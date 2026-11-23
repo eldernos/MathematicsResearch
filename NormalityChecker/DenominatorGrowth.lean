@@ -17,7 +17,7 @@ private lemma product_pos (K : ℕ) : 0 < numeratorProduct K :=
   Finset.prod_pos fun _ hk => partial_num_pos (mem_Icc.mp hk).1
 
 /-- All small-prime powers fit in three copies of the shorter lcm. -/
-private lemma small_log_bound {n K p : ℕ} (hn : 0 < n) (h : n ≤ K^3)
+lemma small_log_bound {n K p : ℕ} (hn : 0 < n) (h : n ≤ K^3)
     (hK : 2 ≤ K) (hp : p.Prime) (hs : p ≤ K^2) :
     p.log n ≤ 3 * p.log (K^2) := by
   let l := p.log (K^2)
@@ -75,7 +75,7 @@ private lemma lcm_cover {n K : ℕ} (hn : 0 < n) (hK : 2 ≤ K) (h : n ≤ K^3) 
     exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right (hd.trans (dvd_prod_of_mem num hk)) B) _
   · simp [Nat.log_of_lt (lt_of_not_ge hpn)]
 
-private lemma log_lcm_le (m : ℕ) : Real.log (lcmUpto m) ≤ 7*m := by
+lemma log_lcm_le (m : ℕ) : Real.log (lcmUpto m) ≤ 7*m := by
   rw [← Chebyshev.psi_eq_log_lcmUpto]
   have hc : Real.log 4 + 4 ≤ 7 := by linarith [Real.log_le_sub_one_of_pos (by norm_num : (0:ℝ)<4)]
   exact (Chebyshev.psi_le_const_mul_self (by positivity)).trans (mul_le_mul_of_nonneg_right hc (by positivity))
@@ -126,7 +126,7 @@ theorem logLoss_le_of_le_cube {n K : ℕ} (hn : 0 < n) (hK : 2 ≤ K) (h : n ≤
   change Real.log _ ≤ _
   linarith [log_product_le K]
 
-private lemma root_cube (x : ℝ) (hx : 0 ≤ x) : (x^(1/3:ℝ))^3 = x := by
+lemma root_cube (x : ℝ) (hx : 0 ≤ x) : (x^(1/3:ℝ))^3 = x := by
   rw [← Real.rpow_mul_natCast hx]; norm_num
 
 /-- Explicit constants in the denominator-loss bound. -/

@@ -22,7 +22,29 @@ run_cmd do
     ``NormalityChecker.logLoss_le,
     ``NormalityChecker.logLoss_isBigO,
     ``NormalityChecker.tendsto_logDen_div,
-    ``NormalityChecker.reciprocal_logDen]
+    ``NormalityChecker.reciprocal_logDen,
+    ``NormalityChecker.offset_zero_block,
+    ``NormalityChecker.offset_components_not_binary_normal,
+    ``NormalityChecker.two_component_normal_necessary,
+    ``NormalityChecker.stride_lift,
+    ``NormalityChecker.half_stride_linearization,
+    ``NormalityChecker.orderOf_two_three_pow,
+    ``NormalityChecker.incomplete_orbit_bound,
+    ``NormalityChecker.incomplete_orbit_interval,
+    ``NormalityChecker.Weyl.equidistributed_of_weyl,
+    ``NormalityChecker.logPrefix_steps,
+    ``NormalityChecker.logPrefix_steps_bounds,
+    ``NormalityChecker.logPrefix_lag_character_bound,
+    ``NormalityChecker.binary_normal_of_odd_fourier,
+    ``NormalityChecker.logTwo_normal_of_odd_prefix_fourier,
+    ``NormalityChecker.Polylog.shifted_eq,
+    ``NormalityChecker.Polylog.denominator_dvd,
+    ``NormalityChecker.Polylog.denominator_zero_order,
+    ``NormalityChecker.Polylog.prime_cancellation,
+    ``NormalityChecker.Polylog.prime_cancellation_of_dvd_base,
+    ``NormalityChecker.Polylog.loss_nonneg,
+    ``NormalityChecker.Polylog.loss_le,
+    ``NormalityChecker.Polylog.loss_isBigO]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

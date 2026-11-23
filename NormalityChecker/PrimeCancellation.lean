@@ -34,7 +34,7 @@ private def scaled (L : ℕ) : ℕ → ℕ
   | 0 => 0
   | t+1 => 2 * scaled L t + L / (t+1)
 
-private lemma index_dvd_lcm {j n : ℕ} (hj : 0 < j) (hjn : j ≤ n) : j ∣ lcmUpto n :=
+lemma index_dvd_lcm {j n : ℕ} (hj : 0 < j) (hjn : j ≤ n) : j ∣ lcmUpto n :=
   Finset.dvd_lcm (f := id) (mem_Icc.mpr ⟨hj, hjn⟩)
 
 private lemma scaled_eq (L t : ℕ) (hL : ∀ j, 0 < j → j ≤ t → j ∣ L) :
@@ -49,7 +49,7 @@ private lemma scaled_eq (L t : ℕ) (hL : ∀ j, 0 < j → j ≤ t → j ∣ L) 
     nlinarith
 
 /-- Cross-multiplication before and after reducing a positive-denominator fraction. -/
-private lemma reduced_info {x : ℚ} {S L : ℕ} (hL : 0 < L) (he : (S : ℚ) = L * x) :
+lemma reduced_info {x : ℚ} {S L : ℕ} (hL : 0 < L) (he : (S : ℚ) = L * x) :
     x.den ∣ L ∧ S * x.den = L * x.num.natAbs := by
   have hx : x = Rat.divInt S L := by
     rw [Rat.divInt_eq_div, Int.cast_natCast, Int.cast_natCast, eq_div_iff (by positivity)]
@@ -141,7 +141,7 @@ private lemma scaled_mod {p : ℕ} [hp : Fact p.Prime] (h2 : (2 : ZMod p) ≠ 0)
       rw [Nat.succ_div_of_not_dvd h, (ZMod.natCast_eq_zero_iff B p).mpr hB, pow_succ]
       ring
 
-private lemma top_power_iff {p a C S : ℕ} {x : ℚ} (hp : p.Prime) (ha : 0 < a)
+lemma top_power_iff {p a C S : ℕ} {x : ℚ} (hp : p.Prime) (ha : 0 < a)
     (hC : ¬ p ∣ C) (hL : 0 < p^a*C) (he : (S : ℚ) = (p^a*C : ℕ) * x) :
     p^a ∣ x.den ↔ ¬ p ∣ S := by
   have cross := (reduced_info hL he).2

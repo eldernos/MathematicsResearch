@@ -3,3 +3,6 @@ module
 public import NormalityChecker.DenominatorGrowth
 public import NormalityChecker.OrderedComponents
 public import NormalityChecker.Resonance
+public import NormalityChecker.Correlations
+public import NormalityChecker.OrbitSum
+public import NormalityChecker.PolylogGrowth
