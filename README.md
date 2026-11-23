@@ -78,7 +78,7 @@ For a general expansion $b^n x=P_n+E_n$ with $E_n\to0$, Lean also proves nonnorm
 
 ## Open proof obligations
 
-The finite classification holds for each fixed family. Passing to the infinite sum for $\log 2$ requires bounds uniform as that family grows with the digit position. The proof for fixed $M$ allows its cutoff to depend on every nonzero cell coefficient. A coefficient with a large power of three in its numerator postpones the point at which the orbit estimate is effective.
+For the ordered normal sum $F_K$, the scaled error $(K+1)2^K(\log 2-F_K)$ is within $1/(K+1)$ of $6/7,5/7,3/7$ for $K\equiv0,1,2\pmod3$ respectively. Adding the corresponding rational correction to $F_K$ gives a normal sum $G_K$ with $|2^n(\log 2-G_K)|\le 2^n/((K+1)^2 2^K)$. The remaining step is to control Fourier averages as $K$ grows with the digit position. The finite classification allows its cutoff to depend on every nonzero cell coefficient. [Derivation and limits of the approximation](notes/ordered-tail.md)
 
 For $\log 2$, the rational prefixes eventually avoid every fixed finite set of exact residues modulo one. Approximate concentration remains possible. Proving cancellation uniformly over partial dyadic intervals at every odd frequency, or exhibiting persistent bias at one fixed odd frequency, would decide binary normality. The normality of $\log 2$ and $\pi$ remains open. [Exact obstruction](NormalityChecker/DenominatorGrowth.lean) · [Dyadic criterion](notes/logarithm-correlations.md)
 

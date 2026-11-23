@@ -96,7 +96,16 @@ run_cmd do
     ``NormalityChecker.logPrefix_centered_lag_bound,
     ``NormalityChecker.logPrefix_dyadic_lag_limit,
     ``NormalityChecker.mean_zero_iff_dyadic_cells,
-    ``NormalityChecker.logTwo_normal_iff_dyadic_lag_cancellation]
+    ``NormalityChecker.logTwo_normal_iff_dyadic_lag_cancellation,
+    ``NormalityChecker.normal_add_rat_iff,
+    ``NormalityChecker.ordered_tail_bounds,
+    ``NormalityChecker.ordered_shift_bounds,
+    ``NormalityChecker.ordered_shift_error_iff,
+    ``NormalityChecker.ordered_critical_shift,
+    ``NormalityChecker.ordered_tail_profile,
+    ``NormalityChecker.corrected_shift_bound,
+    ``NormalityChecker.corrected_critical_shift,
+    ``NormalityChecker.correctedPrefix_normal]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

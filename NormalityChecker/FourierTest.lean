@@ -129,6 +129,18 @@ theorem normal_mul_nat_iff {b D : ℕ} (hb : 2≤b) (hD : 0<D) (x : ℝ) :
     simpa only [Int.cast_mul,Int.cast_natCast,mul_assoc,mul_left_comm,mul_comm] using
       fourier_of_normal H (h*D) (mul_ne_zero hh (by exact_mod_cast hD.ne'))
 
+/-- Translation by a rational preserves normality in every integer radix. -/
+theorem normal_add_rat_iff {b : ℕ} (hb : 2≤b) (x : ℝ) (q : ℚ) :
+    NormalIn b (x+(q:ℝ)) ↔ NormalIn b x := by
+  rw [← normal_mul_nat_iff hb q.pos (x+q), ← normal_mul_nat_iff hb q.pos x]
+  have hq : (q.den:ℝ)*(q:ℝ) = q.num := by rw [Rat.cast_def]; field_simp
+  rw [mul_add,hq]
+  have shifts : shift b ((q.den:ℝ)*x+q.num) = shift b ((q.den:ℝ)*x) := by
+    funext n
+    have h : (b:ℝ)^n*q.num=((b:ℤ)^n*q.num:ℤ) := by push_cast; rfl
+    simp only [shift,mul_add,h,Int.fract_add_intCast]
+  simp only [NormalIn,shifts]
+
 private theorem lag_difference_error {b : ℕ} (hb : 2≤b) (x : ℝ) (u : ℕ → ℝ)
     (he : Tendsto (fun n => (b:ℝ)^n*x-u n) atTop (𝓝 0)) (r : ℕ) :
     Tendsto (fun n => (b:ℝ)^n*((b^r-1:ℕ)*x)-(u (n+r)-u n)) atTop (𝓝 0) := by
