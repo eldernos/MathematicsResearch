@@ -103,4 +103,36 @@ theorem mean_zero_of_cells {S : ℕ} (hS : 0<S) {f : ℕ → ℂ}
     (h : ∀ u ∈ Ico S (3*S), CellCancellation f u) : Tendsto (mean f) atTop (𝓝 0) :=
   mean_zero_of_radix_cells (by decide) hS h
 
+/-- Cancellation of means is equivalent to uniform cancellation on the
+initial segments of each dyadic block [2^k,2^(k+1)). -/
+theorem mean_zero_iff_dyadic_cells (f : ℕ → ℂ) :
+    Tendsto (mean f) atTop (𝓝 0) ↔ RadixCellCancellation 2 f 1 := by
+  constructor
+  · intro H ε hε
+    have small := (tendsto_zero_iff_norm_tendsto_zero.mp H).eventually_lt_const
+      (show 0<ε/3 by positivity)
+    obtain ⟨M,hM⟩ := eventually_atTop.mp small
+    have hg : Tendsto (fun k : ℕ => 2^k) atTop atTop := tendsto_pow_atTop_atTop_of_one_lt (by decide)
+    filter_upwards [hg.eventually_ge_atTop M] with k hk T hT
+    let q := 2^k
+    let P (N : ℕ) := ∑ i ∈ range N, f i
+    have bound (N : ℕ) (hN : q≤N) : ‖P N‖ ≤ (ε/3)*N := by
+      have pos : (0:ℝ)<N := by exact_mod_cast (pow_pos (by decide : 0<2) k).trans_le hN
+      have h := hM N (hk.trans hN)
+      rw [mean,norm_div,Complex.norm_natCast,div_lt_iff₀ pos] at h
+      exact h.le
+    have eqn : ∑ i ∈ range T, f (1*2^k+i) = P (q+T)-P q := by simp [P,sum_range_add,q]
+    rw [eqn]
+    have h := (norm_sub_le _ _).trans (add_le_add (bound (q+T) (by omega)) (bound q le_rfl))
+    have hT' : (T:ℝ)≤q := by exact_mod_cast hT
+    have hq' : (q:ℝ)=(2:ℝ)^k := by dsimp [q]; push_cast; rfl
+    push_cast at h
+    change ‖P (q+T)-P q‖ ≤ ε*(2:ℝ)^k
+    nlinarith [mul_le_mul_of_nonneg_left hT' hε.le]
+  · intro H
+    apply mean_zero_of_radix_cells (c:=2) (S:=1) (by decide) (by decide)
+    intro u hu
+    have : u=1 := by obtain ⟨hl,hh⟩ := mem_Ico.mp hu; omega
+    simpa [this] using H
+
 end NormalityChecker

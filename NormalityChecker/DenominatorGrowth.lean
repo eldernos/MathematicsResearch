@@ -192,4 +192,21 @@ theorem reciprocal_logDen :
     exact Real.exp_log (Nat.cast_pos.mpr (logPrefix n).pos)
   simpa only [one_div, Function.comp_def] using tendsto_inv_atTop_zero.comp h'
 
+/-- No fixed finite set of residues, even with real centers, captures infinitely
+many exact rational prefixes modulo one. -/
+theorem logPrefix_eventually_avoids_residues (S : Finset ℝ) :
+    ∀ᶠ n : ℕ in atTop, ∀ t ∈ S, ∀ z : ℤ, (logPrefix n:ℝ) ≠ t + z := by
+  apply (eventually_all_finset S).mpr
+  intro t _
+  by_cases hit : ∃ m : ℕ, ∃ w : ℤ, (logPrefix m:ℝ) = t+w
+  · obtain ⟨m,w,hw⟩ := hit
+    have hd : 0 < (logDen m:ℝ) := by exact_mod_cast (logPrefix m).pos
+    filter_upwards [reciprocal_logDen.2.eventually_lt_const (one_div_pos.mpr hd)] with n hn z hz
+    have eqn : logPrefix n = logPrefix m+((z-w:ℤ):ℚ) := by
+      exact_mod_cast (show (logPrefix n:ℝ) = (logPrefix m:ℝ)+((z-w:ℤ):ℝ) by push_cast; linarith)
+    have de : logDen n = logDen m := by unfold logDen; rw [eqn,Rat.add_intCast_den]
+    rw [de] at hn
+    exact lt_irrefl _ hn
+  · exact .of_forall (fun n z hz => hit ⟨n,z,hz⟩)
+
 end NormalityChecker

@@ -66,7 +66,7 @@ $$
 =\sum_{j=1}^r\frac{2^{r-j}}{n+j}
 \le\frac{2^r-1}{n+1}.
 $$
-Writing $e(t)=\exp(2\pi i t)$, the joint character $e(h R_n+g R_{n+r})$ differs from $e((h+2^r g)R_n)$ by at most $2\pi |g|(2^r-1)/(n+1)$. This controls each fixed lag. The factor $2^r$ limits its use at growing lags. Lean also proves that vanishing of the Cesàro means of $e(h R_n)$ for every signed odd $h$ suffices for binary normality of $\log 2$. The proof uses a one-step shift to remove factors of two and Weyl’s criterion to pass to all overlapping digit blocks. [Correlations](NormalityChecker/Correlations.lean) · [Weyl criterion](NormalityChecker/Analysis/Weyl.lean)
+Lean proves that $\log 2$ is binary normal exactly when the Cesàro means of $e^{2\pi i h R_n}$ vanish for every odd integer $h$. At any one fixed positive lag $r$, one can equivalently test $R_{n+r}-R_n$. For growing lags, subtracting the explicit drift $(2^r-1)/(n+1)$ from $R_{n+r}-2^rR_n$ gives an error of at most $(2^r-r-1)/(n+1)^2$. At $n=a2^k$ and $r=k$ the uncorrected drift tends to $1/a$. [Proofs and open estimate](notes/logarithm-correlations.md) · [Fourier criteria](NormalityChecker/FourierTest.lean) · [Growing lags](NormalityChecker/GrowingLags.lean)
 
 ## Quantitative nonnormality in every radix
 
@@ -80,7 +80,7 @@ For a general expansion $b^n x=P_n+E_n$ with $E_n\to0$, Lean also proves nonnorm
 
 The finite classification holds for each fixed family. Passing to the infinite sum for $\log 2$ requires bounds uniform as that family grows with the digit position. The proof for fixed $M$ allows its cutoff to depend on every nonzero cell coefficient. A coefficient with a large power of three in its numerator postpones the point at which the orbit estimate is effective.
 
-For $\log 2$, the open input is cancellation of the odd-frequency means. The sequence $1/Q_n$ already shows why denominator growth alone cannot supply it. Fixed-lag correlations describe a constraint on any candidate distribution. They give no decay by themselves. Neither $\log 2$ nor $\pi$ has been classified here.
+For $\log 2$, the rational prefixes eventually avoid every fixed finite set of exact residues modulo one. Approximate concentration remains possible. Proving cancellation uniformly over partial dyadic intervals at every odd frequency, or exhibiting persistent bias at one fixed odd frequency, would decide binary normality. The normality of $\log 2$ and $\pi$ remains open. [Exact obstruction](NormalityChecker/DenominatorGrowth.lean) · [Dyadic criterion](notes/logarithm-correlations.md)
 
 ## Reproduce and review
 

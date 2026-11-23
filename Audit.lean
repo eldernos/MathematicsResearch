@@ -79,7 +79,24 @@ run_cmd do
     ``NormalityChecker.weighted_radixComponent_normal,
     ``NormalityChecker.radixComponent_normal,
     ``NormalityChecker.weighted_radixComponent_pos,
-    ``NormalityChecker.severe_normal_summands]
+    ``NormalityChecker.severe_normal_summands,
+    ``NormalityChecker.logPrefix_eventually_avoids_residues,
+    ``NormalityChecker.mean_zero_of_orthogonal_shifts,
+    ``NormalityChecker.shifted_character_correlation,
+    ``NormalityChecker.fourierMean_zero_iff_of_error,
+    ``NormalityChecker.fourier_of_normal,
+    ``NormalityChecker.normalIn_iff_prefix_fourier,
+    ``NormalityChecker.binary_normal_iff_odd_prefix_fourier,
+    ``NormalityChecker.normal_mul_nat_iff,
+    ``NormalityChecker.normalIn_iff_lag_differences,
+    ``NormalityChecker.logTwo_normal_iff_odd_prefix_fourier,
+    ``NormalityChecker.logTwo_normal_iff_lag_fourier,
+    ``NormalityChecker.logTwo_not_normal_iff_odd_bias,
+    ``NormalityChecker.logPrefix_drift_bounds,
+    ``NormalityChecker.logPrefix_centered_lag_bound,
+    ``NormalityChecker.logPrefix_dyadic_lag_limit,
+    ``NormalityChecker.mean_zero_iff_dyadic_cells,
+    ``NormalityChecker.logTwo_normal_iff_dyadic_lag_cancellation]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

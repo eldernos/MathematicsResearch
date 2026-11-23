@@ -9,3 +9,5 @@ public import NormalityChecker.PolylogGrowth
 public import NormalityChecker.FiniteClassification
 public import NormalityChecker.GeneralResonance
 public import NormalityChecker.StonehamComponents
+public import NormalityChecker.FourierTest
+public import NormalityChecker.GrowingLags

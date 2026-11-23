@@ -104,7 +104,7 @@ lemma mean_phase (u : ℕ → ℝ) (h : ℤ) :
   funext N
   simp only [Weyl.fourierMean, mean, phase, Complex.ofReal_mul, Complex.ofReal_intCast, mul_assoc]
 
-private lemma phase_fract (h : ℤ) (x : ℝ) : phase (h*Int.fract x) = phase (h*x) := by
+lemma phase_fract (h : ℤ) (x : ℝ) : phase (h*Int.fract x) = phase (h*x) := by
   have hz (z : ℤ) : phase z = 1 := by simpa [phase, mul_comm] using Complex.exp_int_mul_two_pi_mul_I z
   rw [show (h:ℝ)*x = h*Int.fract x + ((h*⌊x⌋ : ℤ):ℝ) by
     push_cast; rw [← mul_add, Int.fract_add_floor], phase_add, hz, mul_one]
@@ -129,35 +129,43 @@ theorem normal_of_fourier {b : ℕ} (hb : 2≤b) (x : ℝ)
 theorem binary_normal_of_odd_fourier (x : ℝ)
     (ho : ∀ h : ℤ, Odd h → Tendsto (Weyl.fourierMean (fun n => 2^n*x) h) atTop (𝓝 0)) :
     NormalIn 2 x := by
-  have allFreq (h : ℤ) (hh : h ≠ 0) :
-      Tendsto (Weyl.fourierMean (shift 2 x) h) atTop (𝓝 0) := by
-    obtain ⟨v,m,hm,he⟩ := Nat.exists_eq_two_pow_mul_odd (Int.natAbs_ne_zero.mpr hh)
-    let a : ℤ := h.sign*m
-    have ha : Odd a := (Int.odd_sign_iff.mpr hh).mul (by exact_mod_cast hm)
-    have he' : h = 2^v*a := by rw [← h.sign_mul_natAbs, he]; push_cast; dsimp [a]; ring
-    rw [mean_phase]
-    change Tendsto (mean (fun n => phase (h*Int.fract ((2:ℝ)^n*x)))) atTop (𝓝 0)
-    simp_rw [phase_fract]
-    rw [he']
-    clear he he'
-    induction v with
-    | zero => simpa [mean_phase] using ho a ha
-    | succ v ih =>
-      have H := mean_shift_zero _ (fun n => norm_phase _) ih
-      apply H.congr
-      intro N
-      apply congrArg (fun f => mean f N)
-      funext n
-      push_cast; rw [pow_succ (2:ℝ) v, pow_succ (2:ℝ) n]; ring_nf
-  have H := Weyl.equidistributed_of_weyl (shift 2 x) (fun _ =>
-    ⟨Int.fract_nonneg _, Int.fract_lt_one _⟩) allFreq
-  refine ⟨by decide, fun k m _ hm => ?_⟩
-  have hd : (0:ℝ)<2^k := by positivity
-  have he : ((m:ℝ)+1)/2^k - m/2^k = 1/2^k := by ring
-  unfold frequency
-  simpa [Weyl.visitCount, Set.mem_Ico, he] using
-    H (m/2^k) ((m+1)/2^k) (by positivity) (by gcongr; linarith)
-      ((div_le_one hd).mpr (by exact_mod_cast (show m+1 ≤ 2^k from hm)))
+  apply normal_of_fourier (by decide)
+  intro h hh
+  obtain ⟨v,m,hm,he⟩ := Nat.exists_eq_two_pow_mul_odd (Int.natAbs_ne_zero.mpr hh)
+  let a : ℤ := h.sign*m
+  have ha : Odd a := (Int.odd_sign_iff.mpr hh).mul (by exact_mod_cast hm)
+  have he' : h = 2^v*a := by rw [← h.sign_mul_natAbs, he]; push_cast; dsimp [a]; ring
+  rw [he']
+  clear he he'
+  induction v with
+  | zero => simpa [mean_phase] using ho a ha
+  | succ v ih =>
+    have H := mean_shift_zero _ (fun n => norm_phase _) ih
+    apply H.congr
+    intro N
+    apply congrArg (fun f => mean f N)
+    funext n
+    push_cast; rw [pow_succ (2:ℝ) v, pow_succ (2:ℝ) n]; ring_nf
+
+/-- A vanishing perturbation of the phases leaves each limiting Fourier mean unchanged. -/
+theorem fourierMean_zero_iff_of_error {u v : ℕ → ℝ}
+    (he : Tendsto (fun n => u n-v n) atTop (𝓝 0)) (h : ℤ) :
+    Tendsto (Weyl.fourierMean u h) atTop (𝓝 0) ↔
+      Tendsto (Weyl.fourierMean v h) atTop (𝓝 0) := by
+  let f (n : ℕ) := phase (h*u n)
+  let g (n : ℕ) := phase (h*v n)
+  have small : Tendsto (fun n => f n-g n) atTop (𝓝 0) := by
+    apply tendsto_zero_iff_norm_tendsto_zero.mpr
+    have H := (tendsto_const_nhds (x:=2*Real.pi*|(h:ℝ)|)).mul he.abs
+    apply squeeze_zero (fun _ => norm_nonneg _) _ (by simpa using H)
+    intro n
+    apply (phase_sub_le _ _).trans_eq
+    rw [← mul_sub,abs_mul]; ring
+  have diff : Tendsto (fun n => mean f n-mean g n) atTop (𝓝 0) := by
+    exact (mean_zero _ small).congr (mean_sub f g)
+  simp only [mean_phase]
+  change Tendsto (mean f) atTop (𝓝 0) ↔ Tendsto (mean g) atTop (𝓝 0)
+  exact ⟨fun H => by simpa using H.sub diff,fun H => by simpa using diff.add H⟩
 
 /-- One can test odd frequencies on the exact rational prefixes themselves. -/
 theorem logTwo_normal_of_odd_prefix_fourier
@@ -166,17 +174,6 @@ theorem logTwo_normal_of_odd_prefix_fourier
     NormalIn 2 (Real.log 2) := by
   apply binary_normal_of_odd_fourier
   intro h hh
-  rw [mean_phase]
-  let f (n : ℕ) := phase (h*((2:ℝ)^n*Real.log 2))
-  let g (n : ℕ) := phase (h*(logPrefix n:ℝ))
-  have small : Tendsto (fun n => f n-g n) atTop (𝓝 0) := by
-    apply tendsto_zero_iff_norm_tendsto_zero.mpr
-    have H := (tendsto_const_nhds (x:=2*Real.pi*|(h:ℝ)|)).mul logTwo_shift_error_tendsTo_zero
-    apply squeeze_zero (fun _ => norm_nonneg _) _ (by simpa using H)
-    intro n
-    apply (phase_sub_le _ _).trans_eq
-    rw [← mul_sub,abs_mul,abs_of_nonneg (logTwo_tail_bounds n).1]; ring
-  have HG : Tendsto (mean g) atTop (𝓝 0) := by simpa [mean_phase,g] using ho h hh
-  simpa [mean_sub] using (mean_zero _ small).add HG
+  exact (fourierMean_zero_iff_of_error logTwo_shift_error_tendsTo_zero h).mpr (ho h hh)
 
 end NormalityChecker

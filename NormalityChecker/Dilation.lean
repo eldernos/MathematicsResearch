@@ -38,49 +38,29 @@ private lemma norm_mean_sq {f : ℕ → ℂ} {N : ℕ} (hN : 0<N) :
 private lemma phase_conj (x : ℝ) : conj (phase x) = phase (-x) := by
   rw [phase,phase, ← Complex.exp_conj]; push_cast; simp; ring_nf; rw [map_ofNat]; ring_nf
 
-/-- To test base-b normality one may test all nonzero frequencies after a fixed
-positive integer dilation. Shifts having the same residue b^t modulo D become
-asymptotically orthogonal, and their number can be made arbitrarily large. -/
-theorem normal_of_dilated_fourier {b : ℕ} (hb : 2≤b) (x : ℝ) (D : ℕ) (hD : 0<D)
-    (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((D:ℝ)*((b:ℝ)^n*x))))) atTop (𝓝 0)) :
-    NormalIn b x := by
+/-- Arbitrarily large sets of pairwise orthogonal time translates force
+cancellation of a bounded unit-modulus sequence. -/
+theorem mean_zero_of_orthogonal_shifts (f : ℕ → ℂ) (hunit : ∀ n, ‖f n‖=1)
+    (H : ∀ K : ℕ, ∃ S : Finset ℕ, S.card=K ∧ ∀ a ∈ S, ∀ t ∈ S, a≠t →
+      Tendsto (mean (fun n => f (n+a)*conj (f (n+t)))) atTop (𝓝 0)) :
+    Tendsto (mean f) atTop (𝓝 0) := by
   classical
-  apply normal_of_fourier hb
-  intro h hh0
-  let f (n : ℕ) := phase (h*((b:ℝ)^n*x))
-  change Tendsto (mean f) atTop (𝓝 0)
   apply tendsto_zero_iff_norm_tendsto_zero.mpr
   rw [Metric.tendsto_atTop]
   intro ε hε
   obtain ⟨K,hK⟩ := exists_nat_gt (4/ε^2:ℝ)
   have hK0 : (0:ℝ)<K := lt_trans (by positivity) hK
   have hKe : 4 < (K:ℝ)*ε^2 := (div_lt_iff₀ (by positivity)).mp hK
-  have : NeZero D := ⟨hD.ne'⟩
-  let v (t : ℕ) := (b:ZMod D)^t
-  obtain ⟨y,hy⟩ := Finite.exists_infinite_fiber v
-  obtain ⟨S,hS,hcard⟩ := (Set.infinite_coe_iff.mp hy).exists_subset_card_eq K
+  obtain ⟨S,hcard,hcorr⟩ := H K
   let G (n : ℕ) := ∑ t ∈ S, f (n+t)
-  have corr (a : ℕ) (ha : a ∈ S) (t : ℕ) (ht : t ∈ S) :
-      Tendsto (mean (fun n => f (n+a) * conj (f (n+t)))) atTop
-        (𝓝 (if a=t then (1:ℂ) else 0)) := by
-    by_cases hab : a=t
+  have corr (a : ℕ) (ha : a∈S) (t : ℕ) (ht : t∈S) :
+      Tendsto (mean (fun n => f (n+a)*conj (f (n+t)))) atTop (𝓝 (if a=t then (1:ℂ) else 0)) := by
+    by_cases e : a=t
     · subst t; simp only [ite_true]
       apply tendsto_const_nhds.congr'
       filter_upwards [eventually_gt_atTop 0] with N hN
-      simp [mean,Complex.mul_conj,Complex.normSq_eq_norm_sq,f,norm_phase,hN.ne']
-    · rw [ite_eq_right hab]
-      have he : (b:ZMod D)^a = (b:ZMod D)^t := (hS ha : v a=y).trans (hS ht : v t=y).symm
-      have hd : (D:ℤ) ∣ (b:ℤ)^a-(b:ℤ)^t := (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ D).mp (by push_cast; exact he.symm)
-      obtain ⟨w,hw⟩ := hd
-      have hw0 : w≠0 := by
-        rintro rfl; rw [mul_zero,sub_eq_zero] at hw
-        exact hab ((pow_right_injective₀ (by exact_mod_cast (show 0<b by omega) : (0:ℤ)<b) (by exact_mod_cast (show b≠1 by omega))) hw)
-      have hr : (b:ℝ)^a-(b:ℝ)^t = (D:ℝ)*w := by exact_mod_cast hw
-      apply (H (h*w) (mul_ne_zero hh0 hw0)).congr
-      intro N; apply congrArg (fun g => mean g N); funext n
-      dsimp only [f]; rw [phase_conj,← phase_add,pow_add,pow_add]
-      congr 1; push_cast
-      linear_combination -((h:ℝ)*(b:ℝ)^n*x)*hr
+      simp [mean,Complex.mul_conj,Complex.normSq_eq_norm_sq,hunit,hN.ne']
+    · simpa [e] using hcorr a ha t ht e
   have energy : Tendsto (fun N => (∑ n ∈ range N, ‖G n‖^2)/(N:ℝ)) atTop (𝓝 (K:ℝ)) := by
     have H' := tendsto_finsetSum S fun a ha => tendsto_finsetSum S (fun b hb => corr a ha b hb)
     have hlim : (∑ a ∈ S, ∑ b ∈ S, if a=b then (1:ℂ) else 0) = K := by simp [hcard]
@@ -99,7 +79,7 @@ theorem normal_of_dilated_fourier {b : ℕ} (hb : 2≤b) (x : ℝ) (D : ℕ) (hD
     rw [Function.comp_apply,e,mean]
     simp only [Complex.mul_conj,Complex.normSq_eq_norm_sq, ← Complex.ofReal_sum, ← Complex.ofReal_natCast, ← Complex.ofReal_div,Complex.ofReal_re]
   have translates : Tendsto (fun N => mean G N - (K:ℂ)*mean f N) atTop (𝓝 0) := by
-    have H' := tendsto_finsetSum S fun a _ => shifted_mean_error f (fun n => norm_phase _) a
+    have H' := tendsto_finsetSum S fun a _ => shifted_mean_error f hunit a
     simpa only [sum_const_zero] using H'.congr (fun N => by
       rw [sum_sub_distrib,sum_const,nsmul_eq_mul,hcard]; congr 1
       simp only [mean,G,← sum_div]; rw [sum_comm])
@@ -117,6 +97,44 @@ theorem normal_of_dilated_fourier {b : ℕ} (hb : 2≤b) (x : ℝ) (D : ℕ) (hD
   rw [Real.dist_eq,sub_zero,abs_of_nonneg (norm_nonneg _)]
   apply (mul_lt_mul_iff_right₀ hK0).mp
   linarith
+
+/-- A correlation on the exact radix orbit is a single Fourier character. -/
+theorem shifted_character_correlation (b : ℕ) (x : ℝ) (h : ℤ) (a t : ℕ) :
+    let f (n : ℕ) := phase (h*((b:ℝ)^n*x))
+    mean (fun n => f (n+a)*conj (f (n+t))) =
+      Weyl.fourierMean (fun n => (b:ℝ)^n*x) (h*((b:ℤ)^a-(b:ℤ)^t)) := by
+  rw [mean_phase]
+  congr 1; funext n
+  rw [phase_conj, ← phase_add, pow_add, pow_add]
+  congr 1; push_cast; ring
+
+/-- To test base-b normality one may test all nonzero frequencies after a fixed
+positive integer dilation. Shifts having the same residue b^t modulo D become
+asymptotically orthogonal, and their number can be made arbitrarily large. -/
+theorem normal_of_dilated_fourier {b : ℕ} (hb : 2≤b) (x : ℝ) (D : ℕ) (hD : 0<D)
+    (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((D:ℝ)*((b:ℝ)^n*x))))) atTop (𝓝 0)) :
+    NormalIn b x := by
+  classical
+  apply normal_of_fourier hb
+  intro h hh0
+  let f (n : ℕ) := phase (h*((b:ℝ)^n*x))
+  change Tendsto (mean f) atTop (𝓝 0)
+  apply mean_zero_of_orthogonal_shifts f (fun _ => norm_phase _)
+  intro K
+  have : NeZero D := ⟨hD.ne'⟩
+  let v (t : ℕ) := (b:ZMod D)^t
+  obtain ⟨y,hy⟩ := Finite.exists_infinite_fiber v
+  obtain ⟨S,hS,hcard⟩ := (Set.infinite_coe_iff.mp hy).exists_subset_card_eq K
+  refine ⟨S,hcard,fun a ha t ht hab => ?_⟩
+  have he : (b:ZMod D)^a = (b:ZMod D)^t := (hS ha : v a=y).trans (hS ht : v t=y).symm
+  have hd : (D:ℤ) ∣ (b:ℤ)^a-(b:ℤ)^t := (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ D).mp (by push_cast; exact he.symm)
+  obtain ⟨w,hw⟩ := hd
+  have hw0 : w≠0 := by
+    rintro rfl; rw [mul_zero,sub_eq_zero] at hw
+    exact hab ((pow_right_injective₀ (by exact_mod_cast (show 0<b by omega) : (0:ℤ)<b) (by exact_mod_cast (show b≠1 by omega))) hw)
+  rw [shifted_character_correlation b x h a t, hw, mean_phase]
+  simpa only [Int.cast_mul,Int.cast_natCast,mul_assoc,mul_left_comm,mul_comm] using
+    H (h*w) (mul_ne_zero hh0 hw0)
 
 theorem binary_normal_of_dilated_fourier (x : ℝ) (D : ℕ) (hD : 0<D)
     (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((D:ℝ)*(2^n*x))))) atTop (𝓝 0)) :
