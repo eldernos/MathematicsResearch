@@ -543,4 +543,3 @@ theorem equidistributed_of_weyl (u : ℕ → ℝ) (hu : ∀ k, u k ∈ Set.Ico (
   constructor <;> [linarith [hd2.1, hd1.2]; linarith [hd1.2, hd2.1]]
 
 end NormalityChecker.Weyl
-

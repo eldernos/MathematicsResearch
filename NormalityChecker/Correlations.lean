@@ -46,12 +46,12 @@ theorem logPrefix_steps_bounds (n r : ℕ) :
 noncomputable def phase (x : ℝ) : ℂ :=
   Complex.exp (2 * Real.pi * Complex.I * (x:ℂ))
 
-private lemma phase_add (x y : ℝ) : phase (x+y) = phase x * phase y := by
+lemma phase_add (x y : ℝ) : phase (x+y) = phase x * phase y := by
   simp [phase, mul_add, Complex.exp_add]
 
-private lemma norm_phase (x : ℝ) : ‖phase x‖ = 1 := by simp [phase, Complex.norm_exp]
+lemma norm_phase (x : ℝ) : ‖phase x‖ = 1 := by simp [phase, Complex.norm_exp]
 
-private lemma phase_sub_le (x y : ℝ) : ‖phase x - phase y‖ ≤ 2*Real.pi*|x-y| := by
+lemma phase_sub_le (x y : ℝ) : ‖phase x - phase y‖ ≤ 2*Real.pi*|x-y| := by
   have he : phase x - phase y = phase y * (phase (x-y)-1) := by
     rw [mul_sub_one, ← phase_add, add_sub_cancel]
   rw [he, norm_mul, norm_phase, one_mul]
@@ -75,7 +75,7 @@ theorem logPrefix_lag_character_bound (n r : ℕ) (h g : ℤ) :
   rw [e, abs_mul, abs_of_nonneg hl', ← mul_assoc]
   exact mul_le_mul_of_nonneg_left hu' (by positivity)
 
-private noncomputable def mean (f : ℕ → ℂ) (N : ℕ) := (∑ n ∈ range N, f n)/(N:ℂ)
+noncomputable def mean (f : ℕ → ℂ) (N : ℕ) := (∑ n ∈ range N, f n)/(N:ℂ)
 
 private lemma mean_sub (f g : ℕ → ℂ) (N : ℕ) :
     mean (fun n => f n-g n) N = mean f N - mean g N := by simp [mean, sum_sub_distrib, sub_div]
@@ -99,7 +99,7 @@ private lemma mean_shift_zero (f : ℕ → ℂ) (hb : ∀ n, ‖f n‖ = 1)
     simpa [hb, one_add_one_eq_two] using norm_sub_le (f N) (f 0)
   simpa using ((small.congr fun n => (he n).symm).add hf)
 
-private lemma mean_phase (u : ℕ → ℝ) (h : ℤ) :
+lemma mean_phase (u : ℕ → ℝ) (h : ℤ) :
     Weyl.fourierMean u h = mean (fun n => phase (h*u n)) := by
   funext N
   simp only [Weyl.fourierMean, mean, phase, Complex.ofReal_mul, Complex.ofReal_intCast, mul_assoc]

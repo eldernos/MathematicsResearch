@@ -44,7 +44,22 @@ run_cmd do
     ``NormalityChecker.Polylog.prime_cancellation_of_dvd_base,
     ``NormalityChecker.Polylog.loss_nonneg,
     ``NormalityChecker.Polylog.loss_le,
-    ``NormalityChecker.Polylog.loss_isBigO]
+    ``NormalityChecker.Polylog.loss_isBigO,
+    ``NormalityChecker.component_orbit_approx,
+    ``NormalityChecker.finite_orbit_approx,
+    ``NormalityChecker.mean_zero_of_cells,
+    ``NormalityChecker.fixed_multiplier_orbit,
+    ``NormalityChecker.cell_orbit_approx,
+    ``NormalityChecker.cell_cancellation,
+    ``NormalityChecker.binary_normal_of_dilated_fourier,
+    ``NormalityChecker.not_normal_of_concentration,
+    ``NormalityChecker.not_normal_of_grid_cell,
+    ``NormalityChecker.finite_normal_iff,
+    ``NormalityChecker.binaryNormalTest_correct,
+    ``NormalityChecker.two_component_normal_iff,
+    ``NormalityChecker.three_component_resonance,
+    ``NormalityChecker.component_binary_normal,
+    ``NormalityChecker.ordered_sum_binary_normal]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

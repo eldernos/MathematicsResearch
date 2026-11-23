@@ -6,6 +6,23 @@
 
 Lean 4 proofs about the binary expansion of $\log 2$, the prime factors that survive in its shifted rational approximations, and an explicit infinite series that fails binary normality. The project grew out of the [shared research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221).
 
+## A binary normality checker for finite sums
+
+For any finite set of positive indices and any rational coefficients, Lean now proves a necessary-and-sufficient test for binary normality of $F=\sum a_m T_m$. Pick $S$ at least the largest index. On each of the finitely many cells $S\le u<3S$, compute $j_m=\lfloor\log_3\lfloor u/m\rfloor\rfloor$ and $H_u=\sum_m a_m(-1)^m/(m3^{j_m})$. Then $F$ is binary normal exactly when every $H_u$ is nonzero.
+
+The consequences include binary normality of each $T_m$, binary normality of every ordered finite partial sum of the logarithmic decomposition, and the equivalence
+$$
+T_1+aT_2\text{ is binary normal}\quad\Longleftrightarrow\quad a\notin\{2/3,2\}\quad (a\in\mathbb Q).
+$$
+The unweighted sum $T_{20}+T_{28}+T_{35}$ is nonnormal. The finite test is executable and its correctness theorem refers directly to overlapping digit blocks. [Mathematical proof](notes/finite-sums.md) · [Lean classification and checker](NormalityChecker/FiniteClassification.lean)
+
+```lean
+import NormalityChecker
+open NormalityChecker
+#eval binaryNormalTest {1, 2} (fun _ => 1)         -- true
+#eval binaryNormalTest {20, 28, 35} (fun _ => 1) -- false
+```
+
 ## The two arithmetic milestones
 
 Write
@@ -27,7 +44,7 @@ $$
 | How can approximations certify normality in an integer base $b\ge2$? | If $b^n x-u_n\to0$, normality of $x$ is equivalent to uniform distribution of $u_n$ modulo one. The proof starts from frequencies of overlapping digit blocks and handles wraparound at integer boundaries. [Distribution.lean](NormalityChecker/Distribution.lean) |
 | What does this give for $\log 2$? | $R_0=0$, $R_{n+1}=2R_n+1/(n+1)$ and $0\le 2^n\log2-R_n\le1/(n+1)$. Binary normality is equivalent to uniform distribution of this exact rational recurrence. [LogTwo.lean](NormalityChecker/LogTwo.lean) |
 | Does the proposed cancellation example work? | For $T_m=\sum_{j\ge0}2^{-m3^j}/(m3^j)$, the sum $T_1+2T_2$ fails binary normality. For every $k\ge2$, every start $2\cdot3^k\le n<3^{k+1}$ has next block `00`. That gives at least $1/3$ of the first $3^{k+1}$ starts, above the required $1/4$. [Resonance.lean](NormalityChecker/Resonance.lean) |
-| How are the components related to $\log 2$? | Summing $T_m$ over positive $m$ indivisible by three gives exactly $\log 2$. For each $K\ge1$, using **all** such indices $m\le K$, the sum $\sum f(m)/m$ is nonzero for every choice of odd integers $f(m)$. This proves the parity step in the proposed finite classification. [OrderedComponents.lean](NormalityChecker/OrderedComponents.lean) |
+| How are the components related to $\log 2$? | Summing $T_m$ over positive $m$ indivisible by three gives exactly $\log 2$. For each $K\ge1$, using **all** such indices $m\le K$, the sum $\sum f(m)/m$ is nonzero for every choice of odd integers $f(m)$. This proves the parity step used by the finite classification. [OrderedComponents.lean](NormalityChecker/OrderedComponents.lean) |
 
 ## Finite sums and incomplete orbits
 
@@ -53,7 +70,7 @@ Writing $e(t)=\exp(2\pi i t)$, the joint character $e(h R_n+g R_{n+r})$ differs 
 
 ## Open proof obligations
 
-The positive direction for $T_1+aT_2$, the full rational finite-sum classification, and normality of the ordered sums remain research targets. Applying the interval estimate requires a uniform approximation by the appropriate modular orbit on each insertion interval, passage back from cleared rational coefficients, and summation over all scales through an arbitrary last endpoint.
+The finite classification holds for each fixed family. Passing to the infinite sum for $\log 2$ requires bounds uniform as that family grows with the digit position. The proof for fixed $M$ allows its cutoff to depend on every nonzero cell coefficient. A coefficient with a large power of three in its numerator postpones the point at which the orbit estimate is effective.
 
 For $\log 2$, the open input is cancellation of the odd-frequency means. The sequence $1/Q_n$ already shows why denominator growth alone cannot supply it. Fixed-lag correlations describe a constraint on any candidate distribution. They give no decay by themselves. Neither $\log 2$ nor $\pi$ has been classified here.
 

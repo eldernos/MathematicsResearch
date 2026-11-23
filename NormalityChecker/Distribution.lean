@@ -65,7 +65,7 @@ private lemma average_crossings_eq_frequency (u : ℕ → ℝ) {a c : ℝ}
 
 /-- All translated half-open intervals have the limiting frequency given by their length.
 The floor difference counts integer translates, so endpoints may cross an integer. -/
-def UniformModOne (u : ℕ → ℝ) : Prop :=
+@[expose] def UniformModOne (u : ℕ → ℝ) : Prop :=
   ∀ a c : ℝ, Tendsto (fun N : ℕ => (N : ℝ)⁻¹ *
     ∑ i ∈ range N, ((⌊u i - a⌋ : ℝ) - ⌊u i - c⌋)) atTop (𝓝 (c - a))
 
