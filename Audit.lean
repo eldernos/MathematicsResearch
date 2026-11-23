@@ -70,7 +70,16 @@ run_cmd do
     ``NormalityChecker.oddSquareDivisor_spec,
     ``NormalityChecker.all_base_resonance,
     ``NormalityChecker.severe_resonance,
-    ``NormalityChecker.binary_zero_block_limsup]
+    ``NormalityChecker.binary_zero_block_limsup,
+    ``NormalityChecker.normal_of_fourier,
+    ``NormalityChecker.normal_of_dilated_fourier,
+    ``NormalityChecker.mean_zero_of_radix_cells,
+    ``NormalityChecker.stoneham_order_bound,
+    ``NormalityChecker.stoneham_orbit_small,
+    ``NormalityChecker.weighted_radixComponent_normal,
+    ``NormalityChecker.radixComponent_normal,
+    ``NormalityChecker.weighted_radixComponent_pos,
+    ``NormalityChecker.severe_normal_summands]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

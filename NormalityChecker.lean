@@ -8,3 +8,4 @@ public import NormalityChecker.OrbitSum
 public import NormalityChecker.PolylogGrowth
 public import NormalityChecker.FiniteClassification
 public import NormalityChecker.GeneralResonance
+public import NormalityChecker.StonehamComponents

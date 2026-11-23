@@ -38,18 +38,16 @@ private lemma norm_mean_sq {f : ℕ → ℂ} {N : ℕ} (hN : 0<N) :
 private lemma phase_conj (x : ℝ) : conj (phase x) = phase (-x) := by
   rw [phase,phase, ← Complex.exp_conj]; push_cast; simp; ring_nf; rw [map_ofNat]; ring_nf
 
-/-- To test binary normality one may test all nonzero frequencies after a fixed
-positive integer dilation. Shifts having the same residue 2^t modulo D become
+/-- To test base-b normality one may test all nonzero frequencies after a fixed
+positive integer dilation. Shifts having the same residue b^t modulo D become
 asymptotically orthogonal, and their number can be made arbitrarily large. -/
-theorem binary_normal_of_dilated_fourier (x : ℝ) (D : ℕ) (hD : 0<D)
-    (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((D:ℝ)*(2^n*x))))) atTop (𝓝 0)) :
-    NormalIn 2 x := by
+theorem normal_of_dilated_fourier {b : ℕ} (hb : 2≤b) (x : ℝ) (D : ℕ) (hD : 0<D)
+    (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((D:ℝ)*((b:ℝ)^n*x))))) atTop (𝓝 0)) :
+    NormalIn b x := by
   classical
-  apply binary_normal_of_odd_fourier
-  intro h hh
-  have hh0 : h≠0 := by rintro rfl; exact (by decide : ¬ Odd (0:ℤ)) hh
-  rw [mean_phase]
-  let f (n : ℕ) := phase (h*(2^n*x))
+  apply normal_of_fourier hb
+  intro h hh0
+  let f (n : ℕ) := phase (h*((b:ℝ)^n*x))
   change Tendsto (mean f) atTop (𝓝 0)
   apply tendsto_zero_iff_norm_tendsto_zero.mpr
   rw [Metric.tendsto_atTop]
@@ -58,31 +56,31 @@ theorem binary_normal_of_dilated_fourier (x : ℝ) (D : ℕ) (hD : 0<D)
   have hK0 : (0:ℝ)<K := lt_trans (by positivity) hK
   have hKe : 4 < (K:ℝ)*ε^2 := (div_lt_iff₀ (by positivity)).mp hK
   have : NeZero D := ⟨hD.ne'⟩
-  let v (t : ℕ) := (2:ZMod D)^t
+  let v (t : ℕ) := (b:ZMod D)^t
   obtain ⟨y,hy⟩ := Finite.exists_infinite_fiber v
   obtain ⟨S,hS,hcard⟩ := (Set.infinite_coe_iff.mp hy).exists_subset_card_eq K
   let G (n : ℕ) := ∑ t ∈ S, f (n+t)
-  have corr (a : ℕ) (ha : a ∈ S) (b : ℕ) (hb : b ∈ S) :
-      Tendsto (mean (fun n => f (n+a) * conj (f (n+b)))) atTop
-        (𝓝 (if a=b then (1:ℂ) else 0)) := by
-    by_cases hab : a=b
-    · subst b; simp only [ite_true]
+  have corr (a : ℕ) (ha : a ∈ S) (t : ℕ) (ht : t ∈ S) :
+      Tendsto (mean (fun n => f (n+a) * conj (f (n+t)))) atTop
+        (𝓝 (if a=t then (1:ℂ) else 0)) := by
+    by_cases hab : a=t
+    · subst t; simp only [ite_true]
       apply tendsto_const_nhds.congr'
       filter_upwards [eventually_gt_atTop 0] with N hN
       simp [mean,Complex.mul_conj,Complex.normSq_eq_norm_sq,f,norm_phase,hN.ne']
     · rw [ite_eq_right hab]
-      have he : (2:ZMod D)^a = 2^b := (hS ha : v a=y).trans (hS hb : v b=y).symm
-      have hd : (D:ℤ) ∣ (2:ℤ)^a-2^b := (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ D).mp (by push_cast; exact he.symm)
+      have he : (b:ZMod D)^a = (b:ZMod D)^t := (hS ha : v a=y).trans (hS ht : v t=y).symm
+      have hd : (D:ℤ) ∣ (b:ℤ)^a-(b:ℤ)^t := (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ D).mp (by push_cast; exact he.symm)
       obtain ⟨w,hw⟩ := hd
       have hw0 : w≠0 := by
         rintro rfl; rw [mul_zero,sub_eq_zero] at hw
-        exact hab ((pow_right_injective₀ (by decide : (0:ℤ)<2) (by decide : (2:ℤ)≠1)) hw)
-      have hr : (2:ℝ)^a-2^b = (D:ℝ)*w := by exact_mod_cast hw
+        exact hab ((pow_right_injective₀ (by exact_mod_cast (show 0<b by omega) : (0:ℤ)<b) (by exact_mod_cast (show b≠1 by omega))) hw)
+      have hr : (b:ℝ)^a-(b:ℝ)^t = (D:ℝ)*w := by exact_mod_cast hw
       apply (H (h*w) (mul_ne_zero hh0 hw0)).congr
       intro N; apply congrArg (fun g => mean g N); funext n
       dsimp only [f]; rw [phase_conj,← phase_add,pow_add,pow_add]
       congr 1; push_cast
-      linear_combination -((h:ℝ)*2^n*x)*hr
+      linear_combination -((h:ℝ)*(b:ℝ)^n*x)*hr
   have energy : Tendsto (fun N => (∑ n ∈ range N, ‖G n‖^2)/(N:ℝ)) atTop (𝓝 (K:ℝ)) := by
     have H' := tendsto_finsetSum S fun a ha => tendsto_finsetSum S (fun b hb => corr a ha b hb)
     have hlim : (∑ a ∈ S, ∑ b ∈ S, if a=b then (1:ℂ) else 0) = K := by simp [hcard]
@@ -119,5 +117,9 @@ theorem binary_normal_of_dilated_fourier (x : ℝ) (D : ℕ) (hD : 0<D)
   rw [Real.dist_eq,sub_zero,abs_of_nonneg (norm_nonneg _)]
   apply (mul_lt_mul_iff_right₀ hK0).mp
   linarith
+
+theorem binary_normal_of_dilated_fourier (x : ℝ) (D : ℕ) (hD : 0<D)
+    (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((D:ℝ)*(2^n*x))))) atTop (𝓝 0)) :
+    NormalIn 2 x := normal_of_dilated_fourier (by decide) x D hD H
 
 end NormalityChecker

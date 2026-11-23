@@ -4,7 +4,7 @@
 
 [![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
-Lean 4 proofs about the binary expansion of $\log 2$, the prime factors that survive in its shifted rational approximations, and an explicit infinite series that fails binary normality. The project grew out of the [shared research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221).
+Lean 4 proofs about normality of arithmetic expansions, including a decision procedure for finite binary component sums, irrational nonnormal sums of normal components in every base, and the denominators of shifted polylogarithmic series. The project grew out of the [shared research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221).
 
 ## A binary normality checker for finite sums
 
@@ -70,7 +70,7 @@ Writing $e(t)=\exp(2\pi i t)$, the joint character $e(h R_n+g R_{n+r})$ differs 
 
 ## Quantitative nonnormality in every radix
 
-Write $T_{b,c,m}=\sum_{j\ge0} b^{-mc^j}/(mc^j)$. For integers $b\ge2$, odd $c\ge3$, $1\le m<l<c$, assume $c\mid b^{l-m}+1$. Lean proves that $mT_{b,c,m}+lT_{b,c,l}$ is irrational and nonnormal in base $b$. For **every** fixed length $r$, the upper limiting frequency of the all-zero block is at least $(c-l)/(c-1)$. For the original binary pair this gives $1/2$. In every base one can choose a single pair to exceed any prescribed threshold below one for all these block lengths. [General theorem](NormalityChecker/GeneralResonance.lean) · [Cumulative count](NormalityChecker/ResonantDensity.lean)
+Write $T_{b,c,m}=\sum_{j\ge0} b^{-mc^j}/(mc^j)$. For integers $b\ge2$, odd $c\ge3$, $1\le m<l<c$, assume $c\mid b^{l-m}+1$. Lean proves that $mT_{b,c,m}+lT_{b,c,l}$ is irrational and nonnormal in base $b$. For **every** fixed length $r$, the upper limiting frequency of the all-zero block is at least $(c-l)/(c-1)$. For the original binary pair this gives $1/2$. Both summands are positive and individually normal in base $b$. In every base one can choose a single pair to exceed any prescribed threshold below one for all these block lengths. [General theorem](NormalityChecker/GeneralResonance.lean) · [Cumulative count](NormalityChecker/ResonantDensity.lean) · [Proof for the normal summands](notes/normal-summands.md)
 
 The divisibility $c^{j+1}\mid (b^{l-m})^{c^j}+1$ follows from factoring a difference of $c$-th powers. The geometric factor is divisible by $c$ because its terms agree modulo $c$ and there are $c$ of them. On $[lc^k,c^{k+1})$ all inserted pairs shift to integers, and the strictly positive tail is at most $2/((c-1)c^k)$. For fixed $r$ this forces the next $r$ digits to be zero from some scale onward. Adding the disjoint intervals through scale $k$ and dividing by $c^{k+1}$ gives the bound. The strictly positive tails also rule out a rational sum, whose nonzero distances from integers after shifting would be bounded below by the reciprocal of its denominator.
 

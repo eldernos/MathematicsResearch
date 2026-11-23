@@ -136,7 +136,7 @@ theorem cell_cancellation {u E : ℕ} (M : Finset ℕ) (c : ℕ → ℤ) (j : �
     rw [he', abs_mul, ← mul_assoc]
     apply (mul_le_mul_of_nonneg_left hz' (by positivity)).trans
     simpa [mul_div_assoc] using hsmall.le
-  change ‖∑ i ∈ range T, f (u*q+i)‖ ≤ _
+  change ‖∑ i ∈ range T, f (u*q+i)‖ ≤ ε*(3:ℝ)^k
   have hdiff : ‖(∑ i ∈ range T, f (u*q+i)) - ∑ i ∈ range T, g (u*q+i)‖ ≤ (ε/2)*(3:ℝ)^k := by
     rw [← sum_sub_distrib]
     apply (norm_sum_le _ _).trans

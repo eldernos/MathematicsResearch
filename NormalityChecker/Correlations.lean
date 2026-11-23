@@ -109,6 +109,22 @@ private lemma phase_fract (h : ℤ) (x : ℝ) : phase (h*Int.fract x) = phase (h
   rw [show (h:ℝ)*x = h*Int.fract x + ((h*⌊x⌋ : ℤ):ℝ) by
     push_cast; rw [← mul_add, Int.fract_add_floor], phase_add, hz, mul_one]
 
+/-- Weyl sufficiency for the actual overlapping digit blocks in any integer radix. -/
+theorem normal_of_fourier {b : ℕ} (hb : 2≤b) (x : ℝ)
+    (H : ∀ h : ℤ, h≠0 → Tendsto (mean (fun n => phase (h*((b:ℝ)^n*x)))) atTop (𝓝 0)) :
+    NormalIn b x := by
+  have allFreq (h : ℤ) (hh : h≠0) : Tendsto (Weyl.fourierMean (shift b x) h) atTop (𝓝 0) := by
+    rw [mean_phase]; unfold shift; simp_rw [phase_fract]; exact H h hh
+  have H := Weyl.equidistributed_of_weyl (shift b x) (fun _ =>
+    ⟨Int.fract_nonneg _, Int.fract_lt_one _⟩) allFreq
+  refine ⟨hb, fun k m _ hm => ?_⟩
+  have hd : (0:ℝ)<(b:ℝ)^k := by positivity [show 0<b by omega]
+  have he : ((m:ℝ)+1)/(b:ℝ)^k - m/(b:ℝ)^k = 1/(b:ℝ)^k := by ring
+  unfold frequency
+  simpa [Weyl.visitCount, Set.mem_Ico, he] using
+    H (m/(b:ℝ)^k) ((m+1)/(b:ℝ)^k) (by positivity [show 0<b by omega]) (by gcongr; linarith)
+      ((div_le_one hd).mpr (by exact_mod_cast (show m+1 ≤ b^k from hm)))
+
 /-- Odd signed frequencies suffice for the exact doubling orbit. -/
 theorem binary_normal_of_odd_fourier (x : ℝ)
     (ho : ∀ h : ℤ, Odd h → Tendsto (Weyl.fourierMean (fun n => 2^n*x) h) atTop (𝓝 0)) :
