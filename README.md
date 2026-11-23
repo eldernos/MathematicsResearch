@@ -68,6 +68,14 @@ $$
 $$
 Writing $e(t)=\exp(2\pi i t)$, the joint character $e(h R_n+g R_{n+r})$ differs from $e((h+2^r g)R_n)$ by at most $2\pi |g|(2^r-1)/(n+1)$. This controls each fixed lag. The factor $2^r$ limits its use at growing lags. Lean also proves that vanishing of the Cesàro means of $e(h R_n)$ for every signed odd $h$ suffices for binary normality of $\log 2$. The proof uses a one-step shift to remove factors of two and Weyl’s criterion to pass to all overlapping digit blocks. [Correlations](NormalityChecker/Correlations.lean) · [Weyl criterion](NormalityChecker/Analysis/Weyl.lean)
 
+## Quantitative nonnormality in every radix
+
+Write $T_{b,c,m}=\sum_{j\ge0} b^{-mc^j}/(mc^j)$. For integers $b\ge2$, odd $c\ge3$, $1\le m<l<c$, assume $c\mid b^{l-m}+1$. Lean proves that $mT_{b,c,m}+lT_{b,c,l}$ is irrational and nonnormal in base $b$. For **every** fixed length $r$, the upper limiting frequency of the all-zero block is at least $(c-l)/(c-1)$. For the original binary pair this gives $1/2$. In every base one can choose a single pair to exceed any prescribed threshold below one for all these block lengths. [General theorem](NormalityChecker/GeneralResonance.lean) · [Cumulative count](NormalityChecker/ResonantDensity.lean)
+
+The divisibility $c^{j+1}\mid (b^{l-m})^{c^j}+1$ follows from factoring a difference of $c$-th powers. The geometric factor is divisible by $c$ because its terms agree modulo $c$ and there are $c$ of them. On $[lc^k,c^{k+1})$ all inserted pairs shift to integers, and the strictly positive tail is at most $2/((c-1)c^k)$. For fixed $r$ this forces the next $r$ digits to be zero from some scale onward. Adding the disjoint intervals through scale $k$ and dividing by $c^{k+1}$ gives the bound. The strictly positive tails also rule out a rational sum, whose nonzero distances from integers after shifting would be bounded below by the reciprocal of its denominator.
+
+For a general expansion $b^n x=P_n+E_n$ with $E_n\to0$, Lean also proves nonnormality when the residues of $P_n$ visit a fixed finite set with positive upper density. The centers can lie anywhere modulo one and the remainders may have either sign. [Prefix certificate](NormalityChecker/Concentration.lean)
+
 ## Open proof obligations
 
 The finite classification holds for each fixed family. Passing to the infinite sum for $\log 2$ requires bounds uniform as that family grows with the digit position. The proof for fixed $M$ allows its cutoff to depend on every nonzero cell coefficient. A coefficient with a large power of three in its numerator postpones the point at which the orbit estimate is effective.

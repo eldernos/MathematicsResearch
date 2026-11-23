@@ -59,7 +59,18 @@ run_cmd do
     ``NormalityChecker.two_component_normal_iff,
     ``NormalityChecker.three_component_resonance,
     ``NormalityChecker.component_binary_normal,
-    ``NormalityChecker.ordered_sum_binary_normal]
+    ``NormalityChecker.ordered_sum_binary_normal,
+    ``NormalityChecker.not_normal_of_prefix_hits,
+    ``NormalityChecker.geometric_cells_limsup,
+    ``NormalityChecker.odd_radix_lift,
+    ``NormalityChecker.radix_pair_tail,
+    ``NormalityChecker.radix_pair_zero_limsup,
+    ``NormalityChecker.radix_pair_not_normal,
+    ``NormalityChecker.radix_pair_irrational,
+    ``NormalityChecker.oddSquareDivisor_spec,
+    ``NormalityChecker.all_base_resonance,
+    ``NormalityChecker.severe_resonance,
+    ``NormalityChecker.binary_zero_block_limsup]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

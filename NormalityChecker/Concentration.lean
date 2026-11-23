@@ -52,6 +52,40 @@ theorem not_normal_of_concentration {b : ℕ} {x η : ℝ} {C : Finset ℝ} (hη
   filter_upwards [ht.eventually_lt_const he] with N hN
   exact ((hdom N).trans_lt hN).not_ge
 
+open Classical in
+/-- An expansion whose arithmetic prefixes hit finitely many residues with positive
+upper density and whose shifted remainders tend to zero is nonnormal. -/
+theorem not_normal_of_prefix_hits {b : ℕ} {x η : ℝ} {P : ℕ → ℝ} {C : Finset ℝ}
+    (hη : 0<η) (herror : Tendsto (fun n => (b:ℝ)^n*x-P n) atTop (𝓝 0))
+    (hcount : ∃ᶠ N in atTop, η ≤
+      ((range N).filter (fun i => ∃ t ∈ C, ∃ z : ℤ, P i=t+z)).card/(N:ℝ)) :
+    ¬ NormalIn b x := by
+  classical
+  apply not_normal_of_concentration (C:=C) (η:=η/2) (half_pos hη)
+  intro ε hε
+  obtain ⟨K,hK⟩ := (Metric.tendsto_atTop.mp herror) ε hε
+  have small := (tendsto_const_div_atTop_nhds_zero_nat (K:ℝ)).eventually_lt_const (half_pos hη)
+  apply (hcount.and_eventually (small.and (eventually_gt_atTop 0))).mono
+  rintro N ⟨hN,hsmall,hpos⟩
+  let near := (range N).filter (fun i => nearResidues C ε ((b:ℝ)^i*x))
+  let hit := (range N).filter (fun i => ∃ t ∈ C, ∃ z : ℤ, P i=t+z)
+  have hsub : hit ⊆ range K ∪ near := by
+    intro i hi
+    obtain ⟨hiN,t,ht,z,hz⟩ := mem_filter.mp hi
+    by_cases hiK : i<K
+    · exact mem_union_left _ (mem_range.mpr hiK)
+    · refine mem_union_right _ (mem_filter.mpr ⟨hiN,t,ht,z,?_⟩)
+      simpa [Real.dist_eq,hz] using hK i (by omega)
+  have HH := (card_le_card hsub).trans (Finset.card_union_le ..)
+  rw [card_range] at HH
+  have HH' : (hit.card:ℝ) ≤ K+(near.card:ℝ) := by exact_mod_cast HH
+  change η≤(hit.card:ℝ)/N at hN
+  change η/2≤(near.card:ℝ)/N
+  have hn : (0:ℝ)<N := by exact_mod_cast hpos
+  rw [le_div_iff₀ hn] at hN ⊢
+  rw [div_lt_iff₀ hn] at hsmall
+  linarith
+
 /-- A fixed rational grid contains y up to tolerance ε whenever Dy is within Dε of an integer. -/
 private lemma near_grid {D : ℕ} (hD : 0<D) {y ε : ℝ} {z : ℤ}
     (hz : |(D:ℝ)*y-z| < D*ε) :

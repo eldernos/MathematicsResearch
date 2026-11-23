@@ -7,3 +7,4 @@ public import NormalityChecker.Correlations
 public import NormalityChecker.OrbitSum
 public import NormalityChecker.PolylogGrowth
 public import NormalityChecker.FiniteClassification
+public import NormalityChecker.GeneralResonance
