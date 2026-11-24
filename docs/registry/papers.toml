@@ -50,7 +50,7 @@ Normality follows when most blocks of a radix orbit are approximated in mean by 
 [[paper]]
 number = "V"
 dir = "papers/05-classical-denominators"
-title = "Denominator Arithmetic in Representations of Classical Constants"
+title = "Reduced Denominators of Binary Logarithm and Arctangent Series"
 families = ["CC"]
 principal = ["CC-01", "CC-02"]
 status = "draft"

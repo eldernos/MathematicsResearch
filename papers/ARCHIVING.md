@@ -4,7 +4,15 @@ The manuscript release groups all five PDFs with their LaTeX sources, bibliograp
 
 ## 1. Verify the files you are about to archive
 
-From a clone of the repository, use a fresh checkout of the release tag. Record the full SHA printed by the second command. Compare it with the release manifest and the successful Lean workflow for that commit.
+The simplest route is to download the eight named assets from the GitHub release into one folder. Keep the five PDFs, the named ZIP archive, `release-manifest.json` and `SHA256SUMS.txt` together. In that folder run:
+
+```sh
+sha256sum -c SHA256SUMS.txt
+```
+
+All seven listed files should report `OK`. The manifest gives the full Git commit, the URLs of its two verification runs and the digest of each paper. The named ZIP contains the LaTeX, figures, review reports, PDFs and Lean sources in one file. This is the ZIP to upload for a collection DOI.
+
+To verify the source independently from a clone of the repository, use a fresh checkout of the release tag. Record the full SHA printed by the second command. Compare it with the release manifest and the successful Lean workflow for that commit.
 
 ```sh
 git fetch origin tag manuscripts-v1.0.0
