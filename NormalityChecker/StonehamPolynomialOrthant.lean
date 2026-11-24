@@ -155,9 +155,10 @@ private lemma mass_reduce {d p L J : ℕ} (e : Strides d) (le : L ≤ J) (U : Se
 
 /-- Uniform finite precision over all upper sets containing one specified
 point. Compactness of the Boolean membership functions gives a single cutoff. -/
-theorem weighted_uniform_precision {d p : ℕ} (e : Strides d) (hp : 3 ≤ p) (anchor : Vector d) :
+theorem weighted_uniform_precision_at {d c p : ℕ} (e : Strides d) (hc : 3 ≤ c)
+    (hp : 1 < p) (pc : p ∣ c) (anchor : Vector d) :
     ∃ L : ℕ, ∀ U : Set (Vector d), IsUpperSet U → anchor ∈ U →
-      (weightedMass e p L U : ZMod (p^L)) ≠ 0 := by
+      (weightedMass e c L U : ZMod (p^L)) ≠ 0 := by
   classical
   by_contra! h
   choose U upper hit vanish using h
@@ -176,29 +177,39 @@ theorem weighted_uniform_precision {d p : ℕ} (e : Strides d) (hp : 3 ≤ p) (a
   have ha : anchor ∈ V := by
     obtain ⟨j,hj⟩ := (coord anchor).exists
     exact hj.mp (hit _)
-  obtain ⟨K,cK,eqn⟩ := weighted_upper_set_numerator e (by omega : 2 ≤ p) V hv ⟨_,ha⟩
+  obtain ⟨K,cK,eqn⟩ := weighted_upper_set_numerator e (by omega : 2 ≤ c) V hv ⟨_,ha⟩
   have kn : K ≠ 0 := by
-    let : Fact (1 < p-1) := ⟨by omega⟩
+    let : Fact (1 < c-1) := ⟨by omega⟩
     intro hK
     simp [hK] at cK
   let L := K.natAbs+1
   have matchbox := (eventually_all_finset (box d L)).mpr (fun v _ => coord v)
   obtain ⟨j,matchj,large⟩ := (matchbox.and (inc.tendsto_atTop.eventually_ge_atTop L)).exists
-  have eqMass : weightedMass e p L (U (φ j)) = weightedMass e p L V := by
+  have eqMass : weightedMass e c L (U (φ j)) = weightedMass e c L V := by
     unfold weightedMass
     congr 1
     ext v
     simp only [mem_filter]
     exact and_congr_right (fun hv => matchj v hv)
-  have zero : (weightedMass e p L V : ZMod (p^L)) = 0 := by
-    rw [← eqMass, ← mass_reduce e large, ZMod.natCast_eq_zero_iff]
+  let reduce (J : ℕ) := ZMod.castHom (pow_dvd_pow_of_dvd pc J) (ZMod (p^J))
+  have zero : (weightedMass e c L V : ZMod (p^L)) = 0 := by
+    have red := congrArg (reduce L) (mass_reduce (p:=c) e large (U (φ j)))
+    simp only [map_natCast] at red
+    rw [← eqMass, ← red, ZMod.natCast_eq_zero_iff]
     exact (pow_dvd_pow p large).trans ((ZMod.natCast_eq_zero_iff ..).mp (vanish (φ j)))
-  have ek := eqn L
+  have ek := congrArg (reduce L) (eqn L)
+  simp only [map_mul, map_natCast, map_intCast] at ek
   rw [zero,zero_mul] at ek
   have div := (ZMod.intCast_zmod_eq_zero_iff_dvd K (p^L)).mp ek.symm
   have small : K.natAbs < p^L :=
     (Nat.lt_succ_self _).trans_le (Nat.lt_pow_self (n:=L) (by omega : 2 ≤ p)).le
   exact kn (Int.eq_zero_of_dvd_of_natAbs_lt_natAbs div (by simpa using small))
+
+/-- Uniform precision in the modulus given by the geometric ratio itself. -/
+theorem weighted_uniform_precision {d p : ℕ} (e : Strides d) (hp : 3 ≤ p) (anchor : Vector d) :
+    ∃ L : ℕ, ∀ U : Set (Vector d), IsUpperSet U → anchor ∈ U →
+      (weightedMass e p L U : ZMod (p^L)) ≠ 0 :=
+  weighted_uniform_precision_at e hp (by omega) dvd_rfl anchor
 
 /-- The ordinary total-degree specialization. -/
 theorem upper_set_numerator {d p : ℕ} (hp : 2 ≤ p) (U : Set (Vector d))
