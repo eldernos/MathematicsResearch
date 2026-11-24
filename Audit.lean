@@ -177,7 +177,24 @@ run_cmd do
     ``NormalityChecker.Localized.clean_denominator,
     ``NormalityChecker.Localized.shift_error,
     ``NormalityChecker.Localized.series_normal,
-    ``NormalityChecker.Localized.binary_series_normal]
+    ``NormalityChecker.Localized.binary_series_normal,
+    ``NormalityChecker.LocalizedSupport.sum_layers,
+    ``NormalityChecker.LocalizedSupport.shift_error,
+    ``NormalityChecker.LocalizedSupport.canonical_lift_fixed,
+    ``NormalityChecker.LocalizedSupport.prefix_residue,
+    ``NormalityChecker.LocalizedSupport.passes_denominator,
+    ``NormalityChecker.LocalizedSupport.insertion_count,
+    ``NormalityChecker.LocalizedSupport.clean_denominator,
+    ``NormalityChecker.LocalizedSupport.Certificate.normal,
+    ``NormalityChecker.LocalizedSupport.decimal_residue_table,
+    ``NormalityChecker.LocalizedSupport.decimal_denominator,
+    ``NormalityChecker.LocalizedSupport.decimal_235_normal,
+    ``NormalityChecker.LocalizedSupport.decimal_value_eq_series,
+    ``NormalityChecker.LocalizedSupport.decimal_series_normal,
+    ``NormalityChecker.LocalizedSupport.decimal_257_normal,
+    ``NormalityChecker.LocalizedSupport.decimal_2511_normal,
+    ``NormalityChecker.LocalizedSupport.base30_2357_normal,
+    ``NormalityChecker.LocalizedSupport.binary_certificates]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

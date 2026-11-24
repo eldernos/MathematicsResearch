@@ -20,3 +20,4 @@ public import NormalityChecker.AggregateGaps
 public import NormalityChecker.LocalizedNormality
 public import NormalityChecker.LocalizedMixed
 public import NormalityChecker.FixedGap
+public import NormalityChecker.LocalizedExamples

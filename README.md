@@ -70,6 +70,10 @@ X_{b,q,p}=\sum_{j,a\ge0}\frac{1}{q^ap^j b^{q^ap^j}}.
 
 This includes decimal normality for the prime pairs $`\{2,7\}`$ and $`\{5,11\}`$. The proof bounds the proportion of digit positions where many factors of $`p`$ disappear from the reduced denominator. The earlier binary $`\{2,5\}`$ result also identifies exactly where one factor of five cancels. [General proof and prior work](notes/mixed-localized-logarithms.md) · [Literal series theorem](NormalityChecker/LocalizedMixed.lean) · [Exact calculation for five](notes/localized-logarithms.md)
 
+## Finite certificates for infinite prime-restricted sums
+
+The logarithmic series supported on $`2^a3^j5^c`$ is **decimal normal**. Five residues modulo 9 certify every sufficiently large rational prefix. More generally, an executable test checks every cell of a finite partition. Success proves normality when all support primes except the selected odd prime divide the base. This also gives decimal normality for the supports $`\{2,5,7\}`$ and $`\{2,5,11\}`$, and base-30 normality for $`\{2,3,5,7\}`$. [Proof and worked certificates](notes/localized-certificates.md) · [Literal three-exponent theorem](NormalityChecker/LocalizedExamples.lean)
+
 ## The two arithmetic milestones
 
 The logarithm series gives the rational prefixes
