@@ -1,6 +1,6 @@
 {
  "description": "Proof-dependency map. Solid edges are checked against the import graph of NormalityChecker/**/*.lean: each source module is transitively imported by a target module (shortest path recorded) and a public declaration of the source is referenced on such a path. Dashed edges are historical; dotted edges are paper-only inputs.",
- "modules_parsed": 167,
+ "modules_parsed": 171,
  "foundation_modules": [
   "Basic",
   "Analysis.Weyl",
