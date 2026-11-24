@@ -29,7 +29,7 @@ The same script runs in [Lean continuous integration](../.github/workflows/lean.
 | --- | --- | --- |
 | Exact-arithmetic tests | `python3 -B -m unittest discover -s scripts -p 'test_*.py'` | The finite computations quoted in the notes, with rational arithmetic, and the portal's own checks |
 | Build | `lake build` | Every module elaborates; every proof is accepted by Lean's elaborator |
-| Independent paper statements | `lake env lean papers/01-stoneham-polynomials/check.lean` and `papers/02-localized-normality/check.sh` | The library theorems inhabit the public statement types in the two principal papers at the specified radix and indexing conventions |
+| Independent paper statements | The `check.sh` or `check.lean` entry in each numbered manuscript folder | The library theorems inhabit the public statement types in the two principal papers at the specified radix and indexing conventions |
 | Axiom audit | `lake env lean Audit.lean` | The listed theorems depend only on `propext`, `Classical.choice` and `Quot.sound`; no `sorry` and no added axioms |
 | Declaration directory | `NORMALITY_UPDATE_THEOREM_INDEX=0 lake env lean scripts/readme_theorems.lean` | The README directory and [declarations.json](data/declarations.json) list exactly the public theorems and lemmas of the compiled library, at their actual source lines |
 | Documentation | `python3 -B scripts/portal.py check --strict` | Registry entries name existing declarations and files; every relative link and anchor resolves; every result identifier mentioned is registered; every module has a topic; generated pages, figures and data are current |

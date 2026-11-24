@@ -5,8 +5,13 @@ cd "$(dirname "$0")/.."
 python3 -B -m unittest discover -s scripts -p 'test_*.py'
 lake build
 lake env lean Audit.lean
-lake env lean papers/01-stoneham-polynomials/check.lean
-papers/02-localized-normality/check.sh
+for paper in papers/[0-9][0-9]-*/; do
+  if [[ -x "${paper}check.sh" ]]; then
+    "${paper}check.sh"
+  elif [[ -f "${paper}check.lean" ]]; then
+    lake env lean "${paper}check.lean"
+  fi
+done
 NORMALITY_UPDATE_THEOREM_INDEX=0 lake env lean scripts/readme_theorems.lean
 # Registry, links, anchors, result identifiers, topics, generated pages and figures.
 python3 -B scripts/portal.py check --strict
