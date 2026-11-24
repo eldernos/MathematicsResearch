@@ -13,18 +13,14 @@ def RadixCellCancellation (c : ℕ) (f : ℕ → ℂ) (u : ℕ) : Prop :=
   ∀ ε : ℝ, 0<ε → ∀ᶠ k : ℕ in atTop, ∀ T ≤ c^k,
     ‖∑ i ∈ range T, f (u*c^k+i)‖ ≤ ε*(c:ℝ)^k
 
-/-- Control of all partial cells at large scales controls every prefix endpoint. -/
-theorem mean_zero_of_radix_cells {c S : ℕ} (hc : 1<c) (hS : 0<S) {f : ℕ → ℂ}
-    (h : ∀ u ∈ Ico S (c*S), RadixCellCancellation c f u) : Tendsto (mean f) atTop (𝓝 0) := by
-  apply tendsto_zero_iff_norm_tendsto_zero.mpr
-  rw [Metric.tendsto_atTop]
-  intro ε hε
-  let δ := ε/(2*((c:ℝ)+1)*S)
+/-- Sum complete scales and the final partial scale, with the initial prefix explicit. -/
+theorem prefix_of_radix_cells {c S K N : ℕ} (hc : 1<c) (hS : 0<S) {f : ℕ → ℂ}
+    {δ : ℝ} (hδ : 0<δ) (hlow : S*c^K ≤ N)
+    (hK : ∀ k≥K, ∀ u ∈ Ico S (c*S), ∀ T ≤ c^k,
+      ‖∑ i ∈ range T, f (u*c^k+i)‖ ≤ δ*(c:ℝ)^k) :
+    ‖∑ i ∈ range N, f i‖ ≤ ‖∑ i ∈ range (S*c^K), f i‖ + ((c:ℝ)+1)*S*δ*N := by
   have hc₁ : 1 ≤ c := by omega
   have hwidth : S+(c-1)*S=c*S := by nlinarith [Nat.sub_add_cancel hc₁, Nat.mul_sub_left_distrib S c 1]
-  have hδ : 0<δ := by dsimp [δ]; positivity
-  have HE := (eventually_all_finset (Ico S (c*S))).mpr (fun u hu => h u hu δ hδ)
-  obtain ⟨K,hK⟩ := eventually_atTop.mp HE
   let P (n : ℕ) := ∑ i ∈ range n, f i
   have segment (k : ℕ) (hk : K≤k) (l : ℕ) (hl : l≤(c-1)*S) :
       ‖P ((S+l)*c^k)-P (S*c^k)‖ ≤ l*(δ*(c:ℝ)^k) := by
@@ -50,11 +46,6 @@ theorem mean_zero_of_radix_cells {c S : ℕ} (hc : 1<c) (hS : 0<S) {f : ℕ → 
       have H' := norm_add_le (P (S*c^(k+1))-P (S*c^k)) (P (S*c^k))
       rw [sub_add_cancel] at H'
       push_cast [Nat.cast_sub hc₁] at H; rw [pow_succ (c:ℝ) k]; linarith
-  have hlim : Tendsto (fun n : ℕ => C/(n:ℝ)) atTop (𝓝 0) := tendsto_const_div_atTop_nhds_zero_nat C
-  obtain ⟨N₀,hN₀⟩ := eventually_atTop.mp (hlim.eventually_lt_const (half_pos hε))
-  refine ⟨max N₀ (S*c^K),fun N hN => ?_⟩
-  have hlow := (le_max_right _ _).trans hN
-  have h₀ := hN₀ N ((le_max_left _ _).trans hN)
   let k := Nat.log c (N/S)
   have hNS : c^K ≤ N/S := (Nat.le_div_iff_mul_le hS).mpr (by simpa [mul_comm] using hlow)
   have hNSpos := (pow_pos (by omega : 0<c) K).trans_le hNS
@@ -71,7 +62,6 @@ theorem mean_zero_of_radix_cells {c S : ℕ} (hc : 1<c) (hS : 0<S) {f : ℕ → 
   let r := N%q
   have hus : S≤u := (Nat.le_div_iff_mul_le hq).mpr hu₀
   have hut : u<c*S := (Nat.div_lt_iff_lt_mul hq).mpr hu₁
-  have hpos : (0:ℝ)<N := by exact_mod_cast (Nat.mul_pos hS hq).trans_le hu₀
   have hu := segment k hk (u-S) (by omega)
   rw [Nat.add_sub_of_le hus] at hu
   have he : P N = P (u*q) + ∑ i ∈ range r, f (u*q+i) := by
@@ -89,13 +79,37 @@ theorem mean_zero_of_radix_cells {c S : ℕ} (hc : 1<c) (hS : 0<S) {f : ℕ → 
     nlinarith [boundary k hk, mul_le_mul_of_nonneg_right hz (by positivity : 0≤δ*(c:ℝ)^k),
       mul_le_mul_of_nonneg_right hs' (by positivity : 0≤δ*(c:ℝ)^k)]
   have hqN : (c:ℝ)^k ≤ N := by exact_mod_cast (Nat.le_mul_of_pos_left q hS).trans hu₀
+  apply hpartial.trans
+  change C + _ ≤ C + _
+  gcongr
+
+/-- Control of all partial cells at large scales controls every prefix endpoint. -/
+theorem mean_zero_of_radix_cells {c S : ℕ} (hc : 1<c) (hS : 0<S) {f : ℕ → ℂ}
+    (h : ∀ u ∈ Ico S (c*S), RadixCellCancellation c f u) : Tendsto (mean f) atTop (𝓝 0) := by
+  apply tendsto_zero_iff_norm_tendsto_zero.mpr
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  let δ := ε/(2*((c:ℝ)+1)*S)
+  have hδ : 0<δ := by dsimp [δ]; positivity
+  have HE := (eventually_all_finset (Ico S (c*S))).mpr (fun u hu => h u hu δ hδ)
+  obtain ⟨K,hK⟩ := eventually_atTop.mp HE
+  let P (n : ℕ) := ∑ i ∈ range n, f i
+  let C := ‖P (S*c^K)‖
+  have hlim : Tendsto (fun n : ℕ => C/(n:ℝ)) atTop (𝓝 0) := tendsto_const_div_atTop_nhds_zero_nat C
+  obtain ⟨N₀,hN₀⟩ := eventually_atTop.mp (hlim.eventually_lt_const (half_pos hε))
+  refine ⟨max N₀ (S*c^K),fun N hN => ?_⟩
+  have hlow := (le_max_right _ _).trans hN
+  have h₀ := hN₀ N ((le_max_left _ _).trans hN)
+  have bound := prefix_of_radix_cells hc hS hδ hlow hK
+  have hpos : (0:ℝ)<N := by exact_mod_cast (Nat.mul_pos hS (pow_pos (by omega : 0<c) K)).trans_le hlow
   have hS' : (0:ℝ)<S := by exact_mod_cast hS
   have hd' : ((c:ℝ)+1)*(S:ℝ)*δ = ε/2 := by dsimp [δ]; field_simp
-  rw [show ∀ a b c d : ℝ, a*b*c*d = (a*b*c)*d by intros; ring,hd'] at hpartial
+  rw [hd'] at bound
   rw [Real.dist_eq, sub_zero,abs_of_nonneg (norm_nonneg _),mean,norm_div,Complex.norm_natCast, div_lt_iff₀ hpos]
   change ‖P N‖ < _
   have HC := (div_lt_iff₀ hpos).mp h₀
-  nlinarith [mul_le_mul_of_nonneg_left hqN (half_pos hε).le]
+  change ‖P N‖ ≤ C+(ε/2)*N at bound
+  nlinarith
 
 abbrev CellCancellation := RadixCellCancellation 3
 

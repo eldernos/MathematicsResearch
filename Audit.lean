@@ -194,7 +194,13 @@ run_cmd do
     ``NormalityChecker.LocalizedSupport.decimal_257_normal,
     ``NormalityChecker.LocalizedSupport.decimal_2511_normal,
     ``NormalityChecker.LocalizedSupport.base30_2357_normal,
-    ``NormalityChecker.LocalizedSupport.binary_certificates]
+    ``NormalityChecker.LocalizedSupport.binary_certificates,
+    ``NormalityChecker.Localized.effective_threshold_mesh,
+    ``NormalityChecker.IntervalFourier.interval_count_bound,
+    ``NormalityChecker.Localized.interval_discrepancy_rate,
+    ``NormalityChecker.Localized.discrepancy_rate,
+    ``NormalityChecker.smooth_order_bound,
+    ``NormalityChecker.Localized.Composite.separated_prefixes]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

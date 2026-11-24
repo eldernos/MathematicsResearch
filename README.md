@@ -68,7 +68,7 @@ For every odd prime $`p`$, restricting the series for ln 2 to indices $`2^a p^j`
 X_{b,q,p}=\sum_{j,a\ge0}\frac{1}{q^ap^j b^{q^ap^j}}.
 ```
 
-This includes decimal normality for the prime pairs $`\{2,7\}`$ and $`\{5,11\}`$. The proof bounds the proportion of digit positions where many factors of $`p`$ disappear from the reduced denominator. The earlier binary $`\{2,5\}`$ result also identifies exactly where one factor of five cancels. [General proof and prior work](notes/mixed-localized-logarithms.md) · [Literal series theorem](NormalityChecker/LocalizedMixed.lean) · [Exact calculation for five](notes/localized-logarithms.md)
+For each fixed triple, Lean also proves that the interval discrepancy of the first $`N`$ shifts is $`O(1/\log\log N)`$. This includes decimal normality for the prime pairs $`\{2,7\}`$ and $`\{5,11\}`$. The proof bounds the proportion of digit positions where many factors of $`p`$ disappear from the reduced denominator. The earlier binary $`\{2,5\}`$ result also identifies exactly where one factor of five cancels. [General proof and prior work](notes/mixed-localized-logarithms.md) · [Literal series theorem](NormalityChecker/LocalizedMixed.lean) · [Discrepancy rate](NormalityChecker/LocalizedDiscrepancy.lean) · [Exact calculation for five](notes/localized-logarithms.md)
 
 ## Finite certificates for infinite prime-restricted sums
 

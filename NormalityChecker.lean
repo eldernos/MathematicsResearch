@@ -21,3 +21,5 @@ public import NormalityChecker.LocalizedNormality
 public import NormalityChecker.LocalizedMixed
 public import NormalityChecker.FixedGap
 public import NormalityChecker.LocalizedExamples
+public import NormalityChecker.LocalizedDiscrepancy
+public import NormalityChecker.CompositeLayers

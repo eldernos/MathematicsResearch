@@ -11,11 +11,11 @@ open scoped Topology
 namespace NormalityChecker.Localized
 variable (d : Parameters)
 
-private noncomputable def character (h : ℤ) (n : ℕ) := phase ((h:ℝ)*(shifted d n:ℝ))
+noncomputable def character (h : ℤ) (n : ℕ) := phase ((h:ℝ)*(shifted d n:ℝ))
 
-private def periodFactor := d.b^d.p.totient-1
+def periodFactor := d.b^d.p.totient-1
 
-private lemma clean_block {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K s T J : ℕ}
+lemma clean_block {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K s T J : ℕ}
     (large : d.p^J*h.natAbs*periodFactor d ≤ K) (hK : 2≤K) (hs : 0<s)
     (hi : s ≤ d.p^6*K^6) (hT : T ≤ K^5)
     (survives : (K:ℚ)^6 ≤ d.p^J * padicNorm d.p (shifted d s))
@@ -111,22 +111,22 @@ private lemma block_split (f : ℕ → ℂ) (s B L : ℕ) :
   | zero => simp
   | succ L ih => rw [Nat.succ_mul,sum_range_add,ih,sum_range_succ]; simp [Nat.add_assoc]
 
-private lemma trivial_character_bound (h : ℤ) (s T : ℕ) :
-    ‖∑ i ∈ range T, character d h (s+i)‖ ≤ T := by
-  simpa [character,norm_phase] using norm_sum_le (range T) (fun i => character d h (s+i))
-
 /-- The cost of an arbitrary partial cell consists of a vanishing block error
 and the specified exceptional width. Only starts with a small denominator are charged. -/
-private lemma cell_bound {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K D u T J : ℕ}
-    (hu : 1≤u) (hu' : u<d.p^6) (large : d.p^J*h.natAbs*periodFactor d ≤ K)
+lemma statistic_cell_bound (F : ℕ → ℂ) (bounded : ∀ n, ‖F n‖ ≤ 1) {K D u T J : ℕ} {G : ℝ} (hG : 0≤G)
+    (hu : 1≤u) (hu' : u<d.p^6)
     (hK : 2≤K) (hD : D≤K^5) (hDpow : d.p^6*K^6 ≤ 2^D) (hT : T≤K^6)
     {δ : ℝ} (hδ : 0≤δ)
     (diam : ∀ s t : ℕ, u*K^6 ≤ s → t ≤ (u+1)*K^6 →
       (d.p:ℚ)^J * padicNorm d.p (shifted d s) < (K:ℚ)^6 →
-      (d.p:ℚ)^J * padicNorm d.p (shifted d t) < (K:ℚ)^6 → (t:ℝ)-s < δ*K^6) :
-    ‖∑ i ∈ range T, character d h (u*K^6+i)‖ ≤
-       ((d.p:ℝ)^6+4+2*((D:ℝ)+1)^2)*K^5 + δ*K^6 := by
+      (d.p:ℚ)^J * padicNorm d.p (shifted d t) < (K:ℚ)^6 → (t:ℝ)-s < δ*K^6)
+    (good_bound : ∀ s : ℕ, K^6 ≤ s → s ≤ d.p^6*K^6 → (K:ℚ)^6 ≤ d.p^J*padicNorm d.p (shifted d s) →
+      (∀ v ∈ allowed d s, index d v + v.1 ≤ s) →
+      (∀ m, s<m → m<s+K^5 → ¬ Supported d m) → ‖∑ i ∈ range (K^5), F (s+i)‖ ≤ G) :
+    ‖∑ i ∈ range T, F (u*K^6+i)‖ ≤ (K:ℝ)*G + (2+2*((D:ℝ)+1)^2)*K^5 + δ*K^6 := by
   classical
+  have trivial (s T : ℕ) : ‖∑ i ∈ range T, F (s+i)‖ ≤ T :=
+    (norm_sum_le ..).trans ((sum_le_sum (fun i (_ : i∈range T) => bounded (s+i))).trans_eq (by simp))
   let B := K^5
   let U := u*K
   let s := u*K^6
@@ -134,7 +134,7 @@ private lemma cell_bound {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K D u T J : �
   let start (l : ℕ) := s+l*B
   let bad := (range L).filter (fun l => (d.p:ℚ)^J * padicNorm d.p (shifted d (start l)) < (K:ℚ)^6)
   let E := blockExceptions d D B U ∪ bad
-  let f (l : ℕ) := ∑ i ∈ range B, character d h (start l+i)
+  let f (l : ℕ) := ∑ i ∈ range B, F (start l+i)
   have hB : 0<B := pow_pos (by omega) _
   have hL : L ≤ K := Nat.div_le_of_le_mul (by simpa [B,show K^6=K^5*K by ring] using hT)
   have hb (l : ℕ) : start l = (U+l)*B := by dsimp [start,s,B,U]; ring
@@ -150,7 +150,7 @@ private lemma cell_bound {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K D u T J : �
     have hp : (0:ℝ)<K := by exact_mod_cast (by omega : 0<K)
     apply le_of_lt; apply (lt_of_mul_lt_mul_right (a:=(K:ℝ)^5) _ (by positivity))
     dsimp [start,s,B] at le; push_cast at le; linarith only [le]
-  have good (l : ℕ) (hl : l ∈ range L) (hg : l ∉ E) : ‖f l‖ ≤ ((d.p:ℝ)^6+2)*K^4 := by
+  have good (l : ℕ) (hl : l ∈ range L) (hg : l ∉ E) : ‖f l‖ ≤ G := by
     have ge : l ∉ blockExceptions d D B U := fun h => hg (mem_union_left _ h)
     have surv : (K:ℚ)^6 ≤ d.p^J*padicNorm d.p (shifted d (start l)) := by
       by_contra! h; exact hg (mem_union_right _ (mem_filter.mpr ⟨hl,h⟩))
@@ -158,17 +158,16 @@ private lemma cell_bound {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K D u T J : �
     have before (m : ℕ) (hm : Supported d m) (hi : m < start l+B) : m+B ≤ start l := by
       have hmD := (hi.le.trans bound).trans hDpow
       rw [hb] at hi ⊢; apply good_block d hB ge hm hmD; simpa [Nat.add_mul] using hi
-    apply clean_block d (s:=start l) (T:=B) hh odd large hK (Nat.add_pos_left (Nat.mul_pos hu (pow_pos (show 0<K by omega) _)) _)
-      ((Nat.le_add_right ..).trans bound) le_rfl surv
+    apply good_bound (start l) ((Nat.le_mul_of_pos_left _ hu).trans (Nat.le_add_right ..)) ((Nat.le_add_right ..).trans bound) surv
     · intro v hv
       have hm := (mem_allowed d).mp hv
       have H := before _ ⟨v,rfl⟩ (by omega)
       have ha := (exponent_bounds d (((hm.trans (Nat.le_add_right ..)).trans bound).trans hDpow)).1
       omega
     · intro m hm hi hp; have := before m hp hi; omega
-  have each (l : ℕ) (hl : l ∈ range L) : ‖f l‖ ≤ ((d.p:ℝ)^6+2)*K^4 + (if l∈E then (B:ℝ) else 0) := by
+  have each (l : ℕ) (hl : l ∈ range L) : ‖f l‖ ≤ G + (if l∈E then (B:ℝ) else 0) := by
     split_ifs with he
-    · exact (trivial_character_bound d h (start l) B).trans (le_add_of_nonneg_left (by positivity))
+    · exact (trivial (start l) B).trans (le_add_of_nonneg_left (by positivity))
     · simpa using good l hl he
   have mass : ∑ l ∈ range L, (if l∈E then (B:ℝ) else 0) ≤ (2*((D:ℝ)+1)^2 + (δ*K+1))*B := by
     rw [← sum_filter]; simp only [sum_const,nsmul_eq_mul]
@@ -176,19 +175,34 @@ private lemma cell_bound {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K D u T J : �
     have hcard := (card_le_card (show (range L).filter (·∈E) ⊆ E from fun _ hl => (mem_filter.mp hl).2)).trans (card_union_le ..)
     exact (by exact_mod_cast hcard : _ ≤ ((blockExceptions d D B U).card:ℝ) + bad.card).trans
       (add_le_add (by exact_mod_cast exception_count d D B U) small)
-  have bulk : ‖∑ l ∈ range L, f l‖ ≤ (K:ℝ)*(((d.p:ℝ)^6+2)*K^4) + (2*((D:ℝ)+1)^2+(δ*K+1))*B := by
+  have bulk : ‖∑ l ∈ range L, f l‖ ≤ (K:ℝ)*G + (2*((D:ℝ)+1)^2+(δ*K+1))*B := by
     apply (norm_sum_le ..).trans ((sum_le_sum each).trans _)
     rw [sum_add_distrib]; simp only [sum_const,card_range,nsmul_eq_mul]
     exact add_le_add (mul_le_mul_of_nonneg_right (by exact_mod_cast hL) (by positivity)) mass
   let r := T%B
   have cut : T=L*B+r := by dsimp [L,r]; rw [Nat.mul_comm,Nat.div_add_mod]
   conv_lhs => rw [cut,sum_range_add,block_split]
-  have tail := trivial_character_bound d h (s+L*B) r
+  have tail := trivial (s+L*B) r
   simp only [Nat.add_assoc] at tail
   apply (norm_add_le ..).trans ((add_le_add bulk tail).trans _)
   have hr : (r:ℝ) ≤ B := by exact_mod_cast (Nat.mod_lt T hB).le
   change _ + _ + (r:ℝ) ≤ _
   dsimp only [B] at *; push_cast at *; nlinarith only [hr]
+
+private lemma cell_bound {h : ℤ} (hh : h ≠ 0) (odd : Odd d.p) {K D u T J : ℕ}
+    (hu : 1≤u) (hu' : u<d.p^6) (large : d.p^J*h.natAbs*periodFactor d ≤ K)
+    (hK : 2≤K) (hD : D≤K^5) (hDpow : d.p^6*K^6 ≤ 2^D) (hT : T≤K^6)
+    {δ : ℝ} (hδ : 0≤δ)
+    (diam : ∀ s t : ℕ, u*K^6 ≤ s → t ≤ (u+1)*K^6 →
+      (d.p:ℚ)^J * padicNorm d.p (shifted d s) < (K:ℚ)^6 →
+      (d.p:ℚ)^J * padicNorm d.p (shifted d t) < (K:ℚ)^6 → (t:ℝ)-s < δ*K^6) :
+    ‖∑ i ∈ range T, character d h (u*K^6+i)‖ ≤
+       ((d.p:ℝ)^6+4+2*((D:ℝ)+1)^2)*K^5 + δ*K^6 := by
+  have H := statistic_cell_bound d (character d h) (fun n => (norm_phase _).le)
+    (G:=((d.p:ℝ)^6+2)*K^4) (by positivity) hu hu' hK hD hDpow hT hδ diam
+    (fun s low high surv clean free => clean_block d hh odd large hK
+      ((pow_pos (show 0<K by omega) _).trans_le low) high le_rfl surv clean free)
+  exact H.trans_eq (by ring)
 
 /-- Mixed two-generator normality in base `b`, for `q ∣ b` and an odd prime
 `p` coprime to `b`. The hypotheses allow composite `q` as well. -/

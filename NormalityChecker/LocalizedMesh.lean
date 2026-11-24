@@ -91,12 +91,12 @@ theorem threshold_mesh (u : ℕ) (hu : 1≤u) {ε : ℝ} (hε : 0<ε) :
 
 /-- On each unit cell of the normalized scale, any two exceptional positions are
 less than `ε p^k` apart. This includes cutoffs inside the exceptional region. -/
-theorem exceptional_diameter (u : ℕ) (hu : 1≤u) {ε : ℝ} (hε : 0<ε) :
-    ∃ J : ℕ, ∀ k ≥ J, ∀ s t : ℕ, u*d.p^k ≤ s → t ≤ (u+1)*d.p^k →
+lemma exceptional_diameter_of_mesh (u : ℕ) (hu : 1≤u) {ε : ℝ} {J : ℕ}
+    (H : ∀ x y : ℝ, u≤x → y≤u+1 → x+ε≤y → ∃ a i : ℕ, i≤J ∧ x < (d.q:ℝ)^a/(d.p:ℝ)^i ∧ (d.q:ℝ)^a/(d.p:ℝ)^i < y) :
+    ∀ k ≥ J, ∀ s t : ℕ, u*d.p^k ≤ s → t ≤ (u+1)*d.p^k →
       padicNorm d.p (shifted d s) < (d.p:ℚ)^(k-J) →
       padicNorm d.p (shifted d t) < (d.p:ℚ)^(k-J) → (t:ℝ)-s < ε*(d.p:ℝ)^k := by
-  obtain ⟨J,H⟩ := threshold_mesh d u hu hε
-  refine ⟨J,fun k hk s t hs ht hbad₁ hbad₂ => ?_⟩
+  intro k hk s t hs ht hbad₁ hbad₂
   by_contra! wide
   let S := (d.p:ℝ)^k
   have hS : 0<S := pow_pos (by exact_mod_cast d.hp.pos) _
@@ -117,6 +117,13 @@ theorem exceptional_diameter (u : ℕ) (hu : 1≤u) {ε : ℝ} (hε : 0<ε) :
   have sep := separated_prefixes d h₁' h₂' ratio
   have pw : (d.p:ℚ)^(k-J) ≤ (d.p:ℚ)^(k-i) := pow_le_pow_right₀ (by exact_mod_cast d.hp.one_le) (by omega)
   exact (not_lt_of_ge (pw.trans sep)) (max_lt hbad₁ hbad₂)
+
+theorem exceptional_diameter (u : ℕ) (hu : 1≤u) {ε : ℝ} (hε : 0<ε) :
+    ∃ J : ℕ, ∀ k ≥ J, ∀ s t : ℕ, u*d.p^k ≤ s → t ≤ (u+1)*d.p^k →
+      padicNorm d.p (shifted d s) < (d.p:ℚ)^(k-J) →
+      padicNorm d.p (shifted d t) < (d.p:ℚ)^(k-J) → (t:ℝ)-s < ε*(d.p:ℝ)^k := by
+  obtain ⟨J,H⟩ := threshold_mesh d u hu hε
+  exact ⟨J,exceptional_diameter_of_mesh d u hu H⟩
 
 /-- A set of integer starts of diameter at most `w` has at most `w+1` members. -/
 lemma card_of_diameter (A : Finset ℕ) {w : ℝ} (hw : 0≤w)

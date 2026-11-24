@@ -7,10 +7,12 @@ open Filter Finset
 open scoped Topology
 namespace NormalityChecker
 
-/-- Extreme interval discrepancy of the first N shifts, counting all overlapping starts. -/
-noncomputable def binaryDiscrepancy (x : ℝ) (N : ℕ) : ℝ :=
+/-- Extreme interval discrepancy of the first N radix shifts, counting overlapping starts. -/
+noncomputable def radixDiscrepancy (b : ℕ) (x : ℝ) (N : ℕ) : ℝ :=
   sSup {d | ∃ a c : ℝ, 0 ≤ a ∧ a < c ∧ c ≤ 1 ∧
-    d = |frequency (shift 2 x) a c N - (c-a)|}
+    d = |frequency (shift b x) a c N - (c-a)|}
+
+noncomputable abbrev binaryDiscrepancy := radixDiscrepancy 2
 
 noncomputable def asymptoticDiscrepancy (x : ℝ) := limsup (binaryDiscrepancy x) atTop
 
@@ -45,7 +47,7 @@ theorem interval_le_discrepancy (x : ℝ) (N : ℕ) {a c : ℝ} (ha : 0≤a) (ha
 lemma discrepancy_le {x : ℝ} {N : ℕ} {D : ℝ}
     (H : ∀ a c : ℝ, 0≤a → a<c → c≤1 → |frequency (shift 2 x) a c N-(c-a)|≤D) :
     binaryDiscrepancy x N ≤ D := by
-  unfold binaryDiscrepancy
+  unfold binaryDiscrepancy radixDiscrepancy
   refine csSup_le ?_ ?_
   · exact ⟨_,0,1,le_rfl,zero_lt_one,le_rfl,rfl⟩
   rintro _ ⟨a,c,ha,hac,hc,rfl⟩
