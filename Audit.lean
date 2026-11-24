@@ -105,7 +105,28 @@ run_cmd do
     ``NormalityChecker.ordered_tail_profile,
     ``NormalityChecker.corrected_shift_bound,
     ``NormalityChecker.corrected_critical_shift,
-    ``NormalityChecker.correctedPrefix_normal]
+    ``NormalityChecker.correctedPrefix_normal,
+    ``NormalityChecker.exists_inverse_lift,
+    ``NormalityChecker.inverse_lift_precision,
+    ``NormalityChecker.lift_eval_zero_iff,
+    ``NormalityChecker.CyclotomicCell.model,
+    ``NormalityChecker.CyclotomicCell.character,
+    ``NormalityChecker.mean_at_scale,
+    ``NormalityChecker.cyclotomic_fourier_limit,
+    ``NormalityChecker.cyclotomic_normal_iff,
+    ``NormalityChecker.residueOrder_eq,
+    ``NormalityChecker.CyclicPolynomial.vanishes_iff,
+    ``NormalityChecker.resonanceWitnesses_eq,
+    ``NormalityChecker.cyclotomicNormalTest_correct,
+    ``NormalityChecker.circle_mixture_of_characters,
+    ``NormalityChecker.cyclotomic_distribution,
+    ``NormalityChecker.binary_cyclotomic_cell,
+    ``NormalityChecker.cyclotomicTest_binary_eq,
+    ``NormalityChecker.positive_sum_of_order_one,
+    ``NormalityChecker.decimal_positive_normal,
+    ``NormalityChecker.seventh_triple_not_normal,
+    ``NormalityChecker.seventh_triple_masses,
+    ``NormalityChecker.seventh_triple_distributions]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

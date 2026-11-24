@@ -4,11 +4,40 @@
 
 [![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
-Lean 4 proofs about normality of arithmetic expansions, including a decision procedure for finite binary component sums, irrational nonnormal sums of normal components in every base, and the denominators of shifted polylogarithmic series. The project grew out of the [shared research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221).
+NormalityChecker decides normality for finite rational sums of Stoneham-type components. Its correctness theorem connects a Boolean calculation to the limiting frequency of every overlapping digit block. The repository also contains proofs about logarithmic denominators and the open normality question for ln 2. [Note for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
 
-## A binary normality checker for finite sums
+## The cyclotomic checker
 
-The checker takes rational coefficients and positive indices for the components
+Fix a base $`b\ge2`$ and an odd prime $`p`$ coprime to $`b`$. The input is a finite set of positive indices $`M`$ and rational coefficients $`a_m`$. It specifies the real number
+
+```math
+F=\sum_{m\in M}a_m T_{b,p,m},\qquad
+T_{b,p,m}=\sum_{j=0}^{\infty}\frac{1}{m p^j b^{m p^j}}.
+```
+
+Let $`d`$ be the multiplicative order of $`b`$ modulo $`p`$ and choose a positive $`S`$ at least as large as every index. For each integer $`S\le u\lt pS`$, form the rational polynomial
+
+```math
+P_u(X)=\sum_{m\in M}\frac{a_m X^m}{m p^{j_m(u)}},
+\qquad j_m(u)=\left\lfloor\log_p\left\lfloor u/m\right\rfloor\right\rfloor.
+```
+
+**The sum is normal in base $`b`$ exactly when $`\Phi_d`$ divides none of these polynomials.** The implementation tests divisibility using a cyclic vector of rational coefficients. [Lean equivalence](NormalityChecker/CyclotomicClassification.lean) · [Executable checker](NormalityChecker/CyclotomicTest.lean)
+
+```lean
+import NormalityChecker
+open NormalityChecker
+
+#eval cyclotomicNormalTest 10 3 {1, 2, 3, 4} (fun m => 1 / (m + 1)) -- true
+#eval cyclotomicNormalTest 2 7 {1, 2, 3} (fun m => m)               -- false
+#eval (resonanceWitnesses 2 7 3 {1, 2, 3} (fun m => m)).sort       -- [3, 4, 5, 6]
+```
+
+For $`b=10,p=3`$, **every** nonempty finite family with positive rational weights is decimal normal. For $`b=2,p=7`$, the three-term sum in the example is binary nonnormal. Its orbit after scaling by six has two different subsequential limits. The point mass at zero has weight $`2/9`$ at endpoints $`3\cdot7^k`$ and $`2/3`$ at endpoints $`7^{k+1}`$. In each case the remaining mass is uniform on the circle. [Verified examples](NormalityChecker/CyclotomicExamples.lean) · [Distribution theorem](NormalityChecker/CyclotomicDistribution.lean)
+
+## The original binary checker
+
+At $`b=2,p=3`$ the generalized checker agrees with the original checker for the components
 
 ```math
 T_m=\sum_{j=0}^{\infty}\frac{1}{m3^j 2^{m3^j}}.

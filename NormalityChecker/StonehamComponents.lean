@@ -10,7 +10,7 @@ open Finset Filter
 open scoped Topology
 namespace NormalityChecker
 
-private noncomputable def weightedTerm (b c m j : ℕ) : ℝ :=
+noncomputable def weightedTerm (b c m j : ℕ) : ℝ :=
   (1/(b:ℝ))^(m*c^j)/(c:ℝ)^j
 
 private lemma weighted_majorant {b c m J n : ℕ} (hb : 1<b) (hc : 1<c) (hn : n≤m*c^J) (i : ℕ) :
@@ -54,6 +54,22 @@ private lemma weighted_prefix {b c : ℕ} (hb : 1<b) (hc : 1<c) (hbc : b.Coprime
     rw [sum_range_succ,mul_add,he,term _ hn,pow_succ (c:ℝ)]
     dsimp [d]; push_cast; field_simp; ring
 
+theorem weighted_tail_bound {b c m n k : ℕ} (hb : 1<b) (hc : 1<c) (hm : 0<m)
+    (hn : n ≤ m*c^(k+1)) :
+    |(b:ℝ)^n*((m:ℝ)*radixComponent b c m) -
+      ∑ j ∈ range (k+1), (b:ℝ)^n*weightedTerm b c m j| ≤ (1/((c:ℝ)-1))/(c:ℝ)^k := by
+  have hs := (weighted_sums hb hc hm).mul_left ((b:ℝ)^n)
+  let t (j : ℕ) := (b:ℝ)^n * weightedTerm b c m (j+(k+1))
+  have ht : Summable t := (summable_nat_add_iff _).mpr hs.summable
+  have eqn := hs.summable.sum_add_tsum_nat_add (k+1)
+  rw [hs.tsum_eq] at eqn
+  rw [← eqn,add_sub_cancel_left,abs_of_nonneg (tsum_nonneg (fun j => by unfold weightedTerm; positivity))]
+  have hsmall : 1/(c:ℝ)<1 := (div_lt_one (by positivity)).mpr (by exact_mod_cast hc)
+  calc
+    _ ≤ ∑' j : ℕ, (1/(c:ℝ)^(k+1))*(1/(c:ℝ))^j := ht.tsum_le_tsum
+      (fun j => weighted_majorant hb hc hn j) ((summable_geometric_of_lt_one (by positivity) hsmall).mul_left _)
+    _ = _ := by rw [tsum_mul_left,tsum_geometric_of_lt_one (by positivity) hsmall,pow_succ]; field_simp
+
 /-- At the left endpoint of each cell the finite prefix has a unit numerator.
 The same numerator generates the orbit up to the next insertion. -/
 private lemma weighted_cell {b c m : ℕ} (hb : 1<b) (hc : 1<c) (hm : 0<m) (hbc : b.Coprime c)
@@ -68,18 +84,8 @@ private lemma weighted_cell {b c m : ℕ} (hb : 1<b) (hc : 1<c) (hm : 0<m) (hbc 
   have hn : n ≤ m*c^(k+1) := by dsimp [n]; rw [pow_succ]; nlinarith [Nat.mul_le_mul_right (c^k) (Nat.succ_le_of_lt hhi)]
   have hp : (∑ j ∈ range (k+1), (b:ℝ)^n*weightedTerm b c m j) = A*(b:ℝ)^i/(c:ℝ)^k := by
     rw [← mul_sum]; dsimp [n]; rw [pow_add]; linear_combination (b:ℝ)^i*he
-  have hs := (weighted_sums hb hc hm).mul_left ((b:ℝ)^n)
-  let t (j : ℕ) := (b:ℝ)^n * weightedTerm b c m (j+(k+1))
-  have ht : Summable t := (summable_nat_add_iff _).mpr hs.summable
-  have eqn := hs.summable.sum_add_tsum_nat_add (k+1)
-  rw [hp,hs.tsum_eq] at eqn
-  change |(b:ℝ)^n*_ - _| ≤ _
-  rw [← eqn,add_sub_cancel_left,abs_of_nonneg (tsum_nonneg (fun j => by unfold weightedTerm; positivity))]
-  have hsmall : 1/(c:ℝ)<1 := (div_lt_one (by positivity)).mpr (by exact_mod_cast hc)
-  calc
-    _ ≤ ∑' j : ℕ, (1/(c:ℝ)^(k+1))*(1/(c:ℝ))^j := ht.tsum_le_tsum
-      (fun j => weighted_majorant hb hc hn j) ((summable_geometric_of_lt_one (by positivity) hsmall).mul_left _)
-    _ = _ := by rw [tsum_mul_left,tsum_geometric_of_lt_one (by positivity) hsmall,pow_succ]; field_simp
+  rw [← hp]
+  exact weighted_tail_bound hb hc hm hn
 
 private theorem weighted_fourier {b c m : ℕ} (hb : 1<b) (hc : 1<c) (ho : Odd c)
     (hbc : b.Coprime c) (hm : 0<m) (h : ℤ) (hh : h≠0) :

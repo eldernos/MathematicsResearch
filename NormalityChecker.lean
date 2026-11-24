@@ -12,3 +12,4 @@ public import NormalityChecker.StonehamComponents
 public import NormalityChecker.FourierTest
 public import NormalityChecker.GrowingLags
 public import NormalityChecker.OrderedTail
+public import NormalityChecker.CyclotomicExamples

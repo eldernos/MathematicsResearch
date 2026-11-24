@@ -28,11 +28,19 @@ private lemma depths {m u : ℕ} (hm : 0<m) (hmu : m≤u) :
   · have hi := (Nat.div_lt_iff_lt_mul hm).mp (Nat.lt_pow_succ_log_self (by decide : 1<3) (u/m))
     rw [mul_comm m]; exact hi
 
-private lemma clear_weights (M : Finset ℕ) (a : ℕ → ℚ) :
-    ∃ (D : ℕ) (c : ℕ → ℤ), 0<D ∧ ∀ m ∈ M, (c m:ℚ)=D*(a m/m) := by
+/-- Common denominator used to clear the weights a_m/m. -/
+def weightDen (M : Finset ℕ) (a : ℕ → ℚ) := ∏ m ∈ M, (a m/m).den
+
+def integerWeight (M : Finset ℕ) (a : ℕ → ℚ) (m : ℕ) : ℤ :=
+  (weightDen M a / (a m/m).den : ℕ) * (a m/m).num
+
+lemma weightDen_pos (M : Finset ℕ) (a : ℕ → ℚ) : 0<weightDen M a :=
+  prod_pos (fun m _ => (a m/m).pos)
+
+lemma integerWeight_spec (M : Finset ℕ) (a : ℕ → ℚ) :
+    ∀ m ∈ M, (integerWeight M a m:ℚ)=weightDen M a*(a m/m) := by
   let w (m : ℕ) := a m/m
   let D := ∏ m ∈ M, (w m).den
-  refine ⟨D,fun m => (D/(w m).den:ℕ)*(w m).num, prod_pos (fun m _ => (w m).pos), ?_⟩
   intro m hm
   have he := Nat.div_mul_cancel (dvd_prod_of_mem (fun m => (w m).den) hm)
   change (((D / (w m).den:ℕ)*(w m).num:ℤ):ℚ) = (D:ℚ)*w m
@@ -40,6 +48,10 @@ private lemma clear_weights (M : Finset ℕ) (a : ℕ → ℚ) :
   rw [Int.cast_mul,Int.cast_natCast]
   have he' : ((D/(w m).den:ℕ):ℚ)*(w m).den = D := by exact_mod_cast he
   rw [← he', mul_assoc]; congr 1; field_simp
+
+private lemma clear_weights (M : Finset ℕ) (a : ℕ → ℚ) :
+    ∃ (D : ℕ) (c : ℕ → ℤ), 0<D ∧ ∀ m∈M, (c m:ℚ)=D*(a m/m) :=
+  ⟨_,_,weightDen_pos M a,integerWeight_spec M a⟩
 
 private lemma scaled_sum {M : Finset ℕ} {a : ℕ → ℚ} {D : ℕ} {c : ℕ → ℤ}
     (hc : ∀ m ∈ M, (c m:ℚ)=D*(a m/m)) (hm : ∀ m ∈ M, 0<m) :
