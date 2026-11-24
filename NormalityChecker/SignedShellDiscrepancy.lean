@@ -511,4 +511,53 @@ theorem irrational_iff_frequently_nonzero {b p C : ℕ} (hb : 2 ≤ b) (hp : p.P
     nlinarith only [h, mul_le_mul_of_nonneg_right (Nat.cast_le (α:=ℝ).mpr card) ap.le,
       mul_pos ap (Nat.cast_pos.mpr bp)]
 
+/-- Density at the first boundary and its one-shell affine recurrence. -/
+theorem zeroDensity_boundary_recurrence {p : ℕ} (hp : 1 < p) (c : ℕ → ℤ) :
+    zeroDensity p c 1 = 0 ∧ ∀ j,
+      zeroDensity p c (p^(j+1)) =
+        ((if c j = 0 then (p:ℝ)-1 else 0) + zeroDensity p c (p^j)) / p := by
+  constructor
+  · simp [density_eq, mass]
+  intro j
+  have le : p^j ≤ p^(j+1) := Nat.pow_le_pow_right (by omega) (Nat.le_succ _)
+  have pn : (p:ℝ) ≠ 0 := by exact_mod_cast (show p ≠ 0 by omega)
+  rw [density_eq, mass_shell hp c j _ le le_rfl, density_eq]
+  split_ifs <;> push_cast [Nat.cast_sub le] <;> rw [pow_succ] <;> field_simp <;> ring
+
+/-- All prefix cutoffs have the same upper density as the geometric boundaries. -/
+theorem limsup_zeroDensity_eq_boundary {p : ℕ} (hp : 1 < p) (c : ℕ → ℤ) :
+    limsup (zeroDensity p c) atTop = limsup (fun j => zeroDensity p c (p^j)) atTop := by
+  have pos : 0 < p := by omega
+  have grow : Tendsto (fun j : ℕ => p^j) atTop atTop := tendsto_pow_atTop_atTop_of_one_lt hp
+  have high := isBoundedUnder_of_eventually_le (f:=atTop) (.of_forall fun n => (density_bounds p c n).2)
+  have low := isCoboundedUnder_le_of_le atTop fun n => (density_bounds p c n).1
+  have bh := isBoundedUnder_of_eventually_le (f:=atTop) (.of_forall fun j => (density_bounds p c (p^j)).2)
+  refine le_antisymm ((limsup_le_iff low high).2 ?_) (grow.limsup_comp_le_limsup
+    (isCoboundedUnder_le_of_le _ fun n => (density_bounds p c n).1) high)
+  intro y hy
+  obtain ⟨J, hJ⟩ := eventually_atTop.mp (eventually_lt_of_limsup_lt hy bh)
+  filter_upwards [eventually_ge_atTop (p^J)] with N hN
+  have npos : 0 < N := (pow_pos pos J).trans_le hN
+  let j := Nat.log p N
+  have hj : J ≤ j := Nat.le_log_of_pow_le hp hN
+  have lo : p^j ≤ N := Nat.pow_log_le_self p npos.ne'
+  have hi : N ≤ p^(j+1) := (Nat.lt_pow_succ_log_self hp N).le
+  have le := lo.trans hi
+  have np : (0:ℝ) < N := by exact_mod_cast npos
+  have l := hJ j hj
+  have r := hJ (j+1) (Nat.le_succ_of_le hj)
+  by_cases big : 1 < y
+  · exact (density_bounds p c N).2.trans_lt big
+  have yp : 0 ≤ y := ((density_bounds p c (p^j)).1.trans_lt l).le
+  simp only [density_eq] at l r ⊢
+  rw [div_lt_iff₀ np, mass_shell hp c j N lo hi]
+  by_cases h : c j = 0
+  · rw [div_lt_iff₀ (Nat.cast_pos.mpr (pow_pos pos _)), mass_shell hp c j _ le le_rfl] at r
+    simp only [h, ite_true, Nat.cast_add, Nat.cast_sub lo, Nat.cast_sub le] at r ⊢
+    have hN' : (N:ℝ) ≤ (p^(j+1):ℕ) := by exact_mod_cast hi
+    nlinarith only [r, mul_nonneg (sub_nonneg.mpr (le_of_not_gt big)) (sub_nonneg.mpr hN')]
+  · simp only [h, ite_false, add_zero]
+    exact ((div_lt_iff₀ (Nat.cast_pos.mpr (pow_pos pos _))).mp l).trans_le
+      (mul_le_mul_of_nonneg_left (by exact_mod_cast lo) yp)
+
 end NormalityChecker.SignedPhases

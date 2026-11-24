@@ -63,7 +63,7 @@ Here $`b=2`$, $`p=3`$, and the listed phase word starts with $`c_0`$. The table 
 | 1, 0 | 3/4, 1/4 | **3/4** |
 | 1, 0, 0 | 12/13, 4/13, 10/13 | **12/13** |
 
-## Which values occur? (Paper proof)
+## Which values occur?
 
 For a fixed admissible $`b,p`$, all binary zero patterns occur already with $`c_j=1-z_j`$. Let $`\sigma`$ delete the first digit of a one-sided binary word $`s=s_0s_1\ldots`$ and define
 
@@ -71,7 +71,7 @@ For a fixed admissible $`b,p`$, all binary zero patterns occur already with $`c_
 V_p(s)=(p-1)\sum_{i=0}^{\infty}\frac{s_i}{p^{i+1}}.
 ```
 
-**The spectrum consists exactly of $`V_p(s)`$ for the words $`s`$ lexicographically at least as large as every suffix $`\sigma^h s`$, $`h\ge1`$.** For $`p=2`$ a dyadic value is included whenever it has at least one expansion satisfying the suffix condition.
+**Theorem (Lean). The spectrum consists exactly of $`V_p(s)`$ for the words $`s`$ lexicographically at least as large as every suffix $`\sigma^h s`$, $`h\ge1`$.** For $`p=2`$ a dyadic value is included whenever it has at least one expansion satisfying the suffix condition. Lean also proves compactness, periodic approximation with an explicit error bound, and the classification of isolated points. The dimension and translated-spectrum deductions are given in the companion note. [Formal characterization](../NormalityChecker/ShellHistories.lean#L388) · [Proofs, dimension and changing schedules](attainable-shell-histories.md)
 
 *Necessity.* Write the reverse history after shell $`j`$ as $`h_j=z_jz_{j-1}\ldots z_0 00\ldots`$. Its value is $`H_{j+1}`$. Take the compact set of all subsequential limits of these histories as $`j\to\infty`$. It is closed under deleting the first digit because $`\sigma h_j=h_{j-1}`$ for $`j\ge1`$. It has a lexicographically largest word $`s`$, obtained by choosing the largest possible digit at each successive position. Hence all its suffixes are at most $`s`$. The map $`V_p`$ is continuous and order preserving in the weak sense, including the binary ambiguity. Its value at $`s`$ equals the limsup of the boundary densities.
 
