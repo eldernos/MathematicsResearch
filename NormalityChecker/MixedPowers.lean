@@ -22,19 +22,19 @@ structure Generators where
 
 namespace Generators
 variable (d : Generators)
-private abbrev p := d.c.minFac
-private lemma prime : d.p.Prime := Nat.minFac_prime (by have := d.hc; omega)
-private lemma qc : d.q.Coprime d.c := by
+abbrev p := d.c.minFac
+lemma prime : d.p.Prime := Nat.minFac_prime (by have := d.hc; omega)
+lemma qc : d.q.Coprime d.c := by
   obtain ⟨A,hA⟩ := d.clears; exact Nat.Coprime.of_dvd_left hA (d.cop.pow_left A)
-private lemma unit_at {v : ℕ} (h : v.Coprime d.c) : ¬d.p∣v :=
+lemma unit_at {v : ℕ} (h : v.Coprime d.c) : ¬d.p∣v :=
   d.prime.coprime_iff_not_dvd.mp (Nat.Coprime.of_dvd_left (Nat.minFac_dvd _) h.symm)
-private lemma norm_growth : 1<(padicNorm d.p (d.c:ℚ))⁻¹ := by
+lemma norm_growth : 1<(padicNorm d.p (d.c:ℚ))⁻¹ := by
   let : Fact d.p.Prime := ⟨d.prime⟩
   apply (one_lt_inv₀ (lt_of_le_of_ne (padicNorm.nonneg _) (Ne.symm (padicNorm.ne_zero (by exact_mod_cast (show d.c≠0 by have := d.hc; omega)))))).mpr
   exact (padicNorm.nat_lt_one_iff _).mpr (Nat.minFac_dvd _)
 abbrev idx := index d.q d.c
-private lemma positive (v) : 0<d.idx v := Nat.mul_pos (pow_pos (by have := d.hq; omega) _) (pow_pos (by have := d.hc; omega) _)
-private lemma injective : Function.Injective d.idx := by
+lemma positive (v) : 0<d.idx v := Nat.mul_pos (pow_pos (by have := d.hq; omega) _) (pow_pos (by have := d.hc; omega) _)
+lemma injective : Function.Injective d.idx := by
   let : Fact d.p.Prime := ⟨d.prime⟩
   have pw (x : ℚ) (k : ℕ) : padicNorm d.p (x^k)=(padicNorm d.p x)^k := by induction k with | zero => simp | succ _ ih => simp [pow_succ,ih]
   have norm (v : ℕ × ℕ) : padicNorm d.p (d.idx v:ℚ) = (padicNorm d.p (d.c:ℚ))^v.2 := by
@@ -63,9 +63,16 @@ theorem shifted_tail {s : ℕ} (hs : 0<s) : Tendsto (fun n => (d.b:ℝ)^n*d.valu
     (fun v => (div_le_one (zero_lt_one.trans_le (large v))).mpr (large v)) small (allowed d.q d.c) (fun _ _ => mem_allowed d.hq d.hc)
   simpa only [P,value,powerPrefix,a,Rat.cast_mul,Rat.cast_pow,Rat.cast_sum,Rat.cast_div,Rat.cast_one,Rat.cast_natCast,div_div] using tail
 
-private lemma clean {s n D A : ℕ} (base : d.q∣d.b^A) (size : n≤2^D)
+/-- Signed integer numerators on the common insertion schedule. Zero suppresses a term. -/
+def weightedPrefix (w : ℕ × ℕ → ℤ) (s n : ℕ) : ℚ :=
+  (d.b:ℚ)^n * ∑ v ∈ allowed d.q d.c n, (w v:ℚ) * (1 / ((d.idx v:ℚ)^s*(d.b:ℚ)^(d.idx v)))
+
+@[simp] lemma weightedPrefix_one (s n : ℕ) : d.weightedPrefix (fun _ => 1) s n = d.P s n := by
+  simp [weightedPrefix,P,powerPrefix]
+
+private lemma clean (w : ℕ × ℕ → ℤ) {s n D A : ℕ} (base : d.q∣d.b^A) (size : n≤2^D)
     (age : ∀ v∈allowed d.q d.c n, d.idx v + A*s*D ≤ n) :
-    (d.P s n).den ∣ d.c^(D*s) := by
+    (d.weightedPrefix w s n).den ∣ d.c^(D*s) := by
   have each (v : ℕ × ℕ) (hv : v∈allowed d.q d.c n) :
       ∃ z : ℕ, (z:ℚ)=d.c^(D*s)*((d.b:ℚ)^n*(1/((d.idx v:ℚ)^s*(d.b:ℚ)^(d.idx v)))) := by
     have hi := (mem_allowed d.hq d.hc).mp hv
@@ -86,26 +93,32 @@ private lemma clean {s n D A : ℕ} (base : d.q∣d.b^A) (size : n≤2^D)
     have eqn' : ((z*w:ℕ):ℚ)*(d.idx v:ℚ)^s=(d.c:ℚ)^(D*s)*(d.b:ℚ)^(n-d.idx v) := by exact_mod_cast eqn
     rw [pow_sub₀ _ bp hi] at eqn'; field_simp [bp,(d.positive v).ne'] at eqn' ⊢; linarith only [eqn']
   choose! z hz using each
-  apply (reduced_info (S:=∑ v∈allowed d.q d.c n,z v) (pow_pos (by have := d.hc; omega : 0<d.c) _) _).1
-  simp only [P,powerPrefix,Nat.cast_sum,Nat.cast_pow,mul_sum]; exact sum_congr rfl hz
-
+  let S : ℤ := ∑ v ∈ allowed d.q d.c n, w v*z v
+  have eqn : (S:ℚ)=(d.c^(D*s):ℕ)*d.weightedPrefix w s n := by
+    simp only [S,weightedPrefix,Int.cast_sum,Int.cast_mul,Int.cast_natCast,Nat.cast_pow,mul_sum]
+    apply sum_congr rfl; intro v hv; rw [hz v hv]; ring
+  have repr : d.weightedPrefix w s n=Rat.divInt S (d.c^(D*s):ℕ) := by
+    rw [Rat.divInt_eq_div,Int.cast_natCast]
+    apply (eq_div_iff (by exact_mod_cast (pow_ne_zero _ (show d.c≠0 by have := d.hc; omega)))).mpr
+    rw [eqn,mul_comm]
+  exact_mod_cast (repr ▸ Rat.den_dvd S (d.c^(D*s):ℕ) : ((d.weightedPrefix w s n).den:ℤ) ∣ (d.c^(D*s):ℕ))
 
 /-- For a fixed denominator cutoff, bad full-block starts occupy a vanishing
 fraction of each cell. A single prime divisor of `c` detects separation. -/
-private lemma exceptional {s : ℕ} (hs : 0<s) (u : ℕ) (hu : 1≤u) (M : ℕ) {δ : ℝ} (pos : 0<δ) :
+theorem exceptional_of_separated (Z : ℕ → ℚ) (M : ℕ)
+    (separates : ∃ J : ℕ, ∀ {a j n m}, J≤j → n<d.q^a*d.c^j → d.q^a*d.c^j≤m → m≤d.q*n →
+      M≤max (Z n).den (Z m).den) (u : ℕ) (hu : 1≤u) {δ : ℝ} (pos : 0<δ) :
     ∀ᶠ k : ℕ in atTop, let K := d.c^k
-      let bad := (range K).filter (fun l => (d.P s ((u*K+l)*K)).den<M)
+      let bad := (range K).filter (fun l => (Z ((u*K+l)*K)).den<M)
       (bad.card:ℝ) ≤ δ*K+1 := by
-  let W := ((padicNorm d.p (d.c:ℚ))⁻¹)^s
-  have wp : 1<W := one_lt_pow₀ d.norm_growth hs.ne'
+  obtain ⟨J,sep⟩ := separates
   let U : ℝ := u+1
   have up : 0<U := by dsimp [U]; positivity
   obtain ⟨R,hR⟩ := exists_nat_gt (max 1 (3*U*Real.log d.q/δ))
   have Rpos : 0<R := by exact_mod_cast (zero_lt_one.trans ((le_max_left ..).trans_lt hR))
   have width : 3*U*Real.log d.q/(R+1) ≤ δ := by
     rw [div_le_iff₀ (by positivity)]; linarith only [(div_lt_iff₀ pos).mp ((le_max_right ..).trans_lt hR),pos]
-  have grow := tendsto_pow_atTop_atTop_of_one_lt wp
-  filter_upwards [eventually_ge_atTop (R*d.q^2*d.c^R),grow.eventually_ge_atTop (M:ℚ)] with k hk big
+  filter_upwards [eventually_ge_atTop (R*d.q^2*d.c^R),eventually_ge_atTop J] with k hk big
   let K := d.c^k
   have kp : 0<K := pow_pos (by have := d.hc; omega) _
   have kr : (0:ℝ)<K := by exact_mod_cast kp
@@ -137,18 +150,19 @@ private lemma exceptional {s : ℕ} (hs : 0<s) (u : ℕ) (hu : 1≤u) (M : ℕ) 
     rw [← Nat.mul_assoc]; apply Nat.mul_le_mul_right K
     have H := Nat.mul_le_mul_right (u*K+l) d.hq
     have low := Nat.le_mul_of_pos_left K hu; omega
-  have sep := power_separated hs d.hq d.hc d.prime (Nat.minFac_dvd _) (d.unit_at d.cop) (d.unit_at d.qc) left right ratio
-  have bad {n : ℕ} (h : (d.P s n).den<M) : padicNorm d.p (d.P s n)<M :=
-    (padicNorm_le_den d.prime _).trans_lt (by exact_mod_cast h)
-  exact (not_lt_of_ge (big.trans ((pow_le_pow_right₀ wp.le jk).trans sep))) (max_lt (bad bl) (bad br))
+  exact (not_lt_of_ge (sep (big.trans jk) left right ratio)) (max_lt bl br)
 
-/-- The localized polylogarithm on `q^a c^j` is normal for every fixed positive
-order. The coprime generator may be composite. -/
-theorem normal (s : ℕ) (hs : 0<s) : NormalIn d.b (d.value s) := by
+/-- Common clearing, insertion and orbit argument for all signed numerators. -/
+theorem normal_weighted (w : ℕ × ℕ → ℤ) (s : ℕ) (x : ℝ)
+    (tail : Tendsto (fun n => (d.b:ℝ)^n*x-(d.weightedPrefix w s n:ℝ)) atTop (𝓝 0))
+    (exceptional : ∀ u : ℕ, 1≤u → ∀ M : ℕ, ∀ δ : ℝ, 0<δ → ∀ᶠ k : ℕ in atTop,
+      let K := d.c^k
+      (((range K).filter (fun l => (d.weightedPrefix w s ((u*K+l)*K)).den<M)).card:ℝ) ≤ δ*K+1) :
+    NormalIn d.b x := by
   obtain ⟨A,base⟩ := d.clears
   let C := 2*d.c
   apply normal_of_arithmetic_certificate (B:=d.c) (L:=d.c) d.hb (by have := d.hc; omega) d.hc
-    _ (d.P s) (d.shifted_tail hs) (fixed_support_orbit_estimate d.hb d.hc d.cop) (2*C*s)
+    _ (d.weightedPrefix w s) tail (fixed_support_orbit_estimate d.hb d.hc d.cop) (2*C*s)
   intro u hu M η pos
   let δ := η/2
   have dp : 0<δ := half_pos pos
@@ -156,7 +170,7 @@ theorem normal (s : ℕ) (hs : 0<s) : NormalIn d.b (d.value s) := by
   let F : ℝ := 3+2*(2*(C:ℝ)+1)^2+A*s*(2*C)
   have grow := (tendsto_pow_const_div_const_pow_of_one_lt 2 (by exact_mod_cast d.hc : (1:ℝ)<d.c)).const_mul F
   simp only [mul_zero] at grow
-  filter_upwards [eventually_ge_atTop 1,d.exceptional hs u (mem_Ico.mp hu).1 M dp,
+  filter_upwards [eventually_ge_atTop 1,exceptional u (mem_Ico.mp hu).1 M δ dp,
     grow.eventually_le_const (lt_min dp zero_lt_one)] with k hk diameter small
   let K := d.c^k; let D := C*(k+1)
   have kp : 0<K := pow_pos (by have := d.hc; omega) _
@@ -172,7 +186,7 @@ theorem normal (s : ℕ) (hs : 0<s) : NormalIn d.b (d.value s) := by
     exact_mod_cast (show (A:ℝ)*s*D≤K by nlinarith [dcle,mul_nonneg (sq_nonneg (2*(C:ℝ)+1)) (sq_nonneg (k:ℝ))])
   let idxs := ((range (D+1)) ×ˢ (range (D+1))).image d.idx
   let ins := insertionBlocks idxs K (u*K)
-  let bad := (range K).filter (fun l => (d.P s ((u*K+l)*K)).den<M)
+  let bad := (range K).filter (fun l => (d.weightedPrefix w s ((u*K+l)*K)).den<M)
   refine ⟨ins∪bad,?_,?_⟩
   · have H := card_union_le ins bad
     have cnt : ins.card≤2*((D+1)^2) := (card_insertionBlocks ..).trans (Nat.mul_le_mul_left _ (card_image_le.trans_eq (by simp; ring)))
@@ -198,7 +212,7 @@ theorem normal (s : ℕ) (hs : 0<s) : NormalIn d.b (d.value s) := by
       have ab : v.1 ≤ D := (Nat.pow_le_pow_iff_right (by decide : 1<2)).mp (((Nat.pow_le_pow_left d.hq _).trans (Nat.le_mul_of_pos_right _ (pow_pos (by have := d.hc; omega : 0<d.c) _))).trans cap)
       have jb : v.2 ≤ D := (Nat.pow_le_pow_iff_right (by decide : 1<2)).mp (((Nat.pow_le_pow_left d.hc _).trans (Nat.le_mul_of_pos_left _ (pow_pos (by have := d.hq; omega : 0<d.q) _))).trans cap)
       exact insertionBlocks_free kp hn.1 (mem_image.mpr ⟨v,mem_product.mpr ⟨mem_range.mpr (by omega),mem_range.mpr (by omega)⟩,rfl⟩ : d.idx v∈idxs) hv
-    have clean := d.clean (s:=s) base (n:=n) (by rw [endpt] at high; omega : n≤2^D) (fun v hv => by
+    have clean := d.clean w (s:=s) base (n:=n) (by rw [endpt] at high; omega : n≤2^D) (fun v hv => by
       have le : d.idx v ≤ n := (mem_allowed d.hq d.hc).mp hv; have H := before v (by rw [endpt]; omega); omega)
     refine ⟨le_of_not_gt (fun h => hn.2 (mem_filter.mpr ⟨mem_range.mpr hl,h⟩)),⟨D*s,clean⟩,?_,?_⟩
     · apply (Nat.le_of_dvd (pow_pos (by have := d.hc; omega : 0<d.c) _) clean).trans
@@ -210,8 +224,20 @@ theorem normal (s : ℕ) (hs : 0<s) : NormalIn d.b (d.value s) := by
         · intro le; change d.idx v≤n+i at le; change d.idx v≤n; change i<K at hi
           have H := before v (by rw [endpt]; omega); omega
         · omega
-      change powerPrefix _ _ _ _ (n+i)=_ * powerPrefix _ _ _ _ n
-      simp only [powerPrefix,eqn,pow_add]; ring
+      change d.weightedPrefix w s (n+i)=_ * d.weightedPrefix w s n
+      simp only [weightedPrefix,eqn,pow_add]; ring
+
+/-- Positive orders with unit numerator. -/
+theorem normal (s : ℕ) (hs : 0<s) : NormalIn d.b (d.value s) := by
+  apply d.normal_weighted (fun _ => 1) s _ (by simpa using d.shifted_tail hs)
+  intro u hu M δ pos
+  simp only [weightedPrefix_one]
+  apply d.exceptional_of_separated (d.P s) M _ u hu pos
+  have grow := tendsto_pow_atTop_atTop_of_one_lt (one_lt_pow₀ d.norm_growth hs.ne')
+  obtain ⟨J,hJ⟩ := eventually_atTop.mp (grow.eventually_ge_atTop (M:ℚ))
+  refine ⟨J,fun {a j n m} hj left right short => ?_⟩
+  have sep := power_separated hs d.hq d.hc d.prime (Nat.minFac_dvd _) (d.unit_at d.cop) (d.unit_at d.qc) left right short
+  exact_mod_cast (hJ j hj).trans (sep.trans (max_le_max (padicNorm_le_den d.prime _) (padicNorm_le_den d.prime _)))
 
 /-- The same result with the series and all generator assumptions written out. -/
 theorem series_normal {b q c s : ℕ} (hb : 2 ≤ b) (hq : 2 ≤ q) (hc : 2 ≤ c)

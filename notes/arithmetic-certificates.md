@@ -1,5 +1,7 @@
 # Normality certificates for arithmetic expansions
 
+The exact rational-prefix certificate below is the zero-error case of the approximate block theorem. For the finite Fourier bound, mixed rational weights, and dense polynomial expansions, see the [polynomial certificate proof guide](polynomial-certificates.md).
+
 A rational approximation to a digit shift can lose many denominator factors and still be useful. For Weyl's criterion, what matters is whether its **reduced** denominator grows on sufficiently many blocks and whether the radix orbit cancels before the next insertion. This note gives the precise conditions and three ways of meeting them. [General certificate](../NormalityChecker/ArithmeticCertificate.lean) · [Definition of normality](../NormalityChecker/Basic.lean)
 
 | Family or estimate | Result in Lean | Scope |

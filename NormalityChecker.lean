@@ -27,3 +27,7 @@ public import NormalityChecker.MixedPowers
 public import NormalityChecker.SmoothCertificates
 public import NormalityChecker.PolynomialInsertions
 public import NormalityChecker.RadixTelescoping
+public import NormalityChecker.DensePolynomial
+public import NormalityChecker.PeriodicWeights
+public import NormalityChecker.LogShadow
+public import NormalityChecker.ApproximateDiscrepancy

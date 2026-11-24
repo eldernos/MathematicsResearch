@@ -22,6 +22,21 @@ lemma mem_allowed {q c n : ℕ} (hq : 2≤q) (hc : 2≤c) {v : ℕ × ℕ} : v�
 /-- Shifted rational prefix including every insertion up to and including `n`. -/
 def shiftedPrefix (b q c n : ℕ) : ℚ := powerPrefix b q c 1 n
 
+/-- Between two cutoffs of ratio at most `q`, each layer inserts at most one term. -/
+lemma layer_injective {q c s t : ℕ} (hq : 2≤q) (hc : 2≤c) (short : t ≤ q*s) :
+    Set.InjOn Prod.snd (↑(allowed q c t \ allowed q c s) : Set (ℕ × ℕ)) := by
+  let A := allowed q c t \ allowed q c s
+  rintro ⟨e,j⟩ he ⟨f,l⟩ hf eqn
+  change j=l at eqn; subst l
+  have ordered {e f : ℕ} (he : (e,j)∈A) (hf : (f,j)∈A) : ¬ e<f := by
+    intro h
+    have cut : s < q^e*c^j := lt_of_not_ge (fun h => (mem_sdiff.mp he).2 ((mem_allowed (v:=(e,j)) hq hc).mpr h))
+    have cap : q^f*c^j ≤ t := (mem_allowed hq hc).mp (mem_sdiff.mp hf).1
+    have gap := Nat.mul_le_mul_right (c^j) (Nat.pow_le_pow_right (by omega : 0<q) (show e+1≤f from h))
+    rw [pow_succ',Nat.mul_assoc] at gap
+    exact (not_lt_of_ge (gap.trans cap)) (short.trans_lt (Nat.mul_lt_mul_of_pos_left cut (by omega)))
+  exact Prod.ext (le_antisymm (not_lt.mp (ordered hf he)) (not_lt.mp (ordered he hf))) rfl
+
 /-- Primewise separation for every positive polylogarithm order. -/
 theorem power_separated {b q c p s t a j order : ℕ} (hs : 0<order) (hq : 2≤q) (hc : 2≤c) (hp : p.Prime)
     (hpc : p ∣ c) (hb : ¬p ∣ b) (hqp : ¬p ∣ q) (left : s < q^a*c^j)
@@ -32,17 +47,7 @@ theorem power_separated {b q c p s t a j order : ℕ} (hs : 0<order) (hq : 2≤q
   let w (v : ℕ × ℕ) : ℚ := 1/((index q c v:ℚ)^order*(b:ℚ)^index q c v)
   let A := I t \ I s
   have included : (a,j) ∈ A := mem_sdiff.mpr ⟨(mem_allowed hq hc).mpr right,mt (mem_allowed hq hc).mp left.not_ge⟩
-  have unique : Set.InjOn Prod.snd (↑A : Set (ℕ × ℕ)) := by
-    rintro ⟨e,j⟩ he ⟨f,l⟩ hf eqn
-    change j=l at eqn; subst l
-    have ordered {e f : ℕ} (he : (e,j)∈A) (hf : (f,j)∈A) : ¬ e<f := by
-      intro h
-      have cut : s < q^e*c^j := lt_of_not_ge (fun h => (mem_sdiff.mp he).2 ((mem_allowed (v:=(e,j)) hq hc).mpr h))
-      have cap : q^f*c^j ≤ t := (mem_allowed hq hc).mp (mem_sdiff.mp hf).1
-      have gap := Nat.mul_le_mul_right (c^j) (Nat.pow_le_pow_right (by omega : 0<q) (show e+1≤f from h))
-      rw [pow_succ',Nat.mul_assoc] at gap
-      exact (not_lt_of_ge (gap.trans cap)) (short.trans_lt (Nat.mul_lt_mul_of_pos_left cut (by omega)))
-    exact Prod.ext (le_antisymm (not_lt.mp (ordered hf he)) (not_lt.mp (ordered he hf))) rfl
+  have unique := layer_injective hq hc short
   have normPow (x : ℚ) (n : ℕ) : padicNorm p (x^n)=(padicNorm p x)^n := by
     induction n with
     | zero => simp

@@ -8,11 +8,13 @@ NormalityChecker gives exact arithmetic certificates for normality in an integer
 
 ## Normality from rational prefixes
 
-A general Lean theorem proves normality when reduced prefix denominators grow on most insertion-free blocks, have prime factors from a fixed set coprime to the radix, and are polynomially bounded in the block length. The required short-orbit estimate is proved in the repository. [Certificate and proof guide](notes/arithmetic-certificates.md) · [Formal orbit estimate](NormalityChecker/SmoothOrbit.lean)
+A general Lean theorem proves normality if most blocks are approximated, in mean distance modulo one, by rational radix orbits. Each block can choose its own model. Its reduced denominator must grow, have prime factors from a fixed set coprime to the radix, and be polynomially bounded in the block length. Finite Fourier and interval-count bounds account for model error, orbit cancellation, exceptional blocks and the unfinished final block. [Certificate theorem](NormalityChecker/ArithmeticCertificate.lean) · [Interval-count bound](NormalityChecker/ApproximateDiscrepancy.lean) · [Proof guide](notes/polynomial-certificates.md) · [Orbit estimate](NormalityChecker/SmoothOrbit.lean)
 
 | Application | Kernel-verified conclusion |
 | --- | --- |
-| Mixed localized polylogarithms | For $`m=q^a c^j`$, the sum of $`1/(m^s b^m)`$ over all exponent pairs is base-$`b`$ normal for every integer $`s\ge1`$, whenever $`b,q,c\ge2`$, $`q\mid b^A`$ for some $`A`$, and $`\gcd(b,c)=1`$. |
+| Dense polynomial weights | For coprime $`b,c\ge2`$, every nonzero rational polynomial $`P`$ of degree below $`s`$ gives a base-$`b`$ normal sum with terms $`P(n)/(c^{s\lfloor\log_c n\rfloor}b^n)`$ at positive integer positions. [Proof and binary example](NormalityChecker/DensePolynomial.lean) |
+| Mixed rational weights | For $`m=q^a c^j`$, the sum of $`P(m)/(m^s b^m)`$ over all exponent pairs is base-$`b`$ normal under the same polynomial conditions, with $`b,q,c\ge2`$, $`q\mid b^A`$ for some $`A`$, and $`\gcd(b,c)=1`$. This includes finite signed rational combinations of different localized orders with a nonzero combined numerator. [Mixed and restricted-axis theorems](NormalityChecker/RationalWeights.lean) |
+| Periodic weights on power intervals | If the period $`d`$ divides $`c-1`$, a finite rational sum over one period determines whether the dense sum is zero or normal. This includes restrictions to any nonempty set of residue classes. [Periodic test](NormalityChecker/PeriodicWeights.lean) |
 | Independent prime exponents | A passing residue test proves normality at any positive integer order. The earlier order-one certificates for $`\{2,5,7\}`$, $`\{2,5,11\}`$ and $`\{2,5,7,11,13\}`$ now give binary normality. |
 | A Stoneham constant with polynomially spaced insertions | Adding $`\sum_{m\ge1}3^{-\lfloor\log_3m\rfloor}2^{-m^r}`$ to the binary Stoneham component with parameter 3 preserves normality for every positive integer $`r`$. For the dense case $`r=1`$, the perturbed sum is exactly $`3-3S`$, where $`S`$ includes the initial term $`1/2`$. |
 
@@ -154,6 +156,8 @@ For the same recurrence, a positive lower limit of the average of $`1-\cos(2\pi 
 ## Open proof obligations
 
 For the ordered normal sum $`F_K`$, the scaled error $`(K+1)2^K(\log 2-F_K)`$ is within $`1/(K+1)`$ of $`6/7,5/7,3/7`$ for $`K\equiv0,1,2\pmod{3}`$ respectively. Adding the corresponding rational correction to $`F_K`$ gives a normal sum $`G_K`$ with $`|2^n(\log 2-G_K)|\le 2^n/((K+1)^2 2^K)`$. The remaining step is to control Fourier averages as $`K`$ grows with the digit position. The finite classification allows its cutoff to depend on every nonzero cell coefficient. [Derivation and limits of the approximation](notes/ordered-tail.md)
+
+A corrected rational prefix now shadows a full block from $`n`$ through $`2n`$. Lean proves $`|2^n\ln 2-C_n(n)|\le 2^{-n}/(n+1)`$. This gives an explicit long-block model for testing the four-position discrepancy target. Its denominator and the frequency of middle-third visits on its orbit are the remaining arithmetic questions. [Construction and denominator obstruction](notes/logarithm-correlations.md#rational-models-on-linear-length-blocks)
 
 For $`\log 2`$, the rational prefixes eventually avoid every fixed finite set of exact residues modulo one. Approximate concentration remains possible. Proving cancellation uniformly over partial dyadic intervals at every odd frequency, or exhibiting persistent bias at one fixed odd frequency, would decide binary normality. The normality of $`\log 2`$ and $`\pi`$ remains open. [Exact obstruction](NormalityChecker/DenominatorGrowth.lean) · [Dyadic criterion](notes/logarithm-correlations.md)
 
