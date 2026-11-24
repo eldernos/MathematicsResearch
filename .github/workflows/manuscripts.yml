@@ -30,6 +30,11 @@ jobs:
         run: python3 -B papers/check_release.py --require-reviews --verify-pins
       - name: Rebuild the manuscripts and resolve cross-references
         run: papers/build.sh
+      - name: Reproduce all five PDFs in a second clean build
+        run: |
+          sha256sum papers/[0-9][0-9]-*/paper.pdf > "$RUNNER_TEMP/rebuilt-pdfs.sha256"
+          papers/build.sh
+          sha256sum -c "$RUNNER_TEMP/rebuilt-pdfs.sha256"
       - name: Read rebuilt PDFs
         run: |
           for paper in papers/[0-9][0-9]-*/paper.pdf; do

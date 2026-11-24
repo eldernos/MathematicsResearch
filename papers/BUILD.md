@@ -16,7 +16,7 @@ To compile a single manuscript:
 papers/build.sh 01-stoneham-polynomials
 ```
 
-The script resolves cross-references and bibliographies through latexmk. It uses a temporary output directory for auxiliary files and copies the completed PDF into its manuscript directory. The release was prepared with TeX Live 2026. Font, engine and package versions can affect PDF serialization and pagination.
+The script resolves cross-references and bibliographies through latexmk. It uses a temporary output directory for auxiliary files and copies the completed PDF into its manuscript directory. The release was prepared with TeX Live 2026. The manuscript workflow compares the PDF bytes from two independent temporary build directories on the same runner. Different fonts, engines and package versions can affect PDF serialization and pagination.
 
 ## Verify a downloaded release
 

@@ -19,7 +19,7 @@ Verification does **not** establish:
 
 ## How to cite
 
-Cite a fixed version, not the moving default branch. Give the commit, the result identifier and, where relevant, the Lean declaration.
+For a manuscript, cite its title, the release tag `manuscripts-v1.0.0` and the version DOI when available. The release manifest identifies the associated commit and PDF checksum. For a formal result, give its proof commit, result identifier and Lean declaration. The following example cites the Checkpoint 11 polynomial theorem. [Manuscript release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0)
 
 ```bibtex
 @misc{normality-arithmetic-expansions,
