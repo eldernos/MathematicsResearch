@@ -109,6 +109,40 @@ def shell_statistics(n):
         length += 32
 
 
+def zeckendorf_readout(fib, value):
+    """Return the smallest occupied index and the parity of the successor sum."""
+    parity = 0
+    while value:
+        index = bisect_right(fib, value)-1
+        value -= fib[index]
+        least = index+2
+        parity ^= least % 3 != 2
+    return least, parity
+
+
+def quadratic_residue_witnesses(limit, max_modulus, cutoff):
+    """Check both small-index outcomes in every power-of-two residue class."""
+    if limit < 1 or max_modulus < 3 or cutoff < 2:
+        raise ValueError("require positive search length, modulus >= 3 and cutoff >= 2")
+    fib = [1, 2]
+    while fib[-1] < (1 << (limit-1)):
+        fib.append(fib[-2]+fib[-1])
+    hits = [zeckendorf_readout(fib, 1 << n)[0] <= cutoff for n in range(limit)]
+    results = {}
+    for m in range(3, max_modulus+1, 2):
+        states = {}
+        residue = 1
+        while residue not in states:
+            states[residue] = [None, None]
+            residue = 2*residue % m
+        for n, hit in enumerate(hits):
+            if states[residue][hit] is None:
+                states[residue][hit] = n
+            residue = 2*residue % m
+        results[m] = states
+    return results
+
+
 def quadratic_statistics(length, cutoff):
     """Exact transition counts and least Fibonacci indices at shifts 0 through length-1."""
     if length < 1 or cutoff < 2:
@@ -127,13 +161,7 @@ def quadratic_statistics(length, cutoff):
         fib.append(fib[-2]+fib[-1])
     small = 0
     for n in range(length+2):
-        remainder = 1 << n
-        parity = 0
-        while remainder:
-            index = bisect_right(fib, remainder)-1
-            remainder -= fib[index]
-            least = index+2
-            parity ^= least % 3 != 2
+        least, parity = zeckendorf_readout(fib, 1 << n)
         if n < length:
             small += least <= cutoff
         if n > 0:
@@ -156,8 +184,19 @@ if __name__ == '__main__':
     quadratic = tasks.add_parser('quadratic')
     quadratic.add_argument('n', nargs='+', type=int)
     quadratic.add_argument('--cutoff', type=int, default=4)
+    residue = tasks.add_parser('quadratic-moduli')
+    residue.add_argument('--limit', type=int, default=1024)
+    residue.add_argument('--max-modulus', type=int, default=101)
+    residue.add_argument('--cutoff', type=int, default=4)
     args = parser.parse_args()
-    if args.task == 'periodic':
+    if args.task == 'quadratic-moduli':
+        states = quadratic_residue_witnesses(args.limit, args.max_modulus, args.cutoff)
+        pairs = [pair for residues in states.values() for pair in residues.values()]
+        complete = [pair for pair in pairs if None not in pair]
+        print(f'{len(complete)} of {len(pairs)} residue classes have both witnesses')
+        if complete:
+            print('Largest required witness exponent:', max(max(pair) for pair in complete))
+    elif args.task == 'periodic':
         print('cycle, signed tests:', *periodic_phases(args.base, args.p, args.weights))
     elif args.task == 'binomial':
         for n in args.n:

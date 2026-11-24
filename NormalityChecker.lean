@@ -51,3 +51,8 @@ public import NormalityChecker.PartialUniformity
 public import NormalityChecker.WindowShadow
 public import NormalityChecker.NumeratorEscape
 public import NormalityChecker.GoldenDigits
+public import NormalityChecker.IntervalCoverage
+public import NormalityChecker.OrbitRigidity
+public import NormalityChecker.JointFiveThirteen
+public import NormalityChecker.LogPolynomialKernel
+public import NormalityChecker.GoldenCongruence

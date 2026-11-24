@@ -4,11 +4,26 @@
 
 [![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
-NormalityChecker gives exact arithmetic certificates for normality in an integer base. Its finite cyclotomic checker decides normality of rational sums of Stoneham-type components. A second checker returns exact rational upper bounds on asymptotic interval discrepancy for infinite prime-restricted expansions. A zero bound proves normality. For logarithmic order and one off-base prime, the finite bounds converge to the exact asymptotic discrepancy. [Note for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
+**Theorem (maximal discrepancy for finite prime supports).** Let $b\ge 2$ and $s\ge1$ be integers and let $P$ be any finite set of primes. Write $\operatorname{supp}(m)$ for the set of prime divisors of $m$, and put
+
+$$
+X_{b,P,s}=\sum_{\substack{m\ge1\\ \operatorname{supp}(m)\subseteq P}}
+                 \frac{1}{m^s b^m}.
+$$
+
+Let $D_\infty^{(b)}(x)$ be the limsup of the interval discrepancy of the fractional parts $\{b^n x\}$ for $0\le n<N$ as $N\to\infty$. Then
+
+$$
+D_\infty^{(b)}(X_{b,P,s})=1
+\quad\Longleftrightarrow\quad
+p\mid b\ \text{for every }p\in P.
+$$
+
+More precisely, each $p\in P$ with $p\nmid b$ gives $D_\infty^{(b)}(X_{b,P,s})\le 1-1/(p-1)$. In particular, if $2\in P$ and $b$ is odd, the series is normal in base $b$. [Lean theorem](NormalityChecker/MaximalSupport.lean) · [Mathematical proof](notes/finite-support-discrepancy.md) · [Guide for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
 
 ## Quantitative discrepancy on finite prime supports
 
-For the series with terms $`1/(m^s b^m)`$ on all positive integers supported on a finite prime set $`P`$, Lean proves **maximal discrepancy exactly when every support prime divides the base**. Each off-base prime $`p`$ gives $`D_\infty\le1-1/(p-1)`$. A support containing 2 therefore gives normality in every odd base. The finite checker sharpens the bound by counting failed cells through every possible prefix endpoint. In base 7 with support $`\{2,3,5\}`$, testing at powers of five returns $`5/12`$, $`1/4`$, and zero. Arbitrarily small exceptional length also suffices for normality. [Proof guide and examples](notes/finite-support-discrepancy.md) · [Classification](NormalityChecker/MaximalSupport.lean) · [Executable bound and soundness](NormalityChecker/DiscrepancyChecker.lean)
+The checker sharpens the bound by counting failed modular cells through every prefix endpoint. In base 7 with support $\{2,3,5\}$, testing at powers of five returns $5/12$, $1/4$, and zero. Several primes can certify the same prefix. Only their simultaneous failures are charged. [Checker and soundness](NormalityChecker/DiscrepancyChecker.lean) · [Overlaps and the binary example on $\{2,5,13\}$](notes/overlapping-certificates.md)
 
 When $`s=1`$ and $`p`$ is the only off-base prime, let $`Z\subseteq[1,p)`$ be the intersection of the failed regions at all precisions. The exact discrepancy is
 
@@ -17,6 +32,8 @@ D_\infty=\max_{1\le t\le p}\frac{|Z|/(p-1)+|Z\cap[1,t)|}{t}.
 ```
 
 Here $`|\cdot|`$ is Lebesgue measure. Normality is equivalent to $`|Z|=0`$. The endpoint $`t`$ accounts for prefixes ending partway through a scale. For general radix orbits, a uniformly distributed share $`g`$ across all long prefixes implies $`D_\infty\le1-g`$. Correct limiting frequencies for all 256 binary words of length eight give $`D_\infty\le1/128`$. [Proof of the exact formula and worked examples](notes/persistent-discrepancy.md) · [Partial-uniformity theorems](NormalityChecker/PartialUniformity.lean)
+
+See the [polynomial kernel construction and finite coverage experiments](notes/complementary-models.md) for complementary models of the classical constants.
 
 ## Normality from rational prefixes
 
@@ -186,6 +203,6 @@ lake exe cache get $(sed -nE 's/^(public )?import (Mathlib\.[A-Za-z0-9_.]+)$/\2/
 scripts/verify.sh
 ```
 
-The verification script first compares the Python certificate cells against exact rational prefixes, then builds the library, audits the transitive axiom dependencies of the headline theorems, then replays every project module with `leanchecker`. The audit permits only `propext`, `Classical.choice`, and `Quot.sound`. GitHub Actions runs the same checks on pushes and pull requests. The original verified baseline is tagged `research-checkpoint-1`. The preceding localized-logarithm results are preserved at `research-checkpoint-7`. [Axiom audit](Audit.lean) · [CI workflow](.github/workflows/lean.yml)
+The verification script first compares the Python certificate cells against exact rational prefixes, then builds the library, audits the transitive axiom dependencies of the headline theorems, then replays every project module with `leanchecker`. The audit permits only `propext`, `Classical.choice`, and `Quot.sound`. GitHub Actions runs the same checks on pushes and pull requests. The original verified baseline is tagged `research-checkpoint-1`. The localized-logarithm results are tagged `research-checkpoint-7`, and the exact discrepancy results at `8bf9f04` are tagged `research-checkpoint-8`. [Axiom audit](Audit.lean) · [CI workflow](.github/workflows/lean.yml)
 
 The project is an AI-assisted formalization of questions raised in the linked conversation. Lean checks the declarations and their dependencies. The correspondence between the definitions and the intended mathematics, and questions of priority, remain matters for human review. Original contributions are MIT-licensed. The port of Trevor Morris’s Weyl criterion retains Apache-2.0 and identifies the upstream revision in its header. [MIT license](LICENSE) · [Weyl license](NormalityChecker/Analysis/LICENSE-Weyl) · [Upstream Weyl criterion](https://github.com/gotrevor/normal-numbers/blob/6260625c6836d8bb172da4b011e089f63a728c41/src/NormalNumbers/WeylCriterion.lean)

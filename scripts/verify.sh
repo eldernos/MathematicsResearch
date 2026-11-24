@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-python3 -B scripts/test_localized_certificate.py
+python3 -B -m unittest discover -s scripts -p 'test_*.py'
 lake build
 lake env lean Audit.lean
 while IFS= read -r -d '' source; do

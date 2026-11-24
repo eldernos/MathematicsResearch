@@ -65,6 +65,34 @@ private lemma support_modulus {b p : ℕ} (A : Finset ℕ) (primes : ∀ r∈A,r
   · exact h.trans (dvd_mul_right ..)
   · exact (dvd r (mem_filter.mpr ⟨hr,h⟩)).trans (dvd_mul_left ..)
 
+/-- A passing cell forces denominator growth at the actual digit position. -/
+theorem passing_cell_survives {b s p ell : ℕ} {S : Finset ℕ} (hs : 0<s)
+    (hp : p.Prime) (outside : p∉S) (cop : b.Coprime p)
+    (Z : Finset ℕ) (cover : failedCells b s p ell S ⊆ Z) :
+    ∀ M : ℕ, ∀ᶠ n : ℕ in atTop, decide (CellProfile.coordinate p (p^ell) n∈Z)=false →
+      M≤(powerShifted b s (insert p S) n).den := by
+  let u := CellProfile.coordinate p (p^ell)
+  intro M
+  let K := 2*ell+M
+  filter_upwards [eventually_ge_atTop (p^K)] with n stable ok
+  let k := Nat.log p n
+  have hk : K≤k := Nat.le_log_of_pow_le hp.one_lt stable
+  have np : 0<n := (pow_pos hp.pos K).trans_le stable
+  have left := Nat.pow_log_le_self p np.ne'
+  have right := Nat.lt_pow_succ_log_self hp.one_lt n
+  have coord : u n=n/p^(k-ell) := by simp [u,CellProfile.coordinate,Nat.log_div_base_pow,k]
+  have ke : ell≤k := by dsimp [K] at hk; omega
+  have split : p^ell*p^(k-ell)=p^k := by rw [← pow_add]; congr 1; omega
+  have inside : u n∈Ico (p^ell) (p*p^ell) := by
+    rw [coord,mem_Ico,Nat.le_div_iff_mul_le (pow_pos hp.pos _),Nat.div_lt_iff_lt_mul (pow_pos hp.pos _),mul_assoc,split,← pow_succ']; exact ⟨left,right⟩
+  have nz : powerCellResidue s p ell S (inverseLift b p ell ell) (u n)≠0 := fun h => by
+    have mem := cover (show u n∈failedCells b s p ell S from mem_filter.mpr ⟨inside,h⟩); exact (of_decide_eq_false ok) mem
+  rw [coord] at nz
+  have den := cell_power_denominator hs hp outside cop (k:=k) (by dsimp [K] at hk; omega : ell+ell≤k) right (canonical_lift_fixed hp cop ell) nz
+  have ex : k≤k*s := by simpa using Nat.mul_le_mul_left k hs
+  have exp : M≤k*s-ell := by dsimp [K] at hk; omega
+  exact (Nat.le_of_lt (Nat.lt_pow_self hp.one_lt (n:=M))).trans ((Nat.pow_le_pow_right hp.pos exp).trans (Nat.le_of_dvd (Rat.pos _) den))
+
 /-- Any covering set of failed grid cells is allowed. Successful cells yield
 large reduced denominators at every sufficiently late scale. -/
 theorem discrepancy_of_cell_cover {b s p ell : ℕ} {S : Finset ℕ} (hb : 2≤b) (hs : 0<s)
@@ -75,35 +103,62 @@ theorem discrepancy_of_cell_cover {b s p ell : ℕ} {S : Finset ℕ} (hb : 2≤b
   obtain ⟨c,hc,bc,supp⟩ := support_modulus A (fun r hr => by rcases mem_insert.mp hr with rfl|h; exacts [hp,primes r h]) hp (mem_insert_self ..) cop
   let u := CellProfile.coordinate p (p^ell)
   apply discrepancy_of_survival A hb hc bc hs supp (fun n => decide (u n∈Z))
-  · intro M
-    let K := 2*ell+M
-    filter_upwards [eventually_ge_atTop (p^K)] with n stable ok
-    let k := Nat.log p n
-    have hk : K≤k := Nat.le_log_of_pow_le hp.one_lt stable
-    have np : 0<n := (pow_pos hp.pos K).trans_le stable
-    have left := Nat.pow_log_le_self p np.ne'
-    have right := Nat.lt_pow_succ_log_self hp.one_lt n
-    have coord : u n=n/p^(k-ell) := by simp [u,CellProfile.coordinate,Nat.log_div_base_pow,k]
-    have ke : ell≤k := by dsimp [K] at hk; omega
-    have split : p^ell*p^(k-ell)=p^k := by rw [← pow_add]; congr 1; omega
-    have inside : u n∈Ico (p^ell) (p*p^ell) := by
-      rw [coord,mem_Ico,Nat.le_div_iff_mul_le (pow_pos hp.pos _),Nat.div_lt_iff_lt_mul (pow_pos hp.pos _),mul_assoc,split,← pow_succ']; exact ⟨left,right⟩
-    have nz : powerCellResidue s p ell S (inverseLift b p ell ell) (u n)≠0 := fun h => by
-      have mem := cover (show u n∈failedCells b s p ell S from mem_filter.mpr ⟨inside,h⟩); simp [mem] at ok
-    rw [coord] at nz
-    have den := cell_power_denominator hs hp outside cop (k:=k) (by dsimp [K] at hk; omega : ell+ell≤k) right (canonical_lift_fixed hp cop ell) nz
-    have ex : k≤k*s := by simpa using Nat.mul_le_mul_left k hs
-    have exp : M≤k*s-ell := by dsimp [K] at hk; omega
-    exact (Nat.le_of_lt (Nat.lt_pow_self hp.one_lt (n:=M))).trans ((Nat.pow_le_pow_right hp.pos exp).trans (Nat.le_of_dvd (Rat.pos _) den))
+  · exact passing_cell_survives hs hp outside cop Z cover
   · apply Eventually.of_forall; intro N
     have H := Rat.cast_le (K:=ℝ) |>.mpr (CellProfile.count_bound hp.one_lt (pow_pos hp.pos ell) Z grid N)
     simpa [u,apply_ite] using H
+
+/-- Each test uses its own geometric scale and precision. Only simultaneous failures
+are charged. The density hypothesis is an upper bound through every late prefix. -/
+theorem discrepancy_of_joint_failures {b s : ℕ} (A J : Finset ℕ) (level : ℕ → ℕ)
+    (hb : 2≤b) (hs : 0<s) (primes : ∀ r∈A, r.Prime) (nonempty : J.Nonempty)
+    (subset : J⊆A) (off : ∀ p∈J, b.Coprime p) {D : ℝ}
+    (density : ∀ ε : ℝ, 0<ε → ∀ᶠ N : ℕ in atTop,
+      (∑ n∈range N, if ∀ p∈J, CellProfile.coordinate p (p^(level p)) n ∈
+        failedCells b s p (level p) (A.erase p) then (1:ℝ) else 0) ≤ (D+ε)*N) :
+    limsup (radixDiscrepancy b (powerValue b s A)) atTop ≤ D := by
+  obtain ⟨p,hp⟩ := nonempty
+  obtain ⟨c,hc,bc,supp⟩ := support_modulus A primes (primes p (subset hp)) (subset hp) (off p hp)
+  let fails (p n : ℕ) := CellProfile.coordinate p (p^(level p)) n ∈
+    failedCells b s p (level p) (A.erase p)
+  apply le_of_forall_pos_le_add
+  intro ε pos
+  apply discrepancy_of_survival A hb hc bc hs supp (fun n => decide (∀ p∈J, fails p n))
+  · intro M
+    have each (q : ℕ) (hq : q∈J) : ∀ᶠ n : ℕ in atTop, ¬fails q n → M≤(powerShifted b s A n).den := by
+      have h := passing_cell_survives (ell:=level q) hs (primes q (subset hq)) (notMem_erase q A)
+        (off q hq) _ (Subset.rfl) M
+      simpa [fails,insert_erase (subset hq)] using h
+    filter_upwards [(eventually_all_finset J).mpr each] with n allpass h
+    simp only [decide_eq_false_iff_not,not_forall] at h
+    obtain ⟨q,hq⟩ := h
+    by_cases inside : q∈J
+    · exact allpass q inside (by simpa [inside] using hq)
+    · simp [inside] at hq
+  · simpa [fails] using density ε pos
+
+set_option maxRecDepth 10000 in
+theorem five_thirteen_first_failures :
+    failedCells 2 1 5 0 {2,13}={2,3} ∧
+    failedCells 2 1 13 0 {2,5}={10,11,12} := by decide +kernel
 
 /-- Soundness of the executable rational discrepancy checker at a single precision. -/
 theorem discrepancy_le_certificate {b s p : ℕ} {S : Finset ℕ} (hb : 2≤b) (hs : 0<s)
     (hp : p.Prime) (outside : p∉S) (cop : b.Coprime p) (primes : ∀ r∈S,r.Prime) (ell : ℕ) :
     limsup (radixDiscrepancy b (powerValue b s (insert p S))) atTop ≤ (discrepancyCertificate b s p ell S:ℝ) :=
   discrepancy_of_cell_cover hb hs hp outside cop primes _ (Subset.rfl) (filter_subset ..)
+
+set_option maxRecDepth 20000 in
+set_option maxHeartbeats 3000000 in
+theorem five_thirteen_precision_two : discrepancyCertificate 2 1 5 1 {2,13}=0 ∧
+    discrepancyCertificate 2 1 13 1 {2,5}=0 := by decide +kernel
+
+theorem five_thirteen_binary_normal : NormalIn 2 (powerValue 2 1 {2,5,13}) := by
+  apply normal_of_radix_limsup_zero (by decide)
+  have h := discrepancy_le_certificate (b:=2) (s:=1) (p:=5) (S:={2,13}) (by decide)
+    (by decide) (by decide) (by decide) (by decide) (by intro r hr; simp at hr; rcases hr with rfl|rfl <;> decide) 1
+  rw [five_thirteen_precision_two.1, Rat.cast_zero] at h
+  simpa only [Finset.insert_comm] using h
 
 /-- Arbitrarily small bad mass suffices, even when no finite test is zero. The
 worst-prefix fraction is at most `p` times the full-scale bad fraction. -/

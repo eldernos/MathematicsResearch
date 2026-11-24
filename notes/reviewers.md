@@ -102,6 +102,10 @@ The approximate certificate allows different rational models on different blocks
 
 The order-$`s`$ prime-restricted series has maximal discrepancy exactly when every support prime divides the radix. An exact finite bound tracks passing and failing regions even in incomplete geometric scales. Independent review would help identify prior results on positive-density uniform orbit segments for smooth supports, and on the metric scope of rational block models. [Proof, examples and open scope](finite-support-discrepancy.md)
 
+## Complementary certificates
+
+For the binary support $\{2,5,13\}$, the all-prefix count at precision one gives a Lean bound of $0.234$. A separate phase optimization encloses the exact joint failure density, and precision two proves normality. The overlap rigidity theorem gives a second review target: on a long common block, two sufficiently accurate smooth models coincide modulo one. For classical constants the polynomial moment identity and the modular obstruction for Fibonacci indices have kernel proofs. The finite logarithm coverage experiment and the sharper phase optimization have reproducible exact-arithmetic calculations. [Overlaps and density](overlapping-certificates.md) · [Classical models and limitations](complementary-models.md)
+
 ## Verification and open scope
 
 The research and formalization are AI-assisted. The repository pins Lean and Mathlib, builds the library, audits the listed theorems for transitive axioms, and replays the project modules through the kernel. The original binary checkpoint remains available for comparison. [Verification instructions](../README.md#reproduce-and-review) · [Audit](../Audit.lean) · [Previous checkpoint](https://github.com/eldernos/MathematicsResearch/tree/research-checkpoint-2)

@@ -343,7 +343,32 @@ run_cmd do
     ``NormalityChecker.adjacent_small_escape,
     ``NormalityChecker.golden_floor_zeckendorf,
     ``NormalityChecker.golden_floor_mod_two,
-    ``NormalityChecker.golden_bit_readout]
+    ``NormalityChecker.golden_bit_readout,
+    ``NormalityChecker.Coverage.endpoint_path,
+    ``NormalityChecker.Coverage.restrict_edge,
+    ``NormalityChecker.Coverage.fourier_of_path,
+    ``NormalityChecker.Coverage.disjoint_cover,
+    ``NormalityChecker.Coverage.discrepancy_of_paths,
+    ``NormalityChecker.LocalizedSupport.passing_cell_survives,
+    ``NormalityChecker.LocalizedSupport.discrepancy_of_joint_failures,
+    ``NormalityChecker.LocalizedSupport.five_thirteen_first_failures,
+    ``NormalityChecker.LocalizedSupport.joint_five_thirteen_count,
+    ``NormalityChecker.LocalizedSupport.first_precision_joint_discrepancy,
+    ``NormalityChecker.LocalizedSupport.five_thirteen_precision_two,
+    ``NormalityChecker.LocalizedSupport.five_thirteen_binary_normal,
+    ``NormalityChecker.smooth_overlap_separation,
+    ``NormalityChecker.smooth_overlap_rigidity,
+    ``NormalityChecker.overlap_chain_denominator,
+    ``NormalityChecker.polynomial_moment_error,
+    ``NormalityChecker.polynomial_log_error,
+    ``NormalityChecker.polynomial_log_rational_integral,
+    ``NormalityChecker.adjustKernel_eval,
+    ``NormalityChecker.adjustKernel_model,
+    ``NormalityChecker.normalized_kernel_for_target,
+    ``NormalityChecker.chebyshevKernel_normalized,
+    ``NormalityChecker.chebyshev_log_error,
+    ``NormalityChecker.polynomial_bbp_error,
+    ``NormalityChecker.golden_high_indices_in_every_class]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a
