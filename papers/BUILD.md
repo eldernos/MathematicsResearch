@@ -25,4 +25,4 @@ sha256sum -c papers/SHA256SUMS
 python3 -B papers/check_release.py --require-reviews
 ```
 
-The checksums identify the archived files. After intentionally rebuilding a new version, inspect the PDFs and record their checksums with `python3 -B papers/check_release.py --write-checksums`. Consult each reviewer's guide for the declaration names and the precise status of the paper's mathematical inputs. [Manuscript index](README.md) · [Owner's DOI guide](ARCHIVING.md)
+The checksums identify the archived files. In a Git clone containing the referenced commits, add `--verify-pins` to check the source file and line for each GitHub Lean link embedded in the PDFs. This option uses Poppler’s `pdfinfo`. After intentionally rebuilding a new version, inspect the PDFs and record their checksums with `python3 -B papers/check_release.py --write-checksums`. Consult each reviewer's guide for the declaration names and the precise status of the paper's mathematical inputs. [Manuscript index](README.md) · [Owner's DOI guide](ARCHIVING.md)
