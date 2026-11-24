@@ -10,7 +10,7 @@ open Filter Finset
 open scoped Topology
 namespace NormalityChecker.ProductThreeFive
 
-private lemma good_den {n M : ℕ} (hn : 5^(M+1) ≤ n) (good : columnCost n = 0) :
+private lemma column_den {n M : ℕ} (hn : 5^(M+1) ≤ n) (good : columnCost n = 0) :
     M ≤ (pre n).den := by
   have le := Nat.le_log_of_pow_le (by decide : 1<5) hn
   obtain ⟨l,hl⟩ : ∃ l, l+1=Nat.log 5 n := ⟨Nat.log 5 n-1,by omega⟩
@@ -20,6 +20,25 @@ private lemma good_den {n M : ℕ} (hn : 5^(M+1) ≤ n) (good : columnCost n = 0
     simp_all)
   exact (by omega : M≤l+1).trans
     ((Nat.lt_pow_self (by decide : 1<5)).le.trans (Nat.le_of_dvd (pre n).pos dv))
+
+/-- Charge a position only when both full prime powers fail their endpoint tests. -/
+def jointCost (n : ℕ) : ℕ :=
+  if Nat.log 5 (n-3^Nat.log 3 n)%2=0 then columnCost n else 0
+
+private lemma joint_le_column (n : ℕ) : jointCost n ≤ columnCost n := by
+  unfold jointCost; split <;> omega
+
+private lemma good_den {n M : ℕ} (hn : 5^(M+1) ≤ n) (good : jointCost n = 0) :
+    M ≤ (pre n).den := by
+  unfold jointCost at good
+  split_ifs at good with row
+  · exact column_den hn good
+  · have high := (Nat.pow_le_pow_left (by decide : 3≤5) (M+1)).trans hn
+    have le := Nat.le_log_of_pow_le (by decide : 1<3) high
+    obtain ⟨k,hk⟩ : ∃ k, k+1=Nat.log 3 n := ⟨Nat.log 3 n-1,by omega⟩
+    have dv := (ternary_survival_iff hk).mpr (hk ▸ row)
+    exact (by omega : M≤k+1).trans
+      ((Nat.lt_pow_self (by decide : 1<3)).le.trans (Nat.le_of_dvd (pre n).pos dv))
 
 private def exceptions (N B : ℕ) := insert 0 ((active N).image (fun v => location v/B))
 
@@ -58,14 +77,14 @@ private lemma local_bound {ε : ℝ} {M K N B l : ℕ} (ep : 0<ε)
     (large : max (max K (5^(M+1))) 4 ≤ B) (upper : N ≤ 4*(B*B))
     (hl : l<N/B) (free : l∉exceptions N B) {a c : ℝ} (ha : 0≤a) (ac : a≤c) (hc : c≤1) :
     ‖∑ i∈range B, Localized.centered (shift 2 (alpha 3*alpha 5)) a c (l*B+i)‖ ≤
-      ε*B + ∑ i∈range B,(columnCost (l*B+i):ℝ) := by
+      ε*B + ∑ i∈range B,(jointCost (l*B+i):ℝ) := by
   have bp : 0<B := by omega
   have ne : l≠0 := fun h => free (h ▸ mem_insert_self ..)
   have lo := Nat.le_mul_of_pos_left B (Nat.pos_of_ne_zero ne)
   have endpt := (Nat.le_div_iff_mul_le bp).mp hl
   have den := prefix_denominator (n:=l*B) (bp.trans_le lo)
   have orb := clean bp hl free
-  by_cases some : ∃ i<B, columnCost (l*B+i)=0
+  by_cases some : ∃ i<B, jointCost (l*B+i)=0
   · obtain ⟨i,hi,ok⟩ := some
     have survives := good_den (M:=M) (by omega) ok
     have dv := Rat.mul_den_dvd ((2:ℚ)^i) (pre (l*B))
@@ -82,9 +101,9 @@ private lemma local_bound {ε : ℝ} {M K N B l : ℕ} (ep : 0<ε)
     apply (block B (l*B) (by omega) (survives.trans (Nat.le_of_dvd (pre _).pos dv))
       den.1 high orb a c ha ac hc).trans
     exact le_add_of_nonneg_right (sum_nonneg fun _ _ => Nat.cast_nonneg _)
-  · have allOne (i : ℕ) (hi : i∈range B) : (columnCost (l*B+i):ℝ)=1 := by
-      have H : columnCost (l*B+i) ≠ 0 := fun h => some ⟨i,mem_range.mp hi,h⟩
-      unfold columnCost at *
+  · have allOne (i : ℕ) (hi : i∈range B) : (jointCost (l*B+i):ℝ)=1 := by
+      have H : jointCost (l*B+i) ≠ 0 := fun h => some ⟨i,mem_range.mp hi,h⟩
+      unfold jointCost columnCost at *
       split_ifs at * <;> simp_all
     rw [sum_congr rfl allOne]
     have h := (norm_sum_le ..).trans (sum_le_sum (s:=range B) (fun i _ =>
@@ -92,11 +111,11 @@ private lemma local_bound {ε : ℝ} {M K N B l : ℕ} (ep : 0<ε)
     simpa using h.trans (by simpa using (le_add_of_nonneg_left (mul_nonneg ep.le (Nat.cast_nonneg (α:=ℝ) B)) :
       (B:ℝ)≤ε*B+B))
 
-/-- Counting every surviving top column gives binary discrepancy at most 27/40.
-The chosen intervals vary with both exponents and the final cutoff. -/
-theorem column_discrepancy : asymptoticDiscrepancy (alpha 3 * alpha 5) ≤ 27/40 := by
-  apply le_of_forall_pos_le_add
-  intro ε ep
+/-- An ordinary prefix is charged only for simultaneous failures, with
+vanishing uniform error. The finite quinary count supplies an absolute cap. -/
+theorem joint_prefix_discrepancy {ε : ℝ} (ep : 0<ε) :
+    ∀ᶠ N : ℕ in atTop, radixDiscrepancy 2 (alpha 3 * alpha 5) N ≤
+      min ((∑ n ∈ range N, (jointCost n:ℝ))/N) (27/40) + ε := by
   obtain ⟨M,K,block⟩ := smooth_interval_block (b:=2) (c:=15) (d:=6)
     (fixed_support_orbit_estimate (by decide) (by decide) (by decide))
     (alpha 3*alpha 5) pre (by simpa only [Nat.cast_ofNat] using shifted_tail)
@@ -106,7 +125,6 @@ theorem column_discrepancy : asymptoticDiscrepancy (alpha 3 * alpha 5) ≤ 27/40
   obtain ⟨k₀,threshold⟩ := eventually_atTop.mp ((eventually_ge_atTop 1).and
     (((tendsto_pow_atTop_atTop_of_one_lt (by decide : 1<2)).eventually_ge_atTop
       (max (max K (5^(M+1))) 4)).and (err.eventually_le_const (show 0<ε/2 by positivity))))
-  apply limsup_le_of_le (isCoboundedUnder_le_of_le _ (fun N => (radix_discrepancy_bounds 2 _ N).1))
   filter_upwards [eventually_ge_atTop (4^k₀)] with N hN
   let k := Nat.log 4 N
   let B := 2^k
@@ -135,7 +153,7 @@ theorem column_discrepancy : asymptoticDiscrepancy (alpha 3 * alpha 5) ≤ 27/40
   refine csSup_le ⟨_,0,1,le_rfl,zero_lt_one,le_rfl,rfl⟩ ?_
   rintro _ ⟨a,c,ha,ac,hc,rfl⟩
   have H := charged_prefix_bound (Localized.centered (shift 2 (alpha 3*alpha 5)) a c)
-    (Localized.centered_norm _ ha ac.le hc) (fun n => (columnCost n:ℝ)) (fun _ => Nat.cast_nonneg _)
+    (Localized.centered_norm _ ha ac.le hc) (fun n => (jointCost n:ℝ)) (fun _ => Nat.cast_nonneg _)
     bp (exceptions N B) (show 0≤ε/2 by positivity)
     (fun l hl free => local_bound (by positivity) block large upper hl free ha ac.le hc)
   have count : 40*(∑ n ∈ range N,(columnCost n:ℝ)) ≤ 27*N+39*(Nat.log 5 N:ℝ)+52 := by
@@ -145,9 +163,22 @@ theorem column_discrepancy : asymptoticDiscrepancy (alpha 3 * alpha 5) ≤ 27/40
   rw [centered] at H
   change |(IntervalFourier.count _ _ _ N:ℝ)/N-(c-a)| ≤ _
   have nr : (0:ℝ)<N := by exact_mod_cast pos
-  rw [div_sub' nr.ne',abs_div,abs_of_pos nr,div_le_iff₀ nr]
+  rw [← min_add_add_right,le_min_iff]
+  have cheap := sum_le_sum (s:=range N) (fun n _ => Nat.cast_le (α:=ℝ).mpr (joint_le_column n))
+  rw [div_sub' nr.ne',abs_div,abs_of_pos nr,div_le_iff₀ nr,div_le_iff₀ nr,add_mul,div_mul_cancel₀ _ nr.ne']
   change |(IntervalFourier.count _ _ _ N:ℝ)-N*(c-a)| ≤ _ at H
-  linarith only [H,spend,count]
+  constructor
+  · linarith only [H,spend,show 0≤(39*(Nat.log 5 N:ℝ)+52)/40 by positivity]
+  · linarith only [H,spend,count,cheap]
+
+/-- Counting every surviving top column gives binary discrepancy at most 27/40.
+The chosen intervals vary with both exponents and the final cutoff. -/
+theorem column_discrepancy : asymptoticDiscrepancy (alpha 3 * alpha 5) ≤ 27/40 := by
+  apply le_of_forall_pos_le_add
+  intro ε ep
+  apply limsup_le_of_le (isCoboundedUnder_le_of_le _ (fun N => (radix_discrepancy_bounds 2 _ N).1))
+  filter_upwards [joint_prefix_discrepancy ep] with N h
+  exact h.trans (add_le_add_left (min_le_right ..) _)
 
 /-- The strengthened bound stated solely in terms of the two defining series. -/
 theorem independent_product_discrepancy : StonehamStatements.IndependentProductDiscrepancy :=
