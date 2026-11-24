@@ -4,7 +4,7 @@ Let $E=\sum_{m\ge1}(2^m-1)^{-1}$, let $\tau(m)$ count the positive divisors of $
 
 **What the sources establish.** Captain Sude's elementary Lean release gives an unconditional lower count $N\exp[-70000(\log\log N)^3]$ for every fixed word at all sufficiently large cutoffs. Mira Cult's November 2026 claim concerns short windows. For fixed $7/12<a\le1$ and fixed nonempty $w$, every sufficiently late window of $N^a\le H\le N$ digits after digit $N$ contains at least $c_{a,w}H$ copies wholly inside it. Its crucial input is a weighted local estimate on primes conditioned on an actual divisor term. Below we check the reductions, the range of the cited prime theorem and the role of the weights. The full multistage local estimate remains a paper input to this audit. Binary normality of $E$ remains open. [Elementary release][elementary] · [Mira's theorem][mira] · [Weighted comparison][weighted]
 
-**Two transfers.** An unconditional deduction from Shiu's theorem below reduces the full divisor Fourier statistic on every window of length between $N^\delta$ and $N$ for fixed $\delta>0$ to $O(\sqrt{T\log T})$ offsets around $T=\log\log N$. A separate Lean proof converts occurrences of a single specified word into an explicit deficit from the trivial Fourier bound on the same window. The elementary release supplies an unconditional, vanishing proportional deficit on prefixes. Mira's paper supplies a fixed positive proportional deficit on its short windows if its analytic estimates are used. Neither deduction establishes cancellation of order $o(H)$. [Lean transfer](ErdosBorweinFourier.lean) · [Shiu, Theorem 1][shiu] · [Henriot, p. 1][henriot]
+**Two transfers.** An unconditional deduction from Shiu's theorem below reduces the full divisor Fourier statistic on every window of length between $N^\delta$ and $N$ for fixed $\delta>0$ to $O(\sqrt{T\log T})$ offsets around $T=\log\log N$. A separate Lean proof converts occurrences of a single specified word into an explicit deficit from the trivial Fourier bound on the same window. The elementary release supplies an unconditional, vanishing proportional deficit on prefixes. Mira's paper supplies a fixed positive proportional deficit on its short windows if its analytic estimates are used. Neither deduction establishes cancellation of order $o(H)$. [Lean transfer](../../NormalityChecker/ErdosBorweinFourier.lean) · [Shiu, Theorem 1][shiu] · [Henriot, p. 1][henriot]
 
 ## Source and tools registry
 
@@ -101,7 +101,7 @@ For an odd integer $h$ choose $k$ with $2^k\ge2\pi|h|$. Let $C$ count shifts $N\
 2\left|\sum_{N\le n<N+H}z_n\right|\le 2H+2-C.
 ```
 
-At every counted start the shifted fractional part lies in $[1/2,1/2+2^{-k})$. Since $e(h/2)=-1$, one has $|1+z_n|\le2\pi|h|2^{-k}\le1$. The doubling identity $z_{n+1}=z_n^2$ then gives $|z_n+z_{n+1}|\le1$ there, and the trivial bound is 2 elsewhere. Summing the pairs differs from twice the original sum by just two endpoint phases. This argument applies for every real number. The file specializes it to the literal Lambert series for $E$. [Lean statement and proof](ErdosBorweinFourier.lean)
+At every counted start the shifted fractional part lies in $[1/2,1/2+2^{-k})$. Since $e(h/2)=-1$, one has $|1+z_n|\le2\pi|h|2^{-k}\le1$. The doubling identity $z_{n+1}=z_n^2$ then gives $|z_n+z_{n+1}|\le1$ there, and the trivial bound is 2 elsewhere. Summing the pairs differs from twice the original sum by just two endpoint phases. This argument applies for every real number. The file specializes it to the literal Lambert series for $E$. [Lean statement and proof](../../NormalityChecker/ErdosBorweinFourier.lean)
 
 On prefixes the elementary release gives, for this word and every sufficiently large $N$, an upper bound $1+1/N-\tfrac12\exp[-70000(\log\log N)^3]$ on the normalized Fourier norm. Using the November word count on its windows instead gives $1+1/H-c_{a,w}/2$. A wholly contained occurrence is eligible for the Lean count even though Lean also admits the last $k-1$ starts. In conjunction with the unconditional localization, the latter bound passes to the sum on $J_N$ with an extra $O_{\delta,h}(T^{-3})$. It gives a strict gap below one for each fixed nonzero frequency because for $h=2^v h_0$ shifting by $v$ changes the normalized sum by at most $2v/H$. To deduce normality one would need a limit of zero. No formal import of a different Lean toolchain or unproved short-interval theorem is used. [Elementary archive][elementary] · [November theorem][mira]
 
@@ -111,7 +111,7 @@ In this checkout run the following commands. The note's Lean file is standalone 
 
 ```sh
 lake build
-lake env lean notes/phase13/ErdosBorweinFourier.lean
+lake env lean NormalityChecker/ErdosBorweinFourier.lean
 python3 scripts/portal.py check
 ```
 

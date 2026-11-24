@@ -1,7 +1,10 @@
-import NormalityChecker.FirstFrequency
+module
+
+public import NormalityChecker.FirstFrequency
 
 /-! A finite-prefix consequence of the integral estimate for log 2. -/
 
+@[expose] public section
 open Finset Filter
 namespace NormalityChecker.Phase13
 

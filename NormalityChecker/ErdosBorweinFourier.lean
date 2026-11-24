@@ -1,12 +1,16 @@
-import NormalityChecker.Correlations
+module
+
+public import NormalityChecker.Correlations
 
 /-! A finite transfer from counts of the binary word consisting of a one
 followed by zeros to a deficit in a Fourier sum on the same window. -/
 
+@[expose] public section
+
 open Finset NormalityChecker
 open scoped Classical
 
-namespace ErdosBorweinAudit
+namespace NormalityChecker.ErdosBorweinAudit
 
 noncomputable def lambertE : ℝ := ∑' m : ℕ, 1 / ((2 : ℝ) ^ (m + 1) - 1)
 
@@ -89,6 +93,5 @@ theorem erdosBorwein_window_fourier (h : ℤ) (hh : Odd h) (start length k : ℕ
       (1 - c/2) * length + 1 := by
   linarith [window_fourier_deficit lambertE hh start length k hk]
 
-#print axioms erdosBorwein_window_fourier
 
-end ErdosBorweinAudit
+end NormalityChecker.ErdosBorweinAudit

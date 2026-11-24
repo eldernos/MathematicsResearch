@@ -1,7 +1,11 @@
-import NormalityChecker.CorrectedStrides
-import NormalityChecker.DiagonalStep
+module
+
+public import NormalityChecker.CorrectedStrides
+public import NormalityChecker.DiagonalStep
 
 /-! Rational identities for the corrected-numerator research note. -/
+
+@[expose] public section
 namespace NormalityChecker.PhaseThirteen
 
 open CorrectedStrides

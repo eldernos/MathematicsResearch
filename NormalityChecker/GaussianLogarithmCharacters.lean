@@ -1,10 +1,14 @@
-import NormalityChecker.StrideDenominatorRate
-import Mathlib.LinearAlgebra.Matrix.Charpoly.FiniteField
-import Mathlib.Analysis.SpecialFunctions.Complex.LogBounds
+module
+
+public import NormalityChecker.StrideDenominatorRate
+public import Mathlib.LinearAlgebra.Matrix.Charpoly.FiniteField
+public import Mathlib.Analysis.SpecialFunctions.Complex.LogBounds
 
 /-! Standalone checks for the Gaussian prefix and the modular character estimate. -/
 
-namespace Phase13.ComplementaryCharacters
+@[expose] public section
+
+namespace NormalityChecker.GaussianLogarithmCharacters
 
 open Finset
 
@@ -276,4 +280,4 @@ theorem forcing_sum (z : ℕ → ℂ) (hz : ∀ i, ‖z i‖ = 1) (T : ℕ) (c :
   change _ ≤ 9*(∑ i ∈ range T, d i)+12
   linarith [show 0 ≤ d 0 from sq_nonneg _]
 
-end Phase13.ComplementaryCharacters
+end NormalityChecker.GaussianLogarithmCharacters

@@ -1,0 +1,26 @@
+# Short returns of actual two-stride logarithm numerators
+
+Fix a prime $p>3$. The two real logarithms give the rational prefix
+```math
+Y_n=\sum_{j=1}^n \frac{2^{n-j}W(j)}j,\qquad
+W(j)=4[2\mid j]+3[3\mid j]-6[6\mid j].
+```
+It approximates $2^n\log 2$ to within $4/(n+1)$. Write $R_n$ for the part of this same sum with $p\nmid j$ and $G_n$ for the part with $p\mid j$. Both include their actual coefficients. Let $Z_n$ be the reduction of $R_n$ in $\mathbb F_p$. In particular, $Z_n$ has the uniquely specified initial value zero. [Two-stride expansion and tail](../../NormalityChecker/StridedLogarithm.lean) · [Combined recurrence](../../NormalityChecker/StrideDenominatorRate.lean) · [Formal split and count](../../NormalityChecker/StrideResidueReturns.lean)
+
+**Short-window theorem.** In any interval of $T\ge1$ consecutive integer starts contained in $[Ap,(A+1)p)$, for any $A\ge0$ and any specified field element, the number of occurrences as $Z_n$ is at most
+```math
+6\bigl(\lfloor T/(H+1)\rfloor+1+H^2\bigr),\qquad 0\le H<p .
+```
+Taking $H=\lfloor T^{1/3}\rfloor$ gives $O(T^{2/3})$ with an absolute constant. An interval of at most $p$ consecutive starts crosses at most one block boundary, so splitting there gives the same order uniformly in its location. For an arbitrary interval of length $T\ge p$, summing the full-block bound and two endpoint bounds gives $O(Tp^{-1/3})$.
+
+**Ordered pairs.** Put $w_{u,v}(j)=4u[2\mid j]+3v[3\mid j]-6v[6\mid j]$ over $\mathbb F_p$. This records any linear projection of the two prime-free components. For $(u,v)\ne(0,0)$ the six coefficients include a nonzero entry: residues 2 and 3 modulo 6 have coefficients $4u$ and $3v$. Fix the start class $a\bmod 6$ and a gap $0<h<p$ with a nonzero coefficient among the next $h$ entries. Within one block, at most $h$ starts in that class give any prescribed ordered pair of projected residues. Indeed the recurrence over that gap gives
+```math
+Z_{n+h}-2^h Z_n=\sum_{j=1}^h \frac{2^{h-j}w_{u,v}(a+j)}{n+j}\pmod p .
+```
+The denominators on the right are units when both starts lie in the block. Clearing the $h$ distinct linear denominators gives a polynomial of degree at most $h$ in the starting position. At the negative of an index carrying a nonzero coefficient only the corresponding summand survives, and its remaining factors are all nonzero. The polynomial therefore has at most $h$ roots. Distinct starts in one block represent distinct field elements.
+
+**From pairs to counts.** Within each class, divide the window into intervals of at most $H+1$ positions. Each occurrence other than the first in a subinterval has an earlier occurrence at a gap from 1 to $H$. Gaps between two starts of the same class are multiples of six, so every admissible gap contains a nonzero coefficient. There are at most $H^2$ returning pairs over these gaps, and at most $\lfloor T/(H+1)\rfloor+1$ first occurrences. Summation over the six classes proves the bound for every nonzero projection and thus for the hits on any prescribed affine line in the two-dimensional residue space. Lean verifies the simple-pole lemma, ordered-pair and one-class interval theorems for general periodic coefficients, and the six-class bound specialized to $Y_n$. The affine-line statement follows by the two coefficient evaluations above.
+
+**An additional digit of the unsifted prefix.** Throughout a block fix any $e\ge0$ such that $p^e Y_n$ is $p$-integral there, for example $p^{e+1}>(A+1)p-1$. A prescribed residue of $p^eY_n$ modulo $p^{e+1}$ also occurs $O(T^{2/3})$ times on $T$ consecutive starts within this block. In the ordered-pair argument no new pole is crossed, so $G_{n+h}=2^hG_n$. Use integer representatives of both targets modulo $p^{e+1}$. Their difference after multiplying the first by $2^h$ must vanish modulo $p^e$; dividing this difference by $p^e$ gives precisely the field target in the simple-pole proof. This also applies to comparable linear combinations with integer coefficients whose reduction modulo $p$ is nonzero. The result on the full scaled prefixes is a paper deduction. When $e=1$ and $p$ exactly divides the reduced denominator $Q_n$, writing $Y_n=B_n/Q_n$ identifies the statistic with $B_n/(Q_n/p)\bmod p^2$. A bound for the normalized residue alone does not bound hits of the bare reduced numerator when $Q_n/p$ varies.
+
+**Why the real discrepancy question is harder.** These estimates control arbitrarily late windows of the actual rational sequence. The frequencies tested are in a single local field. The real phase factors through all prime-power components of the reduced denominator, and their product can be concentrated while each projection spreads. An independent audit gives a rational countermodel to the transfer. The relevant general small-denominator sieve must control the joint lifts or the real phase itself. The earlier single-pole calculation for direct Taylor prefixes applies in one-pole windows and treats the two series individually. Here the coefficient period is used to handle both actual components together and any number of earlier poles. We make no claim of historical priority for the polynomial root-counting method. [Earlier direct Taylor bound](../dyadic-prefix-residues.md) · [Independent review and countermodel](reviews/classical-bands.md) · [Corrected numerator comparisons](corrected-numerators.md)

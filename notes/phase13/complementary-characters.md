@@ -4,7 +4,7 @@
 ```math
 \lim_{N\to\infty}\frac{\log q_N}{N}=\frac5{12}.
 ```
-The real dyadic logarithm construction has optimal exponent $1/2$ for finite integer combinations of $\log(1\pm 2^{-k})$ truncated at a common binary exponent. The improvement uses the real part of a Gaussian logarithm. The standalone Lean file verifies the four-series identity, the common denominator, prime removal throughout the specified band, and the eventual upper bound for every exponent above $5/12$. The proof of the matching lower bound and of the approximation error is given below. [Lean checks](ComplementaryCharacters.lean) · [Real dyadic optimality theorem](../strided-logarithm.md#why-half-is-optimal-in-this-class)
+The real dyadic logarithm construction has optimal exponent $1/2$ for finite integer combinations of $\log(1\pm 2^{-k})$ truncated at a common binary exponent. The improvement uses the real part of a Gaussian logarithm. The standalone Lean file verifies the four-series identity, the common denominator, prime removal throughout the specified band, and the eventual upper bound for every exponent above $5/12$. The proof of the matching lower bound and of the approximation error is given below. [Lean checks](../../NormalityChecker/GaussianLogarithmCharacters.lean) · [Real dyadic optimality theorem](../strided-logarithm.md#why-half-is-optimal-in-this-class)
 
 There is also a uniform first-frequency deficit for the **modulo $p^2$ joint character** of the two original rational prefixes. Its proof uses the one-step additive term and Weil's Kloosterman bound. The real first-frequency deficit for $\log 2$ remains open.
 
@@ -79,7 +79,7 @@ Choose a unit $c$ in the direction of $\sum_{n\in I}z_n$, taking $c=1$ for zero 
 ```math
 |vc-u^2|^2\le 3|v-c|^2+6|u-c|^2.
 ```
-Factor $vc-u^2=(v-c)c+(c-u)(c+u)$ and square the bound $|v-c|+2|u-c|$. With $u=z_n$, $v=z_{n+1}$ the left side is $2(1-\Re(c f_n))$. Summing the right side costs at most $9\sum|z_n-c|^2+12$ by shifting the endpoint, and $\sum|z_n-c|^2=2T(1-|T^{-1}\sum z_n|)$. This proves the estimate. Lean verifies the pointwise inequality and its finite sum with endpoint cost 12. [Lean proof](ComplementaryCharacters.lean) · [Earlier single-residue counting bound](../dyadic-prefix-residues.md)
+Factor $vc-u^2=(v-c)c+(c-u)(c+u)$ and square the bound $|v-c|+2|u-c|$. With $u=z_n$, $v=z_{n+1}$ the left side is $2(1-\Re(c f_n))$. Summing the right side costs at most $9\sum|z_n-c|^2+12$ by shifting the endpoint, and $\sum|z_n-c|^2=2T(1-|T^{-1}\sum z_n|)$. This proves the estimate. Lean verifies the pointwise inequality and its finite sum with endpoint cost 12. [Lean proof](../../NormalityChecker/GaussianLogarithmCharacters.lean) · [Earlier single-residue counting bound](../dyadic-prefix-residues.md)
 
 **Short initial subintervals of the band.** At $L=2p$, the direction $(2,1)$ retains a deficit of at least $1/54-o(1)$ even when $T=\lfloor p^\eta\rfloor$ for any fixed $0<\eta<1/2$. In fact this holds for $T<p$ as soon as $\log T/[(\log p)^{2/3}(\log\log p)^2]\to\infty$. Restrict the forcing sum to $n+1=2p+6j$ with $1\le j\le T/6$. The weight is 4 since $2p$ is even and prime to 3. The forcing equals $e_p((4/6)/j)$. Bourgain and Garaev bound the absolute value of this initial reciprocal sum of length $M=\lfloor T/6\rfloor$ by a constant times $M(\log\log p)^3\log p/(\log M)^{3/2}$, uniformly in the nonzero numerator. This is $o(T)$ under the displayed condition. Bounding all remaining forcing terms by one gives $|T^{-1}\sum f_n|\le5/6+o(1)$. The same squared-distance inequality gives the claim. The alignment at $2p$ is needed for this application of the initial-sum theorem. [Bourgain and Garaev, Theorem 16](https://arxiv.org/pdf/1211.4184)
 
@@ -122,6 +122,6 @@ For a starting position $N$ and word length $T$, choose a precision $q>T$ and pu
 The independent series $\sum_{j\ge1}2^{-j}/j$ certifies the same four words. At $N=256,1024,4096$ the reduced denominator bit lengths for $k=5$ are $150,623,2458$. Direct rational summation checks the short-sum congruence at every odd prime $\sqrt{N/2}<p\le N/2$ in each case for $k=2,5$. These are finite checks. [Exact arithmetic program](complementary_characters.py)
 
 ```sh
-lake env lean notes/phase13/ComplementaryCharacters.lean
+lake env lean NormalityChecker/GaussianLogarithmCharacters.lean
 python3 notes/phase13/complementary_characters.py
 ```

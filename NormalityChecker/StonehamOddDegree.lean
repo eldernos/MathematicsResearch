@@ -38,7 +38,11 @@ theorem binary_power_retained_denominator {b d q r : ℕ} (cop : b.Coprime 2)
       _ ≤ 2^J * 2^(k-J) := Nat.mul_le_mul_right _ (Nat.lt_pow_self (n:=J) (by decide : 1<2)).le
       _ = _ := by rw [← pow_add, Nat.add_sub_of_le jl]
     simpa [cut, position, stretch, reflect, caps, e, t, J, mul_assoc] using h.trans (Nat.pow_log_le_self 2 pos.ne')
-  have nz := numerator_nonzero Nat.prime_two cop e t near
+  have stable (j k' : ℕ) (hj : L ≤ j) (hk : L ≤ k') :
+      (b : ZMod (2^L))^(2^k') = b^(2^j) :=
+    (stable_power Nat.prime_two cop le_rfl hk).trans (stable_power Nat.prime_two cop le_rfl hj).symm
+  have nz := numerator_nonzero (dvd_rfl : 2 ∣ 2) cop stable e t (fun i => by
+    simpa only [two_mul] using near i)
     (pass _ (cut_upper (by decide) e t k n) (symmetric_cut d m k n) hit)
   let A := numerator b 2 e t k n
   let x := productPrefix b 2 e t n
