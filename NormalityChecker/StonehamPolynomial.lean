@@ -38,6 +38,7 @@ theorem rational_sum_normal_at {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3
     rw [Function.comp_apply,eqn (a i) (mem_insert_of_mem (mem_image_of_mem _ hi)),mul_assoc]
   rwa [eqn lead member,mul_assoc,e] at result
 
+/-- The odd-prime specialization of the rational leading-monomial criterion. -/
 theorem rational_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
     (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℚ) (nc : c ≠ 0)
     (s : Finset ι) (u : ι → Monomial) (a : ι → ℚ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
@@ -90,6 +91,7 @@ theorem standard_sum_normal_at {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3
     (fun i => (u i).shifted hc₀) (fun i => normalize (u i) (a i)) lt
   simpa only [scaled] using res
 
+/-- The odd-prime specialization for products of positive-index generators. -/
 theorem same_prime_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
     (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℚ) (nc : c ≠ 0)
     (s : Finset ι) (u : ι → Monomial) (a : ι → ℚ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
@@ -136,6 +138,7 @@ theorem polynomial_normal_at {b c p : ℕ} (hb : 2 ≤ b) (hc : 3 ≤ c) (hp : p
   simpa only [Monomial.standardValue,term,pow_one,prod_const,card_univ,Fintype.card_fin,
     show ∀ q : ℚ, (algebraMap ℚ ℝ) q = (q:ℝ) from fun _ => rfl] using h
 
+/-- Rational polynomials of a generator with odd prime-power parameter. -/
 theorem prime_power_polynomial_normal {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
     (cop : b.Coprime p) (e : ℕ+) (P : ℚ[X]) (degree : 0 < P.natDegree) :
     NormalIn b (P.eval₂ (algebraMap ℚ ℝ) (alpha b (p^(e : ℕ)))) :=

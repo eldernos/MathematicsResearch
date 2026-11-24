@@ -14,9 +14,10 @@ Let *b* ≥ 2 and *c* > 2 be coprime integers. Define the positive-index Stoneha
 the inverse radix powers converge to a unit in ℚ<sub>*p*</sub>. This includes every even *c* > 2.
 It verifies the retained denominator bound in this case for products with arbitrary positive
 strides and radix dilations, and normality for rational combinations with one strictly highest-degree
-monomial. The proof for cycles of length greater than one, given below, concerns univariate
-polynomials. [Independent statements](../../NormalityChecker/CompositePolynomialStatements.lean) ·
+monomial. Lean also verifies nonvanishing of every periodic upper-set mass. The passage from a
+nonconstant cycle to polynomial normality is a written deduction for univariate polynomials. [Independent statements](../../NormalityChecker/CompositePolynomialStatements.lean) ·
 [Unit-limit and even-parameter proofs](../../NormalityChecker/CompositePolynomial.lean) ·
+[Nonvanishing of periodic masses](../../NormalityChecker/PeriodicPolynomialMass.lean) ·
 [Product and sum theorem](../../NormalityChecker/StonehamPolynomial.lean) ·
 [Paper I and its original scope](../../papers/01-stoneham-polynomials/paper.pdf)
 
@@ -123,6 +124,9 @@ If the mass vanished in ℚ<sub>*p*</sub>, it would vanish in *K*, making *S* in
 its ring of integers and hence over ℤ. This proves nonvanishing for every nonempty upper
 set, in every shell class. The identical one-dimensional cycle in all coordinates is
 the reason a **single** monic polynomial suffices for powers of one generator.
+Lean proves the finite-box monic identity for arbitrary integral weights and their nonzero
+limiting mass for a periodic cycle of roots of unity in a complete normed field with ‖*c*‖ < 1.
+[Kernel proof](../../NormalityChecker/PeriodicPolynomialMass.lean)
 
 For example, take *b* = 2 and *c* = 35. At *p* = 5 the inverse radix has order 4 and
 35 ≡ −1 modulo 4. At *p* = 7 its order is 3 and 35 ≡ −1 modulo 3. Neither prime
@@ -151,7 +155,7 @@ to infinity, has fixed prime support dividing *c*, and is at most *n*<sup>*d*</s
 The remaining estimates apply without change for composite *c*. The shifted real tail tends to
 zero by dominated convergence, with dominating weights ∏ᵢ *c*<sup>−*j*ᵢ</sup>. Only
 *O*((1 + log *N*)<sup>*d*</sup>) insertions occur up to position *N*. Blocks of length ⌊√*N*⌋
-meeting an insertion cover *o*(*N*) positions; on each other block the prefix follows an exact
+meeting an insertion cover *o*(*N*) positions. On each other block the prefix follows an exact
 radix orbit. The fixed-support short-orbit estimate applies because the reduced denominator is
 polynomially bounded in the block length and all its prime factors are coprime to *b*. Weyl's
 criterion gives normality and rational scaling restores the original coefficients.
