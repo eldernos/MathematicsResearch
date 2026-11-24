@@ -75,29 +75,35 @@ theorem retained_with_lower_terms {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (co
   change t.degree*k-(L+h) ≤ _
   omega
 
-/-- A unique highest-degree monomial with nonzero integer coefficient survives
-addition of any finite sum of strictly lower-degree monomials. All denominator parameters are powers of one odd prime. Both the
-radix dilations and the denominator exponents can vary across factors. -/
-theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
-    (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
-    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+/-- The uniform upper bound on denominators uses only the largest degree. -/
+theorem combination_denominator {ι : Type*} {b p D : ℕ} (hp : 0<p)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (le : ∀ i ∈ s, (u i).degree ≤ D) (n : ℕ) :
+    (∑ i ∈ s, (a i:ℚ)*(u i).model b p n).den ∣ p^(D*Nat.log p n) := by
+  apply (Rat.den_sum_dvd_lcm_den ..).trans; apply Finset.lcm_dvd
+  intro i hi
+  have dd := Rat.mul_den_dvd (a i:ℚ) ((u i).model b p n)
+  simp only [Rat.den_intCast,one_mul] at dd
+  exact dd.trans ((denominator_dvd hp (u i).stride _).trans
+    (pow_dvd_pow _ (Nat.mul_le_mul_right _ (le i hi))))
+
+/-- With possibly tied top degrees, a uniform surviving pole suffices for
+the same sparse-block proof. -/
+theorem sum_normal_of_retained {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime)
+    (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (le : ∀ i ∈ s, (u i).degree ≤ t.degree)
+    (survives : ∃ C K : ℕ, ∀ n, K ≤ Nat.log p n → 0<n →
+      p^(t.degree*Nat.log p n-C) ∣
+        ((c:ℚ)*t.model b p n + ∑ i ∈ s, (a i:ℚ)*(u i).model b p n).den) :
     NormalIn b (c * t.value b p + ∑ i ∈ s, (a i:ℝ)*(u i).value b p) := by
   classical
   let R (n : ℕ) := ∑ i ∈ s, (a i:ℚ)*(u i).model b p n
   let P (n : ℕ) := (c:ℚ)*t.model b p n + R n
-  have lower (n : ℕ) : (R n).den ∣ p^((t.degree-1)*Nat.log p n) := by
-    apply (Rat.den_sum_dvd_lcm_den ..).trans; apply Finset.lcm_dvd
-    intro i hi
-    have dd := Rat.mul_den_dvd (a i:ℚ) ((u i).model b p n)
-    simp only [Rat.den_intCast,one_mul] at dd
-    have le := lt i hi
-    exact dd.trans ((denominator_dvd hp.pos (u i).stride _).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (by omega))))
   have smooth (n : ℕ) : (P n).den ∣ p^(t.degree*Nat.log p n) := by
     apply (Rat.add_den_dvd_lcm ..).trans; apply Nat.lcm_dvd
     · have dd := Rat.mul_den_dvd (c:ℚ) (t.model b p n)
       simp only [Rat.den_intCast,one_mul] at dd
       exact dd.trans (denominator_dvd hp.pos t.stride t.parameter)
-    · exact (lower n).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (Nat.sub_le ..)))
+    · exact combination_denominator hp.pos s u a le n
   have scaled (v : Monomial) (z : ℤ) : Tendsto (fun n => (b:ℝ)^n * ((z:ℝ)*v.value b p) -
       (((z:ℚ)*v.model b p n:ℚ):ℝ)) atTop (𝓝 0) := by
     simpa only [Monomial.value,Monomial.model,Rat.cast_mul,Rat.cast_intCast,mul_zero,mul_sub,mul_left_comm (z:ℝ)] using
@@ -108,11 +114,11 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
     (fixed_support_orbit_estimate hb hp.one_lt cop) (4*t.degree) ?_
   · simpa only [P,R,Rat.cast_add,Rat.cast_sum,mul_add,mul_sum,← sum_sub_distrib,
       add_sub_add_comm,sum_const_zero,add_zero] using tail
-  obtain ⟨C,K,retain⟩ := retained_with_lower_terms hp odd cop t degree c nc R lower
+  obtain ⟨C,K,retain⟩ := survives
   let A (k : ℕ) := t.events p k ∪ s.biUnion (fun i => (u i).events p k)
   have count (k : ℕ) : (A k).card ≤ (s.card+1)*(2*(k+1))^t.degree := by
     have lift (i : ι) (hi : i ∈ s) := ((u i).events_card p k).trans
-      (Nat.pow_le_pow_right (by positivity) (lt i hi).le)
+      (Nat.pow_le_pow_right (by positivity) (le i hi))
     have small := card_biUnion_le.trans (sum_le_sum lift)
     have h := (card_union_le ..).trans (add_le_add (t.events_card p k) small)
     simp only [sum_const, smul_eq_mul] at h
@@ -172,7 +178,7 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
         v.model b p (n+j) = (b:ℚ)^j*v.model b p n := by
       apply prefix_follows hp.one_lt v.positive
       intro w newer; by_contra! le
-      have hpos := incl (v.event_mem (by omega) w (le.trans_lt (by change j<B at hj; omega)))
+      have hpos := incl (v.event_mem hp.two_le w (le.trans_lt (by change j<B at hj; omega)))
       have gap := insertionBlocks_free bp free hpos (by
         rw [Nat.add_mul,one_mul]; change position p v.stride v.parameter w < n+B
         change j<B at hj; omega)
@@ -182,5 +188,16 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
     · ring
     · apply sum_congr rfl; intro i hi
       rw [follows (u i) (fun _ h => mem_union_right _ (mem_biUnion.mpr ⟨i,hi,h⟩))]; ring
+
+/-- A unique highest-degree monomial with nonzero integer coefficient survives
+addition of any finite sum of strictly lower-degree monomials. All denominator parameters are powers of one odd prime. Both the
+radix dilations and the denominator exponents can vary across factors. -/
+theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
+    (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+    NormalIn b (c * t.value b p + ∑ i ∈ s, (a i:ℝ)*(u i).value b p) := by
+  apply sum_normal_of_retained hb hp cop t degree c s u a (fun i hi => (lt i hi).le)
+  apply retained_with_lower_terms hp odd cop t degree c nc
+  exact combination_denominator hp.pos s u a (fun i hi => by have := lt i hi; omega)
 
 end NormalityChecker.StonehamPolynomial

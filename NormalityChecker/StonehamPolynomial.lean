@@ -54,10 +54,12 @@ namespace Monomial
 noncomputable def standardValue (t : Monomial) (b p : ℕ) :=
   ∏ i, alpha (b^(t.parameter i)) (p^(t.stride i : ℕ))
 
-private def shifted (t : Monomial) {p : ℕ} (hp : 0 < p) : Monomial :=
+/-- Shift each factor by its first positive stride. -/
+def shifted (t : Monomial) {p : ℕ} (hp : 0 < p) : Monomial :=
   ⟨t.degree,fun i => t.parameter i*p^(t.stride i : ℕ),fun i => Nat.mul_pos (t.positive i) (pow_pos hp _),t.stride⟩
 
-private lemma shifted_value (t : Monomial) {b p : ℕ} (hp : 0 < p) :
+/-- Convert an index-zero product to the standard index-one normalization. -/
+lemma shifted_value (t : Monomial) {b p : ℕ} (hp : 0 < p) :
     (t.shifted hp).value b p = (p:ℝ)^(∑ i, (t.stride i : ℕ)) * t.standardValue b p := by
   change (∏ i : Fin t.degree, axis b (p^(t.stride i : ℕ)) (t.parameter i * p^(t.stride i : ℕ))) = _
   simp only [standardValue, axis_shift (pow_pos hp _),Nat.cast_pow,prod_mul_distrib,prod_pow_eq_pow_sum]
