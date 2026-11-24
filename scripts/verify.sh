@@ -5,6 +5,7 @@ cd "$(dirname "$0")/.."
 python3 -B -m unittest discover -s scripts -p 'test_*.py'
 lake build
 lake env lean Audit.lean
+NORMALITY_UPDATE_THEOREM_INDEX=0 lake env lean scripts/readme_theorems.lean
 while IFS= read -r -d '' source; do
   module=${source%.lean}
   echo "Replaying ${module//\//.}"
