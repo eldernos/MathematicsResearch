@@ -70,7 +70,7 @@ def check_files(require_reviews, verify_pins):
             if not (folder / name).is_file():
                 problems.append(f"Missing {relative / name}")
         if require_reviews:
-            for reviewer in ("gemini", "sonnet"):
+            for reviewer in ("gemini", "sonnet", "resolution"):
                 report = ROOT / "papers" / "reviews" / directory / f"{reviewer}.md"
                 if not report.is_file():
                     problems.append(f"Missing {report.relative_to(ROOT)}")
@@ -95,7 +95,7 @@ def main():
     parser.add_argument("--write-checksums", action="store_true",
                         help="record the current PDF hashes after rebuilding")
     parser.add_argument("--require-reviews", action="store_true",
-                        help="also require independent Gemini and Sonnet reports for each manuscript")
+                        help="require both independent reports and their disposition for each manuscript")
     parser.add_argument("--verify-pins", action="store_true",
                         help="check Lean source links embedded in PDFs against available Git history")
     args = parser.parse_args()

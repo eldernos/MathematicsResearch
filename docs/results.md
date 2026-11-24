@@ -782,7 +782,7 @@ Shell *j* consists of the integers *n* with *pʲ* ≤ *n* < *pʲ*⁺¹; it is a 
 D_N - \frac{Z(N)}{N} \longrightarrow 0 \qquad (N \to \infty),
 ```
 
-and consequently the limiting discrepancy *D*∞(*X*) = lim sup *D*<sub>*N*</sub> equals the upper density lim sup *Z*(*N*)/*N* of the zero shells.
+and consequently the limiting discrepancy *D*∞(*X*) = lim sup *D*<sub>*N*</sub> equals the upper density lim sup *Z*(*N*)/*N* of the positions in zero-phase shells.
 
 **Scope.** The convergence holds along all prefix lengths, including cutoffs inside a shell. Position 0 precedes the first shell and counts as regular. The phases may be aperiodic and of either sign; only boundedness is assumed. The hypotheses allow *p* = 2 in every odd base. The proof shows that points on nonzero shells are uniformly distributed relative to the full prefix (`nonzero_shells_uniform`) and that late points on zero shells avoid every fixed interval [δ, 1 − δ) (`zero_shells_miss_interior`). The theorem concerns the base *b* used in the construction only.
 

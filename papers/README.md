@@ -26,4 +26,4 @@ A two-stride representation of ln 2 has reduced-denominator growth rate one half
 
 The [review record](reviews/README.md) identifies each reviewed revision, both independent model reports and the disposition of their findings. These are public research drafts. Journal decisions, priority assessments and authorship decisions belong to the project owner and the relevant mathematical community.
 
-Use the release-specific checksums to verify a downloaded PDF. The archive guide explains how the project owner can obtain a version DOI for the complete release or a separate preprint DOI for an individual manuscript. [Shared notation](notation.md) · [PDF checksums](SHA256SUMS) · [DOI instructions](ARCHIVING.md)
+Use the release-specific checksums to verify a downloaded PDF. The archive guide explains how the project owner can obtain a version DOI for the complete release or a separate preprint DOI for an individual manuscript. [Shared notation](notation.md) · [Build and verify](BUILD.md) · [PDF checksums](SHA256SUMS) · [DOI instructions](ARCHIVING.md)
