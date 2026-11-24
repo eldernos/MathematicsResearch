@@ -231,3 +231,75 @@ lean = [
 ]
 proof = ["notes/polynomial-masks.md#rational-coefficients"]
 related = ["MW-01"]
+
+[[result]]
+id = "MW-08"
+title = "Joint uniformity at distinct orders on a common mask"
+topic = "weights"
+status = "lean"
+statement = '''
+In the vector of LS-09, retain the same subset of the smooth indices *m* in every coordinate. If *S* = {*p*} for a prime *p* ∤ *b* and the vector is nonempty, its shifts are jointly uniformly distributed exactly when the retained exponents *k* in *m* = *p*ᵏ are unbounded.
+
+For odd *b* and any finite prime support *S* containing 2, joint uniformity also holds if the common mask retains every sufficiently large power of two. The mask can take arbitrary values at all other smooth indices.
+'''
+scope = '''
+The orders are positive and pairwise distinct, and every rational polynomial numerator is nonzero at zero. On one axis the gaps between retained exponents may grow arbitrarily. Vandehey’s Theorem 7.4 already covers the unsigned scalar series on an infinite restriction of a single coprime axis. The second assertion gives a sufficient condition on mixed supports.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.joint_axis_orders_iff",
+  "NormalityChecker.LocalizedSupport.joint_late_twos_orders",
+]
+proof = ["notes/phase13/localized-joint.md#common-masks"]
+computation = ["scripts/test_localized_joint.lean"]
+related = ["LS-09", "MW-02", "MW-03"]
+
+[[result]]
+id = "MW-09"
+title = "Which rational weights have finitely many denominator primes?"
+topic = "weights"
+status = "lean"
+statement = '''
+Let *p* be prime and *u* ≥ 0 an integer. Let *A*, *G* be integer polynomials coprime over the rationals with *G*(0) ≠ 0. Evaluate the following coefficient at *m* = *p*ᵏ for *k* ≥ 0 wherever *G*(*m*) ≠ 0.
+
+```math
+\frac{A(m)}{m^u G(m)}
+```
+
+A finite set contains the prime divisors of every reduced coefficient denominator exactly when *G* is constant. For nonconstant *G*, primes outside any prescribed finite set occur at arbitrarily late nonsingular indices.
+'''
+scope = '''
+This tests the denominators of individual coefficients before summation. For example, 1/(*m*(*m* + 1)) escapes every finite prime set along the dyadic axis. The normality of the resulting series remains undecided by this test. Every nonempty full smooth support contains an entire prime-power axis.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.finite_denominator_primes_iff",
+  "NormalityChecker.LocalizedSupport.rational_denominator_prime_outside",
+]
+proof = ["notes/phase13/localized-joint.md#rational-functions-with-controlled-denominator-primes"]
+computation = ["scripts/test_localized_joint.lean"]
+related = ["MW-01", "LS-09"]
+
+[[result]]
+id = "MW-10"
+title = "A finite cycle test for sparse signed periodic weights"
+topic = "weights"
+status = "lean"
+statement = '''
+Fix *b* ≥ 2, a prime *p* ∤ *b*, an integer *d* ≥ 1 and rational weights *H* on the residues modulo *d*. Let *L* ≥ 1 be a period of *p*ʲ modulo *d* after its preperiod. Set
+
+```math
+X=\sum_{j=0}^{\infty}\frac{H(p^j)}{p^j b^{p^j}},
+\qquad W(z)=\sum_{r=1}^{L}p^{L-r}H(p^r z).
+```
+
+The number *X* is normal in base *b* exactly when *W*(*z*) ≠ 0 at every residue *z* on the eventual cycle.
+'''
+scope = '''
+This is the order-one sparse series on a single prime-power axis. Both signs are allowed. With *b* = 2, *p* = 3 and *d* = 4 the cycle is 1, 3. Weights 1, −1 on that cycle give a normal number. Weights 1, −3 give a zero window and a nonnormal number although every supported numerator is nonzero.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.periodic_axis_normal_iff",
+  "NormalityChecker.LocalizedSupport.periodic_axis_counterexample",
+]
+proof = ["notes/phase13/localized-joint.md#signed-periodic-weights-on-one-axis"]
+computation = ["scripts/test_localized_joint.lean"]
+related = ["MW-03", "MW-05", "MW-06"]

@@ -17,7 +17,7 @@ Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *e* ≥ 1. Defi
 For every polynomial *P* with rational coefficients and degree at least one, the number *P*(α) is normal in base *b*.
 '''
 scope = '''
-The series starts at *j* = 1, as in Stoneham's definition. The radix *b* is the construction base. The prime must be odd: the nonvanishing argument uses *K*(*p*) ≡ 1 (mod *p* − 1), which excludes *p* = 2. No statement is made about other bases, about rational functions of α or about polynomials in several independent Stoneham numbers (see ST-04 and ST-06).
+The series starts at *j* = 1, as in Stoneham's definition. The radix *b* is the construction base. This odd-prime proof uses *K*(*p*) ≡ 1 (mod *p* − 1). ST-11 extends the univariate conclusion to every coprime parameter above two. ST-12 and ST-13 treat parameter two. ST-17 treats specific alternate radices, and ST-04 and ST-06 concern several factors.
 '''
 lean = [
   "NormalityChecker.StonehamPolynomial.prime_power_polynomial_normal",
@@ -30,7 +30,7 @@ supersedes = [
   "NormalityChecker.StonehamPolynomial.binary_power_normal",
   "NormalityChecker.StonehamSquare.binary_normal",
 ]
-related = ["ST-02", "ST-03", "ST-04", "ST-05"]
+related = ["ST-02", "ST-03", "ST-04", "ST-05", "ST-11"]
 figures = ["stoneham-square-lattice"]
 
 [[result]]
@@ -117,7 +117,7 @@ c \, \mu + \sum_{i=1}^{k} a_i \, \mu_i
 is normal in base *b*.
 '''
 scope = '''
-The degree is the number of factors; it ignores the dilations *m* and strides *e*. The hypothesis is that exactly one monomial has maximal degree. Distinct monomials of the same maximal degree can cancel their leading residues, and no claim is made in that case. This is therefore **not** a theorem about arbitrary multivariate polynomials in Stoneham numbers. All factors share one odd prime *p* ∤ *b*, and normality is asserted only in base *b*. ST-01 and ST-02 are the special cases used in Lean.
+Degree counts factors regardless of the dilations *m* and strides *e*. The hypothesis is that exactly one monomial has maximal degree. Distinct monomials of the same maximal degree can cancel their leading residues, as the radix-stride identity in ST-16 illustrates. That entry gives a sufficient divisibility condition when maximal degrees tie. All factors share one odd prime *p* ∤ *b*, and normality is asserted only in base *b*. ST-01 and ST-02 are the special cases used in Lean.
 '''
 lean = [
   "NormalityChecker.StonehamPolynomial.same_prime_sum_normal",
@@ -163,7 +163,7 @@ For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>
 ```
 '''
 scope = '''
-Here {·} is the fractional part, and both series start at *j* = 1. The bound comes from a uniformly distributed share of at least 2/45 of every long prefix, supplied by one isolated insertion on each late ternary shell. Binary normality of *x* is open in this repository. Transcendence of *x* is a paper deduction from Ridout's theorem and is recorded in ST-07; it is not part of this Lean entry.
+Here {·} is the fractional part, and both series start at *j* = 1. The bound comes from a uniformly distributed share of at least 2/45 of every long prefix, supplied by one isolated insertion on each late ternary shell. ST-14 strengthens the upper bound to 27/40. Binary normality of *x* remains open. ST-07 gives a written deduction of transcendence from Ridout’s theorem.
 '''
 lean = [
   "NormalityChecker.ProductThreeFive.discrepancy",
@@ -171,7 +171,7 @@ lean = [
   "NormalityChecker.ProductThreeFive.uniform_windows",
 ]
 proof = ["notes/stoneham-powers-products.md#a-product-on-different-prime-axes"]
-related = ["ST-02", "ST-07"]
+related = ["ST-02", "ST-07", "ST-14"]
 
 [[result]]
 id = "ST-07"
@@ -188,7 +188,7 @@ Let *b* ≥ 2 and let *c*, *d* ≥ 2 be multiplicatively independent integers, b
 In particular α(2, 3) · α(2, 5) is transcendental.
 '''
 scope = '''
-This is a written proof, not a Lean theorem. For the parameters (*b*, *c*, *d*) = (2, 3, 5) the discrepancy bound 43/45 and irrationality are kernel-verified (ST-06); only transcendence is added here. In general no explicit bound below one is given. Transcendence uses Ridout's theorem on rational approximations whose denominators have prime factors in a fixed finite set, applied to truncations at isolated insertions. Algebraic independence of the two factors is not used or claimed, and full normality of such products remains open.
+For the parameters (*b*, *c*, *d*) = (2, 3, 5), ST-06 gives irrationality and ST-14 gives the stronger discrepancy bound 27/40 in Lean. The general discrepancy inequality is qualitative. Transcendence uses Ridout's theorem on rational approximations whose denominators have prime factors in a fixed finite set, applied to truncations at isolated insertions. Algebraic independence of the two factors is not used or claimed, and full normality of such products remains open.
 '''
 proof = ["notes/stoneham-powers-products.md#a-product-on-different-prime-axes"]
 inputs = ["D. Ridout, Rational approximations to algebraic numbers, Mathematika 4 (1957) — restricted-denominator form of Roth's theorem"]
@@ -257,3 +257,207 @@ This is a written proof, not a Lean theorem. It rests on a separation estimate f
 proof = ["notes/ternary-stoneham-complexity.md"]
 inputs = ["Schmidt–Schlickewei Subspace Theorem, in Schlickewei's p-adic form as stated in Y. Bilu, Astérisque 317 (2008), statement 2.3"]
 related = ["ST-01"]
+
+[[result]]
+id = "ST-11"
+title = "Polynomial images for every coprime Stoneham parameter above two"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and *c* > 2 be coprime integers. Define
+
+```math
+\alpha_{b,c}=\sum_{j=1}^{\infty}\frac{1}{c^j b^{c^j}}.
+```
+
+For every nonconstant polynomial *P* with rational coefficients, *P*(α<sub>*b*,*c*</sub>) is normal in base *b*. This includes α<sub>2,35</sub>, for which neither prime divisor of 35 has a constant limiting phase.
+'''
+scope = '''
+The proof handles periodic phases at every prime dividing *c* for powers of one generator. For products with different strides and radix dilations, the separate unique-highest-degree theorem assumes that for some prime *p* dividing *c*, the powers of *b* with exponents *c*ʲ eventually stabilize modulo each *p*ᵏ. Every even *c* > 2 coprime to *b* meets this latter hypothesis at 2. Paper I treats odd prime powers. Bailey and Crandall proved normality of the individual coprime generators. The literature comparison leaves historical priority for the nonlinear conclusion open.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.coprime_polynomial_normal",
+  "NormalityChecker.StonehamPolynomial.periodic_power_retained_denominator",
+  "NormalityChecker.StonehamPolynomial.standard_sum_normal_at",
+  "NormalityChecker.StonehamPolynomial.even_polynomial_normal",
+]
+proof = ["notes/phase13/composite-polynomials.md", "notes/phase13/reviews/composite-polynomials.md"]
+supersedes = ["ST-01", "NormalityChecker.StonehamPolynomial.unit_limit_polynomial_normal"]
+related = ["ST-12", "ST-13", "ST-17"]
+
+[[result]]
+id = "ST-12"
+title = "The parameter-two square and its exact prefix denominators"
+topic = "stoneham"
+status = "lean"
+statement = '''
+For every odd integer *b* ≥ 3, let α be the sum of 1/(2ʲ *b*<sup>2ʲ</sup>) over *j* ≥ 1. Then α² is normal in base *b*. Let *q*ₙ be the reduced denominator of the shifted square prefix obtained by summing over ordered pairs of positive indices *i*, *j* with 2ⁱ + 2ʲ ≤ *n*. Each pair contributes
+
+```math
+\frac{b^{n-2^i-2^j}}{2^{i+j}}.
+```
+
+For *n* < 4 the denominator is 1. On every shell 2ᵏ ≤ *n* < 2ᵏ⁺¹ with *k* ≥ 2, it is 2<sup>2*k*−2</sup> before 3 · 2ᵏ⁻¹ and 2<sup>*k*−1</sup> from that midpoint onward.
+'''
+scope = '''
+The midpoint belongs to the second interval. The exact drop in the quadratic denominator allows a linear term of a general quadratic polynomial to have the same pole order there. The linked review gives a sufficient coefficient condition for some quadratic projections and explains the additional cancellation in α² − 2α. General quadratic projections at parameter two remain open.
+'''
+lean = [
+  "NormalityChecker.ParameterTwoSquare.square_normal",
+  "NormalityChecker.ParameterTwoSquare.exact_profile",
+  "NormalityChecker.ParameterTwoSquare.shifted_tail",
+]
+proof = ["notes/phase13/parameter-two-square.md", "notes/phase13/reviews/symmetric-degree.md#quadratic-projections-with-equal-valuations"]
+related = ["ST-03", "ST-11", "ST-13"]
+
+[[result]]
+id = "ST-13"
+title = "Odd prime-power degrees at Stoneham parameter two"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let *b* ≥ 3 be odd, let *q* be an odd prime and let *r* ≥ 0. For every rational polynomial *P* of degree exactly *q*ʳ, the number *P*(α<sub>*b*,2</sub>) is normal in base *b*. In particular, every cubic with nonzero leading coefficient is allowed, with arbitrary lower coefficients.
+'''
+scope = '''
+Here 2 is the parameter of the positive-index Stoneham series and *q* controls the degree. Cyclic permutation of the indices of a power gives a nonzero mass modulo *q*. The accompanying finite calculation gives the exact cubic denominator losses on dyadic shells. The joint uniformity of distinct powers with degrees from this list follows on paper by applying the scalar theorem to each nonzero integer projection.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.odd_prime_power_degree_polynomial_normal",
+  "NormalityChecker.StonehamPolynomial.binary_power_retained_denominator",
+  "NormalityChecker.StonehamPolynomial.cubic_polynomial_normal",
+]
+proof = ["notes/phase13/reviews/symmetric-degree.md"]
+computation = ["notes/phase13/reviews/check_symmetric_degree.py"]
+related = ["ST-05", "ST-11", "ST-12"]
+
+[[result]]
+id = "ST-14"
+title = "A discrepancy bound of 27/40 for the product on two prime axes"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Put *x* = α<sub>2,3</sub> α<sub>2,5</sub> with both sums starting at index one. For the binary interval discrepancy of ST-06,
+
+```math
+\limsup_{N\to\infty} D_N(x)\le\frac{27}{40}.
+```
+
+The bound includes prefixes ending inside a quinary shell. More precisely, let *F*(*N*) count positions below *N* where both full prime powers in the prefix denominator tests of ST-15 fail. Then *D*<sub>*N*</sub>(*x*) ≤ *F*(*N*)/*N* + *o*(1) as *N* tends to infinity.
+'''
+scope = '''
+Counting every surviving top quinary column strengthens the original single-window estimate 43/45. A separate logarithmic-time argument in the note gives density 1/8 for simultaneous failures under harmonic weighting. Partial summation then gives the written deduction liminf *D*<sub>*N*</sub>(*x*) ≤ 1/8 for ordinary prefixes. Binary normality of this product remains open.
+'''
+lean = [
+  "NormalityChecker.ProductThreeFive.independent_product_discrepancy",
+  "NormalityChecker.ProductThreeFive.joint_prefix_discrepancy",
+]
+proof = ["notes/phase13/independent-axes.md#counting-all-surviving-columns", "notes/phase13/independent-axes.md#the-logarithmic-distribution-of-the-coupled-endpoints"]
+supersedes = ["NormalityChecker.ProductThreeFive.discrepancy"]
+related = ["ST-06", "ST-07", "ST-15"]
+
+[[result]]
+id = "ST-15"
+title = "Exact tests and persistent denominator loss on two prime axes"
+topic = "stoneham"
+status = "lean"
+statement = '''
+For the product of ST-14, let *R*ₙ be its rational prefix, summing 2<sup>*n*−3ⁱ−5ʲ</sup>/(3ⁱ5ʲ) over *i*, *j* ≥ 1 with 3ⁱ + 5ʲ ≤ *n*. For *n* ≥ 5 put *K* = ⌊log₃ *n*⌋, *L* = ⌊log₅ *n*⌋, *P* = 3ᴷ and *Q* = 5ᴸ. The reduced denominator contains *P* exactly when ⌊log₅(*n* − *P*)⌋ is odd. It contains *Q* exactly when ⌊log₃(*n* − *Q*)⌋ is nonzero modulo four. Set the integer logarithm of zero to zero.
+
+For each *h* ≥ 1 there are arbitrarily late exponents *K*, *L* ≥ *h* with *P* < *Q* < 5*P*/4 such that throughout *P* + *Q* ≤ *n* < 3*P*, the denominator divides
+
+```math
+3^{K-h}5^{L-h}.
+```
+'''
+scope = '''
+Both primes lose at least *h* layers throughout an interval longer than 3*P*/4. The note also derives exact valuations on full rectangles by a written lifting argument. The script compares the two survival tests with exact fractions through position 100,000. The two endpoint tests use the same cutoff.
+'''
+lean = [
+  "NormalityChecker.ProductThreeFive.mixed_prefix_persistent_loss",
+  "NormalityChecker.ProductThreeFive.mixed_prefix_residues",
+  "NormalityChecker.ProductThreeFive.rectangle_factor",
+]
+proof = ["notes/phase13/independent-axes.md#exact-residues-of-a-prefix", "notes/phase13/independent-axes.md#persistent-simultaneous-cancellation", "notes/phase13/independent-axes.md#exact-loss-on-full-rectangles"]
+computation = ["scripts/check_independent_axes.py"]
+related = ["ST-06", "ST-14"]
+
+[[result]]
+id = "ST-16"
+title = "Tied leading degrees with divisible coefficients"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Fix *b* ≥ 2, an odd prime *p* ∤ *b*, a product *M* of *d* ≥ 1 factors α(*b*ᵐ, *p*ᵉ) with *m*, *e* ≥ 1, and finitely many products *M*ᵢ of degrees at most *d*. There exists an integer *H* ≥ 0 such that for every choice of integers *a*ᵢ the following number is normal in base *b*.
+
+```math
+M+p^H\sum_i a_i M_i
+```
+'''
+scope = '''
+The products are fixed before *H* is chosen. They can include other products of degree *d*. Arbitrary coefficients at tied degree can give a rational value. For example α(8, 3) − 3α(2, 3) = −1/8 by the radix-stride identity.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.tied_coefficient_statement",
+  "NormalityChecker.StonehamPolynomial.tied_standard_normal",
+  "NormalityChecker.StonehamPolynomial.radix_stride_identity",
+]
+proof = ["notes/phase13/independent-axes.md#tied-highest-degree-monomials"]
+related = ["ST-02", "ST-04"]
+
+[[result]]
+id = "ST-17"
+title = "Alternate radices for polynomial images and excess zeros in radix 48"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let *b*, *c* ≥ 2 and *a*, *d* ≥ 1 be integers. Every rational polynomial in α<sub>*b*,*c*</sub> of degree at most *d* is nonnormal in radix *b*ᵃ*c* if *a* > (*c*ᵈ − 1) log<sub>*b*</sub> *c*. When *d* < *c*, the condition *a* > *d* log<sub>*b*</sub> *c*/(*c* − *d*) also suffices.
+
+For the binary-normal square α<sub>2,3</sub>², let *v* = 3/log₂ 48. Every fixed nonempty all-zero word in radix 48 has lower limiting starting frequency at least *v* − 1/2 > 1/48. Thus even the single zero digit exceeds its simple-normal frequency. The interval discrepancy in radix 48 satisfies
+
+```math
+\liminf_{N\to\infty}D_N\ge v-\frac12,
+\qquad
+\limsup_{N\to\infty}D_N\ge\frac{3(v-1/2)}{2v}.
+```
+'''
+scope = '''
+The alternate-radix statement allows common factors of *b* and *c*. Combining it with ST-11 gives failure of absolute normality for every nonconstant univariate image there. Bailey and Borwein already gave radix 48 for the generator itself. The square uses the different insertion positions 3ⁱ + 3ʲ.
+'''
+lean = [
+  "NormalityChecker.AlternateBase.polynomial_nonnormal",
+  "NormalityChecker.AlternateBase.small_degree_polynomial_nonnormal",
+  "NormalityChecker.AlternateBase.quadratic_nonnormal_48",
+  "NormalityChecker.AlternateBase.square_zero_word_liminf",
+  "NormalityChecker.AlternateBase.square_zero_digit_excess",
+  "NormalityChecker.AlternateBase.square_discrepancy_48",
+]
+proof = ["notes/phase13/alternate-bases.md"]
+related = ["ST-03", "ST-10", "ST-11"]
+
+[[result]]
+id = "ST-18"
+title = "Power-saving discrepancy for odd-prime Stoneham polynomials"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+Let *x* be a rational linear combination as in ST-04 with a unique nonzero monomial of largest degree *d* ≥ 1. In particular *x* may be any degree-*d* polynomial in α<sub>*b*,*p*ᵉ</sub> for an odd prime *p* ∤ *b*. There is a computable constant *C* depending on the fixed data such that for every *N* ≥ 2 the base-*b* interval discrepancy satisfies
+
+```math
+D_N(x)\le C N^{-\delta_d},
+\qquad \delta_d=\frac{1}{2(2^{d+1}-2)}.
+```
+
+In degrees two and three the sharper bounds are *O*(*N*<sup>−1/6</sup>(1 + log *N*)²) and *O*(*N*<sup>−1/14</sup>(1 + log *N*)<sup>51/28</sup>).
+'''
+scope = '''
+Lean checks the tail, denominator arithmetic, finite discrepancy transfer and dyadic summation. The explicit asymptotic rates are written deductions. The finite transfer takes the exponential-sum and Erdős–Turán estimates as hypotheses. Degree-one power savings predate this work (Kano, Bailey–Crandall). The stated nonlinear rates use a common odd prime in the defining radix.
+'''
+lean = [
+  "NormalityChecker.QuantitativeStoneham.discrepancy_of_vandehey",
+  "NormalityChecker.StonehamPolynomial.product_tail_bound",
+  "NormalityChecker.QuantitativeStoneham.differencing_margin",
+  "NormalityChecker.QuantitativeStoneham.dyadic_prefix_bound",
+]
+proof = ["notes/phase13/quantitative-normality.md"]
+inputs = ["J. Vandehey, exponential sums over fixed-support denominators, Theorem 5.1 (arXiv:1606.07911), and the Erdős–Turán discrepancy inequality."]
+related = ["ST-01", "ST-04"]
