@@ -386,3 +386,217 @@ lean = [
 proof = ["notes/corrected-strides.md"]
 computation = ["scripts/corrected_strides.py"]
 related = ["CC-01", "CC-11"]
+
+[[result]]
+id = "CC-14"
+title = "A Gaussian logarithm prefix with denominator exponent 5/12"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+For a complex number *z* write *S*(*z*, *m*) for the sum of *z*ʲ/*j* over 1 ≤ *j* ≤ *m*. Put *m*ᵣ = ⌊*N*/*r*⌋ and *g* = ⌊2*N*/5⌋. Define
+
+```math
+A_N=2S(1/4,m_2)-6S(-1/8,m_3),
+```
+
+```math
+B_N=10S(1/16,m_4)-10\Re S((1+i)/8,g).
+```
+
+The rational *Y*<sub>*N*</sub> = 2ᴺ(*A*<sub>*N*</sub> + *B*<sub>*N*</sub>) approximates 2ᴺ ln 2 with error *O*(1/(*N* + 1)). Its reduced denominator *q*<sub>*N*</sub> satisfies
+
+```math
+\lim_{N\to\infty}\frac{\log q_N}{N}=\frac{5}{12}.
+```
+'''
+scope = '''
+Lean proves the series identity and shows that the reduced denominator divides the least common multiple through ⌊*N*/2⌋. Every odd prime in (*N*/4, *N*/3] cancels, giving the kernel-checked eventual upper bound for every exponent above 5/12. The error and matching lower bound have written proofs. Optimality within the note’s one-parameter Gaussian family also uses a finite enumeration of rational bands. CC-02 concerns real dyadic logarithms. Takahashi previously used the imaginary parts of Gaussian logarithms for binary arctangent series.
+'''
+lean = [
+  "NormalityChecker.GaussianLogarithmCharacters.eventually_below",
+  "NormalityChecker.GaussianLogarithmCharacters.gaussian_series",
+  "NormalityChecker.GaussianLogarithmCharacters.common_denominator",
+  "NormalityChecker.GaussianLogarithmCharacters.lost_bands",
+]
+proof = ["notes/phase13/complementary-characters.md", "notes/phase13/reviews/classical-bands.md"]
+inputs = ["Prime number theorem and Chebyshev bounds for the logarithmic mass of prime bands."]
+computation = ["notes/phase13/complementary_characters.py"]
+related = ["CC-01", "CC-02", "CC-12"]
+
+[[result]]
+id = "CC-15"
+title = "Short returns of the regular part of the two-stride logarithm prefix"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *p* > 3 be prime. Put *W*(*j*) = 4[2 ∣ *j*] + 3[3 ∣ *j*] − 6[6 ∣ *j*], where each bracket is 1 when the divisibility holds and zero otherwise. Let *Z*ₙ be the residue modulo *p* of the sum of 2ⁿ⁻ʲ *W*(*j*)/*j* over 1 ≤ *j* ≤ *n* with *p* ∤ *j*. In any *T* ≥ 1 consecutive starts lying in one block [*A p*, (*A* + 1)*p*), the number of occurrences of any one residue is at most
+
+```math
+6\left(\left\lfloor\frac{T}{H+1}\right\rfloor+1+H^2\right)
+```
+
+for every integer 0 ≤ *H* < *p*.
+'''
+scope = '''
+This is the regular part of the actual rational prefix in CC-01, with initial value zero. Choosing *H* = ⌊*T*<sup>1/3</sup>⌋ and splitting at block boundaries gives the written bound *O*(*T*<sup>2/3</sup>) for *T* ≤ *p*, uniformly in the start. The note treats affine lines for the two regular components and one further residue digit of the full scaled prefix. Local residue counts alone leave the real discrepancy undecided.
+'''
+lean = [
+  "NormalityChecker.StrideResidueReturns.logarithm_window",
+  "NormalityChecker.StrideResidueReturns.actual_regular_digit",
+  "NormalityChecker.StrideResidueReturns.regular_pairs",
+]
+proof = ["notes/phase13/raw-logarithm-residues.md", "notes/phase13/reviews/classical-bands.md#a-counterexample-to-a-real-fourier-inference"]
+related = ["CC-01", "CC-16", "CC-17"]
+
+[[result]]
+id = "CC-16"
+title = "A Fourier deficit for the joint logarithm prefix modulo a prime square"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+Use *S* from CC-14 and set *U*ₙ = 2ⁿ*S*(1/4, ⌊*n*/2⌋), *V*ₙ = −2ⁿ*S*(−1/8, ⌊*n*/3⌋). For a prime *p* > 3 and integers *a*, *b* with at least one nonzero modulo *p*, reduce *p*(*aU*ₙ + *bV*ₙ) modulo *p*² to an integer representative *r*ₙ. Put *z*ₙ = exp(2π*i r*ₙ/*p*²). For *I* = [*L*, *L* + *T*) with 0 ≤ *L*, 1 ≤ *T* ≤ *p* and *L* + *T* < *p*²,
+
+```math
+1-\left|\frac{1}{T}\sum_{n\in I}z_n\right|
+\ge \frac{d}{54}-O\left(\frac{\sqrt{p}\log p}{T}\right).
+```
+
+Here *d* counts the nonzero entries modulo *p* of the six weights (2*a* − 3*b*, 0, 2*a*, 3*b*, 2*a*, 0). For the combined logarithm (*a*, *b*) = (2, 1), the lower limiting deficit is at least 2/27 when *T*/(√*p* log *p*) tends to infinity.
+'''
+scope = '''
+The interval conditions ensure that the scaled rational has denominator coprime to *p*. Lean checks the unit-circle inequality and its finite sum. The cancellation estimate for the additive term modulo *p* is a paper deduction using Weil’s bound. The character here takes both local residue digits. A fixed deficit for the real binary shifts of ln 2 remains open.
+'''
+lean = ["NormalityChecker.GaussianLogarithmCharacters.forcing_sum", "NormalityChecker.GaussianLogarithmCharacters.forcing_distance"]
+proof = ["notes/phase13/complementary-characters.md#a-uniform-modular-joint-character-deficit"]
+inputs = ["A. Weil, On some exponential sums (1948), bound for complete Kloosterman sums."]
+related = ["CC-01", "CC-15"]
+
+[[result]]
+id = "CC-17"
+title = "Incidence bounds for actual residues of corrected logarithm prefixes"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+Let *y*ₙ be the diagonal beta-corrected model *C*ₙ of CC-11. Fix *n* and gaps 0 < *h* < *k*. Among the primes *p* > 3 in (*n* + *k*, 2*n*], at most *O*(*k*) admit any *c*, *d* modulo *p* satisfying
+
+```math
+p y_{n+j}\equiv c+d2^j\pmod p
+```
+
+at all three offsets *j* = 0, *h*, *k*. For *h* = 1 and *k* = 2, the exceptional primes are exactly the primes in that band dividing 5*n* + 7. There is at most one.
+
+For the two-stride beta model of CC-13 at starts 6*m*, write *Z*ₘ for its value with fixed correction orders *r*, *s* ≥ 0. Fix a gap *h* ≥ 1 and a prime *p* > max(3*h* + *r*, 3(2*h* + *s*), 3). In any interval of at most *p* consecutive phase indices, choose *v* ≥ 0 such that *p*ᵛ*Z*ₘ is integral at *p* throughout. Any prescribed ordered pair of its residues modulo *p*<sup>*v*+1</sup> occurs at gap *h* at most 2(5*h* + *r* + *s*) times with both endpoints in the interval.
+'''
+scope = '''
+Lean checks the recurrences, the consecutive diagonal triple identity and the strictly positive two-stride determinant for even *r*. The prime counts and moving-window consequences are written deductions. In the common one-pole band the note also excludes affine fits to the second two-stride digit outside *O*(*k* + *r* + *s* + 1) primes for even *r*. All residues are of the specified rational models with a fixed scaling across the window. Their common-denominator numerators and their real fractional parts contain different information.
+'''
+lean = [
+  "NormalityChecker.PhaseThirteen.diagonal_three",
+  "NormalityChecker.PhaseThirteen.diagonal_step_ratio",
+  "NormalityChecker.PhaseThirteen.six_step",
+  "NormalityChecker.PhaseThirteen.six_determinant",
+]
+proof = ["notes/phase13/corrected-numerators.md"]
+computation = ["scripts/phase13_corrected_numerators.py"]
+related = ["CC-11", "CC-13", "CC-15", "CC-18"]
+
+[[result]]
+id = "CC-18"
+title = "Certified digit changes on four complete binary shells of ln 2"
+topic = "classical"
+status = "computation"
+statement = '''
+Let *A* run through 256, 512, 1024 and 2048. Exact rational enclosures for blocks of digits certify respectively 76, 143, 354 and 680 internal digit changes on the four shells of binary shifts [*A*, 2*A*). On each of these shells,
+
+```math
+\frac{1}{A}\sum_{n=A}^{2A-1}\bigl(1-\cos(2\pi\,2^n\ln 2)\bigr)\ge\frac{143}{512}.
+```
+'''
+scope = '''
+The computation uses three aligned partial congruences for corrected prefixes and counts only adjacent digits within each disjoint block. Each forced change contributes at least one to the sum. The estimate covers 3,840 positions on the four stated shells. A uniform positive deficit for arbitrarily late shells remains open.
+'''
+proof = ["notes/phase13/corrected-numerators.md#what-overlapping-crt-grids-determine"]
+computation = ["scripts/phase13_corrected_numerators.py"]
+related = ["CC-13", "CC-17", "CC-19"]
+
+[[result]]
+id = "CC-19"
+title = "A squared-logarithm discrepancy gap at every large prefix of ln 2"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *D*<sub>*N*</sub> be the interval discrepancy of the fractional parts of 2ⁿ ln 2 for 0 ≤ *n* < *N*. For every sufficiently large *N*, with *k* = ⌊(log₆₈ *N*)/2⌋,
+
+```math
+1-D_N\ge\frac{k^2}{N}.
+```
+'''
+scope = '''
+The proof uses the logarithm’s auxiliary integral and counts positions preceding a transition in each of several disjoint shells. It strengthens the finite-prefix part of CC-05. The guaranteed gap still tends to zero. The linked note discusses stronger coefficients obtainable on paper from external irrationality-exponent estimates.
+'''
+lean = [
+  "NormalityChecker.Phase13.logTwo_all_prefix_gap",
+  "NormalityChecker.Phase13.logTwo_squared_log_gap",
+  "NormalityChecker.Phase13.discrepancy_of_interior",
+]
+proof = ["notes/phase13/logarithm-transitions.md"]
+related = ["CC-04", "CC-05", "CC-18"]
+
+[[result]]
+id = "CC-20"
+title = "From an Erdős–Borwein word count to a Fourier deficit"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *E* be the sum of 1/(2ᵐ − 1) over *m* ≥ 1. Fix an odd integer *h* and a word length *k* with 2ᵏ ≥ 2π|*h*|. Let *C* count positions *N* ≤ *n* < *N* + *H* at which the binary digits of *E* beginning at digit *n* + 1 are a one followed by *k* − 1 zeros. Then
+
+```math
+2\left|\sum_{n=N}^{N+H-1}\exp(2\pi i h2^n E)\right|
+\le 2H+2-C.
+```
+'''
+scope = '''
+The kernel inequality takes the observed word count as input. Starts in the final *k* − 1 positions are eligible. CC-21 supplies a positive proportional count on specified windows by an external paper theorem. Captain Sude’s separate elementary Lean release gives an unconditional prefix count of at least *N* exp(−70000(log log *N*)³) for each fixed word at sufficiently large *N*. Both word counts come from the sources cited in the note. The finite transfer also holds for any real number.
+'''
+lean = [
+  "NormalityChecker.ErdosBorweinAudit.erdosBorwein_window_fourier",
+  "NormalityChecker.ErdosBorweinAudit.window_fourier_deficit",
+]
+proof = ["notes/phase13/erdos-borwein.md#a-checked-transfer-from-one-word-to-a-fourier-deficit"]
+related = ["CC-21", "CC-22"]
+
+[[result]]
+id = "CC-21"
+title = "Positive lower word frequencies in Erdős–Borwein windows"
+topic = "classical"
+status = "paper"
+statement = '''
+Fix a nonempty binary word *w* and 7/12 < *a* ≤ 1. In the expansion of the Erdős–Borwein constant *E* from CC-20, every sufficiently late window of *H* digits after digit *N*, with *N*ᵃ ≤ *H* ≤ *N*, contains at least *c*<sub>*a*,*w*</sub>*H* wholly contained copies of *w*, for some *c*<sub>*a*,*w*</sub> > 0. In particular every fixed word has positive ordinary lower density.
+'''
+scope = '''
+This is Mira Cult’s November 2026 short-window theorem. The independent written audit derives the weighted local estimate for exact prime counts using polynomial upper and lower bounds and checks the passage to ordinary digit counts. With CC-20 the theorem gives a Fourier norm bounded away from one on these windows for each fixed nonzero frequency after division by *H*. Binary normality, which requires the correct limiting frequency for every word, remains open.
+'''
+proof = ["notes/phase13/reviews/erdos-local-limit.md", "notes/phase13/erdos-borwein.md#audit-of-the-november-proof"]
+inputs = ["Mira Cult, Erdős–Borwein positive word density, claim 0002 (November 2026).", "Huxley–Iwaniec’s short-interval Bombieri–Vinogradov estimate in the range stated by Perelli, Pintz and Salerno."]
+related = ["CC-20", "CC-22"]
+
+[[result]]
+id = "CC-22"
+title = "Localization of the divisor Fourier sum for the Erdős–Borwein constant"
+topic = "classical"
+status = "paper"
+statement = '''
+Fix an integer *h* and 0 < δ ≤ 1. Let *T* = log log *N* and let *J* consist of positive integers *j* with |*j* − *T*| ≤ 4√(*T* log *T*). Let τ(*m*) count positive divisors and put *e*(*t*) = exp(2π*i t*). Define
+
+```math
+S_n=\sum_{j\in J}\frac{\tau(n+j)}{2^j}.
+```
+
+Uniformly for *N*ᵟ ≤ *H* ≤ *N*, the mean of |*e*(*h*2ⁿ*E*) − *e*(*h S*ₙ)| over *N* ≤ *n* < *N* + *H* is *O*(1/*T*³), with constant depending on δ and *h*.
+'''
+scope = '''
+This written estimate follows from multiplicative moments on ordinary short intervals. It is independent of the word-density theorem. Binary normality would follow from cancellation of the remaining sums for every fixed odd frequency on doubling intervals. Such cancellation is still open. Mira’s earlier S06 gives a different truncation for prefix averages.
+'''
+proof = ["notes/phase13/erdos-borwein.md#an-unconditional-localization-of-the-divisor-fourier-statistic"]
+inputs = ["P. Shiu, A Brun–Titchmarsh theorem for multiplicative functions, Theorem 1, with uniform dependence on majorants as in Henriot."]
+related = ["CC-20", "CC-21"]

@@ -256,3 +256,54 @@ All four assertions are finite and checked by kernel reduction. The example refu
 lean = ["NormalityChecker.LocalizedSupport.order_two_deep_counterexample"]
 proof = ["notes/joint-persistent.md#higher-orders-and-the-lower-order-residues-paper-proof"]
 related = ["LS-02"]
+
+[[result]]
+id = "LS-09"
+title = "Joint rectangle frequencies at distinct localized orders"
+topic = "localized"
+status = "lean"
+statement = '''
+Let *S* be a finite set of primes, at least one of which does not divide the radix *b* ≥ 2. Let *M*(*S*) consist of the positive integers supported on *S*, including 1. Choose pairwise distinct positive integers *s*₁, …, *s*<sub>*d*</sub> and rational polynomials *P*ᵢ with *P*ᵢ(0) ≠ 0. Define
+
+```math
+X_i=\sum_{m\in M(S)}\frac{P_i(m)}{m^{s_i} b^m}.
+```
+
+The fractional parts of the *d* values *b*ⁿ*X*ᵢ are jointly uniformly distributed. For every half-open box, the proportion of 0 ≤ *n* < *N* at which all coordinates lie in the box tends to the product of its side lengths.
+'''
+scope = '''
+The unit numerators give Corollary 1.3 of Paper II. Each coordinate uses the same support and the same position *n*. The support may contain primes dividing *b*, and the numerators may have either sign and any degree. Mira’s S09, Theorem 2, already treats distinct prime/order pairs on singleton supports, including the fixed-prime specialization for unit numerators. Repeating an order can give identical coordinates. The proof supplies a limiting frequency for each box.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.distinct_orders_checked",
+  "NormalityChecker.LocalizedSupport.joint_full_orders",
+  "NormalityChecker.LocalizedSupport.joint_full_polynomial_orders",
+]
+proof = ["notes/phase13/localized-joint.md", "papers/02-localized-normality/paper.pdf"]
+computation = ["scripts/test_localized_joint.lean"]
+related = ["LS-01", "LS-10", "MW-01", "MW-08"]
+
+[[result]]
+id = "LS-10"
+title = "A computable common certificate depth for positive error"
+topic = "localized"
+status = "lean"
+statement = '''
+Fix a radix *b* ≥ 2, a prime *p* ∤ *b*, a finite set of other support primes, a finite set of positive orders *T*, and a rational ε > 0. At depth *k* let *Z*ₛ(*k*) be the failed cells of the unsigned order-*s* test of LS-02 at *p*. The search for the first *k* satisfying
+
+```math
+\frac{2|Z_s(k)|}{p^k}<\varepsilon
+```
+
+for every *s* in *T* terminates. At every depth at least *k*, the worst-prefix discrepancy certificate is below ε for every requested order.
+'''
+scope = '''
+The output is a precision for the finite certificates. A digit-position cutoff for rectangle frequencies and a depth at which every cell passes are separate questions. For *b* = 4, support {2, 3, 11}, *p* = 3, orders {1, 2} and ε = 9/10, the search returns 2 even though the order-one certificate still has failed cells.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.certificateModulus_spec",
+  "NormalityChecker.LocalizedSupport.exists_common_depth",
+]
+proof = ["notes/phase13/localized-joint.md#what-can-be-computed-in-certificate-depth"]
+computation = ["scripts/test_localized_joint.lean"]
+related = ["LS-02", "LS-03", "LS-06", "LS-07", "LS-09"]
