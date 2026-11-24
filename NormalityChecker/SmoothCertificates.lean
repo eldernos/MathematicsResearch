@@ -44,7 +44,7 @@ def powerCoefficient (order : ℕ) (S : Finset ℕ) (i : ℕ) : ℚ :=
 noncomputable def powerValue (b order : ℕ) (S : Finset ℕ) : ℝ :=
   ∑' i, (powerCoefficient order S i:ℝ)/(b:ℝ)^(i+1)
 
-private lemma value_one (b : ℕ) (S : Finset ℕ) : powerValue b 1 S = value b S := by
+lemma value_one (b : ℕ) (S : Finset ℕ) : powerValue b 1 S = value b S := by
   apply tsum_congr; intro i; unfold powerCoefficient term
   split_ifs <;> simp [div_eq_mul_inv,mul_comm]
 

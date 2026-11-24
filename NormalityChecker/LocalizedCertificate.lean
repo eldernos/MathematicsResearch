@@ -100,10 +100,11 @@ def powerPartial (b order : ℕ) (S : Finset ℕ) (n : ℕ) := ∑ m ∈ indices
 
 def powerShifted (b order : ℕ) (S : Finset ℕ) (n : ℕ) := (b:ℚ)^n * powerPartial b order S n
 
-/-- The cell residue is the reduction of the full unshifted, normalized prefix. -/
-theorem power_prefix_residue {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
-    (hb : b.Coprime p) (hk : seed+ell ≤ k) (hi : n < p^(k+1))
-    (fixed : (inverseLift b p ell seed)^p = inverseLift b p ell seed) :
+private theorem prefix_of_row_lifts {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+    (hb : b.Coprime p) (hk : ell ≤ k) (hi : n < p^(k+1))
+    (rowLift : ∀ i ≤ ell, ∀ r : ℕ,
+      ((p:ZMod (p^(ell+1)))^i)^order * ((b:ZMod _)^(p^(k-i)*r) * (inverseLift b p ell seed)^r) =
+        ((p:ZMod (p^(ell+1)))^i)^order) :
     Represents (((p:ℚ)^k)^order*powerPartial b order (insert p S) n)
       (powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell))) := by
   let M := p^(ell+1)
@@ -140,16 +141,58 @@ theorem power_prefix_residue {order : ℕ} (positive : 0 < order) {b p ell seed 
     rw [← e]; dsimp [m]; push_cast; rw [mul_pow,mul_pow]; field_simp [hp.ne_zero]
   · push_cast
     by_cases h : i ≤ ell
-    · have hl := fixed_lift (j:=j) (by dsimp [j]; omega : seed ≤ j) fixed
-      have cancel : (b:ZMod M)^m * w^r = 1 := by
-        change (b:ZMod M)^(p^j*r) * (inverseLift b p ell seed)^r = 1
-        rw [← hl,pow_mul,← mul_pow,← mul_pow,ZMod.mul_inv_of_unit _ hbu,one_pow,one_pow]
+    · have cancel := rowLift i h r
+      change ((p:ZMod M)^i)^order * ((b:ZMod M)^m * w^r) = ((p:ZMod M)^i)^order at cancel
       calc (r:ZMod M)^order*b^m*(((p:ZMod M)^i*(r:ZMod M)⁻¹)^order*w^r) =
-          ((p:ZMod M)^i)^order * ((r:ZMod M)*(r:ZMod M)⁻¹)^order * ((b:ZMod M)^m*w^r) := by simp only [mul_pow]; ring
+          ((p:ZMod M)^i)^order * ((b:ZMod M)^m*w^r) * ((r:ZMod M)*(r:ZMod M)⁻¹)^order := by simp only [mul_pow]; ring
         _ = _ := by rw [ZMod.mul_inv_of_unit _ hu,cancel]; simp
     · have hz : (p:ZMod M)^i=0 := by
         exact_mod_cast (ZMod.natCast_eq_zero_iff (p^i) M).mpr (pow_dvd_pow p (Nat.succ_le_of_lt (lt_of_not_ge h)))
       simp [hz,positive.ne']
+
+/-- The cell residue is the reduction of the full unshifted, normalized prefix. -/
+theorem power_prefix_residue {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+    (hb : b.Coprime p) (hk : seed+ell ≤ k) (hi : n < p^(k+1))
+    (fixed : (inverseLift b p ell seed)^p = inverseLift b p ell seed) :
+    Represents (((p:ℚ)^k)^order*powerPartial b order (insert p S) n)
+      (powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell))) := by
+  apply prefix_of_row_lifts positive hp hs hb (by omega : ell≤k) hi
+  intro i hei r
+  have hl := fixed_lift (j:=k-i) (by omega : seed≤k-i) fixed
+  have hbu := (ZMod.isUnit_iff_coprime b (p^(ell+1))).mpr (hb.pow_right _)
+  rw [← hl,pow_mul,← mul_pow,← mul_pow,ZMod.mul_inv_of_unit _ hbu,one_pow,one_pow,mul_one]
+
+/-- At the canonical lift each earlier row only needs its remaining precision.
+This permits a precision growing all the way to `k+1` on scale `k`. -/
+theorem canonical_prefix_residue {order b p ell k n : ℕ} {S : Finset ℕ} (positive : 0<order)
+    (hp : p.Prime) (hs : p∉S) (hb : b.Coprime p) (hk : ell≤k) (hi : n<p^(k+1)) :
+    Represents (((p:ℚ)^k)^order*powerPartial b order (insert p S) n)
+      (powerCellResidue order p ell S (inverseLift b p ell ell) (n/p^(k-ell))) := by
+  apply prefix_of_row_lifts positive hp hs hb hk hi
+  intro i hei r
+  let e := ell-i
+  let M := p^(ell+1)
+  let D := p^(e+1)
+  let φ := ZMod.castHom (pow_dvd_pow p (show e+1≤ell+1 by dsimp [e]; omega)) (ZMod D)
+  let z : ZMod M := (b:ZMod M)^(p^(k-i)*r)*(inverseLift b p ell ell)^r-1
+  let : NeZero M := ⟨(pow_pos hp.pos _).ne'⟩
+  have hu := (ZMod.isUnit_iff_coprime b M).mpr (hb.pow_right _)
+  have hv := (ZMod.isUnit_iff_coprime b D).mpr (hb.pow_right _)
+  have inv : φ ((b:ZMod M)⁻¹)=(b:ZMod D)⁻¹ := by
+    apply hv.mul_right_inj.mp
+    have H := congrArg φ (ZMod.mul_inv_of_unit _ hu)
+    rwa [map_mul,map_natCast,map_one,← ZMod.mul_inv_of_unit _ hv] at H
+  have reduced : φ z=0 := by
+    have h₁ := fixed_lift (j:=ell) (by dsimp [e]; omega : e≤ell) (canonical_lift_fixed hp hb e)
+    have h₂ := fixed_lift (j:=k-i) (by dsimp [e]; omega : e≤k-i) (canonical_lift_fixed hp hb e)
+    dsimp only [z,inverseLift]; rw [map_sub,map_mul,map_pow,map_pow,map_pow,map_one,inv,map_natCast,h₁,← h₂,pow_mul,← mul_pow,← mul_pow,ZMod.mul_inv_of_unit _ hv]; simp
+  have dz : D ∣ z.val := (ZMod.natCast_eq_zero_iff ..).mp (by rw [ZMod.natCast_val]; exact reduced)
+  have dvd : M∣p^(i*order)*z.val := by
+    have eq : M=p^i*D := by dsimp [M,D,e]; rw [← pow_add]; congr 1; omega
+    exact dvd_trans (dvd_of_eq eq) (Nat.mul_dvd_mul (pow_dvd_pow p (Nat.le_mul_of_pos_right _ positive)) dz)
+  have az := (ZMod.natCast_eq_zero_iff ..).mpr dvd
+  push_cast at az; rw [ZMod.natCast_zmod_val,pow_mul] at az
+  dsimp only [z] at az; rw [mul_sub,mul_one,sub_eq_zero] at az; exact az
 
 theorem prefix_residue {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
     (hb : b.Coprime p) (hk : seed+ell ≤ k) (hi : n < p^(k+1))

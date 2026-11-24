@@ -10,11 +10,11 @@ namespace NormalityChecker
 /-- Magnitude of the order-`r` forward difference of `1/(n+1)`. -/
 def logDifference (r n : ℕ) : ℚ := (r.factorial:ℚ)*n.factorial/(n+r+1).factorial
 
-private lemma difference_zero (n : ℕ) : logDifference 0 n=1/(n+1:ℚ) := by
+lemma difference_zero (n : ℕ) : logDifference 0 n=1/(n+1:ℚ) := by
   simp only [logDifference,Nat.add_zero,Nat.factorial_zero,Nat.cast_one,one_mul,Nat.factorial_succ,Nat.cast_mul,Nat.cast_add]
   field_simp [Nat.factorial_ne_zero]
 
-private lemma difference_step (r n : ℕ) : logDifference r n - logDifference r (n+1) = logDifference (r+1) n := by
+lemma difference_step (r n : ℕ) : logDifference r n - logDifference r (n+1) = logDifference (r+1) n := by
   dsimp [logDifference]; rw [show n+1+r+1=(n+r+1)+1 by omega,show n+(r+1)+1=(n+r+1)+1 by omega]
   rw [Nat.factorial_succ (n+r+1),Nat.factorial_succ r,Nat.factorial_succ n]; push_cast
   field_simp; ring

@@ -27,7 +27,7 @@ private theorem period_step {b d : ℕ} (A : ZMod d → ℚ) (x : ZMod d) :
 def periodicAntidifference (b d : ℕ) (A : ZMod d → ℚ) (x : ZMod d) : ℚ :=
   periodWeight b d A x / (1-((b:ℚ)⁻¹)^d)
 
-private theorem periodic_data {b d : ℕ} [NeZero d] (hb : 2≤b) (A : ZMod d → ℚ) :
+theorem periodic_data {b d : ℕ} [NeZero d] (hb : 2≤b) (A : ZMod d → ℚ) :
     let F := periodicAntidifference b d A
     (∀ n : ℕ, A (n:ZMod d)=F n-F (n+1:ℕ)/b) ∧
     Summable (fun n : ℕ => (F (n:ZMod d):ℝ)/(b:ℝ)^n) ∧ 1-((b:ℚ)⁻¹)^d≠0 := by

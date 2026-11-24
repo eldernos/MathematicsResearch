@@ -1,6 +1,10 @@
 # Note for reviewers
 
-## Result under review
+## Where to start with arithmetic discrepancy
+
+The exact discrepancy theorem concerns logarithmic order and a finite support with one prime outside the radix. The proof note gives both directions of the formula, including the prefix endpoint at which discrepancy is greatest. The same note treats signed periodic expansions of arbitrary period. The denominator note proves that the fraction of corrected logarithm models losing a fixed proportion of upper-interval primes tends to zero uniformly over long windows. The classical-constants note lists the additional estimates needed for a strict discrepancy bound and separates those estimates from the finite experiments. Questions of priority remain open for independent review. [Exact discrepancy and periodic weights](persistent-discrepancy.md) · [Prime survival in logarithm models](log-shadow-primes.md) · [Classical constants](classical-discrepancy.md)
+
+## Finite combinations of Stoneham-type components
 
 Which finite rational combinations of Stoneham-type components are normal in their construction base? Fix integers $`b\ge 2`$ and an odd **prime** $`p`$ coprime to $`b`$. Let $`M`$ be a finite set of positive integers, let $`a_m`$ be arbitrary rationals, and put
 
@@ -92,7 +96,7 @@ The dense theorem concerns every nonzero rational polynomial $`P`$ of degree bel
 
 Vandehey’s Theorem 7.4 already implies the constant-numerator single-axis result on every infinite subsequence here. We would welcome references covering varying signed numerators, cancellation across mixed denominator layers, or the precise dense polynomial family after symbolic summation. The qualitative fixed-support estimate used by Lean is internal. Assessing the historical priority of its applications requires a separate literature judgment. [Comparison with prior constructions](polynomial-certificates.md#comparisons-and-open-scope) · [Vandehey, §7.2](https://arxiv.org/pdf/1606.07911)
 
-The approximate certificate allows different rational models on different blocks. For the full logarithm the new construction gives linear-length shadowing, while its denominators can acquire unbounded primes. Independent scrutiny of the denominator obstruction and of potential orbit estimates on most block starts would bear directly on the open four-window discrepancy objective. [Approximate certificate](../NormalityChecker/ArithmeticCertificate.lean) · [Logarithm model and paper obstruction](logarithm-correlations.md#rational-models-on-linear-length-blocks)
+The approximate certificate allows different rational models on different blocks. For the full logarithm the diagonal model shadows $2n$ further shifts. Its reduced denominators have exponential size on almost every index in long windows. A reviewer can test the numerator obstruction by comparing the orbit of the actual numerator with that of numerator one at the very same denominator. The one-frequency estimate on all sufficiently late dyadic starts remains open. [Approximate certificate](../NormalityChecker/ArithmeticCertificate.lean) · [Denominator and window estimates](log-shadow-primes.md) · [Numerator and fixed-window questions](classical-discrepancy.md)
 
 ## Finite-support discrepancy
 
