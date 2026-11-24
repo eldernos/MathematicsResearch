@@ -62,14 +62,14 @@ open NormalityChecker
 
 ## The two arithmetic milestones
 
-Write
+The logarithm series gives the rational prefixes
 
 ```math
 A_n=\sum_{j=1}^{n}\frac{1}{j2^j},\qquad
-R_n=2^n A_n,\qquad
-Q_n=\operatorname{den}(R_n),\qquad
-D_n=\operatorname{lcm}(1,\ldots,n).
+R_n=2^n A_n.
 ```
+
+Let $`Q_n`$ be the reduced denominator of $`R_n`$ and $`D_n`$ the least common multiple of the integers from 1 through $`n`$, with $`D_0=1`$.
 
 1. **Exact cancellation.** For every odd prime $`p`$ and every $`a\ge1`$ with $`p^a\le n\lt p^{a+1}`$, let $`k=\lfloor n/p^a\rfloor`$. Then $`p^a\mid Q_n`$ if and only if $`p`$ does not divide the reduced numerator of $`A_k`$. For example, $`Q_{10}=63`$. To see why a short prefix suffices, clear denominators with $`D_n`$ and reduce modulo $`p`$. Only indices divisible by $`p^a`$ can contribute. On those indices Fermat's theorem gives $`2^{jp^a}\equiv2^j\pmod{p}`$. [PrimeCancellation.lean](NormalityChecker/PrimeCancellation.lean)
 2. **Quantitative loss.** For $`n\ge8`$ the checked bound is $`0\le\log(D_n/Q_n)\le116n^{2/3}`$. For a cutoff $`K\ge2`$ with $`n\le K^3`$, three copies of $`D_{K^2}`$ cover all powers of primes at most $`K^2`$. Each larger prime occurs to exponent at most one. If it cancels, the first theorem puts it in a numerator of $`A_1,\ldots,A_K`$. Chebyshev's upper bound gives a total log loss of at most $`29K^2`$. Taking $`K=\lceil n^{1/3}\rceil`$ gives the stated inequality. Mathlib's prime number theorem for $`D_n`$ then gives $`\log Q_n/n\to1`$. [DenominatorGrowth.lean](NormalityChecker/DenominatorGrowth.lean)
