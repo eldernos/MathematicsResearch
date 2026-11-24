@@ -81,7 +81,7 @@ The directory links each named public theorem and lemma to its declaration. It i
 
 <!-- BEGIN LEAN THEOREM INDEX -->
 <details>
-<summary>Browse all 776 public theorems and lemmas by Lean module</summary>
+<summary>Browse all 779 public theorems and lemmas by Lean module</summary>
 
 - **AdjacentShadow** · [pascal_prefix](NormalityChecker/AdjacentShadow.lean#L16) · [logShadow_adjacent_prime](NormalityChecker/AdjacentShadow.lean#L25) · [logShadow_adjacent_theta](NormalityChecker/AdjacentShadow.lean#L36) · [logShadow_adjacent_growth](NormalityChecker/AdjacentShadow.lean#L52)
 - **AggregateGaps** · [gap_age_count_bound](NormalityChecker/AggregateGaps.lean#L36) · [hit_density_of_mean_age](NormalityChecker/AggregateGaps.lean#L48) · [logTwo_discrepancy_of_mean_age](NormalityChecker/AggregateGaps.lean#L78)
@@ -225,6 +225,7 @@ The directory links each named public theorem and lemma to its declaration. It i
 - **SmoothOrbit** · [fixed_support_orbit_estimate](NormalityChecker/SmoothOrbit.lean#L207)
 - **SparseTransitions** · [kempner_dyadic_separation](NormalityChecker/SparseTransitions.lean#L68) · [kempner_discrepancy_one](NormalityChecker/SparseTransitions.lean#L91)
 - **StonehamComponents** · [weighted_tail_bound](NormalityChecker/StonehamComponents.lean#L57) · [weighted_radixComponent_normal](NormalityChecker/StonehamComponents.lean#L120) · [radixComponent_normal](NormalityChecker/StonehamComponents.lean#L124) · [weighted_radixComponent_pos](NormalityChecker/StonehamComponents.lean#L129) · [severe_normal_summands](NormalityChecker/StonehamComponents.lean#L138)
+- **StonehamJoint** · [joint_uniform_powers](NormalityChecker/StonehamJoint.lean#L196) · [polynomial_statement_checked](NormalityChecker/StonehamJoint.lean#L206) · [joint_statement_checked](NormalityChecker/StonehamJoint.lean#L209)
 - **StonehamOrbit** · [unit_orbit_bound](NormalityChecker/StonehamOrbit.lean#L82) · [stoneham_orbit_small](NormalityChecker/StonehamOrbit.lean#L99)
 - **StonehamOrder** · [smooth_order_bound](NormalityChecker/StonehamOrder.lean#L65) · [fixed_support_order_bound](NormalityChecker/StonehamOrder.lean#L74) · [stoneham_order_bound](NormalityChecker/StonehamOrder.lean#L83)
 - **StonehamPolynomial** · [rational_sum_normal](NormalityChecker/StonehamPolynomial.lean#L12) · [same_prime_sum_normal](NormalityChecker/StonehamPolynomial.lean#L70) · [prime_power_product_normal](NormalityChecker/StonehamPolynomial.lean#L87) · [same_prime_product_normal](NormalityChecker/StonehamPolynomial.lean#L94) · [binary_three_nine_product](NormalityChecker/StonehamPolynomial.lean#L100) · [power_normal](NormalityChecker/StonehamPolynomial.lean#L106) · [prime_power_polynomial_normal](NormalityChecker/StonehamPolynomial.lean#L112) · [polynomial_normal](NormalityChecker/StonehamPolynomial.lean#L124) · [binary_power_normal](NormalityChecker/StonehamPolynomial.lean#L129) · [binary_polynomial_normal](NormalityChecker/StonehamPolynomial.lean#L132)
