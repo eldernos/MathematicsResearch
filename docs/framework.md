@@ -14,7 +14,7 @@ The theorems in this repository concern different numbers, but their proofs shar
 | --- | --- | --- |
 | Stoneham polynomials ([ST-01](results.md#st-01)) | The insertions of a power form an upward-closed set; its generating-function numerator satisfies *K*(*p*) ≡ 1 (mod *p* − 1), so it is never 0 | normality, joint uniformity |
 | Finite prime supports ([LS-01](results.md#ls-01)) | Persistent cancellation would give positive measure on a logarithmic circle; finite differences and *p*-adic separation of rays make every fiber finite | normality or *D*∞ = 1 |
-| Signed shells ([DS-01](results.md#ds-01)) | On shell *j* the prefix is *b*ⁿ⁻ᵖʲ*c*ⱼ/*p*ʲ modulo 1, whose reduced denominator is at least *p*ʲ/*C* when \|*c*ⱼ\| ≤ *C* and *c*ⱼ ≠ 0, and 1 when *c*ⱼ = 0 | *D*∞ equals the density of zero shells |
+| Signed shells ([DS-01](results.md#ds-01)) | On shell *j* the prefix is *b*ⁿ⁻ᵖʲ*c*ⱼ/*p*ʲ modulo 1, whose reduced denominator is at least *p*ʲ/*C* when \|*c*ⱼ\| ≤ *C* and *c*ⱼ ≠ 0, and 1 when *c*ⱼ = 0 | *D*∞ equals the upper density of positions in zero-phase shells |
 | Cyclotomic sums ([CR-01](results.md#cr-01)) | Cancellation modulo *p*ᵏ is detected by a cyclotomic polynomial at a lift of 1/*b* | normality, or explicit resonant distributions |
 
 ## Proof-dependency map

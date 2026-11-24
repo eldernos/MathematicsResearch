@@ -85,7 +85,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 
 ### ST-01 · Polynomial images of odd-prime-power Stoneham numbers
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *e* ≥ 1. Define
 
@@ -109,7 +109,7 @@ For every polynomial *P* with rational coefficients and degree at least one, the
 
 ### ST-02 · Products of Stoneham numbers along one odd-prime axis
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *b* ≥ 2 and let *p* be an odd prime with *p* ∤ *b*. For positive integers *m* and *e* write
 
@@ -137,7 +137,7 @@ is normal in base *b*. For example, α(2, 3) · α(2, 9) is normal in base 2.
 
 ### ST-03 · Exact denominator profile of the binary Stoneham square
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let α = α(2, 3) be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 1. For an integer *n* ≥ 0 let *T*<sub>*n*</sub> be the set of ordered pairs (*i*, *j*) of positive integers with 3ⁱ + 3ʲ ≤ *n*, and put
 
@@ -168,7 +168,7 @@ For *n* < 81 the denominator *q*<sub>*n*</sub> equals 1 on [0, 6), 9 on [6, 12),
 
 ### ST-04 · Combinations with a unique leading monomial
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *b*, *p* and α(*b*<sup>*m*</sup>, *p*<sup>*e*</sup>) be as in ST-02. Call a product of *d* ≥ 0 such numbers, with arbitrary positive *m* and *e* in each factor, a monomial of degree *d*; the empty product is the monomial 1 of degree 0. Let *μ* be a monomial of degree *d* ≥ 1, let *c* ≠ 0 be rational, and let *μ*₁, …, *μ*<sub>*k*</sub> be monomials of degree less than *d* with rational coefficients *a*₁, …, *a*<sub>*k*</sub>. Then
 
@@ -190,7 +190,7 @@ is normal in base *b*.
 
 ### ST-05 · Joint uniform distribution of distinct Stoneham powers
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *b*, *p* and *e* be as in ST-01, and let *r*₁, …, *r*<sub>*d*</sub> be distinct positive integers. Then the points
 
@@ -212,7 +212,7 @@ are uniformly distributed in the unit cube [0, 1)ᵈ: for every box with sides [
 
 ### ST-06 · A product on two prime axes: discrepancy below one and irrationality
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>) over *j* ≥ 1, and put *x* = α(2, 3) · α(2, 5). For *N* ≥ 1 let *D*<sub>*N*</sub> be the supremum, over 0 ≤ *u* < *v* ≤ 1, of the absolute difference between the proportion of 0 ≤ *n* < *N* with {2ⁿ*x*} ∈ [*u*, *v*) and *v* − *u*. Then *x* is irrational and
 
@@ -232,7 +232,7 @@ For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>
 
 ### ST-07 · Transcendence of products of two independent Stoneham numbers
 
-**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *b* ≥ 2 and let *c*, *d* ≥ 2 be multiplicatively independent integers, both coprime to *b*. Write α(*b*, *c*) for the sum of 1/(*c*ʲ *b*<sup>*c*ʲ</sup>) over *j* ≥ 1. Then the product α(*b*, *c*) · α(*b*, *d*) is transcendental, and its base-*b* interval discrepancy *D*<sub>*N*</sub> (defined as in ST-06 with radix *b*) satisfies
 
@@ -252,7 +252,7 @@ In particular α(2, 3) · α(2, 5) is transcendental.
 
 ### ST-08 · Normality of single Stoneham components with odd parameter
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *b* ≥ 2, let *c* ≥ 3 be odd with gcd(*b*, *c*) = 1, and let *m* ≥ 1. Put
 
@@ -274,7 +274,7 @@ Then *T*<sub>*b*,*c*,*m*</sub> and *m* · *T*<sub>*b*,*c*,*m*</sub> are normal i
 
 ### ST-09 · Polynomially spaced insertions preserve binary normality
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let *S* be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 0, and for a positive integer *r* put
 
@@ -296,7 +296,7 @@ For every *r* ≥ 1 the number *S* + *Z*<sub>*r*</sub> is normal in base 2. More
 
 ### ST-10 · Superlinear ternary word complexity of the binary Stoneham number
 
-**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials) (draft)
+**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
 
 Let α = α(2, 3) be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 1. For every real *C* > 0 and every sufficiently large integer *L*, the ternary words of length *L* that start at digit positions 1, 2, …, 1 + ⌊*CL*⌋ of α are pairwise distinct. Consequently, if *p*₃(*L*) is the number of distinct words of length *L* occurring in the ternary expansion of α, then *p*₃(*L*)/*L* → ∞.
 
@@ -312,7 +312,7 @@ Let α = α(2, 3) be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 1. For ever
 
 ### LS-01 · Unsigned finite-support dichotomy
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b* ≥ 2 and *s* ≥ 1 be integers, let *P* be a finite set of primes, and let *M*(*P*) be the set of positive integers all of whose prime factors lie in *P*, including 1. Put
 
@@ -338,7 +338,7 @@ For *N* ≥ 1 let *D*<sub>*N*</sub> be the supremum, over 0 ≤ *u* < *v* ≤ 1,
 
 ### LS-02 · Exact discrepancy from persistent cancellation at every order
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b*, *s*, *P*, *M*(*P*), *X* and *D*<sub>*N*</sub> be as in LS-01, and let *J* be the set of *p* ∈ *P* with *p* ∤ *b*. For *p* ∈ *J* let *w* be the root of unity in the *p*-adic integers congruent to 1/*b* modulo *p*, and put *S*<sub>*p*</sub> = *M*(*P* ∖ {*p*}). For 1 ≤ *d* ≤ *s* and 1 ≤ *t* < *p* define the convergent *p*-adic series
 
@@ -375,7 +375,7 @@ and *X* is normal in base *b* if and only if |*Z*| = 0.
 
 ### LS-03 · Persistent failed regions are null
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b*, *s*, *P* and *X* be as in LS-01, and let *p* ∈ *P* with *p* ∤ *b*. With *V*<sub>*p*,*s*</sub> as in LS-02, the set *Z*<sub>*p*,*s*</sub> = {1 ≤ *t* < *p* : *V*<sub>*p*,*s*</sub>(*t*) = 0} has Lebesgue measure zero.
 
@@ -399,7 +399,7 @@ Then lim sup *D*<sub>*N*</sub> ≤ *C*<sub>*k*</sub> for every *k*, and *C*<sub>
 
 ### LS-04 · Two-generator localized logarithms: normality with a discrepancy rate
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b*, *q* ≥ 2 be integers with *q* ∣ *b*, and let *p* be an odd prime with *p* ∤ *b*. Put
 
@@ -428,7 +428,7 @@ for all sufficiently large *N*. In particular the series for log 2 restricted to
 
 ### LS-05 · Rational polynomial weights on two-generator supports
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b*, *q*, *c* ≥ 2 be integers with gcd(*b*, *c*) = 1, such that every prime factor of *q* divides *b*. Let *P* be a nonzero polynomial with rational coefficients and let *s* be an integer with deg *P* < *s*. Then
 
@@ -456,7 +456,7 @@ is normal in base *b*.
 
 ### LS-06 · Finite-depth termination on two-prime full supports
 
-**Evidence:** Written proof · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Written proof · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *p* ≠ *q* be primes, *b* ≥ 2 with *p* ∤ *b*, and *s* ≥ 1, and take *P* = {*p*, *q*} in LS-01. Then the order-*s* certificate of LS-03 for the selected prime *p* vanishes at some finite depth: there is *k* with *F*<sub>*k*</sub> empty, so every cell passes and *C*<sub>*k*</sub> = 0. Moreover, for odd *p*, every one-sided value of the function *V*<sub>*p*,*s*</sub> of LS-02 is transcendental over ℚ.
 
@@ -470,7 +470,7 @@ Let *p* ≠ *q* be primes, *b* ≥ 2 with *p* ∤ *b*, and *s* ≥ 1, and take *
 
 ### LS-07 · Finite-depth termination at large order
 
-**Evidence:** Written proof · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Written proof · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Fix a prime *p*. For all sufficiently large orders *s*, every finite set of primes *P* containing *p*, and every *b* ≥ 2 with *p* ∤ *b*, the order-*s* certificate of LS-03 for *p* vanishes at a finite depth determined by the top row alone; the required precision is *o*(*s*) as *s* → ∞, uniformly in *P* and *b*. For *p* = 3 this holds for every *s* ≥ 2.
 
@@ -486,7 +486,7 @@ Fix a prime *p*. For all sufficiently large orders *s*, every finite set of prim
 
 ### MW-01 · Classification of full-support rational polynomial weights
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b* ≥ 2 and *s* ≥ 0 be integers, let *S* be a finite set of primes, and let *M*(*S*) be the set of positive integers all of whose prime factors lie in *S*, including 1. Let *P* be a nonzero polynomial with rational coefficients, and let *r* be its order of vanishing at 0, the largest *r* with *X*ʳ dividing *P*. Put
 
@@ -511,7 +511,7 @@ When the criterion fails, *x* is not normal and there is an integer *L* ≥ 1 co
 
 ### MW-02 · Masks retaining late powers of an off-base prime
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b*, *s*, *S*, *M*(*S*), *P* and *r* be as in MW-01 with *r* < *s*, and let *p* ∈ *S* be a prime with *p* ∤ *b*. Let *A* ⊆ *M*(*S*) be any set of retained indices and put
 
@@ -540,7 +540,7 @@ In particular, if *A* contains every sufficiently large power of *p*, then lim s
 
 ### MW-03 · Masks on a single prime-power axis
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, let *t* ≥ 1, and let *P* be a polynomial with rational coefficients and *P*(0) ≠ 0. For a set *K* of nonnegative integers put
 
@@ -562,7 +562,7 @@ Then *x*<sub>*K*</sub> is normal in base *b* if and only if *K* is infinite.
 
 ### MW-04 · Dense polynomial weights on power intervals
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b*, *c* ≥ 2 be coprime integers, let *P* be a nonzero polynomial with rational coefficients, and let *s* > deg *P*. Then
 
@@ -590,7 +590,7 @@ and this number is normal in base 2.
 
 ### MW-05 · Periodic weights on power intervals: a finite cyclic test
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, let *d* ≥ 1, and let *A* be a rational-valued function on the residues modulo *d*. Put
 
@@ -1480,7 +1480,7 @@ E_3 = \frac{2^{N \bmod 3} \, B(\lfloor N/3 \rfloor, s)}{9^s}.
 
 ### LS-08 · Order two: a deeply failed cell need not clear the prime
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Take *b* = 36, *s* = 2, *P* = {2, 3, 7}, the selected prime *p* = 7 and the position *n* = 186, and let
 
@@ -1502,7 +1502,7 @@ be the shifted rational prefix of order two. Then ⌊log₇ 186⌋ = 2, the orde
 
 ### MW-06 · Nonzero periodic weights with a vanishing phase
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *A* be the function on residues modulo 4 with *A*(0) = −1/2, *A*(1) = 1, *A*(2) = 3/2 and *A*(3) = −3. Then
 
@@ -1524,7 +1524,7 @@ is not normal in base 2. Moreover, for every integer *s* ≥ 0, the sum of *a*(*
 
 ### MW-07 · Rational weights with discrepancy exactly two thirds
 
-**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (draft)
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
 
 Let *D*<sub>*N*</sub>(*x*) be the binary interval discrepancy of LS-01. The numbers
 
@@ -1638,15 +1638,15 @@ Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of le
 
 Publication status is maintained in [papers/README.md](../papers/README.md). No manuscript has been peer reviewed or accepted.
 
-### I. Polynomial Images of Stoneham Numbers
+### I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter
 
-**Status:** draft · **Results:** [ST-01](#st-01) · [ST-05](#st-05) · [ST-02](#st-02) · [ST-03](#st-03) · [Directory](../papers/01-stoneham-polynomials)
+**Status:** internally reviewed · **Results:** [ST-01](#st-01) · [ST-05](#st-05) · [ST-02](#st-02) · [ST-03](#st-03) · [Directory](../papers/01-stoneham-polynomials)
 
-For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconstant rational polynomial in the Stoneham number with parameters *b* and *p*ᵉ is normal in base *b*, and distinct positive powers of that number have jointly uniformly distributed radix orbits. The proof counts the insertions of a power in an upward-closed set of exponent vectors; the numerator of the resulting generating function is congruent to 1 modulo *p* − 1 at *z* = *p*, so a prime power survives in every shifted denominator. The paper also treats products along one prime axis, combinations with a unique leading monomial, the exact denominator profile of the binary Stoneham square, and a discrepancy bound for a product on two different prime axes.
+For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconstant rational polynomial in the Stoneham number with parameters *b* and *p*ᵉ is normal in base *b*, and distinct positive powers of that number have jointly uniformly distributed radix orbits. The proof counts the insertions of a power in an upward-closed set of exponent vectors; the numerator of the resulting generating function is congruent to 1 modulo *p* − 1 at *z* = *p*, so a growing prime power survives at every sufficiently late shift. The paper also treats products along one prime axis, combinations with a unique leading monomial, the exact denominator profile of the binary Stoneham square, and a discrepancy bound for a product on two different prime axes.
 
 ### II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports
 
-**Status:** draft · **Results:** [LS-01](#ls-01) · [MW-01](#mw-01) · [LS-02](#ls-02) · [LS-03](#ls-03) · [Directory](../papers/02-localized-normality)
+**Status:** internally reviewed · **Results:** [LS-01](#ls-01) · [MW-01](#mw-01) · [LS-02](#ls-02) · [LS-03](#ls-03) · [Directory](../papers/02-localized-normality)
 
 Restrict the series for a polylogarithm of positive integer order to the integers whose prime factors lie in a finite set. The resulting radix expansion is normal when some support prime does not divide the radix, and its discrepancy tends to one otherwise. For a nonzero rational polynomial weight *P*(*m*) on the full support, normality holds exactly when *P* vanishes at zero to order less than *s* and some support prime does not divide the radix. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region and shows that this region is null, using recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays.
 

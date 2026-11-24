@@ -2,7 +2,7 @@
 
 These five manuscripts develop results in the formal library of *Normality and Discrepancy of Arithmetic Expansions*. Papers I and II are the principal mathematical papers. Paper III treats signed expansions. Paper IV supplies the methods, and Paper V records what these methods currently prove for classical constants. The original verified research baseline is [Checkpoint 11](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035). The [result registry](../docs/results.md) distinguishes kernel proofs, paper deductions and finite computations.
 
-## I. Polynomial images of Stoneham numbers
+## I. Polynomial images of Stoneham numbers with an odd prime-power parameter
 
 For a radix *b* coprime to an odd prime *p*, every nonconstant rational polynomial in the standard Stoneham number with parameter *p*ᵉ is normal in base *b*. The paper proves uniform survival of the leading denominator on the insertion scales, then applies a fixed-support orbit estimate. It includes the square denominator profile, a quantitative mixed-prime product bound and joint uniformity of the radix orbits of distinct positive powers. Registry ST-01 through ST-06. [PDF](01-stoneham-polynomials/paper.pdf) · [LaTeX](01-stoneham-polynomials/paper.tex) · [Reviewer guide](01-stoneham-polynomials/REVIEW.md)
 

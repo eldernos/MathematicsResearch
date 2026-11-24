@@ -24,14 +24,13 @@ Cite a fixed version, not the moving default branch. Give the commit, the result
 ```bibtex
 @misc{normality-arithmetic-expansions,
   title        = {Normality and Discrepancy of Arithmetic Expansions},
-  author       = {{eldernos}},
   howpublished = {GitHub repository, commit a09e011720bc74396a27f4cb3ce2d8a5b3ce5035 (Checkpoint 11)},
   url          = {https://github.com/eldernos/MathematicsResearch/tree/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035},
   note         = {Result ST-01, Lean declaration NormalityChecker.StonehamPolynomial.prime_power_polynomial_normal}
 }
 ```
 
-Replace the commit, identifier and declaration as needed; `python3 scripts/portal.py link <ID> --commit <sha>` prints the permanent links. The author field gives the repository owner's GitHub name until archived records with owner-approved creator names exist. Manuscript releases, DOIs and the recommended form of citation for each paper are described in [papers/ARCHIVING.md](../papers/ARCHIVING.md); once a DOI is issued, cite the version DOI.
+Replace the commit, identifier and declaration as needed; `python3 scripts/portal.py link <ID> --commit <sha>` prints the permanent links. Use the creator names from the owner-approved archival record when it becomes available. Manuscript releases, DOIs and the recommended form of citation for each paper are described in [papers/ARCHIVING.md](../papers/ARCHIVING.md); once a DOI is issued, cite the version DOI.
 
 ## License
 
