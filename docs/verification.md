@@ -21,7 +21,7 @@ lake exe cache get $(sed -nE 's/^(public )?import (Mathlib\.[A-Za-z0-9_.]+)$/\2/
 scripts/verify.sh
 ```
 
-The same script runs in [continuous integration](../.github/workflows/lean.yml) on every push. [Workflow runs](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
+The same script runs in [Lean continuous integration](../.github/workflows/lean.yml) on every push. The separate [manuscript workflow](../.github/workflows/manuscripts.yml) checks the archived PDFs and the exact source lines embedded in them, then rebuilds all five papers from LaTeX. [Workflow runs](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
 ## What each step establishes
 
@@ -29,9 +29,10 @@ The same script runs in [continuous integration](../.github/workflows/lean.yml) 
 | --- | --- | --- |
 | Exact-arithmetic tests | `python3 -B -m unittest discover -s scripts -p 'test_*.py'` | The finite computations quoted in the notes, with rational arithmetic, and the portal's own checks |
 | Build | `lake build` | Every module elaborates; every proof is accepted by Lean's elaborator |
+| Independent paper statements | `lake env lean papers/01-stoneham-polynomials/check.lean` and `papers/02-localized-normality/check.sh` | The library theorems inhabit the public statement types in the two principal papers at the specified radix and indexing conventions |
 | Axiom audit | `lake env lean Audit.lean` | The listed theorems depend only on `propext`, `Classical.choice` and `Quot.sound`; no `sorry` and no added axioms |
 | Declaration directory | `NORMALITY_UPDATE_THEOREM_INDEX=0 lake env lean scripts/readme_theorems.lean` | The README directory and [declarations.json](data/declarations.json) list exactly the public theorems and lemmas of the compiled library, at their actual source lines |
-| Documentation | `python3 -B scripts/portal.py check` | Registry entries name existing declarations and files; every relative link and anchor resolves; every result identifier mentioned is registered; every module has a topic; generated pages, figures and data are current |
+| Documentation | `python3 -B scripts/portal.py check --strict` | Registry entries name existing declarations and files; every relative link and anchor resolves; every result identifier mentioned is registered; every module has a topic; generated pages, figures and data are current |
 | Kernel replay | `lake env leanchecker <module>` for every module, then `replayFromImports` on the root | The compiled declarations are re-checked by the Lean kernel, independently of the elaborator |
 
 The axiom audit covers the theorems listed in [Audit.lean](../Audit.lean), which include every principal result. The kernel replay covers every module.
