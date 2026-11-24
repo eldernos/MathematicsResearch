@@ -175,6 +175,20 @@ private lemma den_of_rep {p ell k : ℕ} (hp : p.Prime) {x : ℚ} {z : ZMod (p^(
   rw [Nat.factorization_mul ha x.den_ne_zero,Finsupp.add_apply] at v
   exact (hp.pow_dvd_iff_le_factorization x.den_ne_zero).mpr (by omega)
 
+/-- Only the residue of the cell containing the given position needs to survive. -/
+theorem cell_power_denominator {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+    (hb : b.Coprime p) (hk : seed+ell ≤ k) (hi : n < p^(k+1))
+    (fixed : (inverseLift b p ell seed)^p = inverseLift b p ell seed)
+    (hz : powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell)) ≠ 0) :
+    p^(k*order-ell) ∣ (powerShifted b order (insert p S) n).den := by
+  let z := powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell))
+  have hbunit : IsUnit ((b:ZMod (p^(ell+1)))^n) := ((ZMod.isUnit_iff_coprime ..).mpr (hb.pow_right _)).pow n
+  apply den_of_rep hp (z:=(b:ZMod _)^n*z) (by intro h; exact hz (hbunit.mul_right_inj.mp (by simpa using h)))
+  obtain ⟨a,d,hd,e,hm⟩ := power_prefix_residue positive hp hs hb hk hi fixed
+  refine ⟨b^n*a,d,hd,?_,?_⟩
+  · unfold powerShifted; rw [pow_mul]; push_cast; linear_combination (b:ℚ)^n * e
+  · push_cast; linear_combination (b:ZMod _)^n * hm
+
 /-- Success certifies the selected prime power in the reduced *shifted* denominator. -/
 theorem passes_power_denominator {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
     (hb : b.Coprime p) (hk : seed+ell ≤ k) (lo : p^k ≤ n) (hi : n < p^(k+1))
@@ -187,12 +201,7 @@ theorem passes_power_denominator {order : ℕ} (positive : 0 < order) {b p ell s
     ((Nat.div_lt_iff_lt_mul (pow_pos hp.pos _)).mpr (he' ▸ hi))
   let z := powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell))
   have hz : z ≠ 0 := by dsimp [z]; rw [eqn]; exact pass.2 v hv
-  have hbunit : IsUnit ((b:ZMod (p^(ell+1)))^n) := ((ZMod.isUnit_iff_coprime ..).mpr (hb.pow_right _)).pow n
-  apply den_of_rep hp (z:=(b:ZMod _)^n*z) (by intro h; exact hz (hbunit.mul_right_inj.mp (by simpa using h)))
-  obtain ⟨a,d,hd,e,hm⟩ := power_prefix_residue positive hp hs hb hk hi pass.1
-  refine ⟨b^n*a,d,hd,?_,?_⟩
-  · unfold powerShifted; rw [pow_mul]; push_cast; linear_combination (b:ℚ)^n * e
-  · push_cast; linear_combination (b:ZMod _)^n * hm
+  exact cell_power_denominator positive hp hs hb hk hi pass.1 hz
 
 theorem passes_denominator {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
     (hb : b.Coprime p) (hk : seed+ell ≤ k) (lo : p^k ≤ n) (hi : n < p^(k+1))

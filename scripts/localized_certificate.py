@@ -50,6 +50,22 @@ def certificate(base, support, p, precision, order=1):
     return cells
 
 
+def discrepancy_bound(p, cells):
+    """Return the worst prefix fraction and its earliest maximizing endpoint."""
+    edges = [left for left, _ in cells] + [Fraction(p)]
+    widths = [right - left if residue == 0 else Fraction(0)
+              for (left, residue), right in zip(cells, edges[1:])]
+    carry = sum(widths, Fraction(0)) / (p - 1)
+    failed = Fraction(0)
+    worst, at = carry, edges[0]
+    for width, right in zip(widths, edges[1:]):
+        failed += width
+        score = (carry + failed) / right
+        if score > worst:
+            worst, at = score, right
+    return worst, at
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('base', type=int)
@@ -64,4 +80,7 @@ if __name__ == '__main__':
         parser.error(str(error))
     for start, residue in cells:
         print(f'{str(start):>12}  {residue}')
-    print('denominator survival certified' if all(r for _, r in cells) else 'inconclusive')
+    bound, endpoint = discrepancy_bound(args.p, cells)
+    print(f'asymptotic interval discrepancy ≤ {bound} (worst prefix at {endpoint})')
+    if bound == 0:
+        print('normality certified')

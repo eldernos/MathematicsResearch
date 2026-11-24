@@ -48,7 +48,7 @@ private lemma value_one (b : ℕ) (S : Finset ℕ) : powerValue b 1 S = value b 
   apply tsum_congr; intro i; unfold powerCoefficient term
   split_ifs <;> simp [div_eq_mul_inv,mul_comm]
 
-private theorem power_tail {b order : ℕ} (hb : 2≤b) (hs : 0<order) (S : Finset ℕ) :
+theorem power_tail {b order : ℕ} (hb : 2≤b) (hs : 0<order) (S : Finset ℕ) :
     Tendsto (fun n => (b:ℝ)^n*powerValue b order S-(powerShifted b order S n:ℝ)) atTop (𝓝 0) := by
   have little {i : ℕ} : 1 ≤ ((i:ℚ)+1)^order := one_le_pow₀ (by linarith [Nat.cast_nonneg (α:=ℚ) i])
   have tail := indexed_shift_error hb (fun i : ℕ => i+1) (fun _ _ h => Nat.add_right_cancel h)

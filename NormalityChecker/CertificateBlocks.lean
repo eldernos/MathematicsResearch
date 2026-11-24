@@ -27,7 +27,7 @@ lemma insertionBlocks_free {A : Finset ℕ} {B U l m : ℕ} (hB : 0<B)
   have bound := Nat.lt_mul_div_succ m hB
   rw [Nat.add_mul] at H; rw [Nat.mul_add,Nat.mul_comm B (m/B)] at bound; omega
 
-private lemma split_blocks (f : ℕ → ℂ) (s B L : ℕ) :
+lemma split_blocks (f : ℕ → ℂ) (s B L : ℕ) :
     ∑ i ∈ range (L*B), f (s+i) = ∑ l ∈ range L, ∑ j ∈ range B, f (s+l*B+j) := by
   induction L with
   | zero => simp

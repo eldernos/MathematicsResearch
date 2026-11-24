@@ -4,7 +4,11 @@
 
 [![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
-NormalityChecker gives exact arithmetic certificates for normality in an integer base. Its finite cyclotomic checker decides normality of rational sums of Stoneham-type components. A second checker proves normality of infinite prime-restricted expansions when a finite modular calculation succeeds. Both conclusions concern the limiting frequencies of all overlapping digit blocks. [Note for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
+NormalityChecker gives exact arithmetic certificates for normality in an integer base. Its finite cyclotomic checker decides normality of rational sums of Stoneham-type components. A second checker returns exact rational upper bounds on asymptotic interval discrepancy for infinite prime-restricted expansions. A zero bound proves normality. Both conclusions concern the limiting frequencies of all overlapping digit blocks. [Note for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
+
+## Quantitative discrepancy on finite prime supports
+
+For the series with terms $`1/(m^s b^m)`$ on all positive integers supported on a finite prime set $`P`$, Lean proves **maximal discrepancy exactly when every support prime divides the base**. Each off-base prime $`p`$ gives $`D_\infty\le1-1/(p-1)`$. A support containing 2 therefore gives normality in every odd base. The finite checker sharpens the bound by counting failed cells through every possible prefix endpoint. In base 7 with support $`\{2,3,5\}`$, testing at powers of five returns $`5/12`$, $`1/4`$, and zero. Arbitrarily small exceptional length also suffices for normality. [Proof guide and examples](notes/finite-support-discrepancy.md) · [Classification](NormalityChecker/MaximalSupport.lean) · [Executable bound and soundness](NormalityChecker/DiscrepancyChecker.lean)
 
 ## Normality from rational prefixes
 

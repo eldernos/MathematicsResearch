@@ -33,7 +33,7 @@ For $`p^k\le n<p^{k+1}`$ and $`k\ge s+\ell`$, set $`u=\lfloor n/p^{k-\ell}\rfloo
 \sum_{\substack{r\text{ supported on }S\\r p^{\ell-i}\le u}} r^{-1}w^r\pmod{p^L}.
 ```
 
-Each omitted layer contains a factor $`p^L`$. The inverse radix power in a retained summand is $`w^r`$, since $`j\ge s`$. To evaluate every cutoff it suffices to test the left endpoint $`p^\ell`$ and all thresholds $`r p^{\ell-i}`$ in $`[p^\ell,p^{\ell+1})`$. At every integer grid point the included terms coincide with those at the greatest preceding threshold, including the threshold itself. If all tested values are nonzero, $`p^{k-\ell}`$ divides the reduced shifted denominator. A zero gives an inconclusive test at that precision. [Soundness for every cutoff](../NormalityChecker/LocalizedCertificate.lean)
+Each omitted layer contains a factor $`p^L`$. The inverse radix power in a retained summand is $`w^r`$, since $`j\ge s`$. To evaluate every cutoff it suffices to test the left endpoint $`p^\ell`$ and all thresholds $`r p^{\ell-i}`$ in $`[p^\ell,p^{\ell+1})`$. At every integer grid point the included terms coincide with those at the greatest preceding threshold, including the threshold itself. If all tested values are nonzero, $`p^{k-\ell}`$ divides the reduced shifted denominator. Zero cells can still yield a quantitative bound at the same precision. [Partial discrepancy certificates](finite-support-discrepancy.md) [Soundness for every cutoff](../NormalityChecker/LocalizedCertificate.lean)
 
 ```lean
 import NormalityChecker

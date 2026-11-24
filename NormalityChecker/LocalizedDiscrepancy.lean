@@ -11,14 +11,14 @@ open Finset Filter
 open scoped Topology
 namespace NormalityChecker.Localized
 
-private noncomputable def centered (u : ℕ → ℝ) (a c : ℝ) (n : ℕ) : ℂ :=
+noncomputable def centered (u : ℕ → ℝ) (a c : ℝ) (n : ℕ) : ℂ :=
   ((if a ≤ u n ∧ u n < c then 1 else 0 : ℝ) - (c-a) : ℝ)
 
-private lemma centered_norm (u : ℕ → ℝ) {a c : ℝ} (ha : 0≤a) (hac : a≤c) (hc : c≤1) (n : ℕ) :
+lemma centered_norm (u : ℕ → ℝ) {a c : ℝ} (ha : 0≤a) (hac : a≤c) (hc : c≤1) (n : ℕ) :
     ‖centered u a c n‖ ≤ 1 := by
   rw [centered,Complex.norm_real,Real.norm_eq_abs,abs_le]; split_ifs <;> constructor <;> linarith
 
-private lemma centered_sum (u : ℕ → ℝ) (a c : ℝ) (s T : ℕ) :
+lemma centered_sum (u : ℕ → ℝ) (a c : ℝ) (s T : ℕ) :
     ‖∑ i ∈ range T, centered u a c (s+i)‖ =
     |(IntervalFourier.count (fun i => u (s+i)) a c T : ℝ)-T*(c-a)| := by
   classical

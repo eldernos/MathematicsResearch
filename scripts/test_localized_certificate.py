@@ -4,7 +4,7 @@ import unittest
 from bisect import bisect_right
 from fractions import Fraction
 
-from localized_certificate import certificate
+from localized_certificate import certificate, discrepancy_bound
 
 
 def supported(m, primes):
@@ -19,6 +19,27 @@ class CertificateTests(unittest.TestCase):
         cells = certificate(10, {2, 3, 5}, 3, 2)
         self.assertEqual(cells, [(1, 1), (Fraction(4, 3), 4), (Fraction(5, 3), 1),
                                  (2, 6), (Fraction(8, 3), 3)])
+
+    def test_worst_prefix_and_refinement(self):
+        results = [(Fraction(5, 12), 3), (Fraction(1, 4), 3), (0, 1)]
+        previous = None
+        for precision, expected in enumerate(results, 1):
+            cells = certificate(7, {2, 3, 5}, 5, precision)
+            self.assertEqual(discrepancy_bound(5, cells), expected)
+            if previous is not None:
+                starts = [left for left, _ in previous]
+                for left, residue in cells:
+                    parent = bisect_right(starts, left) - 1
+                    self.assertEqual(residue % 5**(precision - 1), previous[parent][1])
+            previous = cells
+        # The sole failing cell is [2,3). Charging only complete scales would give 1/4.
+        self.assertEqual([left for left, z in certificate(7, {2, 3, 5}, 5, 1) if not z], [2])
+
+    def test_discrepancy_extremes(self):
+        self.assertEqual(discrepancy_bound(3, [(Fraction(1), 0)]), (1, 1))
+        self.assertEqual(discrepancy_bound(3, [(Fraction(1), 1)]), (0, 1))
+        for order in (1, 2, 4):
+            self.assertEqual(discrepancy_bound(2, certificate(15, {2, 3, 5, 7}, 2, 1, order)), (0, 1))
 
     def test_against_unshifted_rational_prefix(self):
         # Scales start once all contributing inverse-base powers have stabilized.

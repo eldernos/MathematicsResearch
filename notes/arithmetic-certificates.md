@@ -7,7 +7,7 @@ A rational approximation to a digit shift can lose many denominator factors and 
 | Family or estimate | Result in Lean | Scope |
 | --- | --- | --- |
 | Modular orbits on a fixed set of denominator primes | Uniform cancellation for every fixed polynomial relation between denominator and block length | Qualitative estimate, with the prime set fixed before taking limits |
-| Polylogarithms on a fixed finite prime support | A successful finite modular test implies normality at every specified positive integer order | A zero cell leaves the test inconclusive |
+| Polylogarithms on a fixed finite prime support | A successful finite modular test implies normality at every specified positive integer order | Zero cells have an exact prefix-weighted discrepancy bound. [Partial certificates](finite-support-discrepancy.md) |
 | Mixed generators $`q^a c^j`$ | Normal for every positive integer order | $`q,c\ge2`$, $`q\mid b^A`$ for some $`A`$, and $`\gcd(b,c)=1`$ |
 | Binary Stoneham component with insertions at $`m^r`$ | Normal for every integer $`r\ge1`$ with the weights below | Local denominator dominance for $`r\ge2`$ and an exact sum for $`r=1`$ |
 | Dense rational telescoping terms | Adding a certified difference preserves normality under the stated convergence assumptions | The certificate supplies an antidifference and the boundary term |

@@ -94,6 +94,10 @@ Vandehey’s Theorem 7.4 already implies the constant-numerator single-axis resu
 
 The approximate certificate allows different rational models on different blocks. For the full logarithm the new construction gives linear-length shadowing, while its denominators can acquire unbounded primes. Independent scrutiny of the denominator obstruction and of potential orbit estimates on most block starts would bear directly on the open four-window discrepancy objective. [Approximate certificate](../NormalityChecker/ArithmeticCertificate.lean) · [Logarithm model and paper obstruction](logarithm-correlations.md#rational-models-on-linear-length-blocks)
 
+## Finite-support discrepancy
+
+The order-$`s`$ prime-restricted series has maximal discrepancy exactly when every support prime divides the radix. An exact finite bound tracks passing and failing regions even in incomplete geometric scales. Independent review would help identify prior results on positive-density uniform orbit segments for smooth supports, and on the metric scope of rational block models. [Proof, examples and open scope](finite-support-discrepancy.md)
+
 ## Verification and open scope
 
 The research and formalization are AI-assisted. The repository pins Lean and Mathlib, builds the library, audits the listed theorems for transitive axioms, and replays the project modules through the kernel. The original binary checkpoint remains available for comparison. [Verification instructions](../README.md#reproduce-and-review) · [Audit](../Audit.lean) · [Previous checkpoint](https://github.com/eldernos/MathematicsResearch/tree/research-checkpoint-2)

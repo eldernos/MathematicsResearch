@@ -42,7 +42,7 @@ theorem approximate_prefix_bound (h : ℤ) (f : ℕ → ℝ) (model : ℕ → �
   apply (phase_model_sum_bound h B (fun i => f (start+l*B+i)) (model l)).trans
   exact (add_le_add (orbit l hl hg) (mul_le_mul_of_nonneg_left (close l hl hg) (by positivity))).trans_eq (by ring)
 
-private lemma model_orbit_bound {b c d M T : ℕ} {η : ℝ} (h : ℤ) (hh : h≠0) (model : ℚ)
+lemma model_orbit_bound {b c d M T : ℕ} {η : ℝ} (h : ℤ) (hh : h≠0) (model : ℚ)
     (bound : ∀ y : ℚ, ∀ t : ℕ, M≤y.den → (∃ j : ℕ, y.den ∣ c^j) → y.den≤t^d →
       ‖∑ i ∈ range t, phase ((b:ℝ)^i*y)‖ ≤ η*t)
     (lo : h.natAbs*M≤model.den) (div : model.den∣c^j) (hi : model.den≤T^d) :

@@ -31,3 +31,7 @@ public import NormalityChecker.DensePolynomial
 public import NormalityChecker.PeriodicWeights
 public import NormalityChecker.LogShadow
 public import NormalityChecker.ApproximateDiscrepancy
+public import NormalityChecker.MaximalSupport
+public import NormalityChecker.ModelCounting
+public import NormalityChecker.LocalizedLogGap
+public import NormalityChecker.ShiftedWeights
