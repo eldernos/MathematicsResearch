@@ -9,7 +9,7 @@ lake env lean papers/01-stoneham-polynomials/check.lean
 papers/02-localized-normality/check.sh
 NORMALITY_UPDATE_THEOREM_INDEX=0 lake env lean scripts/readme_theorems.lean
 # Registry, links, anchors, result identifiers, topics, generated pages and figures.
-python3 -B scripts/portal.py check
+python3 -B scripts/portal.py check --strict
 while IFS= read -r -d '' source; do
   module=${source%.lean}
   echo "Replaying ${module//\//.}"
