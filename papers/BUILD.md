@@ -4,7 +4,7 @@ Each numbered directory contains the LaTeX source, bibliography, compiled PDF an
 
 ## Compile
 
-Install TeX Live with pdfLaTeX, BibTeX, latexmk, the AMS classes, standard LaTeX packages and PGF/TikZ. For a Debian or Ubuntu environment the relevant packages are normally `latexmk`, `texlive-latex-extra`, `texlive-pictures` and `texlive-fonts-recommended`. From the repository root:
+Install TeX Live with pdfLaTeX, BibTeX, latexmk, the AMS classes, standard LaTeX packages and PGF/TikZ. For a Debian or Ubuntu environment the relevant packages are normally `latexmk`, `lmodern`, `texlive-latex-extra`, `texlive-pictures` and `texlive-fonts-recommended`. From the repository root:
 
 ```sh
 papers/build.sh
