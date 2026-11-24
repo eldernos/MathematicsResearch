@@ -63,3 +63,11 @@ public import NormalityChecker.ChebyshevModels
 public import NormalityChecker.PolynomialMasks
 public import NormalityChecker.JointPersistent
 public import NormalityChecker.SignedShellDiscrepancy
+public import NormalityChecker.CorrectedStrides
+public import NormalityChecker.FactorialNumerators
+public import NormalityChecker.StrideDenominatorRate
+public import NormalityChecker.DyadicLogRates
+public import NormalityChecker.ResidueWindows
+public import NormalityChecker.TranslatedShellExamples
+public import NormalityChecker.HigherOrderPrefix
+public import NormalityChecker.ThresholdDifferences

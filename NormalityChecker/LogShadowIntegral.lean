@@ -14,7 +14,7 @@ private lemma integrable_kernel (n r : ℕ) : IntervalIntegrable (kernel n r) vo
   apply ContinuousOn.intervalIntegrable_of_Icc (by norm_num); unfold kernel
   exact (by fun_prop : Continuous (fun t : ℝ => t^n*(1-t)^r)).continuousOn.div (by fun_prop) (fun t ht => by have := ht.2; linarith)
 
-private lemma beta_difference (r n : ℕ) : (∫ t : ℝ in 0..1,t^n*(1-t)^r) = (logDifference r n:ℝ) := by
+lemma beta_difference (r n : ℕ) : (∫ t : ℝ in 0..1,t^n*(1-t)^r) = (logDifference r n:ℝ) := by
   induction r generalizing n with
   | zero => simp [difference_zero]
   | succ r ih =>

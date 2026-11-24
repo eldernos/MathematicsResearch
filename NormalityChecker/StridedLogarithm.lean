@@ -79,7 +79,7 @@ private theorem normalized_limit :
   rw [← sum_neg_distrib]; apply sum_congr rfl; intro i _
   rw [show (-(1/8):ℝ)=(-1)*(1/8) by ring,mul_pow]; ring
 
-private theorem stride_step (k : ℕ) (N : ℕ) (w : ℕ → ℤ) :
+theorem stride_step (k : ℕ) (N : ℕ) (w : ℕ → ℤ) :
     stridedPrefix k (N+1) w = 2*stridedPrefix k N w +
       if k∣N+1 then (w ((N+1)/k):ℚ)/((N+1)/k:ℕ) else 0 := by
   let term (n i : ℕ) := ((w (i+1)*(2:ℤ)^(n-k*(i+1)):ℤ):ℚ)/(i+1)
