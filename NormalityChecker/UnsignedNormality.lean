@@ -139,16 +139,9 @@ theorem unsigned_persistent_null {b s p : ℕ} {S : Finset ℕ} (hp : p.Prime)
     rw [insert_erase hr]
     exact fun m hm _ => ⟨1,mem_singleton_self _,m,hm,(one_mul _).symm⟩
 
-/-- The computable worst-prefix certificate tends to zero for every individual
-off-base prime. The conclusion allows a positive certificate at every finite depth. -/
-theorem unsigned_certificate_tendsTo_zero {b s p : ℕ} {S : Finset ℕ} (hp : p.Prime)
-    (out : p ∉ S) (cop : b.Coprime p) (hs : 0 < s) (primes : ∀ q ∈ S, q.Prime) :
-    Tendsto (fun k => (discrepancyCertificate b s p k S : ℝ)) atTop (𝓝 0) := by
-  have limit := region_mass_tendsto hs hp out cop
-  rw [measureReal_def, unsigned_persistent_null hp out cop hs primes, ENNReal.toReal_zero] at limit
-  apply squeeze_zero (fun k => by exact_mod_cast CellProfile.bound_nonneg p (p^k) (failedCells b s p k S)) _
-    (by simpa using limit.const_mul 2)
-  intro k
+/-- Twice the total failed-cell width bounds the worst-prefix score, at every order. -/
+theorem certificate_le_twice_mass {b s p k : ℕ} {S : Finset ℕ} (hp : p.Prime) :
+    (discrepancyCertificate b s p k S : ℝ) ≤ 2 * volume.real (failedRegion b s p k S) := by
   let Z := failedCells b s p k S
   change ((CellProfile.bound p (p^k) Z : ℚ) : ℝ) ≤ 2 * volume.real (meshRegion (p^k) Z)
   rw [mesh_mass (pow_pos hp.pos k)]
@@ -170,6 +163,17 @@ theorem unsigned_certificate_tendsTo_zero {b s p : ℕ} {S : Finset ℕ} (hp : p
   rw [← mul_div_assoc]
   exact (div_le_div_of_nonneg_right (by linarith) (pos.trans_le low).le).trans
     (div_le_div_of_nonneg_left (by positivity) pos low)
+
+/-- The computable worst-prefix certificate tends to zero for every individual
+off-base prime. The conclusion allows a positive certificate at every finite depth. -/
+theorem unsigned_certificate_tendsTo_zero {b s p : ℕ} {S : Finset ℕ} (hp : p.Prime)
+    (out : p ∉ S) (cop : b.Coprime p) (hs : 0 < s) (primes : ∀ q ∈ S, q.Prime) :
+    Tendsto (fun k => (discrepancyCertificate b s p k S : ℝ)) atTop (𝓝 0) := by
+  have limit := region_mass_tendsto hs hp out cop
+  rw [measureReal_def, unsigned_persistent_null hp out cop hs primes, ENNReal.toReal_zero] at limit
+  apply squeeze_zero (fun k => by exact_mod_cast CellProfile.bound_nonneg p (p^k) (failedCells b s p k S)) _
+    (by simpa using limit.const_mul 2)
+  exact fun _ => certificate_le_twice_mass hp
 
 private theorem unsigned_limsup_le_zero {b s : ℕ} (S : Finset ℕ) (hb : 2 ≤ b)
     (hs : 0 < s) (primes : ∀ q ∈ S, q.Prime) (off : ∃ p ∈ S, ¬p ∣ b) :

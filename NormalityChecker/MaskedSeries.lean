@@ -19,7 +19,8 @@ noncomputable def series (b : ℕ) (a : ℕ → ℚ) : ℝ := ∑' m, (a m : ℝ
 def pre (b : ℕ) (a : ℕ → ℚ) (n : ℕ) : ℚ :=
   ∑ m ∈ range (n+1), (b : ℚ) ^ (n-m) * a m
 
-private theorem summable_weight {b : ℕ} (hb : 2 ≤ b) {a : ℕ → ℚ} (growth : PolyGrowth a) :
+/-- Polynomial coefficient growth gives absolute summability after radix discounting. -/
+theorem summable_weight {b : ℕ} (hb : 2 ≤ b) {a : ℕ → ℚ} (growth : PolyGrowth a) :
     Summable (fun m => (a m : ℝ) / (b : ℝ) ^ m) := by
   obtain ⟨C, hC, d, bound⟩ := growth
   let q := (b : ℝ)⁻¹
