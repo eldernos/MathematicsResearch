@@ -15,7 +15,7 @@ namespace NormalityChecker.LocalizedSupport
 /-- The normalized real phase of a digit position, on the scale of the prime `p`. -/
 def digitPhase (p : ℕ) (y : ℝ) := y / (p:ℝ)^(Nat.log p ⌊y⌋₊)
 
-private lemma phase_digit {p : ℕ} (hp : p.Prime) {y : ℝ} (hy : 1 ≤ y) :
+lemma phase_digit {p : ℕ} (hp : p.Prime) {y : ℝ} (hy : 1 ≤ y) :
     digitPhase p y ∈ Set.Ico 1 (p:ℝ) ∧
       ⌊digitPhase p y * (p:ℝ)^(Nat.log p ⌊y⌋₊)⌋₊ = ⌊y⌋₊ := by
   let n := ⌊y⌋₊
@@ -40,7 +40,7 @@ def jointPhaseSet (b s : ℕ) (A : Finset ℕ) : Set ℝ :=
 /-- Ordinary length in a prefix divided by its cutoff. -/
 def prefixMass (E : Set ℝ) (N : ℕ) : ℝ := volume.real (Set.Ico 0 (N:ℝ) ∩ E) / N
 
-private lemma prefix_finite (E : Set ℝ) (N : ℕ) : volume (Set.Ico 0 (N:ℝ) ∩ E) ≠ ⊤ :=
+lemma prefix_finite (E : Set ℝ) (N : ℕ) : volume (Set.Ico 0 (N:ℝ) ∩ E) ≠ ⊤ :=
   measure_ne_top_of_subset Set.inter_subset_left (by simp)
 
 private lemma mesh_mem_one {n : ℕ} {y : ℝ} (hy : y ∈ Set.Ico (n:ℝ) (n+1)) :
@@ -349,7 +349,7 @@ private lemma prefixMass_union_le (E F : Set ℝ) (N : ℕ) :
   rw [Set.inter_union_distrib_left,← add_div]
   exact div_le_div_of_nonneg_right (measureReal_union_le ..) (Nat.cast_nonneg N)
 
-private lemma prefixMass_compare {E F : Set ℝ} (K N : ℕ)
+lemma prefixMass_compare {E F : Set ℝ} (K N : ℕ)
     (h : ∀ y : ℝ, (K:ℝ) ≤ y → y ∈ E → y ∈ F) :
     prefixMass E N ≤ prefixMass F N + K/N := by
   let I := Set.Ico (0:ℝ) (K:ℝ)
