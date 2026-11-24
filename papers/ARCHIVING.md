@@ -1,6 +1,6 @@
 # Archive and cite this release
 
-The manuscript release groups all five PDFs with their LaTeX sources, bibliographies, figures, research notes and Lean proofs. The release tag is **manuscripts-v1.0.0**. Checkpoint 11, the mathematical baseline, is a separate tag. [Manuscripts](README.md) · [Repository releases](https://github.com/eldernos/MathematicsResearch/releases) · [Checkpoint 11](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035)
+The manuscript release groups all five PDFs with their LaTeX sources, bibliographies, figures, research notes and Lean proofs. For this published GitHub release, the manual deposit below lets the project owner confirm author credits and metadata before issuing the DOI. The release tag is **manuscripts-v1.0.0**. Checkpoint 11, the mathematical baseline, is a separate tag. [Manuscripts](README.md) · [GitHub manuscript release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0) · [Checkpoint 11](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035)
 
 ## 1. Verify the files you are about to archive
 
