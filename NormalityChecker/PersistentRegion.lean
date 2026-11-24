@@ -55,7 +55,8 @@ theorem failed_region_inside {b s p k : ℕ} {S : Finset ℕ} (hp : 0<p) :
   · apply le_trans _ l; rw [le_div_iff₀ pos,one_mul]; exact_mod_cast lo
   · apply h.le.trans; rw [div_le_iff₀ pos]; exact_mod_cast hi
 
-private theorem failed_region_antitone {b s p : ℕ} {S : Finset ℕ} (hs : 0<s) (hp : p.Prime)
+/-- Refining the precision can only shrink the failed subset of the phase interval. -/
+theorem failed_region_antitone {b s p : ℕ} {S : Finset ℕ} (hs : 0<s) (hp : p.Prime)
     (outside : p∉S) (cop : b.Coprime p) : Antitone (fun k => failedRegion b s p k S) := by
   apply antitone_nat_of_succ_le; intro k t ht
   obtain ⟨u,hu,l,h⟩ := Set.mem_iUnion₂.mp ht
