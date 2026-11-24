@@ -126,7 +126,28 @@ run_cmd do
     ``NormalityChecker.decimal_positive_normal,
     ``NormalityChecker.seventh_triple_not_normal,
     ``NormalityChecker.seventh_triple_masses,
-    ``NormalityChecker.seventh_triple_distributions]
+    ``NormalityChecker.seventh_triple_distributions,
+    ``NormalityChecker.transition_iff_bits,
+    ``NormalityChecker.discrepancy_le_transitions,
+    ``NormalityChecker.asymptoticDiscrepancy_le_transitions,
+    ``NormalityChecker.interior_frequency_le_transitions,
+    ``NormalityChecker.discrepancy_lt_one_iff_transitions,
+    ``NormalityChecker.normal_iff_discrepancy_zero,
+    ``NormalityChecker.sharp_finite_discrepancy,
+    ``NormalityChecker.sharp_asymptotic_discrepancy,
+    ``NormalityChecker.third_discrepancy_sharp,
+    ``NormalityChecker.transition_of_middle_hit,
+    ``NormalityChecker.middle_hit_near_transition,
+    ``NormalityChecker.middle_transition_bounds,
+    ``NormalityChecker.logTwo_density_comparison,
+    ``NormalityChecker.logTwo_discrepancy_lt_one_iff_middle,
+    ``NormalityChecker.logTwo_discrepancy_le_middle,
+    ``NormalityChecker.LogTwoForm.dyadic_separation,
+    ``NormalityChecker.logTwo_window_hit,
+    ``NormalityChecker.logTwo_logarithmic_count,
+    ``NormalityChecker.logTwo_finite_discrepancy_gap,
+    ``NormalityChecker.kempner_dyadic_separation,
+    ``NormalityChecker.kempner_discrepancy_one]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

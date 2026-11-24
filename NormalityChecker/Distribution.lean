@@ -225,4 +225,13 @@ theorem normalIn_iff_uniform_approx {b : ℕ} (hb : 2 ≤ b) (x : ℝ) (u : ℕ 
   exact ⟨fun h => uniformModOne_of_error h (by simpa using he.neg),
     fun h => uniformModOne_of_error h he⟩
 
+/-- Convergence on any anchored interval, including the endpoints 0 and 1. -/
+theorem anchored_frequency_of_normal {b : ℕ} {x : ℝ} (hn : NormalIn b x) {t : ℝ}
+    (ht : 0≤t) (ht' : t≤1) : Tendsto (frequency (shift b x) 0 t) atTop (𝓝 t) := by
+  have H : HasAverage (fun n => crossings 0 t ((b:ℝ)^n*x)) (t-0) :=
+    (normalIn_iff_uniform hn.1 x).mp hn 0 t
+  unfold HasAverage at H
+  rw [average_crossings_eq_frequency _ le_rfl ht ht',sub_zero] at H
+  exact H
+
 end NormalityChecker

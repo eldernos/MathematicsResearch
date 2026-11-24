@@ -117,6 +117,12 @@ The divisibility $`c^{j+1}\mid (b^{l-m})^{c^j}+1`$ follows from factoring a diff
 
 For a general expansion $`b^n x=P_n+E_n`$ with $`E_n\to0`$, Lean also proves nonnormality when the residues of $`P_n`$ visit a fixed finite set with positive upper density. The centers can lie anywhere modulo one and the remainders may have either sign. [Prefix certificate](NormalityChecker/Concentration.lean)
 
+## Binary transitions and discrepancy
+
+Lean proves that the upper limiting interval discrepancy of a binary expansion is strictly below one exactly when its digit transitions have positive lower density. If that density is $`t`$, the discrepancy is at most $`\max(2/3,1-t)`$. The period-two orbit of $`1/3`$ attains the constant $`2/3`$. [Sharp bound](NormalityChecker/SharpDiscrepancy.lean)
+
+For ln 2, this condition is equivalent to positive lower density of visits of the rational residues $`\{R_n\}`$ to the closed middle third. Every sufficiently late window $`[n,34n)`$ contains such a visit and a true digit transition. That yields an unconditional logarithmic count. A linear count, which would give a fixed discrepancy bound below one, remains open. [Proof and arithmetic obstacle](notes/transition-discrepancy.md)
+
 ## Open proof obligations
 
 For the ordered normal sum $`F_K`$, the scaled error $`(K+1)2^K(\log 2-F_K)`$ is within $`1/(K+1)`$ of $`6/7,5/7,3/7`$ for $`K\equiv0,1,2\pmod{3}`$ respectively. Adding the corresponding rational correction to $`F_K`$ gives a normal sum $`G_K`$ with $`|2^n(\log 2-G_K)|\le 2^n/((K+1)^2 2^K)`$. The remaining step is to control Fourier averages as $`K`$ grows with the digit position. The finite classification allows its cutoff to depend on every nonzero cell coefficient. [Derivation and limits of the approximation](notes/ordered-tail.md)

@@ -13,3 +13,5 @@ public import NormalityChecker.FourierTest
 public import NormalityChecker.GrowingLags
 public import NormalityChecker.OrderedTail
 public import NormalityChecker.CyclotomicExamples
+public import NormalityChecker.LogTwoTransitions
+public import NormalityChecker.SparseTransitions
