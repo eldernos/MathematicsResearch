@@ -49,3 +49,5 @@ The searches on 24 November 2026 included “Stoneham numbers powers squares pol
 | Transcendence | Coons gives the standard generators' transcendence in Appendix A. Ridout's theorem gives the needed restricted-denominator approximation threshold for the products. Their uses in the paper are outside the kernel audit. [Coons](https://doi.org/10.1017/S1446788713000682) · [Ridout](https://doi.org/10.1112/S0025579300001339) |
 
 The unresolved priority question is whether earlier work proves polynomial normality for these specified generators, including through a different representation or a more general criterion. The failure of one choice of generator hypotheses establishes no historical exclusion. The paper is prepared for mathematical review. Project-owner authorship and submission decisions remain pending.
+
+The repository preprint on two Stoneham summands gives a title and date without a personal byline; the bibliography identifies its source repository and revision. Vandehey’s theorem numbers in the text refer to the linked arXiv version. The independent model reports and subsequent changes are recorded in the [release review log](../reviews/README.md).

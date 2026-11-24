@@ -4,7 +4,7 @@ Each numbered directory contains the LaTeX source, bibliography, compiled PDF an
 
 ## Compile
 
-Install TeX Live with pdfLaTeX, BibTeX, latexmk, the AMS classes, standard LaTeX packages and PGF/TikZ. For a Debian or Ubuntu environment the relevant packages are normally `latexmk`, `texlive-latex-extra`, `texlive-pictures` and `texlive-fonts-recommended`. From the repository root:
+Install TeX Live with pdfLaTeX, BibTeX, latexmk, the AMS classes, standard LaTeX packages and PGF/TikZ. For a Debian or Ubuntu environment the relevant packages are normally `latexmk`, `lmodern`, `texlive-latex-extra`, `texlive-pictures` and `texlive-fonts-recommended`. From the repository root:
 
 ```sh
 papers/build.sh
@@ -25,4 +25,4 @@ sha256sum -c papers/SHA256SUMS
 python3 -B papers/check_release.py --require-reviews
 ```
 
-The checksums identify the archived files. After intentionally rebuilding a new version, inspect the PDFs and record their checksums with `python3 -B papers/check_release.py --write-checksums`. Consult each reviewer's guide for the declaration names and the precise status of the paper's mathematical inputs. [Manuscript index](README.md) · [Owner's DOI guide](ARCHIVING.md)
+The checksums identify the archived files. In a Git clone containing the referenced commits, add `--verify-pins` to check the source file and line for each GitHub Lean link embedded in the PDFs. This option uses Poppler’s `pdfinfo`. After intentionally rebuilding a new version, inspect the PDFs and record their checksums with `python3 -B papers/check_release.py --write-checksums`. Consult each reviewer's guide for the declaration names and the precise status of the paper's mathematical inputs. [Manuscript index](README.md) · [Owner's DOI guide](ARCHIVING.md)

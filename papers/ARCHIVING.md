@@ -14,7 +14,7 @@ cd ../normality-manuscript-archive
 sha256sum -c papers/SHA256SUMS
 ```
 
-The checksum file is relative to the repository root. It authenticates the PDF content against this tag. The tag identifies the full source tree, including the paper-specific correspondence checks. The release archive can be created directly from Git, even if your working directory contains local changes.
+The checksum file is relative to the repository root. It compares each PDF byte for byte with the recorded digest for this tag. The tag identifies the full source tree, including the paper-specific correspondence checks. The release archive can be created directly from Git, even if your working directory contains local changes.
 
 ```sh
 git archive --format=zip --prefix=MathematicsResearch-manuscripts-v1.0.0/ \
@@ -37,7 +37,7 @@ For **one DOI covering the complete research release**, deposit the source archi
 
 ## Alternative for a GitHub software release
 
-For automatic archival of published GitHub releases, link the owner’s GitHub account to Zenodo and open **profile menu → GitHub → Sync now**. Enable **eldernos/MathematicsResearch** before publishing the corresponding GitHub Release. A Git tag alone leaves this publication step available. On GitHub, choose the existing release tag and verify its target commit. Publish the release, then return to Zenodo’s GitHub panel and open the processed release DOI. Verify the archived source includes the committed PDFs and their checksums. Use the manual route above if the release event already occurred before the integration was enabled. Use one archival route per release to avoid duplicate records.
+For automatic archival of published GitHub releases, link the owner’s GitHub account to Zenodo and open **profile menu → GitHub → Sync now**. Enable **eldernos/MathematicsResearch** before publishing the corresponding GitHub Release. A Git tag alone leaves this publication step available. On GitHub, choose the existing release tag and verify its target commit. Publish the release, then return to Zenodo’s GitHub panel and open the processed release DOI. Zenodo archives the repository snapshot. All five PDFs are committed under `papers/`, so they travel with the proofs. Verify their presence and checksums on the resulting record. Use the manual route above if the release event already occurred before the integration was enabled. Use one archival route per release to avoid duplicate records.
 
 Zenodo supports repository metadata in CITATION.cff and .zenodo.json. When both are present, Zenodo gives .zenodo.json precedence. Ensure automated records will use the credits you intend before enabling release ingestion. [Enable the repository](https://help.zenodo.org/docs/github/enable-repository/) · [Archive a GitHub release](https://help.zenodo.org/docs/github/archive-software/github-upload/) · [Citation metadata precedence](https://help.zenodo.org/docs/github/describe-software/citation-file/)
 
