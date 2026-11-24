@@ -1,0 +1,14 @@
+# Paper I review disposition
+
+Gemini 4 Neon and Sonnet 5.5 independently reviewed the same [author revision](https://github.com/eldernos/MathematicsResearch/tree/a9d9166e40aab0b9b85af0fdc9b967f87cd3b606/papers/01-stoneham-polynomials). Both found the principal mathematical claims sound. Their circulation assessments apply to that revision. [Gemini report](gemini.md) · [Sonnet report](sonnet.md)
+
+| Finding | Change in the release manuscript |
+| --- | --- |
+| Scope, torus notation and endpoint conventions | The title specifies an odd prime-power parameter. The monomial theorem quantifies its finite family on one radix and prime. The joint corollary uses a named torus and covers overlapping inner or outer collars by constant bounds. |
+| Denominator and orbit quantifiers | The upper denominator divisibility is stated at every cutoff, including degree zero. The eventual lower divisibility specifies integer constants. The fixed-support orbit estimate now states its uniform quantifiers. Both missing ordered pairs at the third square scale are identified. |
+| Leading-term contribution and the prime-two boundary | The introduction states the cancellation issue for the classical generators. An explicit upper set has numerator zero at two. |
+| Transcendence sections | The text identifies the univariate specialization of the one-axis argument and the mixed-product specialization of the independent-parameter result. The general proof now specifies late positive exponents, the Fourier-to-interval step, and the share supplied by bounded return gaps. The separate binary example retains its explicit approximation exponent and its verified discrepancy constant. |
+| References and priority | The relevant Wall and Ridout references have been added. DOI identifiers are visible in print. The repository preprint is identified by its repository, date and revision; its title page supplies no personal author. The theorem numbering for Vandehey is explicitly tied to the preprint. Kano's account is identified as the source for the Korobov criterion. |
+| Professional exposition | The priority-status sentence, an arbitrary sample polynomial, redundant endpoint commentary and repository narration have been removed or rewritten. Captions describe their mathematical content. The formal table explains the registry identifiers and includes the orbit-estimate reference. |
+
+The explicit constant in the quadratic denominator bound is retained because it matches the cited Lean theorem. The public release preserves the historical proof checkpoint and the separate commit containing the new joint theorem. Exact links resolve to both. The AI-assistance disclosure remains in the manuscript. Human attribution, independent expert evaluation, and any journal submission remain with the owner. [Revised PDF](../../01-stoneham-polynomials/paper.pdf) · [Reviewer guide](../../01-stoneham-polynomials/REVIEW.md)
