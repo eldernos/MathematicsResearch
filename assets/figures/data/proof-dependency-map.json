@@ -1,6 +1,6 @@
 {
  "description": "Proof-dependency map. Solid edges are checked against the import graph of NormalityChecker/**/*.lean: each source module is transitively imported by a target module (shortest path recorded) and a public declaration of the source is referenced on such a path. Dashed edges are historical; dotted edges are paper-only inputs.",
- "modules_parsed": 171,
+ "modules_parsed": 204,
  "foundation_modules": [
   "Basic",
   "Analysis.Weyl",
@@ -326,7 +326,7 @@
     "StonehamPolynomialPrefix",
     "StonehamPolynomialOrthant"
    ],
-   "declaration_used": "StonehamPolynomial.weighted_uniform_precision",
+   "declaration_used": "StonehamPolynomial.weighted_uniform_precision_at",
    "used_in": "StonehamPolynomialPrefix"
   },
   {
@@ -874,7 +874,8 @@
    "imports": "Basic",
    "import_path": [
     "StonehamJoint",
-    "StonehamStatements",
+    "JointWeyl",
+    "RectangleFrequency",
     "Basic"
    ]
   },
@@ -884,11 +885,9 @@
    "imports": "Analysis.Weyl",
    "import_path": [
     "StonehamJoint",
-    "StonehamPolynomial",
-    "StonehamPolynomialNormal",
-    "ArithmeticCertificate",
-    "SmoothOrbit",
-    "StonehamOrbit",
+    "JointWeyl",
+    "FourierTest",
+    "Dilation",
     "Correlations",
     "Analysis.Weyl"
    ]
@@ -899,11 +898,7 @@
    "imports": "FourierTest",
    "import_path": [
     "StonehamJoint",
-    "StonehamPolynomial",
-    "StonehamPolynomialNormal",
-    "ArithmeticCertificate",
-    "SmoothOrbit",
-    "CertificateBlocks",
+    "JointWeyl",
     "FourierTest"
    ]
   },
