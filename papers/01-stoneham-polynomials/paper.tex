@@ -42,9 +42,8 @@ The proof identifies a nonvanishing inclusion--exclusion numerator for each uppe
 of reflected exponents. Compactness bounds the loss in the reduced prefix denominator
 uniformly across all insertion patterns.
 Distinct positive powers of one generator have jointly uniformly distributed radix orbits.
-For the square of $\alpha_{2,3}$ we give the exact prefix denominators.
-The binary discrepancy of $\alpha_{2,3}\alpha_{2,5}$ has upper limit at most $43/45$.
-Ridout's theorem gives transcendence both for this product and for the one-axis combinations above.
+In particular the classical Stoneham square $\alpha_{2,3}^2$ is binary normal, and we determine its exact prefix denominators.
+For multiplicatively independent integers $c,d\ge2$ with $\gcd(b,cd)=1$, the product $\alpha_{b,c}\alpha_{b,d}$ is transcendental and its upper base-$b$ discrepancy is strictly below one. For $b=2$, $c=3$ and $d=5$ the upper bound is $43/45$.
 \end{abstract}
 
 \section{Normality in the defining radix}
@@ -65,7 +64,7 @@ Let $b\ge2$, let $p$ be an odd prime coprime to $b$, and let $e\ge1$ be an integ
 For every nonconstant polynomial $P\in\Q[X]$, the number $P(\alpha_{b,p^e})$ is normal in base $b$.
 \end{theorem}
 
-In particular, every positive power of $\alpha_{2,3}$ is binary normal.
+In particular, every positive power of $\alpha_{2,3}$ is binary normal. By the equivalence of normality in bases $b$ and $b^k$ for positive integers $k$ \cite{wall,bc}, the square is normal in every base $2^k$.
 For products we count degree with multiplicity. Choose positive integers $m_i,e_i$
 independently in each factor and put
 \begin{equation}\label{eq:monomial}
@@ -85,6 +84,8 @@ The choices $m_1=m_2=1$, $e_1=1$, $e_2=2$ give the binary-normal number
 $\alpha_{2,3}\alpha_{2,9}$. The strict degree inequality prevents the lower-degree terms from canceling the leading
 $p$-power in the reduced denominator. In a general multivariate
 polynomial several terms of maximal degree can contribute at the same denominator order.
+
+For products on independent axes, Proposition~\ref{prop:indep} gives a different conclusion, namely transcendence and a strict upper bound on discrepancy. Its proof isolates insertions at $c^k+d^\ell$ on a positive proportion of digit positions and applies Ridout's theorem. Normality of $\alpha_{2,3}\alpha_{2,5}$ remains open.
 
 \subsection*{Relation to earlier results}
 Stoneham established normality for specific constants including $\alpha_{2,3}$ by studying
@@ -106,7 +107,7 @@ Kano's comparison gives the corresponding growth requirements in Wagner's constr
 \cite[pp.~909--911]{kano}. The older results establish polynomial normality for
 explicit families. N.~M.~Korobov studied simultaneous normality under the name of conjunctly
 normal numbers \cite{jointkorobov}. Corollary~\ref{cor:joint} takes the coordinates to be
-distinct powers of the same classical generator.
+distinct powers of the same classical generator. Mira's working notes \cite[S07, Thm.~1; S09, Thm.~2]{mira} give a normality criterion for $\sum_{j\ge1}D^{-j}b^{-C^j}$ with independent choices of $C,D$, and joint normality at fixed $b$ for $L_{p,s}(b)=\sum_{j\ge0}p^{-sj}b^{-p^j}$ indexed by distinct pairs $(p,s)$ with $p\nmid b$ and $s\ge1$. In particular $L_{p,1}(b)=b^{-1}+\alpha_{b,p}$. The joint result treats linear combinations of these series. Here products of terms from one generator produce the powers in Corollary~\ref{cor:joint}; changing $s$ in $L_{p,s}$ changes the coefficient of each term.
 
 Vandehey's fixed-prime-support estimate supplies the analytic implication from reduced
 denominators to uniformity \cite[Corollary 1.2 in the preprint]{vandehey}. Theorem 7.4 of that version treats a series
@@ -442,7 +443,7 @@ visits to an interval strictly between grid points. This proves irrationality.
 
 Whether $\alpha_{2,3}\alpha_{2,5}$ is binary normal remains open.
 
-\section{Transcendence}
+\section{Transcendence and products with independent parameters}
 
 \begin{corollary}\label{cor:trans}
 Every value in Theorem~\ref{thm:main} is transcendental.
@@ -585,7 +586,7 @@ The directory accompanying this paper contains exact figure data, Python regener
 code, and a declaration-level correspondence table. The transcendence arguments and Proposition~\ref{prop:indep}
 are mathematical deductions outside the Lean verification.
 
-\paragraph{Disclosure.} OpenAI Codex drafted this manuscript from the formal library and its proof notes. AI tools also assisted with formalization, source comparison and figures.
+\paragraph{Disclosure.} Under the project owner's direction, AI systems explored the Stoneham examples, developed the denominator and normality arguments, and wrote the corresponding Lean proofs and statement checks. OpenAI Codex drafted the exposition, compared earlier results and prepared the figures. The project owner retains responsibility for authorship and any submission.
 
 \begingroup
 \small

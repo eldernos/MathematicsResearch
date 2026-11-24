@@ -4,6 +4,8 @@
 
 The main results are Theorems 1.1 and 1.2. Section 4 proves that persistent cancellation at each individual off-radix prime has measure zero. Section 5 treats rational polynomial weights and restrictions. Appendix A gives the exact joint formula through every prefix. Keeping the formula in an appendix allows a referee to verify the classification using only the single-prime upper bound, and to examine the stronger local clearing equivalence separately.
 
+Corollary 1.3 is a written deduction from the kernel-checked full-support polynomial classification. The largest order with nonzero character coefficient gives a polynomial with nonzero constant term. Mira’s S09, Theorems 1–2, treats the wholly coprime unsigned case and the joint family across singleton prime/order pairs. [Mira’s working notes](https://gist.github.com/Mira-acc/ea2791119de611279237096e35cbc976/d699a69c2037ee4420bfb8e1e0ad0b310bbc8eb0)
+
 ## Correspondence with the checkpoint
 
 The prefixes **L** and **P** below stand for `NormalityChecker.LocalizedSupport` and `NormalityChecker.PolynomialMasks`. Each source link selects a declaration at commit `a09e011720bc74396a27f4cb3ce2d8a5b3ce5035`. Table 1 in the manuscript also links the supporting declarations.

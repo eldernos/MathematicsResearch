@@ -26,7 +26,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-Let \(p\) be a prime coprime to the radix \(b\). For a sparse expansion with bounded integer phases \(c_j\) and insertions \(c_j-pc_{j-1}\) at \(p^j\), we determine the interval discrepancy at every prefix up to an error tending to zero. Its main term is the proportion of positions in shells with \(c_j=0\). The attainable upper discrepancies are precisely the base-\(p\) values, with digits \(0,p-1\), of binary words lexicographically maximal among their suffixes. Rational translation multiplies the main term by the discrepancy of a finite orbit. Cyclic de Bruijn words thereby give transcendental examples of arbitrarily small positive discrepancy. For finite rational combinations of dilated components with one odd prime parameter, resonance is equivalent to divisibility of an explicit cell polynomial by a cyclotomic polynomial. We also give, in each radix, two positive normal summands whose irrational sum has arbitrarily high upper frequencies of zero blocks.
+Let \(p\) be a prime coprime to the radix \(b\). For a sparse expansion with bounded integer phases \(c_j\) and insertions \(c_j-pc_{j-1}\) at \(p^j\), we determine the interval discrepancy at every prefix up to an error tending to zero. Its main term is the proportion of positions in shells with \(c_j=0\). The spectrum is the image of the suffix-maximal binary words of Kaneko and Steiner under base-\(p\) evaluation with digits \(0,p-1\). For each such word we construct an expansion with phases in \(\{0,1\}\) whose upper discrepancy is its value. Rational translation multiplies the main term by the discrepancy of a finite orbit. Cyclic de Bruijn words thereby give transcendental examples of arbitrarily small positive discrepancy. For finite rational combinations of dilated components with one odd prime parameter, resonance is equivalent to divisibility of an explicit cell polynomial by a cyclotomic polynomial. We also give, in each radix, two positive normal summands whose irrational sum has arbitrarily high upper frequencies of zero blocks.
 \end{abstract}
 
 \section{Two expansions and their radix orbits}
@@ -357,7 +357,7 @@ Theorem~\ref{th:pair} & \source{StonehamComponents}{138}{Every-radix pair of nor
 \end{center}
 The rational de Bruijn equality, \eqref{eq:finitebridge}, the composite-parameter extension of the irrationality criterion, and the transcendence conclusions have the paper proofs above. Roth and Ridout are external inputs. From the manuscript directory, run \texttt{python3 figures/generate.py} and \texttt{latexmk -pdf paper.tex}. The figure data, Lean correspondence checks and literature search record accompany the source.
 
-\paragraph{AI assistance.} OpenAI Codex drafted the exposition, compared it with the cited declarations and prepared the figures.
+\paragraph{AI assistance.} AI systems assisted the project owner in exploring phase patterns, developing proofs of the resonance and realization results, and writing the Lean proofs identified in the correspondence table. OpenAI Codex drafted the exposition, checked its correspondence with the formal declarations and prepared the figures. The project owner makes all authorship and submission decisions.
 
 \bibliographystyle{plain}
 \begingroup
