@@ -58,14 +58,21 @@ The other family has a finite set \(M\) of positive insertion multipliers and ra
  T_{b,c,m}=\sum_{j=0}^\infty\frac{1}{m c^j b^{m c^j}},
  \qquad F=\sum_{m\in M}v_mT_{b,p,m}.
 \end{equation}
-All series here converge absolutely. In the usual Stoneham convention \(\alpha_{b,c}=\sum_{j\ge1}c^{-j}b^{-c^j}\), so \(mT_{b,c,m}=b^{-m}+\alpha_{b^m,c}\). In \eqref{eq:F}, cancellations occur among completed insertions of different components. In \eqref{eq:X}, the successive jumps prescribe the residual numerator on each shell. These mechanisms give different tests for vanishing. Both leave a rational radix orbit on the remaining positions.
+All series here converge absolutely. In the usual Stoneham convention \(\alpha_{b,c}=\sum_{j\ge1}c^{-j}b^{-c^j}\), so \(mT_{b,c,m}=b^{-m}+\alpha_{b^m,c}\). On a cell of \(F\), the different components contribute to a single \(p\)-adic
+numerator. Its vanishing depends on both \(b\) and the weights through the
+cyclotomic test of Theorem~\ref{th:cyclo}. For \(X\), the difference
+\(a_j=c_j-pc_{j-1}\) prescribes the numerator of shell \(j\) directly:
+the completed prefix is integral there precisely when \(c_j=0\) on
+sufficiently late shells. The remaining shells support long rational radix
+orbits. Formula~\eqref{eq:finitebridge} applies the same counting argument
+to the integer-cleared value of \(F\).
 
 Stoneham already used a numerator of the form \(Z_j-pZ_{j-1}\), with unit numerators \(Z_j\) and an insertion schedule built from multiplicative periods \cite{stoneham70,kano}. In Kano's Theorem~1 \cite{kano}, the choice \(\lambda_j=j,\ \mu_j=p^j,\ A_j=a_j\) gives normality when \(p\nmid c_j\) eventually, up to the rational initial term. Here bounded nonzero phases may be divisible by \(p\), and recurring zero phases give a quantitative obstruction. Stoneham's classical series and Bailey--Crandall's general normality results concern individual constants \cite{stoneham,bc}. Vandehey relates incomplete modular orbits to sufficient normality conditions in \cite[\S7]{vandehey}. Rings constructed by Wagner and by Kano and Shiokawa have prescribed normality for nonzero elements \cite{wagner,ks}. Their constructions impose arithmetic conditions on the generators. For arbitrary real summands, even positivity and normality alone put little restriction on a sum: given a fixed \(s>0\), almost every \(x\in(0,s)\) makes both \(x\) and \(s-x\) normal. Appendix~\ref{app:pair} gives explicit positive summands and a common frequency bound for every zero word.
 
-Bailey and Borwein studied nonnormality in other radices and asked about the sum of two standard Stoneham constants with the same construction base \cite{bb}. The 2026 two-sum manuscript treats that question \cite{twosum}. In \eqref{eq:F} the denominator parameter stays fixed while the multipliers \(m\) and weights \(v_m\) vary. Section~\ref{sec:finite} gives the exact criterion for this finite family.
+Bailey and Borwein studied nonnormality in other radices and asked about the sum of two standard Stoneham constants with the same construction base \cite{bb}. The 2026 repository preprint proves the affirmative result for two standard summands in a common construction base \cite{twosum}. In \eqref{eq:F} the denominator parameter stays fixed while the multipliers \(m\) and weights \(v_m\) vary. Section~\ref{sec:finite} gives the exact criterion for this finite family.
 
 \section{Rational orbits of length comparable to the denominator}\label{sec:orbits}
-We need uniformity up to a cutoff inside a cell. Here the reduced denominator is comparable to the cell length, so an elementary estimate suffices. Put \(e(t)=\exp(2\pi i t)\).
+A cutoff may fall inside a cell. The following bound is uniform in the length of the observed segment. Put \(e(t)=\exp(2\pi i t)\).
 
 \begin{lemma}\label{lem:orbits}
 Fix \(b\), a finite set of primes \(P\) none of which divides \(b\), and \(K>0\). As \(q\to\infty\) through integers supported on \(P\),
@@ -73,7 +80,9 @@ Fix \(b\), a finite set of primes \(P\) none of which divides \(b\), and \(K>0\)
  \sup_{\substack{(A,q)=1,\ 0\le T\le Kq\\ I\subseteq[0,1)\ {\rm interval}}}
  \left|\#\{0\le i<T:\fr{A b^i/q}\in I\}-T|I|\right|=o(q).
 \]
-Here \(T\) is an integer and intervals are half-open.
+Here \(T\) is an integer and intervals are half-open. For each fixed
+\(h\in\Z\setminus\{0\}\), uniformly over the same \(A,T\),
+\(\left|\sum_{i<T}e(hA b^i/q)\right|=o_h(q)\).
 \end{lemma}
 \begin{proof}
 Choose \(L\ge1\) with \(g=b^L\equiv1\pmod\ell\) for every \(\ell\in P\), and \(g\equiv1\pmod4\) if \(2\in P\). For \(t=\ord_q(b)\), one has \(q\mid g^t-1\). Lifting the exponent gives
@@ -109,7 +118,7 @@ The positions \(n=up^k+i\), \(0\le i<p^k\), form a cell. The inequalities \(mp^{
 \[
  B_n=(p-1)\sum_{m\in M}g_m\sum_{j=0}^{J_m}p^{t-j}b^{n-mp^j}.
 \]
-Modulo \(p^t\) we may replace \(b^{n-mp^j}\) in the \(j\)-th summand by \(b^nw^m\), since their difference is divisible by \(p^j\). The inner geometric sum times \(p-1\) is \(p^{t+1}-p^{t-J_m}\). Thus
+In \(\Z_p/p^t\Z_p\) we may replace \(b^{n-mp^j}\) in the \(j\)-th summand by \(b^nw^m\), since their difference is divisible by \(p^j\). The inner geometric sum times \(p-1\) is \(p^{t+1}-p^{t-J_m}\). Thus
 \begin{equation}\label{eq:cell}
  B_n\equiv -b^n W_u\pmod{p^t},\qquad
  W_u=\sum_{m\in M}g_mp^{E-j_m(u)}w^m=Dp^E P_u(w).
@@ -148,7 +157,7 @@ A half-open arc crossing zero is the complement of a half-open interval, with th
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{th:shell}]
-Use the comparison points \(\fr{Y_n}\), with \(Y_n=mP_n+b^n r\). For some \(s\) the denominator of \(b^n r\) is constant, say \(q_0\), and coprime to \(b\) for \(n\ge s\): multiplication by \(b\) removes each prime in common with the denominator. The resulting orbit is periodic, of period \(L\ge1\), including \(q_0=1\). Period counting gives \(\lim_N D_N(r)=d_b(r)\).
+Use the comparison points \(\fr{Y_n}\), with \(Y_n=mP_n+b^n r\). Choose a shell boundary \(s=p^{j_0}\) sufficiently late that the denominator of \(b^n r\) is constant, say \(q_0\), and coprime to \(b\) for \(n\ge s\): multiplication by \(b\) removes each prime in common with the denominator. The resulting orbit is periodic, of period \(L\ge1\), including \(q_0=1\). Period counting gives \(\lim_N D_N(r)=d_b(r)\).
 
 On a nonzero shell beyond \(s\), \(Y_n\) follows a rational radix orbit. Its reduced denominator \(q\) divides \(q_0p^j\), and \(\den(P_n)\le |m|q_0q\), by \(mP_n=Y_n-b^nr\). Hence
 \[
@@ -158,16 +167,23 @@ All its prime factors belong to the fixed set of divisors of \(pq_0\). Since the
 \begin{equation}\label{eq:mixture}
  \sup_I\left|\widetilde\mu_N(I)-(1-\theta_N)|I|-\theta_N\nu_r(I)\right|\longrightarrow0 .
 \end{equation}
-The first \(s\) positions and position zero cost \(O((s+1)/N)\). The interval discrepancy of the mixture in \eqref{eq:mixture} is exactly \(\theta_Nd_b(r)\). The paired circle errors for the true samples tend to zero by Lemma~\ref{lem:phase}. Lemma~\ref{lem:perturb} transfers the discrepancy asymptotic by taking \(N\to\infty\) and then \(\delta\downarrow0\). At \(m=1,r=0\), \(d_b(0)=1\), since arbitrarily short intervals contain the atom. This gives \eqref{eq:all}; taking upper limits gives the product.
+The finite prefix before the chosen shell boundary contributes \(O(s/N)\). The interval discrepancy of the mixture in \eqref{eq:mixture} is exactly \(\theta_Nd_b(r)\). The paired circle errors for the true samples tend to zero by Lemma~\ref{lem:phase}. Lemma~\ref{lem:perturb} transfers the discrepancy asymptotic by taking \(N\to\infty\) and then \(\delta\downarrow0\). At \(m=1,r=0\), \(d_b(0)=1\), since arbitrarily short intervals contain the atom. This gives \eqref{eq:all}; taking upper limits gives the product.
 \end{proof}
 
-Normality of \(X\) is equivalent to \(c_j\ne0\) eventually. Finitely many zero shells contribute \(O(1/N)\), and every zero shell gives \(\theta_{p^{j+1}}\ge(p-1)/p\). The upper bound arising from the count of uncontrolled positions alone would prove only \(D_N(X)\le\theta_N+o(1)\). Equality here uses their concentration at one circle point. In a sufficient normality test without such information, failure of a denominator condition supplies neither a lower bound nor a proof of nonnormality.
+Normality of \(X\) is equivalent to \(c_j\ne0\) eventually. Finitely many zero shells contribute \(O(1/N)\), and every zero shell gives \(\theta_{p^{j+1}}\ge(p-1)/p\). Counting the zero-shell positions yields an upper bound. Their concentration at one circle point supplies the matching lower bound.
 
-The same argument identifies the quantitative connection with Theorem~\ref{th:cyclo}. Count the positions \(n<N\) in its resonant cells by \(Z_R(N)\), excluding \(n<S\). For the integer-cleared sum \(U\), the following is a paper deduction:
+To apply the comparison to Theorem~\ref{th:cyclo}, count the positions \(n<N\) in its resonant cells by \(Z_R(N)\), excluding \(n<S\). For the integer-cleared sum \(U\), this gives
 \begin{equation}\label{eq:finitebridge}
  D_N(mU+r)=d_b(r)Z_R(N)/N+o(1)\qquad (m\in\Z\setminus\{0\},\ r\in\Q).
 \end{equation}
-Indeed, \eqref{eq:cell} gives an integral comparison on resonant cells and a denominator comparable to \(p^k\) on every other cell. Multiplication by \(m\) and addition of \(b^nr\) change the latter between the same fixed factors \((|m|q_0)^{-1}\) and \(q_0\) used above. There are only finitely many cell types. Lemma~\ref{lem:orbits}, periodic counting and Lemma~\ref{lem:perturb} give \eqref{eq:finitebridge} at every cutoff. In the \(p=7\) example with \(r=0\), the densities increase on the four consecutive resonant cells and decrease on the others, giving \(D_\infty(6F)=2/3\). Integer dilation transfers the qualitative normality criterion back to \(F\). Recovering a numerical discrepancy after division requires the residues of the integral comparison points modulo the divisor.
+Indeed, \eqref{eq:cell} gives an integral comparison on resonant cells and a denominator comparable to \(p^k\) on every other cell. Multiplication by \(m\) and addition of \(b^nr\) change the latter between the same fixed factors \((|m|q_0)^{-1}\) and \(q_0\) used above. The number of cells before \(N\) is \(O(\log N)\).
+On each resonant segment the count differs from its length times \(\nu_r(I)\)
+by at most one period of the rational orbit, including a final partial segment.
+On the other cells Lemma~\ref{lem:orbits} gives a total centered error \(o(N)\)
+uniformly in \(I\), by summation over geometric scales. After division by \(N\)
+the comparison measure thus differs on intervals by \(o(1)\) from
+\((1-Z_R(N)/N)\lambda+(Z_R(N)/N)\nu_r\). Lemma~\ref{lem:perturb} transfers its
+discrepancy to the original samples and proves \eqref{eq:finitebridge}. In the \(p=7\) example with \(r=0\), the densities increase on the four consecutive resonant cells and decrease on the others, giving \(D_\infty(6F)=2/3\). Since \(F=U/((p-1)D)\), Wall's rational affine invariance theorem \cite{wall} transfers normality between \(F\) and \(U\). Recovering a numerical discrepancy after division requires the residues of the integral comparison points modulo the divisor.
 
 
 \section{Periodic phases and maximal histories}\label{sec:hist}
@@ -187,7 +203,7 @@ Suppose \(c_{j+L}=c_j\) for \(j\ge0\), \(L\ge1\). With \(A=M_L/(p^L-1)\), one ha
 \]
 \end{proposition}
 \begin{proof}
-Over \(L\) steps the recurrence sends an initial value \(x\) to \((x+M_L)/p^L\); its unique fixed point is \(A\). The periodic solution before shell \(r\) is \((M_r+A)/p^r\). Its difference from \(H_j\) is \(A/p^j\) at the \(j\)-th boundary. Alternatively, read the recurrence after a shell of residue \(r\) backwards: the limiting density is \((p-1)\sum_{i\ge0}z_{(r-i)\bmod L}/p^{i+1}\). Grouping by periods and taking the maximum gives the two expressions, by \eqref{eq:all}. The same proof applies when only the zero pattern is eventually periodic, since a finite change of bits changes \(Z(N)\) by a bounded amount.
+Over \(L\) steps the recurrence sends an initial value \(x\) to \((x+M_L)/p^L\); its unique fixed point is \(A\). The periodic solution before shell \(r\) is \((M_r+A)/p^r\). Its difference from \(H_j\) is \(A/p^j\) at the \(j\)-th boundary. Alternatively, read the recurrence after a shell of residue \(r\) backwards: the limiting density is \((p-1)\sum_{i\ge0}z_{(r-i)\bmod L}/p^{i+1}\). Grouping by periods and taking the maximum gives the two expressions, by \eqref{eq:all}. For an eventually periodic zero pattern, extend its eventual period back to shell zero. This changes \(Z(N)\) by \(O(1)\), so the second expression remains valid with the periodic extension. In the first expression \(M_r\) and \(A\) must likewise be computed for that extension.
 \end{proof}
 
 Table~\ref{tab:cycles} gives the cycles for three numbers defined by \eqref{eq:X}. In base two the cycle of \(1/3\) has atoms \(1/3,2/3\) of equal mass. An arc containing both has length at least \(1/3\), and this length is approached. Arcs containing just one have excess at most \(1/2\), so \(d_2(1/3)=2/3\).
@@ -242,12 +258,13 @@ Truncating an admissible word at any index and filling the rest with zeros prese
 
 \begin{figure}[htbp]\centering
 \input{figures/spectrum.tex}
-\caption{Exact finite subset of \(\mathcal S_p\). Each tick is the largest cyclic history value of a binary period of length at most eight. The gap above 0 is at least \(1-1/p\) in each row; Corollary~\ref{cor:symbol} gives its exact length in the full spectrum.}\label{fig:spectrum}
+\caption{Exact finite subset of \(\mathcal S_p\). Each tick is the largest cyclic history value of a binary period of length at most eight. Corollary~\ref{cor:symbol} gives \(1-1/p\) as the least positive value in the full spectrum; the ticks represent only the displayed finite periods.}\label{fig:spectrum}
 \end{figure}
 
-For binary lexicographic order these are the sup-words of Kaneko and Steiner \cite[Theorem~1 and \S4.1]{kanekosteiner}. They prove density of periodic sup-words and identify \(10^\infty\) as the least nonzero word. Theorem~\ref{th:spectrum} realizes the numerical image of this symbolic set as the upper discrepancies of the signed arithmetic family. Parry characterized admissible \(\beta\)-expansions \cite{parry}. Baiocchi and Komornik's Theorem~2.5(a) identifies the infinite expansions of one (infinitely many nonzero digits) that satisfy this suffix condition as the quasi-greedy expansions of one in varying bases \cite{bk}. Here \(V_p\) evaluates in one prescribed integer radix and includes terminating words. Allouche's univoque condition also constrains the complemented word \cite{allouche}.
+For binary lexicographic order these are the sup-words of Kaneko and Steiner \cite[Theorem~1 and \S4.1]{kanekosteiner}. They prove density of periodic sup-words and identify \(10^\infty\) as the least nonzero word. Theorem~\ref{th:spectrum} realizes the numerical image of this symbolic set as the upper discrepancies of the signed arithmetic family. Parry characterized admissible \(\beta\)-expansions \cite{parry}. Baiocchi and Komornik's Theorem~2.5(a) identifies the infinite expansions of one (infinitely many nonzero digits) that satisfy this suffix condition as the quasi-greedy expansions of one in varying bases \cite{bk}. Here \(V_p\) evaluates in one prescribed integer radix and includes terminating words. The two-sided univoque conditions also constrain the complemented word \cite{devries}; Allouche studies their self-Sturmian specialization \cite{allouche}.
 
-At \(p=2\) there is an exact identification with the parameter set in Carminati and Tiozzo \cite[\S2]{ct}: \(1-\mathcal S_2\) consists of the parameters \(t\in[0,1]\) whose doubling orbit avoids \((0,t)\). Indeed complementing the digits gives a suffix-minimal expansion of \(t\). Except for \(t=0\) it has infinitely many ones: an admissible maximal word eventually all ones must be all ones. Use this nonterminating convention for \(t>0\); each suffix then represents the doubling iterate, taking value 1 at the circle point zero. Lexicographic and numerical comparisons agree on these expansions. Avoidance is exactly the assertion that every suffix is at least the original word. Complementing again gives the converse, including \(t=1\).
+For the doubling map, survivor sets and their bifurcations were studied by
+Urba\'nski \cite{urbanski} and Nilsson \cite{nilsson}. At \(p=2\) the correspondence with the parameter set in Carminati and Tiozzo \cite[\S2]{ct} is explicit: \(1-\mathcal S_2\) consists of the parameters \(t\in[0,1]\) whose doubling orbit avoids \((0,t)\). Indeed complementing the digits gives a suffix-minimal expansion of \(t\). Except for \(t=0\) it has infinitely many ones: an admissible maximal word eventually all ones must be all ones. Use this nonterminating convention for \(t>0\); each suffix then represents the doubling iterate, taking value 1 at the circle point zero. Lexicographic and numerical comparisons agree on these expansions. Avoidance is exactly the assertion that every suffix is at least the original word. Complementing again gives the converse, including \(t=1\).
 
 
 \section{Small positive discrepancies and transcendence}\label{sec:small}
@@ -262,7 +279,7 @@ Let \(w\) be a base-\(b\) cyclic de Bruijn word of order \(h\ge1\), \(L=b^h\), a
 Thus for each fixed signed expansion \(X\) with \(D_\infty(X)>0\), the translates obtained by taking successively higher orders have strictly positive upper discrepancies tending to zero.
 \end{proposition}
 \begin{proof}
-The directed graph on words of length \(h-1\) has an edge for each length-\(h\) word, from its prefix to its suffix. Every vertex has \(b\) incoming and \(b\) outgoing edges, and successive appending of the letters of a target word reaches that vertex. An Euler circuit gives the required cyclic word, including the one-vertex case \(h=1\) \cite{debruijn}. The expansion of \(r\) repeats \(w\). Its rotations have distinct initial \(h\)-digit words, hence give one point in each cell \([j/L,(j+1)/L)\).
+The directed graph on words of length \(h-1\) has an edge for each length-\(h\) word, from its prefix to its suffix. Every vertex has \(b\) incoming and \(b\) outgoing edges, and successive appending of the letters of a target word reaches that vertex. An Euler circuit gives the required cyclic word, including the one-vertex case \(h=1\) \cite{debruijn,good}. The expansion of \(r\) repeats \(w\). Its rotations have distinct initial \(h\)-digit words, hence give one point in each cell \([j/L,(j+1)/L)\).
 
 For \(L\) sorted distinct atoms of equal weight, the centered distribution function \(G(t)=\nu_r([0,t))-t\) has slope \(-1\) between atoms. At \(y_j\) its left value is \(j/L-y_j\) and its right limit is \((j+1)/L-y_j\). Since centered interval masses are increments of \(G\), the discrepancy is its oscillation on the circle, namely
 \[
@@ -291,11 +308,15 @@ The partial sum \(R_j\) has reduced denominator \(q_j\) dividing \(Q_j=p^j b^{p^
 \]
 by summing the geometric majorant over all integer radix exponents from \(p^{j+1}\) onwards. In particular \(Q_j|X-R_j|\to0\). If \(X=u/v\) is rational, \(v>0\), then every unequal partial sum has \(|X-R_j|\ge1/(vQ_j)\), so \(R_j=X\) eventually. Thus \(a_{j+1}=0\) eventually. The resulting relation \(c_{j+1}=pc_j\) and boundedness force the phases to be eventually zero. Conversely those phases give a finite rational sum.
 
-Kano also uses lacunary partial sums and restricted denominators for transcendence \cite[Theorem~2]{kano}. For irrational \(X\), the \(R_j\) include infinitely many distinct reduced fractions. For fixed \(1<\mu<p\), the preceding tail bound implies \(0<|X-R_j|<Q_j^{-\mu}\le q_j^{-\mu}\) eventually, since \((p-\mu)p^j\log b\) dominates \(O(j)\). For \(p>2\), choose \(\mu>2\) and apply Roth's theorem \cite{roth}. For every \(p\ge2\), the prime divisors of \(q_j\) belong to the fixed finite set of prime divisors of \(pb\). Ridout's restricted-denominator theorem excludes infinitely many such approximants with exponent \(\mu>1\) for an algebraic irrational \cite{ridout}. This proves transcendence. The padding in Theorem~\ref{th:spectrum} supplies infinitely many nonzero phases, as do the three periodic words. A rational affine map of nonzero slope preserves transcendence.
+Kano also uses lacunary partial sums and restricted denominators for transcendence \cite[Theorem~2]{kano}. For irrational \(X\), the \(R_j\) include infinitely many distinct reduced fractions. For fixed \(1<\mu<p\), the preceding tail bound implies \(0<|X-R_j|<Q_j^{-\mu}\le q_j^{-\mu}\) eventually, since \((p-\mu)p^j\log b\) dominates \(O(j)\). For \(p>2\), choose \(\mu>2\) and apply Roth's theorem \cite{roth}. For every \(p\ge2\), the prime divisors of \(q_j\) belong to the fixed finite set of prime divisors of \(pb\). For a reduced approximant \(u_j/q_j\), convergence to \(X\) gives \(|u_j|=O(q_j)\). Its height is therefore \(O(q_j)\). Ridout's restricted-denominator theorem excludes infinitely many such approximants with exponent \(\mu>1\) for an algebraic irrational \cite{ridout}. This proves transcendence. The padding in Theorem~\ref{th:spectrum} supplies infinitely many nonzero phases, as do the three periodic words. A rational affine map of nonzero slope preserves transcendence.
 \end{proof}
 
 \appendix
 \section{An explicit pair of positive normal summands}\label{app:pair}
+Here the summands are normal in the observation radix although their defining
+series can use different dilations. They need not be the two standard
+common-base generators of the Bailey--Borwein question.
+
 \begin{theorem}\label{th:pair}
 Suppose \(b\ge2\), \(c\ge3\) is odd, \(1\le m<\ell<c\), and \(c\mid b^{\ell-m}+1\). Then \(x=mT_{b,c,m}\) and \(y=\ell T_{b,c,\ell}\) are positive and normal in base \(b\). Their sum is irrational and nonnormal. For every \(h\ge1\),
 \[
@@ -336,7 +357,7 @@ Theorem~\ref{th:pair} & \source{StonehamComponents}{138}{Every-radix pair of nor
 \end{center}
 The rational de Bruijn equality, \eqref{eq:finitebridge}, the composite-parameter extension of the irrationality criterion, and the transcendence conclusions have the paper proofs above. Roth and Ridout are external inputs. From the manuscript directory, run \texttt{python3 figures/generate.py} and \texttt{latexmk -pdf paper.tex}. The figure data, Lean correspondence checks and literature search record accompany the source.
 
-\paragraph{AI assistance.} An AI coding assistant drafted the exposition, checked it against the cited declarations, and prepared the figures. Authorship and submission decisions rest with the project owner.
+\paragraph{AI assistance.} OpenAI Codex drafted the exposition, compared it with the cited declarations and prepared the figures.
 
 \bibliographystyle{plain}
 \begingroup

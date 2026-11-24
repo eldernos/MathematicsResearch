@@ -1,0 +1,13 @@
+# Paper III review disposition
+
+The two independent reports concern [author revision 43bbe0e](https://github.com/eldernos/MathematicsResearch/tree/43bbe0e4edefc489582a759aadb3c26caf2328b0/papers/03-signed-resonance). Both reviewers re-derived the principal claims and checked periodic examples. [Gemini report](gemini.md) · [Sonnet report](sonnet.md)
+
+| Finding | Change in the release manuscript |
+| --- | --- |
+| Finite cyclotomic family versus prescribed phases | The introduction identifies the radix-dependent cyclotomic residue of the finite family and the prescribed residual phase on a shell. It states the difference in clearing conventions and the role of a surviving orbit. The appendix distinguishes its positive summands from two standard common-base generators. |
+| Uniformity, endpoints and eventual periods | The local lemma now states its character-sum conclusion as well as interval counts. The preperiod of a rational orbit is absorbed up to a shell boundary. For eventual periodicity both formulas use a periodic extension, whose finite initial changes have vanishing frequency. The comparison for the integer-cleared cyclotomic family spells out the error from resonant segments and the count on nonresonant cells. |
+| Scaling and transcendence | The text identifies the rational inverse of the clearing multiplier and cites Wall's normality invariance. It explains why the height in Ridout's theorem is bounded by a fixed multiple of the reduced denominator. The narrower Roth consequence is retained to identify the classical input sufficient for the three periodic examples. |
+| Prior literature | The joint-sum preprint is described as a repository preprint and its conclusion is stated. The univoque suffix conditions are distinguished from Allouche's special case. Urbański and Nilsson are credited for the doubling-map background and Good for the general-alphabet cycle construction. |
+| Exposition and figures | Several internal proof-status transitions were replaced by mathematical statements. The second figure has more space for its rows and separates its finite ticks from the least positive value of the limiting spectrum. The first figure is explicitly a plot of the comparison terms, with exact finite counts and source data. |
+
+The arithmetic realization of the histories is the relevant contribution to assess against earlier symbolic results. The reports provide internal mathematical and editorial review. External review and owner-approved authorship remain pending. [Revised PDF](../../03-signed-resonance/paper.pdf) · [Correspondence](../../03-signed-resonance/CORRESPONDENCE.md)

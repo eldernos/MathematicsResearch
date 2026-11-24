@@ -81,13 +81,13 @@ def spectrum():
     save_table("spectrum.csv", ("length", "chronological_zero_bits", "max_reverse_rotation",
                                 "p=2", "p=3"), rows)
 
-    lines = [r"\begin{tikzpicture}[x=11.2cm,y=1cm,font=\small]"]
-    for p, y in [(2, .95), (3, .45)]:
+    lines = [r"\begin{tikzpicture}[x=13.2cm,y=1cm,font=\small]"]
+    for p, y in [(2, 1.52), (3, .68)]:
         lines.append(rf"\draw[black!22] (0,{y}) -- (1,{y});")
         lines.append(rf"\node[left] at (-.015,{y}) {{\(p={p}\)}};")
         for value in sorted(points[p]):
-            lines.append(rf"\draw[ink,line width=.5pt] ({float(value):.7f},{y-.105:.3f}) "
-                         rf"-- ++(0,.21);")
+            lines.append(rf"\draw[ink,line width=.5pt] ({float(value):.7f},{y-.15:.3f}) "
+                         rf"-- ++(0,.30);")
     for value, label in [(0, "0"), (.25, "1/4"), (.5, "1/2"), (.75, "3/4"), (1, "1")]:
         lines.append(rf"\draw ({value},.22) -- ++(0,-.055) node[below] {{\({label}\)}};")
     save_drawing("spectrum.tex", lines)
