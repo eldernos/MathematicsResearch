@@ -30,7 +30,7 @@
 {\small Technical report \enspace $\cdot$ \enspace 24 November 2026}
 \end{center}
 \begin{abstract}
-A segment of the radix orbit of a real number can be tested against the orbit of a rational with reduced denominator \(Q\). For a fixed finite set of primes coprime to the radix, short exponential sums cancel uniformly when \(Q\to\infty\) and \(Q\le T^d\), where \(T\) is the segment length and \(d\) is fixed. We give sufficient conditions for normality with small mean approximation error and exceptional segments. Disjoint pieces of local discrepancy at most \(\delta\) covering a lower proportion \(g\) give limiting upper discrepancy at most \(1-g(1-\delta)\). An endpoint estimate permits overlapping tests. For a localized series, tests at different primes charge only simultaneous failures. An example computes their upper density to within \(10^{-10}\). Two accurate rational models on a common segment must agree modulo one under the polynomial bound in the overlap length. A counting estimate shows that almost every real number escapes all such approximations on prescribed geometric schedules, even with unrestricted denominator primes.
+We give a sufficient condition for normality in base \(b\) by approximating segments of the radix orbit in mean by rational orbits. The denominators grow on a proportion of segments tending to one, have prime factors in a fixed finite set coprime to \(b\), and are bounded by a fixed power of the segment length. The short exponential sum estimate used here is a qualitative consequence of Vandehey's theorem. If disjoint sets of positions have discrepancy at most \(\delta\) and cover a lower proportion \(g\), the limiting upper discrepancy is at most \(1-g(1-\delta)\). For a binary series supported on the primes \(2,5,13\), we enclose the upper density of simultaneous failures of two denominator tests within an interval of width \(10^{-10}\). We also prove that sufficiently accurate models on overlapping segments agree modulo one when their denominators satisfy the same support and size bounds on the overlap. On prescribed geometric schedules, the set of real numbers admitting arbitrarily accurate models has Lebesgue measure zero, even with unrestricted denominator primes.
 \end{abstract}
 
 \section{Rational approximations to digit shifts}
@@ -41,14 +41,14 @@ Let \(b\ge2\) be an integer. Write \(x_n=\{b^n x\}\in[0,1)\), \(e(t)=\exp(2\pi i
  \left|\frac1N\#\{0\le n<N:x_n\in[u,v)\}-(v-u)\right|,
  \qquad D_\infty^{(b)}(x)=\limsup_{N\to\infty}D_N^{(b)}(x).
 \]
-A real number is normal in base \(b\) if every word of length \(r\ge1\) has limiting frequency \(b^{-r}\), counting overlapping occurrences and using the terminating expansion at radix rationals. A word is a half-open interval \([m/b^r,(m+1)/b^r)\). Approximating both endpoints of any interval by points of this grid shows that normality is equivalent to \(D_N^{(b)}(x)\to0\). Write \(\den y\) for the positive denominator of \(y\in\Q\) in lowest terms. Call an integer \(Q\) supported on \(c\) if \(Q\mid c^j\) for some \(j\ge0\).
+A real number is normal in base \(b\) if every word of length \(r\ge1\) has limiting frequency \(b^{-r}\), counting overlapping occurrences and using the terminating expansion at radix rationals. Each word corresponds to a half-open interval \([m/b^r,(m+1)/b^r)\), where \(0\le m<b^r\). Approximating both endpoints of any interval by points of this grid shows that normality is equivalent to \(D_N^{(b)}(x)\to0\). Write \(\den y\) for the positive denominator of \(y\in\Q\) in lowest terms. Call an integer \(Q\) supported on \(c\) if \(Q\mid c^j\) for some \(j\ge0\).
 
 \begin{theorem}[Mean rational approximation]\label{thm:mean}
 Fix \(b,c\ge2\) with \(\gcd(b,c)=1\), and integers \(L\ge2,\ B\ge1,\ d\ge0\). Let \(P_n\in\Q\) satisfy \(b^nx-P_n\to0\) in \(\R\). At scale \(k\ge0\) put
 \[
  A=(LB)^k,\qquad T=B^k,\qquad m=L^k,\qquad A=mT.
 \]
-For each \(u=1,\ldots,LB-1\), each integer \(M\ge1\) and each \(\eta>0\), suppose that for all sufficiently large \(k\) the following holds. Of the \(m\) starts \(n=uA+jT\), \(0\le j<m\), at most \(\eta m\) are exceptional. At every other start there is a rational \(y\) whose denominator \(Q\) is supported on \(c\), such that
+For each \(u=1,\ldots,LB-1\), integer \(M\ge1\) and \(\eta>0\), suppose that all sufficiently large \(k\) admit a set \(E\subseteq\{0,\ldots,m-1\}\) with \(|E|\le\eta m\) such that for every \(j\notin E\) in this range, writing \(n=uA+jT\), there exists a rational \(y\) with reduced denominator \(Q\) supported on \(c\) satisfying
 \begin{equation}\label{eq:mean}
  M\le Q\le T^d,\qquad
  \frac1T\sum_{i=0}^{T-1}\circabs{P_{n+i}-b^i y}\le\eta .
@@ -56,27 +56,27 @@ For each \(u=1,\ldots,LB-1\), each integer \(M\ge1\) and each \(\eta>0\), suppos
 Then \(x\) is normal in base \(b\).
 \end{theorem}
 
-The rational \(y\) may change with the block. The exact-prefix case takes \(y=P_n\) and requires \(P_{n+i}=b^iP_n\) throughout each retained block. The integers \(d,b,c,L,B\) are fixed before the denominator floor or the error tolerance is chosen. If \(B=1\) or \(d=0\), the upper bound is one, so arbitrarily large floors cannot be met. The role of the real tail hypothesis is to pass from the rational observations \(P_j\) to the actual radix shifts. Errors within a block are measured modulo one.
+An \emph{arithmetic certificate} in this setting consists of the block models, the exceptional sets and the estimates in \eqref{eq:mean}, for fixed \(b,c,L,B,d\) and every \(M,\eta\). In the exact case \(y=P_n\) and \(P_{n+i}=b^iP_n\) throughout each retained block. If \(B=1\) or \(d=0\), then \(T^d=1\) precludes the hypotheses for \(M\ge2\) and \(\eta<1\). The real tail transfers character-sum bounds from \(P_n\) to the radix shifts.
 
-Korobov studied digit frequencies on complete and incomplete periods of rational fractions \cite{korobov}. Bailey and Crandall relate radix recurrences with convergent perturbations to normality and use them in lacunary constructions \cite[Thms.~3.1, 4.8, 4.11]{bailey}. Vandehey obtains quantitative cancellation on a fixed finite prime support \cite[Cor.~1.2]{vandehey}. His Theorem~7.4 treats series \(\sum_j c_j^{-1}b^{-m_j}\) with \(c_j\) strictly increasing, \(c_j\mid c_{j+1}\), and a lower growth condition on \(m_j-m_{j-1}\). In Theorem~\ref{thm:mean} the denominator belongs to a model of a shifted prefix, where the sum of many coefficients may have undergone cancellation. The spacing condition is replaced by an estimate of the proportion of usable blocks.
+Korobov studied digit frequencies on complete and incomplete periods of rational fractions \cite{korobov}. Bailey and Crandall relate radix recurrences with convergent perturbations to normality and use them in lacunary constructions \cite{bailey}. Vandehey obtains quantitative cancellation on a fixed finite prime support \cite[Cor.~1.2]{vandehey}. His Theorem~7.4 treats series \(\sum_j c_j^{-1}b^{-m_j}\) with \(c_j\) strictly increasing, \(c_j\mid c_{j+1}\), and a lower growth condition on \(m_j-m_{j-1}\). In Theorem~\ref{thm:mean} the denominator belongs to a model of a shifted prefix, where the sum of many coefficients may have undergone cancellation. The spacing condition is replaced by an estimate of the proportion of usable blocks.
 
-For example, the Stoneham polynomial theorem uses growing denominators on blocks between insertions. In the localized logarithm with binary radix and support \(\{2,3\}\), rational phases with power-of-three denominators already yield a quantitative discrepancy estimate \cite[Thms.~1.1, 4.1]{localized}. Section~\ref{sec:joint} treats several independent denominator exponents by testing the same shifted prefix at different primes. The arithmetic of these two families is developed in the companion papers on \href{https://github.com/eldernos/MathematicsResearch/blob/0e58f3e8a8351f0923b80e693ff76a7ece539c87/papers/01-stoneham-polynomials/paper.pdf}{Stoneham polynomial images} and \href{https://github.com/eldernos/MathematicsResearch/blob/0e58f3e8a8351f0923b80e693ff76a7ece539c87/papers/02-localized-normality/paper.pdf}{localized polylogarithms}. For signed Stoneham expansions the uncovered positions can themselves be localized near zero on the circle. In that case a matching lower bound gives an \src{SignedShellDiscrepancy}{144}{exact prefix discrepancy formula}.
+For polynomial images of Stoneham numbers, the reduced denominator grows on the blocks between successive term insertions. In the localized logarithm with binary radix and support \(\{2,3\}\), rational phases with power-of-three denominators already yield a quantitative discrepancy estimate \cite[Thms.~1.1, 4.1]{localized}. Section~\ref{sec:joint} treats several independent denominator exponents by testing the same shifted prefix at different primes. The arithmetic of these two families is developed in the companion papers on \href{https://github.com/eldernos/MathematicsResearch/blob/0e58f3e8a8351f0923b80e693ff76a7ece539c87/papers/01-stoneham-polynomials/paper.pdf}{Stoneham polynomial images} and \href{https://github.com/eldernos/MathematicsResearch/blob/0e58f3e8a8351f0923b80e693ff76a7ece539c87/papers/02-localized-normality/paper.pdf}{localized polylogarithms}. For signed Stoneham expansions the uncovered positions can themselves be localized near zero on the circle. The discrepancy at cutoff \(N\) then differs from the fraction of positions in zero-phase shells by \(o(1)\), as proved in the \src{SignedShellDiscrepancy}{144}{signed-shell theorem} and developed in the \href{https://github.com/eldernos/MathematicsResearch/blob/e9b4d1ad7d23e61b62da0507864d5b40a7631678/papers/03-signed-resonance/paper.pdf}{companion paper on signed expansions}.
 
 \section{Short sums on a fixed prime support}
-\begin{theorem}[Fixed-support estimate]\label{thm:short}
+\begin{theorem}[Fixed-support estimate, after Vandehey]\label{thm:short}
 For \(b,c\ge2\) coprime, each integer \(d\ge0\) and each \(\epsilon>0\), there is \(M=M(b,c,d,\epsilon)\) such that for every \(T\ge1\), \(y=a/Q\) in lowest terms with \(Q\) supported on \(c\) and \(M\le Q\le T^d\),
 \[
  \left|\frac1T\sum_{i=0}^{T-1}e(b^iy)\right|\le\epsilon .
 \]
 \end{theorem}
-For \(d>0\) the range is \(T\ge Q^{1/d}\). Vandehey's Corollary~1.2 gives \(O_{b,c,d}(Q^{-\sigma}(1+\log Q))\) for the displayed mean, for some \(\sigma>0\). His sum starts at exponent one, an equivalent convention since \(b\) permutes the reduced numerators. We give a qualitative differencing proof to exhibit the uses of fixed support.
+For \(d>0\) the range is \(T\ge Q^{1/d}\). Vandehey's Corollary~1.2 gives \(O_{b,c,d}(Q^{-\sigma}(1+\log Q))\) for the displayed mean, for some \(\sigma>0\). His sum starts at exponent one, an equivalent convention since \(b\) permutes the reduced numerators. The following differencing argument proves this qualitative consequence directly.
 
 \begin{proof}
 Let \(r=\varphi(c^2)\) and \(C=b^r-1\). For each \(p\mid c\) and \(m\ge1\),
 \[
  v_p(b^{rm}-1)=v_p(C)+v_p(m).
 \]
-Indeed \(p\mid C\) by Euler's theorem, and \(4\mid C\) if \(2\mid c\). For \(p\mid z\) (and \(4\mid z\) at \(2\)), the binomial expansion of \((1+z)^p-1\) gives valuation \(v_p(z)+1\). Raising \(1+z\) to an exponent prime to \(p\) preserves the valuation of the difference from one. Iteration proves the formula. For \(Q>1\), let \(v_Q\) denote the order of \(b\) modulo \(Q\). Then \(Q\mid b^{rv_Q}-1\), hence \(Q\mid C v_Q\). In particular \(Q/C\le v_Q\le Q\).
+Indeed \(p\mid C\) by Euler's theorem, and \(4\mid C\) if \(2\mid c\). For \(p\mid z\) (and \(4\mid z\) at \(2\)), the binomial expansion of \((1+z)^p-1\) gives valuation \(v_p(z)+1\). For \(p\nmid u\), the same expansion gives \(v_p((1+z)^u-1)=v_p(z)\). Iteration proves the formula. For \(Q>1\), let \(v_Q\) denote the order of \(b\) modulo \(Q\). Then \(Q\mid b^{rv_Q}-1\), hence \(Q\mid C v_Q\). In particular \(Q/C\le v_Q\le Q\).
 
 Let \(G\) be the subgroup generated by \(b\) modulo \(Q\). Its Fourier sums satisfy
 \[
@@ -92,7 +92,7 @@ We prove uniform convergence to zero when \(K,Q\to\infty,\ T\ge K^3,\ Q\le K^s\)
 \[
  g=\gcd(Q,b^{(l-j)v}-1),\qquad D\mid g,\qquad g\le C(l-j)v\le CHcK.
 \]
-For the last bound \(v_g\mid(l-j)v\) and \(g\le C v_g\). Consequently \(Q/g\le K^s\), while \(Q/g>K^{s-1}/(CHc)\) grows for fixed \(H\).
+The last bound follows since \(v_g\mid(l-j)v\) and \(g\le C v_g\). Consequently \(Q/g\le K^s\), while \(Q/g>K^{s-1}/(CHc)\) grows for fixed \(H\).
 
 Set \(z_i=e(b^iy)\). The mean of \(z_{i+jv}\) over \(i<T\) differs from that of \(z_i\) by at most \(2Hv/T\). Average over \(0\le j<H\) and apply Cauchy--Schwarz in \(i\). The squared modulus of the translated mean is bounded by
 \[
@@ -112,9 +112,9 @@ Thus a good full block contributes at most \((1+2\pi |h|)\eta T\) to the modulus
  \left|\sum_{i<t}e(h P_{uA+i})\right|
  \le(\epsilon+2\pi |h|\delta)mT+(|E|+1)T .
 \end{equation}
-In fact, each exceptional full block and the unfinished last block cost at most \(T\).
+In fact, each exceptional full block and the unfinished last block contributes at most \(T\) to the absolute sum.
 
-Since \(T/A=L^{-k}\to0\), \eqref{eq:prefix} bounds every partial cell sum by \(o(A)\), uniformly in the finitely many \(u\), on letting \(\eta\downarrow0\). For a prefix ending in the shell \([A,(LB)A)\), sum over its earlier shells and its completed or partial cells. From any fixed large scale onward, an upper bound \(\rho (LB)^j\) per cell contributes at most \(\rho (LB-1)\sum_{j=0}^k (LB)^j\le \rho LB\,A\). Earlier positions cost a fixed constant. Divide by the prefix length, at least \(A\), and send \(\rho\) to zero. The character means for \(P_n\) therefore vanish. Those for \(b^nx\) have the same limit by the tail hypothesis and the Lipschitz bound. Weyl's criterion \cite{weyl} proves normality.
+Since \(T/A=L^{-k}\to0\), \eqref{eq:prefix} bounds every partial cell sum by \(o(A)\), uniformly in the finitely many \(u\), on letting \(\eta\downarrow0\). For a prefix ending in the shell \([A,(LB)A)\), sum over its earlier shells and its completed or partial cells. From any fixed large scale onward, an upper bound \(\rho (LB)^j\) per cell contributes at most \(\rho (LB-1)\sum_{j=0}^k (LB)^j\le \rho LB\,A\). Earlier positions contribute a bounded term. Divide by the prefix length, at least \(A\), and send \(\rho\) to zero. The character means for \(P_n\) therefore vanish. Those for \(b^nx\) have the same limit by the tail hypothesis and the Lipschitz bound. Weyl's criterion \cite{weyl} proves normality.
 \end{proof}
 
 \section{Coverage and overlapping intervals}\label{sec:cover}
@@ -133,9 +133,9 @@ Suppose disjoint pieces in \([0,N)\) cover \(G\) positions altogether and each n
 If, for every \(\epsilon>0\) and all sufficiently large \(N\), such pieces can be chosen with \(G/N\ge g-\epsilon\), then \(D_\infty\le1-g(1-\delta)\). More generally let \(F_N\subset[0,N)\) with \(\liminf |F_N|/N\ge g\). If \(\sup_I|C_I(F_N)|=o(N)\), then \(D_\infty\le1-g\).
 \end{proposition}
 \begin{proof}
-On a piece \(F\), the centered sum has absolute value at most \(\delta |F|\). An uncovered position costs at most one since \(|\mathbf1_I-|I||\le1\). Add over the disjoint pieces and the remainder, then divide by \(N\) and take the supremum. The asymptotic inequality follows on letting \(\epsilon\downarrow0\). In the last assertion the two analogous costs are \(o(N)\) and \(N-|F_N|\).
+On a piece \(F\), the centered sum has absolute value at most \(\delta |F|\). An uncovered position contributes at most one in absolute value since \(|\mathbf1_I-|I||\le1\). Add over the disjoint pieces and the remainder, then divide by \(N\) and take the supremum. The asymptotic inequality follows on letting \(\epsilon\downarrow0\). In the last assertion the two analogous costs are \(o(N)\) and \(N-|F_N|\).
 \end{proof}
-A fixed digit resolution has a different effect. If each of the \(q\ge1\) equal mesh intervals has limiting frequency \(1/q\), every union of consecutive mesh intervals has its correct limiting frequency, uniformly over this finite list. Inscribing and circumscribing an arbitrary interval by grid intervals changes its length by at most \(2/q\) on each side. Hence \(D_\infty\le2/q\). In particular a test at one resolution gives a discrepancy bound even when finer resolutions have yet to be controlled.
+A fixed digit resolution has a different effect. If each of the \(q\ge1\) equal mesh intervals has limiting frequency \(1/q\), every union of consecutive mesh intervals has its correct limiting frequency, uniformly over this finite list. For each test interval, the circumscribed grid interval exceeds its length by at most \(2/q\), and the inscribed one falls short by at most \(2/q\). Hence \(D_\infty\le2/q\). In particular a test at one resolution gives a discrepancy bound even when finer resolutions have yet to be controlled.
 
 \begin{proposition}[Endpoint paths]\label{prop:path}
 Let \(f_i\) take values in a normed abelian group, with \(\|f_i\|\le1\), and let \(S(n)=\sum_{i<n}f_i\). Give an undirected edge between \(a\) and \(b'\) a cost \(w\) whenever \(\|S(b')-S(a)\|\le w\). Then
@@ -147,11 +147,11 @@ on any path from \(0\) to \(N\) with successive edge costs \(w_j\). If an interv
 \begin{proof}
 The telescoping sum for \(S(N)-S(0)\) uses a negative sign whenever an edge is traversed backwards. The triangle inequality gives the path cost. To restrict an edge, traverse the left discarded interval backwards, then the full edge, then the right discarded interval backwards. The discarded edges have costs at most \(l,r\), and directly summing over the middle gives \(t\). For centered counts divide by \(N\) and take the supremum over \(I\).
 \end{proof}
-For example, three consecutive runs \(+1,-1,+1\) of the same length \(T\) give zero sums on both adjoining intervals of length \(2T\). Their union has sum \(T\). In the opposite direction, zero sums on \([0,8),[2,8),[2,10)\) force the sum on \([0,10)\) to vanish by the path with vertices \(0,8,2,10\).
+For example, three consecutive runs \(+1,-1,+1\) of the same length \(T\) give zero sums on both overlapping intervals of length \(2T\). Their union has sum \(T\). In the opposite direction, zero sums on \([0,8),[2,8),[2,10)\) force the sum on \([0,10)\) to vanish by the path with vertices \(0,8,2,10\).
 
 There is an exact interpretation of the shortest path when only scalar edge bounds are known. Include a unit-cost edge between every two consecutive indices in a finite range containing \(0,N\). If \(d(j)\) is the shortest path distance from \(0\), set \(f_i=d(i+1)-d(i)\). Then \(|f_i|\le1\) and \(|d(j)-d(k)|\le w\) on every given edge of cost \(w\). These data attain \(S(N)=d(N)\). Additional information about the particular characters or centered counts can give a smaller bound.
 
-\section{Several tests for the same denominator}\label{sec:joint}
+\section{Joint denominator tests at several primes}\label{sec:joint}
 Let \(S\) be a finite set of primes. Write \(\mathcal M(S)\) for the positive integers supported on \(S\), including \(1\). For an integer \(s\ge1\) put
 \[
  X=\sum_{m\in\mathcal M(S)}\frac{b^{-m}}{m^s},
@@ -159,9 +159,9 @@ Let \(S\) be a finite set of primes. Write \(\mathcal M(S)\) for the positive in
 \]
 For \(p\in S\) with \(p\nmid b\), choose a precision \(L_p\ge1\). Put \(w_p=(b^{-1})^{p^{L_p-1}}\bmod p^{L_p}\) and define on \(1\le t<p\)
 \begin{equation}\label{eq:res}
- U_p(t)=\sum_{is<L_p} p^{is}
+ U_p(t)=\sum_{\substack{i\ge0\\is<L_p}} p^{is}
    \sum_{\substack{r\in\mathcal M(S\setminus\{p\})\\r\le p^i t}}
-     r^{-s}w_p^r \pmod {p^{L_p}},\qquad i\ge0 .
+     r^{-s}w_p^r \pmod {p^{L_p}} .
 \end{equation}
 The inverses exist modulo \(p^{L_p}\). The failed region \(Z_p=\{t:U_p(t)=0\}\) is a finite union of half-open intervals. For \(n\ge1\) put \(k_p(n)=\lfloor\log_p n\rfloor\), \(t_p(n)=n/p^{k_p(n)}\) and \(B_p=\{n\ge1:t_p(n)\in Z_p\}\). For \(E\subseteq\Z_{\ge1}\), let \(\overline d(E)=\limsup_{N\to\infty}\#(E\cap[1,N))/N\).
 
@@ -174,13 +174,15 @@ For each nonempty \(J\subseteq\{p\in S:p\nmid b\}\) and any fixed choices of \(L
 \begin{proof}
 Fix \(p\in J\), let \(L=L_p\), and write \(k=k_p(n)\). Expand \(p^{ks}b^{-n}R_n\) by writing \(m=p^{k-i}r\), \(p\nmid r\). Row \(i\) carries the factor \(p^{is}\) and the cutoff \(r\le p^it_p(n)\). Euler's theorem gives \(w_p^p=w_p\bmod p^L\). If \(k\ge2(L-1)\), then \(k-i\ge L-1\) for all \(is<L\), so the factor \(b^{-p^{k-i}r}\) in those rows reduces to \(w_p^r\). All other rows vanish modulo \(p^L\). This proves \eqref{eq:res} is the residue of \(p^{ks}b^{-n}R_n\). At a passing position \(v_p(\den R_n)\ge ks-L+1\) for \(ks\ge L-1\). For any prescribed \(M\) the denominator is consequently at least \(M\) at all sufficiently late positions passing any test, since \(J\) is finite.
 
-For an arbitrary large \(N\) take \(T=\lfloor\sqrt N\rfloor\). Partition its prefix into consecutive blocks of length \(T\), discarding the remainder, the initial block and each block \([a,a+T)\) for which \([a-T,a+T]\) contains an index from \(\mathcal M(S)\). Each index discards at most three full blocks. Up to \(N+T\) there are at most \((1+\log_2(N+T))^{|S|}\) such indices, by their exponent vectors. The discarded part contains \(o(N)\) positions. On a retained block,
+Following the block decomposition for the localized logarithm \cite[\S5]{localized}, take for each large \(N\) the length \(T=\lfloor\sqrt N\rfloor\). Partition its prefix into consecutive blocks of length \(T\), discarding the remainder, the initial block and each block \([a,a+T)\) for which \([a-T,a+T]\) contains an index from \(\mathcal M(S)\). Each index discards at most three full blocks. Up to \(N+T\) there are at most \((1+\log_2(N+T))^{|S|}\) such indices, by their exponent vectors. The discarded part contains \(o(N)\) positions. On a retained block,
 \(R_{a+i}=b^iR_a\) for \(i<T\). Also \(0\le b^nX-R_n\le(n+1)^{-s}/(b-1)\), uniformly small for \(n\ge T\).
 
-Let \(c=\prod_{p\in S,\,p\nmid b}p\) and \(H=\lceil\log_2(N+T)\rceil\). For \(m\le a\), \(m\in\mathcal M(S)\), one has \(m^s\mid b^{sH}c^{sH}\). Every such summand is at least \(T\) shifts old at \(a\). Once \(T\ge sH\), its reduced denominator divides \(c^{sH}\), hence so does \(\den R_a\). Since \(c,s\) are fixed this common denominator is at most \(T^d\) for a fixed integer \(d\) and all large \(N\).
+Let \(c=\prod_{p\in S,\,p\nmid b}p\) and \(H=\lceil\log_2(N+T)\rceil\). For \(m\le a\), \(m\in\mathcal M(S)\), one has \(m^s\mid b^{sH}c^{sH}\). The retained-block condition gives \(a-m\ge T\) for each such summand. Once \(T\ge sH\), its reduced denominator divides \(c^{sH}\), hence so does \(\den R_a\). Since \(c,s\) are fixed this common denominator is at most \(T^d\) for a fixed integer \(d\) and all large \(N\).
 
-On a retained block containing a passing position, \(\den R_{a+i}\mid\den R_a\), so the starting denominators grow uniformly as \(N\to\infty\). Theorem~\ref{thm:short}, reduction after multiplication by each fixed \(h\ne0\), and the real tail bound give vanishing character means uniformly on these blocks. Their discrepancies tend uniformly to zero. Otherwise choose a sequence of violating blocks. Trigonometric polynomial approximation gives convergence of their empirical measures to Lebesgue measure on the circle, first on continuous functions and then on each interval of a fixed finite mesh by continuous upper and lower approximations. Inscription and circumscription on arbitrarily fine meshes give a contradiction. Each remaining full block consists entirely of joint failures. Proposition~\ref{prop:cover} now gives a prefix cost at most the number of joint failures plus \(o(N)\), proving \eqref{eq:joint}.
+On a retained block containing a passing position, \(\den R_{a+i}\mid\den R_a\), so the starting denominators grow uniformly as \(N\to\infty\). Theorem~\ref{thm:short}, reduction after multiplication by each fixed \(h\ne0\), and the real tail bound give vanishing character means uniformly on these blocks. Their discrepancies tend uniformly to zero. Indeed, if uniform convergence failed, some sequence of these blocks would have discrepancy bounded below by a positive constant. Trigonometric polynomial approximation gives convergence of their empirical measures to Lebesgue measure on the circle, first on continuous functions and then on each interval of a fixed finite mesh by continuous upper and lower approximations. Inscription and circumscription on arbitrarily fine meshes give a contradiction. Each remaining full block consists entirely of joint failures. Proposition~\ref{prop:cover} now bounds \(N D_N^{(b)}(X)\) by the number of joint failures in the prefix plus \(o(N)\), proving \eqref{eq:joint}.
 \end{proof}
+
+The full unsigned classification in the \href{https://github.com/eldernos/MathematicsResearch/blob/0e58f3e8a8351f0923b80e693ff76a7ece539c87/papers/02-localized-normality/paper.pdf}{companion paper on localized polylogarithms} already gives normality when \(J\) is nonempty. The fixed-precision bound above also quantifies how much of an orbit these particular tests certify before one passes to a limit in precision.
 
 \subsection*{Two primes on logarithmic scales}
 For a fixed pair \(p\ne q\) as above, define
@@ -194,7 +196,7 @@ Partial summation bounds this logarithmic density above by \(\overline d(B_p\cap
 \subsection*{A worked binary example}
 Take \(b=2,\ S=\{2,5,13\},\ s=1\). At precision one only \(i=0\) contributes to \eqref{eq:res}. For \(p=5\), the cofactors below 5 are \(1,2,4\). The partial residues \(3,0,4\bmod5\) give \(Z_5=[2,4)\). For \(p=13\), the cofactors \(1,2,4,5,8,10\) give successive residues \(7,12,11,8,10,0\bmod13\), hence \(Z_{13}=[10,13)\). The individual upper densities are \(5/8\) and \(1/4\). At the end of a band \([ap^j,ep^j)\), the accumulated fraction tends to \(p(e-a)/(e(p-1))\), and between such endpoints the fraction first decreases and then increases.
 
-To compute the upper density \(D_{\rm fail}\) of their intersection, extend both families of bands to all integer exponents on the positive real axis. This changes their mass below 1 by at most one. At integer cutoffs the counts above 1 equal lengths, since all the original endpoints are integers. The accumulated fraction can attain a local maximum at a right endpoint of either family. Divide all coordinates by such an endpoint. If the fixed band is \([a,e)\) for the prime \(p\), its scaled copies are \(p^{-j}[a/e,1)\), \(j\ge0\). The other prime \(q\) contributes \(u q^{-j}[a',e')\), \(j\ge0\), with \(1/q\le u\le1\), clipped to \([0,1]\). The phases \(u\) approached at successive fixed endpoints are dense in this range by irrationality of \(\log p/\log q\).
+To compute the upper density \(D_{\rm fail}\) of their intersection, extend both families of bands to all integer exponents on the positive real axis. This changes their mass below 1 by at most one. At integer cutoffs the counts above 1 equal lengths, since all the original endpoints are integers. On a component of the intersection the accumulated fraction is nondecreasing, and in the next gap it is nonincreasing. Its upper limit can therefore be computed at right endpoints of components, each a right endpoint of at least one family. Divide all coordinates by such an endpoint. If the fixed band is \([a,e)\) for the prime \(p\), its scaled copies are \(p^{-j}[a/e,1)\), \(j\ge0\). The other prime \(q\) contributes \(u q^{-j}[a',e')\), \(j\ge0\), with \(1/q\le u\le1\), clipped to \([0,1]\). The phases \(u\) approached at successive fixed endpoints are dense in this range by irrationality of \(\log p/\log q\).
 
 Discard \([0,\tau)\), with \(0<\tau<1\). Only finitely many copies remain. Each intersection length is an affine function of \(u\) between crossings of moving endpoints with fixed endpoints (including the clipping boundaries). Its maximum therefore occurs at one of these finitely many ratios or at a phase endpoint. The sum is continuous there. If \(m_\tau\) is the larger of the two anchor maxima, density of the phases and a tail of length at most \(\tau\) give
 \[
@@ -220,7 +222,7 @@ Thus \(D_{\rm fail}\) rounds to \(0.233241755\) at nine decimal places. This is 
     \draw (\x,0)--++(0,-.003);
     \node[below=1pt] at (\x,0){\pgfmathprintnumber{\x}};}
   \node[rotate=90] at (-.13,.125){Joint failure length};
-  \node at (.5,-.036){Relative scale \(u\)};
+  \node[anchor=north] at (.5,-.050){Relative scale \(u\)};
   \input{figures/curves.tex}
   \fill[ink] (jointPeak) circle[radius=1.8pt];
   \node[above,font=\scriptsize,ink] at (jointPeak) {\(5/13\)};
@@ -229,10 +231,10 @@ Thus \(D_{\rm fail}\) rounds to \(0.233241755\) at nine decimal places. This is 
   \draw[anchorThirteen] (.56,.284)--(.62,.284);
   \node[right] at (.63,.284){Endpoint of a 13-band};
 \end{tikzpicture}
-\caption{Exact finite computation for the binary support \(\{2,5,13\}\) at precision one. The curves give the joint failed length in \([10^{-5},1]\) after rescaling a right endpoint to 1. The dashed curve starts at \(1/13\), the solid curve at \(1/5\). The solid peak occurs at \(u=5/13\), where the newest left endpoints coincide at \(10/13\).}\label{fig:curves}
+\caption{Exact finite computation for the binary support \(\{2,5,13\}\) at precision one. The curves give the joint failed length in \([10^{-5},1]\) after rescaling a right endpoint to 1. The parameter \(u\) sets the relative scale of the other prime\textquoteright s bands. The dashed curve starts at \(1/13\), the solid curve at \(1/5\). The solid peak occurs at \(u=5/13\), where the newest left endpoints coincide at \(10/13\).}\label{fig:curves}
 \end{figure}
 
-At precision two both primes have empty failed regions. For example, the \(i=0,1\) rows modulo 25 change only at \(t=1,8/5,2,13/5,16/5,4\), where their combined residues are respectively \(13,23,10,15,20,14\). For \(p=13\) the same finite check on \(t=j/13\), \(13\le j<169\), gives residues in \(\{7,\ldots,168\}\) on every cell. Theorem~\ref{thm:joint} now gives \(D_\infty^{(2)}(X)=0\). The positive density in Figure~\ref{fig:curves} measures the loss at precision one.
+At precision two both primes have empty failed regions. For example, the \(i=0,1\) rows modulo 25 change only at \(t=1,8/5,2,13/5,16/5,4\), where their combined residues are respectively \(13,23,10,15,20,14\). For \(p=13\) checking the grid \(t=j/13\), \(13\le j<169\), includes all cell boundaries. The smallest and largest residues are 7 and 167. Theorem~\ref{thm:joint} now gives \(D_\infty^{(2)}(X)=0\). Thus a positive upper density of failures at the first precision is compatible with zero limiting discrepancy.
 
 \section{Separation on a shared segment}\label{sec:rigidity}
 \begin{theorem}[Uniform separation]\label{thm:rigidity}
@@ -251,7 +253,9 @@ For \(1<Q<M\), every \(b^iw\) still has reduced denominator \(Q\), hence distanc
 \end{proof}
 
 \begin{corollary}[Overlapping models]\label{cor:chain}
-Suppose that a sequence of pairs of models satisfies the support and size hypotheses of Theorem~\ref{thm:rigidity} eventually, with positive lengths \(T_j\), and their combined mean error on the common samples tends to zero. Eventually the two starting phases are equal modulo one. For a chain in which block \(j+1\) starts \(r_j\ge0\) shifts after block \(j\), apply this assertion to the aligned pair \(b^{r_j}y_j,y_{j+1}\). The reduced denominators of the block models are eventually constant.
+Fix \(b,c,d\) as in Theorem~\ref{thm:rigidity}. For each \(j\) let \(T_j\ge1\), and let \(y_j,z_j\) have reduced denominators supported on \(c\) and at most \(T_j^d\). If for observations \(f^{(j)}_i\), \(0\le i<T_j\), the left side of \eqref{eq:rigid} for this pair tends to zero as \(j\to\infty\), then \(y_j-z_j\in\Z\) for all sufficiently large \(j\).
+
+In particular, consider consecutive blocks with rational models \(y_j,y_{j+1}\), whose start indices differ by \(r_j\ge0\) and whose overlap has length \(T_j\ge1\). Suppose both denominators are supported on \(c\) and at most \(T_j^d\). If the combined mean error of the aligned models \(b^{r_j}y_j,y_{j+1}\) on their common observations tends to zero, then \(\den y_j\) is eventually constant.
 \end{corollary}
 \begin{proof}
 Once the error is below \(\gamma\), \eqref{eq:rigid} forces integral difference. Multiplication by \(b^{r_j}\) preserves any denominator supported on \(c\), and an integer translation preserves it as well. Therefore \(\den y_{j+1}=\den y_j\) for all sufficiently large \(j\).
@@ -259,10 +263,10 @@ Once the error is below \(\gamma\), \eqref{eq:rigid} forces integral difference.
 
 Both the error and the size bound in this argument refer to the \emph{overlap}. Small mean error on a longer block can concentrate on its short shared part. A size bound polynomial in the original length suffices if that length is bounded by a fixed power of \(T\). Three examples distinguish the restrictions.
 
-If a denominator shares a radix factor, the models \(0,1/b\) coincide after one shift. Their mean distance is \(1/(bT)\). Without the size bound, the fixed-support models \(0,c^{-T^2}\) have mean distance at most \(b^Tc^{-T^2}\to0\). Finally put \(Q_m=b^m-1\) and take \(0,1/Q_m\) with \(T=mQ_m\). These denominators are prime to \(b\) and at most \(T\). Each length-\(m\) period has sum of the distances to zero at most \(\sum_{j<m} b^j/Q_m=1/(b-1)\). Their mean distance tends to zero, so arbitrary changes of prime support defeat uniform separation even with \(d=1\). The same example has first character mean tending to one. Its denominators escape every fixed coprime support since \(v_{Q_m}\le m\) and any fixed support would give \(Q_m\le C m\) in the proof of Theorem~\ref{thm:short}.
+If a denominator shares a radix factor, the models \(0,1/b\) coincide after one shift. Their mean distance is \(1/(bT)\). Without the size bound, the fixed-support models \(0,c^{-T^2}\) have mean distance at most \(b^Tc^{-T^2}\to0\). Finally, for \(m\ge2\) put \(Q_m=b^m-1\) and take \(0,1/Q_m\) with \(T=mQ_m\). These denominators are prime to \(b\) and at most \(T\). Each length-\(m\) period has sum of the distances to zero at most \(\sum_{j<m} b^j/Q_m=1/(b-1)\). Their mean distance tends to zero, so arbitrary changes of prime support defeat uniform separation even with \(d=1\). The same example has first character mean tending to one. No fixed finite set of primes supports all these denominators since \(v_{Q_m}\le m\) and any fixed support would give \(Q_m\le C m\) in the proof of Theorem~\ref{thm:short}.
 
 \section{A counting obstruction}\label{sec:count}
-The orbit of a Lebesgue-typical point has little chance of following any low-denominator rational for a whole prescribed block in mean circle distance. The obstruction does not require fixed prime support. Let \(\lambda\) be Lebesgue probability measure on \([0,1)\).
+We bound the measure of points approximated on a prescribed block by any rational orbit whose denominator is bounded by a power of the block length. Let \(\lambda\) be Lebesgue probability measure on \([0,1)\).
 
 \begin{theorem}[Polynomially many rational models]\label{thm:count}
 Fix \(b\ge2,\ d\in\Z_{\ge0}\), put \(a=b^2\), and set \(\eta_b=1/(16a^2)\). For a prescribed start \(n\ge0\) and length \(T\ge2\), let \(E_{n,T}\) consist of all \(x\in[0,1)\) for which a rational \(y\) with \(\den y\le T^d\) satisfies \(T^{-1}\sum_{i<T}\circabs{b^{n+i}x-b^iy}\le\eta_b\). Then
@@ -280,10 +284,10 @@ Give digit \(1\) weight one and every other digit weight two. The total product 
 \]
 Indeed \(T\le3J\) for \(T\ge2\), hence \(K\log2\le 3J\log2/(16a)\le J/(4a)\). There are at most \(\sum_{q\le T^d}q\le T^{2d}\) rational models modulo one. A union bound gives \eqref{eq:prob}. Multiplying by the number of starts leaves a summable sequence in \(k\). The first Borel--Cantelli lemma gives the assertion without independence between starts.
 \end{proof}
-The exponential estimate is a finite-word instance of the standard lower-tail estimate for independent digits (compare Hoeffding \cite{hoeffding}). Borel--Cantelli also applies simultaneously to a countable family of prescribed schedules. In particular the integer parameters \(b,B,L,d\) of Theorem~\ref{thm:mean} give only countably many schedules, with \((LB-1)L^k\) starts per scale. On a late block the real tail \(b^jx-P_j=o(1)\) changes its mean error by \(o(1)\) uniformly for \(j\) beyond the block start. An arbitrarily accurate certificate for \(P\) would therefore give an approximation in \eqref{eq:prob}. Borel's theorem gives normality for almost every \(x\) \cite{borel}. The numbers admitting these certificates form a null set. The estimate concerns prescribed search ranges and gives no verdict for a specified constant.
+The exponential estimate is a finite-word instance of the standard lower-tail estimate for independent digits (compare Hoeffding \cite{hoeffding}). Borel--Cantelli also applies simultaneously to a countable family of prescribed schedules. In particular the integer parameters \(b,B,L,d\) of Theorem~\ref{thm:mean} give only countably many schedules, with \((LB-1)L^k\) starts per scale. On a late block the real tail \(b^jx-P_j=o(1)\) changes its mean error by \(o(1)\) uniformly for \(j\) beyond the block start. An arbitrarily accurate certificate for \(P\) would therefore give an approximation in \eqref{eq:prob}. Borel's theorem gives normality for almost every \(x\) \cite{borel}. The numbers admitting these certificates form a null set. This measure estimate applies to prescribed schedules.
 
 \section{Formal correspondence and sources}
-The formal statements use the \src{Basic}{23}{digit-cylinder definition of normality} and the \src{BinaryDiscrepancy}{11}{supremum over half-open intervals}. In Theorem~\ref{thm:mean} the Lean statement takes the short-orbit estimate as an argument. Theorem~\ref{thm:short} supplies it for the \(b,c\) in the printed statement. For Theorem~\ref{thm:joint}, Lean indexes precision \(L_p\) by \(L_p-1\) and expresses the upper density hypothesis as a bound with arbitrarily small slack for every late prefix. Theorem~\ref{thm:count} uses a formal finite word count. The measure estimate, the two-prime logarithmic density, the sharpness statement for scalar edge data, and the rational enclosure in the worked example are proved or computed here on paper.
+The formal statements use the \src{Basic}{23}{digit-cylinder definition of normality} and the \src{BinaryDiscrepancy}{11}{supremum over half-open intervals}. In Theorem~\ref{thm:mean} the Lean statement takes the short-orbit estimate as an argument. Theorem~\ref{thm:short} supplies it for the \(b,c\) in the printed statement. For Proposition~\ref{prop:cover} the formal statement specializes the observations to radix orbits. For Theorem~\ref{thm:joint}, Lean indexes precision \(L_p\) by \(L_p-1\) and expresses the upper density hypothesis as a bound with arbitrarily small slack for every late prefix. Theorem~\ref{thm:count} uses a formal finite word count. The measure estimate, the two-prime logarithmic density, the sharpness statement for scalar edge data, and the rational enclosure in the worked example are proved or computed here on paper.
 
 \begin{center}
 \small
@@ -292,18 +296,18 @@ The formal statements use the \src{Basic}{23}{digit-cylinder definition of norma
 Printed result & Lean declaration at the proof revision\\ \midrule
 Theorem~\ref{thm:mean} (AC-01) &
  \src{ArithmeticCertificate}{62}{\nolinkurl{normal_of_approximate_arithmetic_certificate}}\\
-Theorem~\ref{thm:short}, \eqref{eq:prefix} &
+Theorem~\ref{thm:short} (AC-04), \eqref{eq:prefix} &
  \src{SmoothOrbit}{207}{\nolinkurl{fixed_support_orbit_estimate}}\newline
  \src{ArithmeticCertificate}{34}{\nolinkurl{approximate_prefix_bound}}\\
 Proposition~\ref{prop:cover} (AC-02) &
  \src{QualityCoverage}{13}{\nolinkurl{Coverage.fixed_quality_cover}}\newline
  \src{QualityCoverage}{38}{\nolinkurl{Coverage.asymptotic_fixed_quality}}\newline
  \src{PartialUniformity}{75}{\nolinkurl{discrepancy_of_uniform_share}}\\
-Proposition~\ref{prop:path} (AC-02) &
+Proposition~\ref{prop:path} (AC-07) &
  \src{IntervalCoverage}{15}{\nolinkurl{Coverage.endpoint_path}}\newline
  \src{IntervalCoverage}{39}{\nolinkurl{Coverage.restrict_edge}}\newline
  \src{IntervalCoverage}{67}{\nolinkurl{Coverage.discrepancy_of_paths}}\\
-Theorem~\ref{thm:joint} (AC-02) &
+Theorem~\ref{thm:joint} (AC-06) &
  \src{DiscrepancyChecker}{113}{\nolinkurl{LocalizedSupport.discrepancy_of_joint_failures}}\\
 First-precision example &
  \src{DiscrepancyChecker}{141}{\nolinkurl{LocalizedSupport.five_thirteen_first_failures}}\newline
@@ -315,7 +319,7 @@ Theorem~\ref{thm:rigidity}, Corollary~\ref{cor:chain} (AC-03) &
  \src{OrbitRigidity}{32}{\nolinkurl{smooth_overlap_separation}}\newline
  \src{OrbitRigidity}{83}{\nolinkurl{smooth_overlap_rigidity}}\newline
  \src{OrbitRigidity}{101}{\nolinkurl{overlap_chain_denominator}}\\
-Theorem~\ref{thm:count}, word inequality &
+Theorem~\ref{thm:count} (AC-10), word inequality &
  \src{ModelCounting}{14}{\nolinkurl{few_symbol_words}}\\ \bottomrule
 \end{tabular}
 \end{center}
@@ -333,7 +337,7 @@ papers/build.sh 04-arithmetic-certificates
 \end{minipage}
 
 \smallskip
-\noindent\emph{AI assistance.} AI tools assisted the mathematical development, Lean proofs and exposition. Authorship and submission decisions rest with the project owner.
+\noindent\emph{AI assistance.} OpenAI Codex drafted the mathematical exposition, compared the statements with their Lean declarations and prepared the figure and its data.
 
 \begingroup\small
 \bibliographystyle{plain}

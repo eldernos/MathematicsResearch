@@ -628,7 +628,7 @@ If in addition *c* ≥ 2 is any integer coprime to *b* with *c* ≡ 1 (mod *d*) 
 
 ### CR-01 · Cyclotomic classification of finite combinations of Stoneham-type components
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *d* be the multiplicative order of *b* modulo *p*. For each positive integer *m* put
 
@@ -656,7 +656,7 @@ Then *F* = Σ *a*ₘ *T*ₘ is normal in base *b* if and only if the *d*-th cycl
 
 ### CR-02 · Exactly two rational coefficients make a binary two-term sum nonnormal
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 For each positive integer *m* put
 
@@ -678,7 +678,7 @@ For every rational number *a*, the number *T*₁ + *a T*₂ is normal in base 2 
 
 ### CR-04 · Exact weak limits and two different limiting distributions for one resonant sum
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Keep the notation of CR-01. Let *R* be the number of integers *u* with *S* ≤ *u* < *pS* for which Φ<sub>*d*</sub> divides *P*ᵤ, put *w* = *R*/((*p* − 1)*S*), and let *L* be (*p* − 1) times the product over *m* ∈ *M* of the reduced denominators of *a*ₘ/*m*. For every continuous complex-valued function *f* on the circle ℝ/ℤ, put
 
@@ -706,7 +706,7 @@ For *b* = 2, *p* = 7 and *F* = *T*₁ + 2*T*₂ + 3*T*₃ one has *L* = 6, and *
 
 ### CR-05 · Positive combinations are normal when the base is 1 modulo the prime
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 In the setting of CR-01 suppose in addition that *b* ≡ 1 (mod *p*). Then for every nonempty finite set *M* of positive integers and every choice of positive rational coefficients *a*ₘ, the number *F* = Σ *a*ₘ *T*ₘ is normal in base *b*. In particular every such positive combination with *b* = 10 and *p* = 3 is normal in base 10.
 
@@ -722,7 +722,7 @@ In the setting of CR-01 suppose in addition that *b* ≡ 1 (mod *p*). Then for e
 
 ### CR-06 · A finite rational test for binary combinations with parameter 3
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *T*ₘ be as in CR-02, let *M* be a finite set of positive integers, let *a*ₘ be rational, and let *S* be a positive integer with *m* ≤ *S* for every *m* ∈ *M*. For *S* ≤ *u* < 3*S* let *j*ₘ(*u*) be the largest *j* ≥ 0 with *m* 3ʲ ≤ *u*, and put
 
@@ -744,7 +744,7 @@ Then *F* = Σ *a*ₘ *T*ₘ is normal in base 2 if and only if *H*ᵤ ≠ 0 for 
 
 ### CR-07 · Every ordered partial sum of a decomposition of ln 2 is binary normal
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *T*ₘ be as in CR-02. Summing over all positive integers *m* not divisible by 3,
 
@@ -768,7 +768,7 @@ and for every *K* ≥ 1 the finite partial sum of *T*ₘ over 1 ≤ *m* ≤ *K* 
 
 ### DS-01 · Exact discrepancy of signed Stoneham expansions
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, and let *c*₀, *c*₁, … be a bounded sequence of integers. Put *a*₀ = *c*₀ and *a*ⱼ₊₁ = *c*ⱼ₊₁ − *p c*ⱼ, and
 
@@ -796,7 +796,7 @@ and consequently the limiting discrepancy *D*∞(*X*) = lim sup *D*<sub>*N*</sub
 
 ### DS-02 · Discrepancy of periodic phases and the values 27/40, 3/4 and 12/13
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 In the setting of DS-01 suppose that the phases have period *L* ≥ 1. For 0 ≤ *r* ≤ *L* let *M*ᵣ be the number of zero-shell positions below *pʳ*, namely the sum of *p*ⁱ⁺¹ − *pⁱ* over those *i* < *r* with *c*ᵢ = 0, and put *A* = *M*<sub>*L*</sub>/(*pᴸ* − 1). Then
 
@@ -825,7 +825,7 @@ respectively.
 
 ### DS-03 · Rational translation multiplies the discrepancy by that of the rational orbit
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 In the setting of DS-01 let *m* be a nonzero integer and *r* a rational number. Let *D*(*r*) be the limiting discrepancy of the orbit {*bⁿr*}, which equals the interval discrepancy of the uniform measure on one period of its eventual cycle. Then for all prefix lengths
 
@@ -854,7 +854,7 @@ for every nonzero integer *m*.
 
 ### DS-04 · The attainable discrepancies are the values of suffix-maximal binary words
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 For a one-sided binary word *s* = *s*₀*s*₁*s*₂… and an integer *p* ≥ 2 put
 
@@ -878,7 +878,7 @@ Fix *b* ≥ 2 and a prime *p* with *p* ∤ *b*. A real number δ equals *D*∞(*
 
 ### DS-05 · Compactness, a gap above zero and periodic approximation in the spectrum
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *p* ≥ 2 and let *S*ₚ be the set of values *V*ₚ(*s*) of suffix-maximal binary words (DS-04). Then
 
@@ -900,7 +900,7 @@ Moreover, let *p* be a prime with *p* ∤ *b*, let *s* be suffix-maximal and let
 
 ### DS-06 · A signed expansion is normal exactly when its phases are eventually nonzero
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 In the setting of DS-01, the number *X* is normal in base *b* if and only if *c*ⱼ ≠ 0 for all sufficiently large *j*.
 
@@ -916,7 +916,7 @@ In the setting of DS-01, the number *X* is normal in base *b* if and only if *c*
 
 ### DS-07 · Irrationality criterion and transcendence of signed expansions
 
-**Evidence:** Lean + written deduction · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean + written deduction · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 In the setting of DS-01, the number *X* is irrational if and only if *c*ⱼ ≠ 0 for infinitely many *j*. In that case *X* is transcendental.
 
@@ -933,7 +933,7 @@ In the setting of DS-01, the number *X* is irrational if and only if *c*ⱼ ≠ 
 
 ### DS-08 · Rational translations give arbitrarily small positive discrepancy
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *b* ≥ 2 and let *t* ≥ 2 be an integer coprime to *b*. The limiting discrepancies *D*(*t*⁻ᵏ) of the rational orbits {*bⁿ t*⁻ᵏ} are positive and tend to 0 as *k* → ∞. Consequently, in the setting of DS-01, if *D*∞(*X*) > 0 then for every ε > 0 and all sufficiently large *k*,
 
@@ -955,7 +955,7 @@ Also, if a cyclic base-*b* word of length *L* places exactly one of its *L* rota
 
 ### DS-09 · Changing the shell schedule: equal zero patterns with discrepancies 9/13 and 12/13
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *b* = 2 and *p* = 3. For the phases repeating 0, 1, 3 (starting at *c*₀) the jump at every index 3*k* + 2 vanishes, and for the phases repeating 0, 0, 1 the jump at every index 3*k* + 1 vanishes. Their limiting discrepancies are 9/13 and 12/13 respectively.
 
@@ -971,7 +971,7 @@ Let *b* = 2 and *p* = 3. For the phases repeating 0, 1, 3 (starting at *c*₀) t
 
 ### DS-11 · Hausdorff dimension of the discrepancy spectrum
 
-**Evidence:** Written proof · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Written proof · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 For every integer *p* ≥ 2 the set *S*ₚ of DS-05 has Hausdorff dimension log 2 / log *p*, and its Hausdorff measure in that dimension is zero. In particular *S*₂ has dimension 1 and Lebesgue measure zero, and every *S*ₚ is closed and nowhere dense. For fixed rational *r* the translated spectrum is *D*(*r*) · *S*ₚ. The union of the translated spectra over all rational *r* has dimension log 2 / log *p*, zero Hausdorff measure in that dimension, and closure [0, 1].
 
@@ -986,7 +986,7 @@ For every integer *p* ≥ 2 the set *S*ₚ of DS-05 has Hausdorff dimension log 
 
 ### AC-01 · Normality from rational orbit models on most blocks
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b* ≥ 2 and let *c* ≥ 2 be an integer coprime to *b*. Let *x* be real and let *P*₀, *P*₁, … be rational numbers with *bⁿx* − *P*ₙ → 0. Fix integers *B* ≥ 1, *L* ≥ 2 and *d* ≥ 0. At scale *k*, for each integer *u* with 1 ≤ *u* < *LB* and each 0 ≤ *l* < *Lᵏ*, consider the block of *T* = *Bᵏ* positions starting at *n* = (*u Lᵏ* + *l*) *Bᵏ*. Suppose that for every such *u*, every integer *M* and every η > 0, for all sufficiently large *k* there is an exceptional set of at most η*Lᵏ* indices *l* such that every other block admits a rational number *y* whose reduced denominator *q* satisfies
 
@@ -1014,7 +1014,7 @@ where ‖·‖ is the distance to the nearest integer. Then *x* is normal in bas
 
 ### AC-04 · Cancellation in short radix orbits with smooth denominators
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b*, *c* ≥ 2 be coprime integers and let *d* ≥ 0. For every η > 0 there is an integer *M* such that for every rational *y* and every integer *T* ≥ 0, if the reduced denominator *q* of *y* satisfies *q* ≥ *M*, *q* divides a power of *c*, and *q* ≤ *Tᵈ*, then
 
@@ -1034,7 +1034,7 @@ Let *b*, *c* ≥ 2 be coprime integers and let *d* ≥ 0. For every η > 0 there
 
 ### AC-05 · Exact rational discrepancy certificates for prime-restricted logarithmic series
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b* ≥ 2 and *s* ≥ 1, let *P* be a finite set of primes, and let
 
@@ -1063,7 +1063,7 @@ For *b* = 7, *P* = {2, 3, 5} and *p* = 5 the right side equals 5/12, 1/4 and 0 a
 
 ### AC-06 · Charging only simultaneous failures of several prime tests
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 In the setting of AC-05, let *J* be a nonempty set of primes of *P* none of which divides *b*, each with its own precision. Write *B*ₚ for the set of positions *n* whose cell coordinate fails the test for *p*. If for every ε > 0 and all sufficiently large *N* the number of *n* < *N* lying in every *B*ₚ, *p* ∈ *J*, is at most (*D* + ε)*N*, then *D*∞(*X*) ≤ *D*.
 
@@ -1082,7 +1082,7 @@ For *b* = 2, *s* = 1 and *P* = {2, 5, 13}, the two first-precision tests at 5 an
 
 ### AC-08 · Square-root bound for incomplete orbits of 2 modulo powers of 3
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *k* ≥ 2, let *A* be an integer not divisible by 3, and let *u*, *N* ≥ 0. Then
 
@@ -1104,7 +1104,7 @@ Let *k* ≥ 2, let *A* be an integer not divisible by 3, and let *u*, *N* ≥ 0.
 
 ### AC-02 · Partial coverage bounds the discrepancy
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b* ≥ 2 and *x* be real, and write *u*ₙ = {*bⁿx*}. Let *N* > 0 and let *G*₁, …, *G*ₖ be pairwise disjoint subsets of {0, …, *N* − 1} with union of size *G*. Suppose that, for some real *d* and every interval [α, β) ⊆ [0, 1] and every *i*,
 
@@ -1128,7 +1128,7 @@ In particular, if a family of selected sets covering a lower proportion *g* is a
 
 ### AC-03 · Rigidity of overlapping smooth rational models
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b*, *c* ≥ 2 be coprime and let *d* ≥ 0. There is δ > 0 with the following property. Let *T* ≥ 1, let *x* and *y* be rationals whose reduced denominators are at most *Tᵈ* and have all prime factors dividing *c*, and suppose *x* − *y* is not an integer. Then for all real numbers *f*₀, *f*₁, …, with ‖·‖ the distance to the nearest integer,
 
@@ -1150,7 +1150,7 @@ Consequently, if two such families of models *xₙ*, *yₙ* on common blocks of 
 
 ### AC-07 · Discrepancy bounds from certified paths between prefix endpoints
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b* ≥ 2, *x* real and *N* > 0. For an interval [α, β) ⊆ [0, 1] let *S*(*v*) be the number of *n* < *v* with α ≤ {*bⁿx*} < β, minus *v*(β − α). Suppose that for every such interval there are integers 0 = *v*₀, *v*₁, …, *v*ₘ = *N* and costs *c*₀, …, *c*ₘ₋₁ with |*S*(*v*ᵢ₊₁) − *S*(*v*ᵢ)| ≤ *c*ᵢ and *c*₀ + ⋯ + *c*ₘ₋₁ ≤ *DN*. Then *D*<sub>*N*</sub>(*x*) ≤ *D*.
 
@@ -1546,7 +1546,7 @@ satisfy *D*<sub>*N*</sub>(*x*₁) → 2/3 and *D*<sub>*N*</sub>(*x*₂) → 2/3.
 
 ### CR-03 · Two positive normal numbers with an irrational nonnormal sum, in every base
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 For integers *b* ≥ 2, *c* ≥ 2 and *m* ≥ 1 put
 
@@ -1583,7 +1583,7 @@ is irrational and not normal in base *b*, and for every *r* ≥ 0 the upper freq
 
 ### DS-10 · Division by an integer can change the discrepancy factor
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (draft)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
 
 Let *b* = 2, *p* = 3, let *Y* be the expansion of DS-01 with phases repeating 1, 0, and put *X* = 9*Y* + 3/8. Then *D*∞(*X*) = 3/4 and *D*∞(*X*/9) = 1/2.
 
@@ -1599,7 +1599,7 @@ Let *b* = 2, *p* = 3, let *Y* be the expansion of DS-01 with phases repeating 1,
 
 ### AC-09 · Concentration near finitely many residues forces nonnormality
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Let *b* ≥ 2, let *x* be real and let *C* be a finite set of real numbers. Suppose there is η > 0 such that for every ε > 0 there are infinitely many *N* for which at least η*N* of the integers 0 ≤ *n* < *N* satisfy |*bⁿx* − *t* − *z*| < ε for some *t* ∈ *C* and some integer *z*. Then *x* is not normal in base *b*.
 
@@ -1617,7 +1617,7 @@ In particular, if *P*ₙ are real numbers with *bⁿx* − *P*ₙ → 0 and, for
 
 ### AC-10 · Accurate polynomial-denominator models are rare on a fixed schedule
 
-**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (draft)
+**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
 
 Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of length *T* = *Bᵏ* at the starts used in AC-01. For Lebesgue-almost every *x* in [0, 1), only finitely many of these blocks admit a rational *y* with denominator at most *Tᵈ* and, with ‖·‖ the distance to the nearest integer,
 
@@ -1652,13 +1652,13 @@ Restrict the series for a polylogarithm of positive integer order to the integer
 
 ### III. Resonance and Discrepancy in Signed Stoneham Expansions
 
-**Status:** draft · **Results:** [CR-01](#cr-01) · [DS-01](#ds-01) · [DS-03](#ds-03) · [DS-04](#ds-04) · [Directory](../papers/03-signed-resonance)
+**Status:** internally reviewed · **Results:** [CR-01](#cr-01) · [DS-01](#ds-01) · [DS-03](#ds-03) · [DS-04](#ds-04) · [Directory](../papers/03-signed-resonance)
 
 A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
 
 ### IV. Arithmetic Certificates for Normality and Their Limitations
 
-**Status:** draft · **Results:** [AC-01](#ac-01) · [AC-02](#ac-02) · [AC-03](#ac-03) · [Directory](../papers/04-arithmetic-certificates)
+**Status:** internally reviewed · **Results:** [AC-01](#ac-01) · [AC-02](#ac-02) · [AC-03](#ac-03) · [Directory](../papers/04-arithmetic-certificates)
 
 Normality follows when most blocks of a radix orbit are approximated in mean by rational orbits whose denominators grow, are polynomially bounded and have prime factors in a fixed finite set. Partial coverage gives explicit discrepancy bounds, and overlapping certificates combine through endpoint paths and joint failure accounting. Two accurate smooth rational models on a common block must coincide modulo one, and a counting argument limits what such models can explain.
 

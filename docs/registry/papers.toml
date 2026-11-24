@@ -31,7 +31,7 @@ dir = "papers/03-signed-resonance"
 title = "Resonance and Discrepancy in Signed Stoneham Expansions"
 families = ["CR", "DS"]
 principal = ["CR-01", "DS-01", "DS-03", "DS-04"]
-status = "draft"
+status = "internally reviewed"
 abstract = '''
 A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
 '''
@@ -42,7 +42,7 @@ dir = "papers/04-arithmetic-certificates"
 title = "Arithmetic Certificates for Normality and Their Limitations"
 families = ["AC"]
 principal = ["AC-01", "AC-02", "AC-03"]
-status = "draft"
+status = "internally reviewed"
 abstract = '''
 Normality follows when most blocks of a radix orbit are approximated in mean by rational orbits whose denominators grow, are polynomially bounded and have prime factors in a fixed finite set. Partial coverage gives explicit discrepancy bounds, and overlapping certificates combine through endpoint paths and joint failure accounting. Two accurate smooth rational models on a common block must coincide modulo one, and a counting argument limits what such models can explain.
 '''
