@@ -68,3 +68,5 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error paper.tex
 ```
 
 The figure also ships in PDF, so rebuilding the manuscript alone requires only LaTeX and BibTeX. The manuscript has been compiled and its pages visually checked. It is a research draft for expert review. Authorship, final attribution and submission remain with the project owner.
+
+The standalone contracts and checks first appear in [manuscript revision 9796812](https://github.com/eldernos/MathematicsResearch/tree/9796812804e0e22f6adb49436a8ff98cb8814c07/papers/02-localized-normality). The earlier library checkpoint supplies the mathematical results linked in Table 1. The independent reports and dispositions are in the [review record](../reviews/README.md).

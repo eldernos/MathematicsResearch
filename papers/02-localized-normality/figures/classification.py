@@ -16,7 +16,7 @@ def limit(base, support):
 
 
 def support_label(support):
-    return "{" + ", ".join(map(str, support)) + "}"
+    return "{" + ", ".join(map(str, support)) + "}" if support else "∅"
 
 
 def draw(surface):
