@@ -23,3 +23,7 @@ public import NormalityChecker.FixedGap
 public import NormalityChecker.LocalizedExamples
 public import NormalityChecker.LocalizedDiscrepancy
 public import NormalityChecker.CompositeLayers
+public import NormalityChecker.MixedPowers
+public import NormalityChecker.SmoothCertificates
+public import NormalityChecker.PolynomialInsertions
+public import NormalityChecker.RadixTelescoping

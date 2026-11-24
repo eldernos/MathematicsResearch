@@ -31,7 +31,7 @@ theorem insertion_count (S : Finset ℕ) (D : ℕ) : (indices S (2^D)).card ≤ 
       rw [outside hms,outside hns]
   simpa using card_le_card_of_injOn (t:=univ) code (fun _ _ => mem_univ _) inj
 
-private lemma cofactor_dvd {S : Finset ℕ} {b r D : ℕ} (hb : 0<b) (base : ∀ q ∈ S, q ∣ b)
+lemma cofactor_dvd {S : Finset ℕ} {b r D : ℕ} (hb : 0<b) (base : ∀ q ∈ S, q ∣ b)
     (hr : r ∈ Nat.factoredNumbers S) (hD : r ≤ 2^D) : r ∣ b^D := by
   apply (Nat.factorization_le_iff_dvd hr.1 (pow_pos hb _).ne').mp
   intro q; rw [Nat.factorization_pow,Finsupp.nsmul_apply,smul_eq_mul]

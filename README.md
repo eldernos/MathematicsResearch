@@ -4,7 +4,19 @@
 
 [![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
-NormalityChecker decides normality for finite rational sums of Stoneham-type components. Its correctness theorem connects a Boolean calculation to the limiting frequency of every overlapping digit block. The repository also contains proofs about logarithmic denominators and the open normality question for ln 2. [Note for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
+NormalityChecker gives exact arithmetic certificates for normality in an integer base. Its finite cyclotomic checker decides normality of rational sums of Stoneham-type components. A second checker proves normality of infinite prime-restricted expansions when a finite modular calculation succeeds. Both conclusions concern the limiting frequencies of all overlapping digit blocks. [Note for reviewers](notes/reviewers.md) · [Research conversation](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221)
+
+## Normality from rational prefixes
+
+A general Lean theorem proves normality when reduced prefix denominators grow on most insertion-free blocks, have prime factors from a fixed set coprime to the radix, and are polynomially bounded in the block length. The required short-orbit estimate is proved in the repository. [Certificate and proof guide](notes/arithmetic-certificates.md) · [Formal orbit estimate](NormalityChecker/SmoothOrbit.lean)
+
+| Application | Kernel-verified conclusion |
+| --- | --- |
+| Mixed localized polylogarithms | For $`m=q^a c^j`$, the sum of $`1/(m^s b^m)`$ over all exponent pairs is base-$`b`$ normal for every integer $`s\ge1`$, whenever $`b,q,c\ge2`$, $`q\mid b^A`$ for some $`A`$, and $`\gcd(b,c)=1`$. |
+| Independent prime exponents | A passing residue test proves normality at any positive integer order. The earlier order-one certificates for $`\{2,5,7\}`$, $`\{2,5,11\}`$ and $`\{2,5,7,11,13\}`$ now give binary normality. |
+| A Stoneham constant with polynomially spaced insertions | Adding $`\sum_{m\ge1}3^{-\lfloor\log_3m\rfloor}2^{-m^r}`$ to the binary Stoneham component with parameter 3 preserves normality for every positive integer $`r`$. For the dense case $`r=1`$, the perturbed sum is exactly $`3-3S`$, where $`S`$ includes the initial term $`1/2`$. |
+
+The mixed and perturbed families have unconditional proofs. The research note gives the conditions behind each certificate, its relation to published exponential-sum estimates, and the obstruction that remains for $`\ln 2`$. [Mixed series](NormalityChecker/MixedPowers.lean) · [Finite-support checker](NormalityChecker/SmoothCertificates.lean) · [Perturbations](NormalityChecker/PolynomialInsertions.lean)
 
 ## The cyclotomic checker
 
@@ -72,7 +84,7 @@ For each fixed triple, Lean also proves that the interval discrepancy of the fir
 
 ## Finite certificates for infinite prime-restricted sums
 
-The logarithmic series supported on $`2^a3^j5^c`$ is **decimal normal**. Five residues modulo 9 certify every sufficiently large rational prefix. More generally, an executable test checks every cell of a finite partition. Success proves normality when all support primes except the selected odd prime divide the base. This also gives decimal normality for the supports $`\{2,5,7\}`$ and $`\{2,5,11\}`$, and base-30 normality for $`\{2,3,5,7\}`$. [Proof and worked certificates](notes/localized-certificates.md) · [Literal three-exponent theorem](NormalityChecker/LocalizedExamples.lean)
+The logarithmic series supported on $`2^a3^j5^c`$ is **decimal normal**. Five residues modulo 9 certify every sufficiently large rational prefix. More generally, an executable test checks every cell of a finite partition. Success proves normality for a fixed finite prime support with a selected prime coprime to the base. This also gives decimal normality for the supports $`\{2,5,7\}`$ and $`\{2,5,11\}`$, and base-30 normality for $`\{2,3,5,7\}`$. [Proof and worked certificates](notes/localized-certificates.md) · [Literal three-exponent theorem](NormalityChecker/LocalizedExamples.lean)
 
 ## The two arithmetic milestones
 
@@ -155,6 +167,6 @@ lake exe cache get $(sed -nE 's/^(public )?import (Mathlib\.[A-Za-z0-9_.]+)$/\2/
 scripts/verify.sh
 ```
 
-The verification script builds the library, audits the transitive axiom dependencies of the headline theorems, then replays every project module with `leanchecker`. The audit permits only `propext`, `Classical.choice`, and `Quot.sound`. GitHub Actions runs the same checks on pushes and pull requests. The original verified baseline is tagged `research-checkpoint-1`. [Axiom audit](Audit.lean) · [CI workflow](.github/workflows/lean.yml)
+The verification script first compares the Python certificate cells against exact rational prefixes, then builds the library, audits the transitive axiom dependencies of the headline theorems, then replays every project module with `leanchecker`. The audit permits only `propext`, `Classical.choice`, and `Quot.sound`. GitHub Actions runs the same checks on pushes and pull requests. The original verified baseline is tagged `research-checkpoint-1`. The preceding localized-logarithm results are preserved at `research-checkpoint-7`. [Axiom audit](Audit.lean) · [CI workflow](.github/workflows/lean.yml)
 
 The project is an AI-assisted formalization of questions raised in the linked conversation. Lean checks the declarations and their dependencies. The correspondence between the definitions and the intended mathematics, and questions of priority, remain matters for human review. Original contributions are MIT-licensed. The port of Trevor Morris’s Weyl criterion retains Apache-2.0 and identifies the upstream revision in its header. [MIT license](LICENSE) · [Weyl license](NormalityChecker/Analysis/LICENSE-Weyl) · [Upstream Weyl criterion](https://github.com/gotrevor/normal-numbers/blob/6260625c6836d8bb172da4b011e089f63a728c41/src/NormalNumbers/WeylCriterion.lean)

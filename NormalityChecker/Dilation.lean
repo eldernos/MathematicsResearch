@@ -35,7 +35,7 @@ private lemma norm_mean_sq {f : ℕ → ℂ} {N : ℕ} (hN : 0<N) :
   rw [mean,norm_div,Complex.norm_natCast,div_pow,div_le_div_iff₀ (by positivity) hn]
   nlinarith [mul_le_mul_of_nonneg_right (h'.trans h) hn.le]
 
-private lemma phase_conj (x : ℝ) : conj (phase x) = phase (-x) := by
+lemma phase_conj (x : ℝ) : conj (phase x) = phase (-x) := by
   rw [phase,phase, ← Complex.exp_conj]; push_cast; simp; ring_nf; rw [map_ofNat]; ring_nf
 
 /-- Arbitrarily large sets of pairwise orthogonal time translates force

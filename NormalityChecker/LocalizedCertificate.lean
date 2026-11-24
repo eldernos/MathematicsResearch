@@ -44,29 +44,33 @@ theorem canonical_lift_fixed {p b : ℕ} (hp : p.Prime) (hb : b.Coprime p) (ell 
   rw [← pow_mul,ex,pow_add,unit,one_mul]
 
 /-- The integer grid coordinate is `floor(n / p^(k-ell))`. -/
-def cellResidue (p ell : ℕ) (S : Finset ℕ) (w : ZMod (p^(ell+1))) (u : ℕ) :=
+def powerCellResidue (order p ell : ℕ) (S : Finset ℕ) (w : ZMod (p^(ell+1))) (u : ℕ) :=
   ∑ i ∈ range (ell+1), ∑ r ∈ indices S (u/p^(ell-i)),
-    (p:ZMod (p^(ell+1)))^i * (r:ZMod _)⁻¹ * w^r
+    ((p:ZMod (p^(ell+1)))^i * (r:ZMod _)⁻¹)^order * w^r
+
+def cellResidue := powerCellResidue 1
 
 /-- Left endpoints of the exact half-open cells, in units of `1 / p^ell`. -/
 def cellStarts (p ell : ℕ) (S : Finset ℕ) : Finset ℕ :=
   insert (p^ell) (((range (ell+1)).biUnion (fun i =>
     (indices S (p^(i+1)-1)).image (fun r => r*p^(ell-i)))).filter (fun u => p^ell ≤ u))
 
-def passes (b p ell seed : ℕ) (S : Finset ℕ) : Bool :=
+def passesPower (order b p ell seed : ℕ) (S : Finset ℕ) : Bool :=
   let w := inverseLift b p ell seed
-  decide (w^p = w) && decide (∀ u ∈ cellStarts p ell S, cellResidue p ell S w u ≠ 0)
+  decide (w^p = w) && decide (∀ u ∈ cellStarts p ell S, powerCellResidue order p ell S w u ≠ 0)
 
-private lemma cell_cover {p ell u : ℕ} (hp : 0 < p) (S : Finset ℕ)
+def passes := passesPower 1
+
+private lemma cell_cover (order : ℕ) {p ell u : ℕ} (hp : 0 < p) (S : Finset ℕ)
     (w : ZMod (p^(ell+1))) (lo : p^ell ≤ u) (hi : u < p^(ell+1)) :
-    ∃ v ∈ cellStarts p ell S, cellResidue p ell S w u = cellResidue p ell S w v := by
+    ∃ v ∈ cellStarts p ell S, powerCellResidue order p ell S w u = powerCellResidue order p ell S w v := by
   let starts := (cellStarts p ell S).filter (· ≤ u)
   have left : p^ell ∈ starts := mem_filter.mpr ⟨mem_insert_self ..,lo⟩
   let v := starts.max' ⟨_,left⟩
   have hv : v ∈ starts := starts.max'_mem _
   have hvu := (mem_filter.mp hv).2
   refine ⟨v,(mem_filter.mp hv).1,?_⟩
-  unfold cellResidue; apply sum_congr rfl; intro i h
+  unfold powerCellResidue; apply sum_congr rfl; intro i h
   have hei : i ≤ ell := by simpa using mem_range.mp h
   have e : p^(i+1)*p^(ell-i)=p^(ell+1) := by rw [← pow_add]; congr 1; omega
   have heq : indices S (u/p^(ell-i)) = indices S (v/p^(ell-i)) := by
@@ -90,28 +94,34 @@ private lemma fixed_lift {b p ell seed j : ℕ} (hj : seed ≤ j)
   | base => rfl
   | succ j _ ih => rw [pow_succ p j,pow_mul,ih,fixed]
 
+def powerWeight (b order m : ℕ) : ℚ := 1 / ((m:ℚ)^order * (b:ℚ)^m)
+
+def powerPartial (b order : ℕ) (S : Finset ℕ) (n : ℕ) := ∑ m ∈ indices S n, powerWeight b order m
+
+def powerShifted (b order : ℕ) (S : Finset ℕ) (n : ℕ) := (b:ℚ)^n * powerPartial b order S n
+
 /-- The cell residue is the reduction of the full unshifted, normalized prefix. -/
-theorem prefix_residue {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+theorem power_prefix_residue {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
     (hb : b.Coprime p) (hk : seed+ell ≤ k) (hi : n < p^(k+1))
     (fixed : (inverseLift b p ell seed)^p = inverseLift b p ell seed) :
-    Represents ((p:ℚ)^k*partialSum b (insert p S) n)
-      (cellResidue p ell S (inverseLift b p ell seed) (n/p^(k-ell))) := by
+    Represents (((p:ℚ)^k)^order*powerPartial b order (insert p S) n)
+      (powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell))) := by
   let M := p^(ell+1)
   let w := inverseLift b p ell seed
-  let row (i : ℕ) := ∑ r ∈ indices S (n/p^(k-i)), (p:ZMod M)^i * (r:ZMod M)⁻¹ * w^r
-  have row_eq : ∑ i ∈ range (k+1), row i = cellResidue p ell S w (n/p^(k-ell)) := by
-    unfold cellResidue
+  let row (i : ℕ) := ∑ r ∈ indices S (n/p^(k-i)), ((p:ZMod M)^i * (r:ZMod M)⁻¹)^order * w^r
+  have row_eq : ∑ i ∈ range (k+1), row i = powerCellResidue order p ell S w (n/p^(k-ell)) := by
+    unfold powerCellResidue
     calc _ = ∑ i ∈ range (ell+1), row i := by
            symm; apply sum_subset (range_mono (by omega))
            intro i _ h; have hi' : ell+1 ≤ i := by simpa using h
            have hz : (p:ZMod M)^i=0 := by
              exact_mod_cast (ZMod.natCast_eq_zero_iff (p^i) M).mpr (pow_dvd_pow p hi')
-           simp [row,hz]
+           simp [row,hz,positive.ne']
          _ = _ := by
            apply sum_congr rfl; intro i hi'; dsimp only [row]
            have hei : i ≤ ell := by simpa using mem_range.mp hi'
            rw [Nat.div_div_eq_div_mul,← pow_add,show k-ell+(ell-i)=k-i by omega]
-  rw [← row_eq,partialSum,sum_layers hp hs n k hi,← sum_range_reflect (fun j => ∑ r ∈ indices S (n/p^j), weight b (p^j*r)) (k+1)]
+  rw [← row_eq,powerPartial,sum_layers hp hs n k hi,← sum_range_reflect (fun j => ∑ r ∈ indices S (n/p^j), powerWeight b order (p^j*r)) (k+1)]
   simp only [Nat.add_sub_cancel,mul_sum]
   apply rep_sum; intro i hi'
   have hik : i ≤ k := by simpa using mem_range.mp hi'
@@ -121,25 +131,33 @@ theorem prefix_residue {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) 
   let m := p^j*r
   have hu : IsUnit (r:ZMod M) := (ZMod.isUnit_iff_coprime ..).mpr ((hp.factoredNumbers_coprime hs hsr).symm.pow_right _)
   have hbu : IsUnit (b:ZMod M) := (ZMod.isUnit_iff_coprime ..).mpr (hb.pow_right _)
-  refine ⟨p^i,r*b^m,by simpa using hu.mul (hbu.pow m),?_,?_⟩
+  refine ⟨(p^i)^order,r^order*b^m,by simpa using (hu.pow order).mul (hbu.pow m),?_,?_⟩
   · have hb0 : b ≠ 0 := by intro h; subst b; simp [hp.ne_one] at hb
     have hr0 := hsr.1
     have e : (p:ℚ)^i*(p:ℚ)^j = (p:ℚ)^k := by rw [← pow_add]; congr 1; dsimp [j]; omega
-    change ((r*b^m:ℕ):ℚ)*((p:ℚ)^k*weight b m) = (p^i:ℕ)
-    simp only [weight,Nat.cast_mul,Nat.cast_pow]
-    rw [← e]; dsimp [m]; push_cast; field_simp [hp.ne_zero]
+    change ((r^order*b^m:ℕ):ℚ)*(((p:ℚ)^k)^order*powerWeight b order m) = ((p^i)^order:ℕ)
+    simp only [powerWeight,Nat.cast_mul,Nat.cast_pow]
+    rw [← e]; dsimp [m]; push_cast; rw [mul_pow,mul_pow]; field_simp [hp.ne_zero]
   · push_cast
     by_cases h : i ≤ ell
     · have hl := fixed_lift (j:=j) (by dsimp [j]; omega : seed ≤ j) fixed
       have cancel : (b:ZMod M)^m * w^r = 1 := by
         change (b:ZMod M)^(p^j*r) * (inverseLift b p ell seed)^r = 1
         rw [← hl,pow_mul,← mul_pow,← mul_pow,ZMod.mul_inv_of_unit _ hbu,one_pow,one_pow]
-      calc (r:ZMod M)*b^m*((p:ZMod M)^i*(r:ZMod M)⁻¹*w^r) =
-          (p:ZMod M)^i * ((r:ZMod M)*(r:ZMod M)⁻¹) * ((b:ZMod M)^m*w^r) := by ring
+      calc (r:ZMod M)^order*b^m*(((p:ZMod M)^i*(r:ZMod M)⁻¹)^order*w^r) =
+          ((p:ZMod M)^i)^order * ((r:ZMod M)*(r:ZMod M)⁻¹)^order * ((b:ZMod M)^m*w^r) := by simp only [mul_pow]; ring
         _ = _ := by rw [ZMod.mul_inv_of_unit _ hu,cancel]; simp
     · have hz : (p:ZMod M)^i=0 := by
         exact_mod_cast (ZMod.natCast_eq_zero_iff (p^i) M).mpr (pow_dvd_pow p (Nat.succ_le_of_lt (lt_of_not_ge h)))
-      simp [hz]
+      simp [hz,positive.ne']
+
+theorem prefix_residue {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+    (hb : b.Coprime p) (hk : seed+ell ≤ k) (hi : n < p^(k+1))
+    (fixed : (inverseLift b p ell seed)^p = inverseLift b p ell seed) :
+    Represents ((p:ℚ)^k*partialSum b (insert p S) n)
+      (cellResidue p ell S (inverseLift b p ell seed) (n/p^(k-ell))) := by
+  simpa only [powerPartial,partialSum,powerWeight,weight,pow_one,cellResidue] using
+    power_prefix_residue (order:=1) (by decide) hp hs hb hk hi fixed
 
 private lemma den_of_rep {p ell k : ℕ} (hp : p.Prime) {x : ℚ} {z : ZMod (p^(ell+1))}
     (hz : z ≠ 0) (h : Represents ((p:ℚ)^k*x) z) : p^(k-ell) ∣ x.den := by
@@ -158,22 +176,28 @@ private lemma den_of_rep {p ell k : ℕ} (hp : p.Prime) {x : ℚ} {z : ZMod (p^(
   exact (hp.pow_dvd_iff_le_factorization x.den_ne_zero).mpr (by omega)
 
 /-- Success certifies the selected prime power in the reduced *shifted* denominator. -/
-theorem passes_denominator {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+theorem passes_power_denominator {order : ℕ} (positive : 0 < order) {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
     (hb : b.Coprime p) (hk : seed+ell ≤ k) (lo : p^k ≤ n) (hi : n < p^(k+1))
-    (pass : passes b p ell seed S = true) : p^(k-ell) ∣ (shifted b (insert p S) n).den := by
-  simp only [passes,Bool.and_eq_true,decide_eq_true_eq] at pass
+    (pass : passesPower order b p ell seed S = true) : p^(k*order-ell) ∣ (powerShifted b order (insert p S) n).den := by
+  simp only [passesPower,Bool.and_eq_true,decide_eq_true_eq] at pass
   have he : p^ell*p^(k-ell)=p^k := by rw [← pow_add]; congr 1; omega
   have he' : p^(ell+1)*p^(k-ell)=p^(k+1) := by rw [← pow_add]; congr 1; omega
-  obtain ⟨v,hv,eqn⟩ := cell_cover hp.pos S (inverseLift b p ell seed)
+  obtain ⟨v,hv,eqn⟩ := cell_cover order hp.pos S (inverseLift b p ell seed)
     ((Nat.le_div_iff_mul_le (pow_pos hp.pos _)).mpr (he ▸ lo))
     ((Nat.div_lt_iff_lt_mul (pow_pos hp.pos _)).mpr (he' ▸ hi))
-  let z := cellResidue p ell S (inverseLift b p ell seed) (n/p^(k-ell))
+  let z := powerCellResidue order p ell S (inverseLift b p ell seed) (n/p^(k-ell))
   have hz : z ≠ 0 := by dsimp [z]; rw [eqn]; exact pass.2 v hv
   have hbunit : IsUnit ((b:ZMod (p^(ell+1)))^n) := ((ZMod.isUnit_iff_coprime ..).mpr (hb.pow_right _)).pow n
   apply den_of_rep hp (z:=(b:ZMod _)^n*z) (by intro h; exact hz (hbunit.mul_right_inj.mp (by simpa using h)))
-  obtain ⟨a,d,hd,e,hm⟩ := prefix_residue hp hs hb hk hi pass.1
+  obtain ⟨a,d,hd,e,hm⟩ := power_prefix_residue positive hp hs hb hk hi pass.1
   refine ⟨b^n*a,d,hd,?_,?_⟩
-  · unfold shifted; push_cast; linear_combination (b:ℚ)^n * e
+  · unfold powerShifted; rw [pow_mul]; push_cast; linear_combination (b:ℚ)^n * e
   · push_cast; linear_combination (b:ZMod _)^n * hm
+
+theorem passes_denominator {b p ell seed k n : ℕ} {S : Finset ℕ} (hp : p.Prime) (hs : p ∉ S)
+    (hb : b.Coprime p) (hk : seed+ell ≤ k) (lo : p^k ≤ n) (hi : n < p^(k+1))
+    (pass : passes b p ell seed S = true) : p^(k-ell) ∣ (shifted b (insert p S) n).den := by
+  simpa only [Nat.mul_one,powerShifted,shifted,powerPartial,partialSum,powerWeight,weight,pow_one] using
+    passes_power_denominator (order:=1) (by decide) hp hs hb hk lo hi pass
 
 end NormalityChecker.LocalizedSupport

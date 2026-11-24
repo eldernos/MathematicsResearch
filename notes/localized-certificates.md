@@ -51,9 +51,9 @@ The independent Python implementation accepts the **precision** and the **whole 
 | 10 | 2, 5, 7 | 7 | 343 | 22 | Normality |
 | 10 | 2, 5, 11 | 11 | 11 | 6 | Normality |
 | 30 | 2, 3, 5, 7 | 7 | 7 | 6 | Normality |
-| 2 | 2, 5, 7 | 7 | 7 | 4 | Denominator survival |
-| 2 | 2, 5, 11 | 11 | 11 | 6 | Denominator survival |
-| 2 | 2, 5, 7, 11, 13 | 13 | 13 | 8 | Denominator survival |
+| 2 | 2, 5, 7 | 7 | 7 | 4 | Normality |
+| 2 | 2, 5, 11 | 11 | 11 | 6 | Normality |
+| 2 | 2, 5, 7, 11, 13 | 13 | 13 | 8 | Normality |
 
 ## From a denominator to digits
 
@@ -63,7 +63,20 @@ On scales of size $`K^6`$, partition into blocks of length $`K^5`$. Charge at mo
 
 ## Several surviving denominator primes
 
-**Paper consequence.** Let $`d`$ be the number of support primes coprime to $`b`$. On the same clean blocks, after multiplying by fixed $`h\ne0`$, the denominator $`Q`$ has only these prime factors. The certificate gives $`Q\gg_h K^6`$ and the product of the highest available powers gives $`Q\le(64K^6)^d`$. The reduced numerator is a unit modulo $`Q`$. Vandehey's Corollary 1.2 bounds the normalized exponential sum by $`C Q^{-\delta}(1+\log Q)`$ whenever the block length is at least $`Q^\epsilon`$. Take $`\epsilon=1/(2d)`$. Then $`K^5\ge Q^\epsilon`$ eventually. The initial base shift can be absorbed into the unit numerator, and the bound tends to zero uniformly on the clean blocks. The same insertion and partial-block estimates give normality on paper for the three binary examples in the table. The Lean proofs there end at denominator survival. [Vandehey, Corollary 1.2](https://arxiv.org/html/1606.07911v1#S1.p7) · [Earlier finite-prime comparison](mixed-localized-logarithms.md#prior-results-and-the-three-prime-obstruction)
+On clean blocks all remaining prime divisors belong to a fixed support coprime to the base. Their product $`c`$ is fixed, although their exponents vary. After clearing base factors the denominator divides a power of $`c`$ and is polynomially bounded in the block length. One passing prime test forces the reduced denominator to grow on every clean block. The qualitative fixed-support estimate proves uniform cancellation and yields binary normality for all three supports in the table. The theorem `normal_of_smooth_estimate` exposes the analytic input and `normal_of_certificate` supplies its proof. [Fixed-support estimate](../NormalityChecker/SmoothOrbit.lean) · [Unconditional binary results](../NormalityChecker/SmoothCertificates.lean) · [Comparison with Vandehey](arithmetic-certificates.md#the-fixed-prime-set-estimate)
+
+## Higher orders
+
+For coefficients $`m^{-s}`$, $`s\ge1`$, use `passesPower s b p ell seed S`. Each contribution changes from $`p^i r^{-1}w^r`$ to $`(p^i r^{-1})^s w^r`$. The formal checker uses the same complete grid as the order-one test. The Python version omits layers with $`is\ge L`$, whose contributions vanish identically, so it can print fewer intervals with the same residue function. A successful test implies $`p^{sk-L+1}`$ divides every sufficiently late shifted denominator and gives base-$`b`$ normality. The mixed two-generator theorem also covers cases where no passing finite table has been found. [Modular proof](../NormalityChecker/LocalizedCertificate.lean) · [Normality from the higher-order test](../NormalityChecker/SmoothCertificates.lean) · [Mixed generator proof](../NormalityChecker/MixedPowers.lean)
+
+```lean
+import NormalityChecker
+open NormalityChecker.LocalizedSupport
+#eval passesPower 2 10 3 0 0 {2, 5}  -- true, order 2 at modulus 3
+example : passesPower 2 10 3 0 0 {2, 5} = true := by decide +kernel
+```
+
+`python3 scripts/localized_certificate.py 10 3 1 2 3 5 --order 2` gives residues 1 and 2 on the two cells beginning at 1 and 2. [Independent exact-prefix check](../scripts/test_localized_certificate.py)
 
 ## Scope for the full logarithm
 

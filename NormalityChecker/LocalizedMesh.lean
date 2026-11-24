@@ -140,14 +140,17 @@ lemma card_of_diameter (A : Finset ℕ) {w : ℝ} (hw : 0≤w)
   have le' : (A.card:ℝ) ≤ (r:ℝ)+1-l := by exact_mod_cast (show (A.card:ℤ)≤(r:ℤ)+1-l by omega)
   linarith
 
-private lemma norm_le_prime_part (x : ℚ) : padicNorm d.p x ≤ (d.p:ℚ)^(x.den.factorization d.p) := by
-  let : Fact d.p.Prime := ⟨d.hp⟩
-  have hc := congrArg (padicNorm d.p) (Rat.den_mul_eq_num x)
+lemma norm_le_prime_part {p : ℕ} (hp : p.Prime) (x : ℚ) : padicNorm p x ≤ (p:ℚ)^(x.den.factorization p) := by
+  let : Fact p.Prime := ⟨hp⟩
+  have hc := congrArg (padicNorm p) (Rat.den_mul_eq_num x)
   rw [padicNorm.mul,padicNorm.eq_zpow_of_ne_zero (by exact_mod_cast x.den_ne_zero),padicValRat.of_nat,
     zpow_neg,zpow_natCast,inv_mul_eq_div] at hc
-  have hpos : 0 < (d.p:ℚ) := by exact_mod_cast d.hp.pos
-  rw [Nat.factorization_def _ d.hp]
+  have hpos : 0 < (p:ℚ) := by exact_mod_cast hp.pos
+  rw [Nat.factorization_def _ hp]
   simpa using (div_le_iff₀ (pow_pos hpos _)).mp (hc.trans_le (padicNorm.of_int x.num))
+
+lemma padicNorm_le_den {p : ℕ} (hp : p.Prime) (x : ℚ) : padicNorm p x ≤ x.den :=
+  (norm_le_prime_part hp x).trans (by exact_mod_cast Nat.ordProj_le p x.den_ne_zero)
 
 /-- For every exceptional fraction `ε`, all sufficiently large loss thresholds `L`
 have exceptional fraction at most `ε` on all sufficiently late prime-power shells.
@@ -172,7 +175,7 @@ theorem severe_loss_rare {ε : ℝ} (hε : 0<ε) : ∀ᶠ L : ℕ in atTop, ∀�
   have per (u : ℕ) (hu : u∈U) : ((cell u).card:ℝ) ≤ ε*S := by
     have hJ := (le_sup hu : cut u ≤ U.sup cut).trans_lt hL
     have low {n : ℕ} (hn : bad n) : padicNorm d.p (shifted d n) < (d.p:ℚ)^(k-cut u) :=
-      (norm_le_prime_part d _).trans_lt (pow_lt_pow_right₀ (by exact_mod_cast d.hp.one_lt) (by dsimp [bad] at hn; omega))
+      (norm_le_prime_part d.hp _).trans_lt (pow_lt_pow_right₀ (by exact_mod_cast d.hp.one_lt) (by dsimp [bad] at hn; omega))
     have hc := card_of_diameter (cell u) (w:=δ*S) (by positivity) (fun s hs t ht => by
       obtain ⟨hi,hs'⟩ := mem_filter.mp hs; obtain ⟨hj,ht'⟩ := mem_filter.mp ht
       rw [hSr]; exact (hcut u hu k (by omega) s t (mem_Ico.mp hi).1 (mem_Ico.mp hj).2.le (low hs') (low ht')).le)
