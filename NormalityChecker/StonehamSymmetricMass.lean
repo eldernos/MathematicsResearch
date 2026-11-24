@@ -34,25 +34,24 @@ theorem sum_eq_diagonal_of_prime_power {q d r : ℕ} (hq : q.Prime) (hd : d = q 
     let X := {v : Fin d → A // f v = z}
     let action : AddAction (Fin d) X := {
       vadd g v := ⟨v.val ∘ Equiv.addRight g, (symm _ _).trans v.property⟩
-      zero_vadd v := by apply Subtype.ext; funext i; change v.val (i + 0) = v.val i; rw [add_zero]
-      add_vadd g h v := by apply Subtype.ext; funext i; change v.val (i + (g+h)) = v.val ((i+g)+h); rw [add_assoc] }
+      zero_vadd v := by
+        apply Subtype.ext; funext i
+        change v.val (i + 0) = v.val i
+        rw [add_zero]
+      add_vadd g h v := by
+        apply Subtype.ext; funext i
+        change v.val (i + (g + h)) = v.val ((i + g) + h)
+        rw [add_assoc] }
+    have constant (v : AddAction.fixedPoints (Fin d) X) :
+        (fun _ : Fin d => v.val.val 0) = v.val.val := by
+      funext i
+      have h := congrArg (fun w : X => w.val 0) (AddAction.mem_fixedPoints.mp v.property i)
+      change v.val.val (0 + i) = v.val.val 0 at h
+      simpa using h.symm
     let E : AddAction.fixedPoints (Fin d) X ≃ {a // diag a = z} :=
-      { toFun := fun v => ⟨v.val.val 0, by
-          have heq (i : Fin d) := congrArg (fun w : X => w.val 0)
-            (AddAction.mem_fixedPoints.mp v.property i)
-          have eqv : (fun _ : Fin d => v.val.val 0) = v.val.val := by
-            funext i
-            have h := heq i
-            change v.val.val (0+i) = v.val.val 0 at h
-            simpa using h.symm
-          exact (congrArg f eqv).trans v.val.property⟩
+      { toFun := fun v => ⟨v.val.val 0, (congrArg f (constant v)).trans v.val.property⟩
         invFun := fun a => ⟨⟨fun _ => a.val, a.property⟩, AddAction.mem_fixedPoints.mpr fun _ => rfl⟩
-        left_inv := by
-          intro v
-          apply Subtype.ext; apply Subtype.ext; funext i
-          have h := congrArg (fun w : X => w.val 0) (AddAction.mem_fixedPoints.mp v.property i)
-          change v.val.val (0+i) = v.val.val 0 at h
-          simpa using h.symm
+        left_inv := fun v => Subtype.ext (Subtype.ext (constant v))
         right_inv := fun _ => rfl }
     have h := group.card_modEq_card_fixedPoints X
     rw [Nat.card_congr E] at h
@@ -148,7 +147,8 @@ private lemma mass_eq_clipped {d M L : ℕ} (hML : M ≤ L) (U : Set (Vector d))
 private lemma clippedMass_mod_prime {d q r M : ℕ} (hq : q.Prime) (hd : d = q ^ r)
     (U : Set (Vector d)) (upper : IsUpperSet U) (symm : SymmetricSet U)
     {a : ℕ} (hit : (fun _ => a) ∈ U) (ha : a ≤ M) :
-    ∃ m ≤ a, (clippedMass U M : ZMod q) = -(2 ^ m) := by
+    ∃ m ≤ a, (∀ j : ℕ, (fun _ => j) ∈ U ↔ m ≤ j) ∧
+      (clippedMass U M : ZMod q) = -(2 ^ m) := by
   classical
   let : Fact q.Prime := ⟨hq⟩
   have ex : ∃ j : ℕ, (fun _ => j) ∈ U := ⟨a, hit⟩
@@ -168,7 +168,7 @@ private lemma clippedMass_mod_prime {d q r M : ℕ} (hq : q.Prime) (hd : d = q ^
   have diag (a : Fin (M+1)) : f (fun _ => a) =
       if m ≤ a.val then (letter M a : ZMod q) else 0 := by
     simp [f, threshold, hd, ZMod.pow_card_pow]
-  refine ⟨m, Nat.find_min' ex hit, ?_⟩
+  refine ⟨m, Nat.find_min' ex hit, threshold, ?_⟩
   simp only [clippedMass, Int.cast_sum, Int.cast_ite, Int.cast_prod, Int.cast_zero]
   change (∑ v, f v) = _
   rw [sum_eq_diagonal_of_prime_power hq hd f inv]
@@ -184,16 +184,16 @@ private lemma clippedMass_mod_prime {d q r M : ℕ} (hq : q.Prime) (hd : d = q ^
   linear_combination geom
 
 /-- In prime-power dimension, binary mass stabilizes at an integer whose
-residue modulo the degree prime is the negative of a power of two. -/
+residue modulo the degree prime is minus two to the first occupied diagonal index. -/
 theorem symmetric_binary_mass {d q r : ℕ} (hq : q.Prime) (hd : d = q ^ r)
     (U : Set (Vector d)) (upper : IsUpperSet U) (symm : SymmetricSet U)
     {a : ℕ} (anchor : (fun _ => a) ∈ U) :
-    ∃ K : ℤ, ∃ m ≤ a, (K : ZMod q) = -(2^m) ∧
+    ∃ K : ℤ, ∃ m ≤ a, (∀ j : ℕ, (fun _ => j) ∈ U ↔ m ≤ j) ∧ (K : ZMod q) = -(2^m) ∧
       ∀ᶠ L : ℕ in atTop, (mass 2 L U : ZMod (2^L)) = K := by
   classical
   obtain ⟨M, le, clip⟩ := exists_clip U upper a
-  obtain ⟨m, hm, eqn⟩ := clippedMass_mod_prime hq hd U upper symm anchor le
-  refine ⟨clippedMass U M, m, hm, eqn, ?_⟩
+  obtain ⟨m, hm, threshold, eqn⟩ := clippedMass_mod_prime hq hd U upper symm anchor le
+  refine ⟨clippedMass U M, m, hm, threshold, eqn, ?_⟩
   filter_upwards [eventually_ge_atTop M] with L hL
   exact mass_eq_clipped hL U clip
 
@@ -224,7 +224,7 @@ theorem symmetric_binary_uniform_precision {d q r : ℕ} (hq : q.Prime) (odd : 2
     obtain ⟨j,h₁,h₂⟩ := ((coord (v ∘ σ)).and (coord v)).exists
     exact h₁.symm.trans ((symm (φ j) v σ).trans h₂)
   obtain ⟨j,hj⟩ := (coord (fun _ => a)).exists
-  obtain ⟨K,m,_,residue,stable⟩ := symmetric_binary_mass hq hd V hv sv (hj.mp (hit _))
+  obtain ⟨K,m,_,_,residue,stable⟩ := symmetric_binary_mass hq hd V hv sv (hj.mp (hit _))
   have nonzero : K ≠ 0 := by
     let : Fact q.Prime := ⟨hq⟩
     have nz : (2 : ZMod q) ≠ 0 := by
