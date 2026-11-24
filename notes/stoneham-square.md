@@ -13,7 +13,7 @@ R_n=\sum_{i,j\ge1,\ 3^i+3^j\le n}
        \frac{2^{n-3^i-3^j}}{3^{i+j}}.
 $$
 
-Write $q_n$ for its reduced positive denominator. For $n\ge81$ one has $n^2<243q_n$ and $q_n\le n^2$. Lean proves the exact table below, the initial exceptions, both quadratic bounds, the true shifted-tail limit and binary normality. [Lean statements and proofs](../NormalityChecker/StonehamSquare.lean)
+Write $q_n$ for its reduced positive denominator. For $n\ge81$ one has $n^2\lt 243q_n$ and $q_n\le n^2$. Lean proves the exact table below, the initial exceptions, both quadratic bounds, the true shifted-tail limit and binary normality. [Lean statements and proofs](../NormalityChecker/StonehamSquare.lean)
 
 | Digit positions, for each integer k ≥ 4 | Exponent of 3 in the reduced denominator |
 | --- | ---: |
@@ -36,7 +36,7 @@ Each interval includes its left endpoint and excludes its right endpoint. Here a
 
 ## Exact ternary cancellation
 
-Write $k=\lfloor\log_3 n\rfloor$. Throughout its scale every ordered pair with both indices at most $k-1$ is present, because $2\cdot3^{k-1}<3^k$. A new pair must have one index equal to $k$. Its other index $j$ first enters at $3^k+3^j$. Thus the entire second interval has precisely the old pairs and the two new arms through $j=k-2$.
+Write $k=\lfloor\log_3 n\rfloor$. Throughout its scale every ordered pair with both indices at most $k-1$ is present, because $2\cdot3^{k-1}\lt 3^k$. A new pair must have one index equal to $k$. Its other index $j$ first enters at $3^k+3^j$. Thus the entire second interval has precisely the old pairs and the two new arms through $j=k-2$.
 
 Let $D$ be the largest present sum of indices $i+j$. The integer $3^D R_n$ is a sum of powers of three times $2^{n-3^i-3^j}$. Every $3^i+3^j$ is a multiple of six, so the binary factor is congruent to the same unit $2^n$ modulo nine for every included pair. Modulo three the normalized numerator therefore counts the top layer, up to a unit. Modulo nine it counts that layer plus three times the layer immediately below.
 
@@ -50,4 +50,4 @@ The hypothesis $k\ge4$ matters. At $k=3$ the would-be pair $(k,k-3)$ uses index 
 
 The summands of $\alpha$ are positive and absolutely summable, so multiplying the series gives the sum over ordered pairs. For each fixed pair, its contribution to $2^n\alpha^2-R_n$ vanishes once its location is reached. Before then its shifted contribution is at most $3^{-i-j}$, and the sum of these majorants is finite. Dominated convergence for series gives $2^n\alpha^2-R_n\to0$. In particular, an insertion arbitrarily close to $n$ is covered by the same proof.
 
-Use scales $9^h\le n<9^{h+1}$ and clean blocks of length $3^h$. Before the end of such a scale each index is at most $2(h+1)$, so at most $4(h+1)^2$ ordered pairs can insert. Removing blocks that meet insertion locations costs a vanishing proportion. On every other block the rational prefixes are successive doublings of the starting prefix. Their starting denominators are powers of three, grow uniformly to infinity, and are bounded by $(3^h)^6$ for $h\ge1$. The fixed-support short-orbit estimate and the true tail bound now give the Weyl criterion along all prefixes. [Arithmetic normality certificate](../NormalityChecker/ArithmeticCertificate.lean) · [Fixed-support short-orbit theorem](../NormalityChecker/SmoothOrbit.lean) · [Application to the square](../NormalityChecker/StonehamSquare.lean)
+Use scales $9^h\le n\lt 9^{h+1}$ and clean blocks of length $3^h$. Before the end of such a scale each index is at most $2(h+1)$, so at most $4(h+1)^2$ ordered pairs can insert. Removing blocks that meet insertion locations costs a vanishing proportion. On every other block the rational prefixes are successive doublings of the starting prefix. Their starting denominators are powers of three, grow uniformly to infinity, and are bounded by $(3^h)^6$ for $h\ge1$. The fixed-support short-orbit estimate and the true tail bound now give the Weyl criterion along all prefixes. [Arithmetic normality certificate](../NormalityChecker/ArithmeticCertificate.lean) · [Fixed-support short-orbit theorem](../NormalityChecker/SmoothOrbit.lean) · [Application to the square](../NormalityChecker/StonehamSquare.lean)

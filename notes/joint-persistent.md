@@ -38,6 +38,8 @@ F_L(N)\le G(N)+2N\sum_{p\in J}(a_{p,L}-a_p).
 
 ## The compact set of attainable phases (paper proof)
 
+The maximum-on-closure and all-prefix statements now also have kernel proofs. [Formalization](higher-order-joint.md)
+
 Use the circle $`\mathbb T=\mathbb R/\mathbb Z`$, $`\alpha_p=1/\log p`$ (natural logarithm), and $`H=\overline{\{t\alpha\bmod1:t\in\mathbb R\}}\subseteq\mathbb T^J`$. For a family $`B=(B_p)_{p\in J}`$ of measurable subsets of $`[1,p)`$, let $`\{z\}`$ denote fractional part and put
 
 ```math
@@ -55,7 +57,9 @@ With Haar probability on $`H`$, invariance and Fubini give $`\int_H Q_Z=\mu_H(H\
 
 ## Higher orders and the lower-order residues (paper proof)
 
-At $`s>1`$ the ordinary deepest test only forces $`v_p(R_{s,n})\ge k+1-sk`$. A clean counterexample has $`s=2,\ b=36,\ P=\{2,3,7\},\ n=186`$. Here $`k=2`$, the order-two test vanishes modulo $`7^3`$, the last insertion was at 168, and the reduced denominator is exactly 7. Lean verifies all these finite assertions. This refutes the proposed one-step clearing implication. It leaves open whether the limiting equality using only the order-$`s`$ test always holds. [Kernel counterexample](../NormalityChecker/JointPersistent.lean)
+The all-orders result is now formalized by finite principal-unit expansions. [Lean proof and scope](higher-order-joint.md)
+
+At $`s>1`$ the ordinary deepest test only forces $`v_p(R_{s,n})\ge k+1-sk`$. A clean counterexample has $`s=2,\ b=36,\ P=\{2,3,7\},\ n=186`$. Here $`k=2`$, the order-two test vanishes modulo $`7^3`$, the last insertion was at 168, and the reduced denominator is exactly 7. Lean verifies all these finite assertions. This refutes the proposed one-step clearing implication. The Phase 11 nullity theorem implies that the limiting single-order test is also exact for unsigned full supports, even though this particular finite local clearing implication fails. [Kernel counterexample](../NormalityChecker/JointPersistent.lean)
 
 There is an unconditional replacement. Define $`Z_{p,d}`$ in this section to be the *persistent* failed set for order $`d`$, and set $`B_p=\bigcap_{d=1}^s Z_{p,d}`$. Then
 
@@ -96,7 +100,7 @@ Here are the bounds at an arbitrary cutoff $`N`$. The real points $`0<y<N`$ whos
 
 **Two generators (paper deduction).** If $`P=\{p,q\}`$ and $`p\nmid b`$, $`Z_{p,d}`$ has only finitely many points for every $`d\ge1`$. For odd $`p`$, partition $`[1,p)`$ into finitely many intervals with endpoint ratio strictly less than $`q`$. Given $`t_1<t_2`$ in one interval, there exists an $`i\ge0`$ with a power of $`q`$ in $`(p^it_1,p^it_2]`$ because $`a\log_p q\bmod1`$ is dense. Choose the first such $`i`$. At this row exactly one summand changes since $`t_2/t_1<q`$. Its valuation is $`id`$, and every later change has larger valuation. Thus $`U_{p,d}(t_1)\ne U_{p,d}(t_2)`$. Each partition interval has at most one zero. The prime-two case has none. This gives a refinement proof of normality for the whole mixed-pair family at every order. For example $`b=32,\ P=\{2,31\}`$ has a failed interval $`[16,31)`$ at the first precision. The existing mixed-pair argument also gives quantitative estimates. For context, the localized-logarithm manuscript treats the binary pair $`\{2,3\}`$ and other families, while Vandehey gives fixed-prime-support short-orbit estimates. [Mixed-pair theorem and literature](mixed-localized-logarithms.md) · [Vandehey, Corollary 1.2](https://arxiv.org/abs/1606.07911)
 
-More generally, for any nonempty cofactor support the normalized thresholds $`r/p^i`$ are dense because they include the powers of any one cofactor prime. An interior threshold has a unique representation with $`p\nmid r`$. On a small neighborhood avoiding all other thresholds in rows through $`i`$, its jump modulo $`p^{id+1}`$ is nonzero. Thus no $`Z_{p,d}`$ contains an open interval. This does not bound the measure of a general $`Z_{p,d}`$. An explicit fixed unsigned support with $`J\ne\varnothing`$ and positive persistent joint mass, or one proved to have vanishing mass while all finite joint densities stay positive, remains open here.
+More generally, for any nonempty cofactor support the normalized thresholds $`r/p^i`$ are dense because they include the powers of any one cofactor prime. An interior threshold has a unique representation with $`p\nmid r`$. On a small neighborhood avoiding all other thresholds in rows through $`i`$, its jump modulo $`p^{id+1}`$ is nonzero. Thus no $`Z_{p,d}`$ contains an open interval. This does not bound the measure of a general $`Z_{p,d}`$. Phase 11 proves that every off-base failed region has measure zero, precluding positive persistent mass. Finding a fixed unsigned support with failures at every finite depth is still a separate problem. [Nullity and finite termination](unsigned-finite-support.md)
 
 **A joint refinement example (finite exact computation).** For $`b=78,\ P=\{2,3,5,7\}`$, the two off-base primes both retain positive-length failed intervals through precision three. At each of those precisions the joint upper density is positive by the two-prime phase formula. At precision four the 5-test certifies normality. Exact widths from the checker are
 

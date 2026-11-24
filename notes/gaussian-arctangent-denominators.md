@@ -27,7 +27,7 @@ Set $`M_t=\lfloor 2N/(2t-1)\rfloor`$ and write $`b_t(v)=-\sum_{j=1}^v\Im(z_t^j)/
 
 ## A residue for the combined numerator
 
-Let $`p`$ be an odd prime with $`p^2>M_2`$. Set $`v_t=\lfloor M_t/p\rfloor`$. After multiplying by $`p`$, precisely the terms with $`p\mid j`$ can contribute modulo $`p`$. In the ring of Gaussian integers modulo $`p`$, raising to the $`p`$th power sends $`i`$ to $`i`$ if $`p\equiv1\pmod4`$ and to $`-i`$ if $`p\equiv3\pmod4`$. This follows from the binomial theorem and holds also when the ring has zero divisors. The rational powers of two in $`z_t`$ are units. Writing $`\chi(p)=(-1)^{(p-1)/2}`$ gives
+Let $`p`$ be an odd prime with $`p^2\gt M_2`$. Set $`v_t=\lfloor M_t/p\rfloor`$. After multiplying by $`p`$, precisely the terms with $`p\mid j`$ can contribute modulo $`p`$. In the ring of Gaussian integers modulo $`p`$, raising to the $`p`$th power sends $`i`$ to $`i`$ if $`p\equiv1\pmod4`$ and to $`-i`$ if $`p\equiv3\pmod4`$. This follows from the binomial theorem and holds also when the ring has zero divisors. The rational powers of two in $`z_t`$ are units. Writing $`\chi(p)=(-1)^{(p-1)/2}`$ gives
 
 ```math
 pY_N\equiv 2^N\chi(p)\big(a b_2(v_2)+c b_3(v_3)\big)\pmod p.
@@ -39,15 +39,15 @@ Every $`b_t(v)`$ is positive for $`v\ge1`$. Indeed its first term is $`1/2^t`$, 
 
 ```math
 \frac{|z_t|^2}{2(1-|z_t|)}
-=\frac{1}{B(B-\sqrt2)}<\frac1B .
+=\frac{1}{B(B-\sqrt2)}\lt \frac1B .
 ```
 
-Since $`b_t(0)=0`$ and $`a,c>0`$, every short rational on the right of the congruence is strictly positive whenever $`p\le M_2`$.
+Since $`b_t(0)=0`$ and $`a,c\gt 0`$, every short rational on the right of the congruence is strictly positive whenever $`p\le M_2`$.
 
 ## Quantitative cancellation bound
 
 In fact $`0\le\log(D_{M_2}/Q_N)=O_{a,c}(N^{2/3})`$. For large $`N`$ put $`K=\lceil N^{1/3}\rceil`$. Primes up to $`K^2`$ cost $`O(K^2)`$ in logarithmic loss. Their first powers cost at most $`\sum_{p\le K^2}\log p=O(K^2)`$ by the Chebyshev bound. All powers after the first, even for the full least common multiple, cost $`O(\sqrt N\log N)`$ by charging at most $`\log N`$ to each prime up to $`\sqrt N`$.
 
-For $`K^2<p\le M_2`$, only the first power of $`p`$ is present and $`1\le v_2\le K`$, $`0\le v_3\le K`$. As $`p`$ increases the pair $`(v_2,v_3)`$ decreases in both coordinates, so at most $`2K+1`$ distinct pairs occur. Each nonzero number $`a b_2(v_2)+c b_3(v_3)`$ has denominator dividing $`8^K D_K`$ and absolute value bounded in terms of $`a,c`$. Its reduced numerator therefore has logarithm $`O_{a,c}(K)`$, using $`\log D_K=O(K)`$. Every lost prime in this range divides one of these numerators. Taking their product bounds the remaining logarithmic loss by $`O_{a,c}(K^2)`$. Finally, the prime number theorem gives $`\log D_{M_2}=M_2+o(M_2)`$, proving the rate.
+For $`K^2\lt p\le M_2`$, only the first power of $`p`$ is present and $`1\le v_2\le K`$, $`0\le v_3\le K`$. As $`p`$ increases the pair $`(v_2,v_3)`$ decreases in both coordinates, so at most $`2K+1`$ distinct pairs occur. Each nonzero number $`a b_2(v_2)+c b_3(v_3)`$ has denominator dividing $`8^K D_K`$ and absolute value bounded in terms of $`a,c`$. Its reduced numerator therefore has logarithm $`O_{a,c}(K)`$, using $`\log D_K=O(K)`$. Every lost prime in this range divides one of these numerators. Taking their product bounds the remaining logarithmic loss by $`O_{a,c}(K^2)`$. Finally, the prime number theorem gives $`\log D_{M_2}=M_2+o(M_2)`$, proving the rate.
 
 The calculation supplies both a smaller denominator than the direct Taylor model for $`\arctan(1/2)`$ and a prime-by-prime numerator identity. Controlling the frequency of real binary cylinders for either constant remains open.

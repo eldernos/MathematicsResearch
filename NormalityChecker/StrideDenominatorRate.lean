@@ -53,14 +53,16 @@ private lemma regular_frac {p j : ℕ} (a : ℤ) (h : ¬p∣j) : regular p ((a:�
   rw [Rat.divInt_eq_div,Int.cast_natCast] at d
   exact fun v => h (v.trans (by exact_mod_cast d))
 
-/-- Removing the p-indexed short prefix leaves a rational which is integral at p. -/
-theorem short_prefix_regular {p : ℕ} (pr : p.Prime) (big : 3<p) (N : ℕ) (small : N<p*p) :
-    ¬p∣(twoStridePrefix N-(2:ℚ)^(N-N/p)*twoStridePrefix (N/p)/p).den := by
+/-- Prime-band cancellation for any integer-weight recurrence invariant under multiplying the index by p. -/
+theorem weighted_short_regular (Y : ℕ → ℚ) (W : ℕ → ℤ) (init : Y 0=0)
+    (step : ∀ N, Y (N+1)=2*Y N+(W (N+1):ℚ)/(N+1)) {p : ℕ} (pr : p.Prime) (big : 3<p)
+    (wm : ∀ j,W (p*j)=W j) (N : ℕ) (small : N<p*p) :
+    ¬p∣(Y N-(2:ℚ)^(N-N/p)*Y (N/p)/p).den := by
   let : Fact p.Prime := ⟨pr⟩
   have pp : (p:ℚ)≠0 := by exact_mod_cast pr.ne_zero
   change regular p _
   induction N with
-  | zero => simpa [regular,twoStridePrefix,stridedPrefix] using pr.not_dvd_one
+  | zero => simpa [regular,init] using pr.not_dvd_one
   | succ n ih =>
     have old := regular_twice pr (ih (by omega))
     have le := Nat.div_le_self n p
@@ -83,28 +85,28 @@ theorem short_prefix_regular {p : ℕ} (pr : p.Prime) (big : 3<p) (N : ℕ) (sma
       obtain ⟨v,hv⟩ := fermat
       have hvq := congrArg (fun z : ℤ => (z:ℚ)) hv; push_cast at hvq
       have prodq := congrArg (fun z : ℕ => (z:ℚ)) prod; push_cast at prodq
-      have w : weight (n+1)=weight j := prod ▸ weight_mul pr big j
-      have eqn : twoStridePrefix (n+1)-(2:ℚ)^(n+1-(n+1)/p)*twoStridePrefix ((n+1)/p)/p =
-          2*(twoStridePrefix n-(2:ℚ)^e*twoStridePrefix (n/p)/p)+((weight j*v:ℤ):ℚ)/j := by
-        rw [step,eqj,show n+1-j=e by dsimp [j,e]; omega,w,show twoStridePrefix j=2*twoStridePrefix (n/p)+(weight j:ℚ)/j by simpa [j] using step (n/p)]
+      have w : W (n+1)=W j := prod ▸ wm j
+      have eqn : Y (n+1)-(2:ℚ)^(n+1-(n+1)/p)*Y ((n+1)/p)/p =
+          2*(Y n-(2:ℚ)^e*Y (n/p)/p)+((W j*v:ℤ):ℚ)/j := by
+        rw [step,eqj,show n+1-j=e by dsimp [j,e]; omega,w,show Y j=2*Y (n/p)+(W j:ℚ)/j by simpa [j] using step (n/p)]
         push_cast; rw [← prodq]; field_simp
-        linear_combination (norm:=ring_nf) (weight j:ℚ)*hvq
+        linear_combination (norm:=ring_nf) (W j:ℚ)*hvq
       rw [eqn]; exact regular_add pr old (regular_frac _ (Nat.not_dvd_of_pos_of_lt (Nat.succ_pos (n/p)) jl))
     · have eqj := Nat.succ_div_of_not_dvd dvd
-      have eqn : twoStridePrefix (n+1)-(2:ℚ)^(n+1-(n+1)/p)*twoStridePrefix ((n+1)/p)/p =
-          2*(twoStridePrefix n-(2:ℚ)^(n-n/p)*twoStridePrefix (n/p)/p)+(weight (n+1):ℚ)/(n+1) := by
+      have eqn : Y (n+1)-(2:ℚ)^(n+1-(n+1)/p)*Y ((n+1)/p)/p =
+          2*(Y n-(2:ℚ)^(n-n/p)*Y (n/p)/p)+(W (n+1):ℚ)/(n+1) := by
         rw [step,eqj,show n+1-n/p=n-n/p+1 by omega,pow_succ]; ring
-      rw [eqn]; exact regular_add pr old (by simpa using regular_frac (weight (n+1)) dvd)
+      rw [eqn]; exact regular_add pr old (by simpa using regular_frac (W (n+1)) dvd)
 
 /-- Test on the actual short numerator, valid on every large-prime band. -/
-theorem prime_survives {N p : ℕ} (pr : p.Prime) (big : 3<p) (small : N<p*p)
-    (unit : ¬p∣(twoStridePrefix (N/p)).num.natAbs) : p∣(twoStridePrefix N).den := by
+theorem weighted_prime_survives (Y : ℕ → ℚ) {N p : ℕ} (pr : p.Prime) (big : 3<p) (diff : ¬p∣(Y N-(2:ℚ)^(N-N/p)*Y (N/p)/p).den)
+    (unit : ¬p∣(Y (N/p)).num.natAbs) : p∣(Y N).den := by
   by_contra absent
-  let z := twoStridePrefix (N/p)
+  let z := Y (N/p)
   let h := N-N/p
   let q := (2:ℚ)^h*z/p
-  have free := regular_sub pr (a:=twoStridePrefix N) (b:=twoStridePrefix N-q) absent
-    (short_prefix_regular pr big N small)
+  have free := regular_sub pr (a:=Y N) (b:=Y N-q) absent
+    diff
   rw [sub_sub_cancel] at free
   have eqn : (p:ℚ)*q=2^h*z := by dsimp [q]; field_simp
   have cross : (2:ℤ)^h*z.num*q.den = p*(q.num*z.den) := by
@@ -117,10 +119,20 @@ theorem prime_survives {N p : ℕ} (pr : p.Prime) (big : 3<p) (small : N<p*p)
     (fun hd => Nat.not_dvd_of_pos_of_lt (by decide : 0<2) (by omega : 2<p) (pr.dvd_of_dvd_pow hd)) unit
 
 
+/-- Removing the p-indexed short prefix leaves a rational which is integral at p. -/
+theorem short_prefix_regular {p : ℕ} (pr : p.Prime) (big : 3<p) (N : ℕ) (small : N<p*p) :
+    ¬p∣(twoStridePrefix N-(2:ℚ)^(N-N/p)*twoStridePrefix (N/p)/p).den :=
+  weighted_short_regular _ _ (by decide +kernel) step pr big (weight_mul pr big) N small
+
+/-- Test on the actual short numerator, valid on every large-prime band. -/
+theorem prime_survives {N p : ℕ} (pr : p.Prime) (big : 3<p) (small : N<p*p)
+    (unit : ¬p∣(twoStridePrefix (N/p)).num.natAbs) : p∣(twoStridePrefix N).den :=
+  weighted_prime_survives _ pr big (short_prefix_regular pr big N small) unit
+
 private lemma weight_nonneg (j : ℕ) : 0≤weight j := by
   unfold weight; split_ifs <;> omega
 
-private lemma prefix_pos {j : ℕ} (hj : 2≤j) : 0<twoStridePrefix j := by
+lemma prefix_pos {j : ℕ} (hj : 2≤j) : 0<twoStridePrefix j := by
   induction j,hj using Nat.le_induction with
   | base => decide +kernel
   | succ n _ ih =>
@@ -158,7 +170,7 @@ theorem floor_ratio (k : ℕ) (hk : 0<k) :
   push_cast at e
   field_simp; linarith
 
-private lemma theta_ratio (k : ℕ) (hk : 0<k) :
+lemma theta_ratio (k : ℕ) (hk : 0<k) :
     Tendsto (fun n : ℕ => Chebyshev.theta (n/k:ℕ)/n) atTop (𝓝 (1/(k:ℝ))) := by
   have grow := Nat.tendsto_div_const_atTop hk.ne'
   have h := (Chebyshev.tendsto_theta_div_atTop.comp (tendsto_natCast_atTop_atTop.comp grow)).mul (floor_ratio k hk)

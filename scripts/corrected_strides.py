@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from fractions import Fraction as Q
 from itertools import combinations
-from math import comb, isqrt, lcm
+from math import ceil, comb, floor, gcd, isqrt, lcm
 
 from localized_certificate import prime
 from strided_logarithm import shifted
@@ -71,11 +71,14 @@ def sieve(data, cutoff):
     """Use full large prime powers and the extra power of three from the corrections."""
     if cutoff < 3:
         raise ValueError("cutoff must be at least three")
+    return sieve_selected(data, (p for p in range(cutoff+1, len(data.weights)) if prime(p)))
+
+
+def sieve_selected(data, primes):
+    """The selector supplies distinct primes other than 3 from the common lcm."""
     modulus, residue = data.scale, data.correction_residue
     end = len(data.weights)-1
-    for p in range(cutoff+1, end+1):
-        if not prime(p):
-            continue
+    for p in primes:
         power = p
         while power*p <= end:
             power *= p
@@ -120,6 +123,27 @@ def word_test(n, bits, changes, cutoff):
     return r, s, (data.common//modulus).bit_length(), count
 
 
+def adjacent_grid_example():
+    """Observe the same phase by advancing one model by a bit and restarting the next."""
+    (n, t) = (512, 64)
+    models = [model(start, *orders(start, t)) for start in (n, n+1)]
+    omitted = ({2, 3, 5}, {2, 3, 7})
+    grids = []
+    for data, skip in zip(models, omitted):
+        primes = (p for p in range(2, len(data.weights)) if p not in skip and prime(p))
+        modulus, residue = sieve_selected(data, primes)
+        grids.append((data.common//modulus, Q(residue, data.common)))
+    size, first = grids[0]
+    h = size//gcd(size, 2)
+    k, second = grids[1]
+    period = lcm(h, k)
+    error = 2*models[0].error + models[1].error
+    offset = 2*first-second
+    lower, upper = ceil(period*(-error-offset)), floor(period*(error-offset))
+    assert 2*period*error < 1 and lower == upper
+    return h, k, gcd(h, k)
+
+
 def exponent_exceeds(m_fraction, r_fraction, d, horizon):
     """Integer test for a strict beta entropy margin above horizon*log(2)."""
     den = lcm(m_fraction.denominator, r_fraction.denominator, horizon.denominator)
@@ -162,3 +186,4 @@ if __name__ == '__main__':
     for n, t, k, y in ((128, 40, 2, 4), (256, 48, 2, 5), (512, 64, 3, 5), (1024, 80, 3, 7)):
         print('N, word length, allowed transitions, cutoff; orders, lift bits, survivors:',
               n, t, k, y, word_test(n,t,k,y))
+    print('Compatible adjacent grid sizes and surviving pair count:', adjacent_grid_example())

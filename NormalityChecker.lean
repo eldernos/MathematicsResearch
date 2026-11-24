@@ -69,5 +69,15 @@ public import NormalityChecker.StrideDenominatorRate
 public import NormalityChecker.DyadicLogRates
 public import NormalityChecker.ResidueWindows
 public import NormalityChecker.TranslatedShellExamples
-public import NormalityChecker.HigherOrderPrefix
+public import NormalityChecker.HigherOrderPhase
 public import NormalityChecker.ThresholdDifferences
+public import NormalityChecker.MaskExamples
+public import NormalityChecker.StonehamSquare
+public import NormalityChecker.ShellHistories
+public import NormalityChecker.ChangingShellSchedules
+public import NormalityChecker.StonehamPolynomial
+public import NormalityChecker.LogarithmBands
+public import NormalityChecker.ProductThreeFive
+public import NormalityChecker.UnsignedNormality
+public import NormalityChecker.FullPolynomialNormality
+public import NormalityChecker.DyadicRelations
