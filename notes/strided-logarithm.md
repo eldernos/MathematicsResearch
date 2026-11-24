@@ -74,3 +74,33 @@ To see why, start the recurrence at the symbolic index $X$ with value $c$ and it
 In any interval of $T$ consecutive indices within $[0,p)$, a fixed residue occurs at most $\lceil T/(H+1)\rceil+H(H+1)/2$ times for $1\le H<p/2$. Split into bins of $H+1$ consecutive indices. After the first occurrence in each bin, charge the next occurrence to a returning pair at gap at most $H$. Sum the theorem over these gaps. In particular each prescribed residue occurs $O(p^{2/3})$ times in the full range, uniformly in $c$. These are restrictions on the actual numerator across adjacent and separated models. Binary low-transition cylinders are **real intervals** at each starting index, and the change from the modular unit normalization to those real intervals depends on the index and the whole denominator. A positive-density estimate for those cylinders remains open.
 
 The exact program checks the diagonal recurrence against independently reduced beta models and the two-stride residue against independently summed prefixes. At $N=128,256,512,1024$ the two-stride denominators have respectively 89, 183, 359 and 742 binary digits. All four are finite measurements. [Run the reproduction](../scripts/strided_logarithm.py)
+
+## An arithmetic sieve for low-transition binary words
+
+The diagonal model follows enough shifts to test an entire word of length $n$ at starting position $n$. The following construction uses its residues at large primes **without choosing a lift to the full denominator**. Put $M=2n$, $L=\mathrm{lcm}(1,\ldots,M)$, and let $P$ be the product of primes $\sqrt M<p\le M$. Define $H=L/P$. The data below determine the fractional part of the actual diagonal rational $y_n$ up to a translate of the equally spaced grid of $H$ points.
+
+First express $y_n=\sum_{k=1}^{2n} a_k/k$ over integers. The prefix gives $a_k=2^{n-k}$ for $1\le k\le n$. For $k=n+\ell+1$, the coefficient is the coefficient of $t^\ell$ in
+$$
+\sum_{j=0}^{n-1}(-1)^j(1-t)^j=\frac{1-(-1)^n(1-t)^n}{2-t}.
+$$
+Indeed integrating each summand against $t^n$ gives the beta corrections. In particular $Ly_n$ is integral. For each $p\mid P$, only denominators $k=pj$ contribute after multiplying by $p$ and reducing modulo $p$. Compute the simultaneous residue $0\le r<P$ by the Chinese remainder theorem from
+$$
+r\equiv (L/p)\sum_{j\le M/p} a_{pj}/j\pmod p.
+$$
+There are at most $\sqrt M$ terms per prime. Canceled primes also supply congruences, with residue zero. The possible fractional parts are exactly $r/L+j/H$ for $0\le j<H$ given these congruences alone. The unreduced common denominator keeps the calculation independent of which primes survive reduction.
+
+**Size of the remaining grid (paper theorem).** Its size satisfies $\log H=2\sqrt M+o(\sqrt M)$, whereas $\log L=M+o(M)$. Indeed, writing $\vartheta(x)=\sum_{p\le x}\log p$ gives
+$$
+\log H=\vartheta(\sqrt M)+\sum_{a=2}^{\lfloor\log_2 M\rfloor}\vartheta(M^{1/a}).
+$$
+The first term and the square-power term each contribute $\sqrt M+o(\sqrt M)$ by the prime number theorem. Higher powers cost $O(M^{1/3}\log M)$ by the Chebyshev upper bound.
+
+**Exact exclusion.** Let $B=2^T$, let $0\le a<B$ encode a length-$T$ binary word, and put $\eta=1/((2n+1)\binom{2n}{n})$. If the word occurs at $\{2^n\ln 2\}$ then the grid must intersect the closed interval $[a/B-\eta,(a+1)/B+\eta]$ modulo one, by the verified integral error bound. Equivalently the following inequality is necessary:
+$$
+\left\lceil\frac{L(a/B-\eta)-r}{P}\right\rceil
+\ \le\
+\left\lfloor\frac{L((a+1)/B+\eta)-r}{P}\right\rfloor .
+$$
+Unrestricted integer lifts in this test include both endpoints of the circle. Each word admits at most $1+\lfloor H(2^{-T}+2\eta)\rfloor$ lifts in the unwrapped interval. For $T=n$ this is at most one for all sufficiently large $n$. If $T$ is fixed instead, $H\ge2^T$ eventually and every cylinder contains a grid point. In particular, these large-prime data alone cannot exclude even one fixed twelve-bit word at sufficiently large positions. Information from the small-prime part or a statistical constraint on the full lift would be needed for that strategy. [Beta error bound](../NormalityChecker/LogShadowIntegral.lean)
+
+**Finite exact computation.** The $2T$ words with at most one transition are the two constant words and the words with one final run of opposite bits. For $T=n$ at starts $64,128,256,512,1024$, the integer test rejects **all** of them, even allowing every possible small-prime lift. The respective bit lengths of $H$ are 33, 43, 64, 97 and 134. The true logarithm has at least two transitions among those $n$ digits in each example. The argument gives an arithmetic test for any specified list of low-transition words at any start. A lower bound proportional to the word length on a sufficient share of arbitrarily late shells remains open. [Integer sieve and checks against the fully reduced models](../scripts/strided_logarithm.py)

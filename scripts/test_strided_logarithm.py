@@ -1,6 +1,8 @@
 import unittest
 
-from strided_logarithm import finite_certificates, golden_modulus_hits, pi_hex_transitions, relations, validate
+from strided_logarithm import (
+    finite_certificates, golden_modulus_hits, low_transition_sieve, pi_hex_transitions, relations, validate,
+)
 
 
 class StridedLogarithmTests(unittest.TestCase):
@@ -12,6 +14,11 @@ class StridedLogarithmTests(unittest.TestCase):
         self.assertEqual([m for m, _ in found].count(1), 7)
         self.assertEqual([m for m, _ in found].count(2), 1)
         self.assertEqual(len(found), 8)
+
+    def test_low_transition_sieve(self):
+        self.assertEqual(low_transition_sieve(64, 12), (33, 24))
+        self.assertEqual([low_transition_sieve(n, n) for n in (64, 128, 256, 512, 1024)],
+                         [(33, 0), (43, 0), (64, 0), (97, 0), (134, 0)])
 
     def test_finite_orbit_certificates(self):
         self.assertEqual(finite_certificates(1024),

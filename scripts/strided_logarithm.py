@@ -2,9 +2,11 @@
 
 from fractions import Fraction as Q
 from itertools import combinations_with_replacement
+from math import comb, isqrt, lcm
 
 from discrepancy_experiments import corrected_model, log_bits
 from kernel_coverage import block_discrepancy
+from localized_certificate import prime
 
 
 def relations(max_stride=6, budget=4):
@@ -119,6 +121,54 @@ def golden_modulus_hits(n):
     return index, hits
 
 
+def diagonal_sieve(n):
+    """Return (L, P, r) with L*y_n integral and L*y_n = r mod P, using only large primes."""
+    if n < 1:
+        raise ValueError("positive diagonal start required")
+    end = 2*n
+    common = lcm(*range(1, end+1))
+    # Coefficients of (1-(-1)^n(1-t)^n)/(2-t), in ascending degree.
+    correction = [(1-(-1)**n)//2]
+    for degree in range(1, n):
+        coefficient = correction[-1]-(-1)**(n+degree)*comb(n, degree)
+        correction.append(coefficient//2)
+    modulus, residue = 1, 0
+    for p in range(isqrt(end)+1, end+1):
+        if not prime(p):
+            continue
+        pole = 0
+        for j in range(1, end//p+1):
+            k = p*j
+            weight_mod = pow(2, n-k, p) if k <= n else correction[k-n-1]
+            pole = (pole + weight_mod*pow(j, -1, p)) % p
+        target = (common//p)*pole % p
+        digit = (target-residue)*pow(modulus, -1, p) % p
+        residue += modulus*digit
+        modulus *= p
+    return common, modulus, residue
+
+
+def low_transition_sieve(n, bits):
+    """Count words with at most one change surviving the large-prime test for 2^n log(2)."""
+    if bits < 1:
+        raise ValueError("positive binary word length required")
+    common, modulus, residue = diagonal_sieve(n)
+    base = 1 << bits
+    beta_den = (2*n+1)*comb(2*n, n)
+    # A possible lifted numerator r+Pj must lie in the closed error enlargement.
+    def survives(word):
+        lower = (word*common-base*residue)*beta_den-base*common
+        upper = ((word+1)*common-base*residue)*beta_den+base*common
+        den = base*modulus*beta_den
+        return -((-lower)//den) <= upper//den
+
+    survivors = int(survives(0)) + int(survives(base-1))
+    for tail_length in range(1, bits):
+        suffix = (1 << tail_length)-1
+        survivors += survives(suffix) + survives(base-1-suffix)
+    return (common//modulus).bit_length(), survivors
+
+
 def validate():
     for n in range(1, 90):
         y = shifted(n)
@@ -130,6 +180,10 @@ def validate():
                 actual = residue_of_rational(p*y, p)
                 predicted = pow(2, n, p)*residue_of_rational(partial(n//p), p) % p
                 assert actual == predicted
+    for n in range(1, 70):
+        common, modulus, residue = diagonal_sieve(n)
+        cleared = common*corrected_model(n, n)
+        assert cleared.denominator == 1 and cleared.numerator % modulus == residue
     for p in (7, 13, 31, 43):
         values = diagonal_residues(p)
         for n, w in enumerate(values):
@@ -155,3 +209,5 @@ if __name__ == '__main__':
               n, y.denominator.bit_length(), golden_modulus_hits(n))
     print('Multiple, qualifying starts, disjoint positions:', finite_certificates(1024))
     print('Hexadecimal shifts of pi, transitions on [128,256):', pi_hex_transitions(128, 128))
+    for n in (64, 128, 256, 512, 1024):
+        print('Diagonal start, residual modulus bits, surviving words:', n, low_transition_sieve(n, n))
