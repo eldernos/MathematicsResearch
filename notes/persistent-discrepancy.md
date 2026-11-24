@@ -37,7 +37,7 @@ The first normalized cell $[1,2)$ always passes. Consequently $\rho(2)=\rho(1)/2
 
 ## Reproducing the precision table
 
-Each row gives the exact rational upper bounds for $L=1,2,3,4$, at order one. The row with two off-base primes illustrates the wider scope of the one-sided result. A zero certificate proves normality in all four examples. [Tests against exact rational arithmetic](../scripts/test_localized_certificate.py)
+Each row gives the exact rational upper bounds for $L=1,2,3,4$, at order one. The row with two off-base primes shows the bounds from one selected prime. Intersecting the failure sets of every off-base prime gives the exact order-one limit. [Joint formula and higher-order obstruction](joint-persistent.md) A zero certificate proves normality in all four examples. [Tests against exact rational arithmetic](../scripts/test_localized_certificate.py)
 
 | Base | Support | Selected prime | $C_1$ | $C_2$ | $C_3$ | $C_4$ |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: |

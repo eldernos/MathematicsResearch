@@ -56,3 +56,10 @@ public import NormalityChecker.OrbitRigidity
 public import NormalityChecker.JointFiveThirteen
 public import NormalityChecker.LogPolynomialKernel
 public import NormalityChecker.GoldenCongruence
+public import NormalityChecker.DiagonalNumerator
+public import NormalityChecker.QualityCoverage
+public import NormalityChecker.StridedLogarithm
+public import NormalityChecker.ChebyshevModels
+public import NormalityChecker.PolynomialMasks
+public import NormalityChecker.JointPersistent
+public import NormalityChecker.SignedShellDiscrepancy

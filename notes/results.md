@@ -1,5 +1,18 @@
 # Results and examples
 
+## Phase 10
+
+**The binary discrepancy bound of 0.9999 for ln 2 remains open.** The arithmetic advance is an alternative series with exact shifted denominator growth rate one half and a proof that this rate is optimal among binary-exponent truncations of finite dyadic logarithm identities. The remaining question is whether the actual binary orbit has a sufficiently large lower share of locally distributed blocks or an equivalent quantitative escape estimate.
+
+| Investigation | Evidence and scope |
+| --- | --- |
+| Coverage and actual numerators of ln 2 | Lean proves the fixed-quality and intermittent-shell implications and bounds repetitions of each prescribed normalized diagonal residue. A published irrationality measure improves the individual run bound on paper. Finite exact certificates cover 888 of the first 1,024 positions in disjoint twelve-position blocks. Positive limiting coverage and the required moment and cylinder bounds remain open. [Coverage proofs and finite scope](intermittent-coverage.md) · [Numerator proof](strided-logarithm.md#repetitions-of-a-prescribed-diagonal-numerator-residue) |
+| Alternative representations and integer multiples | Lean proves the two-stride series, its pointwise error and denominator bounds, the full-degree Chebyshev error, and the integer-multiple cosine inequality. The exact denominator rate, optimality theorem and binary-run transfer have paper proofs. The bounded product search uses rational arithmetic. [Series and supporting arithmetic](strided-logarithm.md) · [Transfer between multiples](intermittent-coverage.md#multiplying-a-constant-and-returning-to-the-binary-orbit) |
+| Joint prime failures | Lean proves the exact limiting discrepancy formula at order one for every finite support and checks a failure of deepest-cell clearing at order two. A paper argument uses all orders up to the specified order to obtain a replacement. An explicit unsigned support with an off-base prime and positive persistent joint mass remains open. [Proof, compact phase space and examples](joint-persistent.md) |
+| Polynomial weights and masks | Exact local valuations, finite window counts and signed tail bounds are kernel-verified. The full classification, retained-power and bounded-gap discrepancy bounds are paper deductions. Rational coefficients preserve the positive conclusions. Explicit rational examples in the maximal integer cases have discrepancy 2/3. [Classification and counterexamples](polynomial-masks.md) |
+| Signed Stoneham phases | Lean proves the all-prefix asymptotic, the periodic formula, all three stated rational discrepancies, and the irrationality criterion. The attainable spectrum and transcendence follow on paper, using Roth or Ridout for transcendence. [Statements, proofs and examples](signed-shell-discrepancy.md) |
+| Golden ratio and π | A published digit-change estimate gives a growing lower count for least Zeckendorf indices at most three. A paper inequality transfers hexadecimal discrepancy bounds to binary. The growing-modulus and Machin tests give finite exact counts. A positive asymptotic escape density for either constant remains open. [Proofs and computations](intermittent-coverage.md#hexadecimal-observations-for-π) |
+
 ## Quantitative discrepancy on finite prime supports
 
 The checker sharpens the bound by counting failed modular cells through every prefix endpoint. In base 7 with support $`\{2,3,5\}`$, testing at powers of five returns $`5/12`$, $`1/4`$, and zero. Several primes can certify the same prefix. Only their simultaneous failures are charged. [Checker and soundness](../NormalityChecker/DiscrepancyChecker.lean) · [Overlaps and the binary example](overlapping-certificates.md)
