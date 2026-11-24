@@ -197,6 +197,27 @@ private lemma numerator_nonzero {b c p L N k n : ℕ} (pc : p ∣ c) (cop : b.Co
   have unit := ((ZMod.isUnit_iff_coprime b (p^L)).mpr (cop.pow_right L)).pow n
   exact hn (unit.mul_right_cancel (by simpa using eqn.symm : _ = 0 * (b : ZMod (p^L))^n))
 
+/-- A nonzero residue bounds the number of factors lost when the prefix is reduced. -/
+private theorem factorization_le_of_numerator {b c p L n : ℕ} (hp : p.Prime) (hc : 0 < c)
+    (e : Strides d) (m : Vector d)
+    (nz : (numerator b c e m (Nat.log c n) n : ZMod (p^L)) ≠ 0) :
+    c.factorization p * scale e (Nat.log c n) ≤ (productPrefix b c e m n).den.factorization p + L := by
+  let k := Nat.log c n
+  let A := numerator b c e m k n
+  have no : ¬p^L ∣ A := fun div => nz ((ZMod.natCast_eq_zero_iff ..).mpr div)
+  have reduced := reduced_info (S:=A) (x:=productPrefix b c e m n) (pow_pos hc (scale e k))
+    (by exact_mod_cast scaled (b:=b) (n:=n) hc e m)
+  have cross := reduced.2
+  have nonzero : A ≠ 0 := fun h => no (h ▸ dvd_zero _)
+  have vlt : A.factorization p < L := lt_of_not_ge (fun h => no ((hp.pow_dvd_iff_le_factorization nonzero).mpr h))
+  have div : c^(scale e k) ∣ A*(productPrefix b c e m n).den := cross ▸ dvd_mul_right _ _
+  have le := (Nat.factorization_prime_le_iff_dvd (pow_pos hc _).ne'
+    (Nat.mul_ne_zero nonzero (productPrefix b c e m n).pos.ne')).mpr div p hp
+  rw [Nat.factorization_mul nonzero (productPrefix b c e m n).pos.ne', Finsupp.add_apply,
+    Nat.factorization_pow, Finsupp.smul_apply, smul_eq_mul, mul_comm (scale e k)] at le
+  change c.factorization p * scale e k ≤ _
+  omega
+
 /-- On every sufficiently late scale the reduced denominator retains all but
 a bounded number of the `v_p(c) * d * log_c n` available powers of the prime `p`. -/
 theorem retained_denominator_at {b c p : ℕ} (hp : p.Prime) (hc : 3 ≤ c) (pc : p ∣ c)
@@ -230,19 +251,8 @@ theorem retained_denominator_at {b c p : ℕ} (hp : p.Prime) (hc : 3 ≤ c) (pc 
     exact Nat.mul_le_mul_right _ (Nat.lt_pow_self (n:=J) (by omega : 1<c)).le
   have nz := numerator_nonzero pc cop freeze e m (fun i => (le_max_left ..).trans (near i))
     (pass _ (cut_upper (by omega : 0<c) e m k n) hit)
-  let A := numerator b c e m k n
-  have no : ¬p^L ∣ A := fun div => nz ((ZMod.natCast_eq_zero_iff ..).mpr div)
-  have reduced := reduced_info (S:=A) (x:=productPrefix b c e m n) (pow_pos (by omega : 0<c) (scale e k))
-    (by exact_mod_cast scaled (b:=b) (n:=n) (by omega : 0<c) e m)
-  have cross := reduced.2
-  have nonzero : A ≠ 0 := fun h => no (h ▸ dvd_zero _)
-  have vlt : A.factorization p < L := lt_of_not_ge (fun h => no ((hp.pow_dvd_iff_le_factorization nonzero).mpr h))
+  have le : c.factorization p * scale e k ≤ _ := factorization_le_of_numerator hp (by omega : 0 < c) e m nz
   apply (hp.pow_dvd_iff_le_factorization (productPrefix b c e m n).pos.ne').mpr
-  have div : c^(scale e k) ∣ A*(productPrefix b c e m n).den := cross ▸ dvd_mul_right _ _
-  have le := (Nat.factorization_prime_le_iff_dvd (pow_pos (by omega : 0<c) _).ne'
-    (Nat.mul_ne_zero nonzero (productPrefix b c e m n).pos.ne')).mpr div p hp
-  rw [Nat.factorization_mul nonzero (productPrefix b c e m n).pos.ne', Finsupp.add_apply,
-    Nat.factorization_pow, Finsupp.smul_apply, smul_eq_mul, mul_comm (scale e k)] at le
   have gap := Nat.mul_le_mul_left (c.factorization p) (show d*k ≤ scale e k+W from scale_lower e k)
   rw [Nat.mul_add] at gap
   change c.factorization p*(d*k)-(L+c.factorization p*W) ≤ _

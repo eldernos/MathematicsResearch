@@ -9,9 +9,9 @@ open Finset Polynomial
 namespace NormalityChecker.StonehamPolynomial
 
 /-- The single leading monomial criterion allows arbitrary rational coefficients. -/
-theorem rational_sum_normal_at {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3 ≤ c)
-    (hp : p.Prime) (pc : p ∣ c) (stable : StablePowers b c p)
-    (cop : b.Coprime c) (t : Monomial) (degree : 0 < t.degree) (lead : ℚ) (nc : lead ≠ 0)
+theorem rational_sum_normal_of_retainsAt {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3 ≤ c)
+    (hp : p.Prime) (pc : p ∣ c)
+    (cop : b.Coprime c) (t : Monomial) (retention : t.RetainsAt b c p) (degree : 0 < t.degree) (lead : ℚ) (nc : lead ≠ 0)
     (s : Finset ι) (u : ι → Monomial) (a : ι → ℚ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
     NormalIn b ((lead:ℝ) * t.value b c + ∑ i ∈ s, (a i:ℝ)*(u i).value b c) := by
   classical
@@ -28,7 +28,7 @@ theorem rational_sum_normal_at {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3
   have nz : z lead ≠ 0 := fun h =>
     (mul_ne_zero (Nat.cast_ne_zero.mpr pos.ne') (Rat.cast_ne_zero.mpr nc) : (D:ℝ)*(lead:ℝ) ≠ 0)
       ((eqn lead member).symm.trans (by simp [h]))
-  have result := integer_sum_normal_at hb hc hp pc stable cop t degree (z lead) nz s u (z ∘ a) lt
+  have result := integer_sum_normal_of_retainsAt hb hc hp pc cop t retention degree (z lead) nz s u (z ∘ a) lt
   apply (normal_mul_nat_iff hb pos _).mp
   rw [mul_add,mul_sum]
   have e : (∑ i ∈ s, ((z ∘ a) i:ℝ)*(u i).value b c) =
@@ -37,6 +37,16 @@ theorem rational_sum_normal_at {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3
     intro i hi
     rw [Function.comp_apply,eqn (a i) (mem_insert_of_mem (mem_image_of_mem _ hi)),mul_assoc]
   rwa [eqn lead member,mul_assoc,e] at result
+
+/-- The rational leading-monomial criterion at a stabilizing prime. -/
+theorem rational_sum_normal_at {ι : Type*} {b c p : ℕ} (hb : 2 ≤ b) (hc : 3 ≤ c)
+    (hp : p.Prime) (pc : p ∣ c) (stable : StablePowers b c p)
+    (cop : b.Coprime c) (t : Monomial) (degree : 0 < t.degree) (lead : ℚ) (nc : lead ≠ 0)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℚ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+    NormalIn b ((lead:ℝ) * t.value b c + ∑ i ∈ s, (a i:ℝ)*(u i).value b c) :=
+  rational_sum_normal_of_retainsAt hb hc hp pc cop t
+    (retained_denominator_at hp hc pc (cop.coprime_dvd_right pc) stable t.stride t.parameter)
+    degree lead nc s u a lt
 
 /-- The odd-prime specialization of the rational leading-monomial criterion. -/
 theorem rational_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)

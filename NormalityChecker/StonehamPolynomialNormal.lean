@@ -37,17 +37,22 @@ private lemma event_mem {p k : ℕ} (hp : 2 ≤ p) (v : Vector t.degree)
 
 private lemma events_card (p k : ℕ) : (t.events p k).card ≤ (2*(k+1))^t.degree :=
   card_image_le.trans_eq (by simp [box])
+/-- The leading prefix loses only boundedly many factors of a chosen prime divisor. -/
+def RetainsAt (b q p : ℕ) : Prop :=
+  ∃ L K : ℕ, ∀ n : ℕ, K ≤ Nat.log q n → 0 < n →
+    p^(q.factorization p * (t.degree * Nat.log q n) - L) ∣ (t.model b q n).den
+
 end Monomial
 
 /-- An integral leading coefficient and any rational perturbation with pole order
 at most `v_p(q)(d-1)k` leave a pole of order at least `v_p(q)dk-C` at late scales. -/
-theorem retained_with_lower_terms_at {b q p : ℕ} (hp : p.Prime) (hq : 3 ≤ q)
-    (pq : p ∣ q) (cop : b.Coprime p) (stable : StablePowers b q p)
-    (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
+theorem retained_with_lower_terms_of_retainsAt {b q p : ℕ} (hp : p.Prime) (hq : 3 ≤ q)
+    (pq : p ∣ q)
+    (t : Monomial) (retention : t.RetainsAt b q p) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
     (lower : ∀ n, (R n).den ∣ q^((t.degree-1)*Nat.log q n)) :
     ∃ C K : ℕ, ∀ n, K ≤ Nat.log q n → 0 < n →
       p^(q.factorization p * (t.degree * Nat.log q n) - C) ∣ ((c:ℚ)*t.model b q n + R n).den := by
-  obtain ⟨L,K,retain⟩ := retained_denominator_at hp hq pq cop stable t.stride t.parameter
+  obtain ⟨L,K,retain⟩ := retention
   let h := c.natAbs.factorization p
   refine ⟨L+h,max K (L+h+1),fun n late pos => ?_⟩
   let k := Nat.log q n
@@ -78,6 +83,16 @@ theorem retained_with_lower_terms_at {b q p : ℕ} (hp : p.Prime) (hq : 3 ≤ q)
   have split := congrArg (q.factorization p * ·) eqdeg
   rw [Nat.mul_add] at split
   omega
+
+/-- A stabilizing prime supplies the leading denominator estimate. -/
+theorem retained_with_lower_terms_at {b q p : ℕ} (hp : p.Prime) (hq : 3 ≤ q)
+    (pq : p ∣ q) (cop : b.Coprime p) (stable : StablePowers b q p)
+    (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
+    (lower : ∀ n, (R n).den ∣ q^((t.degree-1)*Nat.log q n)) :
+    ∃ C K : ℕ, ∀ n, K ≤ Nat.log q n → 0 < n →
+      p^(q.factorization p * (t.degree * Nat.log q n) - C) ∣ ((c:ℚ)*t.model b q n + R n).den :=
+  retained_with_lower_terms_of_retainsAt hp hq pq t
+    (retained_denominator_at hp hq pq cop stable t.stride t.parameter) degree c nc R lower
 
 theorem retained_with_lower_terms {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (cop : b.Coprime p)
     (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
@@ -219,16 +234,26 @@ theorem sum_normal_of_retained {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.P
   simpa [hp.factorization_self] using survives
 
 /-- A unique highest-degree monomial with nonzero integer coefficient survives
-addition of any finite sum of strictly lower-degree monomials. Each parameter is a
-power of the same integer, which has a stabilizing prime divisor. -/
+addition of any finite sum of strictly lower-degree monomials when its prefix
+retains the expected pole at a prime divisor of the common parameter. -/
+theorem integer_sum_normal_of_retainsAt {ι : Type*} {b q p : ℕ} (hb : 2 ≤ b) (hq : 3 ≤ q)
+    (hp : p.Prime) (pq : p ∣ q)
+    (cop : b.Coprime q) (t : Monomial) (retention : t.RetainsAt b q p) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+    NormalIn b (c * t.value b q + ∑ i ∈ s, (a i:ℝ)*(u i).value b q) := by
+  apply sum_normal_of_retained_at hb (by omega) hp pq cop t degree c s u a (fun i hi => (lt i hi).le)
+  apply retained_with_lower_terms_of_retainsAt hp hq pq t retention degree c nc
+  exact combination_denominator (by omega) s u a (fun i hi => by have := lt i hi; omega)
+
+/-- The integer leading-monomial criterion at a stabilizing prime. -/
 theorem integer_sum_normal_at {ι : Type*} {b q p : ℕ} (hb : 2 ≤ b) (hq : 3 ≤ q)
     (hp : p.Prime) (pq : p ∣ q) (stable : StablePowers b q p)
     (cop : b.Coprime q) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
     (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
-    NormalIn b (c * t.value b q + ∑ i ∈ s, (a i:ℝ)*(u i).value b q) := by
-  apply sum_normal_of_retained_at hb (by omega) hp pq cop t degree c s u a (fun i hi => (lt i hi).le)
-  apply retained_with_lower_terms_at hp hq pq (cop.coprime_dvd_right pq) stable t degree c nc
-  exact combination_denominator (by omega) s u a (fun i hi => by have := lt i hi; omega)
+    NormalIn b (c * t.value b q + ∑ i ∈ s, (a i:ℝ)*(u i).value b q) :=
+  integer_sum_normal_of_retainsAt hb hq hp pq cop t
+    (retained_denominator_at hp hq pq (cop.coprime_dvd_right pq) stable t.stride t.parameter)
+    degree c nc s u a lt
 
 /-- The odd-prime specialization of the integer sum theorem. -/
 theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
