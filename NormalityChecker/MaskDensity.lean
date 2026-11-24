@@ -187,4 +187,12 @@ theorem unbounded_gaps_zero {p : ℕ} (hp : 1<p) (e : ℕ → ℕ) (inc : Strict
   apply (div_le_div_iff₀ (by exact_mod_cast pos _) (by exact_mod_cast pow_pos (by omega : 0<p) H)).mpr
   exact_mod_cast (Nat.mul_le_mul_right (p^H) lim).trans ((Nat.mul_assoc ..).le.trans (Nat.mul_le_mul_left 2 scales))
 
+/-- Finite selections have window density zero, including the empty selection. -/
+theorem finite_window_density {p : ℕ} (hp : 2≤p) (E : Finset ℕ) :
+    Tendsto (fun N : ℕ => (((range N).filter (fun n => ∃ k∈E, p^k≤n ∧ n<2*p^k)).card:ℝ)/N) atTop (𝓝 0) := by
+  apply squeeze_zero (fun N => by positivity) _ (tendsto_const_div_atTop_nhds_zero_nat ((∑ k∈E,p^k:ℕ):ℝ))
+  intro N; apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _); apply Nat.cast_le.mpr
+  rw [window_count hp E N]
+  apply sum_le_sum; intro k _; omega
+
 end NormalityChecker.PolynomialMasks

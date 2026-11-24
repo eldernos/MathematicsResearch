@@ -12,7 +12,7 @@ private lemma val_eq {p : ℕ} (hp : p.Prime) (z : ℚ) :
     padicValRat p z = (z.num.natAbs.factorization p : ℤ) - z.den.factorization p := by
   simp [padicValRat_def,padicValInt,Nat.factorization_def _ hp]
 
-private lemma val_neg_den {p : ℕ} (hp : p.Prime) (z : ℚ) (h : 0 < z.den.factorization p) :
+lemma valuation_of_den_factor {p : ℕ} (hp : p.Prime) (z : ℚ) (h : 0 < z.den.factorization p) :
     padicValRat p z = -(z.den.factorization p : ℤ) := by
   have div := (hp.pow_dvd_iff_le_factorization z.den_ne_zero).mpr (show 1 ≤ z.den.factorization p from h)
   rw [pow_one] at div
@@ -26,12 +26,12 @@ theorem rational_den_exponent {p : ℕ} (hp : p.Prime) {D : ℤ} (hd : D≠0) (y
     y.den.factorization p = ((D:ℚ)*y).den.factorization p + D.natAbs.factorization p := by
   let : Fact p.Prime := ⟨hp⟩
   have yn : y≠0 := by rintro rfl; simp at hit
-  have v := val_neg_den hp _ hit
+  have v := valuation_of_den_factor hp _ hit
   rw [padicValRat.mul (by exact_mod_cast hd) yn, padicValRat.of_int, padicValInt,
     ← Nat.factorization_def _ hp] at v
   have vy := val_eq hp y
   have pos : 0 < y.den.factorization p := by omega
-  rw [val_neg_den hp y pos] at v
+  rw [valuation_of_den_factor hp y pos] at v
   omega
 
 private lemma shift_at_last {b n m t : ℕ} (G : ℤ[X]) (A : Finset ℕ) (mn : m≤n)
@@ -54,13 +54,13 @@ theorem last_power_den_exponent {b p t n k : ℕ} (hp : p.Prime) (hb : 0<b) (off
   have pos : 0 < z.den.factorization p := by rw [ex]; have := Nat.le_mul_of_pos_right k ht; omega
   have zn : z≠0 := by rintro h; simp [h] at pos
   let u := b^(n-p^k)
-  have vn := val_neg_den hp z pos
+  have vn := valuation_of_den_factor hp z pos
   have prod := padicValRat.mul (p:=p) (show (u:ℚ)≠0 by exact_mod_cast (pow_pos hb _).ne') zn
   rw [padicValRat.of_nat,multiplicity_eq_zero_of_not_dvd (fun h : p∣u => off (hp.dvd_of_dvd_pow h)),
     Nat.cast_zero,zero_add,vn] at prod
   have vv := val_eq hp ((u:ℚ)*z)
   have bigger : 0 < ((u:ℚ)*z).den.factorization p := by omega
-  rw [val_neg_den hp _ bigger] at prod
+  rw [valuation_of_den_factor hp _ bigger] at prod
   rw [shift_at_last G A mn (fun q hq => (cap q hq).2),← Nat.cast_pow]
   change ((u:ℚ)*z).den.factorization p = _
   omega
@@ -88,11 +88,10 @@ theorem infinite_axis_normal {b p t : ℕ} (hb : 2≤b) (hp : p.Prime) (off : ¬
     obtain ⟨j,large,kept⟩ := infinite (M+v+1)
     filter_upwards [eventually_ge_atTop (p^j)] with n late _
     let A := (LocalizedSupport.indices {p} n).filter (fun m => keep m=true)
-    have smooth {m : ℕ} := Nat.mem_factoredNumbers_iff_primeFactors_subset (s:={p}) (m:=m)
     have pm : p^j∈Nat.factoredNumbers {p} := by simpa using Nat.pow_mul_mem_factoredNumbers (s:=∅) hp j (by simp : 1∈Nat.factoredNumbers ∅)
     have hit : p^j∈A := mem_filter.mpr ⟨LocalizedSupport.mem_indices.mpr ⟨late,pm⟩,kept⟩
     let m := A.max' ⟨_,hit⟩
-    have mem : m∈A := max'_mem .. 
+    have mem : m∈A := max'_mem ..
     have ⟨le,ms⟩ := LocalizedSupport.mem_indices.mp (mem_filter.mp mem).1
     let equiv := Nat.equivProdNatFactoredNumbers (s:=∅) hp (by simp)
     obtain ⟨⟨k,w⟩,hw⟩ := equiv.surjective ⟨m,ms⟩
@@ -115,5 +114,44 @@ theorem infinite_axis_normal {b p t : ℕ} (hb : 2≤b) (hp : p.Prime) (off : ¬
     exact (Nat.lt_pow_self hp.one_lt (n:=M)).le.trans
       ((Nat.pow_le_pow_right hp.pos enough).trans (Nat.le_of_dvd y.pos (Nat.ordProj_dvd y.den p)))
   · intro ε pos; filter_upwards with N; simp; positivity
+
+/-- Any eventually zero rational weight on a smooth support leaves a fixed grid
+gap, including the empty mask. -/
+theorem finite_mask_nonnormal {b : ℕ} (hb : 2≤b) {S : Finset ℕ} {a : ℕ → ℚ}
+    (growth : PolyGrowth a) (supp : ∀ m, m∉Nat.factoredNumbers S → a m=0)
+    (finite : ∀ᶠ m : ℕ in atTop, a m=0) : ¬NormalIn b (series b a) := by
+  obtain ⟨K,zero⟩ := eventually_atTop.mp finite
+  let L := ∏ m∈range K,(a m).den
+  have pos : 0<L := prod_pos (fun m _ => (a m).pos)
+  apply (grid_discrepancy hb pos growth supp _).2
+  apply Eventually.of_forall; intro k n _
+  apply (Rat.den_sum_dvd_lcm_den ..).trans; apply Finset.lcm_dvd
+  intro m _
+  by_cases late : K≤m
+  · simp [zero m late]
+  · have dvd : (a m).den∣L := dvd_prod_of_mem (fun i => (a i).den) (mem_range.mpr (lt_of_not_ge late))
+    rw [← Nat.cast_pow]
+    exact cleared_term _ pos.ne' (dvd.trans (dvd_mul_right ..))
+
+/-- Complete mask classification on one off-base prime-power axis in the
+presence of a residual pole. -/
+theorem axis_normal_iff {b p t : ℕ} (hb : 2≤b) (hp : p.Prime) (off : ¬p∣b) (ht : 0<t)
+    (P : ℚ[X]) (p0 : P.eval 0 ≠ 0) (keep : ℕ → Bool) :
+    NormalIn b (maskedValue b {p} keep P t) ↔ ∀ J : ℕ, ∃ j≥J, keep (p^j)=true := by
+  refine ⟨?_,infinite_axis_normal hb hp off ht P p0 keep⟩
+  intro normal; by_contra! finite
+  obtain ⟨K,no⟩ := finite
+  apply finite_mask_nonnormal hb (weights_growth ..) (weights_supported {p} keep P t) _ normal
+  filter_upwards [eventually_ge_atTop (p^K)] with m late
+  by_cases sm : m∈Nat.factoredNumbers {p}
+  · let equiv := Nat.equivProdNatFactoredNumbers (s:=∅) hp (by simp)
+    obtain ⟨⟨j,w⟩,hw⟩ := equiv.surjective ⟨m,sm⟩
+    have eqn := congrArg Subtype.val hw
+    change p^j*(w:ℕ)=m at eqn
+    have one : (w:ℕ)=1 := by simpa using w.property
+    rw [one,mul_one] at eqn
+    have jk := (pow_right_strictMono₀ hp.one_lt).le_iff_le.mp (late.trans_eq eqn.symm)
+    simp [weights,← eqn,no j jk]
+  · exact weights_supported _ _ _ _ _ sm
 
 end NormalityChecker.PolynomialMasks

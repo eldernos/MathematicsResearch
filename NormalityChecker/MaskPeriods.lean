@@ -1,6 +1,7 @@
 module
 
 public import NormalityChecker.MaskDensity
+public import Mathlib.Topology.Algebra.Order.LiminfLimsup
 
 /-! Exact density on geometric periods and finite certificates for periodic masks. -/
 @[expose] public section
@@ -72,7 +73,7 @@ theorem exact_period_price {p S : ℕ} (hp : 1<p) (hs : 0<S) (Z : Finset ℕ) (h
   have ub := limsup_le_of_le (f:=atTop) (isCoboundedUnder_le_of_le _ nn) (.of_forall upper)
   refine le_antisymm ub ?_
   let vals := insert 0 ((Icc S (p*S)).image (score p Z))
-  have win : bound p S Z ∈ vals := max'_mem .. 
+  have win : bound p S Z ∈ vals := max'_mem ..
   rcases mem_insert.mp win with eqn|mem
   · rw [eqn,Rat.cast_zero]; exact le_limsup_of_le (isBoundedUnder_of_eventually_le (.of_forall upper))
       (fun z hz => by obtain ⟨n,h⟩ := hz.exists; exact (nn n).trans h)
@@ -149,5 +150,92 @@ theorem index_mask_eventual_period (p d : ℕ) (hd : 0<d) (keep : Fin d → Bool
   have H := (ij.mul_right (p^(k-i))).symm
   change p^(k+(j-i)) ≡ p^k [MOD d]
   simpa only [← pow_add,show j+(k-i)=k+(j-i) by omega,show i+(k-i)=k by omega] using H
+
+
+/-- For an eventually periodic exponent mask, the finite grid agrees with actual
+retained windows at every sufficiently large position, in both directions. -/
+theorem periodic_windows {p h : ℕ} (hp : 1<p) (hh : 0<h) (keep : ℕ → Bool)
+    (E : Finset ℕ) (inside : E⊆range h)
+    (period : ∀ᶠ k : ℕ in atTop, ∀ j<h, keep (p^(h*k+j))=true ↔ j∈E) :
+    ∀ᶠ n : ℕ in atTop, Window p keep n ↔ coordinate (p^h) 1 n ∉ periodMiss p h E := by
+  obtain ⟨K,stable⟩ := eventually_atTop.mp period
+  let R := p^h
+  have rp : 1<R := one_lt_pow₀ hp hh.ne'
+  filter_upwards [eventually_ge_atTop (R^K)] with n high
+  let k := Nat.log R n
+  let q := R^k
+  let v := n/q
+  have pos := (pow_pos (by omega : 0<R) K).trans_le high
+  have qp : 0<q := pow_pos (by omega) _
+  have coord : coordinate (p^h) 1 n=v := by simp [coordinate,v,q,k,R]
+  have lo : 1≤v := (Nat.le_div_iff_mul_le qp).mpr (by simpa [q,k] using Nat.pow_log_le_self R pos.ne')
+  have hi : v<R := (Nat.div_lt_iff_lt_mul qp).mpr (by simpa [q,k,pow_succ'] using Nat.lt_pow_succ_log_self rp n)
+  have late := Nat.le_log_of_pow_le rp high
+  rw [coord]
+  simp only [periodMiss,mem_filter,mem_Ico,lo,show v<p^h from hi,and_self,true_and,not_not]
+  constructor
+  · rintro ⟨e,hit,left,right⟩
+    let l := e/h
+    let j := e%h
+    have split : h*l+j=e := Nat.div_add_mod e h
+    have jh : j<h := Nat.mod_lt _ hh
+    have lower : R^l≤n := (by
+      rw [← pow_mul]; exact Nat.pow_le_pow_right (by omega) (by omega) : (p^h)^l≤p^e) |>.trans left
+    have upper : n<R^(l+1) := by
+      apply right.trans_le
+      calc 2*p^e ≤ p*p^e := Nat.mul_le_mul_right _ hp
+           _ = p^(e+1) := (pow_succ' ..).symm
+           _ ≤ R^(l+1) := by dsimp [R]; rw [← pow_mul,Nat.mul_succ]; apply Nat.pow_le_pow_right (by omega); omega
+    have kl : k=l := Nat.log_eq_of_pow_le_of_lt_pow lower upper
+    have repr : e=h*k+j := by rw [kl,split]
+    rw [repr] at hit left right
+    refine ⟨j,(stable k late j jh).mp hit,(Nat.le_div_iff_mul_le qp).mpr ?_,(Nat.div_lt_iff_lt_mul qp).mpr ?_⟩
+    · simpa [q,R,pow_add,pow_mul,mul_comm] using left
+    · simpa [q,R,pow_add,pow_mul,mul_assoc,mul_left_comm,mul_comm] using right
+  · rintro ⟨j,hj,left,right⟩
+    refine ⟨h*k+j,(stable k late j (mem_range.mp (inside hj))).mpr hj,?_,?_⟩
+    · simpa [q,R,pow_add,pow_mul,mul_comm] using (Nat.le_div_iff_mul_le qp).mp left
+    · simpa [q,R,pow_add,pow_mul,mul_assoc,mul_left_comm,mul_comm] using (Nat.div_lt_iff_lt_mul qp).mp right
+
+/-- Exact limsup of the missed-window fraction for the actual mask, allowing
+all finite changes before periodicity begins. The complementary lower density is one minus this score. -/
+theorem periodic_mask_price {p h : ℕ} (hp : 1<p) (hh : 0<h) (keep : ℕ → Bool)
+    (E : Finset ℕ) (inside : E⊆range h)
+    (period : ∀ᶠ k : ℕ in atTop, ∀ j<h, keep (p^(h*k+j))=true ↔ j∈E) :
+    letI := Classical.propDecidable
+    limsup (fun N : ℕ => (((range N).filter (fun n => ¬Window p keep n)).card:ℝ)/N) atTop =
+      (bound (p^h) 1 (periodMiss p h E):ℝ) := by
+  classical
+  let R := p^h
+  let Z := periodMiss p h E
+  let f (n : ℕ) : ℝ := if ¬Window p keep n then 1 else 0
+  let g (n : ℕ) : ℝ := if coordinate R 1 n∈Z then 1 else 0
+  let avg (s : ℕ → ℝ) (N : ℕ) := (∑ i∈range N,s i)/(N:ℝ)
+  have eqn : (fun n => f n-g n) =ᶠ[atTop] (fun _ => 0) := by
+    filter_upwards [periodic_windows hp hh keep E inside period] with n eqn
+    dsimp [f,g]; rw [eqn]; simp [R,Z]
+  have limit := (tendsto_const_nhds.congr' eqn.symm).cesaro
+  have diff : Tendsto (avg f - avg g) atTop (𝓝 0) := by simpa [avg,sum_sub_distrib,div_eq_inv_mul,mul_sub,Pi.sub_def] using limit
+  have val (N : ℕ) : avg g N = (periodCount R 1 Z N:ℝ)/N := by simp [avg,g,periodCount]
+  have nn : IsBoundedUnder (·≥·) atTop (avg g) :=
+    isBoundedUnder_of_eventually_ge (.of_forall fun n => (by dsimp [avg,g]; positivity : 0≤avg g n))
+  have grid : Z⊆Ico 1 (R*1) := by simp [Z,periodMiss,R]
+  have cap : IsBoundedUnder (·≤·) atTop (avg g) := isBoundedUnder_of_eventually_le (a:=(bound R 1 Z:ℝ)) (by
+    filter_upwards [eventually_gt_atTop 0] with N pos
+    rw [val,div_le_iff₀ (by exact_mod_cast pos : (0:ℝ)<N)]
+    have bnd : periodCount R 1 Z N ≤ bound R 1 Z*N := count_bound (one_lt_pow₀ hp hh.ne') (by decide) Z grid N
+    exact_mod_cast bnd)
+  have upper := limsup_add_le (v:=avg f-avg g) nn cap diff.isBoundedUnder_ge.isCobounded_le diff.isBoundedUnder_le
+  have lower := le_limsup_add (v:=avg f-avg g) cap nn.isCobounded_le diff.isBoundedUnder_le diff.isBoundedUnder_ge
+  have same : avg g+(avg f-avg g)=avg f := by abel
+  rw [same,diff.limsup_eq,add_zero] at upper
+  rw [same,diff.liminf_eq,add_zero] at lower
+  have exactVal := exact_period_price (one_lt_pow₀ hp hh.ne') (by decide : 0<1) Z grid
+  have fval (N : ℕ) : avg f N=(((range N).filter (fun n => ¬Window p keep n)).card:ℝ)/N := by simp only [avg,f,sum_boole]
+  rw [← funext val] at exactVal
+  calc _ = limsup (avg f) atTop := by
+         apply limsup_congr; apply Eventually.of_forall; intro N
+         rw [fval N]; congr!
+       _ = _ := (le_antisymm upper lower).trans exactVal
 
 end NormalityChecker.PolynomialMasks
