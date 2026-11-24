@@ -87,3 +87,15 @@ An exact-integer computation gives the following finite checks. The final column
 | 65,536 | 21,792 | 87,703 |
 
 These rows can be reproduced with `python3 scripts/middle_gap_counts.py 16`. At precision $`M`$ the program encloses $`2^{M-n} R_n`$ by summing integer floors of $`2^{M-j}/j`$ with at most $`n`$ grid units of accumulated error. For an enclosure meeting an endpoint, it evaluates the recurrence with exact fractions. At the last cutoff the mean age is $`87703/65537`$. The rows are computational observations. The Lean density theorem requires a bound at every sufficiently large cutoff. [Computation](../scripts/middle_gap_counts.py)
+
+## One fixed window length suffices
+
+Fix $`r\ge1`$. Let $`M_r(N)`$ count starts $`n\lt N`$ for which the rational residues $`R_n,\ldots,R_{n+r-1}`$ all miss the closed middle third, and let $`H_N`$ count hits before $`N`$. Each hit covers at most $`r`$ starts. At most $`r-1`$ further starts can use a hit beyond the cutoff. Thus
+
+```math
+N\le M_r(N)+(r-1)+rH_N.
+```
+
+An eventual bound $`M_r(N)\le\rho N`$ with $`\rho\lt1`$ would give lower hit density at least $`(1-\rho)/r`$ and asymptotic discrepancy at most $`\max(2/3,1-(1-\rho)/r)`$. For example, showing that at least four in a thousand length-four windows contain a hit at every sufficiently large cutoff would imply the one-in-a-thousand density target. Lean proves this implication. Establishing its hypothesis for the logarithmic recurrence remains open. [Fixed-window counts and discrepancy](../NormalityChecker/FixedGap.lean)
+
+For the exact doubling orbit from a uniformly chosen $`x\in[0,1)`$, $`r`$ consecutive misses have probability $`(4/3)2^{-r}`$. On the left of the middle third the next point is $`2x`$, and on the right it is $`2x-1`$. Induction gives exactly $`[0,c)\cup(1-c,1)`$ for the initial points that miss all $`r`$ times, where $`c=1/(3\cdot2^{r-1})`$. The interval boundaries and their combined Lebesgue measure are kernel-checked. Summing the probabilities gives the stationary mean-age benchmark $`4/3`$. The observed $`87703/65537`$ is a finite-prefix mean for the rational recurrence. A bound at one fixed window length suffices for the density implication above, even when longer misses have uncontrolled lengths. [Exact binary-orbit intervals and volume](../NormalityChecker/FixedGap.lean)

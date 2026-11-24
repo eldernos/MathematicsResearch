@@ -80,7 +80,7 @@ The comparison used the author manuscripts, Kano's institutional copy, the publi
 
 ## A related infinite-series result
 
-A separate short note proves binary normality of the logarithmic series restricted to indices of the form $`2^a5^j`$. It compares the result with the finite-prime theorem in the September 2026 localized-logarithm manuscript. Two points for review are the cancellation on the middle range of each power-of-five scale and the treatment of a prefix stopping inside an exceptional block. [Proof and literature comparison](localized-logarithms.md) · [Literal series theorem](../NormalityChecker/LocalizedNormality.lean)
+For every odd prime $`p`$, the logarithmic sum over indices $`2^a p^j`$ is binary normal. More generally, the result holds in base $`b`$ with a generator $`q\ge2`$ dividing $`b`$ in place of two. The prime $`p`$ must be coprime to $`b`$. The main point for review is the separation of two exceptional cutoffs by a top-layer insertion and the resulting bound for partial blocks. The note compares coverage with the earlier localized-logarithm manuscript and gives a paper derivation of a discrepancy rate for independent assessment. The kernel verification covers the normality theorem and exceptional-proportion estimate. [Mixed logarithm note](mixed-localized-logarithms.md) · [Formal theorem](../NormalityChecker/LocalizedMixed.lean) · [Exact special case for five](localized-logarithms.md)
 
 ## Verification and open scope
 

@@ -18,3 +18,5 @@ public import NormalityChecker.SparseTransitions
 public import NormalityChecker.FirstFrequency
 public import NormalityChecker.AggregateGaps
 public import NormalityChecker.LocalizedNormality
+public import NormalityChecker.LocalizedMixed
+public import NormalityChecker.FixedGap

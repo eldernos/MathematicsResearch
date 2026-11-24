@@ -60,9 +60,15 @@ open NormalityChecker
 #eval binaryNormalTest {20, 28, 35} (fun _ => 1) -- false
 ```
 
-## A localized logarithm with two prime factors allowed
+## Normality of two-generator localized logarithms
 
-Restrict the series for ln 2 to indices of the form $`2^a5^j`$ with $`a,j\ge0`$. Lean proves the resulting infinite sum is **binary normal**. On certain digit ranges one factor of five cancels from the shifted denominator. A calculation modulo 25 proves exactly how much survives, and an incomplete-orbit estimate controls the gaps between insertions. [Proof and comparison with earlier localized logarithms](notes/localized-logarithms.md) · [Literal series theorem](NormalityChecker/LocalizedNormality.lean)
+For every odd prime $`p`$, restricting the series for ln 2 to indices $`2^a p^j`$ gives a **binary-normal number**. More generally, if $`q\ge2`$ divides the base $`b`$ and $`p`$ is an odd prime coprime to $`b`$, Lean proves normality in base $`b`$ of
+
+```math
+X_{b,q,p}=\sum_{j,a\ge0}\frac{1}{q^ap^j b^{q^ap^j}}.
+```
+
+This includes decimal normality for the prime pairs $`\{2,7\}`$ and $`\{5,11\}`$. The proof bounds the proportion of digit positions where many factors of $`p`$ disappear from the reduced denominator. The earlier binary $`\{2,5\}`$ result also identifies exactly where one factor of five cancels. [General proof and prior work](notes/mixed-localized-logarithms.md) · [Literal series theorem](NormalityChecker/LocalizedMixed.lean) · [Exact calculation for five](notes/localized-logarithms.md)
 
 ## The two arithmetic milestones
 
@@ -127,7 +133,7 @@ Lean proves that the upper limiting interval discrepancy of a binary expansion i
 
 For ln 2, this condition is equivalent to positive lower density of visits of the rational residues $`\{R_n\}`$ to the closed middle third. Every sufficiently late window $`[n,34n)`$ contains such a visit and a true digit transition. That yields an unconditional logarithmic count. A linear count, which would give a fixed discrepancy bound below one, remains open. [Proof and arithmetic obstacle](notes/transition-discrepancy.md)
 
-For the same recurrence, a positive lower limit of the average of $`1-\cos(2\pi R_n)`$ is also equivalent to discrepancy below one. Bounding the mean time elapsed since a middle-third hit would give an explicit lower density. The proof note includes an exact finite experiment with 65,536 starts and states the remaining asymptotic estimate. [First-frequency proof and aggregate gap estimates](notes/transition-discrepancy.md#first-frequency-escape)
+For the same recurrence, a positive lower limit of the average of $`1-\cos(2\pi R_n)`$ is also equivalent to discrepancy below one. Bounding the mean time elapsed since a middle-third hit would give an explicit lower density. Controlling the miss frequency for one fixed window length also suffices. The proof note gives the uniform-orbit benchmark and an exact finite experiment with 65,536 starts. [First-frequency proof and aggregate gap estimates](notes/transition-discrepancy.md#first-frequency-escape)
 
 ## Open proof obligations
 
@@ -140,8 +146,8 @@ For $`\log 2`$, the rational prefixes eventually avoid every fixed finite set of
 Lean and Mathlib are pinned to v4.36.0. With Elan installed, run from the repository root:
 
 ```sh
-export PATH="$`HOME/.elan/bin:`$PATH"
-lake exe cache get $`(sed -nE 's/^(public )?import (Mathlib\.[A-Za-z0-9_.]+)`$/\2/p' NormalityChecker/*.lean NormalityChecker/Analysis/*.lean | sort -u)
+export PATH="$HOME/.elan/bin:$PATH"
+lake exe cache get $(sed -nE 's/^(public )?import (Mathlib\.[A-Za-z0-9_.]+)$/\2/p' NormalityChecker/*.lean NormalityChecker/Analysis/*.lean | sort -u)
 scripts/verify.sh
 ```
 

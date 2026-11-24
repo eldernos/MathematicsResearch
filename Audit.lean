@@ -155,6 +155,11 @@ run_cmd do
     ``NormalityChecker.gap_age_count_bound,
     ``NormalityChecker.hit_density_of_mean_age,
     ``NormalityChecker.logTwo_discrepancy_of_mean_age,
+    ``NormalityChecker.fixed_window_count,
+    ``NormalityChecker.logTwo_density_of_fixed_window,
+    ``NormalityChecker.logTwo_discrepancy_of_fixed_window,
+    ``NormalityChecker.middle_miss_intervals,
+    ``NormalityChecker.middle_miss_volume,
     ``NormalityChecker.unit_orbit_bound,
     ``NormalityChecker.LocalizedFive.denominator_fives,
     ``NormalityChecker.LocalizedFive.value_eq_series,
@@ -162,7 +167,17 @@ run_cmd do
     ``NormalityChecker.LocalizedFive.prefix_orbit,
     ``NormalityChecker.LocalizedFive.clean_denominator,
     ``NormalityChecker.LocalizedFive.binary_normal,
-    ``NormalityChecker.LocalizedFive.series_binary_normal]
+    ``NormalityChecker.LocalizedFive.series_binary_normal,
+    ``NormalityChecker.Localized.decimal_layer_collision,
+    ``NormalityChecker.Localized.layers_injective,
+    ``NormalityChecker.Localized.separated_prefixes,
+    ``NormalityChecker.Localized.threshold_mesh,
+    ``NormalityChecker.Localized.exceptional_diameter,
+    ``NormalityChecker.Localized.severe_loss_rare,
+    ``NormalityChecker.Localized.clean_denominator,
+    ``NormalityChecker.Localized.shift_error,
+    ``NormalityChecker.Localized.series_normal,
+    ``NormalityChecker.Localized.binary_series_normal]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a
