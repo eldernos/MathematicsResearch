@@ -8,6 +8,8 @@ lake env lean Audit.lean
 for paper in papers/[0-9][0-9]-*/; do
   if [[ -x "${paper}check.sh" ]]; then
     "${paper}check.sh"
+  elif [[ -f "${paper}Check.lean" ]]; then
+    lake env lean "${paper}Check.lean"
   elif [[ -f "${paper}check.lean" ]]; then
     lake env lean "${paper}check.lean"
   fi
