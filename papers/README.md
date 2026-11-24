@@ -18,7 +18,7 @@ Cyclotomic conditions determine when cancellation in finite Stoneham combination
 
 This technical report relates short modular orbits to radix digit counts. It specifies the assumptions on prime support, approximation errors, denominators and block lengths, and derives discrepancy bounds from partial or overlapping coverage. Separation and counting results explain when a proposed family of rational models cannot certify a desired fraction of the orbit. Registry AC-01 through AC-03. [PDF](04-arithmetic-certificates/paper.pdf) · [LaTeX](04-arithmetic-certificates/paper.tex) · [Reviewer guide](04-arithmetic-certificates/REVIEW.md)
 
-## V. Denominator arithmetic for classical constants
+## V. Reduced denominators of binary logarithm and arctangent series
 
 A two-stride representation of ln 2 has reduced-denominator growth rate one half. The paper separates this exact rate from upper budgets for corrected approximations and from finite exclusions of low-transition binary words. It also treats related models of π, *e*, and rational arctangents. The strict asymptotic discrepancy target for ln 2 remains open. Registry CC-01 and CC-02. [PDF](05-classical-denominators/paper.pdf) · [LaTeX](05-classical-denominators/paper.tex) · [Reviewer guide](05-classical-denominators/REVIEW.md)
 
@@ -30,6 +30,6 @@ Paper III groups the cyclotomic and signed-shell results in one manuscript and t
 
 ## Status and citation
 
-The [tagged source and downloadable release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0) contains the five papers and their formal evidence. The [review record](reviews/README.md) identifies each reviewed revision, both independent model reports and the disposition of their findings. These are public research drafts. Journal decisions, priority assessments and authorship decisions belong to the project owner and the relevant mathematical community.
+The [tagged source and downloadable release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0) contains the five papers and their formal evidence. The [review record](reviews/README.md) identifies each reviewed revision, both independent model reports and the disposition of their findings. All five manuscripts have been revised following independent Gemini 4 Neon and Sonnet 5.5 reviews of their mathematics, literature comparisons and exposition. They are public research drafts awaiting external mathematical review. Journal decisions, priority assessments and authorship decisions belong to the project owner and the relevant mathematical community.
 
 Use the release-specific checksums to verify a downloaded PDF. The archive guide explains how the project owner can obtain a version DOI for the complete release or a separate preprint DOI for an individual manuscript. [Shared notation](notation.md) · [Build and verify](BUILD.md) · [PDF checksums](SHA256SUMS) · [DOI instructions](ARCHIVING.md)

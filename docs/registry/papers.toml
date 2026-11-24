@@ -53,7 +53,7 @@ dir = "papers/05-classical-denominators"
 title = "Reduced Denominators of Binary Logarithm and Arctangent Series"
 families = ["CC"]
 principal = ["CC-01", "CC-02"]
-status = "draft"
+status = "internally reviewed"
 abstract = '''
 A finite dyadic identity for ln 2 has shifted binary prefixes whose reduced denominators grow at exponential rate one half, and this rate is optimal among finite dyadic logarithm identities, using Bang's primitive-divisor theorem. The paper studies corrected rational models, numerator residues, prime-power sieves, and analogous questions for π, *e* and rational arctangents. It does not establish normality, or an asymptotic discrepancy bound below one, for any of these constants.
 '''

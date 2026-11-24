@@ -1168,7 +1168,7 @@ Let *b* ≥ 2, *x* real and *N* > 0. For an interval [α, β) ⊆ [0, 1] let *S*
 
 ### CC-01 · Half-rate denominators for binary shifts of ln 2
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 The identity (1 + 2⁻³)/(1 − 2⁻²)² = 2 gives
 
@@ -1201,7 +1201,7 @@ Then 0 ≤ 2ᴺ ln 2 − *Y*<sub>*N*</sub> ≤ 4/(*N* + 1) for every *N*. The re
 
 ### CC-02 · The rate 1/2 is optimal among finite dyadic logarithm identities
 
-**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *a*₁, *a*₂, … be integers, only finitely many nonzero, with
 
@@ -1224,7 +1224,7 @@ for some integer *m*. Expanding each logarithm and grouping by binary exponent g
 
 ### CC-03 · Exact prime cancellation in the standard series for ln 2
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 For *k* ≥ 0 let
 
@@ -1250,7 +1250,7 @@ so that *R*₀ = 0 and *R*ₙ₊₁ = 2*R*ₙ + 1/(*n* + 1). Let *Q*ₙ be the r
 
 ### CC-04 · Binary discrepancy below one is equivalent to positive density of digit transitions
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 For a real number *x* let *t*(*x*) be the lower density of the positions *n* at which the binary digits after position *n* begin with 01 or 10, that is, the lim inf over *N* of the proportion of *n* < *N* with {2ⁿ*x*} ∈ [1/4, 3/4). Let *D*∞(*x*) be the limiting interval discrepancy of {2ⁿ*x*}. Then
 
@@ -1272,7 +1272,7 @@ and in general *D*∞(*x*) ≤ max(2/3, 1 − *t*(*x*)). The constant 2/3 is att
 
 ### CC-05 · An unconditional logarithmic count of digit transitions in ln 2
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *R*ₙ be as in CC-03. There is an integer *K* such that for every *N*, at least ⌊log₃₄ *N*⌋ − *K* of the positions *t* < *N* are binary digit transitions of ln 2, and at least as many have {*R*ₜ} in the closed middle third [1/3, 2/3]. Every sufficiently late window [*n*, 34*n*) contains such a position. Consequently, for every *N* ≥ 2,
 
@@ -1294,7 +1294,7 @@ Moreover *D*∞(ln 2) < 1 holds if and only if the visits of {*R*ₙ} to [1/3, 2
 
 ### CC-06 · Denominator rate 1/k for the dyadic logarithms
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *k* ≥ 1 and
 
@@ -1316,7 +1316,7 @@ For *N* ≥ 0 let *Y*<sub>*N*</sub> be the sum of 2ᴺ⁻ᵏʲ/*j* over 1 ≤ *j
 
 ### CC-07 · A Zeckendorf criterion for the binary discrepancy of the golden ratio
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let φ = (1 + √5)/2. For a positive integer *M* let *k*(*M*) be the smallest index occurring in its Zeckendorf representation as a sum of nonconsecutive Fibonacci numbers *F*ᵢ, *i* ≥ 2 (with *F*₂ = 1, *F*₃ = 2). Then
 
@@ -1338,7 +1338,7 @@ Consequently the limiting binary interval discrepancy of φ is below 1 if and on
 
 ### CC-08 · Exponentially accurate rational models and surviving primes for hexadecimal shifts of π
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *r*ₖ = 4/(8*k* + 1) − 2/(8*k* + 4) − 1/(8*k* + 5) − 1/(8*k* + 6), so that π = Σ *r*ₖ/16ᵏ, and let *y*ₙ be the shifted Bailey–Borwein–Plouffe prefix, the sum of 16ⁿ⁻ᵏ *r*ₖ over 0 ≤ *k* ≤ *n*. Every prime *p* with 4*n* + 3 < *p* ≤ 8*n* + 1 and *p* ≡ 1 or 5 (mod 8) divides the reduced denominator of *y*ₙ.
 
@@ -1360,7 +1360,7 @@ Adding *n* explicit rational corrections built from finite differences of the *r
 
 ### CC-09 · Periodic residues and short returns of the Taylor numerators of e
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *A*₀ = 1 and *A*ₙ₊₁ = (*n* + 1)*A*ₙ + 1, so that
 
@@ -1381,7 +1381,7 @@ For all integers *q* ≥ 1 and *n* ≥ 0, the numerator with index *q* + *n* is 
 
 ### CC-10 · Rational Fourier criteria for the binary normality of ln 2
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *R*ₙ be as in CC-03, so that 0 ≤ 2ⁿ ln 2 − *R*ₙ ≤ 1/(*n* + 1). The following are equivalent:
 
@@ -1404,7 +1404,7 @@ Equivalently, ln 2 fails to be binary normal if and only if for some odd *h* and
 
 ### CC-11 · Large denominators for the diagonally corrected models of ln 2 in moving windows
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *R*ₙ be as in CC-03 and, in this entry, let *Q*ₙ be the reduced denominator of
 
@@ -1431,7 +1431,7 @@ Moreover max(*Q*ₙ, *Q*ₙ₊₁) ≥ 2ⁿ for every *n*.
 
 ### CC-12 · Denominator rate 2/3 for binary arctangent models of π
 
-**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 Let *A* = arctan(1/3) and *C* = arctan(1/7), so that *A* + *C* = arctan(1/2) and 2*A* + *C* = π/4. For positive integers *a*, *c* put *x* = *aA* + *cC*. There are explicit rational prefixes *Y*<sub>*N*</sub>, truncating the two series at a common binary exponent, with |2ᴺ*x* − *Y*<sub>*N*</sub>| = *O*(1/*N*) and reduced denominators *Q*<sub>*N*</sub> satisfying
 
@@ -1451,7 +1451,7 @@ This applies to arctan(1/2) with (*a*, *c*) = (1, 1) and to π with (*a*, *c*) =
 
 ### CC-13 · Corrected two-stride models of ln 2 with common denominators and explicit errors
 
-**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (draft)
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
 
 For integers *m*, *j* ≥ 0 put *B*(*m*, *j*) = *m*! *j*!/(*m* + *j* + 1)!. For all integers *N*, *r*, *s* ≥ 0 there is an explicit rational *Y*, obtained by adding *r* and *s* rational corrections to the two strides of CC-01, whose reduced denominator divides 3 to the power max(*r*, 2*s*) times the least common multiple of 1, …, max(⌊*N*/2⌋ + *r*, ⌊*N*/3⌋ + *s*), and
 
@@ -1664,6 +1664,6 @@ Normality follows when most blocks of a radix orbit are approximated in mean by 
 
 ### V. Reduced Denominators of Binary Logarithm and Arctangent Series
 
-**Status:** draft · **Results:** [CC-01](#cc-01) · [CC-02](#cc-02) · [Directory](../papers/05-classical-denominators)
+**Status:** internally reviewed · **Results:** [CC-01](#cc-01) · [CC-02](#cc-02) · [Directory](../papers/05-classical-denominators)
 
 A finite dyadic identity for ln 2 has shifted binary prefixes whose reduced denominators grow at exponential rate one half, and this rate is optimal among finite dyadic logarithm identities, using Bang's primitive-divisor theorem. The paper studies corrected rational models, numerator residues, prime-power sieves, and analogous questions for π, *e* and rational arctangents. It does not establish normality, or an asymptotic discrepancy bound below one, for any of these constants.

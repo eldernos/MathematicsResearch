@@ -38,12 +38,7 @@ A representation using the two arguments $1-2^{-2}$ and $1+2^{-3}$ reduces this
 to $N/2+o(N)$. We determine the rate for every finite integer combination of
 dyadic logarithms with nonzero sum. Bang's primitive divisor theorem gives the
 minimum rate and all cases of equality for representations of a nonzero integer
-multiple of $\log 2$. Integral corrections give explicit common denominators for
-approximations valid over a linear number of further shifts. Congruences for
-their numerators give finite exclusions of binary words. Related results give
-rate $2/3$ for specified binary series for $\arctan(1/2)$ and $\pi$, and
-denominator estimates in moving windows for Taylor sums of $e$.
-The distribution of the binary shifts of these constants remains open here.
+multiple of $\log 2$. Integral corrections bound common denominators for approximations valid over a linear number of further shifts. For one 64-bit block of $\log 2$, residues of the numerators force at least 18 digit changes when only selected prime factors of the modulus are retained. We also obtain reduced-denominator rate $2/3$ for specified binary series for $\arctan(1/2)$ and $\pi$.
 \end{abstract}
 
 \section{Two representations of the logarithm}
@@ -54,8 +49,7 @@ $\den(0)=1$. All logarithms are natural. For the standard expansion put
  R_N=\sum_{j=1}^N\frac{2^{N-j}}{j}.
 \]
 This rational approximates $2^N\log 2$ with error between $0$ and $1/(N+1)$,
-by summing the geometric majorant of the omitted terms. A multiplicative
-identity between three rational numbers yields a second approximation.
+by summing the geometric majorant of the omitted terms. The useful scale for digit extraction is the binary exponent: the fractional part of $2^N\log 2$ determines the digits after position $N$. Different series for the same number can give rational approximations to this shift with very different reduced denominators. The identity $(1+2^{-3})/(1-2^{-2})^2=2$ gives a second such approximation.
 
 \begin{theorem}\label{th:half}
 For every integer $N\ge0$ let
@@ -73,9 +67,7 @@ $0\le 2^N\log 2-Y_N\le4/(N+1)$. Along all integer positions,
 
 The scale $N$ counts binary digits. In the first sum defining $Y_N$ the last
 index is $\lfloor N/2\rfloor$, in the second it is $\lfloor N/3\rfloor$.
-The prime divisors determining the limits can be read from much shorter
-prefixes. In particular, the first omitted prime band for $Y_N$ carries half
-the logarithmic weight of $L_N$. The proof appears in Section~\ref{sec:bands}.
+For $N/2<p\le N$, the prime $p$ can divide the denominator of $R_N$ but is absent from that of $Y_N$. This prime range has logarithmic weight $N/2+o(N)$. Section~\ref{sec:bands} determines the contributions of the remaining ranges.
 
 Bailey, Borwein and Plouffe \cite{bbp} used modular arithmetic on shifted series
 to extract individual digits of $\log 2$ and $\pi$. The denominator studied here
@@ -85,15 +77,13 @@ numerator of $\sum_{j\le n}1/j$. Shiu \cite[Thm.~2]{shiu} characterizes loss
 of the full prime power in the harmonic denominator from the short harmonic
 sum in the same range $mp^a\le n<(m+1)p^a$. Here the dyadic factor interacts with
 reduction at each prime, and primes of order $N$ govern the first-order term.
-Rivoal \cite{rivoal} obtains irrationality measures for logarithms with
+Wu and Chen \cite{wuchen} study divisibility of ordinary harmonic denominators on sets of indices of density one. Rivoal \cite{rivoal} obtains irrationality measures for logarithms with
 denominators restricted to grids of the form $L_{\lfloor\nu m\rfloor}^{s} B^m$.
 Such estimates quantify proximity of the real number to prescribed grids.
 Our denominator formulas concern specific rational points computed from the
 series. The logarithmic identities, the arctangent formulas of
 Takahashi \cite{takahashi}, and the modular periodicity for $e$ of Sondow and
-Schalm \cite{sondow} are antecedents. Priority for the exact rates at a common
-binary cutoff and for the uniform estimates on numerator residues remains
-undetermined.
+Schalm \cite{sondow} concern other aspects of the same expansions. Sections~\ref{sec:bands} and~\ref{sec:correct} determine the denominator rate, classify equality in the dyadic class, and give uniform approximations on later shifts. The subsequent sections treat numerator congruences, finite digit tests and related series.
 
 \begin{figure}[ht]
 \centering
@@ -112,7 +102,7 @@ A rational is integral at $p$ when its reduced denominator is prime to $p$.
 Congruences of such rationals use the inverse of the denominator.
 
 \begin{proposition}[Standard logarithm]\label{prop:standard}
-Set $P_k=\sum_{j=1}^k2^{-j}/j$ and $q_N=\den(R_N)$. If $p$ is odd prime and
+Set $P_k=\sum_{j=1}^k2^{-j}/j$ and $q_N=\den(R_N)$. If $p$ is an odd prime and
 $p^a\le N<p^{a+1}$ for $a\ge1$, then $p^a\mid q_N$ if and only if
 $p$ does not divide the reduced numerator of $P_{\lfloor N/p^a\rfloor}$.
 For $N\ge8$,
@@ -169,7 +159,7 @@ $\log(1+x)=\log(1-x^2)-\log(1-x)$. This identity holds coefficient by
 coefficient in its convergent power series, so every cutoff is preserved.
 
 \begin{theorem}[Prime-band formula]\label{th:bands}
-Suppose $W(pj)=W(j)$ for every $j\ge1$ and all sufficiently large primes $p$.
+Suppose there is a bound $p_0$ such that $W(pj)=W(j)$ for every prime $p>p_0$ and every integer $j\ge1$.
 With $q_N=\den(S_N(W))$,
 \begin{equation}
  \lim_{N\to\infty}\frac{\log q_N}{N}
@@ -233,7 +223,7 @@ precisely when the grouped weights are $m w(j)$ for every $j$.
 Rewrite the plus logarithms as above, and denote the resulting coefficients
 of $\log(1-2^{-k})$ by $b_k$. Exponentiation gives
 $\prod_k(2^k-1)^{b_k}2^{-\sum_k k b_k}=2^m$.
-If the largest occupied $k$ exceeds six, Bang's theorem \cite{bang} supplies
+If the largest occupied $k$ exceeds six, the primitive-divisor theorem of Bang \cite{bang} (see also Zsigmondy \cite{zsigmondy}) supplies
 a prime divisor of $2^k-1$ dividing none of $2^i-1$ for $1\le i<k$.
 Its valuation in the identity forces $b_k=0$, a contradiction. Among the
 remaining indices the valuations at $31$ and $5$ give $b_5=b_4=0$.
@@ -244,7 +234,7 @@ Otherwise $P_1(W)=-b_1/2\ne0$, contributing $1/2$ by itself.
 Since $P_v(W)\to m\log2\ne0$, some later band also contributes.
 \end{proof}
 
-The quantifiers allow arbitrarily large finite stride lists and coefficients.
+The result also applies to fixed rational coefficients after clearing a common denominator: multiplying every truncation by a fixed positive integer changes its logarithmic denominator by a bounded amount.
 Changing the cutoff, permitting coefficients to depend on $N$, or adding
 geometrically decaying rational corrections changes the problem. For example,
 $\log2=2\sum_{j\ge0}3^{-(2j+1)}/(2j+1)$ uses powers of $3$ throughout.
@@ -254,6 +244,7 @@ using two complex arguments of modulus $1/\sqrt2$. Their formula and the
 base-three series above are outside Theorem~\ref{th:optimal}.
 
 \section{Signed integral corrections}\label{sec:correct}
+Beta integrals have also been used in rational approximations to logarithms, for example by Alladi and Robinson \cite{alladi}. Here the multiplier of the logarithm is prescribed by the binary position $N$.
 Write $B(m,j)=\int_0^1t^m(1-t)^j\,dt=m!j!/(m+j+1)!$ for nonnegative integer
 arguments. For $a\in\{2,4,-8\}$ set
 \begin{align*}
@@ -313,7 +304,7 @@ $2^{\lfloor\alpha N\rfloor}\eta\to0$ and
  C=\max(1/2+\rho,1/3+\sigma)+\max(\rho,2\sigma)\log3 .
 \]
 In particular $\limsup_N N^{-1}\log\den(Z)\le C$. Table~\ref{tab:budgets}
-gives strict upper bounds for $C$.
+gives strict upper bounds for $C$. For comparison, with $h=\lfloor\alpha N\rfloor$ the shifted truncation $2^{-h}Y_{N+h}$ approximates $2^N\log 2$ to error $O(2^{-h}/N)$ by Theorem~\ref{th:half}. Its common denominator $2^h L_{\lfloor(N+h)/2\rfloor}$ has logarithmic rate $(1+\alpha)/2+\alpha\log 2$, approximately $1.097,1.693,2.886$ at the three horizons in the table.
 \end{corollary}
 \begin{proof}
 With $m=\lfloor\beta N\rfloor$, $j=\lceil uN\rceil$, Stirling's formula
@@ -334,7 +325,7 @@ with the table data.
 \begin{table}[ht]
 \centering
 \caption{Certified common-denominator rates. The horizon is $\lfloor\alpha N\rfloor$
-further binary shifts. The reduced denominator can be smaller.}\label{tab:budgets}
+further binary shifts. The reduced denominator can be smaller.}\label{tab:budgets}\smallskip
 \begin{tabular}{rrrr}\toprule
 $\alpha$ & $\rho$ & $\sigma$ & upper bound for $C$\\\midrule
 \inputrows{figures/budgets.tex}
@@ -535,7 +526,7 @@ with weights $\rho^j(1-\rho)^{T-1-j}$. Finally $\log P\ge\log L_M-\log H=n/2+o(n
 \end{proof}
 
 The proportion in this proposition averages over candidate residues at a
-single start. The logarithm supplies one particular $r$ there. Concluding
+single start. At a fixed start the numerator for $\log 2$ determines a single residue $r$. Concluding
 positive density of transitions would require an estimate over actual starts
 for those particular residues.
 
@@ -570,10 +561,10 @@ gives the last column.
 
 \begin{table}[H]
 \centering\small
-\caption{Exact exclusions for $\log 2$. The index $n$ counts preceding digits,
+\caption{Binary words excluded by the retained numerator residues of $\log 2$. The index $n$ counts preceding digits,
 $a$ is the maximum number of changes and $y$ is the integer prime cutoff.
 The bits column gives $\lfloor\log_2 H\rfloor+1$. The last column counts words
-passing the closed test, with every unresolved lift allowed.}\label{tab:words}
+passing the closed test, with every unresolved lift allowed.}\label{tab:words}\smallskip
 \begin{tabular}{lrrrrrrrr}\toprule
 Model & $n$ & $T$ & $a$ & $y$ & orders & bits & words & pass\\\midrule
 \inputrows{figures/sieves.tex}
@@ -594,7 +585,7 @@ have word integers from $\lceil2^{64}l\rceil-1$ through $\lfloor2^{64}t\rfloor$,
 reduced modulo $2^{64}$. Apply the same formula to all $g$ translates.
 Exactly $31\,232$ distinct words remain, of which one has $18$ changes
 and none has fewer. Thus the $64$ bits following position $513$ in $\log 2$
-have at least $18$ changes. This lower bound concerns that single word.
+have at least $18$ changes. Direct evaluation of the same word gives $38$ changes. The bound of $18$ quantifies what can be inferred when the omitted residues are unknown.
 
 \section{Arctangents and the number \texorpdfstring{$\pi$}{pi}}\label{sec:angles}
 Let $\chi(j)=0$ for even $j$ and $\chi(j)=(-1)^{(j-1)/2}$ for odd $j$.
@@ -624,7 +615,9 @@ multiplying by $2^{N-km}$ changes the logarithmic denominator by at most
 $k\log2$, proving all binary assertions.
 \end{proof}
 
-\begin{proposition}[Two digits at one prime]\label{prop:twodigits}
+Where a single term in the Taylor sum has denominator divisible by $p$, the reduction modulo $p$ of the cleared numerator is fixed by that term. The next residue modulo $p^2$ distinguishes more of the prefixes.
+
+\begin{proposition}[Returns of a numerator residue modulo $p^2$]\label{prop:twodigits}
 For $-\log(1-2^{-k})$, $k\ge1$, and $\arctan(1/2)$ respectively, put
 \[
  (B,u,a,c)=(2^k,2^{-k},1,2^{-k})\quad\hbox{or}\quad
@@ -657,7 +650,7 @@ If $V_m=A/q$ in lowest terms, the tested residue is $A/(q/p)\bmod p^2$.
 
 The two expansions in the next theorem use binary powers throughout.
 The angle identities and the component series appear in
-Takahashi \cite[eqs.~(11)--(19)]{takahashi}.
+Takahashi \cite[eqs.~(11)--(19)]{takahashi}; for the broader class of Machin-type digit formulas see Borwein, Borwein and Galway \cite{machin}.
 
 \begin{theorem}[Gaussian logarithms]\label{th:gauss}
 Put $z_t=(1-i)/2^t$ for $t=2,3$, $b_t(v)=-\sum_{j=1}^v\Im(z_t^j)/j$,
@@ -739,12 +732,14 @@ Then $A_n/n!=\sum_{j=0}^n1/j!$, and $Q_n$ is its reduced denominator.
 Here the approximated quantity is $e$ itself. The factorial is a different
 denominator scale from that of the binary shifts.
 
-\begin{theorem}\label{th:factorial}
+The following proposition recalls the periodicity of Sondow and Schalm \cite[Prop.~A.5]{sondow}. Its density conclusion follows from Berndt, Kim and Zaharescu \cite[Thm.~1.6 and \S4]{bkzgeneral}. The elementary argument below gives the explicit bound $h-1$ on simultaneous zeros at a fixed separation.
+
+\begin{proposition}\label{th:factorial}
 For integers $q\ge1$, $n\ge0$, one has $A_{n+q}\equiv A_n\bmod q$.
 For every prime $p$ and integer $h\ge1$, at most $h-1$ starts $0\le n<p$
 satisfy $A_n=A_{n+h}=0\bmod p$. For each $\epsilon>0$ the set
 $\{n:\log Q_n<(1-\epsilon)\log(n!)\}$ has upper Banach density zero.
-\end{theorem}
+\end{proposition}
 \begin{proof}
 The recurrence resets $A_q$ to $1\bmod q$ and has periodic multipliers,
 giving the first identity by induction. Sondow and Schalm
@@ -779,7 +774,7 @@ Letting $T\to\infty$ and then $\tau\downarrow0$ finishes the proof.
 Sondow and Schalm already use gap polynomials for nearby Taylor numerators
 \cite[\S3]{sondow}. Berndt, Kim and Zaharescu \cite{bkz} proved that the
 only Taylor sums which are continued-fraction convergents to $e$ are $2$ and
-$8/3$. The moving-window conclusion of Theorem~\ref{th:factorial} also follows
+$8/3$. The moving-window conclusion of Proposition~\ref{th:factorial} also follows
 from their earlier hypergeometric approximation theorem, with a stronger
 exception count \cite[Thm.~1.6 and the end of \S4]{bkzgeneral}.
 Indeed write $t_n=A_n/n!$ and let $H(t_n)$ be the maximum of its reduced
@@ -803,32 +798,24 @@ For integer $b\ge2$ write $x_n=\{b^nx\}$. Define the extreme discrepancy by
 \]
 In base two a change between the next two digits occurs precisely at
 $x_n\in[1/4,3/4)$, with the terminating convention for dyadic rationals.
-The \lean{BinaryDiscrepancy}{229}{binary transition criterion} states that
-$D_\infty^{(2)}(x)<1$ is equivalent to a positive lower density of changes.
+Write $t_N$ for the frequency of these changes in the first $N$ starts. If $t_N\to0$ along a subsequence, then for every $k\ge2$ the frequency of $[2^{-k},1-2^{-k})$ is at most $(k-1)t_N+k/N$: each visit requires a change among the next $k$ digits. Taking first the subsequence and then $k\to\infty$ gives $D_\infty^{(2)}(x)=1$. Conversely, take a circle arc of length less than $1/8$. If it contains consecutive shifts $x_n,x_{n+1}$, then $\|x_n\|=\|x_{n+1}-x_n\|<1/8$, where $\|\cdot\|$ denotes distance to the nearest integer. The whole arc therefore misses the transition region. Otherwise at most $\lceil N/2\rceil$ of the shifts lie on it. Applying this count to a short interval or its complement, while intervals of length in $[1/8,7/8]$ have discrepancy at most $7/8$, proves $D_\infty^{(2)}(x)<1$ whenever $\liminf t_N>0$.
 In particular a bound such as \eqref{eq:grid} excluding words with at most
 $\rho(T-1)$ changes on disjoint windows of lengths $T\ge2$ would suffice if
 such windows fully contained in each sufficiently long prefix occupied a
 fixed positive fraction of it. Their internal gaps number at least half
 their total length. No such coverage is proved for the actual residues.
-For $\log 2$ a \lean{LogTwoTransitions}{220}{finite-prefix estimate} gives
-$D_N^{(2)}\le\max(7/8,1-(\lfloor\log_{34}N\rfloor-K)_+/N)$ for some $K$ and
-all $N\ge2$, where $a_+=\max(0,a)$.
+The next estimate gives a weaker conclusion for every irrational of finite irrationality exponent; see Bugeaud \cite{bugeaud} for the relation between digit expansions and rational approximation.
 
 \begin{proposition}\label{prop:pi-gap}
-For every fixed integer $b\ge2$, in particular in bases $10$ and $16$,
-there is $c_b>0$ such that $D_N^{(b)}(\pi)\le1-c_b\log N/N$ for all large $N$.
+Let $x$ be irrational with finite irrationality exponent $\mu(x)$, and fix an integer $b\ge2$. There is $c_{b,x}>0$ such that $D_N^{(b)}(x)\le1-c_{b,x}\log N/N$ for all sufficiently large $N$. In particular this holds for $\pi$ in bases ten and sixteen, since $\mu(\pi)<8$ by Zeilberger and Zudilin \cite{zz}.
 \end{proposition}
 \begin{proof}
-Write $\|t\|$ for circle distance to zero, $a=1/(2(b+1))$, and let $G_N$
-count the $n<N$ with $\|(b-1)b^n\pi\|\ge a$.
-Put $y=(b-1)\pi$. The published bound $\mu(\pi)<8$ of
-Zeilberger and Zudilin \cite{zz} implies $|y-k/b^m|\ge C_b b^{-8m}$ for all
-large $m$ and integers $k$, by applying the bound to $k/((b-1)b^m)$.
+Let $a=1/(2(b+1))$, and let $G_N$ count the $n<N$ with $\|(b-1)b^nx\|\ge a$. Fix an integer $u>\mu(x)$ and put $y=(b-1)x$. Then $|y-k/b^m|\ge C_{b,x,u} b^{-um}$ for all sufficiently large $m$ and all integers $k$, by the irrationality exponent bound applied to $k/((b-1)b^m)$.
 If $L$ consecutive indices starting at $m$ miss $G_N$, the nearest integers
 $k_j$ to $b^{m+j}y$ satisfy $k_{j+1}=bk_j$, since $(b+1)a<1$.
-Hence $|y-k_0/b^m|\le a b^{-(m+L-1)}$, giving $m+L\le8m+O_b(1)$.
-Every sufficiently late $[m,9m)$ therefore contains a counted index, and
-disjoint such windows give $G_N\gg_b\log N$.
+Hence $|y-k_0/b^m|\le a b^{-(m+L-1)}$, giving $m+L\le um+O_{b,x,u}(1)$.
+Every sufficiently late $[m,(u+1)m)$ therefore contains a counted index, and
+disjoint such windows give $G_N\gg_{b,x,u}\log N$.
 
 Fix $0<d<a/b$. If a circle arc of length at most $d$ contains both $x_n$
 and $x_{n+1}$, then $\|(b-1)x_n\|\le d$. Every $v$ in this arc satisfies
@@ -839,10 +826,7 @@ If an interval and its complement both have length at least $d$, either
 deviation is at most $1-d$. Thus the discrepancy is bounded by the maximum
 of $1-G_N/N$, $1-d$ and $\lceil N/2\rceil/N$ for large $N$, as required.
 \end{proof}
-The gaps in these finite-prefix bounds tend to zero. None of the results here
-establishes $D_\infty^{(2)}<1$ for $\log 2$, $\pi$, $e$, or the rational
-arctangents considered above. In particular the proposed bound $0.9999$ for
-$\log 2$ remains open.
+The upper bound in Proposition~\ref{prop:pi-gap} tends to one. For $\log 2$, $\pi$, $e$ and the rational arctangents considered here, a strict asymptotic binary discrepancy bound below one remains open.
 
 \section{Formal verification and reproducibility}
 The formal sources are pinned to
@@ -853,33 +837,31 @@ The Lean band formula assumes that the zero-prefix set is finite. This follows
 from convergence for the nonzero logarithm identities in
 Theorem~\ref{th:optimal}. The series proof of Theorem~\ref{th:bands} also
 covers infinite zero sets. The primitive-divisor hypothesis in Lean is
-discharged on paper by Bang's theorem. No new Lean declarations accompany
-this manuscript.
+supplied by Bang's theorem. Passage from logarithm identities to the formal valuation conditions uses the coefficientwise rewriting and the exponentiation argument in Section~\ref{sec:bands}.
 
-\begin{table}[ht]
+\begin{table}[H]
 \small\centering
-\caption{Theorem correspondence at Checkpoint 11. Linked entries open the
-declaration or the mathematical source for a paper deduction.}\label{tab:lean}
+\caption{Formal statements and additional arguments used in the proofs.}\label{tab:lean}\smallskip
 \begin{tabular}{@{}p{.26\linewidth}p{.69\linewidth}@{}}
 \toprule
 Result & Source and scope\\\midrule
-Thm.~\ref{th:half}, Prop.~\ref{prop:standard} (CC-01, 03)
+Thm.~\ref{th:half}, Prop.~\ref{prop:standard}
  & \lean{StridedLogarithm}{13}{Series identity},
  \lean{StridedLogarithm}{119}{tail}, \lean{StridedLogarithm}{48}{divisibility},
  \lean{StrideDenominatorRate}{199}{half-rate limit},
  \lean{PrimeCancellation}{164}{prime-power criterion},
  \lean{DenominatorGrowth}{133}{standard loss} and \lean{DenominatorGrowth}{162}{rate}.\\[2pt]
-Cor.~\ref{cor:poly}, Thms.~\ref{th:bands}--\ref{th:optimal} (CC-02)
+Cor.~\ref{cor:poly}, Thms.~\ref{th:bands}--\ref{th:optimal}
  & \lean{PolylogGrowth}{110}{Polylogarithm loss},
  \lean{LogarithmBands}{89}{band limit for a finite zero set},
  \lean{DyadicRelations}{14}{valuation classification} and
  \lean{DyadicRelations}{94}{optimality with primitive divisors}.\\[2pt]
-Thm.~\ref{th:correct}, Cor.~\ref{cor:budgets} (CC-13)
+Thm.~\ref{th:correct}, Cor.~\ref{cor:budgets}
  & \lean{CorrectedStrides}{41}{Signed integral}, \lean{CorrectedStrides}{113}{common denominator},
  \lean{CorrectedStrides}{139}{finite error}. The limiting budgets use Stirling's formula on paper.\\[2pt]
-Prop.~\ref{prop:local}, Thm.~\ref{th:diagonal}, Cor.~\ref{cor:uniform} (CC-11, 13)
- & \noteurl{corrected-strides}{Prime-power residues} on paper.
- \lean{DiagonalStep}{12}{diagonal step}, \lean{DiagonalNumerator}{17}{normalization},
+Prop.~\ref{prop:local}, Thm.~\ref{th:diagonal}, Cor.~\ref{cor:uniform}
+ & \noteurl{corrected-strides}{Prime-power residues} by clearing the integral corrections.
+ \lean{DiagonalStep}{12}{Diagonal step}, \lean{DiagonalNumerator}{17}{normalization},
  \lean{DiagonalNumerator}{135}{paired residues}, \lean{WindowShadow}{67}{moving-window denominator}
  and \lean{WindowShadow}{72}{prime survival}.\\[2pt]
 Props.~\ref{prop:lift}--\ref{prop:overlap}
@@ -887,28 +869,22 @@ Props.~\ref{prop:lift}--\ref{prop:overlap}
  \lean{ResidueWindows}{11}{rigidity of compatible differences}. Grid counts and
  \noteurl{sublinear-residue-windows}{entropy bounds} are paper deductions.
  The word exclusions are exact finite computations.\\[2pt]
-Cor.~\ref{cor:dyadic}, Prop.~\ref{prop:twodigits}, Thm.~\ref{th:gauss} (CC-06, 12)
+Cor.~\ref{cor:dyadic}, Prop.~\ref{prop:twodigits}, Thm.~\ref{th:gauss}
  & \lean{DyadicLogRates}{40}{Positive dyadic logarithm} at all binary positions.
  The signed and character cases, \noteurl{dyadic-prefix-residues}{two-digit bound}
  and \noteurl{gaussian-arctangent-denominators}{Gaussian rate} have paper proofs.\\[2pt]
-Prop.~\ref{prop:bbp}, Thm.~\ref{th:factorial} (CC-08, 09)
+Prop.~\ref{prop:bbp}, Prop.~\ref{th:factorial}
  & \lean{BBPShadow}{25}{BBP integral}, \lean{BBPDenominator}{44}{prime band},
  \lean{BBPShadow}{112}{shifted error}, \lean{FactorialNumerators}{23}{Taylor periodicity}
  and \lean{FactorialNumerators}{55}{paired zeros}. The factorial window estimate is deduced on paper.\\[2pt]
-Section~\ref{sec:disc} (CC-04, 05)
+Section~\ref{sec:disc}
  & \lean{BinaryDiscrepancy}{229}{Transition criterion},
- \lean{LogTwoTransitions}{220}{finite logarithm gap}. Proposition~\ref{prop:pi-gap}
- is a paper deduction from an external irrationality measure.\\
+ \lean{LogTwoTransitions}{220}{related finite bound for $\log 2$}. Proposition~\ref{prop:pi-gap} follows from the irrationality exponent as shown above.\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The source directory \path{papers/05-classical-denominators/} contains the
-LaTeX manuscript, bibliography, full declaration list and reviewer guide.
-Running \texttt{python3 -B figures/generate.py} there regenerates the figure,
-exact denominator data, budget comparisons and all word counts. It uses
-the checkpoint's \href{\cp/scripts/strided_logarithm.py}{diagonal sieve}
-and \href{\cp/scripts/corrected_strides.py}{two-stride sieve}. All boundary
+The accompanying source includes the exact denominator data, budget comparisons and word counts. The script \texttt{figures/generate.py} regenerates them using the \href{\cp/scripts/strided_logarithm.py}{diagonal sieve} and the \href{\cp/scripts/corrected_strides.py}{two-stride sieve}. All boundary
 tests use integer or rational arithmetic. The ordinate of
 Figure~\ref{fig:rates} alone uses floating-point logarithms.
 
@@ -918,7 +894,8 @@ comparison and computational supplement from the cited checkpoint.
 The project owner retains responsibility for mathematical review,
 attribution and any submission decision.
 
-\clearpage
+\begingroup\small
 \bibliographystyle{plain}
 \bibliography{references}
+\endgroup
 \end{document}
