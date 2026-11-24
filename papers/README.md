@@ -22,6 +22,12 @@ This technical report relates short modular orbits to radix digit counts. It spe
 
 A two-stride representation of ln 2 has reduced-denominator growth rate one half. The paper separates this exact rate from upper budgets for corrected approximations and from finite exclusions of low-transition binary words. It also treats related models of π, *e*, and rational arctangents. The strict asymptotic discrepancy target for ln 2 remains open. Registry CC-01 and CC-02. [PDF](05-classical-denominators/paper.pdf) · [LaTeX](05-classical-denominators/paper.tex) · [Reviewer guide](05-classical-denominators/REVIEW.md)
 
+## Circulation priorities
+
+Papers I and II are the first candidates for review by a mathematician. In Paper I the contribution to assess is the theorem for the standard odd-prime-power Stoneham generators, including independently chosen strides and radix dilations. Prior normal-ring constructions and the literature on simultaneous normality already cover related questions. In Paper II the comparison is with earlier localized-logarithm and singleton-axis results, with particular attention to mixed supports and all positive orders. The reviewer guides give the precise source comparisons.
+
+Paper III groups the cyclotomic and signed-shell results in one manuscript and treats the positive normal-summand construction in an appendix. Paper IV is a companion technical report on the methods and their limitations. Paper V is a research draft on denominator arithmetic, with lower submission priority. Historical priority and any personal byline require the owner's and specialists' judgment.
+
 ## Status and citation
 
 The [tagged source and downloadable release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0) contains the five papers and their formal evidence. The [review record](reviews/README.md) identifies each reviewed revision, both independent model reports and the disposition of their findings. These are public research drafts. Journal decisions, priority assessments and authorship decisions belong to the project owner and the relevant mathematical community.
