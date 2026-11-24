@@ -646,7 +646,10 @@ run_cmd do
     ``NormalityChecker.LocalizedSupport.Unsigned.difference_tail,
     ``NormalityChecker.LocalizedSupport.Unsigned.phaseMoment_truncated_difference,
     ``NormalityChecker.LocalizedSupport.Unsigned.difference_support,
-    ``NormalityChecker.LocalizedSupport.Unsigned.difference_bare]
+    ``NormalityChecker.LocalizedSupport.Unsigned.difference_bare,
+    ``NormalityChecker.StonehamPolynomial.joint_uniform_powers,
+    ``NormalityChecker.StonehamPolynomial.polynomial_statement_checked,
+    ``NormalityChecker.StonehamPolynomial.joint_statement_checked]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

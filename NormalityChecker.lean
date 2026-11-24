@@ -81,3 +81,4 @@ public import NormalityChecker.ProductThreeFive
 public import NormalityChecker.UnsignedNormality
 public import NormalityChecker.FullPolynomialNormality
 public import NormalityChecker.DyadicRelations
+public import NormalityChecker.StonehamJoint
