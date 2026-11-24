@@ -1,0 +1,235 @@
+# Cyclotomic resonance and finite combinations. Manuscript: papers/03-signed-resonance.
+# Format: docs/registry/SCHEMA.md
+
+[[result]]
+id = "CR-01"
+title = "Cyclotomic classification of finite combinations of Stoneham-type components"
+topic = "resonance"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *d* be the multiplicative order of *b* modulo *p*. For each positive integer *m* put
+
+```math
+T_m = \sum_{j=0}^{\infty} \frac{1}{m \, p^j \, b^{m p^j}}.
+```
+
+Let *M* be a finite set of positive integers, let *a*ₘ (*m* ∈ *M*) be rational numbers, and let *S* be a positive integer with *m* ≤ *S* for every *m* ∈ *M*. For each integer *u* with *S* ≤ *u* < *pS* and each *m* ∈ *M*, let *j*ₘ(*u*) be the largest *j* ≥ 0 with *m p*ʲ ≤ *u*, and form the rational polynomial
+
+```math
+P_u(X) = \sum_{m \in M} \frac{a_m}{m \, p^{j_m(u)}} \, X^m .
+```
+
+Then *F* = Σ *a*ₘ *T*ₘ is normal in base *b* if and only if the *d*-th cyclotomic polynomial Φ<sub>*d*</sub> divides none of the polynomials *P*ᵤ with *S* ≤ *u* < *pS*.
+'''
+scope = '''
+Normality means that every word of every length *k* ≥ 1 occurs among the overlapping base-*b* blocks with limiting frequency *b*⁻ᵏ, using half-open digit cylinders. The coefficients may be negative or zero and the indices may be divisible by *p*. If *M* is empty or all coefficients vanish, every *P*ᵤ is the zero polynomial, so the criterion correctly reports that *F* = 0 is not normal. Every admissible *S* gives the same answer. The prime *p* must be odd; *p* = 2 and composite parameters are not covered. The theorem concerns base *b* only and finite families only; it says nothing about the infinite decomposition of ln 2 (see CR-07). The executable Boolean `cyclotomicNormalTest`, which takes *S* = max(1, max *M*) and decides divisibility by exact rational cyclic-vector arithmetic, is proved correct on exactly this parameter domain.
+'''
+lean = [
+  "NormalityChecker.cyclotomic_normal_iff",
+  "NormalityChecker.cyclotomicNormalTest_correct",
+  "NormalityChecker.resonanceWitnesses_eq",
+  "NormalityChecker.CyclicPolynomial.vanishes_iff",
+]
+proof = [
+  "notes/reviewers.md#finite-combinations-of-stoneham-type-components",
+  "notes/results.md#the-cyclotomic-checker",
+]
+related = ["CR-04", "CR-05", "CR-06", "CR-07"]
+
+[[result]]
+id = "CR-02"
+title = "Exactly two rational coefficients make a binary two-term sum nonnormal"
+topic = "resonance"
+status = "lean"
+statement = '''
+For each positive integer *m* put
+
+```math
+T_m = \sum_{j=0}^{\infty} \frac{1}{m \, 3^j \, 2^{m 3^j}}.
+```
+
+For every rational number *a*, the number *T*₁ + *a T*₂ is normal in base 2 if and only if *a* ≠ 2 and *a* ≠ 2/3.
+'''
+scope = '''
+The series start at *j* = 0, so *T*₁ = 1/2 + α, where α is the binary Stoneham number with parameter 3 in the convention of ST-01 (series from *j* = 1). Only rational *a* and only base 2 are covered; *a* = 0 and negative *a* are included. For *a* = 2 Lean also proves that, for every *r* ≥ 0, the upper frequency of the all-zero block of length *r* in *T*₁ + 2*T*₂ is at least 1/2 (`binary_zero_block_limsup`). The equivalence is the two-cell special case of CR-06.
+'''
+lean = [
+  "NormalityChecker.two_component_normal_iff",
+  "NormalityChecker.two_component_normal_necessary",
+  "NormalityChecker.components_not_binary_normal",
+  "NormalityChecker.offset_components_not_binary_normal",
+  "NormalityChecker.binary_zero_block_limsup",
+]
+proof = [
+  "notes/finite-sums.md#consequences-and-scope",
+  "notes/results.md#finite-sums-and-incomplete-orbits",
+]
+related = ["CR-01", "CR-06"]
+
+[[result]]
+id = "CR-03"
+title = "Two positive normal numbers with an irrational nonnormal sum, in every base"
+topic = "counterexamples"
+status = "lean"
+statement = '''
+For integers *b* ≥ 2, *c* ≥ 2 and *m* ≥ 1 put
+
+```math
+T_{c,m} = \sum_{j=0}^{\infty} \frac{1}{m \, c^j \, b^{m c^j}}.
+```
+
+Fix *b* ≥ 2 and a real number η < 1. There is a positive integer *d* with the following property. Let *l* = 2*d* + 1, let *c* be the odd part of *b*²ᵈ + 1, and put
+
+```math
+x = T_{c,1}, \qquad y = l \, T_{c,l} .
+```
+
+Then *x* and *y* are positive and normal in base *b*, their sum *x* + *y* is irrational and not normal in base *b*, and for every *r* ≥ 0 the upper limiting frequency of the length-*r* all-zero block in the base-*b* expansion of *x* + *y* exceeds η.
+
+More generally, let *c* be odd, let 1 ≤ *m* < *l* < *c*, and suppose that *c* divides *b*ˡ⁻ᵐ + 1. Then the number
+
+```math
+m \, T_{c,m} + l \, T_{c,l}
+```
+
+is irrational and not normal in base *b*, and for every *r* ≥ 0 the upper frequency of its length-*r* all-zero block is at least (*c* − *l*)/(*c* − 1).
+'''
+scope = '''
+Here "upper frequency of the all-zero block of length *r*" is the limit superior of the proportion of starts *n* < *N* with {*bⁿz*} ∈ [0, *b*⁻ʳ). The integer *d* is chosen once and works for every block length. Normality of each summand holds for every odd *c* ≥ 3 coprime to *b*, including composite *c*, and is proved inside the project (`weighted_radixComponent_normal`); the individual normality of Stoneham-type constants goes back to Stoneham and Bailey–Crandall. For *b* = 10, *c* = 101, *m* = 1, *l* = 3 the bound is 98/100, and `all_base_resonance` gives the fixed nonnormal sum with *m* = 1, *l* = 3 and *c* the odd part of *b*² + 1 in every base. The results do not compute the exact discrepancy of these sums, and priority of the quantitative statement is not established.
+'''
+lean = [
+  "NormalityChecker.severe_normal_summands",
+  "NormalityChecker.severe_resonance",
+  "NormalityChecker.radix_pair_zero_limsup",
+  "NormalityChecker.radix_pair_not_normal",
+  "NormalityChecker.radix_pair_irrational",
+  "NormalityChecker.all_base_resonance",
+  "NormalityChecker.weighted_radixComponent_normal",
+  "NormalityChecker.radixComponent_normal",
+]
+proof = [
+  "notes/normal-summands.md",
+  "notes/results.md#quantitative-nonnormality-in-every-radix",
+]
+supersedes = ["NormalityChecker.radix_pair_tail", "NormalityChecker.resonantSum_not_normal"]
+related = ["CR-02"]
+
+[[result]]
+id = "CR-04"
+title = "Exact weak limits and two different limiting distributions for one resonant sum"
+topic = "resonance"
+status = "lean"
+statement = '''
+Keep the notation of CR-01. Let *R* be the number of integers *u* with *S* ≤ *u* < *pS* for which Φ<sub>*d*</sub> divides *P*ᵤ, put *w* = *R*/((*p* − 1)*S*), and let *L* be (*p* − 1) times the product over *m* ∈ *M* of the reduced denominators of *a*ₘ/*m*. For every continuous complex-valued function *f* on the circle ℝ/ℤ, put
+
+```math
+A_N(f) = \frac{1}{N} \sum_{n=0}^{N-1} f\left( b^n L F \right).
+```
+
+Along the prefix lengths *N* = *S pᵏ*, as *k* → ∞,
+
+```math
+A_N(f) \longrightarrow (1 - w) \int_0^1 f(t) \, dt + w \, f(0).
+```
+
+For *b* = 2, *p* = 7 and *F* = *T*₁ + 2*T*₂ + 3*T*₃ one has *L* = 6, and *F* is not normal in base 2. Along *N* = 3 · 7ᵏ the atom at 0 has weight 2/9, and along *N* = 7ᵏ⁺¹ it has weight 2/3.
+'''
+scope = '''
+The limit is the weak limit of the empirical measures of the integer-scaled orbit *b*ⁿ*LF* modulo one, not of *F* itself, and only along the geometric endpoints *S pᵏ*; different choices of *S* select different endpoint sequences, which is how the two weights in the example arise. An atom at the single point 0 of the circle does not by itself assign mass to a particular half-open digit interval, so the theorem does not give digit-block frequencies. The two weights are computed by kernel evaluation.
+'''
+lean = [
+  "NormalityChecker.cyclotomic_distribution",
+  "NormalityChecker.seventh_triple_distributions",
+  "NormalityChecker.seventh_triple_masses",
+  "NormalityChecker.seventh_triple_not_normal",
+  "NormalityChecker.circle_mixture_of_characters",
+  "NormalityChecker.cyclotomic_fourier_limit",
+]
+proof = [
+  "notes/reviewers.md#exact-statistical-prediction",
+  "notes/results.md#the-cyclotomic-checker",
+]
+related = ["CR-01"]
+
+[[result]]
+id = "CR-05"
+title = "Positive combinations are normal when the base is 1 modulo the prime"
+topic = "resonance"
+status = "lean"
+statement = '''
+In the setting of CR-01 suppose in addition that *b* ≡ 1 (mod *p*). Then for every nonempty finite set *M* of positive integers and every choice of positive rational coefficients *a*ₘ, the number *F* = Σ *a*ₘ *T*ₘ is normal in base *b*. In particular every such positive combination with *b* = 10 and *p* = 3 is normal in base 10.
+'''
+scope = '''
+Here *d* = 1 and Φ₁(*X*) = *X* − 1, so the test of CR-01 evaluates each *P*ᵤ at 1, where it is a sum of positive terms. Positivity of all coefficients is essential; signed combinations must be tested with CR-01. The statement concerns base *b* only.
+'''
+lean = [
+  "NormalityChecker.positive_sum_of_order_one",
+  "NormalityChecker.decimal_positive_normal",
+]
+proof = [
+  "notes/reviewers.md#exact-statistical-prediction",
+  "notes/results.md#the-cyclotomic-checker",
+]
+related = ["CR-01"]
+
+[[result]]
+id = "CR-06"
+title = "A finite rational test for binary combinations with parameter 3"
+topic = "resonance"
+status = "lean"
+statement = '''
+Let *T*ₘ be as in CR-02, let *M* be a finite set of positive integers, let *a*ₘ be rational, and let *S* be a positive integer with *m* ≤ *S* for every *m* ∈ *M*. For *S* ≤ *u* < 3*S* let *j*ₘ(*u*) be the largest *j* ≥ 0 with *m* 3ʲ ≤ *u*, and put
+
+```math
+H_u = \sum_{m \in M} \frac{a_m \, (-1)^m}{m \, 3^{j_m(u)}} .
+```
+
+Then *F* = Σ *a*ₘ *T*ₘ is normal in base 2 if and only if *H*ᵤ ≠ 0 for every *u* with *S* ≤ *u* < 3*S*. In particular each *T*ₘ is binary normal, and *T*₂₀ + *T*₂₈ + *T*₃₅ is not binary normal (the cell *u* = 84 fails).
+'''
+scope = '''
+This is the case *b* = 2, *p* = 3 of CR-01: there Φ₂(*X*) = *X* + 1 and *H*ᵤ = *P*ᵤ(−1), and Lean proves that the two executable tests agree on every admissible input (`cyclotomicTest_binary_eq`). Negative and zero coefficients and indices divisible by 3 are allowed. The constants in the proof depend on the finite family, so the test gives no uniform control as the family grows.
+'''
+lean = [
+  "NormalityChecker.finite_normal_iff",
+  "NormalityChecker.binaryNormalTest_correct",
+  "NormalityChecker.normal_of_nonresonance",
+  "NormalityChecker.not_normal_of_resonance",
+  "NormalityChecker.component_binary_normal",
+  "NormalityChecker.three_component_resonance",
+  "NormalityChecker.cyclotomicTest_binary_eq",
+  "NormalityChecker.binary_cyclotomic_cell",
+]
+proof = [
+  "notes/finite-sums.md",
+  "notes/results.md#the-original-binary-checker",
+]
+related = ["CR-01", "CR-02", "CR-07"]
+
+[[result]]
+id = "CR-07"
+title = "Every ordered partial sum of a decomposition of ln 2 is binary normal"
+topic = "resonance"
+status = "lean"
+statement = '''
+Let *T*ₘ be as in CR-02. Summing over all positive integers *m* not divisible by 3,
+
+```math
+\sum_{3 \nmid m} T_m = \ln 2 ,
+```
+
+and for every *K* ≥ 1 the finite partial sum of *T*ₘ over 1 ≤ *m* ≤ *K* with 3 ∤ *m* is normal in base 2.
+'''
+scope = '''
+The identity regroups the series ln 2 = Σ 1/(*n* 2ⁿ) by the power of 3 dividing *n*. Normality of each partial sum follows from CR-06: after clearing powers of 3 every cell coefficient is a sum of odd numerators over the indices, and the unique largest power of 2 among the indices prevents cancellation. Convergence of the partial sums to ln 2 gives no control of digit frequencies, and nothing here proves or disproves binary normality of ln 2. The scaled error (*K* + 1) 2ᴷ (ln 2 − *F*ᴷ) and the resulting open uniformity problem are discussed in notes/ordered-tail.md.
+'''
+lean = [
+  "NormalityChecker.ordered_sum_binary_normal",
+  "NormalityChecker.hasSum_components_logTwo",
+  "NormalityChecker.ordered_phase_ne_zero",
+]
+proof = [
+  "notes/finite-sums.md#consequences-and-scope",
+  "notes/results.md#which-digit-questions-the-proofs-settle",
+]
+related = ["CR-06"]

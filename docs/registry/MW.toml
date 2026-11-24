@@ -1,0 +1,233 @@
+# Polynomial weights and masked supports. Manuscript: papers/02-localized-normality.
+# Format: docs/registry/SCHEMA.md
+#
+# Notation shared by the entries below. S is a finite set of primes and M(S) is the set of
+# positive integers whose prime factors lie in S, including 1. A mask is any subset A of M(S).
+# For a polynomial P with rational coefficients and an integer s, x_A is the sum of
+# P(m)/(m^s b^m) over m in A; in Lean this is maskedValue b S keep P s with A = {m : keep m}.
+# The vanishing order r of P at zero is Polynomial.rootMultiplicity 0.
+
+[[result]]
+id = "MW-01"
+title = "Classification of full-support rational polynomial weights"
+topic = "weights"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and *s* ≥ 0 be integers, let *S* be a finite set of primes, and let *M*(*S*) be the set of positive integers all of whose prime factors lie in *S*, including 1. Let *P* be a nonzero polynomial with rational coefficients, and let *r* be its order of vanishing at 0, the largest *r* with *X*ʳ dividing *P*. Put
+
+```math
+x = \sum_{m \in M(S)} \frac{P(m)}{m^s \, b^m}.
+```
+
+Then *x* is normal in base *b* if and only if *r* < *s* and some prime of *S* does not divide *b*.
+
+When the criterion fails, *x* is not normal and there is an integer *L* ≥ 1 coprime to *b* with lim inf *D*<sub>*N*</sub> ≥ 1/*L*, where *D*<sub>*N*</sub> is the interval discrepancy of LS-01 for *x*. If *P* has integer coefficients, then lim sup *D*<sub>*N*</sub> = 1 exactly when the criterion fails.
+'''
+scope = '''
+The degree of *P* is unrestricted and its coefficients may have any signs. The empty set *S* is allowed (then *x* = *P*(1)/*b* is rational), as is *s* = 0, for which the criterion never holds. Normality concerns base *b* only. The positive direction rests on LS-03: the unsigned certificates at the residual order *s* − *r* bound the discrepancy of *x* and tend to zero. For rational coefficients the discrepancy in the failing cases need not equal 1; see MW-07 for two examples with limit 2/3. The lower bound 1/*L* in the failing cases also holds on every mask, not only on the full support.
+'''
+lean = [
+  "NormalityChecker.PolynomialMasks.full_rational_normal_iff",
+  "NormalityChecker.PolynomialMasks.integer_full_classification",
+  "NormalityChecker.PolynomialMasks.rational_boundary",
+]
+proof = [
+  "notes/polynomial-masks.md",
+  "notes/polynomial-masks.md#full-support-and-higher-order-cancellation",
+  "notes/polynomial-masks.md#rational-coefficients",
+]
+supersedes = [
+  "NormalityChecker.PolynomialMasks.normal_of_unsigned_certificates",
+  "NormalityChecker.PolynomialMasks.five_thirteen_polynomial_normal",
+]
+related = ["LS-01", "LS-03", "MW-02", "MW-07"]
+
+[[result]]
+id = "MW-02"
+title = "Masks retaining late powers of an off-base prime"
+topic = "weights"
+status = "lean"
+statement = '''
+Let *b*, *s*, *S*, *M*(*S*), *P* and *r* be as in MW-01 with *r* < *s*, and let *p* ∈ *S* be a prime with *p* ∤ *b*. Let *A* ⊆ *M*(*S*) be any set of retained indices and put
+
+```math
+x_A = \sum_{m \in A} \frac{P(m)}{m^s \, b^m}.
+```
+
+Suppose there are an integer *h* ≥ 1 and exponents *k*₁ < *k*₂ < … such that *p*<sup>*k*ⱼ</sup> ∈ *A* and *k*ⱼ₊₁ − *k*ⱼ ≤ *h* for all sufficiently large *j*. Then the interval discrepancy *D*<sub>*N*</sub> of *x*<sub>*A*</sub> in base *b* satisfies
+
+```math
+\limsup_{N \to \infty} D_N \le 1 - \frac{1}{p^h - 1}.
+```
+
+In particular, if *A* contains every sufficiently large power of *p*, then lim sup *D*<sub>*N*</sub> ≤ 1 − 1/(*p* − 1), and if moreover *p* = 2 and *b* is odd, then *x*<sub>*A*</sub> is normal in base *b*.
+'''
+scope = '''
+The mask is otherwise arbitrary: indices other than the selected powers of *p* may be retained or deleted freely. *P* may have any degree and signed rational coefficients. The bound is the share of positions certified by first cells after retained powers; it is not claimed to be sharp. Lean states the retained-power and odd-base cases for numerators with *P*(0) ≠ 0 and pole order *t* ≥ 1; the general case *r* < *s* reduces to these by the term-by-term identity that cancels *X*ʳ. For eventually periodic exponent sets, Lean computes the exact certified share (for example 11/13 when exponents congruent to 0 or 1 modulo 3 are retained at *p* = 3). A mask that deletes all powers of every off-base prime receives no bound from this theorem.
+'''
+lean = [
+  "NormalityChecker.PolynomialMasks.rational_pole_bound",
+  "NormalityChecker.PolynomialMasks.bounded_gap_discrepancy",
+  "NormalityChecker.PolynomialMasks.late_powers_discrepancy",
+  "NormalityChecker.PolynomialMasks.normal_of_late_twos",
+  "NormalityChecker.PolynomialMasks.masked_cancel",
+]
+proof = [
+  "notes/polynomial-masks.md#periodic-and-bounded-gap-masks",
+  "notes/polynomial-masks.md#rational-coefficients",
+]
+supersedes = ["NormalityChecker.PolynomialMasks.base_five_degree_ten"]
+related = ["MW-01", "MW-03"]
+
+[[result]]
+id = "MW-03"
+title = "Masks on a single prime-power axis"
+topic = "weights"
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, let *t* ≥ 1, and let *P* be a polynomial with rational coefficients and *P*(0) ≠ 0. For a set *K* of nonnegative integers put
+
+```math
+x_K = \sum_{k \in K} \frac{P(p^k)}{p^{kt} \, b^{p^k}}.
+```
+
+Then *x*<sub>*K*</sub> is normal in base *b* if and only if *K* is infinite.
+'''
+scope = '''
+The degree of *P* is unrestricted and *K* may have arbitrarily long gaps. A finite set *K* gives a rational number. Any *P* with vanishing order *r* < *s* at zero reduces to this form with *t* = *s* − *r*. For a composite parameter *c* coprime to *b* in place of *p*, LS-05 gives sufficiency under the different hypothesis deg *P* < *s*.
+'''
+lean = [
+  "NormalityChecker.PolynomialMasks.axis_normal_iff",
+  "NormalityChecker.PolynomialMasks.infinite_axis_normal",
+  "NormalityChecker.PolynomialMasks.finite_mask_nonnormal",
+]
+proof = ["notes/polynomial-masks.md#periodic-and-bounded-gap-masks"]
+related = ["MW-02", "LS-05"]
+
+[[result]]
+id = "MW-04"
+title = "Dense polynomial weights on power intervals"
+topic = "weights"
+status = "lean"
+statement = '''
+Let *b*, *c* ≥ 2 be coprime integers, let *P* be a nonzero polynomial with rational coefficients, and let *s* > deg *P*. Then
+
+```math
+Y = \sum_{n=1}^{\infty} \frac{P(n)}{c^{\, s \lfloor \log_c n \rfloor} \, b^n}
+```
+
+is normal in base *b*. For example, with *b* = 2, *c* = 3, *s* = 2 and *P*(*X*) = *X*,
+
+```math
+\sum_{n=1}^{\infty} \frac{n}{3^{2 \lfloor \log_3 n \rfloor} \, 2^n} = 2 - 16 \sum_{j=1}^{\infty} \frac{3^j + 1}{3^{2j} \, 2^{3^j}},
+```
+
+and this number is normal in base 2.
+'''
+scope = '''
+Every positive integer *n* carries a term, and *c* may be composite. The proof finds a polynomial *H* of degree less than *s* with *P*(*X*) = *H*(*X*) − *H*(*X* + 1)/*b*, telescopes each interval [*c*ʲ, *c*ʲ⁺¹), and reduces *Y* to a rational translate of a nonzero integer multiple of a single-axis series covered by LS-05. Lean also proves the boundary criterion for antidifferences that agree with a polynomial only at the powers of *c*.
+'''
+lean = [
+  "NormalityChecker.dense_polynomial_normal",
+  "NormalityChecker.dense_polynomial_identity",
+  "NormalityChecker.normal_of_polynomial_boundaries",
+  "NormalityChecker.dense_linear_ternary_identity",
+  "NormalityChecker.dense_linear_ternary_normal",
+]
+proof = ["notes/polynomial-certificates.md#from-every-digit-to-the-power-boundaries"]
+related = ["LS-05", "MW-05"]
+
+[[result]]
+id = "MW-05"
+title = "Periodic weights on power intervals: a finite cyclic test"
+topic = "weights"
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, let *d* ≥ 1, and let *A* be a rational-valued function on the residues modulo *d*. Put
+
+```math
+X = \sum_{n=1}^{\infty} \frac{A(n \bmod d)}{p^{\lfloor \log_p n \rfloor} \, b^n}.
+```
+
+Define *F* on residues modulo *d* by
+
+```math
+F(x) = \frac{1}{1 - b^{-d}} \sum_{i=0}^{d-1} \frac{A(x + i)}{b^i},
+```
+
+choose integers *J* ≥ 0 and *L* ≥ 1 with *p*<sup>*J*+*L*</sup> ≡ *p*<sup>*J*</sup> (mod *d*), and for a residue *z* put
+
+```math
+W(z) = \sum_{i=1}^{L} p^{L-i} \, F(z p^i).
+```
+
+Then *X* is normal in base *b* if and only if *W*(*p*<sup>*J*+*i*</sup>) ≠ 0 for every 0 ≤ *i* < *L*.
+
+If in addition *c* ≥ 2 is any integer coprime to *b* with *c* ≡ 1 (mod *d*) and *s* ≥ 1, then the sum of *A*(*n* mod *d*)/(*c*<sup>*s*⌊log<sub>*c*</sub> *n*⌋</sup> *b*ⁿ) over *n* ≥ 1 equals 0 when the sum of *A*(1 + *i*)/*b*ⁱ over 0 ≤ *i* < *d* vanishes, and is normal in base *b* otherwise.
+'''
+scope = '''
+The first test is at order one (exponent 1 on the power of *p*) and requires *p* prime; the period *d* is arbitrary and may be divisible by *p*. A preperiod *J* and cycle length *L* always exist, and any certified pair may be used. When the test fails, the theorem asserts only nonnormality. The second test, for periods dividing *c* − 1, allows every order *s* ≥ 1 and composite *c*. Mixed supports with two independent exponents are not covered.
+'''
+lean = [
+  "NormalityChecker.periodic_normal_iff_phases",
+  "NormalityChecker.exists_power_cycle",
+  "NormalityChecker.periodic_plateau_test",
+]
+proof = [
+  "notes/polynomial-certificates.md#a-finite-test-for-periodic-weights",
+  "notes/results.md#normality-from-rational-prefixes",
+]
+related = ["MW-04", "MW-06"]
+
+[[result]]
+id = "MW-06"
+title = "Nonzero periodic weights with a vanishing phase"
+topic = "counterexamples"
+status = "lean"
+statement = '''
+Let *A* be the function on residues modulo 4 with *A*(0) = −1/2, *A*(1) = 1, *A*(2) = 3/2 and *A*(3) = −3. Then
+
+```math
+\sum_{n=1}^{\infty} \frac{A(n \bmod 4)}{3^{\lfloor \log_3 n \rfloor} \, 2^n}
+```
+
+is not normal in base 2. Moreover, for every integer *s* ≥ 0, the sum of *a*(*n*)/(3<sup>*s*⌊log₃ *n*⌋</sup> 2ⁿ) over *n* ≥ 1 equals 0, where *a*(*n*) = 1 for even *n* and *a*(*n*) = −1/2 for odd *n*.
+'''
+scope = '''
+In the first example one of the two cyclic sums *W* of MW-05 (with *p* = 3, *d* = 4, *J* = 0, *L* = 2) vanishes exactly; nonnormality is all that is claimed, not rationality. In the second example the discounted period sum is −1/2 + 1/2 = 0, so every power boundary has value zero and the series cancels exactly, including for *s* = 0. Both show that nonzero periodic weights do not by themselves force normality.
+'''
+lean = [
+  "NormalityChecker.signed_four_nonnormal",
+  "NormalityChecker.periodic_plateau_zero",
+]
+proof = [
+  "notes/polynomial-certificates.md#a-finite-test-for-periodic-weights",
+  "notes/results.md#normality-from-rational-prefixes",
+]
+related = ["MW-05"]
+
+[[result]]
+id = "MW-07"
+title = "Rational weights with discrepancy exactly two thirds"
+topic = "counterexamples"
+status = "lean"
+statement = '''
+Let *D*<sub>*N*</sub>(*x*) be the binary interval discrepancy of LS-01. The numbers
+
+```math
+x_1 = \sum_{j=0}^{\infty} \frac{3^{j}}{3 \cdot 2^{3^j}}, \qquad x_2 = \sum_{j=0}^{\infty} \frac{1}{3 \cdot 2^j \cdot 2^{2^j}}
+```
+
+satisfy *D*<sub>*N*</sub>(*x*₁) → 2/3 and *D*<sub>*N*</sub>(*x*₂) → 2/3. On the other hand, for every base *b* ≥ 2, every *s* ≥ 0, every finite set of primes *S* and every mask, the weight *m*<sup>*s*+1</sup>(*m* − 1)/(2*m*ˢ) gives a series whose base-*b* discrepancy tends to 1.
+'''
+scope = '''
+In the notation of MW-01, *x*₁ is the full-support series for *b* = 2, *S* = {3}, *s* = 1 and *P*(*X*) = *X*²/3, so *r* = 2 ≥ *s*; *x*₂ is the series for *b* = 2, *S* = {2}, *s* = 1 and *P* = 1/3, whose only support prime divides the base. Both lie in the failing cases of MW-01. Their discrepancy limit 2/3 shows that, for rational coefficients, nonnormality in those cases need not come with maximal discrepancy; the general lower bound is 1/*L* for an integer *L* coprime to *b*. The third example has integer values *m*(*m* − 1)/2 after division by *m*ˢ and attains the maximal value.
+'''
+lean = [
+  "NormalityChecker.PolynomialMasks.ternary_linear_thirds",
+  "NormalityChecker.PolynomialMasks.dyadic_reciprocal_thirds",
+  "NormalityChecker.PolynomialMasks.consecutive_product_maximal",
+]
+proof = ["notes/polynomial-masks.md#rational-coefficients"]
+related = ["MW-01"]

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 584" width="720" height="584" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">
+<title id="title">Finite-resolution visualization of the attainable discrepancy spectrum</title>
+<desc id="desc">Top strip: a horizontal axis from 0 to 1 with a single aqua tick at 0 labelled normal and isolated, an empty stretch up to 2/3, and dense blue ticks between 2/3 and 1. Connector lines enlarge the interval from 2/3 to 1 into a lower panel with seven rows of blue rug ticks for period bounds L = 2, 4, 6, 8, 10, 12 and 14, containing 3, 8, 23, 71, 226, 747 and 2538 distinct values. The ticks fill in a Cantor-like pattern; a shaded band marks the empty gap between 3/4 and 8/9. Triangles mark the kernel-verified examples 27/40, 3/4 and 12/13.</desc>
+<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#7d8590" stroke-width="1.4"/></pattern></defs>
+<rect width="720" height="584" rx="10" fill="#0d1117"/>
+<text x="24" y="34" font-size="18" fill="#f0f6fc" font-weight="600">The attainable discrepancy spectrum for p = 3</text>
+<text x="24" y="56" font-size="13.5" fill="#b7bdc8">Exact discrepancies of all periodic phase sequences, period at most L</text>
+<rect x="496.8" y="68" width="199.2" height="22" rx="11" fill="#151b23" stroke="#3d444d" stroke-width="1"/>
+<text x="596.4" y="83.5" font-size="12.5" fill="#b7bdc8" text-anchor="middle">Exact finite computation</text>
+<text x="80" y="136" font-size="13" fill="#b7bdc8" text-anchor="end">[0, 1]</text>
+<line x1="92" y1="144" x2="560" y2="144" stroke="#3d444d" stroke-width="1"/>
+<path d="M403.5 126h2.29v18h-2.29zM407.35 126h1.05v18h-1.05zM415.06 126h1.44v18h-1.44zM438.17 126h2.43v18h-2.43zM442.02 126h1.48v18h-1.48zM507.5 126h2.72v18h-2.72zM511.35 126h2.35v18h-2.35zM519.06 126h2.77v18h-2.77zM522.91 126h1.59v18h-1.59zM542.17 126h2.86v18h-2.86zM546.02 126h2.78v18h-2.78zM553.72 126h2.91v18h-2.91zM557.57 126h2.93v18h-2.93z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="92" y1="126" x2="92" y2="144" stroke="#199e70" stroke-width="3"/>
+<line x1="92" y1="144" x2="92" y2="148" stroke="#3d444d" stroke-width="1"/>
+<text x="92" y="162" font-size="13" fill="#b7bdc8" text-anchor="middle">0</text>
+<line x1="248" y1="144" x2="248" y2="148" stroke="#3d444d" stroke-width="1"/>
+<text x="248" y="162" font-size="13" fill="#b7bdc8" text-anchor="middle">1/3</text>
+<line x1="404" y1="144" x2="404" y2="148" stroke="#3d444d" stroke-width="1"/>
+<text x="404" y="162" font-size="13" fill="#b7bdc8" text-anchor="middle">2/3</text>
+<line x1="560" y1="144" x2="560" y2="148" stroke="#3d444d" stroke-width="1"/>
+<text x="560" y="162" font-size="13" fill="#b7bdc8" text-anchor="middle">1</text>
+<text x="88" y="118" font-size="13" fill="#b7bdc8">0: normal, isolated</text>
+<text x="269.84" y="137" font-size="13" fill="#8b949e" text-anchor="middle">no attainable value in (0, 2/3)</text>
+<text x="570" y="136" font-size="13" fill="#b7bdc8">L ≤ 14</text>
+<line x1="404" y1="168" x2="92" y2="202" stroke="#3d444d" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="560" y1="168" x2="560" y2="202" stroke="#3d444d" stroke-width="1" stroke-dasharray="3 3"/>
+<rect x="209" y="226" width="195" height="216" rx="0" fill="#151b23" stroke="none" stroke-width="1"/>
+<text x="306.5" y="326" font-size="13" fill="#b7bdc8" text-anchor="middle">gap: no attainable</text>
+<text x="306.5" y="344" font-size="13" fill="#b7bdc8" text-anchor="middle">value in (3/4, 8/9)</text>
+<line x1="103.7" y1="224" x2="103.7" y2="442" stroke="#b7bdc8" stroke-width="1" stroke-dasharray="2 3"/>
+<path d="M98.70000000000012 214 L108.70000000000012 214 L103.70000000000012 222 Z" fill="#f0f6fc" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="209" y1="224" x2="209" y2="442" stroke="#b7bdc8" stroke-width="1" stroke-dasharray="2 3"/>
+<path d="M204.00000000000003 214 L214.00000000000003 214 L209.00000000000003 222 Z" fill="#f0f6fc" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="452" y1="224" x2="452" y2="442" stroke="#b7bdc8" stroke-width="1" stroke-dasharray="2 3"/>
+<path d="M447.00000000000006 214 L457.00000000000006 214 L452.00000000000006 222 Z" fill="#f0f6fc" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="99.7" y="208" font-size="13" fill="#f0f6fc" text-anchor="end" font-weight="600">27/40</text>
+<text x="213" y="208" font-size="13" fill="#f0f6fc" font-weight="600">3/4</text>
+<text x="452" y="208" font-size="13" fill="#f0f6fc" text-anchor="middle" font-weight="600">12/13</text>
+<text x="628" y="208" font-size="13" fill="#b7bdc8" text-anchor="end">values</text>
+<text x="698" y="208" font-size="13" fill="#b7bdc8" text-anchor="end">error</text>
+<text x="80" y="247" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 2</text>
+<path d="M208.5 234h1v18h-1zM559.5 234h1v18h-1z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="247" font-size="13" fill="#b7bdc8" text-anchor="end">3</text>
+<text x="698" y="247" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻¹</text>
+<text x="80" y="277" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 4</text>
+<path d="M103.2 264h1v18h-1zM127.5 264h1v18h-1zM208.5 264h1v18h-1zM419.1 264h1v18h-1zM451.5 264h1v18h-1zM524.4 264h1v18h-1zM559.5 264h1v18h-1z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="277" font-size="13" fill="#b7bdc8" text-anchor="end">8</text>
+<text x="698" y="277" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻²</text>
+<text x="80" y="307" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 6</text>
+<path d="M92.79 294h1v18h-1zM95.37 294h1v18h-1zM103.2 294h1v18h-1zM127.5 294h1v18h-1zM196.93 294h1v18h-1zM199.8 294h1v18h-1zM208.5 294h1v18h-1zM405.21 294h1v18h-1zM408.66 294h1v18h-1zM416.79 294h1v18h-1zM419.1 294h1v18h-1zM439.93 294h1v18h-1zM443.47 294h1v18h-1zM451.5 294h1v18h-1zM509.36 294h1v18h-1zM513.09 294h1v18h-1zM520.93 294h1v18h-1zM524.4 294h1v18h-1zM544.07 294h1v18h-1zM547.9 294h1v18h-1zM555.64 294h1v18h-1zM559.5 294h1v18h-1z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="307" font-size="13" fill="#b7bdc8" text-anchor="end">23</text>
+<text x="698" y="307" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻³</text>
+<text x="80" y="337" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 8</text>
+<path d="M91.64 324h2.14v18h-2.14zM95.37 324h1v18h-1zM103.2 324h1v18h-1zM126.31 324h2.19v18h-2.19zM195.66 324h2.27v18h-2.27zM199.51 324h1.29v18h-1.29zM207.22 324h2.28v18h-2.28zM403.69 324h2.52v18h-2.52zM407.54 324h2.11v18h-2.11zM415.25 324h2.54v18h-2.54zM419.1 324h1v18h-1zM438.36 324h2.57v18h-2.57zM442.21 324h2.25v18h-2.25zM449.92 324h2.58v18h-2.58zM507.71 324h2.65v18h-2.65zM511.56 324h2.53v18h-2.53zM519.26 324h2.67v18h-2.67zM523.12 324h2.28v18h-2.28zM542.38 324h2.69v18h-2.69zM546.23 324h2.67v18h-2.67zM553.94 324h2.71v18h-2.71zM557.79 324h2.71v18h-2.71z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="337" font-size="13" fill="#b7bdc8" text-anchor="end">71</text>
+<text x="698" y="337" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻⁴</text>
+<text x="80" y="367" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 10</text>
+<path d="M91.52 354h2.27v18h-2.27zM95.37 354h1v18h-1zM103.07 354h1.13v18h-1.13zM126.18 354h2.32v18h-2.32zM195.52 354h2.41v18h-2.41zM199.37 354h1.43v18h-1.43zM207.07 354h2.43v18h-2.43zM403.52 354h2.69v18h-2.69zM407.37 354h2.28v18h-2.28zM415.08 354h2.71v18h-2.71zM418.93 354h1.17v18h-1.17zM438.19 354h2.74v18h-2.74zM442.04 354h2.43v18h-2.43zM449.74 354h2.76v18h-2.76zM507.52 354h2.83v18h-2.83zM511.37 354h2.71v18h-2.71zM519.08 354h2.85v18h-2.85zM522.93 354h2.47v18h-2.47zM542.19 354h2.88v18h-2.88zM546.04 354h2.85v18h-2.85zM553.75 354h2.9v18h-2.9zM557.6 354h2.9v18h-2.9z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="367" font-size="13" fill="#b7bdc8" text-anchor="end">226</text>
+<text x="698" y="367" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻⁵</text>
+<text x="80" y="397" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 12</text>
+<path d="M91.5 384h2.28v18h-2.28zM95.35 384h1.01v18h-1.01zM103.06 384h1.14v18h-1.14zM126.17 384h2.33v18h-2.33zM195.5 384h2.43v18h-2.43zM199.35 384h1.44v18h-1.44zM207.06 384h2.44v18h-2.44zM403.5 384h2.71v18h-2.71zM407.35 384h2.3v18h-2.3zM415.06 384h2.73v18h-2.73zM418.91 384h1.19v18h-1.19zM438.17 384h2.76v18h-2.76zM442.02 384h2.45v18h-2.45zM449.72 384h2.78v18h-2.78zM507.5 384h2.85v18h-2.85zM511.35 384h2.73v18h-2.73zM519.06 384h2.87v18h-2.87zM522.91 384h2.49v18h-2.49zM542.17 384h2.9v18h-2.9zM546.02 384h2.88v18h-2.88zM553.72 384h2.92v18h-2.92zM557.58 384h2.92v18h-2.92z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="397" font-size="13" fill="#b7bdc8" text-anchor="end">747</text>
+<text x="698" y="397" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻⁶</text>
+<text x="80" y="427" font-size="13" fill="#f0f6fc" text-anchor="end">L ≤ 14</text>
+<path d="M91.5 414h2.29v18h-2.29zM95.35 414h1.02v18h-1.02zM103.06 414h1.14v18h-1.14zM126.17 414h2.33v18h-2.33zM195.5 414h2.43v18h-2.43zM199.35 414h1.45v18h-1.45zM207.06 414h2.44v18h-2.44zM403.5 414h2.71v18h-2.71zM407.35 414h2.3v18h-2.3zM415.06 414h2.73v18h-2.73zM418.91 414h1.19v18h-1.19zM438.17 414h2.76v18h-2.76zM442.02 414h2.45v18h-2.45zM449.72 414h2.78v18h-2.78zM507.5 414h2.86v18h-2.86zM511.35 414h2.73v18h-2.73zM519.06 414h2.87v18h-2.87zM522.91 414h2.49v18h-2.49zM542.17 414h2.9v18h-2.9zM546.02 414h2.88v18h-2.88zM553.72 414h2.92v18h-2.92zM557.57 414h2.93v18h-2.93z" fill="#3987e5" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="628" y="427" font-size="13" fill="#b7bdc8" text-anchor="end">2538</text>
+<text x="698" y="427" font-size="13" fill="#b7bdc8" text-anchor="end">≤ 3⁻⁷</text>
+<line x1="92" y1="444" x2="560" y2="444" stroke="#3d444d" stroke-width="1"/>
+<line x1="92" y1="444" x2="92" y2="449" stroke="#3d444d" stroke-width="1"/>
+<text x="92" y="464" font-size="13" fill="#b7bdc8" text-anchor="middle">2/3</text>
+<line x1="209" y1="444" x2="209" y2="449" stroke="#3d444d" stroke-width="1"/>
+<text x="209" y="464" font-size="13" fill="#b7bdc8" text-anchor="middle">3/4</text>
+<line x1="404" y1="444" x2="404" y2="449" stroke="#3d444d" stroke-width="1"/>
+<text x="404" y="464" font-size="13" fill="#b7bdc8" text-anchor="middle">8/9</text>
+<line x1="560" y1="444" x2="560" y2="449" stroke="#3d444d" stroke-width="1"/>
+<text x="560" y="464" font-size="13" fill="#b7bdc8" text-anchor="middle">1</text>
+<text x="326" y="484" font-size="13" fill="#b7bdc8" text-anchor="middle">limiting interval discrepancy D∞ (enlarged: 2/3 to 1)</text>
+<line x1="24" y1="506" x2="24" y2="520" stroke="#3987e5" stroke-width="2"/>
+<text x="34" y="517" font-size="13" fill="#b7bdc8">exact D∞ of a periodic phase sequence</text>
+<line x1="312" y1="506" x2="312" y2="520" stroke="#199e70" stroke-width="3"/>
+<text x="322" y="517" font-size="13" fill="#b7bdc8">D∞ = 0, normal</text>
+<path d="M450 507 L460 507 L455 515 Z" fill="#f0f6fc" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="468" y="517" font-size="13" fill="#b7bdc8">kernel-verified example (Fig. 4)</text>
+<text x="24" y="540" font-size="13" fill="#b7bdc8">Error: every point of the full spectrum lies within this distance of a tick in its row.</text>
+<text x="24" y="570" font-size="12" fill="#8b949e">Lean: attainable_discrepancy_iff, cycleMaximum_approximates_historyValue (DS-04).</text>
+</svg>

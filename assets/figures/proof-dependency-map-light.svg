@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 822" width="720" height="822" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">
+<title id="title">Proof-dependency map: which common mathematical techniques support the main theorems</title>
+<desc id="desc">Node-link diagram in three columns. Left column, techniques: upper-orthant sums with K(p) congruent to 1 mod p minus 1; short-orbit cancellation on a fixed prime support; shell counting of signed phases; discrepancy of rational orbits; complete-orbit character sums; p-adic lift of cell coefficients; recurrence on the logarithmic circle; finite differences and finite-ray separation. Middle column, frameworks: rational-prefix normality certificate; discrepancy on selected positions; Ridout&#x27;s theorem as a paper input; insertion-cell model; the order-one joint-failure formula of Phase 10 as a historical node; persistent failed regions with exact discrepancy at all orders; polynomial masks. Right column, results ST-01, ST-05, DS-01, DS-03, DS-04, CR-01, LS-01, MW-01. Solid arrows: orthant sums and the certificate to ST-01, ST-01 to ST-05; short-orbit cancellation to the certificate, certificate to selected positions, which with shell counting feeds DS-01; DS-01 to DS-03 and DS-04; rational orbits to DS-03; orbit sums and p-adic lifts to the cell model, which feeds CR-01; recurrence, finite differences and persistent regions to LS-01; LS-01 and polynomial masks to MW-01. Dashed arrows: CR-01 to DS-01 and the order-one formula to persistent regions, both historical. A dotted arrow from Ridout&#x27;s theorem to DS-01. A band at the bottom states that all eight result modules import the definition of normality, Weyl&#x27;s criterion and the Fourier test.</desc>
+<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#8a929b" stroke-width="1.4"/></pattern></defs>
+<rect width="720" height="822" rx="10" fill="#ffffff"/>
+<text x="24" y="34" font-size="18" fill="#1f2328" font-weight="600">Proof-dependency map</text>
+<text x="24" y="56" font-size="13.5" fill="#59636e">Which common techniques support the principal theorems</text>
+<rect x="496.8" y="20" width="199.2" height="22" rx="11" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="596.4" y="35.5" font-size="12.5" fill="#59636e" text-anchor="middle">Exact finite computation</text>
+<text x="24" y="102" font-size="13" fill="#59636e" font-weight="600">Techniques</text>
+<text x="244" y="102" font-size="13" fill="#59636e" font-weight="600">Frameworks</text>
+<text x="462" y="102" font-size="13" fill="#59636e" font-weight="600">Principal results</text>
+<line x1="24" y1="110" x2="208" y2="110" stroke="#c7ccd1" stroke-width="1"/>
+<line x1="244" y1="110" x2="428" y2="110" stroke="#c7ccd1" stroke-width="1"/>
+<line x1="462" y1="110" x2="688" y2="110" stroke="#c7ccd1" stroke-width="1"/>
+<path d="M208 138 H432 C448.5 138 445.5 138 456 138" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 138 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 196 C227.8 196 224.2 196 238 196" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M244 196 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M428 196 C446.7 196 443.3 148 456 148" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 148 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="575" y1="159" x2="575" y2="174" stroke="#59636e" stroke-width="1.6"/>
+<path d="M575 175 l-3.6 -7 h7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="336" y1="217" x2="336" y2="232" stroke="#59636e" stroke-width="1.6"/>
+<path d="M336 233 l-3.6 -7 h7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M428 254 C446.7 254 443.3 250 456 250" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 250 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 296 H432 C448.5 296 445.5 262 456 262" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 262 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M428 330 C446.7 330 443.3 272 456 272" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="1.5 3.5"/>
+<path d="M462 272 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="575" y1="279" x2="575" y2="298" stroke="#59636e" stroke-width="1.6"/>
+<path d="M575 299 l-3.6 -7 h7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 366 H432 C448.5 366 445.5 328 456 328" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 328 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M688 266 H692 Q700 266 700 274 V372 Q700 380 692 380 H694" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M688 380 l7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 436 C227.8 436 224.2 462 238 462" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M244 462 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 490 H432 C448.5 490 445.5 469 456 469" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 469 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M428 462 C446.7 462 443.3 455 456 455" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 455 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M688 456 H704 Q712 456 712 448 V252 Q712 244 704 244 H694" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/>
+<path d="M688 244 l7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="336" y1="601" x2="336" y2="616" stroke="#59636e" stroke-width="1.6" stroke-dasharray="6 4"/>
+<path d="M336 617 l-3.6 -7 h7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 548 H432 C448.5 548 445.5 581 456 581" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 581 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M428 638 C446.7 638 443.3 594 456 594" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 594 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M208 672 H432 C448.5 672 445.5 607 456 607" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 607 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="575" y1="615" x2="575" y2="634" stroke="#59636e" stroke-width="1.6"/>
+<path d="M575 635 l-3.6 -7 h7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M428 706 C446.7 706 443.3 666 456 666" fill="none" stroke="#59636e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M462 666 l-7 -3.6 v7.2 z" fill="#59636e" stroke="none" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="24" y="117" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="134" font-size="13" fill="#1f2328">Upper-orthant sums</text>
+<text x="34" y="151" font-size="13" fill="#1f2328">K(p) ≡ 1 mod (p − 1)</text>
+<rect x="24" y="175" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="192" font-size="13" fill="#1f2328">Short-orbit cancellation</text>
+<text x="34" y="209" font-size="13" fill="#1f2328">on a fixed prime support</text>
+<rect x="244" y="175" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#59636e" stroke-width="1.4"/>
+<text x="254" y="192" font-size="13" fill="#1f2328">Rational-prefix</text>
+<text x="254" y="209" font-size="13" fill="#1f2328">normality certificate</text>
+<rect x="462" y="117" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="134" font-size="13" fill="#1f2328" font-weight="700">ST-01</text>
+<text x="522" y="134" font-size="13" fill="#1f2328">Polynomial images</text>
+<text x="522" y="151" font-size="13" fill="#1f2328">of Stoneham numbers</text>
+<rect x="462" y="175" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="192" font-size="13" fill="#1f2328" font-weight="700">ST-05</text>
+<text x="522" y="192" font-size="13" fill="#1f2328">Joint uniformity of</text>
+<text x="522" y="209" font-size="13" fill="#1f2328">Stoneham powers</text>
+<rect x="244" y="233" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#59636e" stroke-width="1.4"/>
+<text x="254" y="250" font-size="13" fill="#1f2328">Discrepancy on</text>
+<text x="254" y="267" font-size="13" fill="#1f2328">selected positions</text>
+<rect x="24" y="275" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="292" font-size="13" fill="#1f2328">Shell counting of</text>
+<text x="34" y="309" font-size="13" fill="#1f2328">signed phases</text>
+<rect x="244" y="309" width="184" height="42" rx="6" fill="#ffffff" stroke="#59636e" stroke-width="1" stroke-dasharray="1.5 3.5"/>
+<text x="254" y="326" font-size="13" fill="#59636e">Ridout&#x27;s theorem, for</text>
+<text x="254" y="343" font-size="13" fill="#59636e">transcendence (DS-07)</text>
+<rect x="24" y="345" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="362" font-size="13" fill="#1f2328">Discrepancy of</text>
+<text x="34" y="379" font-size="13" fill="#1f2328">rational orbits</text>
+<rect x="462" y="237" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="254" font-size="13" fill="#1f2328" font-weight="700">DS-01</text>
+<text x="522" y="254" font-size="13" fill="#1f2328">Exact signed-shell</text>
+<text x="522" y="271" font-size="13" fill="#1f2328">discrepancy</text>
+<rect x="462" y="299" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="316" font-size="13" fill="#1f2328" font-weight="700">DS-03</text>
+<text x="522" y="316" font-size="13" fill="#1f2328">Rational translation</text>
+<text x="522" y="333" font-size="13" fill="#1f2328">of signed shells</text>
+<rect x="462" y="359" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="376" font-size="13" fill="#1f2328" font-weight="700">DS-04</text>
+<text x="522" y="376" font-size="13" fill="#1f2328">Attainable</text>
+<text x="522" y="393" font-size="13" fill="#1f2328">discrepancy spectrum</text>
+<rect x="24" y="415" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="432" font-size="13" fill="#1f2328">Complete-orbit</text>
+<text x="34" y="449" font-size="13" fill="#1f2328">character sums</text>
+<rect x="24" y="469" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="486" font-size="13" fill="#1f2328">p-adic lift of</text>
+<text x="34" y="503" font-size="13" fill="#1f2328">cell coefficients</text>
+<rect x="244" y="441" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#59636e" stroke-width="1.4"/>
+<text x="254" y="458" font-size="13" fill="#1f2328">Insertion-cell model</text>
+<text x="254" y="475" font-size="13" fill="#1f2328">and cell limits</text>
+<rect x="462" y="435" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="452" font-size="13" fill="#1f2328" font-weight="700">CR-01</text>
+<text x="522" y="452" font-size="13" fill="#1f2328">Cyclotomic</text>
+<text x="522" y="469" font-size="13" fill="#1f2328">classification</text>
+<rect x="244" y="559" width="184" height="42" rx="6" fill="#ffffff" stroke="#59636e" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="254" y="576" font-size="13" fill="#59636e">Order-one joint failure</text>
+<text x="254" y="593" font-size="13" fill="#59636e">formula (Phase 10)</text>
+<rect x="24" y="527" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="544" font-size="13" fill="#1f2328">Recurrence on the</text>
+<text x="34" y="561" font-size="13" fill="#1f2328">logarithmic circle</text>
+<rect x="244" y="617" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#59636e" stroke-width="1.4"/>
+<text x="254" y="634" font-size="13" fill="#1f2328">Persistent failed regions</text>
+<text x="254" y="651" font-size="13" fill="#1f2328">and all-order discrepancy</text>
+<rect x="24" y="651" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="34" y="668" font-size="13" fill="#1f2328">Finite differences,</text>
+<text x="34" y="685" font-size="13" fill="#1f2328">finite-ray separation</text>
+<rect x="244" y="685" width="184" height="42" rx="6" fill="#f6f8fa" stroke="#59636e" stroke-width="1.4"/>
+<text x="254" y="702" font-size="13" fill="#1f2328">Polynomial masks,</text>
+<text x="254" y="719" font-size="13" fill="#1f2328">local valuations</text>
+<rect x="462" y="573" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="590" font-size="13" fill="#1f2328" font-weight="700">LS-01</text>
+<text x="522" y="590" font-size="13" fill="#1f2328">Unsigned finite-</text>
+<text x="522" y="607" font-size="13" fill="#1f2328">support dichotomy</text>
+<rect x="462" y="635" width="226" height="42" rx="8" fill="#ffffff" stroke="#1f2328" stroke-width="1.6"/>
+<text x="472" y="652" font-size="13" fill="#1f2328" font-weight="700">MW-01</text>
+<text x="522" y="652" font-size="13" fill="#1f2328">Full-support rational</text>
+<text x="522" y="669" font-size="13" fill="#1f2328">polynomial weights</text>
+<rect x="24" y="744" width="672" height="40" rx="6" fill="#f6f8fa" stroke="#c7ccd1" stroke-width="1"/>
+<text x="36" y="761" font-size="13" fill="#1f2328" font-weight="600">Imported by all eight theorem modules:</text>
+<text x="36" y="777" font-size="13" fill="#59636e">definition of normality, Weyl&#x27;s criterion, Fourier test of normality</text>
+<line x1="24" y1="798" x2="50" y2="798" stroke="#59636e" stroke-width="1.8"/>
+<text x="56" y="803" font-size="13" fill="#59636e">dependency, verified in Lean imports</text>
+<line x1="324" y1="798" x2="350" y2="798" stroke="#59636e" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="356" y="803" font-size="13" fill="#59636e">historical, not logical</text>
+<line x1="524" y1="798" x2="550" y2="798" stroke="#59636e" stroke-width="1.8" stroke-dasharray="1.5 3.5"/>
+<text x="556" y="803" font-size="13" fill="#59636e">paper-only input</text>
+</svg>

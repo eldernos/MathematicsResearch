@@ -1,0 +1,277 @@
+# Rational-orbit certificates, coverage and rigidity. Manuscript: papers/04-arithmetic-certificates.
+# Format: docs/registry/SCHEMA.md
+#
+# Notation: ‖t‖ is the distance from a real t to the nearest integer, e(t) = exp(2πit),
+# and D_N, D∞ are the interval discrepancies of the radix orbit as in DS-01.
+
+[[result]]
+id = "AC-01"
+title = "Normality from rational orbit models on most blocks"
+topic = "certificates"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and let *c* ≥ 2 be an integer coprime to *b*. Let *x* be real and let *P*₀, *P*₁, … be rational numbers with *bⁿx* − *P*ₙ → 0. Fix integers *B* ≥ 1, *L* ≥ 2 and *d* ≥ 0. At scale *k*, for each integer *u* with 1 ≤ *u* < *LB* and each 0 ≤ *l* < *Lᵏ*, consider the block of *T* = *Bᵏ* positions starting at *n* = (*u Lᵏ* + *l*) *Bᵏ*. Suppose that for every such *u*, every integer *M* and every η > 0, for all sufficiently large *k* there is an exceptional set of at most η*Lᵏ* indices *l* such that every other block admits a rational number *y* whose reduced denominator *q* satisfies
+
+* *q* ≥ *M*,
+* every prime factor of *q* divides *c*,
+* *q* ≤ *Tᵈ*,
+
+and
+
+```math
+\sum_{i=0}^{T-1} \left\| P_{n+i} - b^i y \right\| \le \eta \, T ,
+```
+
+where ‖·‖ is the distance to the nearest integer. Then *x* is normal in base *b*.
+'''
+scope = '''
+Each block may use its own model *y*. The exact-orbit version, with *y* = *P*ₙ and *P*ₙ₊ᵢ = *bⁱP*ₙ on good blocks, is `normal_of_arithmetic_certificate`. The Lean theorem takes the fixed-support short-orbit estimate for (*b*, *c*) as a hypothesis; AC-04 proves that estimate for every *c* ≥ 2 coprime to *b*, and the two compose directly (as in `DominatedPerturbation.lean`). The denominator exponent *d* and the integer *c* are fixed across all scales and cutoffs. The result gives no rate; a finite interval-count bound for the same block data is `approximate_interval_count_bound`. AC-10 shows that fixed-accuracy models of this kind exist only for a Lebesgue-null set of *x* on a prescribed schedule, so the hypotheses hold only for a Lebesgue-null set of *x*.
+'''
+lean = [
+  "NormalityChecker.normal_of_approximate_arithmetic_certificate",
+  "NormalityChecker.normal_of_arithmetic_certificate",
+  "NormalityChecker.fixed_support_orbit_estimate",
+  "NormalityChecker.approximate_prefix_bound",
+  "NormalityChecker.phase_model_sum_bound",
+  "NormalityChecker.approximate_interval_count_bound",
+]
+proof = [
+  "notes/polynomial-certificates.md#approximate-blocks-and-quantitative-control",
+  "notes/results.md#normality-from-rational-prefixes",
+]
+related = ["AC-04", "AC-10"]
+
+[[result]]
+id = "AC-02"
+title = "Partial coverage bounds the discrepancy"
+topic = "coverage"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and *x* be real, and write *u*ₙ = {*bⁿx*}. Let *N* > 0 and let *G*₁, …, *G*ₖ be pairwise disjoint subsets of {0, …, *N* − 1} with union of size *G*. Suppose that, for some real *d* and every interval [α, β) ⊆ [0, 1] and every *i*,
+
+```math
+\left| \#\{ n \in G_i : \alpha \le u_n < \beta \} - (\beta - \alpha) \, |G_i| \right| \le d \, |G_i| .
+```
+
+Then *D*<sub>*N*</sub>(*x*) ≤ 1 − (1 − *d*) *G*/*N*. If *d* ≤ 1 and for every ε > 0 every sufficiently long prefix admits such pieces covering a proportion at least *g* − ε, then *D*∞(*x*) ≤ 1 − *g*(1 − *d*).
+
+In particular, if a family of selected sets covering a lower proportion *g* is asymptotically uniformly distributed relative to the full prefix length, then *D*∞(*x*) ≤ 1 − *g*; and if each of the *q* intervals [*j*/*q*, (*j* + 1)/*q*) has limiting frequency 1/*q*, then *D*∞(*x*) ≤ 2/*q*. Taking *q* = 2⁸, correct limiting frequencies of all 256 binary words of length 8 give *D*∞(*x*) ≤ 1/128.
+'''
+scope = '''
+The pieces may be chosen afresh for each prefix and may come from different rational models or starting indices. A piece cut by the prefix end must either carry its own certificate or be charged as uncovered. These are general facts about arbitrary radix orbits; they do not by themselves supply the covering share for any particular constant. For ln 2, *d* = 1/3 and *g* = 3/20000 would give *D*∞ ≤ 0.9999, and that coverage is open (see CC-04).
+'''
+lean = [
+  "NormalityChecker.Coverage.fixed_quality_cover",
+  "NormalityChecker.Coverage.asymptotic_fixed_quality",
+  "NormalityChecker.discrepancy_of_uniform_share",
+  "NormalityChecker.discrepancy_of_fixed_cells",
+]
+proof = [
+  "notes/intermittent-coverage.md#fixed-quality-and-unfinished-blocks",
+  "notes/results.md#quantitative-discrepancy-on-finite-prime-supports",
+]
+related = ["AC-07", "CC-04"]
+
+[[result]]
+id = "AC-03"
+title = "Rigidity of overlapping smooth rational models"
+topic = "coverage"
+principal = true
+status = "lean"
+statement = '''
+Let *b*, *c* ≥ 2 be coprime and let *d* ≥ 0. There is δ > 0 with the following property. Let *T* ≥ 1, let *x* and *y* be rationals whose reduced denominators are at most *Tᵈ* and have all prime factors dividing *c*, and suppose *x* − *y* is not an integer. Then for all real numbers *f*₀, *f*₁, …, with ‖·‖ the distance to the nearest integer,
+
+```math
+\frac{1}{T} \sum_{i=0}^{T-1} \left( \left\| f_i - b^i x \right\| + \left\| f_i - b^i y \right\| \right) \ge \delta .
+```
+
+Consequently, if two such families of models *xₙ*, *yₙ* on common blocks of lengths *Tₙ* have mean total error tending to 0, then *xₙ* − *yₙ* is an integer for all large *n*; and along a chain of overlaps in which successive models agree modulo one after shifting, the reduced denominators are eventually constant.
+'''
+scope = '''
+δ depends only on *b*, *c* and *d*. The denominator bound must be polynomial in the actual overlap length *T*: the models 0 and *c* to the power −*T*² have vanishing separation, and the models 0 and 1/*b* agree after one shift. The chain statement shows that compatible overlaps cannot supply the growing denominators required by AC-01; short overlaps and disjoint blocks are not excluded.
+'''
+lean = [
+  "NormalityChecker.smooth_overlap_rigidity",
+  "NormalityChecker.smooth_overlap_separation",
+  "NormalityChecker.overlap_chain_denominator",
+]
+proof = ["notes/overlapping-certificates.md#rigidity-on-shared-samples"]
+related = ["AC-01", "AC-04"]
+
+[[result]]
+id = "AC-04"
+title = "Cancellation in short radix orbits with smooth denominators"
+topic = "certificates"
+status = "lean"
+statement = '''
+Let *b*, *c* ≥ 2 be coprime integers and let *d* ≥ 0. For every η > 0 there is an integer *M* such that for every rational *y* and every integer *T* ≥ 0, if the reduced denominator *q* of *y* satisfies *q* ≥ *M*, *q* divides a power of *c*, and *q* ≤ *Tᵈ*, then
+
+```math
+\left| \sum_{i=0}^{T-1} e\left( b^i y \right) \right| \le \eta \, T .
+```
+'''
+scope = '''
+The estimate is uniform in the numerator of *y*, in *T*, and in the exponents of the individual primes of *c*. It is qualitative: the Lean proof by repeated differencing gives no explicit saving, and Vandehey's quantitative Corollary 1.2, which covers this range, is not formalized. The orbit length need not be a full period of *b* modulo *q*.
+'''
+lean = ["NormalityChecker.fixed_support_orbit_estimate"]
+proof = ["notes/arithmetic-certificates.md#the-fixed-prime-set-estimate"]
+related = ["AC-01", "AC-03"]
+
+[[result]]
+id = "AC-05"
+title = "Exact rational discrepancy certificates for prime-restricted logarithmic series"
+topic = "certificates"
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and *s* ≥ 1, let *P* be a finite set of primes, and let
+
+```math
+X = \sum_{m} \frac{1}{m^s \, b^m},
+```
+
+the sum over all positive integers *m* whose prime factors lie in *P* (including *m* = 1). Let *p* ∈ *P* with *p* ∤ *b* and let ℓ ≥ 0. Let *Z* be the set of failed cells, the integers *u* with *pˡ* ≤ *u* < *pˡ*⁺¹ at which the executable residue test of precision ℓ vanishes, and for real *v* let *z*(*v*) be the number of failed cells *u* < *v*. Then
+
+```math
+D_\infty(X) \le \max_{p^\ell \le v \le p^{\ell+1}} \frac{|Z|/(p-1) + z(v)}{v}.
+```
+
+For *b* = 7, *P* = {2, 3, 5} and *p* = 5 the right side equals 5/12, 1/4 and 0 at ℓ = 0, 1, 2. If for every ε > 0 some precision ℓ has at most ε*pˡ* failed cells, then *X* is normal in base *b*. Without any computation, *D*∞(*X*) ≤ 1 − 1/(*p* − 1).
+'''
+scope = '''
+The bound charges every failed cell fully at every prefix end, including cutoffs inside a scale; the maximum over *v* accounts for prefixes ending partway through a scale. A passing cell certifies growth of the reduced prefix denominator at the actual digit positions, and AC-04 then gives uniform distribution on those blocks. The base-7 values are kernel evaluations; this example is also normal by the selected prime 2 (take *p* = 2, where the universal bound is 0). The certificate is an upper bound and need not be sharp; the exact single-prime formula is a separate result in notes/persistent-discrepancy.md.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.discrepancy_le_certificate",
+  "NormalityChecker.LocalizedSupport.discrepancy_of_cell_cover",
+  "NormalityChecker.LocalizedSupport.base_seven_certificate_values",
+  "NormalityChecker.LocalizedSupport.normal_of_shrinking_cells",
+  "NormalityChecker.LocalizedSupport.discrepancy_le_of_support_prime",
+  "NormalityChecker.LocalizedSupport.failed_cell_refines",
+  "NormalityChecker.LocalizedSupport.passing_cell_survives",
+]
+proof = [
+  "notes/finite-support-discrepancy.md#partial-certificates-and-unfinished-scales",
+  "notes/results.md#quantitative-discrepancy-on-finite-prime-supports",
+]
+computation = ["scripts/localized_certificate.py"]
+related = ["AC-04", "AC-06"]
+
+[[result]]
+id = "AC-06"
+title = "Charging only simultaneous failures of several prime tests"
+topic = "certificates"
+status = "lean"
+statement = '''
+In the setting of AC-05, let *J* be a nonempty set of primes of *P* none of which divides *b*, each with its own precision. Write *B*ₚ for the set of positions *n* whose cell coordinate fails the test for *p*. If for every ε > 0 and all sufficiently large *N* the number of *n* < *N* lying in every *B*ₚ, *p* ∈ *J*, is at most (*D* + ε)*N*, then *D*∞(*X*) ≤ *D*.
+
+For *b* = 2, *s* = 1 and *P* = {2, 5, 13}, the two first-precision tests at 5 and 13 fail on [2 · 5ʲ, 4 · 5ʲ) and [10 · 13ᵏ, 13ᵏ⁺¹) and fail simultaneously on at most 0.234*N* + 2197 of the first *N* positions, for every *N*. Hence *D*∞(*X*) ≤ 0.234.
+'''
+scope = '''
+No independence between the tests is assumed. The number *X* for {2, 5, 13} is in fact binary normal, since either prime proves normality at precision two (`five_thirteen_binary_normal`); the bound 0.234 measures what the joint first-precision information alone yields. The sharper enclosure 0.233241755… of the joint upper density is an exact rational computation with a paper argument, not a Lean theorem. A paper argument shows that joint failure counts of two tests cannot prove normality while both tests keep positive limiting mass.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.discrepancy_of_joint_failures",
+  "NormalityChecker.LocalizedSupport.first_precision_joint_discrepancy",
+  "NormalityChecker.LocalizedSupport.joint_five_thirteen_count",
+  "NormalityChecker.LocalizedSupport.five_thirteen_first_failures",
+  "NormalityChecker.LocalizedSupport.five_thirteen_precision_two",
+  "NormalityChecker.LocalizedSupport.five_thirteen_binary_normal",
+]
+proof = [
+  "notes/overlapping-certificates.md#combining-several-denominator-primes",
+  "notes/overlapping-certificates.md#binary-logarithmic-support-2-5-13",
+]
+computation = ["scripts/overlap_certificate.py", "scripts/test_overlap.py"]
+related = ["AC-05"]
+
+[[result]]
+id = "AC-07"
+title = "Discrepancy bounds from certified paths between prefix endpoints"
+topic = "coverage"
+status = "lean"
+statement = '''
+Let *b* ≥ 2, *x* real and *N* > 0. For an interval [α, β) ⊆ [0, 1] let *S*(*v*) be the number of *n* < *v* with α ≤ {*bⁿx*} < β, minus *v*(β − α). Suppose that for every such interval there are integers 0 = *v*₀, *v*₁, …, *v*ₘ = *N* and costs *c*₀, …, *c*ₘ₋₁ with |*S*(*v*ᵢ₊₁) − *S*(*v*ᵢ)| ≤ *c*ᵢ and *c*₀ + ⋯ + *c*ₘ₋₁ ≤ *DN*. Then *D*<sub>*N*</sub>(*x*) ≤ *D*.
+'''
+scope = '''
+The path may depend on the tested interval, may traverse a certified edge backwards, may overshoot *N* and return, and may repeat vertices. Restricting a certified interval to a subinterval costs the two discarded lengths, and disjoint certified pieces cost the sum of their bounds plus one per uncovered position. Clipping is not free: counting overlapping certified intervals twice can give an incorrect bound.
+'''
+lean = [
+  "NormalityChecker.Coverage.discrepancy_of_paths",
+  "NormalityChecker.Coverage.endpoint_path",
+  "NormalityChecker.Coverage.fourier_of_path",
+  "NormalityChecker.Coverage.restrict_edge",
+  "NormalityChecker.Coverage.disjoint_cover",
+]
+proof = ["notes/overlapping-certificates.md#an-interval-as-a-bound-between-endpoints"]
+related = ["AC-02"]
+
+[[result]]
+id = "AC-08"
+title = "Square-root bound for incomplete orbits of 2 modulo powers of 3"
+topic = "certificates"
+status = "lean"
+statement = '''
+Let *k* ≥ 2, let *A* be an integer not divisible by 3, and let *u*, *N* ≥ 0. Then
+
+```math
+\left| \sum_{n=u}^{u+N-1} e\left( \frac{A \, 2^n}{3^k} \right) \right| \le 5 \sqrt{3^k} \left( 1 + \log 3^k \right).
+```
+'''
+scope = '''
+The bound is uniform in *A*, the starting exponent *u* and the length *N*. The restriction *k* ≥ 2 is needed for uniformity in *N*, since the complete sum modulo 3 need not vanish. The proof linearizes 2 to the power 2 · 3ʳ⁻¹ modulo 3ᵏ and sums geometric series along stride classes. It is used in the binary finite classification (CR-06).
+'''
+lean = [
+  "NormalityChecker.incomplete_orbit_interval",
+  "NormalityChecker.incomplete_orbit_bound",
+]
+proof = [
+  "notes/finite-sums.md#cells-with-nonzero-coefficients",
+  "notes/results.md#finite-sums-and-incomplete-orbits",
+]
+related = ["AC-04", "CR-06"]
+
+[[result]]
+id = "AC-09"
+title = "Concentration near finitely many residues forces nonnormality"
+topic = "counterexamples"
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *x* be real and let *C* be a finite set of real numbers. Suppose there is η > 0 such that for every ε > 0 there are infinitely many *N* for which at least η*N* of the integers 0 ≤ *n* < *N* satisfy |*bⁿx* − *t* − *z*| < ε for some *t* ∈ *C* and some integer *z*. Then *x* is not normal in base *b*.
+
+In particular, if *P*ₙ are real numbers with *bⁿx* − *P*ₙ → 0 and, for infinitely many *N*, at least η*N* of the *P*ₙ with *n* < *N* lie in *C* + ℤ, then *x* is not normal in base *b*.
+'''
+scope = '''
+The approximations may approach the residues from either side, and the centers in *C* need not be rational. The nonnormality direction of CR-01, CR-06 and DS-06 uses this criterion. It gives nonnormality only, with no discrepancy value; DS-01 gives exact values in the signed setting.
+'''
+lean = [
+  "NormalityChecker.not_normal_of_concentration",
+  "NormalityChecker.not_normal_of_prefix_hits",
+  "NormalityChecker.not_normal_of_grid_cell",
+]
+proof = [
+  "notes/finite-sums.md#a-cell-with-zero-coefficient",
+  "notes/results.md#quantitative-nonnormality-in-every-radix",
+]
+related = ["CR-01", "DS-06"]
+
+[[result]]
+id = "AC-10"
+title = "Accurate polynomial-denominator models are rare on a fixed schedule"
+topic = "counterexamples"
+status = "lean+paper"
+statement = '''
+Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of length *T* = *Bᵏ* at the starts used in AC-01. For Lebesgue-almost every *x* in [0, 1), only finitely many of these blocks admit a rational *y* with denominator at most *Tᵈ* and, with ‖·‖ the distance to the nearest integer,
+
+```math
+\frac{1}{T} \sum_{i=0}^{T-1} \left\| b^{n+i} x - b^i y \right\| \le \frac{1}{16 \, b^4} .
+```
+'''
+scope = '''
+Lean verifies the finite counting inequality: among words of length *j* over an alphabet of size *a*, those with at most *k* occurrences of a fixed letter number at most (2*a* − 1)ʲ/2ʲ⁻ᵏ. The probabilistic deduction is on paper: for a fixed model, a uniform *x* makes the block an independent uniform digit string in base *b*², the counting inequality bounds the chance of a small mean error by an exponentially small quantity, there are polynomially many models and *O*(*Lᵏ*) starts per scale, and the first Borel–Cantelli lemma finishes. The statement concerns prescribed schedules and Lebesgue measure; it singles out no particular constant and does not show that any specific number lacks a certificate.
+'''
+lean = ["NormalityChecker.few_symbol_words"]
+proof = ["notes/finite-support-discrepancy.md#how-far-polynomial-denominator-models-can-reach"]
+inputs = "First Borel–Cantelli lemma (standard measure theory)."
+related = ["AC-01"]

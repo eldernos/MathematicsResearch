@@ -1,0 +1,913 @@
+{
+ "commit": "a09e011720bc74396a27f4cb3ce2d8a5b3ce5035",
+ "lines": {
+  "NormalityChecker.BBP.integral_pi": [
+   "NormalityChecker/BBPShadow.lean",
+   25
+  ],
+  "NormalityChecker.BBP.prefix_upper_prime": [
+   "NormalityChecker/BBPDenominator.lean",
+   44
+  ],
+  "NormalityChecker.BBP.shadow_error": [
+   "NormalityChecker/BBPShadow.lean",
+   92
+  ],
+  "NormalityChecker.BBP.shadow_error_after_shifts": [
+   "NormalityChecker/BBPShadow.lean",
+   112
+  ],
+  "NormalityChecker.CorrectedStrides.corrected_integral": [
+   "NormalityChecker/CorrectedStrides.lean",
+   41
+  ],
+  "NormalityChecker.CorrectedStrides.model_den": [
+   "NormalityChecker/CorrectedStrides.lean",
+   113
+  ],
+  "NormalityChecker.CorrectedStrides.model_error": [
+   "NormalityChecker/CorrectedStrides.lean",
+   139
+  ],
+  "NormalityChecker.Coverage.asymptotic_fixed_quality": [
+   "NormalityChecker/QualityCoverage.lean",
+   38
+  ],
+  "NormalityChecker.Coverage.discrepancy_of_paths": [
+   "NormalityChecker/IntervalCoverage.lean",
+   67
+  ],
+  "NormalityChecker.Coverage.disjoint_cover": [
+   "NormalityChecker/IntervalCoverage.lean",
+   52
+  ],
+  "NormalityChecker.Coverage.endpoint_path": [
+   "NormalityChecker/IntervalCoverage.lean",
+   15
+  ],
+  "NormalityChecker.Coverage.fixed_quality_cover": [
+   "NormalityChecker/QualityCoverage.lean",
+   13
+  ],
+  "NormalityChecker.Coverage.fourier_of_path": [
+   "NormalityChecker/IntervalCoverage.lean",
+   26
+  ],
+  "NormalityChecker.Coverage.restrict_edge": [
+   "NormalityChecker/IntervalCoverage.lean",
+   39
+  ],
+  "NormalityChecker.CyclicPolynomial.vanishes_iff": [
+   "NormalityChecker/CyclotomicTest.lean",
+   137
+  ],
+  "NormalityChecker.DyadicRelations.coefficients_of_valuations": [
+   "NormalityChecker/DyadicRelations.lean",
+   14
+  ],
+  "NormalityChecker.DyadicRelations.optimal_rate": [
+   "NormalityChecker/DyadicRelations.lean",
+   94
+  ],
+  "NormalityChecker.DyadicRelations.strict_half_of_first_band": [
+   "NormalityChecker/DyadicRelations.lean",
+   54
+  ],
+  "NormalityChecker.FactorialNumerators.paired_zeros": [
+   "NormalityChecker/FactorialNumerators.lean",
+   55
+  ],
+  "NormalityChecker.FactorialNumerators.periodic_residue": [
+   "NormalityChecker/FactorialNumerators.lean",
+   23
+  ],
+  "NormalityChecker.FactorialNumerators.taylor_sum": [
+   "NormalityChecker/FactorialNumerators.lean",
+   15
+  ],
+  "NormalityChecker.Localized.Composite.Generators.axis_rational_normal": [
+   "NormalityChecker/RationalWeights.lean",
+   94
+  ],
+  "NormalityChecker.Localized.Composite.Generators.mixed_rational_normal": [
+   "NormalityChecker/RationalWeights.lean",
+   72
+  ],
+  "NormalityChecker.Localized.Composite.Generators.normal": [
+   "NormalityChecker/MixedPowers.lean",
+   231
+  ],
+  "NormalityChecker.Localized.Composite.Generators.restricted_axis_normal": [
+   "NormalityChecker/RationalWeights.lean",
+   78
+  ],
+  "NormalityChecker.Localized.Composite.Generators.series_normal": [
+   "NormalityChecker/MixedPowers.lean",
+   243
+  ],
+  "NormalityChecker.Localized.binary_series_normal": [
+   "NormalityChecker/LocalizedMixed.lean",
+   276
+  ],
+  "NormalityChecker.Localized.discrepancy_rate": [
+   "NormalityChecker/LocalizedDiscrepancy.lean",
+   266
+  ],
+  "NormalityChecker.Localized.interval_discrepancy_rate": [
+   "NormalityChecker/LocalizedDiscrepancy.lean",
+   197
+  ],
+  "NormalityChecker.Localized.normal": [
+   "NormalityChecker/LocalizedMixed.lean",
+   209
+  ],
+  "NormalityChecker.Localized.series_normal": [
+   "NormalityChecker/LocalizedMixed.lean",
+   272
+  ],
+  "NormalityChecker.LocalizedSupport.base_seven_certificate_values": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   242
+  ],
+  "NormalityChecker.LocalizedSupport.certificate_tendsTo_discrepancy": [
+   "NormalityChecker/ExactProfile.lean",
+   60
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_eq_log_flow_max": [
+   "NormalityChecker/HigherOrderPhase.lean",
+   412
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_eq_persistent_max": [
+   "NormalityChecker/PersistentRegion.lean",
+   124
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_le_certificate": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   146
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_le_of_support_prime": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   210
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_of_cell_cover": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   98
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_of_joint_failures": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   113
+  ],
+  "NormalityChecker.LocalizedSupport.discrepancy_tracks_jointPhase": [
+   "NormalityChecker/HigherOrderPrefix.lean",
+   276
+  ],
+  "NormalityChecker.LocalizedSupport.failed_cell_refines": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   33
+  ],
+  "NormalityChecker.LocalizedSupport.first_precision_joint_discrepancy": [
+   "NormalityChecker/JointFiveThirteen.lean",
+   128
+  ],
+  "NormalityChecker.LocalizedSupport.five_thirteen_binary_normal": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   156
+  ],
+  "NormalityChecker.LocalizedSupport.five_thirteen_first_failures": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   141
+  ],
+  "NormalityChecker.LocalizedSupport.five_thirteen_precision_two": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   153
+  ],
+  "NormalityChecker.LocalizedSupport.jointOrder_density_tendsTo_discrepancy": [
+   "NormalityChecker/HigherOrderPrefix.lean",
+   370
+  ],
+  "NormalityChecker.LocalizedSupport.joint_five_thirteen_count": [
+   "NormalityChecker/JointFiveThirteen.lean",
+   114
+  ],
+  "NormalityChecker.LocalizedSupport.maximal_discrepancy_iff": [
+   "NormalityChecker/MaximalSupport.lean",
+   77
+  ],
+  "NormalityChecker.LocalizedSupport.normal_iff_persistent_null": [
+   "NormalityChecker/PersistentRegion.lean",
+   186
+  ],
+  "NormalityChecker.LocalizedSupport.normal_of_shrinking_cells": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   165
+  ],
+  "NormalityChecker.LocalizedSupport.order_two_deep_counterexample": [
+   "NormalityChecker/JointPersistent.lean",
+   378
+  ],
+  "NormalityChecker.LocalizedSupport.passing_cell_survives": [
+   "NormalityChecker/DiscrepancyChecker.lean",
+   69
+  ],
+  "NormalityChecker.LocalizedSupport.persistent_iff_phaseMoment_zero": [
+   "NormalityChecker/HigherOrderCells.lean",
+   118
+  ],
+  "NormalityChecker.LocalizedSupport.prefix_discrepancy_tendsTo_one": [
+   "NormalityChecker/HigherOrderDiscrepancy.lean",
+   161
+  ],
+  "NormalityChecker.LocalizedSupport.unsigned_certificate_tendsTo_zero": [
+   "NormalityChecker/UnsignedNormality.lean",
+   144
+  ],
+  "NormalityChecker.LocalizedSupport.unsigned_discrepancy_limit": [
+   "NormalityChecker/UnsignedNormality.lean",
+   194
+  ],
+  "NormalityChecker.LocalizedSupport.unsigned_finite_support_normal": [
+   "NormalityChecker/UnsignedNormality.lean",
+   187
+  ],
+  "NormalityChecker.LocalizedSupport.unsigned_persistent_null": [
+   "NormalityChecker/UnsignedNormality.lean",
+   120
+  ],
+  "NormalityChecker.LogarithmBands.denominator_rate": [
+   "NormalityChecker/LogarithmBands.lean",
+   89
+  ],
+  "NormalityChecker.PolynomialInsertions.linear_value": [
+   "NormalityChecker/PolynomialInsertions.lean",
+   154
+  ],
+  "NormalityChecker.PolynomialInsertions.normal": [
+   "NormalityChecker/PolynomialInsertions.lean",
+   83
+  ],
+  "NormalityChecker.PolynomialInsertions.normal_of_positive_degree": [
+   "NormalityChecker/PolynomialInsertions.lean",
+   182
+  ],
+  "NormalityChecker.PolynomialMasks.axis_normal_iff": [
+   "NormalityChecker/MaskAxis.lean",
+   138
+  ],
+  "NormalityChecker.PolynomialMasks.bounded_gap_discrepancy": [
+   "NormalityChecker/MaskWindows.lean",
+   58
+  ],
+  "NormalityChecker.PolynomialMasks.consecutive_product_maximal": [
+   "NormalityChecker/MaskExamples.lean",
+   53
+  ],
+  "NormalityChecker.PolynomialMasks.dyadic_reciprocal_thirds": [
+   "NormalityChecker/MaskThirds.lean",
+   164
+  ],
+  "NormalityChecker.PolynomialMasks.finite_mask_nonnormal": [
+   "NormalityChecker/MaskAxis.lean",
+   120
+  ],
+  "NormalityChecker.PolynomialMasks.full_rational_normal_iff": [
+   "NormalityChecker/FullPolynomialNormality.lean",
+   15
+  ],
+  "NormalityChecker.PolynomialMasks.infinite_axis_normal": [
+   "NormalityChecker/MaskAxis.lean",
+   70
+  ],
+  "NormalityChecker.PolynomialMasks.integer_full_classification": [
+   "NormalityChecker/MaskGrid.lean",
+   188
+  ],
+  "NormalityChecker.PolynomialMasks.late_powers_discrepancy": [
+   "NormalityChecker/MaskWindows.lean",
+   107
+  ],
+  "NormalityChecker.PolynomialMasks.masked_cancel": [
+   "NormalityChecker/MaskGrid.lean",
+   158
+  ],
+  "NormalityChecker.PolynomialMasks.normal_of_late_twos": [
+   "NormalityChecker/MaskWindows.lean",
+   114
+  ],
+  "NormalityChecker.PolynomialMasks.rational_boundary": [
+   "NormalityChecker/MaskRational.lean",
+   54
+  ],
+  "NormalityChecker.PolynomialMasks.rational_pole_bound": [
+   "NormalityChecker/MaskRational.lean",
+   38
+  ],
+  "NormalityChecker.PolynomialMasks.ternary_linear_thirds": [
+   "NormalityChecker/MaskThirds.lean",
+   107
+  ],
+  "NormalityChecker.ProductThreeFive.discrepancy": [
+   "NormalityChecker/ProductThreeFive.lean",
+   77
+  ],
+  "NormalityChecker.ProductThreeFive.irrational": [
+   "NormalityChecker/ProductThreeFive.lean",
+   93
+  ],
+  "NormalityChecker.ProductThreeFive.uniform_windows": [
+   "NormalityChecker/ProductThreeFiveWindows.lean",
+   117
+  ],
+  "NormalityChecker.ShadowCancellations.diagonal_small_denominators_density_zero": [
+   "NormalityChecker/TypicalShadow.lean",
+   157
+  ],
+  "NormalityChecker.ShadowCancellations.missing_fraction_uniformly_sparse": [
+   "NormalityChecker/WindowShadow.lean",
+   72
+  ],
+  "NormalityChecker.ShadowCancellations.missing_prime_fraction_density_zero": [
+   "NormalityChecker/TypicalShadow.lean",
+   186
+  ],
+  "NormalityChecker.ShadowCancellations.small_denominators_uniformly_sparse": [
+   "NormalityChecker/WindowShadow.lean",
+   67
+  ],
+  "NormalityChecker.SignedPhases.alternating_ratio_discrepancies": [
+   "NormalityChecker/ChangingShellSchedules.lean",
+   19
+  ],
+  "NormalityChecker.SignedPhases.arbitrarily_small_translations": [
+   "NormalityChecker/TranslatedShellExamples.lean",
+   129
+  ],
+  "NormalityChecker.SignedPhases.attainable_discrepancy_iff": [
+   "NormalityChecker/ShellHistories.lean",
+   388
+  ],
+  "NormalityChecker.SignedPhases.binary_three_periods": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   411
+  ],
+  "NormalityChecker.SignedPhases.cycleMaximum_approximates_historyValue": [
+   "NormalityChecker/ShellHistories.lean",
+   406
+  ],
+  "NormalityChecker.SignedPhases.de_bruijn_discrepancy_bounds": [
+   "NormalityChecker/TranslatedShellExamples.lean",
+   50
+  ],
+  "NormalityChecker.SignedPhases.de_bruijn_eight_cells": [
+   "NormalityChecker/TranslatedShellExamples.lean",
+   82
+  ],
+  "NormalityChecker.SignedPhases.discrepancy_sub_zeroDensity_tendsto": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   144
+  ],
+  "NormalityChecker.SignedPhases.division_by_nine_example": [
+   "NormalityChecker/TranslatedShellExamples.lean",
+   182
+  ],
+  "NormalityChecker.SignedPhases.exists_distinct_nearby_historyValue": [
+   "NormalityChecker/ShellHistories.lean",
+   491
+  ],
+  "NormalityChecker.SignedPhases.exists_maximal_limit_history": [
+   "NormalityChecker/ShellHistories.lean",
+   148
+  ],
+  "NormalityChecker.SignedPhases.inverse_power_discrepancy_tendsto": [
+   "NormalityChecker/TranslatedShellExamples.lean",
+   86
+  ],
+  "NormalityChecker.SignedPhases.irrational_iff_frequently_nonzero": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   448
+  ],
+  "NormalityChecker.SignedPhases.isCompact_historySpectrum": [
+   "NormalityChecker/ShellHistories.lean",
+   418
+  ],
+  "NormalityChecker.SignedPhases.least_positive_historyValue": [
+   "NormalityChecker/ShellHistories.lean",
+   339
+  ],
+  "NormalityChecker.SignedPhases.limsup_discrepancy_eq_history_limsup": [
+   "NormalityChecker/ShellHistories.lean",
+   379
+  ],
+  "NormalityChecker.SignedPhases.limsup_discrepancy_eq_zeroDensity": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   234
+  ],
+  "NormalityChecker.SignedPhases.limsup_zeroDensity_eq_boundary": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   528
+  ],
+  "NormalityChecker.SignedPhases.nonzero_shells_uniform": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   24
+  ],
+  "NormalityChecker.SignedPhases.normal_iff_eventually_nonzero": [
+   "NormalityChecker/SignedPhases.lean",
+   123
+  ],
+  "NormalityChecker.SignedPhases.periodicHistoryPattern_error": [
+   "NormalityChecker/ShellHistories.lean",
+   299
+  ],
+  "NormalityChecker.SignedPhases.periodic_discrepancy": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   335
+  ],
+  "NormalityChecker.SignedPhases.rational_discrepancy_limit": [
+   "NormalityChecker/TranslatedShells.lean",
+   179
+  ],
+  "NormalityChecker.SignedPhases.rational_discrepancy_pos": [
+   "NormalityChecker/TranslatedShellExamples.lean",
+   13
+  ],
+  "NormalityChecker.SignedPhases.realizingPattern_limsup": [
+   "NormalityChecker/ShellHistories.lean",
+   237
+  ],
+  "NormalityChecker.SignedPhases.translated_discrepancy": [
+   "NormalityChecker/TranslatedShells.lean",
+   198
+  ],
+  "NormalityChecker.SignedPhases.translated_limsup": [
+   "NormalityChecker/TranslatedShells.lean",
+   221
+  ],
+  "NormalityChecker.SignedPhases.translated_third_examples": [
+   "NormalityChecker/TranslatedShells.lean",
+   259
+  ],
+  "NormalityChecker.SignedPhases.zeroDensity_boundary_recurrence": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   515
+  ],
+  "NormalityChecker.SignedPhases.zeroDensity_eq_historyValue": [
+   "NormalityChecker/ShellHistories.lean",
+   366
+  ],
+  "NormalityChecker.SignedPhases.zero_shells_miss_interior": [
+   "NormalityChecker/SignedShellDiscrepancy.lean",
+   115
+  ],
+  "NormalityChecker.StonehamPolynomial.binary_polynomial_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   132
+  ],
+  "NormalityChecker.StonehamPolynomial.binary_three_nine_product": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   100
+  ],
+  "NormalityChecker.StonehamPolynomial.integer_sum_normal": [
+   "NormalityChecker/StonehamPolynomialNormal.lean",
+   81
+  ],
+  "NormalityChecker.StonehamPolynomial.polynomial_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   124
+  ],
+  "NormalityChecker.StonehamPolynomial.power_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   106
+  ],
+  "NormalityChecker.StonehamPolynomial.prime_power_polynomial_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   112
+  ],
+  "NormalityChecker.StonehamPolynomial.prime_power_product_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   87
+  ],
+  "NormalityChecker.StonehamPolynomial.rational_sum_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   12
+  ],
+  "NormalityChecker.StonehamPolynomial.same_prime_product_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   94
+  ],
+  "NormalityChecker.StonehamPolynomial.same_prime_sum_normal": [
+   "NormalityChecker/StonehamPolynomial.lean",
+   70
+  ],
+  "NormalityChecker.StonehamSquare.exact_profile": [
+   "NormalityChecker/StonehamSquare.lean",
+   251
+  ],
+  "NormalityChecker.StonehamSquare.initial_profile": [
+   "NormalityChecker/StonehamSquare.lean",
+   310
+  ],
+  "NormalityChecker.StonehamSquare.quadratic_denominator": [
+   "NormalityChecker/StonehamSquare.lean",
+   316
+  ],
+  "NormalityChecker.StonehamSquare.shifted_tail": [
+   "NormalityChecker/StonehamSquare.lean",
+   31
+  ],
+  "NormalityChecker.StonehamSquare.third_scale_exception": [
+   "NormalityChecker/StonehamSquare.lean",
+   305
+  ],
+  "NormalityChecker.StrideDenominatorRate.band_survival": [
+   "NormalityChecker/StrideDenominatorRate.lean",
+   143
+  ],
+  "NormalityChecker.StrideDenominatorRate.log_denominator_rate": [
+   "NormalityChecker/StrideDenominatorRate.lean",
+   199
+  ],
+  "NormalityChecker.all_base_resonance": [
+   "NormalityChecker/GeneralResonance.lean",
+   186
+  ],
+  "NormalityChecker.approximate_interval_count_bound": [
+   "NormalityChecker/ApproximateDiscrepancy.lean",
+   14
+  ],
+  "NormalityChecker.approximate_prefix_bound": [
+   "NormalityChecker/ArithmeticCertificate.lean",
+   34
+  ],
+  "NormalityChecker.binaryNormalTest_correct": [
+   "NormalityChecker/FiniteClassification.lean",
+   129
+  ],
+  "NormalityChecker.binary_cyclotomic_cell": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   12
+  ],
+  "NormalityChecker.binary_zero_block_limsup": [
+   "NormalityChecker/GeneralResonance.lean",
+   240
+  ],
+  "NormalityChecker.circle_mixture_of_characters": [
+   "NormalityChecker/CyclotomicDistribution.lean",
+   12
+  ],
+  "NormalityChecker.component_binary_normal": [
+   "NormalityChecker/FiniteClassification.lean",
+   141
+  ],
+  "NormalityChecker.components_not_binary_normal": [
+   "NormalityChecker/Resonance.lean",
+   168
+  ],
+  "NormalityChecker.cyclotomicNormalTest_correct": [
+   "NormalityChecker/CyclotomicTest.lean",
+   211
+  ],
+  "NormalityChecker.cyclotomicTest_binary_eq": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   21
+  ],
+  "NormalityChecker.cyclotomic_distribution": [
+   "NormalityChecker/CyclotomicDistribution.lean",
+   74
+  ],
+  "NormalityChecker.cyclotomic_fourier_limit": [
+   "NormalityChecker/CyclotomicClassification.lean",
+   83
+  ],
+  "NormalityChecker.cyclotomic_normal_iff": [
+   "NormalityChecker/CyclotomicClassification.lean",
+   99
+  ],
+  "NormalityChecker.decimal_positive_normal": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   40
+  ],
+  "NormalityChecker.dense_linear_ternary_identity": [
+   "NormalityChecker/DensePolynomial.lean",
+   127
+  ],
+  "NormalityChecker.dense_linear_ternary_normal": [
+   "NormalityChecker/DensePolynomial.lean",
+   149
+  ],
+  "NormalityChecker.dense_polynomial_identity": [
+   "NormalityChecker/DensePolynomial.lean",
+   90
+  ],
+  "NormalityChecker.dense_polynomial_normal": [
+   "NormalityChecker/DensePolynomial.lean",
+   118
+  ],
+  "NormalityChecker.discrepancy_lt_one_iff_transitions": [
+   "NormalityChecker/BinaryDiscrepancy.lean",
+   229
+  ],
+  "NormalityChecker.discrepancy_of_fixed_cells": [
+   "NormalityChecker/PartialUniformity.lean",
+   39
+  ],
+  "NormalityChecker.discrepancy_of_uniform_share": [
+   "NormalityChecker/PartialUniformity.lean",
+   75
+  ],
+  "NormalityChecker.dyadicLogPrefix_eq": [
+   "NormalityChecker/DyadicLogRates.lean",
+   34
+  ],
+  "NormalityChecker.dyadicLogPrefix_rate": [
+   "NormalityChecker/DyadicLogRates.lean",
+   40
+  ],
+  "NormalityChecker.exists_power_cycle": [
+   "NormalityChecker/PeriodicClassification.lean",
+   26
+  ],
+  "NormalityChecker.few_symbol_words": [
+   "NormalityChecker/ModelCounting.lean",
+   14
+  ],
+  "NormalityChecker.finite_normal_iff": [
+   "NormalityChecker/FiniteClassification.lean",
+   117
+  ],
+  "NormalityChecker.fixed_support_orbit_estimate": [
+   "NormalityChecker/SmoothOrbit.lean",
+   207
+  ],
+  "NormalityChecker.golden_discrepancy_iff_small_index": [
+   "NormalityChecker/GoldenOrbit.lean",
+   190
+  ],
+  "NormalityChecker.golden_fibonacci_identity": [
+   "NormalityChecker/GoldenOrbit.lean",
+   37
+  ],
+  "NormalityChecker.golden_zeckendorf_bounds": [
+   "NormalityChecker/GoldenOrbit.lean",
+   153
+  ],
+  "NormalityChecker.hasSum_components_logTwo": [
+   "NormalityChecker/OrderedComponents.lean",
+   31
+  ],
+  "NormalityChecker.incomplete_orbit_bound": [
+   "NormalityChecker/OrbitSum.lean",
+   97
+  ],
+  "NormalityChecker.incomplete_orbit_interval": [
+   "NormalityChecker/OrbitSum.lean",
+   188
+  ],
+  "NormalityChecker.logDen_ten": [
+   "NormalityChecker/PrimeCancellation.lean",
+   29
+  ],
+  "NormalityChecker.logLoss_le": [
+   "NormalityChecker/DenominatorGrowth.lean",
+   133
+  ],
+  "NormalityChecker.logPrefix_eventually_avoids_residues": [
+   "NormalityChecker/DenominatorGrowth.lean",
+   197
+  ],
+  "NormalityChecker.logShadow_diagonal_max": [
+   "NormalityChecker/DiagonalStep.lean",
+   52
+  ],
+  "NormalityChecker.logTwo_discrepancy_lt_one_iff_escape": [
+   "NormalityChecker/FirstFrequency.lean",
+   116
+  ],
+  "NormalityChecker.logTwo_discrepancy_lt_one_iff_middle": [
+   "NormalityChecker/LogTwoTransitions.lean",
+   148
+  ],
+  "NormalityChecker.logTwo_escape_logarithmic": [
+   "NormalityChecker/FirstFrequency.lean",
+   139
+  ],
+  "NormalityChecker.logTwo_finite_discrepancy_gap": [
+   "NormalityChecker/LogTwoTransitions.lean",
+   220
+  ],
+  "NormalityChecker.logTwo_logarithmic_count": [
+   "NormalityChecker/LogTwoTransitions.lean",
+   208
+  ],
+  "NormalityChecker.logTwo_normal_iff": [
+   "NormalityChecker/LogTwo.lean",
+   84
+  ],
+  "NormalityChecker.logTwo_normal_iff_dyadic_lag_cancellation": [
+   "NormalityChecker/FourierTest.lean",
+   190
+  ],
+  "NormalityChecker.logTwo_normal_iff_lag_fourier": [
+   "NormalityChecker/FourierTest.lean",
+   174
+  ],
+  "NormalityChecker.logTwo_normal_iff_odd_prefix_fourier": [
+   "NormalityChecker/FourierTest.lean",
+   167
+  ],
+  "NormalityChecker.logTwo_not_normal_iff_odd_bias": [
+   "NormalityChecker/FourierTest.lean",
+   183
+  ],
+  "NormalityChecker.logTwo_tail_bounds": [
+   "NormalityChecker/LogTwo.lean",
+   51
+  ],
+  "NormalityChecker.logTwo_two_stride_series": [
+   "NormalityChecker/StridedLogarithm.lean",
+   13
+  ],
+  "NormalityChecker.logTwo_window_hit": [
+   "NormalityChecker/LogTwoTransitions.lean",
+   160
+  ],
+  "NormalityChecker.normal_add_rat_iff": [
+   "NormalityChecker/FourierTest.lean",
+   133
+  ],
+  "NormalityChecker.normal_mul_nat_iff": [
+   "NormalityChecker/FourierTest.lean",
+   119
+  ],
+  "NormalityChecker.normal_of_approximate_arithmetic_certificate": [
+   "NormalityChecker/ArithmeticCertificate.lean",
+   62
+  ],
+  "NormalityChecker.normal_of_arithmetic_certificate": [
+   "NormalityChecker/ArithmeticCertificate.lean",
+   94
+  ],
+  "NormalityChecker.normal_of_nonresonance": [
+   "NormalityChecker/FiniteClassification.lean",
+   76
+  ],
+  "NormalityChecker.normal_of_polynomial_boundaries": [
+   "NormalityChecker/DensePolynomial.lean",
+   100
+  ],
+  "NormalityChecker.not_normal_of_concentration": [
+   "NormalityChecker/Concentration.lean",
+   20
+  ],
+  "NormalityChecker.not_normal_of_grid_cell": [
+   "NormalityChecker/Concentration.lean",
+   110
+  ],
+  "NormalityChecker.not_normal_of_prefix_hits": [
+   "NormalityChecker/Concentration.lean",
+   58
+  ],
+  "NormalityChecker.not_normal_of_resonance": [
+   "NormalityChecker/FiniteClassification.lean",
+   98
+  ],
+  "NormalityChecker.offset_components_not_binary_normal": [
+   "NormalityChecker/Resonance.lean",
+   270
+  ],
+  "NormalityChecker.ordered_phase_ne_zero": [
+   "NormalityChecker/OrderedComponents.lean",
+   52
+  ],
+  "NormalityChecker.ordered_sum_binary_normal": [
+   "NormalityChecker/FiniteClassification.lean",
+   147
+  ],
+  "NormalityChecker.overlap_chain_denominator": [
+   "NormalityChecker/OrbitRigidity.lean",
+   101
+  ],
+  "NormalityChecker.periodic_normal_iff_phases": [
+   "NormalityChecker/PeriodicClassification.lean",
+   57
+  ],
+  "NormalityChecker.periodic_plateau_test": [
+   "NormalityChecker/PeriodicWeights.lean",
+   80
+  ],
+  "NormalityChecker.periodic_plateau_zero": [
+   "NormalityChecker/DensePolynomial.lean",
+   155
+  ],
+  "NormalityChecker.phase_model_sum_bound": [
+   "NormalityChecker/ArithmeticCertificate.lean",
+   15
+  ],
+  "NormalityChecker.polylog_first_den_rate": [
+   "NormalityChecker/DyadicLogRates.lean",
+   13
+  ],
+  "NormalityChecker.positive_sum_of_order_one": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   28
+  ],
+  "NormalityChecker.prime_cancellation": [
+   "NormalityChecker/PrimeCancellation.lean",
+   164
+  ],
+  "NormalityChecker.radixComponent_normal": [
+   "NormalityChecker/StonehamComponents.lean",
+   124
+  ],
+  "NormalityChecker.radix_pair_irrational": [
+   "NormalityChecker/GeneralResonance.lean",
+   148
+  ],
+  "NormalityChecker.radix_pair_not_normal": [
+   "NormalityChecker/GeneralResonance.lean",
+   132
+  ],
+  "NormalityChecker.radix_pair_zero_limsup": [
+   "NormalityChecker/GeneralResonance.lean",
+   113
+  ],
+  "NormalityChecker.resonanceWitnesses_eq": [
+   "NormalityChecker/CyclotomicTest.lean",
+   197
+  ],
+  "NormalityChecker.seventh_triple_distributions": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   65
+  ],
+  "NormalityChecker.seventh_triple_masses": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   57
+  ],
+  "NormalityChecker.seventh_triple_not_normal": [
+   "NormalityChecker/CyclotomicExamples.lean",
+   45
+  ],
+  "NormalityChecker.severe_normal_summands": [
+   "NormalityChecker/StonehamComponents.lean",
+   138
+  ],
+  "NormalityChecker.severe_resonance": [
+   "NormalityChecker/GeneralResonance.lean",
+   200
+  ],
+  "NormalityChecker.sharp_asymptotic_discrepancy": [
+   "NormalityChecker/SharpDiscrepancy.lean",
+   137
+  ],
+  "NormalityChecker.signed_four_nonnormal": [
+   "NormalityChecker/PeriodicClassification.lean",
+   117
+  ],
+  "NormalityChecker.smooth_overlap_rigidity": [
+   "NormalityChecker/OrbitRigidity.lean",
+   83
+  ],
+  "NormalityChecker.smooth_overlap_separation": [
+   "NormalityChecker/OrbitRigidity.lean",
+   32
+  ],
+  "NormalityChecker.tendsto_logDen_div": [
+   "NormalityChecker/DenominatorGrowth.lean",
+   162
+  ],
+  "NormalityChecker.third_discrepancy_sharp": [
+   "NormalityChecker/SharpDiscrepancy.lean",
+   157
+  ],
+  "NormalityChecker.three_component_resonance": [
+   "NormalityChecker/FiniteClassification.lean",
+   136
+  ],
+  "NormalityChecker.twoStridePrefix_den": [
+   "NormalityChecker/StridedLogarithm.lean",
+   48
+  ],
+  "NormalityChecker.twoStridePrefix_survival": [
+   "NormalityChecker/StridedLogarithm.lean",
+   149
+  ],
+  "NormalityChecker.twoStridePrefix_tail": [
+   "NormalityChecker/StridedLogarithm.lean",
+   119
+  ],
+  "NormalityChecker.two_component_normal_iff": [
+   "NormalityChecker/FiniteClassification.lean",
+   166
+  ],
+  "NormalityChecker.two_component_normal_necessary": [
+   "NormalityChecker/Resonance.lean",
+   292
+  ],
+  "NormalityChecker.unique_prime_denominator": [
+   "NormalityChecker/BBPDenominator.lean",
+   13
+  ],
+  "NormalityChecker.weighted_radixComponent_normal": [
+   "NormalityChecker/StonehamComponents.lean",
+   120
+  ]
+ }
+}

@@ -1,0 +1,388 @@
+# Classical constant arithmetic. Manuscript: papers/05-classical-denominators.
+# Format: docs/registry/SCHEMA.md
+#
+# Every scope below ends with the family disclaimer: nothing here proves normality, or a
+# limiting binary discrepancy below 1, for ln 2, π, e or the golden ratio.
+
+[[result]]
+id = "CC-01"
+title = "Half-rate denominators for binary shifts of ln 2"
+topic = "classical"
+principal = true
+status = "lean"
+statement = '''
+The identity (1 + 2⁻³)/(1 − 2⁻²)² = 2 gives
+
+```math
+\ln 2 = 2 \sum_{j=1}^{\infty} \frac{1}{j \, 4^j} + \sum_{j=1}^{\infty} \frac{(-1)^{j+1}}{j \, 8^j} .
+```
+
+For *N* ≥ 0 multiply by 2ᴺ and keep the terms whose binary exponent is at most *N*:
+
+```math
+Y_N = \sum_{1 \le j \le N/2} \frac{2 \cdot 2^{N - 2j}}{j} + \sum_{1 \le j \le N/3} \frac{(-1)^{j+1} \, 2^{N - 3j}}{j} .
+```
+
+Then 0 ≤ 2ᴺ ln 2 − *Y*<sub>*N*</sub> ≤ 4/(*N* + 1) for every *N*. The reduced denominator *q*<sub>*N*</sub> of *Y*<sub>*N*</sub> divides the least common multiple of 1, …, ⌊*N*/2⌋, and
+
+```math
+\lim_{N \to \infty} \frac{\log q_N}{N} = \frac{1}{2} .
+```
+'''
+scope = '''
+The rate concerns the reduced denominator of this prescribed truncation at a common binary exponent, at every *N* (odd *N* and partial periods included). The standard series has rate 1 (CC-03). The lower bound uses survival of every prime in (*N*/*K*, *N*/2] for each fixed *K* and the prime number theorem as formalized in Mathlib. Among finite dyadic logarithm identities the rate 1/2 is optimal (CC-02). A denominator rate is an arithmetic statement about rational models; it gives no digit-frequency information. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.StrideDenominatorRate.log_denominator_rate",
+  "NormalityChecker.logTwo_two_stride_series",
+  "NormalityChecker.twoStridePrefix_tail",
+  "NormalityChecker.twoStridePrefix_den",
+  "NormalityChecker.StrideDenominatorRate.band_survival",
+  "NormalityChecker.twoStridePrefix_survival",
+]
+proof = [
+  "notes/strided-logarithm.md",
+  "notes/corrected-strides.md#actual-rates-for-the-uncorrected-logarithms",
+]
+computation = ["scripts/strided_logarithm.py"]
+related = ["CC-02", "CC-03", "CC-12"]
+
+[[result]]
+id = "CC-02"
+title = "The rate 1/2 is optimal among finite dyadic logarithm identities"
+topic = "classical"
+principal = true
+status = "lean+paper"
+statement = '''
+Let *a*₁, *a*₂, … be integers, only finitely many nonzero, with
+
+```math
+\sum_{k \ge 1} a_k \log\left( 1 - 2^{-k} \right) = m \ln 2
+```
+
+for some integer *m*. Expanding each logarithm and grouping by binary exponent gives integers *W*(*n*) with the sum equal to Σ *W*(*n*)/(*n* 2ⁿ). For *N* ≥ 0 let *Y*<sub>*N*</sub> be the sum of *W*(*n*) 2ᴺ⁻ⁿ/*n* over 1 ≤ *n* ≤ *N*, and let *q*<sub>*N*</sub> be its reduced denominator. Suppose only finitely many *v* ≥ 1 have *Y*ᵥ = 0. Then log *q*<sub>*N*</sub> / *N* converges to a limit *R* with *R* ≥ 1/2, and *R* = 1/2 if and only if *a*₁ = 0.
+'''
+scope = '''
+Identities that also use log(1 + 2⁻ᵏ) are covered after the paper rewriting log(1 + *x*) = log(1 − *x*²) − log(1 − *x*), which preserves every binary-exponent coefficient. The Lean theorem `optimal_rate` assumes, instead of the identity, that the odd-prime valuations of the product of (2ᵏ − 1) to the powers *a*ₖ balance, which is equivalent to the sum being an integer multiple of ln 2; it also takes as an explicit hypothesis that each 2ᵏ − 1 with *k* > 6 and *a*ₖ ≠ 0 has a primitive odd prime divisor. That hypothesis is supplied by Bang's theorem. The finiteness of the zero set is a hypothesis in Lean; on paper it holds whenever *m* ≠ 0, since the partial sums tend to *m* ln 2. With these inputs only strides 1, 2, 3, 6 survive and *a*₁ = 0 gives a multiple of the two-stride series of CC-01. The general rate formula, one minus the sum of 1/*v* − 1/(*v* + 1) over the zeros *v*, is `LogarithmBands.denominator_rate`. Odd-denominator series such as atanh(1/3) lie outside the class. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.DyadicRelations.optimal_rate",
+  "NormalityChecker.DyadicRelations.coefficients_of_valuations",
+  "NormalityChecker.DyadicRelations.strict_half_of_first_band",
+  "NormalityChecker.LogarithmBands.denominator_rate",
+]
+proof = [
+  "notes/strided-logarithm.md#why-half-is-optimal-in-this-class",
+  "notes/strided-logarithm.md#the-residue-of-the-actual-numerator",
+]
+inputs = "Bang's primitive divisor theorem (Bang 1886; Zsigmondy 1892): for every k > 6, 2<sup>*k*</sup> − 1 has a prime divisor dividing no 2<sup>*j*</sup> − 1 with 0 < j < k. The prime number theorem enters through Mathlib inside the Lean rate formula."
+related = ["CC-01", "CC-06"]
+
+[[result]]
+id = "CC-03"
+title = "Exact prime cancellation in the standard series for ln 2"
+topic = "classical"
+status = "lean"
+statement = '''
+For *k* ≥ 0 let
+
+```math
+A_k = \sum_{j=1}^{k} \frac{1}{j \, 2^j}, \qquad R_k = 2^k A_k ,
+```
+
+so that *R*₀ = 0 and *R*ₙ₊₁ = 2*R*ₙ + 1/(*n* + 1). Let *Q*ₙ be the reduced denominator of *R*ₙ, and let *L*ₙ be the least common multiple of 1, …, *n* (with *L*₀ = 1).
+
+* For every odd prime *p* and every *a* ≥ 1 with *pᵃ* ≤ *n* < *pᵃ*⁺¹, the power *pᵃ* divides *Q*ₙ if and only if *p* does not divide the reduced numerator of *A*ₖ with *k* = ⌊*n*/*pᵃ*⌋.
+* For *n* ≥ 8, log(*L*ₙ/*Q*ₙ) is nonnegative and at most 116 times *n* to the power 2/3.
+* log *Q*ₙ / *n* → 1.
+'''
+scope = '''
+For example *Q*₁₀ = 63. The limit uses Mathlib's prime number theorem for *L*ₙ. The rational residues {*R*ₙ} eventually avoid every fixed finite set of exact residues modulo one (`logPrefix_eventually_avoids_residues`), but approximate concentration is not excluded. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.prime_cancellation",
+  "NormalityChecker.logLoss_le",
+  "NormalityChecker.tendsto_logDen_div",
+  "NormalityChecker.logDen_ten",
+  "NormalityChecker.logPrefix_eventually_avoids_residues",
+]
+proof = ["notes/results.md#the-two-arithmetic-milestones"]
+related = ["CC-01", "CC-10"]
+
+[[result]]
+id = "CC-04"
+title = "Binary discrepancy below one is equivalent to positive density of digit transitions"
+topic = "classical"
+status = "lean"
+statement = '''
+For a real number *x* let *t*(*x*) be the lower density of the positions *n* at which the binary digits after position *n* begin with 01 or 10, that is, the lim inf over *N* of the proportion of *n* < *N* with {2ⁿ*x*} ∈ [1/4, 3/4). Let *D*∞(*x*) be the limiting interval discrepancy of {2ⁿ*x*}. Then
+
+```math
+D_\infty(x) < 1 \quad \Longleftrightarrow \quad t(x) > 0 ,
+```
+
+and in general *D*∞(*x*) ≤ max(2/3, 1 − *t*(*x*)). The constant 2/3 is attained by *x* = 1/3, for which *t* = 1 and *D*∞ = 2/3.
+'''
+scope = '''
+This holds for every real *x* and uses the terminating expansion at dyadic rationals. For ln 2, π, *e* and the golden ratio the transition density is not known to be positive; CC-05 and CC-07 restate the condition arithmetically. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.discrepancy_lt_one_iff_transitions",
+  "NormalityChecker.sharp_asymptotic_discrepancy",
+  "NormalityChecker.third_discrepancy_sharp",
+]
+proof = [
+  "notes/transition-discrepancy.md#the-general-theorem",
+  "notes/results.md#binary-transitions-and-discrepancy",
+]
+related = ["CC-05", "CC-07", "AC-02"]
+
+[[result]]
+id = "CC-05"
+title = "An unconditional logarithmic count of digit transitions in ln 2"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *R*ₙ be as in CC-03. There is an integer *K* such that for every *N*, at least ⌊log₃₄ *N*⌋ − *K* of the positions *t* < *N* are binary digit transitions of ln 2, and at least as many have {*R*ₜ} in the closed middle third [1/3, 2/3]. Every sufficiently late window [*n*, 34*n*) contains such a position. Consequently, for every *N* ≥ 2,
+
+```math
+D_N(\ln 2) \le \max\left( \frac{7}{8}, \ 1 - \frac{\lfloor \log_{34} N \rfloor - K}{N} \right).
+```
+
+Moreover *D*∞(ln 2) < 1 holds if and only if the visits of {*R*ₙ} to [1/3, 2/3] have positive lower density, and if and only if the averages of 1 − cos(2π*R*ₙ) have positive lim inf.
+'''
+scope = '''
+The count is logarithmic, not linear, so the finite bound tends to 1 and gives no limiting bound below 1. A linear count, equivalently any of the two density conditions, is open. The window constant 34 comes from a Lean irrationality-type separation; Marcovecchio's irrationality measure improves the constant on paper. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.logTwo_logarithmic_count",
+  "NormalityChecker.logTwo_window_hit",
+  "NormalityChecker.logTwo_finite_discrepancy_gap",
+  "NormalityChecker.logTwo_escape_logarithmic",
+  "NormalityChecker.logTwo_discrepancy_lt_one_iff_middle",
+  "NormalityChecker.logTwo_discrepancy_lt_one_iff_escape",
+]
+proof = [
+  "notes/transition-discrepancy.md#what-this-proves-for-ln-2",
+  "notes/transition-discrepancy.md#first-frequency-escape",
+]
+related = ["CC-03", "CC-04"]
+
+[[result]]
+id = "CC-06"
+title = "Denominator rate 1/k for the dyadic logarithms"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *k* ≥ 1 and
+
+```math
+-\log\left( 1 - 2^{-k} \right) = \sum_{j=1}^{\infty} \frac{1}{j \, 2^{kj}} .
+```
+
+For *N* ≥ 0 let *Y*<sub>*N*</sub> be the sum of 2ᴺ⁻ᵏʲ/*j* over 1 ≤ *j* ≤ ⌊*N*/*k*⌋, the truncation of 2ᴺ times this series at binary exponent *N*. Then the reduced denominator *q*<sub>*N*</sub> of *Y*<sub>*N*</sub> satisfies log *q*<sub>*N*</sub> / *N* → 1/*k*.
+'''
+scope = '''
+The rates 1/*k* become arbitrarily small across the family, but for each fixed *k* this gives no escape or discrepancy estimate. The analogous rates for log(1 + 2⁻ᵏ), arctan(2⁻ᵏ) and the general band formula for combinations summing to log *R* are paper deductions in the note (the general band formula itself is CC-02's `LogarithmBands.denominator_rate`). Transcendence of these constants is classical (Lindemann). No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.dyadicLogPrefix_rate",
+  "NormalityChecker.dyadicLogPrefix_eq",
+  "NormalityChecker.polylog_first_den_rate",
+]
+proof = ["notes/classical-approximants.md#dyadic-logarithms-and-arctangents"]
+related = ["CC-02"]
+
+[[result]]
+id = "CC-07"
+title = "A Zeckendorf criterion for the binary discrepancy of the golden ratio"
+topic = "classical"
+status = "lean"
+statement = '''
+Let φ = (1 + √5)/2. For a positive integer *M* let *k*(*M*) be the smallest index occurring in its Zeckendorf representation as a sum of nonconsecutive Fibonacci numbers *F*ᵢ, *i* ≥ 2 (with *F*₂ = 1, *F*₃ = 2). Then
+
+```math
+\varphi^{-k(M)-1} \le \| M \varphi \| \le \varphi^{1-k(M)} .
+```
+
+Consequently the limiting binary interval discrepancy of φ is below 1 if and only if there are an integer *K* and η > 0 such that, for all large *N*, at least η*N* of the integers 0 ≤ *n* < *N* satisfy *k*(2ⁿ) ≤ *K*.
+'''
+scope = '''
+‖·‖ is the distance to the nearest integer. The criterion combines these bounds with CC-04. Positivity of this lower density is open; a published digit-change estimate gives only a growing count of small indices. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.golden_discrepancy_iff_small_index",
+  "NormalityChecker.golden_zeckendorf_bounds",
+  "NormalityChecker.golden_fibonacci_identity",
+]
+proof = ["notes/classical-discrepancy.md#quadratic-irrationals-and-fibonacci-indices"]
+related = ["CC-04"]
+
+[[result]]
+id = "CC-08"
+title = "Exponentially accurate rational models and surviving primes for hexadecimal shifts of π"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *r*ₖ = 4/(8*k* + 1) − 2/(8*k* + 4) − 1/(8*k* + 5) − 1/(8*k* + 6), so that π = Σ *r*ₖ/16ᵏ, and let *y*ₙ be the shifted Bailey–Borwein–Plouffe prefix, the sum of 16ⁿ⁻ᵏ *r*ₖ over 0 ≤ *k* ≤ *n*. Every prime *p* with 4*n* + 3 < *p* ≤ 8*n* + 1 and *p* ≡ 1 or 5 (mod 8) divides the reduced denominator of *y*ₙ.
+
+Adding *n* explicit rational corrections built from finite differences of the *r*ₖ gives rationals *zₙ* with
+
+```math
+\left| 16^{n+i} \pi - 16^i z_n \right| \le \frac{4 \cdot 16^i}{15 \cdot 60^n} \qquad (i \ge 0).
+```
+'''
+scope = '''
+The BBP value of π is derived in Lean from the integral of 16(4 − 2*t*³ − *t*⁴ − *t*⁵)/(16 − *t*⁸) over [0, 1], without an external axiom. For any fixed α < log₁₆ 60 the error therefore tends to 0 uniformly over 0 ≤ *i* ≤ α*n*, a linear number of hexadecimal shifts. The surviving primes are actual factors of the uncorrected denominator; the numerators are not controlled. Exact counts on finite blocks (for example Machin enclosures) are computations. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.BBP.shadow_error_after_shifts",
+  "NormalityChecker.BBP.shadow_error",
+  "NormalityChecker.BBP.integral_pi",
+  "NormalityChecker.BBP.prefix_upper_prime",
+  "NormalityChecker.unique_prime_denominator",
+]
+proof = ["notes/classical-discrepancy.md#hexadecimal-shifts-of-π"]
+related = ["CC-12"]
+
+[[result]]
+id = "CC-09"
+title = "Periodic residues and short returns of the Taylor numerators of e"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *A*₀ = 1 and *A*ₙ₊₁ = (*n* + 1)*A*ₙ + 1, so that
+
+```math
+\sum_{j=0}^{n} \frac{1}{j!} = \frac{A_n}{n!} .
+```
+
+For all integers *q* ≥ 1 and *n* ≥ 0, the numerator with index *q* + *n* is congruent to *A*ₙ modulo *q*. For every prime *p* and every gap *h* ≥ 1, at most *h* − 1 of the starts 0 ≤ *n* < *p* satisfy *p* | *A*ₙ and *p* | *A*ₙ₊ₕ.
+'''
+scope = '''
+The periodicity and related gap polynomials have precedents in Sondow and Schalm. The density-one survival of the reduced denominators of the Taylor truncations in moving windows is a paper deduction from the pair bound and Chebyshev estimates. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.FactorialNumerators.paired_zeros",
+  "NormalityChecker.FactorialNumerators.periodic_residue",
+  "NormalityChecker.FactorialNumerators.taylor_sum",
+]
+proof = ["notes/classical-approximants.md#factorial-truncations-of-e"]
+related = []
+
+[[result]]
+id = "CC-10"
+title = "Rational Fourier criteria for the binary normality of ln 2"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *R*ₙ be as in CC-03, so that 0 ≤ 2ⁿ ln 2 − *R*ₙ ≤ 1/(*n* + 1). The following are equivalent:
+
+* ln 2 is normal in base 2;
+* the sequence *R*ₙ is uniformly distributed modulo one;
+* for every odd integer *h*, the averages over *n* < *N* of *e*(*h R*ₙ) tend to 0;
+* for some (equivalently every) fixed lag *r* ≥ 1 and every odd *h*, the averages over *n* < *N* of *e*(*h*(*R*ₙ₊ᵣ − *R*ₙ)) tend to 0.
+
+Equivalently, ln 2 fails to be binary normal if and only if for some odd *h* and some δ > 0 the average over *n* < *N* of *e*(*h R*ₙ) has absolute value at least δ for infinitely many *N*.
+'''
+scope = '''
+Here *e*(*t*) = exp(2π*it*). These are reformulations; neither side is decided. The proofs use general transfer theorems: normality is invariant under multiplication by positive integers and translation by rationals, and any vanishing-error rational approximation of the orbit can replace it. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.logTwo_normal_iff_odd_prefix_fourier",
+  "NormalityChecker.logTwo_normal_iff",
+  "NormalityChecker.logTwo_normal_iff_lag_fourier",
+  "NormalityChecker.logTwo_not_normal_iff_odd_bias",
+  "NormalityChecker.logTwo_normal_iff_dyadic_lag_cancellation",
+  "NormalityChecker.logTwo_tail_bounds",
+  "NormalityChecker.normal_mul_nat_iff",
+  "NormalityChecker.normal_add_rat_iff",
+]
+proof = [
+  "notes/results.md#polylogarithms-and-separated-positions",
+  "notes/logarithm-correlations.md",
+]
+related = ["CC-03"]
+
+[[result]]
+id = "CC-11"
+title = "Large denominators for the diagonally corrected models of ln 2 in moving windows"
+topic = "classical"
+status = "lean"
+statement = '''
+Let *R*ₙ be as in CC-03 and, in this entry, let *Q*ₙ be the reduced denominator of
+
+```math
+C_n = R_n + \sum_{j=0}^{n-1} (-1)^j \, \frac{j! \, n!}{(n+j+1)!} .
+```
+
+For every ε > 0 each of the following sets of indices *n* has upper Banach density zero, meaning that its proportion in [*A*, *A* + *T*) tends to 0 as *T* → ∞ uniformly in *A*:
+
+* the *n* with log *Q*ₙ ≤ (1 − ε)*n*;
+* the *n* for which at least a proportion ε of the primes in (*n*, 2*n*] do not divide *Q*ₙ.
+
+Moreover max(*Q*ₙ, *Q*ₙ₊₁) ≥ 2ⁿ for every *n*.
+'''
+scope = '''
+Individual indices, including dyadic starts 2ᵏ, may still be exceptional. The statements concern denominators of these rational models only; the model accuracy over a linear number of further shifts and the open first-frequency and moment criteria are in the note. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.ShadowCancellations.small_denominators_uniformly_sparse",
+  "NormalityChecker.ShadowCancellations.missing_fraction_uniformly_sparse",
+  "NormalityChecker.logShadow_diagonal_max",
+  "NormalityChecker.ShadowCancellations.diagonal_small_denominators_density_zero",
+  "NormalityChecker.ShadowCancellations.missing_prime_fraction_density_zero",
+]
+proof = ["notes/log-shadow-primes.md"]
+related = ["CC-03", "CC-13"]
+
+[[result]]
+id = "CC-12"
+title = "Denominator rate 2/3 for binary arctangent models of π"
+topic = "classical"
+status = "paper"
+statement = '''
+Let *A* = arctan(1/3) and *C* = arctan(1/7), so that *A* + *C* = arctan(1/2) and 2*A* + *C* = π/4. For positive integers *a*, *c* put *x* = *aA* + *cC*. There are explicit rational prefixes *Y*<sub>*N*</sub>, truncating the two series at a common binary exponent, with |2ᴺ*x* − *Y*<sub>*N*</sub>| = *O*(1/*N*) and reduced denominators *Q*<sub>*N*</sub> satisfying
+
+```math
+\lim_{N \to \infty} \frac{\log Q_N}{N} = \frac{2}{3} .
+```
+
+This applies to arctan(1/2) with (*a*, *c*) = (1, 1) and to π with (*a*, *c*) = (8, 4).
+'''
+scope = '''
+Paper deduction only; no Lean theorem states this rate. It uses the classical binary BBP-type series for the two angles (Takahashi) and the prime number theorem, with a common short-numerator test on large-prime bands. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+proof = ["notes/gaussian-arctangent-denominators.md"]
+inputs = "Prime number theorem; the binary BBP-type formulas for arctan(1/3) and arctan(1/7) (Takahashi)."
+related = ["CC-08"]
+
+[[result]]
+id = "CC-13"
+title = "Corrected two-stride models of ln 2 with common denominators and explicit errors"
+topic = "classical"
+status = "lean"
+statement = '''
+For integers *m*, *j* ≥ 0 put *B*(*m*, *j*) = *m*! *j*!/(*m* + *j* + 1)!. For all integers *N*, *r*, *s* ≥ 0 there is an explicit rational *Y*, obtained by adding *r* and *s* rational corrections to the two strides of CC-01, whose reduced denominator divides 3 to the power max(*r*, 2*s*) times the least common multiple of 1, …, max(⌊*N*/2⌋ + *r*, ⌊*N*/3⌋ + *s*), and
+
+the error satisfies |2ᴺ ln 2 − *Y*| ≤ *E*₂ + *E*₃, where
+
+```math
+E_2 = \frac{2 \cdot 2^{N \bmod 2} \, B(\lfloor N/2 \rfloor, r)}{3^r},
+```
+
+```math
+E_3 = \frac{2^{N \bmod 3} \, B(\lfloor N/3 \rfloor, s)}{9^s}.
+```
+'''
+scope = '''
+Multiplying the error by 2ⁱ controls the same model after *i* further binary shifts. Asymptotic denominator budgets 0.746090, 1.095663 and 1.962602 for forward coverage *N*/2, *N* and 2*N* follow on paper by Stirling's formula and the prime number theorem; they bound a common denominator, not the reduced one. No result in this family proves normality, or a limiting binary discrepancy below 1, for ln 2, π, *e* or the golden ratio; the target *D*∞ ≤ 0.9999 for ln 2 remains open.
+'''
+lean = [
+  "NormalityChecker.CorrectedStrides.model_error",
+  "NormalityChecker.CorrectedStrides.model_den",
+  "NormalityChecker.CorrectedStrides.corrected_integral",
+]
+proof = ["notes/corrected-strides.md"]
+computation = ["scripts/corrected_strides.py"]
+related = ["CC-01", "CC-11"]

@@ -1,0 +1,1199 @@
+{
+ "description": "Proof-dependency map. Solid edges are checked against the import graph of NormalityChecker/**/*.lean: each source module is transitively imported by a target module (shortest path recorded) and a public declaration of the source is referenced on such a path. Dashed edges are historical; dotted edges are paper-only inputs.",
+ "modules_parsed": 167,
+ "foundation_modules": [
+  "Basic",
+  "Analysis.Weyl",
+  "FourierTest"
+ ],
+ "nodes": {
+  "orth": {
+   "column": 1,
+   "label": "Upper-orthant sums K(p) ≡ 1 mod (p − 1)",
+   "modules": [
+    "StonehamPolynomialOrthant"
+   ],
+   "kind": "technique"
+  },
+  "short": {
+   "column": 1,
+   "label": "Short-orbit cancellation on a fixed prime support",
+   "modules": [
+    "SmoothOrbit",
+    "OrbitDifferencing",
+    "StonehamOrder"
+   ],
+   "kind": "technique"
+  },
+  "cert": {
+   "column": 2,
+   "label": "Rational-prefix normality certificate",
+   "modules": [
+    "ArithmeticCertificate",
+    "CertificateBlocks"
+   ],
+   "kind": "framework"
+  },
+  "ST-01": {
+   "column": 3,
+   "label": "Polynomial images of Stoneham numbers",
+   "modules": [
+    "StonehamPolynomial"
+   ],
+   "kind": "result"
+  },
+  "ST-05": {
+   "column": 3,
+   "label": "Joint uniformity of Stoneham powers",
+   "modules": [
+    "StonehamJoint"
+   ],
+   "kind": "result"
+  },
+  "supp": {
+   "column": 2,
+   "label": "Discrepancy on selected positions",
+   "modules": [
+    "SupportDiscrepancy"
+   ],
+   "kind": "framework"
+  },
+  "shell": {
+   "column": 1,
+   "label": "Shell counting of signed phases",
+   "modules": [
+    "SignedPhases"
+   ],
+   "kind": "technique"
+  },
+  "ridout": {
+   "column": 2,
+   "label": "Ridout's theorem, for transcendence (DS-07)",
+   "modules": [],
+   "kind": "paper"
+  },
+  "rat": {
+   "column": 1,
+   "label": "Discrepancy of rational orbits",
+   "modules": [
+    "RationalOrbitCycle",
+    "CircleDiscrepancy",
+    "SharpDiscrepancy"
+   ],
+   "kind": "technique"
+  },
+  "DS-01": {
+   "column": 3,
+   "label": "Exact signed-shell discrepancy",
+   "modules": [
+    "SignedShellDiscrepancy"
+   ],
+   "kind": "result"
+  },
+  "DS-03": {
+   "column": 3,
+   "label": "Rational translation of signed shells",
+   "modules": [
+    "TranslatedShells"
+   ],
+   "kind": "result"
+  },
+  "DS-04": {
+   "column": 3,
+   "label": "Attainable discrepancy spectrum",
+   "modules": [
+    "ShellHistories"
+   ],
+   "kind": "result"
+  },
+  "comp": {
+   "column": 1,
+   "label": "Complete-orbit character sums",
+   "modules": [
+    "OrbitSum",
+    "StonehamOrbit"
+   ],
+   "kind": "technique"
+  },
+  "padic": {
+   "column": 1,
+   "label": "p-adic lift of cell coefficients",
+   "modules": [
+    "CyclotomicLift"
+   ],
+   "kind": "technique"
+  },
+  "cell": {
+   "column": 2,
+   "label": "Insertion-cell model and cell limits",
+   "modules": [
+    "Insertion",
+    "CellModel",
+    "CyclotomicCell"
+   ],
+   "kind": "framework"
+  },
+  "CR-01": {
+   "column": 3,
+   "label": "Cyclotomic classification",
+   "modules": [
+    "CyclotomicClassification"
+   ],
+   "kind": "result"
+  },
+  "joint1": {
+   "column": 2,
+   "label": "Order-one joint failure formula (Phase 10)",
+   "modules": [
+    "JointPersistent"
+   ],
+   "kind": "historical"
+  },
+  "rec": {
+   "column": 1,
+   "label": "Recurrence on the logarithmic circle",
+   "modules": [
+    "UnsignedRotation"
+   ],
+   "kind": "technique"
+  },
+  "pers": {
+   "column": 2,
+   "label": "Persistent failed regions and all-order discrepancy",
+   "modules": [
+    "PersistentRegion",
+    "HigherOrderCells",
+    "DiscrepancyChecker",
+    "HigherOrderDiscrepancy"
+   ],
+   "kind": "framework"
+  },
+  "diff": {
+   "column": 1,
+   "label": "Finite differences, finite-ray separation",
+   "modules": [
+    "UnsignedWeights",
+    "UnsignedRays"
+   ],
+   "kind": "technique"
+  },
+  "mask": {
+   "column": 2,
+   "label": "Polynomial masks, local valuations",
+   "modules": [
+    "PolynomialMasks",
+    "MaskedSeries",
+    "MaskClassification"
+   ],
+   "kind": "framework"
+  },
+  "LS-01": {
+   "column": 3,
+   "label": "Unsigned finite- support dichotomy",
+   "modules": [
+    "UnsignedNormality"
+   ],
+   "kind": "result"
+  },
+  "MW-01": {
+   "column": 3,
+   "label": "Full-support rational polynomial weights",
+   "modules": [
+    "FullPolynomialNormality"
+   ],
+   "kind": "result"
+  }
+ },
+ "edges": [
+  {
+   "source": "orth",
+   "target": "ST-01",
+   "style": "solid"
+  },
+  {
+   "source": "short",
+   "target": "cert",
+   "style": "solid"
+  },
+  {
+   "source": "cert",
+   "target": "ST-01",
+   "style": "solid"
+  },
+  {
+   "source": "ST-01",
+   "target": "ST-05",
+   "style": "solid"
+  },
+  {
+   "source": "cert",
+   "target": "supp",
+   "style": "solid"
+  },
+  {
+   "source": "supp",
+   "target": "DS-01",
+   "style": "solid"
+  },
+  {
+   "source": "shell",
+   "target": "DS-01",
+   "style": "solid"
+  },
+  {
+   "source": "ridout",
+   "target": "DS-01",
+   "style": "dotted"
+  },
+  {
+   "source": "DS-01",
+   "target": "DS-03",
+   "style": "solid"
+  },
+  {
+   "source": "rat",
+   "target": "DS-03",
+   "style": "solid"
+  },
+  {
+   "source": "DS-01",
+   "target": "DS-04",
+   "style": "solid"
+  },
+  {
+   "source": "comp",
+   "target": "cell",
+   "style": "solid"
+  },
+  {
+   "source": "padic",
+   "target": "CR-01",
+   "style": "solid"
+  },
+  {
+   "source": "cell",
+   "target": "CR-01",
+   "style": "solid"
+  },
+  {
+   "source": "CR-01",
+   "target": "DS-01",
+   "style": "dashed"
+  },
+  {
+   "source": "joint1",
+   "target": "pers",
+   "style": "dashed"
+  },
+  {
+   "source": "rec",
+   "target": "LS-01",
+   "style": "solid"
+  },
+  {
+   "source": "pers",
+   "target": "LS-01",
+   "style": "solid"
+  },
+  {
+   "source": "diff",
+   "target": "LS-01",
+   "style": "solid"
+  },
+  {
+   "source": "LS-01",
+   "target": "MW-01",
+   "style": "solid"
+  },
+  {
+   "source": "mask",
+   "target": "MW-01",
+   "style": "solid"
+  }
+ ],
+ "verified_solid_edges": [
+  {
+   "edge": [
+    "orth",
+    "ST-01"
+   ],
+   "target_module": "StonehamPolynomial",
+   "source_module": "StonehamPolynomialOrthant",
+   "import_path": [
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "StonehamPolynomialExpansion",
+    "StonehamPolynomialPrefix",
+    "StonehamPolynomialOrthant"
+   ],
+   "declaration_used": "StonehamPolynomial.weighted_uniform_precision",
+   "used_in": "StonehamPolynomialPrefix"
+  },
+  {
+   "edge": [
+    "short",
+    "cert"
+   ],
+   "target_module": "ArithmeticCertificate",
+   "source_module": "SmoothOrbit",
+   "import_path": [
+    "ArithmeticCertificate",
+    "SmoothOrbit"
+   ],
+   "declaration_used": "SmoothOrbitEstimate",
+   "used_in": "ArithmeticCertificate"
+  },
+  {
+   "edge": [
+    "short",
+    "cert"
+   ],
+   "target_module": "ArithmeticCertificate",
+   "source_module": "OrbitDifferencing",
+   "import_path": [
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "OrbitDifferencing"
+   ],
+   "declaration_used": "stride_cancellation",
+   "used_in": "SmoothOrbit"
+  },
+  {
+   "edge": [
+    "short",
+    "cert"
+   ],
+   "target_module": "ArithmeticCertificate",
+   "source_module": "StonehamOrder",
+   "import_path": [
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "StonehamOrbit",
+    "StonehamOrder"
+   ],
+   "declaration_used": "fixed_support_order_bound",
+   "used_in": "SmoothOrbit"
+  },
+  {
+   "edge": [
+    "cert",
+    "ST-01"
+   ],
+   "target_module": "StonehamPolynomial",
+   "source_module": "ArithmeticCertificate",
+   "import_path": [
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "ArithmeticCertificate"
+   ],
+   "declaration_used": "normal_of_arithmetic_certificate",
+   "used_in": "StonehamPolynomialNormal"
+  },
+  {
+   "edge": [
+    "cert",
+    "ST-01"
+   ],
+   "target_module": "StonehamPolynomial",
+   "source_module": "CertificateBlocks",
+   "import_path": [
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "CertificateBlocks"
+   ],
+   "declaration_used": "normal_of_sparse_blocks",
+   "used_in": "ArithmeticCertificate"
+  },
+  {
+   "edge": [
+    "ST-01",
+    "ST-05"
+   ],
+   "target_module": "StonehamJoint",
+   "source_module": "StonehamPolynomial",
+   "import_path": [
+    "StonehamJoint",
+    "StonehamPolynomial"
+   ],
+   "declaration_used": "StonehamPolynomial.prime_power_polynomial_normal",
+   "used_in": "StonehamJoint"
+  },
+  {
+   "edge": [
+    "cert",
+    "supp"
+   ],
+   "target_module": "SupportDiscrepancy",
+   "source_module": "ArithmeticCertificate",
+   "import_path": [
+    "SupportDiscrepancy",
+    "WeightedBlocks",
+    "SmoothCertificates",
+    "IndexedExpansion",
+    "ArithmeticCertificate"
+   ],
+   "declaration_used": "normal_of_arithmetic_certificate",
+   "used_in": "SmoothCertificates"
+  },
+  {
+   "edge": [
+    "cert",
+    "supp"
+   ],
+   "target_module": "SupportDiscrepancy",
+   "source_module": "CertificateBlocks",
+   "import_path": [
+    "SupportDiscrepancy",
+    "WeightedBlocks",
+    "SmoothCertificates",
+    "IndexedExpansion",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "CertificateBlocks"
+   ],
+   "declaration_used": "normal_of_sparse_blocks",
+   "used_in": "ArithmeticCertificate"
+  },
+  {
+   "edge": [
+    "supp",
+    "DS-01"
+   ],
+   "target_module": "SignedShellDiscrepancy",
+   "source_module": "SupportDiscrepancy",
+   "import_path": [
+    "SignedShellDiscrepancy",
+    "SupportDiscrepancy"
+   ],
+   "declaration_used": "smooth_interval_block",
+   "used_in": "SignedShellDiscrepancy"
+  },
+  {
+   "edge": [
+    "shell",
+    "DS-01"
+   ],
+   "target_module": "SignedShellDiscrepancy",
+   "source_module": "SignedPhases",
+   "import_path": [
+    "SignedShellDiscrepancy",
+    "SignedPhases"
+   ],
+   "declaration_used": "SignedPhases.denominator_within_nonzero_shell",
+   "used_in": "SignedShellDiscrepancy"
+  },
+  {
+   "edge": [
+    "DS-01",
+    "DS-03"
+   ],
+   "target_module": "TranslatedShells",
+   "source_module": "SignedShellDiscrepancy",
+   "import_path": [
+    "TranslatedShells",
+    "RationalOrbitCycle",
+    "SignedShellDiscrepancy"
+   ],
+   "declaration_used": "SignedPhases.discrepancy_sub_zeroDensity_tendsto",
+   "used_in": "TranslatedShells"
+  },
+  {
+   "edge": [
+    "rat",
+    "DS-03"
+   ],
+   "target_module": "TranslatedShells",
+   "source_module": "RationalOrbitCycle",
+   "import_path": [
+    "TranslatedShells",
+    "RationalOrbitCycle"
+   ],
+   "declaration_used": "SignedPhases.cycle_frequency_error",
+   "used_in": "TranslatedShells"
+  },
+  {
+   "edge": [
+    "rat",
+    "DS-03"
+   ],
+   "target_module": "TranslatedShells",
+   "source_module": "CircleDiscrepancy",
+   "import_path": [
+    "TranslatedShells",
+    "CircleDiscrepancy"
+   ],
+   "declaration_used": "CircleDiscrepancy.disc_mixture_bound",
+   "used_in": "TranslatedShells"
+  },
+  {
+   "edge": [
+    "rat",
+    "DS-03"
+   ],
+   "target_module": "TranslatedShells",
+   "source_module": "SharpDiscrepancy",
+   "import_path": [
+    "TranslatedShells",
+    "SharpDiscrepancy"
+   ],
+   "declaration_used": "third_discrepancy_sharp",
+   "used_in": "TranslatedShells"
+  },
+  {
+   "edge": [
+    "DS-01",
+    "DS-04"
+   ],
+   "target_module": "ShellHistories",
+   "source_module": "SignedShellDiscrepancy",
+   "import_path": [
+    "ShellHistories",
+    "SignedShellDiscrepancy"
+   ],
+   "declaration_used": "SignedPhases.limsup_discrepancy_eq_zeroDensity",
+   "used_in": "ShellHistories"
+  },
+  {
+   "edge": [
+    "comp",
+    "cell"
+   ],
+   "target_module": "CellModel",
+   "source_module": "OrbitSum",
+   "import_path": [
+    "CellModel",
+    "ScaleTransfer",
+    "OrbitSum"
+   ],
+   "declaration_used": "incomplete_orbit_interval",
+   "used_in": "CellModel"
+  },
+  {
+   "edge": [
+    "comp",
+    "cell"
+   ],
+   "target_module": "CyclotomicCell",
+   "source_module": "StonehamOrbit",
+   "import_path": [
+    "CyclotomicCell",
+    "StonehamComponents",
+    "StonehamOrbit"
+   ],
+   "declaration_used": "stoneham_orbit_small",
+   "used_in": "StonehamComponents"
+  },
+  {
+   "edge": [
+    "padic",
+    "CR-01"
+   ],
+   "target_module": "CyclotomicClassification",
+   "source_module": "CyclotomicLift",
+   "import_path": [
+    "CyclotomicClassification",
+    "CyclotomicFourier",
+    "CyclotomicCell",
+    "CyclotomicLift"
+   ],
+   "declaration_used": "inverse_lift_precision",
+   "used_in": "CyclotomicClassification"
+  },
+  {
+   "edge": [
+    "cell",
+    "CR-01"
+   ],
+   "target_module": "CyclotomicClassification",
+   "source_module": "Insertion",
+   "import_path": [
+    "CyclotomicClassification",
+    "FiniteClassification",
+    "CellModel",
+    "Insertion"
+   ],
+   "declaration_used": "finite_orbit_approx",
+   "used_in": "CellModel"
+  },
+  {
+   "edge": [
+    "cell",
+    "CR-01"
+   ],
+   "target_module": "CyclotomicClassification",
+   "source_module": "CellModel",
+   "import_path": [
+    "CyclotomicClassification",
+    "FiniteClassification",
+    "CellModel"
+   ],
+   "declaration_used": "cell_cancellation",
+   "used_in": "FiniteClassification"
+  },
+  {
+   "edge": [
+    "cell",
+    "CR-01"
+   ],
+   "target_module": "CyclotomicClassification",
+   "source_module": "CyclotomicCell",
+   "import_path": [
+    "CyclotomicClassification",
+    "CyclotomicFourier",
+    "CyclotomicCell"
+   ],
+   "declaration_used": "CyclotomicCell.scaled",
+   "used_in": "CyclotomicClassification"
+  },
+  {
+   "edge": [
+    "rec",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "UnsignedRotation",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedRotation"
+   ],
+   "declaration_used": "Unsigned.positiveZeros_of_persistent",
+   "used_in": "UnsignedNormality"
+  },
+  {
+   "edge": [
+    "pers",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "PersistentRegion",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedRays",
+    "UnsignedPhase",
+    "HigherOrderCells",
+    "PersistentRegion"
+   ],
+   "declaration_used": "LocalizedSupport.failed_region_inside",
+   "used_in": "UnsignedRotation"
+  },
+  {
+   "edge": [
+    "pers",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "HigherOrderCells",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedRays",
+    "UnsignedPhase",
+    "HigherOrderCells"
+   ],
+   "declaration_used": "LocalizedSupport.persistent_iff_phaseMoment_zero",
+   "used_in": "UnsignedRotation"
+  },
+  {
+   "edge": [
+    "pers",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "DiscrepancyChecker",
+   "import_path": [
+    "UnsignedNormality",
+    "HigherOrderDiscrepancy",
+    "JointPersistent",
+    "DeepCancellation",
+    "DiscrepancyChecker"
+   ],
+   "declaration_used": "LocalizedSupport.discrepancy_le_of_support_prime",
+   "used_in": "MaximalSupport"
+  },
+  {
+   "edge": [
+    "pers",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "HigherOrderDiscrepancy",
+   "import_path": [
+    "UnsignedNormality",
+    "HigherOrderDiscrepancy"
+   ],
+   "declaration_used": "LocalizedSupport.prefix_discrepancy_tendsTo_one",
+   "used_in": "UnsignedNormality"
+  },
+  {
+   "edge": [
+    "diff",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "UnsignedWeights",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedWeights"
+   ],
+   "declaration_used": "Unsigned.finite_range_of_residue",
+   "used_in": "UnsignedNormality"
+  },
+  {
+   "edge": [
+    "diff",
+    "LS-01"
+   ],
+   "target_module": "UnsignedNormality",
+   "source_module": "UnsignedRays",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedRays"
+   ],
+   "declaration_used": "Unsigned.finite_ray_separation",
+   "used_in": "UnsignedNormality"
+  },
+  {
+   "edge": [
+    "LS-01",
+    "MW-01"
+   ],
+   "target_module": "FullPolynomialNormality",
+   "source_module": "UnsignedNormality",
+   "import_path": [
+    "FullPolynomialNormality",
+    "UnsignedNormality"
+   ],
+   "declaration_used": "LocalizedSupport.unsigned_certificate_tendsTo_zero",
+   "used_in": "FullPolynomialNormality"
+  },
+  {
+   "edge": [
+    "mask",
+    "MW-01"
+   ],
+   "target_module": "FullPolynomialNormality",
+   "source_module": "PolynomialMasks",
+   "import_path": [
+    "FullPolynomialNormality",
+    "MaskExamples",
+    "MaskThirds",
+    "MaskGrid",
+    "MaskWindows",
+    "MaskClassification",
+    "MaskedDiscrepancy",
+    "MaskedSeries",
+    "PolynomialMasks"
+   ],
+   "declaration_used": "PolynomialMasks.first_cell_den_exponent",
+   "used_in": "MaskAxis"
+  },
+  {
+   "edge": [
+    "mask",
+    "MW-01"
+   ],
+   "target_module": "FullPolynomialNormality",
+   "source_module": "MaskedSeries",
+   "import_path": [
+    "FullPolynomialNormality",
+    "MaskExamples",
+    "MaskThirds",
+    "MaskGrid",
+    "MaskWindows",
+    "MaskClassification",
+    "MaskedDiscrepancy",
+    "MaskedSeries"
+   ],
+   "declaration_used": "PolynomialMasks.gap_approximation",
+   "used_in": "MaskedDiscrepancy"
+  },
+  {
+   "edge": [
+    "mask",
+    "MW-01"
+   ],
+   "target_module": "FullPolynomialNormality",
+   "source_module": "MaskClassification",
+   "import_path": [
+    "FullPolynomialNormality",
+    "MaskExamples",
+    "MaskThirds",
+    "MaskGrid",
+    "MaskWindows",
+    "MaskClassification"
+   ],
+   "declaration_used": "PolynomialMasks.rational_window_bound",
+   "used_in": "MaskDensity"
+  }
+ ],
+ "foundation_imports": [
+  {
+   "result": "ST-01",
+   "module": "StonehamPolynomial",
+   "imports": "Basic",
+   "import_path": [
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "StonehamPolynomialExpansion",
+    "GeneralResonance",
+    "Resonance",
+    "Basic"
+   ]
+  },
+  {
+   "result": "ST-01",
+   "module": "StonehamPolynomial",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "StonehamOrbit",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "ST-01",
+   "module": "StonehamPolynomial",
+   "imports": "FourierTest",
+   "import_path": [
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "CertificateBlocks",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "ST-05",
+   "module": "StonehamJoint",
+   "imports": "Basic",
+   "import_path": [
+    "StonehamJoint",
+    "StonehamStatements",
+    "Basic"
+   ]
+  },
+  {
+   "result": "ST-05",
+   "module": "StonehamJoint",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "StonehamJoint",
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "StonehamOrbit",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "ST-05",
+   "module": "StonehamJoint",
+   "imports": "FourierTest",
+   "import_path": [
+    "StonehamJoint",
+    "StonehamPolynomial",
+    "StonehamPolynomialNormal",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "CertificateBlocks",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "DS-01",
+   "module": "SignedShellDiscrepancy",
+   "imports": "Basic",
+   "import_path": [
+    "SignedShellDiscrepancy",
+    "SignedPhases",
+    "Concentration",
+    "Distribution",
+    "Basic"
+   ]
+  },
+  {
+   "result": "DS-01",
+   "module": "SignedShellDiscrepancy",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "SignedShellDiscrepancy",
+    "SignedPhases",
+    "IndexedExpansion",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "StonehamOrbit",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "DS-01",
+   "module": "SignedShellDiscrepancy",
+   "imports": "FourierTest",
+   "import_path": [
+    "SignedShellDiscrepancy",
+    "SignedPhases",
+    "PeriodicWeights",
+    "DensePolynomial",
+    "RadixTelescoping",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "DS-03",
+   "module": "TranslatedShells",
+   "imports": "Basic",
+   "import_path": [
+    "TranslatedShells",
+    "SharpDiscrepancy",
+    "BinaryDiscrepancy",
+    "Distribution",
+    "Basic"
+   ]
+  },
+  {
+   "result": "DS-03",
+   "module": "TranslatedShells",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "TranslatedShells",
+    "CircleDiscrepancy",
+    "SupportDiscrepancy",
+    "WeightedBlocks",
+    "LocalizedDiscrepancy",
+    "LocalizedMixed",
+    "StonehamOrbit",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "DS-03",
+   "module": "TranslatedShells",
+   "imports": "FourierTest",
+   "import_path": [
+    "TranslatedShells",
+    "CircleDiscrepancy",
+    "SupportDiscrepancy",
+    "WeightedBlocks",
+    "LocalizedDiscrepancy",
+    "IntervalFourier",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "DS-04",
+   "module": "ShellHistories",
+   "imports": "Basic",
+   "import_path": [
+    "ShellHistories",
+    "SignedShellDiscrepancy",
+    "SignedPhases",
+    "Concentration",
+    "Distribution",
+    "Basic"
+   ]
+  },
+  {
+   "result": "DS-04",
+   "module": "ShellHistories",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "ShellHistories",
+    "SignedShellDiscrepancy",
+    "SignedPhases",
+    "IndexedExpansion",
+    "ArithmeticCertificate",
+    "SmoothOrbit",
+    "StonehamOrbit",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "DS-04",
+   "module": "ShellHistories",
+   "imports": "FourierTest",
+   "import_path": [
+    "ShellHistories",
+    "SignedShellDiscrepancy",
+    "SignedPhases",
+    "PeriodicWeights",
+    "DensePolynomial",
+    "RadixTelescoping",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "CR-01",
+   "module": "CyclotomicClassification",
+   "imports": "Basic",
+   "import_path": [
+    "CyclotomicClassification",
+    "FiniteClassification",
+    "Concentration",
+    "Distribution",
+    "Basic"
+   ]
+  },
+  {
+   "result": "CR-01",
+   "module": "CyclotomicClassification",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "CyclotomicClassification",
+    "FiniteClassification",
+    "Dilation",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "CR-01",
+   "module": "CyclotomicClassification",
+   "imports": "FourierTest",
+   "import_path": [
+    "CyclotomicClassification",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "LS-01",
+   "module": "UnsignedNormality",
+   "imports": "Basic",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedRays",
+    "LocalizedMesh",
+    "LocalizedLayers",
+    "PrimeCancellation",
+    "LogTwo",
+    "Distribution",
+    "Basic"
+   ]
+  },
+  {
+   "result": "LS-01",
+   "module": "UnsignedNormality",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "UnsignedNormality",
+    "HigherOrderDiscrepancy",
+    "JointPersistent",
+    "PartialUniformity",
+    "SupportDiscrepancy",
+    "WeightedBlocks",
+    "LocalizedDiscrepancy",
+    "LocalizedMixed",
+    "StonehamOrbit",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "LS-01",
+   "module": "UnsignedNormality",
+   "imports": "FourierTest",
+   "import_path": [
+    "UnsignedNormality",
+    "UnsignedRays",
+    "UnsignedPhase",
+    "HigherOrderCells",
+    "HigherOrderPrincipal",
+    "LocalizedCertificate",
+    "LocalizedSupport",
+    "FourierTest"
+   ]
+  },
+  {
+   "result": "MW-01",
+   "module": "FullPolynomialNormality",
+   "imports": "Basic",
+   "import_path": [
+    "FullPolynomialNormality",
+    "MaskExamples",
+    "MaskThirds",
+    "SharpDiscrepancy",
+    "BinaryDiscrepancy",
+    "Distribution",
+    "Basic"
+   ]
+  },
+  {
+   "result": "MW-01",
+   "module": "FullPolynomialNormality",
+   "imports": "Analysis.Weyl",
+   "import_path": [
+    "FullPolynomialNormality",
+    "MaskExamples",
+    "MaskDominance",
+    "DiscrepancyChecker",
+    "CellProfile",
+    "LocalizedCertificate",
+    "LocalizedSupport",
+    "FourierTest",
+    "Dilation",
+    "Correlations",
+    "Analysis.Weyl"
+   ]
+  },
+  {
+   "result": "MW-01",
+   "module": "FullPolynomialNormality",
+   "imports": "FourierTest",
+   "import_path": [
+    "FullPolynomialNormality",
+    "MaskExamples",
+    "MaskDominance",
+    "DiscrepancyChecker",
+    "CellProfile",
+    "LocalizedCertificate",
+    "LocalizedSupport",
+    "FourierTest"
+   ]
+  }
+ ],
+ "historical_edges": [
+  {
+   "edge": [
+    "CR-01",
+    "DS-01"
+   ],
+   "justification": "The cyclotomic checker for prime-parameter Stoneham sums (commit a11e0aa, 10th commit) preceded the exact discrepancy of signed Stoneham phases (commit 5c2e7d8, 27th commit). SignedShellDiscrepancy does not import CyclotomicClassification."
+  },
+  {
+   "edge": [
+    "joint1",
+    "pers"
+   ],
+   "justification": "results.md, Phase 10: Lean proves the exact limiting discrepancy formula at order one (commit b731ad7); Phase 11: the all-orders, all-prefix persistent discrepancy theorem (commit 10a24c0). HigherOrderDiscrepancy imports JointPersistent, but no public declaration of JointPersistent is referenced by any other module."
+  }
+ ],
+ "paper_inputs": [
+  {
+   "edge": [
+    "ridout",
+    "DS-01"
+   ],
+   "justification": "results.md, Phase 10: transcendence of signed expansions follows on paper using Roth or Ridout (notes/signed-shell-discrepancy.md). No Lean module."
+  }
+ ],
+ "joint_persistent_public_declarations_unused": [
+  "failedWidth",
+  "fixed_deep_loss_bound",
+  "integral_of_joint_deep_failure",
+  "jointFailureDensity",
+  "joint_density_tendsTo_discrepancy",
+  "normal_iff_joint_density_zero",
+  "order_two_deep_counterexample",
+  "prime_cleared_of_deep_failure"
+ ]
+}
