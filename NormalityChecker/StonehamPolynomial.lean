@@ -50,27 +50,28 @@ private lemma axis_shift {b p : ℕ} (hp : 0 < p) (m : ℕ) :
 
 namespace Monomial
 
-/-- Each factor may have its own positive power of the common ambient radix. -/
-noncomputable def standardValue (t : Monomial) (b p : ℕ) := ∏ i, alpha (b^(t.parameter i)) p
+/-- Each factor chooses a positive power of the radix and of the common prime. -/
+noncomputable def standardValue (t : Monomial) (b p : ℕ) :=
+  ∏ i, alpha (b^(t.parameter i)) (p^(t.stride i : ℕ))
 
 private def shifted (t : Monomial) {p : ℕ} (hp : 0 < p) : Monomial :=
-  ⟨t.degree,fun i => t.parameter i*p,fun i => Nat.mul_pos (t.positive i) hp⟩
+  ⟨t.degree,fun i => t.parameter i*p^(t.stride i : ℕ),fun i => Nat.mul_pos (t.positive i) (pow_pos hp _),t.stride⟩
 
 private lemma shifted_value (t : Monomial) {b p : ℕ} (hp : 0 < p) :
-    (t.shifted hp).value b p = (p:ℝ)^t.degree * t.standardValue b p := by
-  change (∏ i : Fin t.degree, axis b p (t.parameter i * p)) = _
-  simp [standardValue, axis_shift hp,prod_mul_distrib]
+    (t.shifted hp).value b p = (p:ℝ)^(∑ i, (t.stride i : ℕ)) * t.standardValue b p := by
+  change (∏ i : Fin t.degree, axis b (p^(t.stride i : ℕ)) (t.parameter i * p^(t.stride i : ℕ))) = _
+  simp only [standardValue, axis_shift (pow_pos hp _),Nat.cast_pow,prod_mul_distrib,prod_pow_eq_pow_sum]
 
 end Monomial
 
-/-- In a finite rational linear combination of products of `α(bᵐ,p)`, one
+/-- In a finite rational linear combination of products of `α(bᵐ,pᵉ)`, one
 nonzero monomial of positive degree strictly above every other degree suffices
 for normality in base `b`. -/
 theorem same_prime_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
     (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℚ) (nc : c ≠ 0)
     (s : Finset ι) (u : ι → Monomial) (a : ι → ℚ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
     NormalIn b ((c:ℝ) * t.standardValue b p + ∑ i ∈ s, (a i:ℝ)*(u i).standardValue b p) := by
-  let normalize (v : Monomial) (q : ℚ) := q/(p:ℚ)^v.degree
+  let normalize (v : Monomial) (q : ℚ) := q/(p:ℚ)^(∑ i, (v.stride i : ℕ))
   have scaled (v : Monomial) (q : ℚ) : ((normalize v q:ℚ):ℝ)*(v.shifted hp.pos).value b p =
       (q:ℝ)*v.standardValue b p := by
     simp only [normalize, Rat.cast_div,Rat.cast_pow,Rat.cast_natCast,Monomial.shifted_value v hp.pos]
@@ -80,14 +81,26 @@ theorem same_prime_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Pr
     (fun i => (u i).shifted hp.pos) (fun i => normalize (u i) (a i)) lt
   simpa only [scaled] using res
 
-/-- In particular, every nonempty product of standard Stoneham numbers with
-the same odd denominator prime, in positive powers of the radix, is base-normal. -/
+/-- Every nonempty product of standard Stoneham numbers with parameters that
+are powers of the same odd prime is normal in the common radix. The first
+parameter of each factor can also be a positive power of that radix. -/
+theorem prime_power_product_normal {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
+    (cop : b.Coprime p) (hd : 0 < d) (m : Vector d) (hm : ∀ i, 0 < m i) (e : Strides d) :
+    NormalIn b (∏ i, alpha (b^(m i)) (p^(e i : ℕ))) := by
+  let t : Monomial := ⟨d,m,hm,e⟩
+  simpa [t,Monomial.standardValue] using same_prime_sum_normal hb hp odd cop t hd 1 one_ne_zero
+    (∅ : Finset Unit) (fun _ => t) (fun _ => 0) (by simp)
+
 theorem same_prime_product_normal {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
     (cop : b.Coprime p) (hd : 0 < d) (m : Vector d) (hm : ∀ i, 0 < m i) :
     NormalIn b (∏ i, alpha (b^(m i)) p) := by
-  let t : Monomial := ⟨d,m,hm⟩
-  simpa [t,Monomial.standardValue] using same_prime_sum_normal hb hp odd cop t hd 1 one_ne_zero
-    (∅ : Finset Unit) (fun _ => t) (fun _ => 0) (by simp)
+  simpa using prime_power_product_normal hb hp odd cop hd m hm (fun _ => 1)
+
+/-- A mixed example with the two denominator parameters three and nine. -/
+theorem binary_three_nine_product : NormalIn 2 (alpha 2 3 * alpha 2 9) := by
+  have h := prime_power_product_normal (b:=2) (p:=3) (d:=2) (by decide) Nat.prime_three
+    (by decide) (by decide) (by decide) (fun _ => 1) (fun _ => Nat.zero_lt_one) ![1,2]
+  simpa [Fin.prod_univ_two] using h
 
 /-- Every positive integral power of the standard number is normal. -/
 theorem power_normal {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
@@ -96,10 +109,10 @@ theorem power_normal {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
 
 /-- Every nonconstant rational polynomial of the standard Stoneham number is
 normal in its radix. -/
-theorem polynomial_normal {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
-    (cop : b.Coprime p) (P : ℚ[X]) (degree : 0 < P.natDegree) :
-    NormalIn b (P.eval₂ (algebraMap ℚ ℝ) (alpha b p)) := by
-  let term (d : ℕ) : Monomial := ⟨d,fun _ => 1, fun _ => Nat.zero_lt_one⟩
+theorem prime_power_polynomial_normal {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
+    (cop : b.Coprime p) (e : ℕ+) (P : ℚ[X]) (degree : 0 < P.natDegree) :
+    NormalIn b (P.eval₂ (algebraMap ℚ ℝ) (alpha b (p^(e : ℕ)))) := by
+  let term (d : ℕ) : Monomial := ⟨d,fun _ => 1, fun _ => Nat.zero_lt_one, fun _ => e⟩
   have lead : P.coeff P.natDegree ≠ 0 :=
     Polynomial.leadingCoeff_ne_zero.mpr (fun eqn => by simp [eqn] at degree)
   have h := same_prime_sum_normal hb hp odd cop (term P.natDegree) degree _ lead
@@ -107,6 +120,11 @@ theorem polynomial_normal {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤
   rw [Polynomial.eval₂_eq_sum_range, sum_range_succ, add_comm]
   simpa only [Monomial.standardValue,term,pow_one,prod_const,card_univ,Fintype.card_fin,
     show ∀ q : ℚ, (algebraMap ℚ ℝ) q = (q:ℝ) from fun _ => rfl] using h
+
+theorem polynomial_normal {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
+    (cop : b.Coprime p) (P : ℚ[X]) (degree : 0 < P.natDegree) :
+    NormalIn b (P.eval₂ (algebraMap ℚ ℝ) (alpha b p)) := by
+  simpa using prime_power_polynomial_normal hb hp odd cop 1 P degree
 
 theorem binary_power_normal {d : ℕ} (hd : 0 < d) : NormalIn 2 (alpha 2 3 ^ d) :=
   power_normal (by decide) Nat.prime_three (by decide) (by decide) hd

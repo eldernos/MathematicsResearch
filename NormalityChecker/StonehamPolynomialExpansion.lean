@@ -1,7 +1,7 @@
 module
 
 public import NormalityChecker.StonehamPolynomialPrefix
-public import NormalityChecker.StonehamComponents
+public import NormalityChecker.GeneralResonance
 public import Mathlib.Analysis.Normed.Group.Tannery
 
 /-! Real convergence and clean-block propagation for products of Stoneham series. -/
@@ -49,70 +49,81 @@ theorem axis_eq {b p m : ℕ} (hm : 0 < m) :
   apply tsum_congr
   intro j; rw [one_div_pow, inv_pow]; field_simp
 
-private lemma series_sums {b p : ℕ} (hb : 1 < b) (hp : 1 < p) (m : Vector d) :
-    HasSum (fun j => (p:ℝ)⁻¹^weight j / (b:ℝ)^position p m j) (∏ i, axis b p (m i)) := by
+private lemma stride_geom {p : ℕ} (hp : 1 < p) (e : ℕ+) :
+    Summable (fun j : ℕ => ((p:ℝ)⁻¹)^((e:ℕ)*j)) :=
+  (summable_geometric_of_lt_one (by positivity) (inv_lt_one_of_one_lt₀ (by exact_mod_cast hp))).comp_injective
+    (fun _ _ h => Nat.eq_of_mul_eq_mul_left e.pos h)
+
+private lemma series_sums {b p : ℕ} (hb : 1 < b) (hp : 1 < p) (e : Strides d) (m : Vector d) :
+    HasSum (fun j => (p:ℝ)⁻¹^weight (stretch e j) / (b:ℝ)^position p e m j)
+      (∏ i, axis b (p^(e i : ℕ)) (m i)) := by
   let r := (p:ℝ)⁻¹
+  let f (i : Fin d) (j : ℕ) := r^((e i : ℕ)*j) / (b:ℝ)^(m i*p^((e i : ℕ)*j))
   have pos : 0 ≤ r := by dsimp [r]; positivity
-  have geo := summable_geometric_of_lt_one pos (inv_lt_one_of_one_lt₀ (by exact_mod_cast hp))
-  have h := product_sums (fun i j => r^j / (b:ℝ)^(m i*p^j)) (fun _ _ => by positivity)
-    (fun i => Summable.of_nonneg_of_le (fun _ => by positivity)
-      (fun j => div_le_self (pow_nonneg pos _) (one_le_pow₀ (by exact_mod_cast hb.le))) geo)
+  have h := product_sums f (fun i j => by dsimp [f]; positivity)
+    (fun i => Summable.of_nonneg_of_le (fun j => by dsimp [f]; positivity)
+      (fun j => div_le_self (pow_nonneg pos _) (one_le_pow₀ (by exact_mod_cast hb.le))) (stride_geom hp (e i)))
+  have sum_axis (i : Fin d) : (∑' j, f i j) = axis b (p^(e i : ℕ)) (m i) := by
+    unfold axis; apply tsum_congr
+    intro j; simp only [f,r,Nat.cast_pow, ← inv_pow, ← pow_mul]
+  simp only [sum_axis] at h
   apply h.congr_fun
   intro v
-  simp only [position, weight, prod_div_distrib, ← prod_pow_eq_pow_sum, r]
+  simp only [position, weight, stretch, f, prod_div_distrib, ← prod_pow_eq_pow_sum, r]
 
-theorem product_tail {b p : ℕ} (hb : 1 < b) (hp : 1 < p) {m : Vector d} (hm : ∀ i, 0 < m i) :
-    Tendsto (fun n => (b:ℝ)^n * (∏ i, axis b p (m i)) - (productPrefix b p m n:ℝ)) atTop (𝓝 0) := by
+theorem product_tail {b p : ℕ} (hb : 1 < b) (hp : 1 < p) {e : Strides d} {m : Vector d} (hm : ∀ i, 0 < m i) :
+    Tendsto (fun n => (b:ℝ)^n * (∏ i, axis b (p^(e i : ℕ)) (m i)) -
+      (productPrefix b p e m n:ℝ)) atTop (𝓝 0) := by
   classical
   let r := (p:ℝ)⁻¹
-  let coeff (j : Vector d) := r^weight j
-  let term (j : Vector d) := coeff j / (b:ℝ)^position p m j
-  let tail (n : ℕ) (j : Vector d) := if position p m j ≤ n then 0 else (b:ℝ)^n * term j
+  let coeff (j : Vector d) := r^weight (stretch e j)
+  let term (j : Vector d) := coeff j / (b:ℝ)^position p e m j
+  let tail (n : ℕ) (j : Vector d) := if position p e m j ≤ n then 0 else (b:ℝ)^n * term j
   have pos : 0 ≤ r := by dsimp [r]; positivity
   have bp : (0:ℝ)<b := by exact_mod_cast (by omega : 0<b)
   have b1 : (1:ℝ)≤b := by exact_mod_cast hb.le
-  have geo := summable_geometric_of_lt_one pos (inv_lt_one_of_one_lt₀ (by exact_mod_cast hp))
   have cs : Summable coeff := by
-    have h := (product_sums (d:=d) (fun _ j => r^j) (fun _ _ => pow_nonneg pos _) (fun _ => geo)).summable
-    simpa only [coeff,weight,prod_pow_eq_pow_sum] using h
-  have ts : HasSum term (∏ i, axis b p (m i)) := series_sums hb hp m
+    have h := (product_sums (d:=d) (fun i j => r^((e i : ℕ)*j)) (fun _ _ => pow_nonneg pos _)
+      (fun i => stride_geom hp (e i))).summable
+    simpa only [coeff,weight,stretch,prod_pow_eq_pow_sum] using h
+  have ts : HasSum term (∏ i, axis b (p^(e i : ℕ)) (m i)) := series_sums hb hp e m
   have bound (n : ℕ) (j : Vector d) : ‖tail n j‖ ≤ coeff j := by
     dsimp only [tail]
     split_ifs with le
-    · simpa only [norm_zero] using pow_nonneg pos (weight j)
-    change ‖(b:ℝ)^n * (r^weight j / (b:ℝ)^position p m j)‖ ≤ _
+    · simpa only [norm_zero] using pow_nonneg pos (weight (stretch e j))
+    change ‖(b:ℝ)^n * (r^weight (stretch e j) / (b:ℝ)^position p e m j)‖ ≤ _
     rw [Real.norm_eq_abs, abs_of_nonneg (by positivity), mul_div_assoc', div_le_iff₀ (by positivity)]
     rw [mul_comm]; exact mul_le_mul_of_nonneg_left (pow_le_pow_right₀ b1 (by omega)) (pow_nonneg pos _)
   have conv := tendsto_tsum_of_dominated_convergence (g:=fun _ => (0:ℝ)) cs
     (f:=tail) (fun j => tendsto_const_nhds.congr' (by
-      filter_upwards [eventually_ge_atTop (position p m j)] with n hn
+      filter_upwards [eventually_ge_atTop (position p e m j)] with n hn
       simp [tail,hn])) (.of_forall bound)
   simp only [tsum_zero] at conv
   apply conv.congr
   intro n
-  let part (j : Vector d) := if position p m j ≤ n then (b:ℝ)^n * term j else 0
-  have supported : ∀ j ∉ active p m n, part j = 0 := fun j hj =>
+  let part (j : Vector d) := if position p e m j ≤ n then (b:ℝ)^n * term j else 0
+  have supported : ∀ j ∉ active p e m n, part j = 0 := fun j hj =>
     ite_eq_right (fun le => hj ((mem_active hp hm).mpr le))
-  have finite : HasSum part (∑ j ∈ active p m n, part j) := hasSum_sum_of_ne_finset_zero supported
+  have finite : HasSum part (∑ j ∈ active p e m n, part j) := hasSum_sum_of_ne_finset_zero supported
   have tf := (cs.of_norm_bounded (bound n)).hasSum
-  have e := (finite.add tf).tsum_eq
+  have total := (finite.add tf).tsum_eq
   have es : (fun j => part j + tail n j) = (fun j => (b:ℝ)^n * term j) := by
     funext j; simp [part,tail]; split <;> simp
-  change (∑' j, (part j + tail n j)) = _ at e
-  rw [es,(ts.mul_left _).tsum_eq] at e
-  have pr : (productPrefix b p m n:ℝ) = ∑ j ∈ active p m n, part j := by
+  change (∑' j, (part j + tail n j)) = _ at total
+  rw [es,(ts.mul_left _).tsum_eq] at total
+  have pr : (productPrefix b p e m n:ℝ) = ∑ j ∈ active p e m n, part j := by
     unfold productPrefix
     push_cast
     apply sum_congr rfl
     intro j hj
     have le := (mem_active hp hm).mp hj
     dsimp only [part,term,coeff,r]; rw [ite_eq_left le,pow_sub₀ (b:ℝ) bp.ne' le,inv_pow]; ring
-  rw [pr]; linarith only [e]
+  rw [pr]; linarith only [total]
 
-theorem prefix_follows {b p : ℕ} (hp : 1 < p) {m : Vector d}
-    (hm : ∀ i, 0 < m i) {n i : ℕ} (free : ∀ j, n < position p m j → n+i < position p m j) :
-    productPrefix b p m (n+i) = (b:ℚ)^i * productPrefix b p m n := by
-  have same : active p m (n+i) = active p m n := by
+theorem prefix_follows {b p : ℕ} (hp : 1 < p) {e : Strides d} {m : Vector d}
+    (hm : ∀ i, 0 < m i) {n i : ℕ} (free : ∀ j, n < position p e m j → n+i < position p e m j) :
+    productPrefix b p e m (n+i) = (b:ℚ)^i * productPrefix b p e m n := by
+  have same : active p e m (n+i) = active p e m n := by
     ext j
     rw [mem_active hp hm, mem_active hp hm]
     constructor
@@ -121,6 +132,6 @@ theorem prefix_follows {b p : ℕ} (hp : 1 < p) {m : Vector d}
   simp only [productPrefix,same,mul_sum]; apply sum_congr rfl
   intro j hj
   have le := (mem_active hp hm).mp hj
-  rw [show n+i-position p m j=i+(n-position p m j) by omega,pow_add,mul_div_assoc]
+  rw [show n+i-position p e m j=i+(n-position p e m j) by omega,pow_add,mul_div_assoc]
 
 end NormalityChecker.StonehamPolynomial

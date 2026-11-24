@@ -15,20 +15,23 @@ structure Monomial where
   degree : ℕ
   parameter : Vector degree
   positive : ∀ i, 0 < parameter i
+  stride : Strides degree := fun _ => 1
 
 namespace Monomial
 variable (t : Monomial)
-noncomputable def value (b p : ℕ) := ∏ i, axis b p (t.parameter i)
-def model (b p n : ℕ) := productPrefix b p t.parameter n
-private def events (p k : ℕ) := (box t.degree (2*(k+1))).image (position p t.parameter)
+noncomputable def value (b p : ℕ) := ∏ i, axis b (p^(t.stride i : ℕ)) (t.parameter i)
+def model (b p n : ℕ) := productPrefix b p t.stride t.parameter n
+private def events (p k : ℕ) := (box t.degree (2*(k+1))).image (position p t.stride t.parameter)
 
 private lemma event_mem {p k : ℕ} (hp : 2 ≤ p) (v : Vector t.degree)
-    (h : position p t.parameter v < 4^(k+1)) : position p t.parameter v ∈ t.events p k := by
+    (h : position p t.stride t.parameter v < 4^(k+1)) : position p t.stride t.parameter v ∈ t.events p k := by
   apply mem_image.mpr ⟨v,mem_box.mpr ?_,rfl⟩
   intro i
-  have lo : 2^(v i) ≤ position p t.parameter v :=
-    (Nat.pow_le_pow_left hp _).trans ((Nat.le_mul_of_pos_left _ (t.positive i)).trans
-      (single_le_sum (f:=fun i => t.parameter i*p^(v i)) (fun _ _ => Nat.zero_le _) (mem_univ i)))
+  have lo : 2^(v i) ≤ position p t.stride t.parameter v := calc
+    2^(v i) ≤ p^(v i) := Nat.pow_le_pow_left hp _
+    _ ≤ p^(stretch t.stride v i) := Nat.pow_le_pow_right (by omega) (Nat.le_mul_of_pos_left _ (t.stride i).pos)
+    _ ≤ t.parameter i * p^(stretch t.stride v i) := Nat.le_mul_of_pos_left _ (t.positive i)
+    _ ≤ _ := single_le_sum (f:=fun j => t.parameter j*p^(stretch t.stride v j)) (fun _ _ => Nat.zero_le _) (mem_univ i)
   exact (Nat.pow_lt_pow_iff_right (by decide : 1 < 2)).mp
     ((lo.trans_lt h).trans_eq (by rw [pow_mul]; rfl))
 
@@ -36,12 +39,14 @@ private lemma events_card (p k : ℕ) : (t.events p k).card ≤ (2*(k+1))^t.degr
   card_image_le.trans_eq (by simp [box])
 end Monomial
 
-private theorem retained_sum {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (cop : b.Coprime p)
+/-- An integral leading coefficient and any rational perturbation with pole order
+at most `(d-1)k` leave a denominator divisible by `p^(dk-C)` at late scales. -/
+theorem retained_with_lower_terms {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (cop : b.Coprime p)
     (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
     (lower : ∀ n, (R n).den ∣ p^((t.degree-1)*Nat.log p n)) :
     ∃ C K : ℕ, ∀ n, K ≤ Nat.log p n → 0 < n →
       p^(t.degree * Nat.log p n - C) ∣ ((c:ℚ)*t.model b p n + R n).den := by
-  obtain ⟨L,K,retain⟩ := retained_denominator hp odd cop t.parameter
+  obtain ⟨L,K,retain⟩ := retained_denominator hp odd cop t.stride t.parameter
   let h := c.natAbs.factorization p
   refine ⟨L+h,max K (L+h+1),fun n late pos => ?_⟩
   let k := Nat.log p n
@@ -71,8 +76,8 @@ private theorem retained_sum {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (cop : b
   omega
 
 /-- A unique highest-degree monomial with nonzero integer coefficient survives
-addition of any finite sum of strictly lower-degree monomials. All parameters
-use the same odd denominator prime, and the dilations can differ in each factor. -/
+addition of any finite sum of strictly lower-degree monomials. All denominator parameters are powers of one odd prime. Both the
+radix dilations and the denominator exponents can vary across factors. -/
 theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
     (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
     (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
@@ -86,24 +91,24 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
     have dd := Rat.mul_den_dvd (a i:ℚ) ((u i).model b p n)
     simp only [Rat.den_intCast,one_mul] at dd
     have le := lt i hi
-    exact dd.trans ((denominator_dvd hp.pos _).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (by omega))))
+    exact dd.trans ((denominator_dvd hp.pos (u i).stride _).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (by omega))))
   have smooth (n : ℕ) : (P n).den ∣ p^(t.degree*Nat.log p n) := by
     apply (Rat.add_den_dvd_lcm ..).trans; apply Nat.lcm_dvd
     · have dd := Rat.mul_den_dvd (c:ℚ) (t.model b p n)
       simp only [Rat.den_intCast,one_mul] at dd
-      exact dd.trans (denominator_dvd hp.pos t.parameter)
+      exact dd.trans (denominator_dvd hp.pos t.stride t.parameter)
     · exact (lower n).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (Nat.sub_le ..)))
   have scaled (v : Monomial) (z : ℤ) : Tendsto (fun n => (b:ℝ)^n * ((z:ℝ)*v.value b p) -
       (((z:ℚ)*v.model b p n:ℚ):ℝ)) atTop (𝓝 0) := by
     simpa only [Monomial.value,Monomial.model,Rat.cast_mul,Rat.cast_intCast,mul_zero,mul_sub,mul_left_comm (z:ℝ)] using
-      (product_tail (b:=b) (p:=p) hb hp.one_lt v.positive).const_mul (z:ℝ)
+      (product_tail (b:=b) (p:=p) (e:=v.stride) hb hp.one_lt v.positive).const_mul (z:ℝ)
   have lowerTail := tendsto_finsetSum s (fun i _ => scaled (u i) (a i))
   have tail := (scaled t c).add lowerTail
   refine normal_of_arithmetic_certificate (B:=2) (L:=2) hb (by decide) (by decide) _ P ?_
     (fixed_support_orbit_estimate hb hp.one_lt cop) (4*t.degree) ?_
   · simpa only [P,R,Rat.cast_add,Rat.cast_sum,mul_add,mul_sum,← sum_sub_distrib,
       add_sub_add_comm,sum_const_zero,add_zero] using tail
-  obtain ⟨C,K,retain⟩ := retained_sum hp odd cop t degree c nc R lower
+  obtain ⟨C,K,retain⟩ := retained_with_lower_terms hp odd cop t degree c nc R lower
   let A (k : ℕ) := t.events p k ∪ s.biUnion (fun i => (u i).events p k)
   have count (k : ℕ) : (A k).card ≤ (s.card+1)*(2*(k+1))^t.degree := by
     have lift (i : ι) (hi : i ∈ s) := ((u i).events_card p k).trans
@@ -169,9 +174,9 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
       intro w newer; by_contra! le
       have hpos := incl (v.event_mem (by omega) w (le.trans_lt (by change j<B at hj; omega)))
       have gap := insertionBlocks_free bp free hpos (by
-        rw [Nat.add_mul,one_mul]; change position p v.parameter w < n+B
+        rw [Nat.add_mul,one_mul]; change position p v.stride v.parameter w < n+B
         change j<B at hj; omega)
-      change position p v.parameter w+B ≤ n at gap; omega
+      change position p v.stride v.parameter w+B ≤ n at gap; omega
     dsimp only [P,R]; rw [follows t (subset_union_left),mul_add,mul_sum]
     congr 1
     · ring
