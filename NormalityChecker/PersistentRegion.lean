@@ -14,10 +14,10 @@ namespace NormalityChecker.LocalizedSupport
 def meshRegion (q : ℕ) (U : Finset ℕ) : Set ℝ :=
   ⋃ u ∈ U, Set.Ico ((u:ℝ)/q) (((u:ℝ)+1)/q)
 
-private lemma mesh_measurable (q : ℕ) (U : Finset ℕ) : MeasurableSet (meshRegion q U) :=
+lemma mesh_measurable (q : ℕ) (U : Finset ℕ) : MeasurableSet (meshRegion q U) :=
   MeasurableSet.biUnion U.countable_toSet (fun _ _ => measurableSet_Ico)
 
-private theorem mesh_mass {q : ℕ} (hq : 0<q) (U : Finset ℕ) :
+theorem mesh_mass {q : ℕ} (hq : 0<q) (U : Finset ℕ) :
     volume.real (meshRegion q U) = (U.card:ℝ)/q := by
   have pos : (0:ℝ)<q := by exact_mod_cast hq
   unfold meshRegion
@@ -46,7 +46,7 @@ def failedRegion (b s p k : ℕ) (S : Finset ℕ) := meshRegion (p^k) (failedCel
 
 def persistentRegion (b s p : ℕ) (S : Finset ℕ) := ⋂ k, failedRegion b s p k S
 
-private theorem failed_region_inside {b s p k : ℕ} {S : Finset ℕ} (hp : 0<p) :
+theorem failed_region_inside {b s p k : ℕ} {S : Finset ℕ} (hp : 0<p) :
     failedRegion b s p k S ⊆ Set.Icc 1 (p:ℝ) := by
   intro t h; obtain ⟨u,hu,l,h⟩ := Set.mem_iUnion₂.mp h
   obtain ⟨lo,hi⟩ := mem_Ico.mp (mem_filter.mp hu).1
@@ -66,7 +66,7 @@ private theorem failed_region_antitone {b s p : ℕ} {S : Finset ℕ} (hs : 0<s)
   · apply le_trans _ l; rw [prod,← div_div,(le_div_iff₀ pos)]; rw [div_mul_eq_mul_div,div_le_div_iff_of_pos_right pp]; exact_mod_cast Nat.div_mul_le_self u p
   · apply h.trans_le; rw [prod,← div_div,div_le_iff₀ pos,mul_comm _ (p:ℝ),mul_div_assoc',div_le_div_iff_of_pos_right pp]; exact_mod_cast (Nat.succ_le_of_lt (Nat.lt_mul_div_succ u hp.pos))
 
-private theorem region_mass_tendsto {b s p : ℕ} {S : Finset ℕ} (hs : 0<s) (hp : p.Prime)
+theorem region_mass_tendsto {b s p : ℕ} {S : Finset ℕ} (hs : 0<s) (hp : p.Prime)
     (outside : p∉S) (cop : b.Coprime p) : Tendsto (fun k => volume.real (failedRegion b s p k S)) atTop
       (𝓝 (volume.real (persistentRegion b s p S))) := by
   have finite (k : ℕ) : volume (failedRegion b s p k S)≠⊤ := measure_ne_top_of_subset (failed_region_inside hp.pos) (by rw [Real.volume_Icc]; exact ENNReal.ofReal_ne_top)
