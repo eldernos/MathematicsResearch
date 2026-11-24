@@ -27,4 +27,9 @@ def JointPowerNormality : Prop :=
       Tendsto (rectangleFrequency (fun n i => shift b (stoneham b (p^(e : ℕ)) ^ r i) n) a c)
         atTop (𝓝 (∏ i, (c i - a i)))
 
+/-- Univariate polynomial normality at every coprime parameter greater than two. -/
+def CoprimePolynomialNormality : Prop :=
+  ∀ {b c : ℕ}, 2 ≤ b → 2 < c → b.Coprime c → ∀ P : ℚ[X], 0 < P.natDegree →
+    NormalIn b (P.eval₂ (algebraMap ℚ ℝ) (stoneham b c))
+
 end NormalityChecker.StonehamStatements

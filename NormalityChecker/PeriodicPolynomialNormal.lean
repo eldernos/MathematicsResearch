@@ -2,6 +2,7 @@ module
 
 public import NormalityChecker.PeriodicPolynomialPrecision
 public import NormalityChecker.StonehamPolynomial
+public import NormalityChecker.StonehamJoint
 import all NormalityChecker.StonehamPolynomialPrefix
 import all NormalityChecker.StonehamPolynomial
 
@@ -161,5 +162,16 @@ theorem coprime_polynomial_normal {b c : ℕ} (hb : 2 ≤ b) (hc : 2 < c) (cop :
     field_simp
   rw [Polynomial.eval₂_eq_sum_range, sum_range_succ, add_comm]
   simpa only [val, show ∀ q : ℚ, (algebraMap ℚ ℝ) q = (q:ℝ) from fun _ => rfl] using result
+
+theorem coprime_polynomial_statement_checked : StonehamStatements.CoprimePolynomialNormality :=
+  fun hb hc cop => coprime_polynomial_normal hb hc cop
+
+/-- Simultaneous rectangle frequencies for distinct powers of any generator with c > 2. -/
+theorem coprime_joint_powers {b c d : ℕ} (hb : 2 ≤ b) (hc : 2 < c) (cop : b.Coprime c)
+    (r : Fin d → ℕ) (pos : ∀ i, 0 < r i) (inj : Function.Injective r) (u v : Fin d → ℝ)
+    (hu : ∀ i, 0 ≤ u i) (huv : ∀ i, u i ≤ v i) (hv : ∀ i, v i ≤ 1) :
+    Tendsto (StonehamStatements.rectangleFrequency (fun n i => shift b (alpha b c ^ r i) n) u v)
+      atTop (𝓝 (∏ i, (v i - u i))) :=
+  joint_powers_of_polynomial_normal (coprime_polynomial_normal hb hc cop) r pos inj u v hu huv hv
 
 end NormalityChecker.StonehamPolynomial

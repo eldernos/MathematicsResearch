@@ -5,6 +5,7 @@ cd "$(dirname "$0")/.."
 python3 -B -m unittest discover -s scripts -p 'test_*.py'
 lake build
 lake env lean Audit.lean
+lake env lean scripts/test_localized_joint.lean
 for paper in papers/[0-9][0-9]-*/; do
   if [[ -x "${paper}check.sh" ]]; then
     "${paper}check.sh"

@@ -650,7 +650,17 @@ run_cmd do
     ``NormalityChecker.StonehamPolynomial.joint_uniform_powers,
     ``NormalityChecker.StonehamPolynomial.polynomial_statement_checked,
     ``NormalityChecker.StonehamPolynomial.joint_statement_checked]
-  for decl in results do
+  let env ← getEnv
+  let mut audited := results.toArray
+  let listed := Std.HashSet.ofList results
+  for (name, info) in env.constants.toList do
+    let .thmInfo _ := info | continue
+    if isPrivateName name || name.isInternal || listed.contains name then continue
+    let some idx := env.getModuleIdxFor? name | continue
+    if `NormalityChecker |>.isPrefixOf env.header.moduleNames[idx.toNat]! then
+      audited := audited.push name
+  logInfo m!"Auditing {audited.size} public theorem declarations."
+  for decl in audited do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a
     unless unexpected.isEmpty do

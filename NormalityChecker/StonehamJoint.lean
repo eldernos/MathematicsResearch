@@ -11,13 +11,12 @@ open Finset Filter Polynomial
 open scoped Topology
 namespace NormalityChecker.StonehamPolynomial
 
-/-- All finite lists of distinct positive powers of the standard prime-power Stoneham
-constant visit every half-open rectangle with limiting frequency equal to its volume. -/
-theorem joint_uniform_powers {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
-    (cop : b.Coprime p) (e : ℕ+) (r : Fin d → ℕ) (pos : ∀ i, 0 < r i) (inj : Function.Injective r)
+/-- Testing scalar characters by polynomials gives joint uniformity of distinct powers. -/
+theorem joint_powers_of_polynomial_normal {b d : ℕ} {x : ℝ}
+    (normal : ∀ P : ℚ[X], 0 < P.natDegree → NormalIn b (P.eval₂ (algebraMap ℚ ℝ) x))
+    (r : Fin d → ℕ) (pos : ∀ i, 0 < r i) (inj : Function.Injective r)
     (a c : Fin d → ℝ) (ha : ∀ i, 0 ≤ a i) (hac : ∀ i, a i ≤ c i) (hc : ∀ i, c i ≤ 1) :
-    Tendsto (StonehamStatements.rectangleFrequency
-      (fun n i => shift b (alpha b (p^(e : ℕ)) ^ r i) n) a c)
+    Tendsto (StonehamStatements.rectangleFrequency (fun n i => shift b (x ^ r i) n) a c)
       atTop (𝓝 (∏ i, (c i - a i))) := by
   apply JointWeyl.rectangle_of_scalar_normal _ _ a c ha hac hc
   intro t zero
@@ -30,11 +29,20 @@ theorem joint_uniform_powers {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 
     simp
   have degree : 0 < P.natDegree := (pos j).trans_le (le_natDegree_of_ne_zero
     (coeff.trans_ne (by exact_mod_cast hj)))
-  let x := alpha b (p^(e : ℕ))
   have ev : P.eval₂ (algebraMap ℚ ℝ) x = ∑ i, (t i : ℝ)*x^r i := by
     simp [P, eval₂_finsetSum, eval₂_monomial]
-  have normal := prime_power_polynomial_normal hb hp odd cop e P degree
-  rwa [ev] at normal
+  have scalar := normal P degree
+  rwa [ev] at scalar
+
+/-- All finite lists of distinct positive powers of the standard prime-power Stoneham
+constant visit every half-open rectangle with limiting frequency equal to its volume. -/
+theorem joint_uniform_powers {b p d : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
+    (cop : b.Coprime p) (e : ℕ+) (r : Fin d → ℕ) (pos : ∀ i, 0 < r i) (inj : Function.Injective r)
+    (a c : Fin d → ℝ) (ha : ∀ i, 0 ≤ a i) (hac : ∀ i, a i ≤ c i) (hc : ∀ i, c i ≤ 1) :
+    Tendsto (StonehamStatements.rectangleFrequency
+      (fun n i => shift b (alpha b (p^(e : ℕ)) ^ r i) n) a c)
+      atTop (𝓝 (∏ i, (c i - a i))) :=
+  joint_powers_of_polynomial_normal (prime_power_polynomial_normal hb hp odd cop e) r pos inj a c ha hac hc
 
 /-- Independent public statement checks use only definitional identification of the series. -/
 theorem polynomial_statement_checked : StonehamStatements.PolynomialNormality :=
