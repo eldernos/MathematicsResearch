@@ -17,6 +17,8 @@ Sharper rates from the proof follow below. Here $L_N=1+\log N$. In degree one th
 | Two | $O(N^{-1/6}L_N^2)$ | $\alpha_{2,3}^2$ |
 | Three | $O(N^{-1/14}L_N^{51/28})$ | $\alpha_{2,3}^3$ |
 
+In using equation (12) of Vandehey’s preprint, take the product over primes dividing the actual reduced modulus, with the factor for 4 only when 4 divides that modulus. A frequency may remove an allowed prime entirely. Taking the maximum over the finitely many supports contained in the original support makes the constants uniform. [Independent source check and correction](reviews/quantitative-coverage.md) · [Review of all-prefix coverage](reviews/quantitative-and-mixed.md)
+
 ## Prefix arithmetic, including rational coefficients
 
 In a degree-$a$ monomial, write $q_i=p^{e_i}$, $s(j)=\sum_i m_iq_i^{j_i}$ and $w(j)=\prod_i q_i^{-j_i}$ for ordered tuples of positive indices. Its shifted prefix $R_n$ is the sum of $w(j)b^{n-s(j)}$ over $s(j)\le n$. For a constant monomial set $R_n=b^n$. Extend $R_n$ by linearity. Multiple tuples at one position all contribute. The zero-index Lean model gives these same positive-index factors after replacing $m_i$ by $m_iq_i$ and dividing the value and prefix by $q_i$ in each factor.

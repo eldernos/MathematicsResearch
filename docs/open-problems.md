@@ -19,7 +19,9 @@ What is proved points at the obstacle rather than past it.
 
 ## Stoneham-type numbers
 
-**The mixed-prime product.** The product of the binary Stoneham numbers with parameters 3 and 5 is irrational and has *D*∞ ≤ 43/45 ([ST-06](results.md#st-06)). Its normality is open. The argument finds one uniform window per ternary scale; normality would need control of almost every position.
+**The mixed-prime product.** The binary product with parameters 3 and 5 has upper discrepancy at most 27/40. Both top layers can be lost together for arbitrarily many depths. A proof of normality would have to control the remaining denominator throughout almost all positions. [All-prefix upper bound and local tests](../notes/phase13/independent-axes.md)
+
+**Parameter two.** In odd radices the square and every rational polynomial of odd prime-power degree are covered. On the upper half-shell of a quadratic, linear and quadratic denominators can have equal order. For the polynomial *X*² − 2*X*, the additional loss can be arbitrarily large. Whether its denominators still grow sufficiently remains open. [Exact obstruction](../notes/phase13/reviews/symmetric-degree.md)
 
 **Ternary normality of the binary Stoneham number.** Normality of α with *b* = 2 and *p* = 3 in base 3 is open. A paper proof gives superlinear growth of the number of distinct ternary words. [Ternary word complexity](../notes/ternary-stoneham-complexity.md)
 

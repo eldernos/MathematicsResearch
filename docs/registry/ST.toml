@@ -270,12 +270,14 @@ Let *b* ≥ 2 and *c* > 2 be coprime integers. Define
 \alpha_{b,c}=\sum_{j=1}^{\infty}\frac{1}{c^j b^{c^j}}.
 ```
 
-For every nonconstant polynomial *P* with rational coefficients, *P*(α<sub>*b*,*c*</sub>) is normal in base *b*. This includes α<sub>2,35</sub>, for which neither prime divisor of 35 has a constant limiting phase.
+For every nonconstant polynomial *P* with rational coefficients, *P*(α<sub>*b*,*c*</sub>) is normal in base *b*. The radix orbits of any finite list of distinct positive powers of the same generator are jointly uniformly distributed. This includes α<sub>2,35</sub>, for which neither prime divisor of 35 has a constant limiting phase.
 '''
 scope = '''
 The proof handles periodic phases at every prime dividing *c* for powers of one generator. For products with different strides and radix dilations, the separate unique-highest-degree theorem assumes that for some prime *p* dividing *c*, the powers of *b* with exponents *c*ʲ eventually stabilize modulo each *p*ᵏ. Every even *c* > 2 coprime to *b* meets this latter hypothesis at 2. Paper I treats odd prime powers. Bailey and Crandall proved normality of the individual coprime generators. The literature comparison leaves historical priority for the nonlinear conclusion open.
 '''
 lean = [
+  "NormalityChecker.StonehamPolynomial.coprime_polynomial_statement_checked",
+  "NormalityChecker.StonehamPolynomial.coprime_joint_powers",
   "NormalityChecker.StonehamPolynomial.coprime_polynomial_normal",
   "NormalityChecker.StonehamPolynomial.periodic_power_retained_denominator",
   "NormalityChecker.StonehamPolynomial.standard_sum_normal_at",

@@ -10,16 +10,7 @@ Let *b* ≥ 2 and *c* > 2 be coprime integers. Define the positive-index Stoneha
 *P*(α<sub>*b*,*c*</sub>) is normal in base *b*. Thus every word of length *m* occurs with limiting frequency
 *b*<sup>−*m*</sup> in its fractional digits. The argument applies to prime and composite *c*.
 
-**Formal scope.** Lean verifies the theorem whenever there is a prime *p* dividing *c* for which
-the inverse radix powers converge to a unit in ℚ<sub>*p*</sub>. This includes every even *c* > 2.
-It verifies the retained denominator bound in this case for products with arbitrary positive
-strides and radix dilations, and normality for rational combinations with one strictly highest-degree
-monomial. Lean also verifies nonvanishing of every periodic upper-set mass. The passage from a
-nonconstant cycle to polynomial normality is a written deduction for univariate polynomials. [Independent statements](../../NormalityChecker/CompositePolynomialStatements.lean) ·
-[Unit-limit and even-parameter proofs](../../NormalityChecker/CompositePolynomial.lean) ·
-[Nonvanishing of periodic masses](../../NormalityChecker/PeriodicPolynomialMass.lean) ·
-[Product and sum theorem](../../NormalityChecker/StonehamPolynomial.lean) ·
-[Paper I and its original scope](../../papers/01-stoneham-polynomials/paper.pdf)
+**Formal scope.** Lean proves the full univariate theorem for every coprime *b* ≥ 2 and *c* > 2 and the joint rectangle frequencies of any distinct positive powers of one generator. The proof constructs the eventually periodic local units, reads their cycle in reverse on the reflected lattice, and bounds denominator loss at each prime dividing *c*. In the stabilizing-unit case, which includes all even *c* > 2, the formal proof also covers products with independently chosen strides and radix dilations and rational combinations with a unique leading monomial. [Independent statement](../../NormalityChecker/StonehamStatements.lean) · [Univariate theorem and joint corollary](../../NormalityChecker/PeriodicPolynomialNormal.lean) · [Reflected cycles and uniform precision](../../NormalityChecker/PeriodicPolynomialPrecision.lean) · [Nonvanishing of periodic masses](../../NormalityChecker/PeriodicPolynomialMass.lean) · [Independently dilated products](../../NormalityChecker/CompositePolynomial.lean) · [Independent mathematical review](reviews/composite-polynomials.md)
 
 ## The constant local unit
 

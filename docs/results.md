@@ -20,6 +20,14 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-08](#st-08) | Normality of single Stoneham components with odd parameter | Lean | I |
 | [ST-09](#st-09) | Polynomially spaced insertions preserve binary normality | Lean | I |
 | [ST-10](#st-10) | Superlinear ternary word complexity of the binary Stoneham number | Written proof | I |
+| [ST-11](#st-11) | Polynomial images for every coprime Stoneham parameter above two | Lean | I |
+| [ST-12](#st-12) | The parameter-two square and its exact prefix denominators | Lean | I |
+| [ST-13](#st-13) | Odd prime-power degrees at Stoneham parameter two | Lean | I |
+| [ST-14](#st-14) | A discrepancy bound of 27/40 for the product on two prime axes | Lean | I |
+| [ST-15](#st-15) | Exact tests and persistent denominator loss on two prime axes | Lean | I |
+| [ST-16](#st-16) | Tied leading degrees with divisible coefficients | Lean | I |
+| [ST-17](#st-17) | Alternate radices for polynomial images and excess zeros in radix 48 | Lean | I |
+| [ST-18](#st-18) | Power-saving discrepancy for odd-prime Stoneham polynomials | Lean + written deduction | I |
 | [LS-01](#ls-01) ★ | Unsigned finite-support dichotomy | Lean | II |
 | [LS-02](#ls-02) ★ | Exact discrepancy from persistent cancellation at every order | Lean | II |
 | [LS-03](#ls-03) ★ | Persistent failed regions are null | Lean | II |
@@ -27,11 +35,16 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [LS-05](#ls-05) | Rational polynomial weights on two-generator supports | Lean | II |
 | [LS-06](#ls-06) | Finite-depth termination on two-prime full supports | Written proof | II |
 | [LS-07](#ls-07) | Finite-depth termination at large order | Written proof | II |
+| [LS-09](#ls-09) | Joint rectangle frequencies at distinct localized orders | Lean | II |
+| [LS-10](#ls-10) | A computable common certificate depth for positive error | Lean | II |
 | [MW-01](#mw-01) ★ | Classification of full-support rational polynomial weights | Lean | II |
 | [MW-02](#mw-02) | Masks retaining late powers of an off-base prime | Lean | II |
 | [MW-03](#mw-03) | Masks on a single prime-power axis | Lean | II |
 | [MW-04](#mw-04) | Dense polynomial weights on power intervals | Lean | II |
 | [MW-05](#mw-05) | Periodic weights on power intervals: a finite cyclic test | Lean | II |
+| [MW-08](#mw-08) | Joint uniformity at distinct orders on a common mask | Lean | II |
+| [MW-09](#mw-09) | Which rational weights have finitely many denominator primes? | Lean | II |
+| [MW-10](#mw-10) | A finite cycle test for sparse signed periodic weights | Lean | II |
 | [CR-01](#cr-01) ★ | Cyclotomic classification of finite combinations of Stoneham-type components | Lean | III |
 | [CR-02](#cr-02) | Exactly two rational coefficients make a binary two-term sum nonnormal | Lean | III |
 | [CR-04](#cr-04) | Exact weak limits and two different limiting distributions for one resonant sum | Lean | III |
@@ -69,6 +82,15 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-11](#cc-11) | Large denominators for the diagonally corrected models of ln 2 in moving windows | Lean | V |
 | [CC-12](#cc-12) | Denominator rate 2/3 for binary arctangent models of π | Written proof | V |
 | [CC-13](#cc-13) | Corrected two-stride models of ln 2 with common denominators and explicit errors | Lean | V |
+| [CC-14](#cc-14) | A Gaussian logarithm prefix with denominator exponent 5/12 | Lean + written deduction | V |
+| [CC-15](#cc-15) | Short returns of the regular part of the two-stride logarithm prefix | Lean | V |
+| [CC-16](#cc-16) | A Fourier deficit for the joint logarithm prefix modulo a prime square | Lean + written deduction | V |
+| [CC-17](#cc-17) | Incidence bounds for actual residues of corrected logarithm prefixes | Lean + written deduction | V |
+| [CC-18](#cc-18) | Certified digit changes on four complete binary shells of ln 2 | Exact computation | V |
+| [CC-19](#cc-19) | A squared-logarithm discrepancy gap at every large prefix of ln 2 | Lean | V |
+| [CC-20](#cc-20) | From an Erdős–Borwein word count to a Fourier deficit | Lean | V |
+| [CC-21](#cc-21) | Positive lower word frequencies in Erdős–Borwein windows | Written proof | V |
+| [CC-22](#cc-22) | Localization of the divisor Fourier sum for the Erdős–Borwein constant | Written proof | V |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -95,14 +117,14 @@ Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *e* ≥ 1. Defi
 
 For every polynomial *P* with rational coefficients and degree at least one, the number *P*(α) is normal in base *b*.
 
-**Scope.** The series starts at *j* = 1, as in Stoneham's definition. The radix *b* is the construction base. The prime must be odd: the nonvanishing argument uses *K*(*p*) ≡ 1 (mod *p* − 1), which excludes *p* = 2. No statement is made about other bases, about rational functions of α or about polynomials in several independent Stoneham numbers (see ST-04 and ST-06).
+**Scope.** The series starts at *j* = 1, as in Stoneham's definition. The radix *b* is the construction base. This odd-prime proof uses *K*(*p*) ≡ 1 (mod *p* − 1). ST-11 extends the univariate conclusion to every coprime parameter above two. ST-12 and ST-13 treat parameter two. ST-17 treats specific alternate radices, and ST-04 and ST-06 concern several factors.
 
-- **Lean:** [`prime_power_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L112) · [`polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L124) · [`power_normal`](../NormalityChecker/StonehamPolynomial.lean#L106) · [`binary_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L132)
+- **Lean:** [`prime_power_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L154) · [`polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L159) · [`power_normal`](../NormalityChecker/StonehamPolynomial.lean#L135) · [`binary_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L167)
 - **Checkpoint 11:** [`prime_power_polynomial_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L112) · [`polynomial_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L124) · [`power_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L106) · [`binary_polynomial_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L132)
 - **Fully qualified:** `NormalityChecker.StonehamPolynomial.prime_power_polynomial_normal`, `NormalityChecker.StonehamPolynomial.polynomial_normal`, `NormalityChecker.StonehamPolynomial.power_normal`, `NormalityChecker.StonehamPolynomial.binary_polynomial_normal`
 - **Proof:** [stoneham-powers-products.md](../notes/stoneham-powers-products.md)
-- **Supersedes:** [`binary_power_normal`](../NormalityChecker/StonehamPolynomial.lean#L129) · [`binary_normal`](../NormalityChecker/StonehamSquare.lean#L346)
-- **Related:** [ST-02](#st-02) · [ST-03](#st-03) · [ST-04](#st-04) · [ST-05](#st-05)
+- **Supersedes:** [`binary_power_normal`](../NormalityChecker/StonehamPolynomial.lean#L164) · [`binary_normal`](../NormalityChecker/StonehamSquare.lean#L346)
+- **Related:** [ST-02](#st-02) · [ST-03](#st-03) · [ST-04](#st-04) · [ST-05](#st-05) · [ST-11](#st-11)
 - **Figures:** [Stoneham square insertion lattice showing the pairwise products of terms](figures.md#stoneham-square-lattice)
 
 <a id="st-02"></a>
@@ -127,7 +149,7 @@ is normal in base *b*. For example, α(2, 3) · α(2, 9) is normal in base 2.
 
 **Scope.** Every factor uses the same odd prime *p*. The radix dilations *m*ᵢ and the strides *e*ᵢ are arbitrary positive integers and may repeat, so the powers of ST-01 are the case of equal factors. Normality is asserted only in the common base *b*. The series start at *j* = 1. Products of Stoneham numbers on different primes are not covered; for α(2, 3) · α(2, 5) see ST-06 and ST-07. Sums of such products are treated in ST-04.
 
-- **Lean:** [`prime_power_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L87) · [`same_prime_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L94) · [`binary_three_nine_product`](../NormalityChecker/StonehamPolynomial.lean#L100)
+- **Lean:** [`prime_power_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L116) · [`same_prime_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L123) · [`binary_three_nine_product`](../NormalityChecker/StonehamPolynomial.lean#L129)
 - **Checkpoint 11:** [`prime_power_product_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L87) · [`same_prime_product_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L94) · [`binary_three_nine_product`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L100)
 - **Fully qualified:** `NormalityChecker.StonehamPolynomial.prime_power_product_normal`, `NormalityChecker.StonehamPolynomial.same_prime_product_normal`, `NormalityChecker.StonehamPolynomial.binary_three_nine_product`
 - **Proof:** [stoneham-powers-products.md § related parameters and the limit of the argument](../notes/stoneham-powers-products.md#related-parameters-and-the-limit-of-the-argument)
@@ -178,9 +200,9 @@ c \, \mu + \sum_{i=1}^{k} a_i \, \mu_i
 
 is normal in base *b*.
 
-**Scope.** The degree is the number of factors; it ignores the dilations *m* and strides *e*. The hypothesis is that exactly one monomial has maximal degree. Distinct monomials of the same maximal degree can cancel their leading residues, and no claim is made in that case. This is therefore **not** a theorem about arbitrary multivariate polynomials in Stoneham numbers. All factors share one odd prime *p* ∤ *b*, and normality is asserted only in base *b*. ST-01 and ST-02 are the special cases used in Lean.
+**Scope.** Degree counts factors regardless of the dilations *m* and strides *e*. The hypothesis is that exactly one monomial has maximal degree. Distinct monomials of the same maximal degree can cancel their leading residues, as the radix-stride identity in ST-16 illustrates. That entry gives a sufficient divisibility condition when maximal degrees tie. All factors share one odd prime *p* ∤ *b*, and normality is asserted only in base *b*. ST-01 and ST-02 are the special cases used in Lean.
 
-- **Lean:** [`same_prime_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L70) · [`rational_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L12) · [`integer_sum_normal`](../NormalityChecker/StonehamPolynomialNormal.lean#L81)
+- **Lean:** [`same_prime_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L107) · [`rational_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L52) · [`integer_sum_normal`](../NormalityChecker/StonehamPolynomialNormal.lean#L259)
 - **Checkpoint 11:** [`same_prime_sum_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L70) · [`rational_sum_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomial.lean#L12) · [`integer_sum_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/StonehamPolynomialNormal.lean#L81)
 - **Fully qualified:** `NormalityChecker.StonehamPolynomial.same_prime_sum_normal`, `NormalityChecker.StonehamPolynomial.rational_sum_normal`, `NormalityChecker.StonehamPolynomial.integer_sum_normal`
 - **Proof:** [stoneham-powers-products.md § related parameters and the limit of the argument](../notes/stoneham-powers-products.md#related-parameters-and-the-limit-of-the-argument) · [stoneham-powers-products.md § the surviving numerator in every degree](../notes/stoneham-powers-products.md#the-surviving-numerator-in-every-degree)
@@ -202,7 +224,7 @@ are uniformly distributed in the unit cube [0, 1)ᵈ: for every box with sides [
 
 **Scope.** Here α is the Stoneham number of ST-01 with parameters *b* and *p*ᵉ, and {·} is the fractional part. All coordinates use the same positions *n*. The deduction from ST-01 is the multidimensional Weyl criterion: every nonzero integer frequency vector gives a nonconstant rational polynomial in α. The theorem concerns powers of one Stoneham number, not several independent ones.
 
-- **Lean:** [`joint_uniform_powers`](../NormalityChecker/StonehamJoint.lean#L196)
+- **Lean:** [`joint_uniform_powers`](../NormalityChecker/StonehamJoint.lean#L39)
 - **Fully qualified:** `NormalityChecker.StonehamPolynomial.joint_uniform_powers`
 - **Proof:** [stoneham-powers-products.md](../notes/stoneham-powers-products.md)
 - **Related:** [ST-01](#st-01)
@@ -220,13 +242,13 @@ For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>
 \limsup_{N \to \infty} D_N \le \frac{43}{45}.
 ```
 
-**Scope.** Here {·} is the fractional part, and both series start at *j* = 1. The bound comes from a uniformly distributed share of at least 2/45 of every long prefix, supplied by one isolated insertion on each late ternary shell. Binary normality of *x* is open in this repository. Transcendence of *x* is a paper deduction from Ridout's theorem and is recorded in ST-07; it is not part of this Lean entry.
+**Scope.** Here {·} is the fractional part, and both series start at *j* = 1. The bound comes from a uniformly distributed share of at least 2/45 of every long prefix, supplied by one isolated insertion on each late ternary shell. ST-14 strengthens the upper bound to 27/40. Binary normality of *x* remains open. ST-07 gives a written deduction of transcendence from Ridout’s theorem.
 
 - **Lean:** [`discrepancy`](../NormalityChecker/ProductThreeFive.lean#L77) · [`irrational`](../NormalityChecker/ProductThreeFive.lean#L93) · [`uniform_windows`](../NormalityChecker/ProductThreeFiveWindows.lean#L117)
 - **Checkpoint 11:** [`discrepancy`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/ProductThreeFive.lean#L77) · [`irrational`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/ProductThreeFive.lean#L93) · [`uniform_windows`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/ProductThreeFiveWindows.lean#L117)
 - **Fully qualified:** `NormalityChecker.ProductThreeFive.discrepancy`, `NormalityChecker.ProductThreeFive.irrational`, `NormalityChecker.ProductThreeFive.uniform_windows`
 - **Proof:** [stoneham-powers-products.md § a product on different prime axes](../notes/stoneham-powers-products.md#a-product-on-different-prime-axes)
-- **Related:** [ST-02](#st-02) · [ST-07](#st-07)
+- **Related:** [ST-02](#st-02) · [ST-07](#st-07) · [ST-14](#st-14)
 
 <a id="st-07"></a>
 
@@ -242,7 +264,7 @@ Let *b* ≥ 2 and let *c*, *d* ≥ 2 be multiplicatively independent integers, b
 
 In particular α(2, 3) · α(2, 5) is transcendental.
 
-**Scope.** This is a written proof, not a Lean theorem. For the parameters (*b*, *c*, *d*) = (2, 3, 5) the discrepancy bound 43/45 and irrationality are kernel-verified (ST-06); only transcendence is added here. In general no explicit bound below one is given. Transcendence uses Ridout's theorem on rational approximations whose denominators have prime factors in a fixed finite set, applied to truncations at isolated insertions. Algebraic independence of the two factors is not used or claimed, and full normality of such products remains open.
+**Scope.** For the parameters (*b*, *c*, *d*) = (2, 3, 5), ST-06 gives irrationality and ST-14 gives the stronger discrepancy bound 27/40 in Lean. The general discrepancy inequality is qualitative. Transcendence uses Ridout's theorem on rational approximations whose denominators have prime factors in a fixed finite set, applied to truncations at isolated insertions. Algebraic independence of the two factors is not used or claimed, and full normality of such products remains open.
 
 - **Proof:** [stoneham-powers-products.md § a product on different prime axes](../notes/stoneham-powers-products.md#a-product-on-different-prime-axes)
 - **External inputs:** D. Ridout, Rational approximations to algebraic numbers, Mathematika 4 (1957) — restricted-denominator form of Roth's theorem
@@ -306,6 +328,174 @@ Let α = α(2, 3) be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 1. For ever
 - **External inputs:** Schmidt–Schlickewei Subspace Theorem, in Schlickewei's p-adic form as stated in Y. Bilu, Astérisque 317 (2008), statement 2.3
 - **Related:** [ST-01](#st-01)
 
+<a id="st-11"></a>
+
+### ST-11 · Polynomial images for every coprime Stoneham parameter above two
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Let *b* ≥ 2 and *c* > 2 be coprime integers. Define
+
+```math
+\alpha_{b,c}=\sum_{j=1}^{\infty}\frac{1}{c^j b^{c^j}}.
+```
+
+For every nonconstant polynomial *P* with rational coefficients, *P*(α<sub>*b*,*c*</sub>) is normal in base *b*. The radix orbits of any finite list of distinct positive powers of the same generator are jointly uniformly distributed. This includes α<sub>2,35</sub>, for which neither prime divisor of 35 has a constant limiting phase.
+
+**Scope.** The proof handles periodic phases at every prime dividing *c* for powers of one generator. For products with different strides and radix dilations, the separate unique-highest-degree theorem assumes that for some prime *p* dividing *c*, the powers of *b* with exponents *c*ʲ eventually stabilize modulo each *p*ᵏ. Every even *c* > 2 coprime to *b* meets this latter hypothesis at 2. Paper I treats odd prime powers. Bailey and Crandall proved normality of the individual coprime generators. The literature comparison leaves historical priority for the nonlinear conclusion open.
+
+- **Lean:** [`coprime_polynomial_statement_checked`](../NormalityChecker/PeriodicPolynomialNormal.lean#L166) · [`coprime_joint_powers`](../NormalityChecker/PeriodicPolynomialNormal.lean#L170) · [`coprime_polynomial_normal`](../NormalityChecker/PeriodicPolynomialNormal.lean#L145) · [`periodic_power_retained_denominator`](../NormalityChecker/PeriodicPolynomialNormal.lean#L106) · [`standard_sum_normal_at`](../NormalityChecker/StonehamPolynomial.lean#L90) · [`even_polynomial_normal`](../NormalityChecker/CompositePolynomial.lean#L63)
+- **Fully qualified:** `NormalityChecker.StonehamPolynomial.coprime_polynomial_statement_checked`, `NormalityChecker.StonehamPolynomial.coprime_joint_powers`, `NormalityChecker.StonehamPolynomial.coprime_polynomial_normal`, `NormalityChecker.StonehamPolynomial.periodic_power_retained_denominator`, `NormalityChecker.StonehamPolynomial.standard_sum_normal_at`, `NormalityChecker.StonehamPolynomial.even_polynomial_normal`
+- **Proof:** [composite-polynomials.md](../notes/phase13/composite-polynomials.md) · [composite-polynomials.md](../notes/phase13/reviews/composite-polynomials.md)
+- **Supersedes:** [ST-01](#st-01) · [`unit_limit_polynomial_normal`](../NormalityChecker/CompositePolynomial.lean#L59)
+- **Related:** [ST-12](#st-12) · [ST-13](#st-13) · [ST-17](#st-17)
+
+<a id="st-12"></a>
+
+### ST-12 · The parameter-two square and its exact prefix denominators
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+For every odd integer *b* ≥ 3, let α be the sum of 1/(2ʲ *b*<sup>2ʲ</sup>) over *j* ≥ 1. Then α² is normal in base *b*. Let *q*ₙ be the reduced denominator of the shifted square prefix obtained by summing over ordered pairs of positive indices *i*, *j* with 2ⁱ + 2ʲ ≤ *n*. Each pair contributes
+
+```math
+\frac{b^{n-2^i-2^j}}{2^{i+j}}.
+```
+
+For *n* < 4 the denominator is 1. On every shell 2ᵏ ≤ *n* < 2ᵏ⁺¹ with *k* ≥ 2, it is 2<sup>2*k*−2</sup> before 3 · 2ᵏ⁻¹ and 2<sup>*k*−1</sup> from that midpoint onward.
+
+**Scope.** The midpoint belongs to the second interval. The exact drop in the quadratic denominator allows a linear term of a general quadratic polynomial to have the same pole order there. The linked review gives a sufficient coefficient condition for some quadratic projections and explains the additional cancellation in α² − 2α. General quadratic projections at parameter two remain open.
+
+- **Lean:** [`square_normal`](../NormalityChecker/ParameterTwoSquare.lean#L20) · [`exact_profile`](../NormalityChecker/ParameterTwoSquareProfile.lean#L155) · [`shifted_tail`](../NormalityChecker/ParameterTwoSquareExpansion.lean#L63)
+- **Fully qualified:** `NormalityChecker.ParameterTwoSquare.square_normal`, `NormalityChecker.ParameterTwoSquare.exact_profile`, `NormalityChecker.ParameterTwoSquare.shifted_tail`
+- **Proof:** [parameter-two-square.md](../notes/phase13/parameter-two-square.md) · [symmetric-degree.md § quadratic projections with equal valuations](../notes/phase13/reviews/symmetric-degree.md#quadratic-projections-with-equal-valuations)
+- **Related:** [ST-03](#st-03) · [ST-11](#st-11) · [ST-13](#st-13)
+
+<a id="st-13"></a>
+
+### ST-13 · Odd prime-power degrees at Stoneham parameter two
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Let *b* ≥ 3 be odd, let *q* be an odd prime and let *r* ≥ 0. For every rational polynomial *P* of degree exactly *q*ʳ, the number *P*(α<sub>*b*,2</sub>) is normal in base *b*. In particular, every cubic with nonzero leading coefficient is allowed, with arbitrary lower coefficients.
+
+**Scope.** Here 2 is the parameter of the positive-index Stoneham series and *q* controls the degree. Cyclic permutation of the indices of a power gives a nonzero mass modulo *q*. The accompanying finite calculation gives the exact cubic denominator losses on dyadic shells. The joint uniformity of distinct powers with degrees from this list follows on paper by applying the scalar theorem to each nonzero integer projection.
+
+- **Lean:** [`odd_prime_power_degree_polynomial_normal`](../NormalityChecker/StonehamOddDegree.lean#L63) · [`binary_power_retained_denominator`](../NormalityChecker/StonehamOddDegree.lean#L23) · [`cubic_polynomial_normal`](../NormalityChecker/StonehamOddDegree.lean#L85)
+- **Fully qualified:** `NormalityChecker.StonehamPolynomial.odd_prime_power_degree_polynomial_normal`, `NormalityChecker.StonehamPolynomial.binary_power_retained_denominator`, `NormalityChecker.StonehamPolynomial.cubic_polynomial_normal`
+- **Proof:** [symmetric-degree.md](../notes/phase13/reviews/symmetric-degree.md)
+- **Computation:** [check_symmetric_degree.py](../notes/phase13/reviews/check_symmetric_degree.py)
+- **Related:** [ST-05](#st-05) · [ST-11](#st-11) · [ST-12](#st-12)
+
+<a id="st-14"></a>
+
+### ST-14 · A discrepancy bound of 27/40 for the product on two prime axes
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Put *x* = α<sub>2,3</sub> α<sub>2,5</sub> with both sums starting at index one. For the binary interval discrepancy of ST-06,
+
+```math
+\limsup_{N\to\infty} D_N(x)\le\frac{27}{40}.
+```
+
+The bound includes prefixes ending inside a quinary shell. More precisely, let *F*(*N*) count positions below *N* where both full prime powers in the prefix denominator tests of ST-15 fail. Then *D*<sub>*N*</sub>(*x*) ≤ *F*(*N*)/*N* + *o*(1) as *N* tends to infinity.
+
+**Scope.** Counting every surviving top quinary column strengthens the original single-window estimate 43/45. A separate logarithmic-time argument in the note gives density 1/8 for simultaneous failures under harmonic weighting. Partial summation then gives the written deduction liminf *D*<sub>*N*</sub>(*x*) ≤ 1/8 for ordinary prefixes. Binary normality of this product remains open.
+
+- **Lean:** [`independent_product_discrepancy`](../NormalityChecker/ProductThreeFiveCoverage.lean#L184) · [`joint_prefix_discrepancy`](../NormalityChecker/ProductThreeFiveCoverage.lean#L116)
+- **Fully qualified:** `NormalityChecker.ProductThreeFive.independent_product_discrepancy`, `NormalityChecker.ProductThreeFive.joint_prefix_discrepancy`
+- **Proof:** [independent-axes.md § counting all surviving columns](../notes/phase13/independent-axes.md#counting-all-surviving-columns) · [independent-axes.md § the logarithmic distribution of the coupled endpoints](../notes/phase13/independent-axes.md#the-logarithmic-distribution-of-the-coupled-endpoints)
+- **Supersedes:** [`discrepancy`](../NormalityChecker/ProductThreeFive.lean#L77)
+- **Related:** [ST-06](#st-06) · [ST-07](#st-07) · [ST-15](#st-15)
+
+<a id="st-15"></a>
+
+### ST-15 · Exact tests and persistent denominator loss on two prime axes
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+For the product of ST-14, let *R*ₙ be its rational prefix, summing 2<sup>*n*−3ⁱ−5ʲ</sup>/(3ⁱ5ʲ) over *i*, *j* ≥ 1 with 3ⁱ + 5ʲ ≤ *n*. For *n* ≥ 5 put *K* = ⌊log₃ *n*⌋, *L* = ⌊log₅ *n*⌋, *P* = 3ᴷ and *Q* = 5ᴸ. The reduced denominator contains *P* exactly when ⌊log₅(*n* − *P*)⌋ is odd. It contains *Q* exactly when ⌊log₃(*n* − *Q*)⌋ is nonzero modulo four. Set the integer logarithm of zero to zero.
+
+For each *h* ≥ 1 there are arbitrarily late exponents *K*, *L* ≥ *h* with *P* < *Q* < 5*P*/4 such that throughout *P* + *Q* ≤ *n* < 3*P*, the denominator divides
+
+```math
+3^{K-h}5^{L-h}.
+```
+
+**Scope.** Both primes lose at least *h* layers throughout an interval longer than 3*P*/4. The note also derives exact valuations on full rectangles by a written lifting argument. The script compares the two survival tests with exact fractions through position 100,000. The two endpoint tests use the same cutoff.
+
+- **Lean:** [`mixed_prefix_persistent_loss`](../NormalityChecker/ProductThreeFiveRectangles.lean#L147) · [`mixed_prefix_residues`](../NormalityChecker/ProductThreeFiveResidues.lean#L243) · [`rectangle_factor`](../NormalityChecker/ProductThreeFiveRectangles.lean#L16)
+- **Fully qualified:** `NormalityChecker.ProductThreeFive.mixed_prefix_persistent_loss`, `NormalityChecker.ProductThreeFive.mixed_prefix_residues`, `NormalityChecker.ProductThreeFive.rectangle_factor`
+- **Proof:** [independent-axes.md § exact residues of a prefix](../notes/phase13/independent-axes.md#exact-residues-of-a-prefix) · [independent-axes.md § persistent simultaneous cancellation](../notes/phase13/independent-axes.md#persistent-simultaneous-cancellation) · [independent-axes.md § exact loss on full rectangles](../notes/phase13/independent-axes.md#exact-loss-on-full-rectangles)
+- **Computation:** [check_independent_axes.py](../scripts/check_independent_axes.py)
+- **Related:** [ST-06](#st-06) · [ST-14](#st-14)
+
+<a id="st-16"></a>
+
+### ST-16 · Tied leading degrees with divisible coefficients
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Fix *b* ≥ 2, an odd prime *p* ∤ *b*, a product *M* of *d* ≥ 1 factors α(*b*ᵐ, *p*ᵉ) with *m*, *e* ≥ 1, and finitely many products *M*ᵢ of degrees at most *d*. There exists an integer *H* ≥ 0 such that for every choice of integers *a*ᵢ the following number is normal in base *b*.
+
+```math
+M+p^H\sum_i a_i M_i
+```
+
+**Scope.** The products are fixed before *H* is chosen. They can include other products of degree *d*. Arbitrary coefficients at tied degree can give a rational value. For example α(8, 3) − 3α(2, 3) = −1/8 by the radix-stride identity.
+
+- **Lean:** [`tied_coefficient_statement`](../NormalityChecker/StonehamTiedCoefficients.lean#L121) · [`tied_standard_normal`](../NormalityChecker/StonehamTiedCoefficients.lean#L69) · [`radix_stride_identity`](../NormalityChecker/StonehamTiedCoefficients.lean#L96)
+- **Fully qualified:** `NormalityChecker.StonehamPolynomial.tied_coefficient_statement`, `NormalityChecker.StonehamPolynomial.tied_standard_normal`, `NormalityChecker.StonehamPolynomial.radix_stride_identity`
+- **Proof:** [independent-axes.md § tied highest degree monomials](../notes/phase13/independent-axes.md#tied-highest-degree-monomials)
+- **Related:** [ST-02](#st-02) · [ST-04](#st-04)
+
+<a id="st-17"></a>
+
+### ST-17 · Alternate radices for polynomial images and excess zeros in radix 48
+
+**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Let *b*, *c* ≥ 2 and *a*, *d* ≥ 1 be integers. Every rational polynomial in α<sub>*b*,*c*</sub> of degree at most *d* is nonnormal in radix *b*ᵃ*c* if *a* > (*c*ᵈ − 1) log<sub>*b*</sub> *c*. When *d* < *c*, the condition *a* > *d* log<sub>*b*</sub> *c*/(*c* − *d*) also suffices.
+
+For the binary-normal square α<sub>2,3</sub>², let *v* = 3/log₂ 48. Every fixed nonempty all-zero word in radix 48 has lower limiting starting frequency at least *v* − 1/2 > 1/48. Thus even the single zero digit exceeds its simple-normal frequency. The interval discrepancy in radix 48 satisfies
+
+```math
+\liminf_{N\to\infty}D_N\ge v-\frac12,
+\qquad
+\limsup_{N\to\infty}D_N\ge\frac{3(v-1/2)}{2v}.
+```
+
+**Scope.** The alternate-radix statement allows common factors of *b* and *c*. Combining it with ST-11 gives failure of absolute normality for every nonconstant univariate image there. Bailey and Borwein already gave radix 48 for the generator itself. The square uses the different insertion positions 3ⁱ + 3ʲ.
+
+- **Lean:** [`polynomial_nonnormal`](../NormalityChecker/AlternateBaseStoneham.lean#L335) · [`small_degree_polynomial_nonnormal`](../NormalityChecker/AlternateBaseStoneham.lean#L345) · [`quadratic_nonnormal_48`](../NormalityChecker/AlternateBaseStoneham.lean#L379) · [`square_zero_word_liminf`](../NormalityChecker/AlternateBaseStoneham.lean#L401) · [`square_zero_digit_excess`](../NormalityChecker/AlternateBaseStoneham.lean#L421) · [`square_discrepancy_48`](../NormalityChecker/AlternateBaseStoneham.lean#L389)
+- **Fully qualified:** `NormalityChecker.AlternateBase.polynomial_nonnormal`, `NormalityChecker.AlternateBase.small_degree_polynomial_nonnormal`, `NormalityChecker.AlternateBase.quadratic_nonnormal_48`, `NormalityChecker.AlternateBase.square_zero_word_liminf`, `NormalityChecker.AlternateBase.square_zero_digit_excess`, `NormalityChecker.AlternateBase.square_discrepancy_48`
+- **Proof:** [alternate-bases.md](../notes/phase13/alternate-bases.md)
+- **Related:** [ST-03](#st-03) · [ST-10](#st-10) · [ST-11](#st-11)
+
+<a id="st-18"></a>
+
+### ST-18 · Power-saving discrepancy for odd-prime Stoneham polynomials
+
+**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Let *x* be a rational linear combination as in ST-04 with a unique nonzero monomial of largest degree *d* ≥ 1. In particular *x* may be any degree-*d* polynomial in α<sub>*b*,*p*ᵉ</sub> for an odd prime *p* ∤ *b*. There is a computable constant *C* depending on the fixed data such that for every *N* ≥ 2 the base-*b* interval discrepancy satisfies
+
+```math
+D_N(x)\le C N^{-\delta_d},
+\qquad \delta_d=\frac{1}{2(2^{d+1}-2)}.
+```
+
+In degrees two and three the sharper bounds are *O*(*N*<sup>−1/6</sup>(1 + log *N*)²) and *O*(*N*<sup>−1/14</sup>(1 + log *N*)<sup>51/28</sup>).
+
+**Scope.** Lean checks the tail, denominator arithmetic, finite discrepancy transfer and dyadic summation. The explicit asymptotic rates are written deductions. The finite transfer takes the exponential-sum and Erdős–Turán estimates as hypotheses. Degree-one power savings predate this work (Kano, Bailey–Crandall). The stated nonlinear rates use a common odd prime in the defining radix.
+
+- **Lean:** [`discrepancy_of_vandehey`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L204) · [`product_tail_bound`](../NormalityChecker/QuantitativeStonehamTail.lean#L104) · [`differencing_margin`](../NormalityChecker/QuantitativeStonehamExponents.lean#L12) · [`dyadic_prefix_bound`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L237)
+- **Fully qualified:** `NormalityChecker.QuantitativeStoneham.discrepancy_of_vandehey`, `NormalityChecker.StonehamPolynomial.product_tail_bound`, `NormalityChecker.QuantitativeStoneham.differencing_margin`, `NormalityChecker.QuantitativeStoneham.dyadic_prefix_bound`
+- **Proof:** [quantitative-normality.md](../notes/phase13/quantitative-normality.md)
+- **External inputs:** J. Vandehey, exponential sums over fixed-support denominators, Theorem 5.1 (arXiv:1606.07911), and the Erdős–Turán discrepancy inequality.
+- **Related:** [ST-01](#st-01) · [ST-04](#st-04)
+
 ## Localized logarithms and polylogarithms
 
 <a id="ls-01"></a>
@@ -327,7 +517,7 @@ For *N* ≥ 1 let *D*<sub>*N*</sub> be the supremum, over 0 ≤ *u* < *v* ≤ 1,
 
 **Scope.** The limits are along all integer cutoffs *N*, not only a subsequence. Every positive order *s* is allowed, and the support may share any primes with *b*. The empty set *P* falls in the second case: then *X* = 1/*b* and *D*<sub>*N*</sub> → 1. Normality is asserted only in the defining radix *b*. The proof gives no rate and no uniformity as *P* grows; the unrestricted series for log 2, whose support contains every prime, is not covered. The normality half uses the soundness of the computable certificate together with LS-03; it does not use the maximum formula of LS-02.
 
-- **Lean:** [`unsigned_discrepancy_limit`](../NormalityChecker/UnsignedNormality.lean#L194) · [`unsigned_finite_support_normal`](../NormalityChecker/UnsignedNormality.lean#L187) · [`maximal_discrepancy_iff`](../NormalityChecker/MaximalSupport.lean#L77) · [`prefix_discrepancy_tendsTo_one`](../NormalityChecker/HigherOrderDiscrepancy.lean#L161)
+- **Lean:** [`unsigned_discrepancy_limit`](../NormalityChecker/UnsignedNormality.lean#L198) · [`unsigned_finite_support_normal`](../NormalityChecker/UnsignedNormality.lean#L191) · [`maximal_discrepancy_iff`](../NormalityChecker/MaximalSupport.lean#L77) · [`prefix_discrepancy_tendsTo_one`](../NormalityChecker/HigherOrderDiscrepancy.lean#L161)
 - **Checkpoint 11:** [`unsigned_discrepancy_limit`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/UnsignedNormality.lean#L194) · [`unsigned_finite_support_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/UnsignedNormality.lean#L187) · [`maximal_discrepancy_iff`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/MaximalSupport.lean#L77) · [`prefix_discrepancy_tendsTo_one`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/HigherOrderDiscrepancy.lean#L161)
 - **Fully qualified:** `NormalityChecker.LocalizedSupport.unsigned_discrepancy_limit`, `NormalityChecker.LocalizedSupport.unsigned_finite_support_normal`, `NormalityChecker.LocalizedSupport.maximal_discrepancy_iff`, `NormalityChecker.LocalizedSupport.prefix_discrepancy_tendsTo_one`
 - **Proof:** [unsigned-finite-support.md](../notes/unsigned-finite-support.md)
@@ -364,7 +554,7 @@ and *X* is normal in base *b* if and only if |*Z*| = 0.
 
 **Scope.** *Z*<sub>*p*,*d*</sub> is exactly the set where the repository's executable order-*d* residue test for *p* fails at every precision (HigherOrderCells). Lean also proves the finite-checker form: if *F*<sub>*L*</sub>(*N*) counts the 0 ≤ *n* < *N* whose cell ⌊*p*<sup>*L*−1</sup> *t*<sub>*p*</sub>(*n*)⌋ fails at precision *L* for every pair (*p*, *d*), then lim over *L* of lim sup over *N* of *F*<sub>*L*</sub>(*N*)/*N* equals lim sup *D*<sub>*N*</sub>. Lean indexes the precision *L* by *l* = *L* − 1. All statements include empty *P* and empty *J* (then *B* = [1, ∞) and *D*<sub>*N*</sub> → 1). The formulas concern only the unsigned full-support series *X*. By LS-03 every *Z*<sub>*p*,*d*</sub> with *p* ∈ *J* is null, so for these series every quantity above equals 0 whenever *J* is nonempty; the value of the formula is therefore already given by LS-01. The entry records the exact identification of discrepancy with persistent cancellation, including convergence of the computable bounds. No analogue is claimed here for signed or masked weights.
 
-- **Lean:** [`jointOrder_density_tendsTo_discrepancy`](../NormalityChecker/HigherOrderPrefix.lean#L370) · [`discrepancy_eq_log_flow_max`](../NormalityChecker/HigherOrderPhase.lean#L412) · [`discrepancy_tracks_jointPhase`](../NormalityChecker/HigherOrderPrefix.lean#L276) · [`persistent_iff_phaseMoment_zero`](../NormalityChecker/HigherOrderCells.lean#L118) · [`discrepancy_eq_persistent_max`](../NormalityChecker/PersistentRegion.lean#L124) · [`normal_iff_persistent_null`](../NormalityChecker/PersistentRegion.lean#L186) · [`certificate_tendsTo_discrepancy`](../NormalityChecker/ExactProfile.lean#L60)
+- **Lean:** [`jointOrder_density_tendsTo_discrepancy`](../NormalityChecker/HigherOrderPrefix.lean#L370) · [`discrepancy_eq_log_flow_max`](../NormalityChecker/HigherOrderPhase.lean#L412) · [`discrepancy_tracks_jointPhase`](../NormalityChecker/HigherOrderPrefix.lean#L276) · [`persistent_iff_phaseMoment_zero`](../NormalityChecker/HigherOrderCells.lean#L118) · [`discrepancy_eq_persistent_max`](../NormalityChecker/PersistentRegion.lean#L125) · [`normal_iff_persistent_null`](../NormalityChecker/PersistentRegion.lean#L187) · [`certificate_tendsTo_discrepancy`](../NormalityChecker/ExactProfile.lean#L60)
 - **Checkpoint 11:** [`jointOrder_density_tendsTo_discrepancy`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/HigherOrderPrefix.lean#L370) · [`discrepancy_eq_log_flow_max`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/HigherOrderPhase.lean#L412) · [`discrepancy_tracks_jointPhase`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/HigherOrderPrefix.lean#L276) · [`persistent_iff_phaseMoment_zero`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/HigherOrderCells.lean#L118) · [`discrepancy_eq_persistent_max`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/PersistentRegion.lean#L124) · [`normal_iff_persistent_null`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/PersistentRegion.lean#L186) · [`certificate_tendsTo_discrepancy`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/ExactProfile.lean#L60)
 - **Fully qualified:** `NormalityChecker.LocalizedSupport.jointOrder_density_tendsTo_discrepancy`, `NormalityChecker.LocalizedSupport.discrepancy_eq_log_flow_max`, `NormalityChecker.LocalizedSupport.discrepancy_tracks_jointPhase`, `NormalityChecker.LocalizedSupport.persistent_iff_phaseMoment_zero`, `NormalityChecker.LocalizedSupport.discrepancy_eq_persistent_max`, `NormalityChecker.LocalizedSupport.normal_iff_persistent_null`, `NormalityChecker.LocalizedSupport.certificate_tendsTo_discrepancy`
 - **Proof:** [higher-order-joint.md](../notes/higher-order-joint.md) · [higher-order-joint.md § maximum on the compact log flow](../notes/higher-order-joint.md#maximum-on-the-compact-log-flow) · [persistent-discrepancy.md § the exact formula](../notes/persistent-discrepancy.md#the-exact-formula)
@@ -389,7 +579,7 @@ Then lim sup *D*<sub>*N*</sub> ≤ *C*<sub>*k*</sub> for every *k*, and *C*<sub>
 
 **Scope.** The nullity holds separately for each prime *p* ∈ *P* with *p* ∤ *b* and each order *s* ≥ 1, whatever the other primes of *P*. The residue condition defining *F*<sub>*k*</sub> is exactly the executable cell test at precision *k* + 1. The certificate tends to zero but may be positive at every finite depth: **finite termination is not claimed** (see LS-06 and LS-07 for paper results in special cases). The proof uses recurrence on the logarithmic circle, multiplicative finite differences in the cofactors and *p*-adic separation of finitely many geometric rays; it needs no independence of the reciprocal logarithms.
 
-- **Lean:** [`unsigned_persistent_null`](../NormalityChecker/UnsignedNormality.lean#L120) · [`unsigned_certificate_tendsTo_zero`](../NormalityChecker/UnsignedNormality.lean#L144) · [`discrepancy_le_certificate`](../NormalityChecker/DiscrepancyChecker.lean#L146)
+- **Lean:** [`unsigned_persistent_null`](../NormalityChecker/UnsignedNormality.lean#L120) · [`unsigned_certificate_tendsTo_zero`](../NormalityChecker/UnsignedNormality.lean#L169) · [`discrepancy_le_certificate`](../NormalityChecker/DiscrepancyChecker.lean#L146)
 - **Checkpoint 11:** [`unsigned_persistent_null`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/UnsignedNormality.lean#L120) · [`unsigned_certificate_tendsTo_zero`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/UnsignedNormality.lean#L144) · [`discrepancy_le_certificate`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/DiscrepancyChecker.lean#L146)
 - **Fully qualified:** `NormalityChecker.LocalizedSupport.unsigned_persistent_null`, `NormalityChecker.LocalizedSupport.unsigned_certificate_tendsTo_zero`, `NormalityChecker.LocalizedSupport.discrepancy_le_certificate`
 - **Proof:** [unsigned-finite-support.md § from prime residues to a measurable function](../notes/unsigned-finite-support.md#from-prime-residues-to-a-measurable-function) · [unsigned-finite-support.md § why a positive measure zero set is impossible](../notes/unsigned-finite-support.md#why-a-positive-measure-zero-set-is-impossible)
@@ -479,6 +669,50 @@ Fix a prime *p*. For all sufficiently large orders *s*, every finite set of prim
 - **Proof:** [fixed-depth-question.md § arbitrarily many cofactor primes at large order](../notes/fixed-depth-question.md#arbitrarily-many-cofactor-primes-at-large-order)
 - **External inputs:** Schlickewei's p-adic Subspace Theorem over the rationals, in the form of F. Luca, J. Ouaknine and J. Worrell, Bull. London Math. Soc. (2025), Theorem 2 (doi:10.1112/blms.70033)
 - **Related:** [LS-03](#ls-03) · [LS-06](#ls-06)
+
+<a id="ls-09"></a>
+
+### LS-09 · Joint rectangle frequencies at distinct localized orders
+
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
+
+Let *S* be a finite set of primes, at least one of which does not divide the radix *b* ≥ 2. Let *M*(*S*) consist of the positive integers supported on *S*, including 1. Choose pairwise distinct positive integers *s*₁, …, *s*<sub>*d*</sub> and rational polynomials *P*ᵢ with *P*ᵢ(0) ≠ 0. Define
+
+```math
+X_i=\sum_{m\in M(S)}\frac{P_i(m)}{m^{s_i} b^m}.
+```
+
+The fractional parts of the *d* values *b*ⁿ*X*ᵢ are jointly uniformly distributed. For every half-open box, the proportion of 0 ≤ *n* < *N* at which all coordinates lie in the box tends to the product of its side lengths.
+
+**Scope.** The unit numerators give Corollary 1.3 of Paper II. Each coordinate uses the same support and the same position *n*. The support may contain primes dividing *b*, and the numerators may have either sign and any degree. Mira’s S09, Theorem 2, already treats distinct prime/order pairs on singleton supports, including the fixed-prime specialization for unit numerators. Repeating an order can give identical coordinates. The proof supplies a limiting frequency for each box.
+
+- **Lean:** [`distinct_orders_checked`](../NormalityChecker/LocalizedJoint.lean#L167) · [`joint_full_orders`](../NormalityChecker/LocalizedJoint.lean#L158) · [`joint_full_polynomial_orders`](../NormalityChecker/LocalizedJoint.lean#L85)
+- **Fully qualified:** `NormalityChecker.LocalizedSupport.distinct_orders_checked`, `NormalityChecker.LocalizedSupport.joint_full_orders`, `NormalityChecker.LocalizedSupport.joint_full_polynomial_orders`
+- **Proof:** [localized-joint.md](../notes/phase13/localized-joint.md) · [paper.pdf](../papers/02-localized-normality/paper.pdf)
+- **Computation:** [test_localized_joint.lean](../scripts/test_localized_joint.lean)
+- **Related:** [LS-01](#ls-01) · [LS-10](#ls-10) · [MW-01](#mw-01) · [MW-08](#mw-08)
+
+<a id="ls-10"></a>
+
+### LS-10 · A computable common certificate depth for positive error
+
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
+
+Fix a radix *b* ≥ 2, a prime *p* ∤ *b*, a finite set of other support primes, a finite set of positive orders *T*, and a rational ε > 0. At depth *k* let *Z*ₛ(*k*) be the failed cells of the unsigned order-*s* test of LS-02 at *p*. The search for the first *k* satisfying
+
+```math
+\frac{2|Z_s(k)|}{p^k}<\varepsilon
+```
+
+for every *s* in *T* terminates. At every depth at least *k*, the worst-prefix discrepancy certificate is below ε for every requested order.
+
+**Scope.** The output is a precision for the finite certificates. A digit-position cutoff for rectangle frequencies and a depth at which every cell passes are separate questions. For *b* = 4, support {2, 3, 11}, *p* = 3, orders {1, 2} and ε = 9/10, the search returns 2 even though the order-one certificate still has failed cells.
+
+- **Lean:** [`certificateModulus_spec`](../NormalityChecker/LocalizedCertificateModulus.lean#L44) · [`exists_common_depth`](../NormalityChecker/LocalizedCertificateModulus.lean#L21)
+- **Fully qualified:** `NormalityChecker.LocalizedSupport.certificateModulus_spec`, `NormalityChecker.LocalizedSupport.exists_common_depth`
+- **Proof:** [localized-joint.md § what can be computed in certificate depth](../notes/phase13/localized-joint.md#what-can-be-computed-in-certificate-depth)
+- **Computation:** [test_localized_joint.lean](../scripts/test_localized_joint.lean)
+- **Related:** [LS-02](#ls-02) · [LS-03](#ls-03) · [LS-06](#ls-06) · [LS-07](#ls-07) · [LS-09](#ls-09)
 
 ## Polynomial weights and masked supports
 
@@ -621,6 +855,69 @@ If in addition *c* ≥ 2 is any integer coprime to *b* with *c* ≡ 1 (mod *d*) 
 - **Fully qualified:** `NormalityChecker.periodic_normal_iff_phases`, `NormalityChecker.exists_power_cycle`, `NormalityChecker.periodic_plateau_test`
 - **Proof:** [polynomial-certificates.md § a finite test for periodic weights](../notes/polynomial-certificates.md#a-finite-test-for-periodic-weights) · [results.md § normality from rational prefixes](../notes/results.md#normality-from-rational-prefixes)
 - **Related:** [MW-04](#mw-04) · [MW-06](#mw-06)
+
+<a id="mw-08"></a>
+
+### MW-08 · Joint uniformity at distinct orders on a common mask
+
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
+
+In the vector of LS-09, retain the same subset of the smooth indices *m* in every coordinate. If *S* = {*p*} for a prime *p* ∤ *b* and the vector is nonempty, its shifts are jointly uniformly distributed exactly when the retained exponents *k* in *m* = *p*ᵏ are unbounded.
+
+For odd *b* and any finite prime support *S* containing 2, joint uniformity also holds if the common mask retains every sufficiently large power of two. The mask can take arbitrary values at all other smooth indices.
+
+**Scope.** The orders are positive and pairwise distinct, and every rational polynomial numerator is nonzero at zero. On one axis the gaps between retained exponents may grow arbitrarily. Vandehey’s Theorem 7.4 already covers the unsigned scalar series on an infinite restriction of a single coprime axis. The second assertion gives a sufficient condition on mixed supports.
+
+- **Lean:** [`joint_axis_orders_iff`](../NormalityChecker/LocalizedJoint.lean#L107) · [`joint_late_twos_orders`](../NormalityChecker/LocalizedJoint.lean#L118)
+- **Fully qualified:** `NormalityChecker.LocalizedSupport.joint_axis_orders_iff`, `NormalityChecker.LocalizedSupport.joint_late_twos_orders`
+- **Proof:** [localized-joint.md § common masks](../notes/phase13/localized-joint.md#common-masks)
+- **Computation:** [test_localized_joint.lean](../scripts/test_localized_joint.lean)
+- **Related:** [LS-09](#ls-09) · [MW-02](#mw-02) · [MW-03](#mw-03)
+
+<a id="mw-09"></a>
+
+### MW-09 · Which rational weights have finitely many denominator primes?
+
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
+
+Let *p* be prime and *u* ≥ 0 an integer. Let *A*, *G* be integer polynomials coprime over the rationals with *G*(0) ≠ 0. Evaluate the following coefficient at *m* = *p*ᵏ for *k* ≥ 0 wherever *G*(*m*) ≠ 0.
+
+```math
+\frac{A(m)}{m^u G(m)}
+```
+
+A finite set contains the prime divisors of every reduced coefficient denominator exactly when *G* is constant. For nonconstant *G*, primes outside any prescribed finite set occur at arbitrarily late nonsingular indices.
+
+**Scope.** This tests the denominators of individual coefficients before summation. For example, 1/(*m*(*m* + 1)) escapes every finite prime set along the dyadic axis. The normality of the resulting series remains undecided by this test. Every nonempty full smooth support contains an entire prime-power axis.
+
+- **Lean:** [`finite_denominator_primes_iff`](../NormalityChecker/LocalizedDenominatorPrimes.lean#L157) · [`rational_denominator_prime_outside`](../NormalityChecker/LocalizedDenominatorPrimes.lean#L124)
+- **Fully qualified:** `NormalityChecker.LocalizedSupport.finite_denominator_primes_iff`, `NormalityChecker.LocalizedSupport.rational_denominator_prime_outside`
+- **Proof:** [localized-joint.md § rational functions with controlled denominator primes](../notes/phase13/localized-joint.md#rational-functions-with-controlled-denominator-primes)
+- **Computation:** [test_localized_joint.lean](../scripts/test_localized_joint.lean)
+- **Related:** [MW-01](#mw-01) · [LS-09](#ls-09)
+
+<a id="mw-10"></a>
+
+### MW-10 · A finite cycle test for sparse signed periodic weights
+
+**Evidence:** Lean · **Paper:** [II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports](../papers/02-localized-normality) (internally reviewed)
+
+Fix *b* ≥ 2, a prime *p* ∤ *b*, an integer *d* ≥ 1 and rational weights *H* on the residues modulo *d*. Let *L* ≥ 1 be a period of *p*ʲ modulo *d* after its preperiod. Set
+
+```math
+X=\sum_{j=0}^{\infty}\frac{H(p^j)}{p^j b^{p^j}},
+\qquad W(z)=\sum_{r=1}^{L}p^{L-r}H(p^r z).
+```
+
+The number *X* is normal in base *b* exactly when *W*(*z*) ≠ 0 at every residue *z* on the eventual cycle.
+
+**Scope.** This is the order-one sparse series on a single prime-power axis. Both signs are allowed. With *b* = 2, *p* = 3 and *d* = 4 the cycle is 1, 3. Weights 1, −1 on that cycle give a normal number. Weights 1, −3 give a zero window and a nonnormal number although every supported numerator is nonzero.
+
+- **Lean:** [`periodic_axis_normal_iff`](../NormalityChecker/LocalizedSignedAxis.lean#L32) · [`periodic_axis_counterexample`](../NormalityChecker/LocalizedSignedAxis.lean#L55)
+- **Fully qualified:** `NormalityChecker.LocalizedSupport.periodic_axis_normal_iff`, `NormalityChecker.LocalizedSupport.periodic_axis_counterexample`
+- **Proof:** [localized-joint.md § signed periodic weights on one axis](../notes/phase13/localized-joint.md#signed-periodic-weights-on-one-axis)
+- **Computation:** [test_localized_joint.lean](../scripts/test_localized_joint.lean)
+- **Related:** [MW-03](#mw-03) · [MW-05](#mw-05) · [MW-06](#mw-06)
 
 ## Cyclotomic resonance and signed expansions
 
@@ -1473,6 +1770,196 @@ E_3 = \frac{2^{N \bmod 3} \, B(\lfloor N/3 \rfloor, s)}{9^s}.
 - **Proof:** [corrected-strides.md](../notes/corrected-strides.md)
 - **Computation:** [corrected_strides.py](../scripts/corrected_strides.py)
 - **Related:** [CC-01](#cc-01) · [CC-11](#cc-11)
+
+<a id="cc-14"></a>
+
+### CC-14 · A Gaussian logarithm prefix with denominator exponent 5/12
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For a complex number *z* write *S*(*z*, *m*) for the sum of *z*ʲ/*j* over 1 ≤ *j* ≤ *m*. Put *m*ᵣ = ⌊*N*/*r*⌋ and *g* = ⌊2*N*/5⌋. Define
+
+```math
+A_N=2S(1/4,m_2)-6S(-1/8,m_3),
+```
+
+```math
+B_N=10S(1/16,m_4)-10\Re S((1+i)/8,g).
+```
+
+The rational *Y*<sub>*N*</sub> = 2ᴺ(*A*<sub>*N*</sub> + *B*<sub>*N*</sub>) approximates 2ᴺ ln 2 with error *O*(1/(*N* + 1)). Its reduced denominator *q*<sub>*N*</sub> satisfies
+
+```math
+\lim_{N\to\infty}\frac{\log q_N}{N}=\frac{5}{12}.
+```
+
+**Scope.** Lean proves the series identity and shows that the reduced denominator divides the least common multiple through ⌊*N*/2⌋. Every odd prime in (*N*/4, *N*/3] cancels, giving the kernel-checked eventual upper bound for every exponent above 5/12. The error and matching lower bound have written proofs. Optimality within the note’s one-parameter Gaussian family also uses a finite enumeration of rational bands. CC-02 concerns real dyadic logarithms. Takahashi previously used the imaginary parts of Gaussian logarithms for binary arctangent series.
+
+- **Lean:** [`eventually_below`](../NormalityChecker/GaussianLogarithmCharacters.lean#L213) · [`gaussian_series`](../NormalityChecker/GaussianLogarithmCharacters.lean#L42) · [`common_denominator`](../NormalityChecker/GaussianLogarithmCharacters.lean#L186) · [`lost_bands`](../NormalityChecker/GaussianLogarithmCharacters.lean#L131)
+- **Fully qualified:** `NormalityChecker.GaussianLogarithmCharacters.eventually_below`, `NormalityChecker.GaussianLogarithmCharacters.gaussian_series`, `NormalityChecker.GaussianLogarithmCharacters.common_denominator`, `NormalityChecker.GaussianLogarithmCharacters.lost_bands`
+- **Proof:** [complementary-characters.md](../notes/phase13/complementary-characters.md) · [classical-bands.md](../notes/phase13/reviews/classical-bands.md)
+- **External inputs:** Prime number theorem and Chebyshev bounds for the logarithmic mass of prime bands.
+- **Computation:** [complementary_characters.py](../notes/phase13/complementary_characters.py)
+- **Related:** [CC-01](#cc-01) · [CC-02](#cc-02) · [CC-12](#cc-12)
+
+<a id="cc-15"></a>
+
+### CC-15 · Short returns of the regular part of the two-stride logarithm prefix
+
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *p* > 3 be prime. Put *W*(*j*) = 4[2 ∣ *j*] + 3[3 ∣ *j*] − 6[6 ∣ *j*], where each bracket is 1 when the divisibility holds and zero otherwise. Let *Z*ₙ be the residue modulo *p* of the sum of 2ⁿ⁻ʲ *W*(*j*)/*j* over 1 ≤ *j* ≤ *n* with *p* ∤ *j*. In any *T* ≥ 1 consecutive starts lying in one block [*A p*, (*A* + 1)*p*), the number of occurrences of any one residue is at most
+
+```math
+6\left(\left\lfloor\frac{T}{H+1}\right\rfloor+1+H^2\right)
+```
+
+for every integer 0 ≤ *H* < *p*.
+
+**Scope.** This is the regular part of the actual rational prefix in CC-01, with initial value zero. Choosing *H* = ⌊*T*<sup>1/3</sup>⌋ and splitting at block boundaries gives the written bound *O*(*T*<sup>2/3</sup>) for *T* ≤ *p*, uniformly in the start. The note treats affine lines for the two regular components and one further residue digit of the full scaled prefix. Local residue counts alone leave the real discrepancy undecided.
+
+- **Lean:** [`logarithm_window`](../NormalityChecker/StrideResidueReturns.lean#L260) · [`actual_regular_digit`](../NormalityChecker/StrideResidueReturns.lean#L217) · [`regular_pairs`](../NormalityChecker/StrideResidueReturns.lean#L85)
+- **Fully qualified:** `NormalityChecker.StrideResidueReturns.logarithm_window`, `NormalityChecker.StrideResidueReturns.actual_regular_digit`, `NormalityChecker.StrideResidueReturns.regular_pairs`
+- **Proof:** [raw-logarithm-residues.md](../notes/phase13/raw-logarithm-residues.md) · [classical-bands.md § a counterexample to a real fourier inference](../notes/phase13/reviews/classical-bands.md#a-counterexample-to-a-real-fourier-inference)
+- **Related:** [CC-01](#cc-01) · [CC-16](#cc-16) · [CC-17](#cc-17)
+
+<a id="cc-16"></a>
+
+### CC-16 · A Fourier deficit for the joint logarithm prefix modulo a prime square
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Use *S* from CC-14 and set *U*ₙ = 2ⁿ*S*(1/4, ⌊*n*/2⌋), *V*ₙ = −2ⁿ*S*(−1/8, ⌊*n*/3⌋). For a prime *p* > 3 and integers *a*, *b* with at least one nonzero modulo *p*, reduce *p*(*aU*ₙ + *bV*ₙ) modulo *p*² to an integer representative *r*ₙ. Put *z*ₙ = exp(2π*i r*ₙ/*p*²). For *I* = [*L*, *L* + *T*) with 0 ≤ *L*, 1 ≤ *T* ≤ *p* and *L* + *T* < *p*²,
+
+```math
+1-\left|\frac{1}{T}\sum_{n\in I}z_n\right|
+\ge \frac{d}{54}-O\left(\frac{\sqrt{p}\log p}{T}\right).
+```
+
+Here *d* counts the nonzero entries modulo *p* of the six weights (2*a* − 3*b*, 0, 2*a*, 3*b*, 2*a*, 0). For the combined logarithm (*a*, *b*) = (2, 1), the lower limiting deficit is at least 2/27 when *T*/(√*p* log *p*) tends to infinity.
+
+**Scope.** The interval conditions ensure that the scaled rational has denominator coprime to *p*. Lean checks the unit-circle inequality and its finite sum. The cancellation estimate for the additive term modulo *p* is a paper deduction using Weil’s bound. The character here takes both local residue digits. A fixed deficit for the real binary shifts of ln 2 remains open.
+
+- **Lean:** [`forcing_sum`](../NormalityChecker/GaussianLogarithmCharacters.lean#L268) · [`forcing_distance`](../NormalityChecker/GaussianLogarithmCharacters.lean#L253)
+- **Fully qualified:** `NormalityChecker.GaussianLogarithmCharacters.forcing_sum`, `NormalityChecker.GaussianLogarithmCharacters.forcing_distance`
+- **Proof:** [complementary-characters.md § a uniform modular joint character deficit](../notes/phase13/complementary-characters.md#a-uniform-modular-joint-character-deficit)
+- **External inputs:** A. Weil, On some exponential sums (1948), bound for complete Kloosterman sums.
+- **Related:** [CC-01](#cc-01) · [CC-15](#cc-15)
+
+<a id="cc-17"></a>
+
+### CC-17 · Incidence bounds for actual residues of corrected logarithm prefixes
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *y*ₙ be the diagonal beta-corrected model *C*ₙ of CC-11. Fix *n* and gaps 0 < *h* < *k*. Among the primes *p* > 3 in (*n* + *k*, 2*n*], at most *O*(*k*) admit any *c*, *d* modulo *p* satisfying
+
+```math
+p y_{n+j}\equiv c+d2^j\pmod p
+```
+
+at all three offsets *j* = 0, *h*, *k*. For *h* = 1 and *k* = 2, the exceptional primes are exactly the primes in that band dividing 5*n* + 7. There is at most one.
+
+For the two-stride beta model of CC-13 at starts 6*m*, write *Z*ₘ for its value with fixed correction orders *r*, *s* ≥ 0. Fix a gap *h* ≥ 1 and a prime *p* > max(3*h* + *r*, 3(2*h* + *s*), 3). In any interval of at most *p* consecutive phase indices, choose *v* ≥ 0 such that *p*ᵛ*Z*ₘ is integral at *p* throughout. Any prescribed ordered pair of its residues modulo *p*<sup>*v*+1</sup> occurs at gap *h* at most 2(5*h* + *r* + *s*) times with both endpoints in the interval.
+
+**Scope.** Lean checks the recurrences, the consecutive diagonal triple identity and the strictly positive two-stride determinant for even *r*. The prime counts and moving-window consequences are written deductions. In the common one-pole band the note also excludes affine fits to the second two-stride digit outside *O*(*k* + *r* + *s* + 1) primes for even *r*. All residues are of the specified rational models with a fixed scaling across the window. Their common-denominator numerators and their real fractional parts contain different information.
+
+- **Lean:** [`diagonal_three`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L142) · [`diagonal_step_ratio`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L126) · [`six_step`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L33) · [`six_determinant`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L115)
+- **Fully qualified:** `NormalityChecker.PhaseThirteen.diagonal_three`, `NormalityChecker.PhaseThirteen.diagonal_step_ratio`, `NormalityChecker.PhaseThirteen.six_step`, `NormalityChecker.PhaseThirteen.six_determinant`
+- **Proof:** [corrected-numerators.md](../notes/phase13/corrected-numerators.md)
+- **Computation:** [phase13_corrected_numerators.py](../scripts/phase13_corrected_numerators.py)
+- **Related:** [CC-11](#cc-11) · [CC-13](#cc-13) · [CC-15](#cc-15) · [CC-18](#cc-18)
+
+<a id="cc-18"></a>
+
+### CC-18 · Certified digit changes on four complete binary shells of ln 2
+
+**Evidence:** Exact computation · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *A* run through 256, 512, 1024 and 2048. Exact rational enclosures for blocks of digits certify respectively 76, 143, 354 and 680 internal digit changes on the four shells of binary shifts [*A*, 2*A*). On each of these shells,
+
+```math
+\frac{1}{A}\sum_{n=A}^{2A-1}\bigl(1-\cos(2\pi\,2^n\ln 2)\bigr)\ge\frac{143}{512}.
+```
+
+**Scope.** The computation uses three aligned partial congruences for corrected prefixes and counts only adjacent digits within each disjoint block. Each forced change contributes at least one to the sum. The estimate covers 3,840 positions on the four stated shells. A uniform positive deficit for arbitrarily late shells remains open.
+
+- **Proof:** [corrected-numerators.md § what overlapping crt grids determine](../notes/phase13/corrected-numerators.md#what-overlapping-crt-grids-determine)
+- **Computation:** [phase13_corrected_numerators.py](../scripts/phase13_corrected_numerators.py)
+- **Related:** [CC-13](#cc-13) · [CC-17](#cc-17) · [CC-19](#cc-19)
+
+<a id="cc-19"></a>
+
+### CC-19 · A squared-logarithm discrepancy gap at every large prefix of ln 2
+
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *D*<sub>*N*</sub> be the interval discrepancy of the fractional parts of 2ⁿ ln 2 for 0 ≤ *n* < *N*. For every sufficiently large *N*, with *k* = ⌊(log₆₈ *N*)/2⌋,
+
+```math
+1-D_N\ge\frac{k^2}{N}.
+```
+
+**Scope.** The proof uses the logarithm’s auxiliary integral and counts positions preceding a transition in each of several disjoint shells. It strengthens the finite-prefix part of CC-05. The guaranteed gap still tends to zero. The linked note discusses stronger coefficients obtainable on paper from external irrationality-exponent estimates.
+
+- **Lean:** [`logTwo_all_prefix_gap`](../NormalityChecker/LogarithmTransitionBounds.lean#L184) · [`logTwo_squared_log_gap`](../NormalityChecker/LogarithmTransitionBounds.lean#L147) · [`discrepancy_of_interior`](../NormalityChecker/LogarithmTransitionBounds.lean#L13)
+- **Fully qualified:** `NormalityChecker.Phase13.logTwo_all_prefix_gap`, `NormalityChecker.Phase13.logTwo_squared_log_gap`, `NormalityChecker.Phase13.discrepancy_of_interior`
+- **Proof:** [logarithm-transitions.md](../notes/phase13/logarithm-transitions.md)
+- **Related:** [CC-04](#cc-04) · [CC-05](#cc-05) · [CC-18](#cc-18)
+
+<a id="cc-20"></a>
+
+### CC-20 · From an Erdős–Borwein word count to a Fourier deficit
+
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *E* be the sum of 1/(2ᵐ − 1) over *m* ≥ 1. Fix an odd integer *h* and a word length *k* with 2ᵏ ≥ 2π|*h*|. Let *C* count positions *N* ≤ *n* < *N* + *H* at which the binary digits of *E* beginning at digit *n* + 1 are a one followed by *k* − 1 zeros. Then
+
+```math
+2\left|\sum_{n=N}^{N+H-1}\exp(2\pi i h2^n E)\right|
+\le 2H+2-C.
+```
+
+**Scope.** The kernel inequality takes the observed word count as input. Starts in the final *k* − 1 positions are eligible. CC-21 supplies a positive proportional count on specified windows by an external paper theorem. Captain Sude’s separate elementary Lean release gives an unconditional prefix count of at least *N* exp(−70000(log log *N*)³) for each fixed word at sufficiently large *N*. Both word counts come from the sources cited in the note. The finite transfer also holds for any real number.
+
+- **Lean:** [`erdosBorwein_window_fourier`](../NormalityChecker/ErdosBorweinFourier.lean#L89) · [`window_fourier_deficit`](../NormalityChecker/ErdosBorweinFourier.lean#L38)
+- **Fully qualified:** `NormalityChecker.ErdosBorweinAudit.erdosBorwein_window_fourier`, `NormalityChecker.ErdosBorweinAudit.window_fourier_deficit`
+- **Proof:** [erdos-borwein.md § a checked transfer from one word to a fourier deficit](../notes/phase13/erdos-borwein.md#a-checked-transfer-from-one-word-to-a-fourier-deficit)
+- **Related:** [CC-21](#cc-21) · [CC-22](#cc-22)
+
+<a id="cc-21"></a>
+
+### CC-21 · Positive lower word frequencies in Erdős–Borwein windows
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Fix a nonempty binary word *w* and 7/12 < *a* ≤ 1. In the expansion of the Erdős–Borwein constant *E* from CC-20, every sufficiently late window of *H* digits after digit *N*, with *N*ᵃ ≤ *H* ≤ *N*, contains at least *c*<sub>*a*,*w*</sub>*H* wholly contained copies of *w*, for some *c*<sub>*a*,*w*</sub> > 0. In particular every fixed word has positive ordinary lower density.
+
+**Scope.** This is Mira Cult’s November 2026 short-window theorem. The independent written audit derives the weighted local estimate for exact prime counts using polynomial upper and lower bounds and checks the passage to ordinary digit counts. With CC-20 the theorem gives a Fourier norm bounded away from one on these windows for each fixed nonzero frequency after division by *H*. Binary normality, which requires the correct limiting frequency for every word, remains open.
+
+- **Proof:** [erdos-local-limit.md](../notes/phase13/reviews/erdos-local-limit.md) · [erdos-borwein.md § audit of the november proof](../notes/phase13/erdos-borwein.md#audit-of-the-november-proof)
+- **External inputs:** Mira Cult, Erdős–Borwein positive word density, claim 0002 (November 2026). Huxley–Iwaniec’s short-interval Bombieri–Vinogradov estimate in the range stated by Perelli, Pintz and Salerno.
+- **Related:** [CC-20](#cc-20) · [CC-22](#cc-22)
+
+<a id="cc-22"></a>
+
+### CC-22 · Localization of the divisor Fourier sum for the Erdős–Borwein constant
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Fix an integer *h* and 0 < δ ≤ 1. Let *T* = log log *N* and let *J* consist of positive integers *j* with |*j* − *T*| ≤ 4√(*T* log *T*). Let τ(*m*) count positive divisors and put *e*(*t*) = exp(2π*i t*). Define
+
+```math
+S_n=\sum_{j\in J}\frac{\tau(n+j)}{2^j}.
+```
+
+Uniformly for *N*ᵟ ≤ *H* ≤ *N*, the mean of |*e*(*h*2ⁿ*E*) − *e*(*h S*ₙ)| over *N* ≤ *n* < *N* + *H* is *O*(1/*T*³), with constant depending on δ and *h*.
+
+**Scope.** This written estimate follows from multiplicative moments on ordinary short intervals. It is independent of the word-density theorem. Binary normality would follow from cancellation of the remaining sums for every fixed odd frequency on doubling intervals. Such cancellation is still open. Mira’s earlier S06 gives a different truncation for prefix averages.
+
+- **Proof:** [erdos-borwein.md § an unconditional localization of the divisor fourier statistic](../notes/phase13/erdos-borwein.md#an-unconditional-localization-of-the-divisor-fourier-statistic)
+- **External inputs:** P. Shiu, A Brun–Titchmarsh theorem for multiplicative functions, Theorem 1, with uniform dependence on majorants as in Henriot.
+- **Related:** [CC-20](#cc-20) · [CC-21](#cc-21)
 
 ## Counterexamples and impossibility results
 

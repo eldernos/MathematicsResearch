@@ -5,6 +5,7 @@
 [foundations]
 title = "Normality, discrepancy and Fourier criteria"
 modules = [
+  "JointWeyl", "RectangleFrequency",
   "Basic", "Distribution", "Analysis/Weyl", "FourierTest", "Dilation", "Correlations", "ScaleTransfer",
   "BinaryDiscrepancy", "CircleDiscrepancy", "SharpDiscrepancy", "RationalOrbitCycle", "Concentration",
   "IntervalFourier", "OrbitDifferencing", "RadixTelescoping", "DominatedPerturbation", "IndexedExpansion",
@@ -13,6 +14,16 @@ modules = [
 [stoneham]
 title = "Stoneham polynomial images and products"
 modules = [
+  "AlternateBaseCoverage", "AlternateBaseDilation", "AlternateBaseStoneham",
+  "AlternateBaseWindows", "CompositePolynomial", "CompositePolynomialStatements",
+  "ParameterTwoSquare", "ParameterTwoSquareArithmetic", "ParameterTwoSquareExpansion",
+  "ParameterTwoSquareProfile", "ParameterTwoSquareStatements", "PeriodicPolynomialMass",
+  "PeriodicPolynomialNormal", "PeriodicPolynomialPrecision", "ProductThreeFiveCount",
+  "ProductThreeFiveCoverage", "ProductThreeFiveFlow", "ProductThreeFiveRectangles",
+  "ProductThreeFiveResidues", "ProductThreeFiveStatements", "QuantitativeStonehamDiscrepancy",
+  "QuantitativeStonehamExponents", "QuantitativeStonehamTail", "StonehamOddDegree",
+  "StonehamPolynomialRetention", "StonehamSymmetricMass", "StonehamTiedCoefficients",
+  "StonehamTiedStatements",
   "StonehamPolynomial", "StonehamPolynomialExpansion", "StonehamPolynomialNormal", "StonehamPolynomialOrthant",
   "StonehamPolynomialPrefix", "StonehamSquare", "StonehamJoint", "StonehamStatements", "StonehamOrbit", "StonehamOrder",
   "StonehamComponents", "ProductThreeFive", "ProductThreeFivePrefix", "ProductThreeFiveWindows", "PolynomialInsertions",
@@ -22,6 +33,8 @@ modules = [
 [localized]
 title = "Localized logarithms and polylogarithms"
 modules = [
+  "LocalizedCertificateModulus", "LocalizedDenominatorPrimes", "LocalizedJoint",
+  "LocalizedJointStatements", "LocalizedSignedAxis",
   "LocalizedCertificate", "LocalizedCertifiedNormal", "LocalizedClearing", "LocalizedDiscrepancy", "LocalizedExamples",
   "LocalizedExpansion", "LocalizedFive", "LocalizedLayers", "LocalizedLogGap", "LocalizedMesh", "LocalizedMeshRate",
   "LocalizedMixed", "LocalizedNormality", "LocalizedSeries", "LocalizedSupport", "CompositeLayers", "MixedPowers",
@@ -71,6 +84,8 @@ modules = [
 [classical]
 title = "Classical constant arithmetic"
 modules = [
+  "CorrectedNumeratorIncidence", "ErdosBorweinFourier", "GaussianLogarithmCharacters",
+  "LogarithmTransitionBounds", "StrideResidueReturns",
   "LogTwo", "LogTwoLinearForms", "LogTwoTransitions", "PrimeCancellation", "DenominatorGrowth", "OrderedTail",
   "StridedLogarithm", "StrideDenominatorRate", "DyadicRelations", "DyadicLogRates", "LogarithmBands", "CorrectedStrides",
   "LogShadow", "LogShadowIntegral", "LogPolynomialKernel", "AdjacentShadow", "BinomialShadow", "DiagonalNumerator",
