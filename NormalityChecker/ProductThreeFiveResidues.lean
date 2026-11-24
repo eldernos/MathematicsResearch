@@ -1,6 +1,7 @@
 module
 
 public import NormalityChecker.ProductThreeFivePrefix
+public import NormalityChecker.ProductThreeFiveStatements
 public import NormalityChecker.PrimeCancellation
 
 /-! Exact top-row and top-column tests for the binary product prefix. -/
@@ -28,6 +29,34 @@ theorem commonNum_eq (n : ℕ) :
   rw [← h₃, ← h₅]
   simp only [Nat.add_sub_cancel,pow_add,pow_succ]
   ring
+
+/-- To any prescribed ternary precision, sum only the active rows within
+that many layers of the top. No hypothesis on the opposite endpoints is needed. -/
+theorem ternary_layers (n h : ℕ) :
+    (commonNum n : ZMod (3^h)) =
+      ∑ v ∈ (active n).filter (fun v => Nat.log 3 n-(v.1+1)<h),
+        ((2^(n-location v)*3^(Nat.log 3 n-(v.1+1))*5^(Nat.log 5 n-(v.2+1)):ℕ) : ZMod (3^h)) := by
+  rw [commonNum,Nat.cast_sum]
+  symm
+  apply sum_subset (filter_subset ..)
+  intro v hv missing
+  have le : h ≤ Nat.log 3 n-(v.1+1) := by
+    simpa only [mem_filter,hv,true_and,not_lt] using missing
+  exact (ZMod.natCast_eq_zero_iff ..).mpr
+    (dvd_mul_of_dvd_left (dvd_mul_of_dvd_right (pow_dvd_pow 3 le) _) _)
+
+/-- The analogous quinary test uses only the top active columns. -/
+theorem quinary_layers (n h : ℕ) :
+    (commonNum n : ZMod (5^h)) =
+      ∑ v ∈ (active n).filter (fun v => Nat.log 5 n-(v.2+1)<h),
+        ((2^(n-location v)*3^(Nat.log 3 n-(v.1+1))*5^(Nat.log 5 n-(v.2+1)):ℕ) : ZMod (5^h)) := by
+  rw [commonNum,Nat.cast_sum]
+  symm
+  apply sum_subset (filter_subset ..)
+  intro v hv missing
+  have le : h ≤ Nat.log 5 n-(v.2+1) := by
+    simpa only [mem_filter,hv,true_and,not_lt] using missing
+  exact (ZMod.natCast_eq_zero_iff ..).mpr (dvd_mul_of_dvd_right (pow_dvd_pow 5 le) _)
 
 private def rowTerm (j : ℕ) : ZMod 3 := ((5:ZMod 3)^(j+1)*2^(5^(j+1):ℕ))⁻¹
 private def colTerm (i : ℕ) : ZMod 5 := ((3:ZMod 5)^(i+1)*2^(3^(i+1):ℕ))⁻¹
@@ -206,5 +235,19 @@ theorem quinary_survival_iff {n l : ℕ} (hl : l+1=Nat.log 5 n) :
   unfold colWeight
   split_ifs <;> simp_all [show (2:ZMod 5)≠0 by decide, show (3:ZMod 5)≠0 by decide,
     show (4:ZMod 5)≠0 by decide]
+
+theorem mixedPrefix_eq (n : ℕ) : StonehamStatements.mixedPrefix n = pre n := by
+  rw [pre,active,sum_filter,sum_product]; rfl
+
+/-- Check the two exact endpoint tests against a separately stated prefix. -/
+theorem mixed_prefix_residues : StonehamStatements.MixedPrefixResidues := by
+  intro n hn
+  have hk := Nat.le_log_of_pow_le (b:=3) (x:=1) (by decide) (by simpa using (by omega : 3≤n))
+  have hl := Nat.le_log_of_pow_le (b:=5) (x:=1) (by decide) (by simpa using hn)
+  obtain ⟨k,hK⟩ : ∃ k, Nat.log 3 n=k+1 := ⟨Nat.log 3 n-1,by omega⟩
+  obtain ⟨l,hL⟩ : ∃ l, Nat.log 5 n=l+1 := ⟨Nat.log 5 n-1,by omega⟩
+  dsimp only
+  rw [mixedPrefix_eq,hK,hL]
+  exact ⟨ternary_survival_iff hK.symm,quinary_survival_iff hL.symm⟩
 
 end NormalityChecker.ProductThreeFive
