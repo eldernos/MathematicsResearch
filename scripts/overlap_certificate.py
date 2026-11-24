@@ -41,6 +41,24 @@ def intersection_length(fixed, moving, scale):
     return length
 
 
+def anchored_maximum(p, pattern, end, q, other, cutoff, phase_range):
+    """Exact maximum of the clipped mass over a closed interval of relative phases."""
+    fixed = sorted((max(cutoff, x), min(Q(1), y))
+                   for x, y in copies(p, pattern, 1/Q(end), cutoff)
+                   if max(cutoff, x) < min(1, y))
+    moving = sorted(copies(q, other, Q(1), cutoff))
+    low, high = phase_range
+    phases = {low, high}
+    for interval in fixed:
+        for edge in interval:
+            for pair in moving:
+                for point in pair:
+                    phase = edge / point
+                    if low < phase < high:
+                        phases.add(phase)
+    return max((intersection_length(fixed, moving, u), u) for u in phases)
+
+
 def joint_upper_density(p, first, q, second, cutoff):
     """Enclose the upper density; distinct primes make the phase orbit dense."""
     if p == q or not 0 < cutoff < 1:
@@ -49,20 +67,9 @@ def joint_upper_density(p, first, q, second, cutoff):
         return Q(0), Q(0)
     best = Q(0)
     for a, pattern, b, other in ((p, first, q, second), (q, second, p, first)):
-        moving = sorted(copies(b, other, Q(1), cutoff))
         for _, end in pattern:
-            fixed = sorted((max(cutoff, x), min(Q(1), y))
-                           for x, y in copies(a, pattern, 1/Q(end), cutoff)
-                           if max(cutoff, x) < min(1, y))
-            phases = {1/Q(b), Q(1)}
-            for interval in fixed:
-                for edge in interval:
-                    for pair in moving:
-                        for point in pair:
-                            phase = edge / point
-                            if 1/Q(b) < phase < 1:
-                                phases.add(phase)
-            best = max(best, *(intersection_length(fixed, moving, u) for u in phases))
+            mass, _ = anchored_maximum(a, pattern, end, b, other, cutoff, (1/Q(b), Q(1)))
+            best = max(best, mass)
     return best, min(Q(1), best + cutoff)
 
 

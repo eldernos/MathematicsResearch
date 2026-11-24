@@ -6,7 +6,7 @@ from math import gcd
 from discrepancy_experiments import log_bits, quadratic_residue_witnesses
 from kernel_coverage import block_discrepancy, coefficients, constrained_integer_model, enclosure, endpoint_bound, scan
 from localized_certificate import certificate
-from overlap_certificate import failed_intervals, joint_box_bound, joint_upper_density
+from overlap_certificate import anchored_maximum, failed_intervals, joint_box_bound, joint_upper_density
 
 
 class OverlapTests(unittest.TestCase):
@@ -29,6 +29,16 @@ class OverlapTests(unittest.TestCase):
             self.assertLessEqual(Q(bad, n+1), high)
         for p in (5, 13):
             self.assertEqual(failed_intervals(p, certificate(2, support, p, 2)), [])
+
+    def test_worst_phase_isolation(self):
+        a, b = [(Q(2), Q(4))], [(Q(10), Q(13))]
+        cutoff = Q(1, 100000)
+        anchor5 = anchored_maximum(5, a, 4, 13, b, cutoff, (Q(1, 13), Q(1)))
+        left = anchored_maximum(13, b, 13, 5, a, cutoff, (Q(1, 5), Q(3, 8)))
+        right = anchored_maximum(13, b, 13, 5, a, cutoff, (Q(2, 5), Q(1)))
+        self.assertEqual([anchor5[0], left[0], right[0]],
+                         [Q(207190189, 892531250), Q(33152, 142805), Q(731638, 3570125)])
+        self.assertLess(max(anchor5[0], left[0], right[0])+cutoff, Q(197, 845))
 
     def test_phase_boxes(self):
         first = [(Q(2), Q(4))]
