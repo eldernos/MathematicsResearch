@@ -77,6 +77,23 @@ private lemma short_orbit {q H : ℕ} [NeZero q] (b T : ℕ) (z : ZMod q) (hT : 
   have hj' : (j:ℝ) ≤ H := by exact_mod_cast (mem_range.mp hj).le
   linarith [orbit_shift b T j z]
 
+/-- Explicit incomplete-orbit bound for a reduced numerator. The shift budget `H`
+and segment length must both fit within the multiplicative period. -/
+theorem unit_orbit_bound {q : ℕ} [NeZero q] (b : ℕ) (A : ℤ)
+    (hA : IsUnit (A : ZMod q)) {T H : ℕ} (hT : T ≤ orderOf (b:ZMod q))
+    (hTq : T ≤ q) (hH : 0 < H) (hperiod : H ≤ orderOf (b:ZMod q))
+    {δ : ℝ} (hδ : 0 < δ) (hlarge : 1 ≤ H*δ^2) :
+    ‖∑ i ∈ range T, phase ((A:ℝ)*(b:ℝ)^i/q)‖ ≤ δ*q + 2*H := by
+  have inj : Set.InjOn (fun j : ℕ => (b:ZMod q)^j*A) (range H) := by
+    intro i hi j hj eqn
+    exact pow_injOn_Iio_orderOf ((mem_range.mp hi).trans_le hperiod)
+      ((mem_range.mp hj).trans_le hperiod) (hA.mul_right_cancel eqn)
+  have eqn (i : ℕ) : ZMod.stdAddChar ((b:ZMod q)^i*(A:ZMod q)) = phase ((A:ℝ)*(b:ℝ)^i/q) := by
+    have e := ZMod.stdAddChar_coe (N:=q) ((b:ℤ)^i*A)
+    push_cast at e
+    rw [e, phase]; congr 1; push_cast; ring
+  simpa only [orbitSum,eqn] using short_orbit b T _ hT hTq hH hδ hlarge inj
+
 /-- Uniform cancellation through any prefix of length at most c^k. The starting
 numerator may vary with the scale, provided it is coprime to c. -/
 theorem stoneham_orbit_small {b c : ℕ} (hb : 1<b) (hc : 1<c) (ho : Odd c)

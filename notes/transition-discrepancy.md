@@ -53,3 +53,37 @@ The integral method belongs to classical irrationality-measure theory. Stronger 
 For the Kempner number $`K=\sum_{j\ge0}2^{-2^j}`$, Lean proves the stronger dyadic separation $`|2^nK-z|\ge2^{-n}`$ for all $`n\ge2`$ and integers $`z`$, together with $`D_\infty(K)=1`$. If $`s`$ is the first power of two greater than $`n\ge1`$, the shifted tail lies between $`2^{n-s}`$ and $`(4/3)2^{n-s}`$. A transition start must be within two positions before $`s`$. There are at most $`2k+1`$ transition starts before $`2^k`$.
 
 This example tests the precise dyadic estimate used above. A positive-density proof for $`\ln2`$ needs information about the *total number* of long gaps. One concrete target is a fixed block length $`B`$ for which a positive lower proportion of disjoint length-$`B`$ blocks contain a middle-third hit. The multiplicative-window theorem alone allows most such fixed-length blocks to be empty. [Verified sparse obstruction](../NormalityChecker/SparseTransitions.lean)
+
+## First-frequency escape
+
+Put $`f(v)=1-\cos(2\pi v)`$ and let $`E_N`$ be the average of $`f(R_n)`$ for $`0\le n\lt N`$. With $`t`$ the lower limiting density of true binary transitions in ln 2, Lean proves
+
+```math
+t\le\liminf_N E_N\le 4t.
+```
+
+In particular, a positive lower limit of $`E_N`$ is necessary and sufficient for discrepancy strictly below one. The proof works for every real $`x`$ and every sequence approximating $`2^n x`$ with error tending to zero. [Finite and limiting inequalities](../NormalityChecker/FirstFrequency.lean)
+
+For the exact orbit, let $`I(v)`$ indicate the half-open transition region $`[1/4,3/4)`$ modulo one. Then $`I(v)\le f(v)`$. Outside that region $`f(v)\le1`$ and inside it $`f(v)\le2`$. The double-angle identity gives $`2f(v)-f(2v)=2f(v)(f(v)-1)\le4I(v)`$. Summing over consecutive shifts telescopes, leaving an endpoint error at most $`2/N`$ in the upper bound. This proof includes the point $`3/4`$, where the indicator is zero and $`f=1`$. The Lipschitz bound for cosine and Cesàro averaging transfer the inequalities to the rational recurrence.
+
+At each closed middle-third hit, $`f(R_n)\ge3/2`$. The verified hit count therefore gives an unconditional lower bound $`(3/2)(\lfloor\log_{34} N\rfloor-C)`$ for the **sum**, for sufficiently large $`N`$. After division by $`N`$ this lower bound tends to zero. The unresolved estimate is a positive lower bound for the **average**.
+
+## Total time between middle-third hits
+
+For a set of hit positions, define $`A_0=0`$. Set $`A_{n+1}=0`$ after a hit at $`n`$, and $`A_{n+1}=A_n+1`$ after a miss. Let $`H`$ be the number of hits before $`N`$, and let $`W_N=\sum_{i=0}^N A_i`$. Lean proves the finite inequality
+
+```math
+(N+1)^2\le(H+1)(N+1+2W_N).
+```
+
+Split the $`N+1`$ positions at the hits, retaining the last segment even when the prefix ends in a long gap. A segment of length $`d`$ contributes $`d(d-1)/2`$ to $`W_N`$. Thus the segment lengths sum to $`N+1`$, and their squares sum to $`N+1+2W_N`$. Cauchy–Schwarz gives the displayed inequality. In particular, for the rational middle-third visits of ln 2, any eventual bound $`W_N\le C(N+1)`$ would give lower hit density at least $`1/(1+2C)`$ and discrepancy at most $`\max(2/3,1-1/(1+2C))`$. An eventual mean age of at most $`499.5`$ would suffice for the one-in-a-thousand target. Even an $`O(N^{3/2})`$ total-age bound would imply a square-root hit count by the finite inequality. The project has yet to derive either estimate for ln 2. [Gap counts and conditional discrepancy theorem](../NormalityChecker/AggregateGaps.lean)
+
+An exact-integer computation gives the following finite checks. The final column includes the unfinished last gap in the prefix.
+
+| Starts $`N`$ | Middle-third hits | Total age $`W_N`$ |
+| ---: | ---: | ---: |
+| 4,096 | 1,404 | 5,069 |
+| 16,384 | 5,448 | 21,874 |
+| 65,536 | 21,792 | 87,703 |
+
+These rows can be reproduced with `python3 scripts/middle_gap_counts.py 16`. At precision $`M`$ the program encloses $`2^{M-n} R_n`$ by summing integer floors of $`2^{M-j}/j`$ with at most $`n`$ grid units of accumulated error. For an enclosure meeting an endpoint, it evaluates the recurrence with exact fractions. At the last cutoff the mean age is $`87703/65537`$. The rows are computational observations. The Lean density theorem requires a bound at every sufficiently large cutoff. [Computation](../scripts/middle_gap_counts.py)

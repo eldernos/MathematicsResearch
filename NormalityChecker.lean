@@ -15,3 +15,6 @@ public import NormalityChecker.OrderedTail
 public import NormalityChecker.CyclotomicExamples
 public import NormalityChecker.LogTwoTransitions
 public import NormalityChecker.SparseTransitions
+public import NormalityChecker.FirstFrequency
+public import NormalityChecker.AggregateGaps
+public import NormalityChecker.LocalizedNormality

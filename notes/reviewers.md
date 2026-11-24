@@ -78,6 +78,10 @@ where $`\lambda`$ is uniform probability measure. The Lean statement gives the l
 
 The comparison used the author manuscripts, Kano's institutional copy, the public two-sum development, and bibliographic title searches. Priority for the cyclotomic equivalence or the exact mixture is unestablished. Particularly valuable review would identify earlier necessary-and-sufficient criteria for these schedules, check the common scaling at coincident insertions, and compare the stated weak limit with existing quantitative distribution results.
 
+## A related infinite-series result
+
+A separate short note proves binary normality of the logarithmic series restricted to indices of the form $`2^a5^j`$. It compares the result with the finite-prime theorem in the September 2026 localized-logarithm manuscript. Two points for review are the cancellation on the middle range of each power-of-five scale and the treatment of a prefix stopping inside an exceptional block. [Proof and literature comparison](localized-logarithms.md) · [Literal series theorem](../NormalityChecker/LocalizedNormality.lean)
+
 ## Verification and open scope
 
 The research and formalization are AI-assisted. The repository pins Lean and Mathlib, builds the library, audits the listed theorems for transitive axioms, and replays the project modules through the kernel. The original binary checkpoint remains available for comparison. [Verification instructions](../README.md#reproduce-and-review) · [Audit](../Audit.lean) · [Previous checkpoint](https://github.com/eldernos/MathematicsResearch/tree/research-checkpoint-2)

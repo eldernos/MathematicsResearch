@@ -147,7 +147,22 @@ run_cmd do
     ``NormalityChecker.logTwo_logarithmic_count,
     ``NormalityChecker.logTwo_finite_discrepancy_gap,
     ``NormalityChecker.kempner_dyadic_separation,
-    ``NormalityChecker.kempner_discrepancy_one]
+    ``NormalityChecker.kempner_discrepancy_one,
+    ``NormalityChecker.escapeAverage_transition_bounds,
+    ``NormalityChecker.first_frequency_bounds,
+    ``NormalityChecker.logTwo_discrepancy_lt_one_iff_escape,
+    ``NormalityChecker.logTwo_escape_logarithmic,
+    ``NormalityChecker.gap_age_count_bound,
+    ``NormalityChecker.hit_density_of_mean_age,
+    ``NormalityChecker.logTwo_discrepancy_of_mean_age,
+    ``NormalityChecker.unit_orbit_bound,
+    ``NormalityChecker.LocalizedFive.denominator_fives,
+    ``NormalityChecker.LocalizedFive.value_eq_series,
+    ``NormalityChecker.LocalizedFive.shift_error,
+    ``NormalityChecker.LocalizedFive.prefix_orbit,
+    ``NormalityChecker.LocalizedFive.clean_denominator,
+    ``NormalityChecker.LocalizedFive.binary_normal,
+    ``NormalityChecker.LocalizedFive.series_binary_normal]
   for decl in results do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a

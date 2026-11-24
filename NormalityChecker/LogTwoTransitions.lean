@@ -107,12 +107,15 @@ theorem middle_transition_bounds (N : ℕ) :
   · apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
     exact_mod_cast (show ((range N).filter T).card≤14+3*((range N).filter MiddleHit).card by omega)
 
-private lemma liminf_comparison {f g : ℕ → ℝ} (hf : ∀ n, 0≤f n ∧ f n≤1) (hg : ∀ n, 0≤g n)
-    (C A : ℝ) (H : ∀ N, g N≤C/(N:ℝ)+A*f N) : liminf g atTop ≤ A*liminf f atTop := by
+/-- Compare lower limits with a pointwise error that vanishes. -/
+lemma liminf_le_mul_of_error {f g err : ℕ → ℝ} {B A : ℝ}
+    (hf : ∀ n, 0 ≤ f n ∧ f n ≤ B) (hg : ∀ n, 0 ≤ g n)
+    (herr : Tendsto err atTop (𝓝 0)) (H : ∀ N, g N ≤ err N + A * f N) :
+    liminf g atTop ≤ A * liminf f atTop := by
   obtain ⟨t,ht,hgrow⟩ := exists_seq_tendsto_liminf
     (isCoboundedUnder_ge_of_le atTop fun n => (hf n).2)
     (isBoundedUnder_of_eventually_ge (.of_forall fun n => (hf n).1))
-  have h := ((tendsto_const_div_atTop_nhds_zero_nat C).comp hgrow).add (ht.const_mul A)
+  have h := (herr.comp hgrow).add (ht.const_mul A)
   rw [zero_add] at h
   by_contra! bad
   obtain ⟨y,hlo,hhi⟩ := exists_between bad
@@ -136,9 +139,11 @@ theorem logTwo_density_comparison :
   have ht (n : ℕ) : 0≤transitionFrequency (Real.log 2) n ∧ transitionFrequency (Real.log 2) n≤1 :=
     frequency_bounds _ _ _ _
   constructor
-  · simpa only [one_mul,transitionDensity] using liminf_comparison ht (fun n => (hi n).1) 12 1
+  · simpa only [one_mul,transitionDensity] using liminf_le_mul_of_error ht (fun n => (hi n).1) (A := 1)
+      (tendsto_const_div_atTop_nhds_zero_nat 12)
       (fun n => by simpa using (middle_transition_bounds n).1)
-  · exact liminf_comparison hi (fun n => (ht n).1) 14 3 (fun n => (middle_transition_bounds n).2)
+  · exact liminf_le_mul_of_error hi (fun n => (ht n).1) (A := 3)
+      (tendsto_const_div_atTop_nhds_zero_nat 14) (fun n => (middle_transition_bounds n).2)
 
 theorem logTwo_discrepancy_lt_one_iff_middle :
     asymptoticDiscrepancy (Real.log 2)<1 ↔ 0<liminf middleFrequency atTop := by

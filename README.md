@@ -60,6 +60,10 @@ open NormalityChecker
 #eval binaryNormalTest {20, 28, 35} (fun _ => 1) -- false
 ```
 
+## A localized logarithm with two prime factors allowed
+
+Restrict the series for ln 2 to indices of the form $`2^a5^j`$ with $`a,j\ge0`$. Lean proves the resulting infinite sum is **binary normal**. On certain digit ranges one factor of five cancels from the shifted denominator. A calculation modulo 25 proves exactly how much survives, and an incomplete-orbit estimate controls the gaps between insertions. [Proof and comparison with earlier localized logarithms](notes/localized-logarithms.md) · [Literal series theorem](NormalityChecker/LocalizedNormality.lean)
+
 ## The two arithmetic milestones
 
 The logarithm series gives the rational prefixes
@@ -122,6 +126,8 @@ For a general expansion $`b^n x=P_n+E_n`$ with $`E_n\to0`$, Lean also proves non
 Lean proves that the upper limiting interval discrepancy of a binary expansion is strictly below one exactly when its digit transitions have positive lower density. If that density is $`t`$, the discrepancy is at most $`\max(2/3,1-t)`$. The period-two orbit of $`1/3`$ attains the constant $`2/3`$. [Sharp bound](NormalityChecker/SharpDiscrepancy.lean)
 
 For ln 2, this condition is equivalent to positive lower density of visits of the rational residues $`\{R_n\}`$ to the closed middle third. Every sufficiently late window $`[n,34n)`$ contains such a visit and a true digit transition. That yields an unconditional logarithmic count. A linear count, which would give a fixed discrepancy bound below one, remains open. [Proof and arithmetic obstacle](notes/transition-discrepancy.md)
+
+For the same recurrence, a positive lower limit of the average of $`1-\cos(2\pi R_n)`$ is also equivalent to discrepancy below one. Bounding the mean time elapsed since a middle-third hit would give an explicit lower density. The proof note includes an exact finite experiment with 65,536 starts and states the remaining asymptotic estimate. [First-frequency proof and aggregate gap estimates](notes/transition-discrepancy.md#first-frequency-escape)
 
 ## Open proof obligations
 
