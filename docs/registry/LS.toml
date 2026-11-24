@@ -1,0 +1,258 @@
+# Localized logarithms and polylogarithms. Manuscript: papers/02-localized-normality.
+# Format: docs/registry/SCHEMA.md
+#
+# Coordination notes.
+# - The finite certificate examples (decimal_235_normal, decimal_2511_normal, base30_2357_normal,
+#   decimal_257_normal, binary_certificates, Certificate.normal, the joint {2,5,13} bound in
+#   JointFiveThirteen) are left to the AC family. All of their normality conclusions are special
+#   cases of LS-01.
+# - LS-02 is a principal result by editorial choice. For the unsigned full supports it concerns,
+#   LS-03 makes every persistent region null, so the value of the formula is already determined
+#   by LS-01 (0 with an off-base prime, 1 otherwise). The scope says so explicitly.
+
+[[result]]
+id = "LS-01"
+title = "Unsigned finite-support dichotomy"
+topic = "localized"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and *s* ≥ 1 be integers, let *P* be a finite set of primes, and let *M*(*P*) be the set of positive integers all of whose prime factors lie in *P*, including 1. Put
+
+```math
+X = \sum_{m \in M(P)} \frac{1}{m^s \, b^m}.
+```
+
+For *N* ≥ 1 let *D*<sub>*N*</sub> be the supremum, over 0 ≤ *u* < *v* ≤ 1, of the absolute difference between the proportion of 0 ≤ *n* < *N* with {*b*ⁿ*X*} ∈ [*u*, *v*) and *v* − *u*. Then:
+
+- if some *p* ∈ *P* does not divide *b*, then *D*<sub>*N*</sub> → 0, so *X* is normal in base *b*;
+- if every *p* ∈ *P* divides *b*, then *D*<sub>*N*</sub> → 1.
+'''
+scope = '''
+The limits are along all integer cutoffs *N*, not only a subsequence. Every positive order *s* is allowed, and the support may share any primes with *b*. The empty set *P* falls in the second case: then *X* = 1/*b* and *D*<sub>*N*</sub> → 1. Normality is asserted only in the defining radix *b*. The proof gives no rate and no uniformity as *P* grows; the unrestricted series for log 2, whose support contains every prime, is not covered. The normality half uses the soundness of the computable certificate together with LS-03; it does not use the maximum formula of LS-02.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.unsigned_discrepancy_limit",
+  "NormalityChecker.LocalizedSupport.unsigned_finite_support_normal",
+  "NormalityChecker.LocalizedSupport.maximal_discrepancy_iff",
+  "NormalityChecker.LocalizedSupport.prefix_discrepancy_tendsTo_one",
+]
+proof = ["notes/unsigned-finite-support.md"]
+supersedes = [
+  "NormalityChecker.LocalizedSupport.maximal_of_base_primes",
+  "NormalityChecker.LocalizedSupport.normal_of_two_mem",
+]
+related = ["LS-02", "LS-03", "LS-04", "MW-01"]
+
+[[result]]
+id = "LS-02"
+title = "Exact discrepancy from persistent cancellation at every order"
+topic = "localized"
+principal = true
+status = "lean"
+statement = '''
+Let *b*, *s*, *P*, *M*(*P*), *X* and *D*<sub>*N*</sub> be as in LS-01, and let *J* be the set of *p* ∈ *P* with *p* ∤ *b*. For *p* ∈ *J* let *w* be the root of unity in the *p*-adic integers congruent to 1/*b* modulo *p*, and put *S*<sub>*p*</sub> = *M*(*P* ∖ {*p*}). For 1 ≤ *d* ≤ *s* and 1 ≤ *t* < *p* define the convergent *p*-adic series
+
+```math
+V_{p,d}(t) = \sum_{i=0}^{\infty} p^{di} \sum_{r \in S_p, \ r \le p^i t} \frac{w^r}{r^d},
+```
+
+and let *Z*<sub>*p*,*d*</sub> be the set of 1 ≤ *t* < *p* with *V*<sub>*p*,*d*</sub>(*t*) = 0. For *y* ≥ 1 write *t*<sub>*p*</sub>(*y*) = *y* / *p*^⌊log<sub>*p*</sub> *y*⌋, and let *B* be the set of *y* ≥ 1 with *t*<sub>*p*</sub>(*y*) ∈ *Z*<sub>*p*,*d*</sub> for every *p* ∈ *J* and every 1 ≤ *d* ≤ *s*. With |·| denoting Lebesgue measure,
+
+```math
+D_N - \frac{|B \cap [0, N)|}{N} \to 0 \qquad (N \to \infty).
+```
+
+Moreover the upper limit is a maximum over a compact phase set. Let *W*<sub>*p*</sub> be the union over all integers *j* of the dilates *p*ʲ(*Z*<sub>*p*,1</sub> ∩ … ∩ *Z*<sub>*p*,*s*</sub>). For *T* = (*T*<sub>*p*</sub>) with 1 ≤ *T*<sub>*p*</sub> ≤ *p*, let *Q*(*T*) be the measure of the set of *u* ∈ [0, 1) with *uT*<sub>*p*</sub> ∈ *W*<sub>*p*</sub> for every *p* ∈ *J*. Let *H* be the closure, in the torus with one circle ℝ/ℤ for each *p* ∈ *J*, of the curve *t* ↦ (*t* / log *p* mod 1). Then lim sup *D*<sub>*N*</sub> is the largest value of *Q*(*T*) over all *T* whose angles (log *T*<sub>*p*</sub> / log *p* mod 1) lie in *H*, and this largest value is attained.
+
+In the special case *s* = 1 with exactly one prime *p* ∈ *P* not dividing *b*, writing *Z* = *Z*<sub>*p*,1</sub>,
+
+```math
+\limsup_{N \to \infty} D_N = \max_{1 \le t \le p} \frac{|Z|/(p-1) + |Z \cap [1, t)|}{t},
+```
+
+and *X* is normal in base *b* if and only if |*Z*| = 0.
+'''
+scope = '''
+*Z*<sub>*p*,*d*</sub> is exactly the set where the repository's executable order-*d* residue test for *p* fails at every precision (HigherOrderCells). Lean also proves the finite-checker form: if *F*<sub>*L*</sub>(*N*) counts the 0 ≤ *n* < *N* whose cell ⌊*p*<sup>*L*−1</sup> *t*<sub>*p*</sub>(*n*)⌋ fails at precision *L* for every pair (*p*, *d*), then lim over *L* of lim sup over *N* of *F*<sub>*L*</sub>(*N*)/*N* equals lim sup *D*<sub>*N*</sub>. Lean indexes the precision *L* by *l* = *L* − 1. All statements include empty *P* and empty *J* (then *B* = [1, ∞) and *D*<sub>*N*</sub> → 1). The formulas concern only the unsigned full-support series *X*. By LS-03 every *Z*<sub>*p*,*d*</sub> with *p* ∈ *J* is null, so for these series every quantity above equals 0 whenever *J* is nonempty; the value of the formula is therefore already given by LS-01. The entry records the exact identification of discrepancy with persistent cancellation, including convergence of the computable bounds. No analogue is claimed here for signed or masked weights.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.jointOrder_density_tendsTo_discrepancy",
+  "NormalityChecker.LocalizedSupport.discrepancy_eq_log_flow_max",
+  "NormalityChecker.LocalizedSupport.discrepancy_tracks_jointPhase",
+  "NormalityChecker.LocalizedSupport.persistent_iff_phaseMoment_zero",
+  "NormalityChecker.LocalizedSupport.discrepancy_eq_persistent_max",
+  "NormalityChecker.LocalizedSupport.normal_iff_persistent_null",
+  "NormalityChecker.LocalizedSupport.certificate_tendsTo_discrepancy",
+]
+proof = [
+  "notes/higher-order-joint.md",
+  "notes/higher-order-joint.md#maximum-on-the-compact-log-flow",
+  "notes/persistent-discrepancy.md#the-exact-formula",
+]
+supersedes = [
+  "NormalityChecker.LocalizedSupport.joint_density_tendsTo_discrepancy",
+  "NormalityChecker.LocalizedSupport.normal_iff_joint_density_zero",
+]
+related = ["LS-01", "LS-03", "LS-08"]
+
+[[result]]
+id = "LS-03"
+title = "Persistent failed regions are null"
+topic = "localized"
+principal = true
+status = "lean"
+statement = '''
+Let *b*, *s*, *P* and *X* be as in LS-01, and let *p* ∈ *P* with *p* ∤ *b*. With *V*<sub>*p*,*s*</sub> as in LS-02, the set *Z*<sub>*p*,*s*</sub> = {1 ≤ *t* < *p* : *V*<sub>*p*,*s*</sub>(*t*) = 0} has Lebesgue measure zero.
+
+Consequently the computable certificate tends to zero. For *k* ≥ 0 let *F*<sub>*k*</sub> be the set of integers *u* with *p*ᵏ ≤ *u* < *p*ᵏ⁺¹ such that *V*<sub>*p*,*s*</sub>(*u*/*p*ᵏ) ≡ 0 modulo *p*ᵏ⁺¹, and put
+
+```math
+C_k = \max_{p^k \le v \le p^{k+1}} \frac{|F_k|/(p-1) + \#\{u \in F_k : u < v\}}{v}.
+```
+
+Then lim sup *D*<sub>*N*</sub> ≤ *C*<sub>*k*</sub> for every *k*, and *C*<sub>*k*</sub> → 0 as *k* → ∞.
+'''
+scope = '''
+The nullity holds separately for each prime *p* ∈ *P* with *p* ∤ *b* and each order *s* ≥ 1, whatever the other primes of *P*. The residue condition defining *F*<sub>*k*</sub> is exactly the executable cell test at precision *k* + 1. The certificate tends to zero but may be positive at every finite depth: **finite termination is not claimed** (see LS-06 and LS-07 for paper results in special cases). The proof uses recurrence on the logarithmic circle, multiplicative finite differences in the cofactors and *p*-adic separation of finitely many geometric rays; it needs no independence of the reciprocal logarithms.
+'''
+lean = [
+  "NormalityChecker.LocalizedSupport.unsigned_persistent_null",
+  "NormalityChecker.LocalizedSupport.unsigned_certificate_tendsTo_zero",
+  "NormalityChecker.LocalizedSupport.discrepancy_le_certificate",
+]
+proof = [
+  "notes/unsigned-finite-support.md#from-prime-residues-to-a-measurable-function",
+  "notes/unsigned-finite-support.md#why-a-positive-measure-zero-set-is-impossible",
+]
+related = ["LS-01", "LS-02", "LS-06", "LS-07"]
+
+[[result]]
+id = "LS-04"
+title = "Two-generator localized logarithms: normality with a discrepancy rate"
+topic = "localized"
+status = "lean"
+statement = '''
+Let *b*, *q* ≥ 2 be integers with *q* ∣ *b*, and let *p* be an odd prime with *p* ∤ *b*. Put
+
+```math
+X = \sum_{a=0}^{\infty} \sum_{j=0}^{\infty} \frac{1}{q^a p^j \, b^{q^a p^j}}.
+```
+
+Then *X* is normal in base *b*, and there is a constant *A* > 0 such that, with *D*<sub>*N*</sub> as in LS-01,
+
+```math
+D_N \le \frac{A}{\log \log N}
+```
+
+for all sufficiently large *N*. In particular the series for log 2 restricted to the integers with prime factors in {2, *p*} is normal in base 2 for every odd prime *p*.
+'''
+scope = '''
+The integer *q* may be composite; the indices are then the products of powers of the single integer *q* with powers of *p* (for *q* = 6 they are 6ᵃ*p*ʲ, not all integers with prime factors in {2, 3, *p*}). When *q* is prime, normality is a case of LS-01 with *P* = {*q*, *p*}; the new content is the explicit rate. The constant *A* depends on *b*, *q* and *p* and is not computed. Normality for odd composite parameters, all orders and polynomial weights is LS-05; it has no rate.
+'''
+lean = [
+  "NormalityChecker.Localized.discrepancy_rate",
+  "NormalityChecker.Localized.interval_discrepancy_rate",
+  "NormalityChecker.Localized.series_normal",
+  "NormalityChecker.Localized.normal",
+  "NormalityChecker.Localized.binary_series_normal",
+]
+proof = [
+  "notes/mixed-localized-logarithms.md",
+  "notes/mixed-localized-logarithms.md#quantitative-interval-discrepancy",
+]
+supersedes = [
+  "NormalityChecker.LocalizedFive.binary_normal",
+  "NormalityChecker.LocalizedFive.series_binary_normal",
+]
+related = ["LS-01", "LS-05"]
+
+[[result]]
+id = "LS-05"
+title = "Rational polynomial weights on two-generator supports"
+topic = "localized"
+status = "lean"
+statement = '''
+Let *b*, *q*, *c* ≥ 2 be integers with gcd(*b*, *c*) = 1, such that every prime factor of *q* divides *b*. Let *P* be a nonzero polynomial with rational coefficients and let *s* be an integer with deg *P* < *s*. Then
+
+```math
+\sum_{a=0}^{\infty} \sum_{j=0}^{\infty} \frac{P(q^a c^j)}{(q^a c^j)^s \, b^{q^a c^j}}
+```
+
+is normal in base *b*. Likewise, for every infinite set *E* of nonnegative integers,
+
+```math
+\sum_{j \in E} \frac{P(c^j)}{c^{js} \, b^{c^j}}
+```
+
+is normal in base *b*.
+'''
+scope = '''
+The parameter *c* may be composite and need not be prime or odd, only coprime to *b*. Taking *P* = 1 gives the localized polylogarithm of order *s* on the indices *q*ᵃ*c*ʲ. Taking *P*(*X*) = λ₁*X*<sup>*s*−1</sup> + λ₂*X*<sup>*s*−2</sup> + … + λ<sub>*s*</sub> gives the finite signed rational combination of the orders 1, …, *s* with coefficients λᵢ, normal whenever these coefficients are not all zero; for example 7/*m* − 3/*m*² + 5/*m*⁴ corresponds to *P* = 7*X*³ − 3*X*² + 5 and *s* = 4. The set *E* in the second series may have arbitrarily long gaps; with finitely many terms the sum would be rational. The indices *q*ᵃ*c*ʲ are distinct because gcd(*q*, *c*) = 1. No discrepancy rate is given.
+'''
+lean = [
+  "NormalityChecker.Localized.Composite.Generators.mixed_rational_normal",
+  "NormalityChecker.Localized.Composite.Generators.series_normal",
+  "NormalityChecker.Localized.Composite.Generators.normal",
+  "NormalityChecker.Localized.Composite.Generators.restricted_axis_normal",
+  "NormalityChecker.Localized.Composite.Generators.axis_rational_normal",
+]
+proof = [
+  "notes/polynomial-certificates.md#why-signed-orders-survive-together",
+  "notes/composite-generators.md",
+]
+related = ["LS-04", "MW-03", "MW-04"]
+
+[[result]]
+id = "LS-06"
+title = "Finite-depth termination on two-prime full supports"
+topic = "localized"
+status = "paper"
+statement = '''
+Let *p* ≠ *q* be primes, *b* ≥ 2 with *p* ∤ *b*, and *s* ≥ 1, and take *P* = {*p*, *q*} in LS-01. Then the order-*s* certificate of LS-03 for the selected prime *p* vanishes at some finite depth: there is *k* with *F*<sub>*k*</sub> empty, so every cell passes and *C*<sub>*k*</sub> = 0. Moreover, for odd *p*, every one-sided value of the function *V*<sub>*p*,*s*</sub> of LS-02 is transcendental over ℚ.
+'''
+scope = '''
+This is a written proof, not a Lean theorem; Lean proves only nullity and convergence of the certificates (LS-03). The result holds for every residue of the radix, including when *q* also does not divide *b*. It concerns the full unsigned support with one cofactor prime. For fixed small order and two or more cofactor primes, finite termination remains open. It fails for masked supports: at *b* = 10, *p* = 3, *s* = 1 and *P* = {2, 3, 5} the paper constructs one fixed cofactor mask whose test fails at every precision.
+'''
+proof = [
+  "notes/fixed-depth-question.md#one-cofactor-prime-and-all-periodic-weights",
+  "notes/fixed-depth-question.md#a-single-fixed-mask-with-failure-at-every-depth",
+]
+inputs = ["Schlickewei's p-adic Subspace Theorem, in the form of F. Luca, J. Ouaknine and J. Worrell, Bull. London Math. Soc. (2025), Theorem 2 (doi:10.1112/blms.70033)"]
+related = ["LS-03", "LS-07"]
+
+[[result]]
+id = "LS-07"
+title = "Finite-depth termination at large order"
+topic = "localized"
+status = "paper"
+statement = '''
+Fix a prime *p*. For all sufficiently large orders *s*, every finite set of primes *P* containing *p*, and every *b* ≥ 2 with *p* ∤ *b*, the order-*s* certificate of LS-03 for *p* vanishes at a finite depth determined by the top row alone; the required precision is *o*(*s*) as *s* → ∞, uniformly in *P* and *b*. For *p* = 3 this holds for every *s* ≥ 2.
+'''
+scope = '''
+This is a written proof, not a Lean theorem. For general *p* the proof gives no numerical threshold for *s*, because it uses the Subspace Theorem over ℚ at the place *p*. The explicit case *p* = 3 uses lifting the exponent for 2ˢ ± 1. Small orders with several cofactor primes are not covered (see LS-06).
+'''
+proof = ["notes/fixed-depth-question.md#arbitrarily-many-cofactor-primes-at-large-order"]
+inputs = ["Schlickewei's p-adic Subspace Theorem over the rationals, in the form of F. Luca, J. Ouaknine and J. Worrell, Bull. London Math. Soc. (2025), Theorem 2 (doi:10.1112/blms.70033)"]
+related = ["LS-03", "LS-06"]
+
+[[result]]
+id = "LS-08"
+title = "Order two: a deeply failed cell need not clear the prime"
+topic = "counterexamples"
+status = "lean"
+statement = '''
+Take *b* = 36, *s* = 2, *P* = {2, 3, 7}, the selected prime *p* = 7 and the position *n* = 186, and let
+
+```math
+R = \sum_{m \in M(P), \ m \le 186} \frac{36^{\, 186 - m}}{m^2}
+```
+
+be the shifted rational prefix of order two. Then ⌊log₇ 186⌋ = 2, the order-two residue test for 7 fails at the cell 186 at precision 3 (it vanishes modulo 7³), every *m* ∈ *M*(*P*) with *m* ≤ 186 satisfies *m* + 16 ≤ 186, and the reduced denominator of *R* is exactly 7.
+'''
+scope = '''
+All four assertions are finite and checked by kernel reduction. The example refutes a proposed one-step implication at order *s* > 1: a failure of the deepest single-order test at a position whose insertions are all old, with every other support prime dividing the radix, need not remove *p* from the reduced denominator. At order one the implication holds. The example does not contradict LS-01 or LS-02, whose limiting tests use all orders 1 through *s*.
+'''
+lean = ["NormalityChecker.LocalizedSupport.order_two_deep_counterexample"]
+proof = ["notes/joint-persistent.md#higher-orders-and-the-lower-order-residues-paper-proof"]
+related = ["LS-02"]

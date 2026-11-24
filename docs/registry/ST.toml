@@ -1,0 +1,259 @@
+# Stoneham polynomial images and products. Manuscript: papers/01-stoneham-polynomials.
+# Format: docs/registry/SCHEMA.md
+
+[[result]]
+id = "ST-01"
+title = "Polynomial images of odd-prime-power Stoneham numbers"
+topic = "stoneham"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *e* ≥ 1. Define
+
+```math
+\alpha_{b,p^e} = \sum_{j=1}^{\infty} \frac{1}{p^{ej} \, b^{p^{ej}}}.
+```
+
+For every polynomial *P* with rational coefficients and degree at least one, the number *P*(α) is normal in base *b*.
+'''
+scope = '''
+The series starts at *j* = 1, as in Stoneham's definition. The radix *b* is the construction base. The prime must be odd: the nonvanishing argument uses *K*(*p*) ≡ 1 (mod *p* − 1), which excludes *p* = 2. No statement is made about other bases, about rational functions of α or about polynomials in several independent Stoneham numbers (see ST-04 and ST-06).
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.prime_power_polynomial_normal",
+  "NormalityChecker.StonehamPolynomial.polynomial_normal",
+  "NormalityChecker.StonehamPolynomial.power_normal",
+  "NormalityChecker.StonehamPolynomial.binary_polynomial_normal",
+]
+proof = ["notes/stoneham-powers-products.md"]
+supersedes = [
+  "NormalityChecker.StonehamPolynomial.binary_power_normal",
+  "NormalityChecker.StonehamSquare.binary_normal",
+]
+related = ["ST-02", "ST-03", "ST-04", "ST-05"]
+figures = ["stoneham-square-lattice"]
+
+[[result]]
+id = "ST-02"
+title = "Products of Stoneham numbers along one odd-prime axis"
+topic = "stoneham"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and let *p* be an odd prime with *p* ∤ *b*. For positive integers *m* and *e* write
+
+```math
+\alpha(b^m, p^e) = \sum_{j=1}^{\infty} \frac{1}{p^{ej} \, b^{m p^{ej}}}.
+```
+
+For every *d* ≥ 1 and all positive integers *m*₁, …, *m*<sub>*d*</sub> and *e*₁, …, *e*<sub>*d*</sub>, the product
+
+```math
+\prod_{i=1}^{d} \alpha(b^{m_i}, p^{e_i})
+```
+
+is normal in base *b*. For example, α(2, 3) · α(2, 9) is normal in base 2.
+'''
+scope = '''
+Every factor uses the same odd prime *p*. The radix dilations *m*ᵢ and the strides *e*ᵢ are arbitrary positive integers and may repeat, so the powers of ST-01 are the case of equal factors. Normality is asserted only in the common base *b*. The series start at *j* = 1. Products of Stoneham numbers on different primes are not covered; for α(2, 3) · α(2, 5) see ST-06 and ST-07. Sums of such products are treated in ST-04.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.prime_power_product_normal",
+  "NormalityChecker.StonehamPolynomial.same_prime_product_normal",
+  "NormalityChecker.StonehamPolynomial.binary_three_nine_product",
+]
+proof = ["notes/stoneham-powers-products.md#related-parameters-and-the-limit-of-the-argument"]
+related = ["ST-01", "ST-04", "ST-06"]
+
+[[result]]
+id = "ST-03"
+title = "Exact denominator profile of the binary Stoneham square"
+topic = "stoneham"
+principal = true
+status = "lean"
+statement = '''
+Let α = α(2, 3) be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 1. For an integer *n* ≥ 0 let *T*<sub>*n*</sub> be the set of ordered pairs (*i*, *j*) of positive integers with 3ⁱ + 3ʲ ≤ *n*, and put
+
+```math
+R_n = \sum_{(i,j) \in T_n} \frac{2^{\, n - 3^i - 3^j}}{3^{\, i + j}}.
+```
+
+Then 2ⁿα² − *R*<sub>*n*</sub> → 0, and the reduced denominator *q*<sub>*n*</sub> of *R*<sub>*n*</sub> is a power of 3. For every *k* ≥ 4 and 3ᵏ ≤ *n* < 3ᵏ⁺¹ its exponent is given by the following table, where each range includes its left endpoint and excludes its right endpoint.
+
+| Digit positions *n* | Exponent of 3 in *q*<sub>*n*</sub> |
+| --- | ---: |
+| From 3ᵏ to 3ᵏ + 3ᵏ⁻² | 2*k* − 2 |
+| From 3ᵏ + 3ᵏ⁻² to 3ᵏ + 3ᵏ⁻¹ | 2*k* − 3 |
+| From 3ᵏ + 3ᵏ⁻¹ to 2 · 3ᵏ | 2*k* − 1 |
+| From 2 · 3ᵏ to 3ᵏ⁺¹ | 2*k* |
+
+For *n* < 81 the denominator *q*<sub>*n*</sub> equals 1 on [0, 6), 9 on [6, 12), 27 on [12, 18), 81 on [18, 30), 9 on [30, 36), 243 on [36, 54) and 729 on [54, 81). Consequently *q*<sub>*n*</sub> ≤ *n*² < 243 *q*<sub>*n*</sub> for every *n* ≥ 81.
+'''
+scope = '''
+The series for α starts at *j* = 1; adding the term with *j* = 0 would create cross terms after squaring. The table requires *k* ≥ 4. The range [30, 36) on the third scale is a genuine exception: the pattern would predict 27, and the reduced denominators are 9 there (Lean checks *q*₃₀ = *q*₃₅ = 9 and *q*₃₆ = 243 separately). The profile concerns the true shifted prefix of α², summed over ordered pairs. Binary normality of α² follows from this profile by the arithmetic certificate and is also a special case of ST-01, which supersedes it.
+'''
+lean = [
+  "NormalityChecker.StonehamSquare.exact_profile",
+  "NormalityChecker.StonehamSquare.initial_profile",
+  "NormalityChecker.StonehamSquare.third_scale_exception",
+  "NormalityChecker.StonehamSquare.quadratic_denominator",
+  "NormalityChecker.StonehamSquare.shifted_tail",
+]
+proof = ["notes/stoneham-square.md", "notes/stoneham-square.md#exact-ternary-cancellation"]
+related = ["ST-01"]
+
+[[result]]
+id = "ST-04"
+title = "Combinations with a unique leading monomial"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let *b*, *p* and α(*b*<sup>*m*</sup>, *p*<sup>*e*</sup>) be as in ST-02. Call a product of *d* ≥ 0 such numbers, with arbitrary positive *m* and *e* in each factor, a monomial of degree *d*; the empty product is the monomial 1 of degree 0. Let *μ* be a monomial of degree *d* ≥ 1, let *c* ≠ 0 be rational, and let *μ*₁, …, *μ*<sub>*k*</sub> be monomials of degree less than *d* with rational coefficients *a*₁, …, *a*<sub>*k*</sub>. Then
+
+```math
+c \, \mu + \sum_{i=1}^{k} a_i \, \mu_i
+```
+
+is normal in base *b*.
+'''
+scope = '''
+The degree is the number of factors; it ignores the dilations *m* and strides *e*. The hypothesis is that exactly one monomial has maximal degree. Distinct monomials of the same maximal degree can cancel their leading residues, and no claim is made in that case. This is therefore **not** a theorem about arbitrary multivariate polynomials in Stoneham numbers. All factors share one odd prime *p* ∤ *b*, and normality is asserted only in base *b*. ST-01 and ST-02 are the special cases used in Lean.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.same_prime_sum_normal",
+  "NormalityChecker.StonehamPolynomial.rational_sum_normal",
+  "NormalityChecker.StonehamPolynomial.integer_sum_normal",
+]
+proof = ["notes/stoneham-powers-products.md#related-parameters-and-the-limit-of-the-argument", "notes/stoneham-powers-products.md#the-surviving-numerator-in-every-degree"]
+related = ["ST-01", "ST-02"]
+
+[[result]]
+id = "ST-05"
+title = "Joint uniform distribution of distinct Stoneham powers"
+topic = "stoneham"
+principal = true
+status = "lean"
+statement = '''
+Let *b*, *p* and *e* be as in ST-01, and let *r*₁, …, *r*<sub>*d*</sub> be distinct positive integers. Then the points
+
+```math
+\left( \{ b^n \alpha^{r_1} \}, \ \ldots, \ \{ b^n \alpha^{r_d} \} \right), \qquad n = 0, 1, 2, \ldots
+```
+
+are uniformly distributed in the unit cube [0, 1)ᵈ: for every box with sides [*a*ᵢ, *c*ᵢ) ⊆ [0, 1], the proportion of the first *N* points in the box tends to its volume.
+'''
+scope = '''
+Here α is the Stoneham number of ST-01 with parameters *b* and *p*ᵉ, and {·} is the fractional part. All coordinates use the same positions *n*. The deduction from ST-01 is the multidimensional Weyl criterion: every nonzero integer frequency vector gives a nonconstant rational polynomial in α. The theorem concerns powers of one Stoneham number, not several independent ones.
+'''
+lean = ["NormalityChecker.StonehamPolynomial.joint_uniform_powers"]
+proof = ["notes/stoneham-powers-products.md"]
+related = ["ST-01"]
+figures = ["stoneham-joint-digits"]
+
+[[result]]
+id = "ST-06"
+title = "A product on two prime axes: discrepancy below one and irrationality"
+topic = "stoneham"
+status = "lean"
+statement = '''
+For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>) over *j* ≥ 1, and put *x* = α(2, 3) · α(2, 5). For *N* ≥ 1 let *D*<sub>*N*</sub> be the supremum, over 0 ≤ *u* < *v* ≤ 1, of the absolute difference between the proportion of 0 ≤ *n* < *N* with {2ⁿ*x*} ∈ [*u*, *v*) and *v* − *u*. Then *x* is irrational and
+
+```math
+\limsup_{N \to \infty} D_N \le \frac{43}{45}.
+```
+'''
+scope = '''
+Here {·} is the fractional part, and both series start at *j* = 1. The bound comes from a uniformly distributed share of at least 2/45 of every long prefix, supplied by one isolated insertion on each late ternary shell. Binary normality of *x* is open in this repository. Transcendence of *x* is a paper deduction from Ridout's theorem and is recorded in ST-07; it is not part of this Lean entry.
+'''
+lean = [
+  "NormalityChecker.ProductThreeFive.discrepancy",
+  "NormalityChecker.ProductThreeFive.irrational",
+  "NormalityChecker.ProductThreeFive.uniform_windows",
+]
+proof = ["notes/stoneham-powers-products.md#a-product-on-different-prime-axes"]
+related = ["ST-02", "ST-07"]
+
+[[result]]
+id = "ST-07"
+title = "Transcendence of products of two independent Stoneham numbers"
+topic = "stoneham"
+status = "paper"
+statement = '''
+Let *b* ≥ 2 and let *c*, *d* ≥ 2 be multiplicatively independent integers, both coprime to *b*. Write α(*b*, *c*) for the sum of 1/(*c*ʲ *b*<sup>*c*ʲ</sup>) over *j* ≥ 1. Then the product α(*b*, *c*) · α(*b*, *d*) is transcendental, and its base-*b* interval discrepancy *D*<sub>*N*</sub> (defined as in ST-06 with radix *b*) satisfies
+
+```math
+\limsup_{N \to \infty} D_N < 1.
+```
+
+In particular α(2, 3) · α(2, 5) is transcendental.
+'''
+scope = '''
+This is a written proof, not a Lean theorem. For the parameters (*b*, *c*, *d*) = (2, 3, 5) the discrepancy bound 43/45 and irrationality are kernel-verified (ST-06); only transcendence is added here. In general no explicit bound below one is given. Transcendence uses Ridout's theorem on rational approximations whose denominators have prime factors in a fixed finite set, applied to truncations at isolated insertions. Algebraic independence of the two factors is not used or claimed, and full normality of such products remains open.
+'''
+proof = ["notes/stoneham-powers-products.md#a-product-on-different-prime-axes"]
+inputs = ["D. Ridout, Rational approximations to algebraic numbers, Mathematika 4 (1957) — restricted-denominator form of Roth's theorem"]
+related = ["ST-06"]
+
+[[result]]
+id = "ST-08"
+title = "Normality of single Stoneham components with odd parameter"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *c* ≥ 3 be odd with gcd(*b*, *c*) = 1, and let *m* ≥ 1. Put
+
+```math
+T_{b,c,m} = \sum_{j=0}^{\infty} \frac{1}{m \, c^j \, b^{m c^j}}.
+```
+
+Then *T*<sub>*b*,*c*,*m*</sub> and *m* · *T*<sub>*b*,*c*,*m*</sub> are normal in base *b*.
+'''
+scope = '''
+This series starts at *j* = 0, unlike α(*b*, *c*) in ST-01; thus *T*<sub>*b*,*c*,1</sub> = 1/*b* + α(*b*, *c*), and normality of α(*b*, *c*) follows by rational translation (a one-line paper step, not a separate Lean statement). The parameter *c* may be composite but must be odd; even *c* is not treated by this proof. Normality of these constants is the classical theorem of Bailey and Crandall; the entry records an independent kernel proof and claims no priority. These components are the building blocks of the finite combinations in the CR family, where sums of two such normal components can be nonnormal.
+'''
+lean = [
+  "NormalityChecker.radixComponent_normal",
+  "NormalityChecker.weighted_radixComponent_normal",
+]
+proof = ["notes/normal-summands.md#normality-of-an-individual-summand"]
+related = ["ST-01", "ST-09"]
+
+[[result]]
+id = "ST-09"
+title = "Polynomially spaced insertions preserve binary normality"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let *S* be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 0, and for a positive integer *r* put
+
+```math
+Z_r = \sum_{m=1}^{\infty} \frac{1}{3^{\lfloor \log_3 m \rfloor} \, 2^{m^r}}.
+```
+
+For every *r* ≥ 1 the number *S* + *Z*<sub>*r*</sub> is normal in base 2. Moreover *Z*₁ = 3 − 4*S*, so *S* + *Z*₁ = 3 − 3*S*.
+'''
+scope = '''
+The series for *S* includes the initial term 1/2 (index *j* = 0). For *r* ≥ 2 the proof compares 3-adic norms: the Stoneham prefix dominates the perturbation prefix, so the insertions at *m*ʳ cannot cancel its denominator. For *r* = 1 there are no insertion-free blocks; instead the exact identity reduces the claim to normality of *S* (ST-08). Only base 2 and the parameter 3 are treated.
+'''
+lean = [
+  "NormalityChecker.PolynomialInsertions.normal_of_positive_degree",
+  "NormalityChecker.PolynomialInsertions.normal",
+  "NormalityChecker.PolynomialInsertions.linear_value",
+]
+proof = ["notes/arithmetic-certificates.md#insertions-at-squares-cubes-and-every-digit"]
+related = ["ST-08"]
+
+[[result]]
+id = "ST-10"
+title = "Superlinear ternary word complexity of the binary Stoneham number"
+topic = "stoneham"
+status = "paper"
+statement = '''
+Let α = α(2, 3) be the sum of 1/(3ʲ 2<sup>3ʲ</sup>) over *j* ≥ 1. For every real *C* > 0 and every sufficiently large integer *L*, the ternary words of length *L* that start at digit positions 1, 2, …, 1 + ⌊*CL*⌋ of α are pairwise distinct. Consequently, if *p*₃(*L*) is the number of distinct words of length *L* occurring in the ternary expansion of α, then *p*₃(*L*)/*L* → ∞.
+'''
+scope = '''
+This is a written proof, not a Lean theorem. It rests on a separation estimate for ‖*hq*α‖ with *q* = 3ᴺ or *q* = 3ᴺ − 3ᵐ, deduced from Schlickewei's *p*-adic Subspace Theorem with the places ∞, 2 and 3. The same argument covers the convention that adds the initial term 1/2. The threshold in *L* is ineffective. The result counts every word occurring at least once; it says nothing about the frequency of any ternary digit, about discrepancy below one, or about ternary normality, all of which remain open.
+'''
+proof = ["notes/ternary-stoneham-complexity.md"]
+inputs = ["Schmidt–Schlickewei Subspace Theorem, in Schlickewei's p-adic form as stated in Y. Bilu, Astérisque 317 (2008), statement 2.3"]
+related = ["ST-01"]

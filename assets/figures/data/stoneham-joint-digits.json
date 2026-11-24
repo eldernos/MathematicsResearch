@@ -1,0 +1,42 @@
+{
+  "orbit_length_N": 16384,
+  "bits_per_coordinate": 4,
+  "precision_bits_M": 16448,
+  "alpha_truncated_after_j": 8,
+  "certification": "floor(2^M lo^r) == floor(2^M hi^r) for r = 1, 2, 3; digits exact",
+  "expected_per_cell": "64",
+  "degrees_of_freedom": 255,
+  "panels": [
+    {
+      "powers": [
+        1,
+        2
+      ],
+      "chi_square": "8119/32",
+      "chi_square_decimal": 253.72,
+      "min_count_over_expected": "11/16",
+      "max_count_over_expected": "23/16"
+    },
+    {
+      "powers": [
+        1,
+        3
+      ],
+      "chi_square": "3763/16",
+      "chi_square_decimal": 235.19,
+      "min_count_over_expected": "47/64",
+      "max_count_over_expected": "47/32"
+    },
+    {
+      "powers": [
+        2,
+        3
+      ],
+      "chi_square": "7785/32",
+      "chi_square_decimal": 243.28,
+      "min_count_over_expected": "11/16",
+      "max_count_over_expected": "85/64"
+    }
+  ],
+  "note": "Numerical illustration only; the limit is the Lean theorem joint_uniform_powers (ST-05)."
+}

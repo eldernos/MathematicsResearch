@@ -1,0 +1,282 @@
+# Exact discrepancy and symbolic spectra of signed Stoneham expansions. Manuscript: papers/03-signed-resonance.
+# Format: docs/registry/SCHEMA.md
+#
+# Common setting for DS-01 to DS-10. Let b ≥ 2, let p be a prime with p ∤ b
+# (p = 2 is allowed when b is odd), and let c_0, c_1, ... be a bounded sequence of
+# integers ("phases"). The jumps are a_0 = c_0 and a_{j+1} = c_{j+1} − p c_j.
+
+[[result]]
+id = "DS-01"
+title = "Exact discrepancy of signed Stoneham expansions"
+topic = "discrepancy"
+principal = true
+status = "lean"
+statement = '''
+Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, and let *c*₀, *c*₁, … be a bounded sequence of integers. Put *a*₀ = *c*₀ and *a*ⱼ₊₁ = *c*ⱼ₊₁ − *p c*ⱼ, and
+
+```math
+X = \sum_{j=0}^{\infty} \frac{a_j}{p^j \, b^{p^j}} .
+```
+
+Shell *j* consists of the integers *n* with *pʲ* ≤ *n* < *pʲ*⁺¹; it is a zero shell when *c*ⱼ = 0. Let *Z*(*N*) be the number of integers 0 ≤ *n* < *N* lying in zero shells, and let *D*<sub>*N*</sub> be the interval discrepancy of the first *N* points {*bⁿX*}, 0 ≤ *n* < *N*: the supremum over 0 ≤ α < β ≤ 1 of the absolute difference between the proportion of these points in [α, β) and β − α. Then
+
+```math
+D_N - \frac{Z(N)}{N} \longrightarrow 0 \qquad (N \to \infty),
+```
+
+and consequently the limiting discrepancy *D*∞(*X*) = lim sup *D*<sub>*N*</sub> equals the upper density lim sup *Z*(*N*)/*N* of the zero shells.
+'''
+scope = '''
+The convergence holds along all prefix lengths, including cutoffs inside a shell. Position 0 precedes the first shell and counts as regular. The phases may be aperiodic and of either sign; only boundedness is assumed. The hypotheses allow *p* = 2 in every odd base. The proof shows that points on nonzero shells are uniformly distributed relative to the full prefix (`nonzero_shells_uniform`) and that late points on zero shells avoid every fixed interval [δ, 1 − δ) (`zero_shells_miss_interior`). The theorem concerns the base *b* used in the construction only.
+'''
+lean = [
+  "NormalityChecker.SignedPhases.discrepancy_sub_zeroDensity_tendsto",
+  "NormalityChecker.SignedPhases.limsup_discrepancy_eq_zeroDensity",
+  "NormalityChecker.SignedPhases.nonzero_shells_uniform",
+  "NormalityChecker.SignedPhases.zero_shells_miss_interior",
+  "NormalityChecker.SignedPhases.limsup_zeroDensity_eq_boundary",
+  "NormalityChecker.SignedPhases.zeroDensity_boundary_recurrence",
+]
+proof = ["notes/signed-shell-discrepancy.md"]
+related = ["DS-02", "DS-03", "DS-04", "DS-06"]
+
+[[result]]
+id = "DS-02"
+title = "Discrepancy of periodic phases and the values 27/40, 3/4 and 12/13"
+topic = "discrepancy"
+principal = true
+status = "lean"
+statement = '''
+In the setting of DS-01 suppose that the phases have period *L* ≥ 1. For 0 ≤ *r* ≤ *L* let *M*ᵣ be the number of zero-shell positions below *pʳ*, namely the sum of *p*ⁱ⁺¹ − *pⁱ* over those *i* < *r* with *c*ᵢ = 0, and put *A* = *M*<sub>*L*</sub>/(*pᴸ* − 1). Then
+
+```math
+D_\infty(X) = \max\left( 0, \ \max_{0 \le r < L} \frac{M_r + A}{p^r} \right).
+```
+
+For *b* = 2 and *p* = 3, the repeating phase words 1, 1, 1, 0 and 1, 0 and 1, 0, 0 (starting at *c*₀) give
+
+```math
+D_\infty(X) = \frac{27}{40}, \qquad D_\infty(X) = \frac{3}{4}, \qquad D_\infty(X) = \frac{12}{13}
+```
+
+respectively.
+'''
+scope = '''
+The rational maximum is the executable `cycleMaximum`; the three binary values are kernel evaluations of it. Each number (*M*ᵣ + *A*)/*pʳ* is the limiting zero-shell density at the boundary before a shell of residue *r*. The note also gives the equivalent closed form (*p* − 1)/(*p*(1 − *p*⁻ᴸ)) times the largest sum over *i* < *L* of *z*ᵣ₋ᵢ/*pⁱ*, with *z*ⱼ = 1 when *c*ⱼ = 0. Eventually periodic phases have the same value by a paper remark; Lean requires exact periodicity from *j* = 0. The three expansions are nonnormal and, by DS-07, irrational.
+'''
+lean = [
+  "NormalityChecker.SignedPhases.periodic_discrepancy",
+  "NormalityChecker.SignedPhases.binary_three_periods",
+]
+proof = ["notes/signed-shell-discrepancy.md#periodic-phases-and-cutoffs-within-shells"]
+related = ["DS-01", "DS-03"]
+figures = ["translated-discrepancy"]
+
+[[result]]
+id = "DS-03"
+title = "Rational translation multiplies the discrepancy by that of the rational orbit"
+topic = "discrepancy"
+principal = true
+status = "lean"
+statement = '''
+In the setting of DS-01 let *m* be a nonzero integer and *r* a rational number. Let *D*(*r*) be the limiting discrepancy of the orbit {*bⁿr*}, which equals the interval discrepancy of the uniform measure on one period of its eventual cycle. Then for all prefix lengths
+
+```math
+D_N(mX + r) - \frac{Z(N)}{N} \, D(r) \longrightarrow 0 ,
+```
+
+and consequently *D*∞(*mX* + *r*) = *D*∞(*X*) · *D*(*r*). For *b* = 2, *p* = 3 and *r* = 1/3 one has *D*(1/3) = 2/3, so the three examples of DS-02 give
+
+```math
+D_\infty(mX + 1/3) = \frac{9}{20}, \qquad \frac{1}{2}, \qquad \frac{8}{13}
+```
+
+for every nonzero integer *m*.
+'''
+scope = '''
+Both signs of *m* are allowed. *D*(*r*) > 0 for every rational *r* (`rational_discrepancy_pos`), and *D*(*r*) = 1 when *r* is an integer, so translation never removes nonnormality. The theorem covers integer multipliers only. Division by an integer can change the discrepancy in a way not predicted by the factor (DS-10); finite-mixture formulas for rational multipliers and the integer-cleared cyclotomic sums of CR-01 are paper extensions in the note.
+'''
+lean = [
+  "NormalityChecker.SignedPhases.translated_limsup",
+  "NormalityChecker.SignedPhases.translated_discrepancy",
+  "NormalityChecker.SignedPhases.rational_discrepancy_limit",
+  "NormalityChecker.SignedPhases.translated_third_examples",
+  "NormalityChecker.SignedPhases.rational_discrepancy_pos",
+  "NormalityChecker.third_discrepancy_sharp",
+]
+proof = [
+  "notes/translated-shells.md",
+  "notes/translated-shells.md#periodic-examples-and-small-positive-discrepancies",
+]
+related = ["DS-02", "DS-08", "DS-10"]
+figures = ["translated-discrepancy"]
+
+[[result]]
+id = "DS-04"
+title = "The attainable discrepancies are the values of suffix-maximal binary words"
+topic = "discrepancy"
+principal = true
+status = "lean"
+statement = '''
+For a one-sided binary word *s* = *s*₀*s*₁*s*₂… and an integer *p* ≥ 2 put
+
+```math
+V_p(s) = (p - 1) \sum_{i=0}^{\infty} \frac{s_i}{p^{i+1}} .
+```
+
+Let σ delete the first letter of a word, and order words lexicographically: at the first differing position the word with 0 is smaller, and equal words are comparable. Call *s* suffix-maximal if σʰ*s* ≤ *s* for every *h* ≥ 1.
+
+Fix *b* ≥ 2 and a prime *p* with *p* ∤ *b*. A real number δ equals *D*∞(*X*) for some bounded integer phase sequence in the setting of DS-01 if and only if δ = *V*ₚ(*s*) for some suffix-maximal binary word *s*. In particular the set of attainable discrepancies does not depend on *b*.
+'''
+scope = '''
+For *p* = 2 a dyadic value is attained as soon as one of its binary codings is suffix-maximal; for example 1000… qualifies for 1/2. Necessity: the discrepancy is the limit superior of the reversed zero-shell histories at the boundaries *pʲ*, read with digits 0 and *p* − 1, and the lexicographically largest limit word of these histories is suffix-maximal and has exactly this value in every radix simultaneously. Sufficiency: an explicit chronological pattern realizes each suffix-maximal word, and the proof uses only phases in {0, 1}. The structure of the spectrum is in DS-05 and its Hausdorff dimension in DS-11. The relation of the binary spectrum to the doubling-map parameter set studied by Carminati and Tiozzo is a paper remark.
+'''
+lean = [
+  "NormalityChecker.SignedPhases.attainable_discrepancy_iff",
+  "NormalityChecker.SignedPhases.limsup_discrepancy_eq_history_limsup",
+  "NormalityChecker.SignedPhases.exists_maximal_limit_history",
+  "NormalityChecker.SignedPhases.realizingPattern_limsup",
+  "NormalityChecker.SignedPhases.zeroDensity_eq_historyValue",
+  "NormalityChecker.SignedPhases.isCompact_historySpectrum",
+  "NormalityChecker.SignedPhases.least_positive_historyValue",
+]
+proof = [
+  "notes/attainable-shell-histories.md",
+  "notes/signed-shell-discrepancy.md#which-values-occur",
+]
+related = ["DS-01", "DS-05", "DS-11"]
+
+[[result]]
+id = "DS-05"
+title = "Compactness, a gap above zero and periodic approximation in the spectrum"
+topic = "discrepancy"
+status = "lean"
+statement = '''
+Let *p* ≥ 2 and let *S*ₚ be the set of values *V*ₚ(*s*) of suffix-maximal binary words (DS-04). Then
+
+* *S*ₚ is compact;
+* the least positive element of *S*ₚ is (*p* − 1)/*p*, attained by the word 1000…, so 0 is an isolated point;
+* every positive element of *S*ₚ is an accumulation point: for each *k* ≥ 1 there is a different element of *S*ₚ within *p*⁻ᵏ of it.
+
+Moreover, let *p* be a prime with *p* ∤ *b*, let *s* be suffix-maximal and let *k* ≥ 1. Take the phases of period 2*k* that equal 1 on the first *k* indices of each period and, on the remaining *k* indices, equal 0 or 1 according as the letters *s*ₖ₋₁, …, *s*₀ are 1 or 0. The rational discrepancy of the resulting expansion, given by the formula of DS-02, lies within *p*⁻ᵏ of *V*ₚ(*s*).
+'''
+scope = '''
+The first three statements concern the symbolic set and hold for every integer *p* ≥ 2; DS-04 identifies *S*ₚ with the discrepancy spectrum when *p* is a prime not dividing *b*. Consequently, if infinitely many phases vanish then *D*∞(*X*) ≥ (*p* − 1)/*p*. Dimension and measure of *S*ₚ are paper results (DS-11).
+'''
+lean = [
+  "NormalityChecker.SignedPhases.isCompact_historySpectrum",
+  "NormalityChecker.SignedPhases.least_positive_historyValue",
+  "NormalityChecker.SignedPhases.exists_distinct_nearby_historyValue",
+  "NormalityChecker.SignedPhases.cycleMaximum_approximates_historyValue",
+  "NormalityChecker.SignedPhases.periodicHistoryPattern_error",
+]
+proof = ["notes/attainable-shell-histories.md#periodic-approximation-and-isolated-points"]
+related = ["DS-04", "DS-11"]
+
+[[result]]
+id = "DS-06"
+title = "A signed expansion is normal exactly when its phases are eventually nonzero"
+topic = "discrepancy"
+status = "lean"
+statement = '''
+In the setting of DS-01, the number *X* is normal in base *b* if and only if *c*ⱼ ≠ 0 for all sufficiently large *j*.
+'''
+scope = '''
+This is the qualitative form of DS-01: each zero shell occupies a fixed proportion of the prefix ending at its right end, and its points stay near integers. Normality is tested in the construction base *b* only.
+'''
+lean = ["NormalityChecker.SignedPhases.normal_iff_eventually_nonzero"]
+proof = ["notes/signed-shell-discrepancy.md"]
+related = ["DS-01"]
+
+[[result]]
+id = "DS-07"
+title = "Irrationality criterion and transcendence of signed expansions"
+topic = "discrepancy"
+status = "lean+paper"
+statement = '''
+In the setting of DS-01, the number *X* is irrational if and only if *c*ⱼ ≠ 0 for infinitely many *j*. In that case *X* is transcendental.
+'''
+scope = '''
+The irrationality criterion is a Lean theorem. Transcendence is a paper deduction: the partial sum through insertion *j* has denominator dividing *pʲ* times the (*pʲ*)-th power of *b*, so all its prime factors divide *pb*, and it approximates *X* to within a constant times the denominator to the power −μ for every fixed μ < *p*; Ridout's theorem (μ > 1, restricted denominators) excludes algebraic irrational *X* for every *p*, and Roth's theorem suffices when *p* ≥ 3. In particular the three binary examples of DS-02, their rational translates in DS-03, and a realization of every value in the spectrum of DS-04 are transcendental. The paper argument also covers composite *p*.
+'''
+lean = ["NormalityChecker.SignedPhases.irrational_iff_frequently_nonzero"]
+proof = ["notes/signed-shell-discrepancy.md#irrationality-lean-and-transcendence-paper-corollaries"]
+inputs = "Roth's theorem on rational approximation to algebraic numbers (Roth 1955); Ridout's p-adic extension with denominators restricted to a finite set of primes (Ridout 1957)."
+related = ["DS-01", "DS-04"]
+
+[[result]]
+id = "DS-08"
+title = "Rational translations give arbitrarily small positive discrepancy"
+topic = "discrepancy"
+status = "lean"
+statement = '''
+Let *b* ≥ 2 and let *t* ≥ 2 be an integer coprime to *b*. The limiting discrepancies *D*(*t*⁻ᵏ) of the rational orbits {*bⁿ t*⁻ᵏ} are positive and tend to 0 as *k* → ∞. Consequently, in the setting of DS-01, if *D*∞(*X*) > 0 then for every ε > 0 and all sufficiently large *k*,
+
+```math
+0 < D_\infty\left( X + t^{-k} \right) < \varepsilon .
+```
+
+Also, if a cyclic base-*b* word of length *L* places exactly one of its *L* rotations in each interval [*i*/*L*, (*i* + 1)/*L*), the repeating rational *r* with that period satisfies 0 < *D*(*r*) ≤ 2/*L*; base-*b* de Bruijn words of order *h* qualify with *L* = *bʰ*.
+'''
+scope = '''
+The statement is qualitative in *k*. The exact value *D*∞(*Y* + 3⁻ᵏ) = 1/(2 · 3ᵏ⁻¹) for the binary example *Y* with phases 1, 0 and the exact de Bruijn formula are paper computations. The binary word 00010111 is checked by kernel evaluation to satisfy the one-visit condition with *L* = 8. Density in [0, 1] of the union of all translated spectra is a paper result (DS-11). When infinitely many phases of *X* are nonzero, the translates are transcendental by the paper corollary in DS-07.
+'''
+lean = [
+  "NormalityChecker.SignedPhases.arbitrarily_small_translations",
+  "NormalityChecker.SignedPhases.inverse_power_discrepancy_tendsto",
+  "NormalityChecker.SignedPhases.rational_discrepancy_pos",
+  "NormalityChecker.SignedPhases.de_bruijn_discrepancy_bounds",
+  "NormalityChecker.SignedPhases.de_bruijn_eight_cells",
+]
+proof = [
+  "notes/translated-shells.md#periodic-examples-and-small-positive-discrepancies",
+  "notes/translated-shells.md#de-bruijn-translations",
+]
+related = ["DS-03"]
+
+[[result]]
+id = "DS-09"
+title = "Changing the shell schedule: equal zero patterns with discrepancies 9/13 and 12/13"
+topic = "discrepancy"
+status = "lean"
+statement = '''
+Let *b* = 2 and *p* = 3. For the phases repeating 0, 1, 3 (starting at *c*₀) the jump at every index 3*k* + 2 vanishes, and for the phases repeating 0, 0, 1 the jump at every index 3*k* + 1 vanishes. Their limiting discrepancies are 9/13 and 12/13 respectively.
+'''
+scope = '''
+Grouping the shells between the nonvanishing jumps, both examples have alternating zero and nonzero groups, with ratios (3, 9) and (9, 3) between group boundaries, so the grouped zero indicator is 1010… in both cases while the discrepancies differ. The general coarsening recurrence for arbitrary power-of-*p* schedules with bounded steps, the constant-step spectrum, and an aperiodic schedule with discrepancy 11/12 for *b* = 2, *p* = 3 are paper deductions from DS-01.
+'''
+lean = ["NormalityChecker.SignedPhases.alternating_ratio_discrepancies"]
+proof = ["notes/attainable-shell-histories.md#changing-the-geometric-schedule"]
+related = ["DS-01", "DS-02"]
+
+[[result]]
+id = "DS-10"
+title = "Division by an integer can change the discrepancy factor"
+topic = "counterexamples"
+status = "lean"
+statement = '''
+Let *b* = 2, *p* = 3, let *Y* be the expansion of DS-01 with phases repeating 1, 0, and put *X* = 9*Y* + 3/8. Then *D*∞(*X*) = 3/4 and *D*∞(*X*/9) = 1/2.
+'''
+scope = '''
+*X* is itself a bounded signed expansion (its phases are nine times those of *Y* except for the initial phase), so DS-01 gives 3/4, while *X*/9 = *Y* + 1/24 falls under DS-03 with *D*(1/24) = 2/3. Thus the multiplicative rule of DS-03 does not extend to rational multipliers with the same translation factor. Transcendence of *X* is the paper corollary of DS-07.
+'''
+lean = ["NormalityChecker.SignedPhases.division_by_nine_example"]
+proof = ["notes/translated-shells.md#several-periodic-orbits-and-rational-division-paper"]
+related = ["DS-03"]
+
+[[result]]
+id = "DS-11"
+title = "Hausdorff dimension of the discrepancy spectrum"
+topic = "discrepancy"
+status = "paper"
+statement = '''
+For every integer *p* ≥ 2 the set *S*ₚ of DS-05 has Hausdorff dimension log 2 / log *p*, and its Hausdorff measure in that dimension is zero. In particular *S*₂ has dimension 1 and Lebesgue measure zero, and every *S*ₚ is closed and nowhere dense. For fixed rational *r* the translated spectrum is *D*(*r*) · *S*ₚ. The union of the translated spectra over all rational *r* has dimension log 2 / log *p*, zero Hausdorff measure in that dimension, and closure [0, 1].
+'''
+scope = '''
+Paper proofs only: the upper bound counts cylinders, and the lower bound uses a mass distribution on words built from blocks ending in 0 after an initial run of ones. The translated statements combine the Lean product formula DS-03 with similarity and a de Bruijn density construction. No Lean theorem states these dimension or measure results.
+'''
+proof = [
+  "notes/attainable-shell-histories.md#hausdorff-dimension-and-measure-paper-proof",
+  "notes/attainable-shell-histories.md#rational-translations-paper-deductions",
+]
+related = ["DS-04", "DS-05"]

@@ -1,0 +1,81 @@
+# Mathematical topic of each Lean module, for the generated directory docs/theorems.md.
+# Every module with a public theorem must appear exactly once; scripts/portal.py checks this.
+# Module names are relative to NormalityChecker/.
+
+[foundations]
+title = "Normality, discrepancy and Fourier criteria"
+modules = [
+  "Basic", "Distribution", "Analysis/Weyl", "FourierTest", "Dilation", "Correlations", "ScaleTransfer",
+  "BinaryDiscrepancy", "CircleDiscrepancy", "SharpDiscrepancy", "RationalOrbitCycle", "Concentration",
+  "IntervalFourier", "OrbitDifferencing", "RadixTelescoping", "DominatedPerturbation", "IndexedExpansion",
+]
+
+[stoneham]
+title = "Stoneham polynomial images and products"
+modules = [
+  "StonehamPolynomial", "StonehamPolynomialExpansion", "StonehamPolynomialNormal", "StonehamPolynomialOrthant",
+  "StonehamPolynomialPrefix", "StonehamSquare", "StonehamJoint", "StonehamStatements", "StonehamOrbit", "StonehamOrder",
+  "StonehamComponents", "ProductThreeFive", "ProductThreeFivePrefix", "ProductThreeFiveWindows", "PolynomialInsertions",
+  "Insertion", "CellModel", "CellLimits",
+]
+
+[localized]
+title = "Localized logarithms and polylogarithms"
+modules = [
+  "LocalizedCertificate", "LocalizedCertifiedNormal", "LocalizedClearing", "LocalizedDiscrepancy", "LocalizedExamples",
+  "LocalizedExpansion", "LocalizedFive", "LocalizedLayers", "LocalizedLogGap", "LocalizedMesh", "LocalizedMeshRate",
+  "LocalizedMixed", "LocalizedNormality", "LocalizedSeries", "LocalizedSupport", "CompositeLayers", "MixedPowers",
+  "Polylog", "PolylogGrowth", "MaximalSupport", "SupportDiscrepancy", "UnsignedNormality", "UnsignedPhase", "UnsignedRays",
+  "UnsignedRotation", "UnsignedWeights", "ThresholdDifferences", "HigherOrderCells", "HigherOrderDiscrepancy",
+  "HigherOrderDominance", "HigherOrderPhase", "HigherOrderPrefix", "HigherOrderPrincipal", "PersistentRegion",
+  "JointPersistent", "DeepCancellation",
+]
+
+[weights]
+title = "Polynomial weights and masked supports"
+modules = [
+  "FullPolynomialNormality", "PolynomialMasks", "PolynomialLayers", "MaskAxis", "MaskClassification", "MaskDensity",
+  "MaskDominance", "MaskExamples", "MaskGrid", "MaskPeriods", "MaskQuotients", "MaskRational", "MaskThirds",
+  "MaskWindows", "MaskedDiscrepancy", "MaskedSeries", "DensePolynomial", "PeriodicWeights", "PeriodicClassification",
+  "RationalWeights", "ShiftedWeights",
+]
+
+[resonance]
+title = "Cyclotomic resonance and finite combinations"
+modules = [
+  "CyclotomicCell", "CyclotomicClassification", "CyclotomicDistribution", "CyclotomicExamples", "CyclotomicFourier",
+  "CyclotomicLift", "CyclotomicTest", "FiniteClassification", "GeneralResonance", "Resonance", "ResonantDensity",
+  "OrderedComponents", "Linearization",
+]
+
+[discrepancy]
+title = "Signed expansions, exact discrepancy and symbolic spectra"
+modules = [
+  "SignedPhases", "SignedShellDiscrepancy", "TranslatedShells", "TranslatedShellExamples", "ShellHistories",
+  "ChangingShellSchedules",
+]
+
+[certificates]
+title = "Rational-orbit certificates"
+modules = [
+  "ArithmeticCertificate", "ApproximateDiscrepancy", "SmoothOrbit", "SmoothCertificates", "OrbitSum", "CertificateBlocks",
+  "WeightedBlocks", "DiscrepancyChecker", "ExactProfile", "CellProfile", "JointFiveThirteen",
+]
+
+[coverage]
+title = "Complementary coverage, rigidity and limitations of models"
+modules = [
+  "PartialUniformity", "QualityCoverage", "IntervalCoverage", "OrbitRigidity", "ModelCounting", "ResidueWindows",
+]
+
+[classical]
+title = "Classical constant arithmetic"
+modules = [
+  "LogTwo", "LogTwoLinearForms", "LogTwoTransitions", "PrimeCancellation", "DenominatorGrowth", "OrderedTail",
+  "StridedLogarithm", "StrideDenominatorRate", "DyadicRelations", "DyadicLogRates", "LogarithmBands", "CorrectedStrides",
+  "LogShadow", "LogShadowIntegral", "LogPolynomialKernel", "AdjacentShadow", "BinomialShadow", "DiagonalNumerator",
+  "DiagonalStep", "ShadowCancellations", "ShadowDenominator", "ShadowGrowth", "TypicalShadow", "WindowShadow",
+  "NumeratorEscape", "AggregateGaps", "DyadicEscape", "FirstFrequency", "FixedGap", "GrowingLags", "SparseTransitions",
+  "TrigonometricMoments", "ChebyshevModels", "BBPShadow", "BBPDenominator", "GoldenOrbit", "GoldenDigits",
+  "GoldenCongruence", "FactorialNumerators",
+]

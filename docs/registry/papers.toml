@@ -1,0 +1,59 @@
+# Manuscript index used for the README table and docs/results.md.
+# The canonical publication status is papers/README.md. Keep `status` in step with it.
+# Allowed status values: planned, draft, internally reviewed, external review, published.
+# None of these manuscripts has been peer reviewed or accepted.
+
+[[paper]]
+number = "I"
+dir = "papers/01-stoneham-polynomials"
+title = "Polynomial Images of Stoneham Numbers"
+families = ["ST"]
+principal = ["ST-01", "ST-05", "ST-02", "ST-03"]
+status = "draft"
+abstract = '''
+For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconstant rational polynomial in the Stoneham number with parameters *b* and *p*ᵉ is normal in base *b*, and distinct positive powers of that number have jointly uniformly distributed radix orbits. The proof counts the insertions of a power in an upward-closed set of exponent vectors; the numerator of the resulting generating function is congruent to 1 modulo *p* − 1 at *z* = *p*, so a prime power survives in every shifted denominator. The paper also treats products along one prime axis, combinations with a unique leading monomial, the exact denominator profile of the binary Stoneham square, and a discrepancy bound for a product on two different prime axes.
+'''
+
+[[paper]]
+number = "II"
+dir = "papers/02-localized-normality"
+title = "Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports"
+families = ["LS", "MW"]
+principal = ["LS-01", "MW-01", "LS-02", "LS-03"]
+status = "draft"
+abstract = '''
+Restrict the series for a polylogarithm of positive integer order to the integers whose prime factors lie in a finite set. The resulting radix expansion is normal when some support prime does not divide the radix, and its discrepancy tends to one otherwise. For a nonzero rational polynomial weight *P*(*m*) on the full support, normality holds exactly when *P* vanishes at zero to order less than *s* and some support prime does not divide the radix. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region and shows that this region is null, using recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays.
+'''
+
+[[paper]]
+number = "III"
+dir = "papers/03-signed-resonance"
+title = "Resonance and Discrepancy in Signed Stoneham Expansions"
+families = ["CR", "DS"]
+principal = ["CR-01", "DS-01", "DS-03", "DS-04"]
+status = "draft"
+abstract = '''
+A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
+'''
+
+[[paper]]
+number = "IV"
+dir = "papers/04-arithmetic-certificates"
+title = "Arithmetic Certificates for Normality and Their Limitations"
+families = ["AC"]
+principal = ["AC-01", "AC-02", "AC-03"]
+status = "draft"
+abstract = '''
+Normality follows when most blocks of a radix orbit are approximated in mean by rational orbits whose denominators grow, are polynomially bounded and have prime factors in a fixed finite set. Partial coverage gives explicit discrepancy bounds, and overlapping certificates combine through endpoint paths and joint failure accounting. Two accurate smooth rational models on a common block must coincide modulo one, and a counting argument limits what such models can explain.
+'''
+
+[[paper]]
+number = "V"
+dir = "papers/05-classical-denominators"
+title = "Denominator Arithmetic in Representations of Classical Constants"
+families = ["CC"]
+principal = ["CC-01", "CC-02"]
+status = "draft"
+abstract = '''
+A finite dyadic identity for ln 2 has shifted binary prefixes whose reduced denominators grow at exponential rate one half, and this rate is optimal among finite dyadic logarithm identities, using Bang's primitive-divisor theorem. The paper studies corrected rational models, numerator residues, prime-power sieves, and analogous questions for π, *e* and rational arctangents. It does not establish normality, or an asymptotic discrepancy bound below one, for any of these constants.
+'''

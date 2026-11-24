@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 680" width="720" height="680" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">
+<title id="title">Stoneham square insertion lattice showing the pairwise products of terms</title>
+<desc id="desc">A 6 by 6 grid of cells indexed by i from 1 to 6 left to right and j from 1 to 6 bottom to top. Each cell shows the insertion position 3 to the i plus 3 to the j and the coefficient 3 to the minus (i + j); the grid is symmetric about the diagonal. Positions range from 6 in the corner (1, 1) to 1458 in the corner (6, 6). Twenty-two cells are shaded blue: all pairs with both indices at most 4, plus (5, 1), (5, 2), (5, 3) and their transposes, the pairs whose position is at most 270. Cells (4, 4), (5, 3) and (3, 5) on the anti-diagonal i + j = 8 have an orange outline. Below, a logarithmic number line from about 2 to 1600 shows the 6 insertion positions 3 to the j of alpha in one row and the 21 distinct positions of alpha squared in a second row, clustered just after each power of 3, with a vertical marker at n = 270; positions up to 270 are blue.</desc>
+<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#7d8590" stroke-width="1.4"/></pattern></defs>
+<rect width="720" height="680" rx="10" fill="#0d1117"/>
+<text x="24" y="34" font-size="18" fill="#f0f6fc" font-weight="600">Squaring creates a two-dimensional insertion lattice</text>
+<text x="24" y="56" font-size="13.5" fill="#b7bdc8"><tspan>Pair (</tspan><tspan font-style="italic">i</tspan><tspan>, </tspan><tspan font-style="italic">j</tspan><tspan>) inserts 3</tspan><tspan dy="-4.86" font-size="10" font-style="italic">−(i+j)</tspan><tspan dy="4.86"> at binary position 3</tspan><tspan dy="-4.86" font-size="10" font-style="italic">i</tspan><tspan dy="4.86"> + 3</tspan><tspan dy="-4.86" font-size="10" font-style="italic">j</tspan><tspan dy="4.86">; blue pairs are kept at digit </tspan><tspan font-style="italic">n</tspan><tspan> = 270</tspan></text>
+<rect x="496.8" y="74" width="199.2" height="22" rx="11" fill="#151b23" stroke="#3d444d" stroke-width="1"/>
+<text x="596.4" y="89.5" font-size="12.5" fill="#b7bdc8" text-anchor="middle">Exact finite computation</text>
+<rect x="77" y="389" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="103" y="411" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">6</text>
+<text x="103" y="430" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−2</tspan></text>
+<rect x="77" y="335" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="103" y="357" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">12</text>
+<text x="103" y="376" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−3</tspan></text>
+<rect x="77" y="281" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="103" y="303" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">30</text>
+<text x="103" y="322" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−4</tspan></text>
+<rect x="77" y="227" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="103" y="249" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">84</text>
+<text x="103" y="268" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−5</tspan></text>
+<rect x="77" y="173" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="103" y="195" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">246</text>
+<text x="103" y="214" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−6</tspan></text>
+<rect x="77" y="119" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="103" y="141" font-size="14" fill="#b7bdc8" text-anchor="middle">732</text>
+<text x="103" y="160" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−7</tspan></text>
+<rect x="131" y="389" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="157" y="411" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">12</text>
+<text x="157" y="430" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−3</tspan></text>
+<rect x="131" y="335" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="157" y="357" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">18</text>
+<text x="157" y="376" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−4</tspan></text>
+<rect x="131" y="281" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="157" y="303" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">36</text>
+<text x="157" y="322" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−5</tspan></text>
+<rect x="131" y="227" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="157" y="249" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">90</text>
+<text x="157" y="268" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−6</tspan></text>
+<rect x="131" y="173" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="157" y="195" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">252</text>
+<text x="157" y="214" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−7</tspan></text>
+<rect x="131" y="119" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="157" y="141" font-size="14" fill="#b7bdc8" text-anchor="middle">738</text>
+<text x="157" y="160" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−8</tspan></text>
+<rect x="185" y="389" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="211" y="411" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">30</text>
+<text x="211" y="430" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−4</tspan></text>
+<rect x="185" y="335" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="211" y="357" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">36</text>
+<text x="211" y="376" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−5</tspan></text>
+<rect x="185" y="281" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="211" y="303" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">54</text>
+<text x="211" y="322" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−6</tspan></text>
+<rect x="185" y="227" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="211" y="249" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">108</text>
+<text x="211" y="268" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−7</tspan></text>
+<rect x="185" y="173" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="211" y="195" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">270</text>
+<text x="211" y="214" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−8</tspan></text>
+<rect x="185" y="119" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="211" y="141" font-size="14" fill="#b7bdc8" text-anchor="middle">756</text>
+<text x="211" y="160" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−9</tspan></text>
+<rect x="239" y="389" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="265" y="411" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">84</text>
+<text x="265" y="430" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−5</tspan></text>
+<rect x="239" y="335" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="265" y="357" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">90</text>
+<text x="265" y="376" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−6</tspan></text>
+<rect x="239" y="281" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="265" y="303" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">108</text>
+<text x="265" y="322" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−7</tspan></text>
+<rect x="239" y="227" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="265" y="249" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">162</text>
+<text x="265" y="268" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−8</tspan></text>
+<rect x="239" y="173" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="265" y="195" font-size="14" fill="#b7bdc8" text-anchor="middle">324</text>
+<text x="265" y="214" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−9</tspan></text>
+<rect x="239" y="119" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="265" y="141" font-size="14" fill="#b7bdc8" text-anchor="middle">810</text>
+<text x="265" y="160" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−10</tspan></text>
+<rect x="293" y="389" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="319" y="411" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">246</text>
+<text x="319" y="430" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−6</tspan></text>
+<rect x="293" y="335" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="319" y="357" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">252</text>
+<text x="319" y="376" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−7</tspan></text>
+<rect x="293" y="281" width="52" height="52" rx="4" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="319" y="303" font-size="14" fill="#f0f6fc" text-anchor="middle" font-weight="600">270</text>
+<text x="319" y="322" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−8</tspan></text>
+<rect x="293" y="227" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="319" y="249" font-size="14" fill="#b7bdc8" text-anchor="middle">324</text>
+<text x="319" y="268" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−9</tspan></text>
+<rect x="293" y="173" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="319" y="195" font-size="14" fill="#b7bdc8" text-anchor="middle">486</text>
+<text x="319" y="214" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−10</tspan></text>
+<rect x="293" y="119" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="319" y="141" font-size="14" fill="#b7bdc8" text-anchor="middle">972</text>
+<text x="319" y="160" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−11</tspan></text>
+<rect x="347" y="389" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="373" y="411" font-size="14" fill="#b7bdc8" text-anchor="middle">732</text>
+<text x="373" y="430" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−7</tspan></text>
+<rect x="347" y="335" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="373" y="357" font-size="14" fill="#b7bdc8" text-anchor="middle">738</text>
+<text x="373" y="376" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−8</tspan></text>
+<rect x="347" y="281" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="373" y="303" font-size="14" fill="#b7bdc8" text-anchor="middle">756</text>
+<text x="373" y="322" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−9</tspan></text>
+<rect x="347" y="227" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="373" y="249" font-size="14" fill="#b7bdc8" text-anchor="middle">810</text>
+<text x="373" y="268" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−10</tspan></text>
+<rect x="347" y="173" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="373" y="195" font-size="14" fill="#b7bdc8" text-anchor="middle">972</text>
+<text x="373" y="214" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−11</tspan></text>
+<rect x="347" y="119" width="52" height="52" rx="4" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="373" y="141" font-size="14" fill="#b7bdc8" text-anchor="middle">1458</text>
+<text x="373" y="160" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">−12</tspan></text>
+<rect x="185.5" y="173.5" width="51" height="51" rx="4" fill="none" stroke="#d95926" stroke-width="3"/>
+<rect x="239.5" y="227.5" width="51" height="51" rx="4" fill="none" stroke="#d95926" stroke-width="3"/>
+<rect x="293.5" y="281.5" width="51" height="51" rx="4" fill="none" stroke="#d95926" stroke-width="3"/>
+<text x="103" y="461" font-size="13" fill="#b7bdc8" text-anchor="middle">1</text>
+<text x="66" y="419.5" font-size="13" fill="#b7bdc8" text-anchor="end">1</text>
+<text x="157" y="461" font-size="13" fill="#b7bdc8" text-anchor="middle">2</text>
+<text x="66" y="365.5" font-size="13" fill="#b7bdc8" text-anchor="end">2</text>
+<text x="211" y="461" font-size="13" fill="#b7bdc8" text-anchor="middle">3</text>
+<text x="66" y="311.5" font-size="13" fill="#b7bdc8" text-anchor="end">3</text>
+<text x="265" y="461" font-size="13" fill="#b7bdc8" text-anchor="middle">4</text>
+<text x="66" y="257.5" font-size="13" fill="#b7bdc8" text-anchor="end">4</text>
+<text x="319" y="461" font-size="13" fill="#b7bdc8" text-anchor="middle">5</text>
+<text x="66" y="203.5" font-size="13" fill="#b7bdc8" text-anchor="end">5</text>
+<text x="373" y="461" font-size="13" fill="#b7bdc8" text-anchor="middle">6</text>
+<text x="66" y="149.5" font-size="13" fill="#b7bdc8" text-anchor="end">6</text>
+<text x="238" y="481" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>index </tspan><tspan font-style="italic">i</tspan></text>
+<text x="44" y="280" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan font-style="italic">j</tspan></text>
+<rect x="434" y="126" width="16" height="16" rx="3" fill="#3987e5" stroke="none" stroke-width="1" fill-opacity="0.36"/>
+<text x="460" y="139" font-size="13" fill="#b7bdc8"><tspan>kept at </tspan><tspan font-style="italic">n</tspan><tspan> = 270: 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">i</tspan><tspan dy="4.68"> + 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">j</tspan><tspan dy="4.68"> ≤ </tspan><tspan font-style="italic">n</tspan></text>
+<rect x="434" y="154" width="16" height="16" rx="3" fill="#151b23" stroke="#262c36" stroke-width="1"/>
+<text x="460" y="167" font-size="13" fill="#b7bdc8">inserted only after digit 270</text>
+<rect x="435" y="183" width="14" height="14" rx="3" fill="none" stroke="#d95926" stroke-width="3"/>
+<text x="460" y="195" font-size="13" fill="#b7bdc8"><tspan>top kept degree </tspan><tspan font-style="italic">i</tspan><tspan> + </tspan><tspan font-style="italic">j</tspan><tspan> = 8: three pairs,</tspan></text>
+<text x="460" y="213" font-size="13" fill="#b7bdc8"><tspan>hence </tspan><tspan font-style="italic">q</tspan><tspan>₂₇₀</tspan><tspan> = 3</tspan><tspan dy="-4.68" font-size="9.6">7</tspan><tspan dy="4.68">, not 3</tspan><tspan dy="-4.68" font-size="9.6">8</tspan></text>
+<text x="434" y="258" font-size="13" fill="#b7bdc8"><tspan>Upper number: insertion position 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">i</tspan><tspan dy="4.68"> + 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">j</tspan></text>
+<text x="434" y="279" font-size="13" fill="#b7bdc8"><tspan>Lower: coefficient 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">−(i+j)</tspan><tspan dy="4.68"> of the pair</tspan></text>
+<text x="434" y="310" font-size="13" fill="#b7bdc8"><tspan>Pairs (</tspan><tspan font-style="italic">i</tspan><tspan>, </tspan><tspan font-style="italic">j</tspan><tspan>) and (</tspan><tspan font-style="italic">j</tspan><tspan>, </tspan><tspan font-style="italic">i</tspan><tspan>) share a position:</tspan></text>
+<text x="434" y="331" font-size="13" fill="#b7bdc8"><tspan>off the diagonal the coefficient is 2·3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">−(i+j)</tspan></text>
+<text x="434" y="362" font-size="13" fill="#b7bdc8"><tspan>Shell 3</tspan><tspan dy="-4.68" font-size="9.6">5</tspan><tspan dy="4.68"> = 243 ≤ </tspan><tspan font-style="italic">n</tspan><tspan> &lt; 3</tspan><tspan dy="-4.68" font-size="9.6">6</tspan><tspan dy="4.68">, </tspan><tspan font-style="italic">t</tspan><tspan> = </tspan><tspan font-style="italic">n</tspan><tspan>/3</tspan><tspan dy="-4.68" font-size="9.6">5</tspan><tspan dy="4.68"> = 10/9</tspan></text>
+<text x="434" y="383" font-size="13" fill="#b7bdc8"><tspan>In offsets (5 − </tspan><tspan font-style="italic">i</tspan><tspan>, 5 − </tspan><tspan font-style="italic">j</tspan><tspan>) the blue set is </tspan><tspan font-style="italic">U</tspan><tspan>ₜ</tspan></text>
+<text x="24" y="518" font-size="14" fill="#f0f6fc" font-weight="600"><tspan>Insertion positions on a logarithmic axis</tspan></text>
+<line x1="132.7" y1="536" x2="132.7" y2="614" stroke="#262c36" stroke-width="1"/>
+<text x="132.7" y="634" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">1</tspan></text>
+<line x1="209.21" y1="536" x2="209.21" y2="614" stroke="#262c36" stroke-width="1"/>
+<text x="209.21" y="634" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">2</tspan></text>
+<line x1="285.72" y1="536" x2="285.72" y2="614" stroke="#262c36" stroke-width="1"/>
+<text x="285.72" y="634" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">3</tspan></text>
+<line x1="362.23" y1="536" x2="362.23" y2="614" stroke="#262c36" stroke-width="1"/>
+<text x="362.23" y="634" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">4</tspan></text>
+<line x1="438.74" y1="536" x2="438.74" y2="614" stroke="#262c36" stroke-width="1"/>
+<text x="438.74" y="634" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">5</tspan></text>
+<line x1="515.25" y1="536" x2="515.25" y2="614" stroke="#262c36" stroke-width="1"/>
+<text x="515.25" y="634" font-size="13" fill="#b7bdc8" text-anchor="middle"><tspan>3</tspan><tspan dy="-4.68" font-size="9.6">6</tspan></text>
+<line x1="120" y1="556" x2="570" y2="556" stroke="#3d444d" stroke-width="1"/>
+<text x="106" y="560.5" font-size="13" fill="#b7bdc8" text-anchor="end"><tspan>α: 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">j</tspan></text>
+<line x1="132.7" y1="545" x2="132.7" y2="567" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="209.21" y1="545" x2="209.21" y2="567" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="285.72" y1="545" x2="285.72" y2="567" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="362.23" y1="545" x2="362.23" y2="567" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="438.74" y1="545" x2="438.74" y2="567" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="515.25" y1="545" x2="515.25" y2="567" stroke="#8b949e" stroke-width="1.6"/>
+<text x="586" y="560.5" font-size="13" fill="#b7bdc8">6 positions</text>
+<line x1="120" y1="598" x2="570" y2="598" stroke="#3d444d" stroke-width="1"/>
+<text x="106" y="602.5" font-size="13" fill="#b7bdc8" text-anchor="end"><tspan>α²: 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">i</tspan><tspan dy="4.68"> + 3</tspan><tspan dy="-4.68" font-size="9.6" font-style="italic">j</tspan></text>
+<line x1="180.97" y1="587" x2="180.97" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="229.24" y1="587" x2="229.24" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="257.48" y1="587" x2="257.48" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="293.06" y1="587" x2="293.06" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="305.76" y1="587" x2="305.76" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="333.99" y1="587" x2="333.99" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="364.76" y1="587" x2="364.76" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="369.57" y1="587" x2="369.57" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="382.27" y1="587" x2="382.27" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="410.5" y1="587" x2="410.5" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="439.6" y1="587" x2="439.6" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="441.28" y1="587" x2="441.28" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="446.08" y1="587" x2="446.08" y2="609" stroke="#3987e5" stroke-width="2.4"/>
+<line x1="458.78" y1="587" x2="458.78" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="487.02" y1="587" x2="487.02" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="515.54" y1="587" x2="515.54" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="516.11" y1="587" x2="516.11" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="517.79" y1="587" x2="517.79" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="522.59" y1="587" x2="522.59" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="535.29" y1="587" x2="535.29" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<line x1="563.53" y1="587" x2="563.53" y2="609" stroke="#8b949e" stroke-width="1.6"/>
+<text x="586" y="602.5" font-size="13" fill="#b7bdc8">21 positions</text>
+<text x="586" y="620" font-size="13" fill="#8b949e"><tspan>indices ≤ 6</tspan></text>
+<line x1="446.08" y1="534" x2="446.08" y2="616" stroke="#f0f6fc" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="440.08" y="534" font-size="13" fill="#f0f6fc" text-anchor="end"><tspan font-style="italic">n</tspan><tspan> = 270</tspan></text>
+<text x="24" y="666" font-size="12" fill="#8b949e">Active set as in Lean mem_active (3ⁱ + 3ʲ ≤ n); denominator as in exact_profile (ST-01, ST-03).</text>
+</svg>
