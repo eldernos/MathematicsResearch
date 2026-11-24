@@ -50,7 +50,8 @@ theorem phase_at_boundary {b p : ℕ} (hb : 2≤b) (hp : p.Prime) (cop : b.Copri
     rw [show (b:ℚ)^gap*(c k/(p:ℚ)^k)=(1+(p:ℚ)^k*w)*(c k/(p:ℚ)^k) by rw [← lift]]
     field_simp; ring
 
-private lemma tail {b p : ℕ} (hb : 2≤b) (hp : p.Prime) (c : ℕ → ℤ) {C : ℕ}
+/-- The signed remainder tends to zero after shifting to any radix position. -/
+theorem shifted_tail_tendsto_zero {b p : ℕ} (hb : 2≤b) (hp : p.Prime) (c : ℕ → ℤ) {C : ℕ}
     (cap : ∀ j,(c j).natAbs≤C) : Tendsto (fun n => (b:ℝ)^n*value b p c-(pre b p c n:ℝ)) atTop (𝓝 0) := by
   have pp : 0<(p:ℝ) := by exact_mod_cast hp.pos
   let I (n : ℕ) := if n=0 then ∅ else range (Nat.log p n+1)
@@ -73,7 +74,8 @@ private lemma tail {b p : ℕ} (hb : 2≤b) (hp : p.Prime) (c : ℕ → ℤ) {C 
   apply H.congr'; filter_upwards [eventually_ne_atTop 0] with n hn
   simp [value,pre,I,hn,trunc]
 
-private lemma within {b p : ℕ} (hb : 2≤b) (hp : p.Prime) (cop : b.Coprime p)
+/-- Throughout a shell the rational prefix follows its initial phase modulo one. -/
+theorem phase_within_shell {b p : ℕ} (hb : 2≤b) (hp : p.Prime) (cop : b.Coprime p)
     (c : ℕ → ℤ) {k n : ℕ} (lo : p^k≤n) (hi : n<p^(k+1)) : ∃ z : ℤ,
     pre b p c n=z+(b:ℚ)^(n-p^k)*c k/(p:ℚ)^k := by
   obtain ⟨z,bd⟩ := phase_at_boundary hb hp cop c k
@@ -101,13 +103,28 @@ private lemma phase_den {b p : ℕ} (hp : p.Prime) (cop : b.Coprime p) (j a : �
     dsimp [U] at dvd; simp only [Int.natAbs_mul,Int.natAbs_pow,Int.natAbs_natCast,mul_assoc] at dvd
     exact ((cop.symm.pow_left j).pow_right a).dvd_of_dvd_mul_left dvd
 
+/-- A nonzero bounded phase yields a growing reduced denominator supported on `p`. -/
+theorem denominator_within_nonzero_shell {b p C j n M : ℕ} (hb : 2 ≤ b) (hp : p.Prime)
+    (cop : b.Coprime p) (c : ℕ → ℤ) (cap : ∀ i, (c i).natAbs ≤ C)
+    (lo : p^j ≤ n) (hi : n < p^(j+1)) (ne : c j ≠ 0) (large : C*M ≤ p^j) :
+    M ≤ (pre b p c n).den ∧ (pre b p c n).den ∣ p^j := by
+  obtain ⟨z, h⟩ := phase_within_shell hb hp cop c lo hi
+  rw [h, Rat.intCast_add_den]
+  obtain ⟨dv, recover⟩ := phase_den hp cop j (n-p^j) (c j)
+  let q := ((b:ℚ)^(n-p^j)*c j/(p:ℚ)^j).den
+  have pos := Int.natAbs_pos.mpr ne
+  have bound : C*M ≤ C*q :=
+    (large.trans (Nat.le_of_dvd (Nat.mul_pos pos (Rat.pos _)) recover)).trans
+      (Nat.mul_le_mul_right q (cap j))
+  exact ⟨Nat.le_of_mul_le_mul_left bound (pos.trans_le (cap j)), dv⟩
+
 /-- A bounded signed phase sequence gives a normal value exactly when only finitely
 many phases vanish. Each zero phase occupies a whole interval of proportional length. -/
 theorem normal_iff_eventually_nonzero {b p C : ℕ} (hb : 2≤b) (hp : p.Prime)
     (cop : b.Coprime p) (c : ℕ → ℤ) (cap : ∀ j,(c j).natAbs≤C) :
     NormalIn b (value b p c) ↔ ∀ᶠ j in atTop, c j≠0 := by
   classical
-  have htail := tail hb hp c cap
+  have htail := shifted_tail_tendsto_zero hb hp c cap
   constructor
   · contrapose!; intro often
     apply not_normal_of_prefix_hits (P:=fun n => (pre b p c n:ℝ)) (C:={0}) (η:=(1:ℝ)/p)
@@ -121,7 +138,7 @@ theorem normal_iff_eventually_nonzero {b p C : ℕ} (hb : 2≤b) (hp : p.Prime)
     have sub : Ico q (2*q) ⊆ (range (2*q)).filter (fun i => ∃ t∈({0}:Finset ℝ), ∃ z : ℤ, (pre b p c i:ℝ)=t+z) := by
       intro i hi; obtain ⟨lo,hi⟩ := mem_Ico.mp hi
       have top : i<p^(k+1) := hi.trans_le (by rw [pow_succ']; exact Nat.mul_le_mul_right _ hp.two_le)
-      obtain ⟨z,id⟩ := within hb hp cop c lo top
+      obtain ⟨z,id⟩ := phase_within_shell hb hp cop c lo top
       refine mem_filter.mpr ⟨mem_range.mpr hi,0,by simp,z,?_⟩
       simp only [zero,Int.cast_zero,mul_zero,zero_div,add_zero] at id; simp [id]
     have count := card_le_card sub; rw [Nat.card_Ico,show 2*q-q=q by omega] at count
@@ -149,14 +166,8 @@ theorem normal_iff_eventually_nonzero {b p C : ℕ} (hb : 2≤b) (hp : p.Prime)
     have k_le : k≤j := Nat.le_log_of_pow_le hp.one_lt (Nat.le_mul_of_pos_left B mpos)
     have km : max (C*M) (max J 2)≤k := hk
     have jnz : c j≠0 := good j (by omega)
-    obtain ⟨z,id⟩ := within hb hp cop c lo hi
-    let y := (b:ℚ)^(n-p^j)*c j/(p:ℚ)^j
-    have e : (pre b p c n).den=y.den := by rw [id,Rat.intCast_add_den]
-    obtain ⟨dv,recover⟩ := phase_den hp cop j (n-p^j) (c j)
-    change M≤(pre b p c n).den ∧ _; rw [e]
-    have cp : 0<(c j).natAbs := Int.natAbs_pos.mpr jnz
     have prod : C*M≤p^j := (show C*M≤j by omega).trans (Nat.lt_pow_self hp.two_le).le
-    have low := (prod.trans (Nat.le_of_dvd (Nat.mul_pos cp y.pos) recover)).trans (Nat.mul_le_mul_right y.den (cap j))
+    obtain ⟨low,dv⟩ := denominator_within_nonzero_shell hb hp cop c cap lo hi jnz prod
     have tight : n≤B^3 := by
       have k2 : 2≤k := by omega
       have direct : m<(p*p)*B := by
@@ -166,7 +177,7 @@ theorem normal_iff_eventually_nonzero {b p C : ℕ} (hb : 2≤b) (hp : p.Prime)
       calc n ≤ ((p*p)*B)*B := Nat.mul_le_mul_right B direct.le
            _ ≤ (B*B)*B := by gcongr
            _ = B^3 := by ring
-    refine ⟨Nat.le_of_mul_le_mul_left low (cp.trans_le (cap j)),⟨j,dv⟩,(Nat.le_of_dvd (pow_pos hp.pos j) dv).trans (lo.trans tight),?_⟩
+    refine ⟨low,⟨j,dv⟩,(Nat.le_of_dvd (pow_pos hp.pos j) dv).trans (lo.trans tight),?_⟩
     intro i hbi
     have dm : B∣p^(j+1) := pow_dvd_pow p (by omega)
     obtain ⟨a,ha⟩ := dm
