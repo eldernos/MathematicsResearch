@@ -1,6 +1,6 @@
 # Archive and cite this release
 
-The manuscript release groups all five PDFs with their LaTeX sources, bibliographies, figures, research notes and Lean proofs. For this published GitHub release, the manual deposit below lets the project owner confirm author credits and metadata before issuing the DOI. The release tag is **manuscripts-v1.0.0**. Checkpoint 11, the mathematical baseline, is a separate tag. [Manuscripts](README.md) · [GitHub manuscript release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0) · [Checkpoint 11](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035)
+The manuscript release groups all five PDFs with their LaTeX sources, bibliographies, figures, research notes and Lean proofs. For this published GitHub release, the manual deposit below lets the project owner confirm author credits and metadata before issuing the DOI. The release tag is **manuscripts-v1.1.0**. Checkpoint 11, the mathematical baseline, is a separate tag. [Manuscripts](README.md) · [GitHub manuscript release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.1.0) · [Checkpoint 11](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035)
 
 ## 1. Verify the files you are about to archive
 
@@ -15,9 +15,9 @@ All seven listed files should report `OK`. The manifest gives the full Git commi
 To verify the source independently from a clone of the repository, use a fresh checkout of the release tag. Record the full SHA printed by the second command. Compare it with the release manifest and the successful Lean workflow for that commit.
 
 ```sh
-git fetch origin tag manuscripts-v1.0.0
-git rev-parse 'manuscripts-v1.0.0^{commit}'
-git worktree add --detach ../normality-manuscript-archive manuscripts-v1.0.0
+git fetch origin tag manuscripts-v1.1.0
+git rev-parse 'manuscripts-v1.1.0^{commit}'
+git worktree add --detach ../normality-manuscript-archive manuscripts-v1.1.0
 cd ../normality-manuscript-archive
 sha256sum -c papers/SHA256SUMS
 ```
@@ -25,9 +25,9 @@ sha256sum -c papers/SHA256SUMS
 The checksum file is relative to the repository root. It compares each PDF byte for byte with the recorded digest for this tag. The tag identifies the full source tree, including the paper-specific correspondence checks. The release archive can be created directly from Git, even if your working directory contains local changes.
 
 ```sh
-git archive --format=zip --prefix=MathematicsResearch-manuscripts-v1.0.0/ \
-  -o ../MathematicsResearch-manuscripts-v1.0.0.zip manuscripts-v1.0.0
-sha256sum ../MathematicsResearch-manuscripts-v1.0.0.zip
+git archive --format=zip --prefix=MathematicsResearch-manuscripts-v1.1.0/ \
+  -o ../MathematicsResearch-manuscripts-v1.1.0.zip manuscripts-v1.1.0
+sha256sum ../MathematicsResearch-manuscripts-v1.1.0.zip
 ```
 
 ## 2. Choose what the DOI will identify

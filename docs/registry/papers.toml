@@ -11,7 +11,7 @@ families = ["ST"]
 principal = ["ST-01", "ST-05", "ST-02", "ST-03"]
 status = "internally reviewed"
 abstract = '''
-For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconstant rational polynomial in the Stoneham number with parameters *b* and *p*ᵉ is normal in base *b*, and distinct positive powers of that number have jointly uniformly distributed radix orbits. The proof counts the insertions of a power in an upward-closed set of exponent vectors; the numerator of the resulting generating function is congruent to 1 modulo *p* − 1 at *z* = *p*, so a growing prime power survives at every sufficiently late shift. The paper also treats products along one prime axis, combinations with a unique leading monomial, the exact denominator profile of the binary Stoneham square, and a discrepancy bound for a product on two different prime axes.
+For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconstant rational polynomial in the Stoneham number with parameters *b* and *p*ᵉ is normal in base *b*, and distinct positive powers of that number have jointly uniformly distributed radix orbits. After reflection, the retained exponent vectors form an upward-closed set; the numerator of the resulting generating function is congruent to 1 modulo *p* − 1 at *z* = *p*, so a growing prime power survives at every sufficiently late shift. The paper also treats products along one prime axis, combinations with a unique leading monomial, the exact denominator profile of the binary Stoneham square, and strict upper discrepancy for products with multiplicatively independent parameters. The last result is a paper deduction, with a Lean bound of 43/45 for the binary product with parameters 3 and 5.
 '''
 
 [[paper]]
@@ -22,7 +22,7 @@ families = ["LS", "MW"]
 principal = ["LS-01", "MW-01", "LS-02", "LS-03"]
 status = "internally reviewed"
 abstract = '''
-Restrict the series for a polylogarithm of positive integer order to the integers whose prime factors lie in a finite set. The resulting radix expansion is normal when some support prime does not divide the radix, and its discrepancy tends to one otherwise. For a nonzero rational polynomial weight *P*(*m*) on the full support, normality holds exactly when *P* vanishes at zero to order less than *s* and some support prime does not divide the radix. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region and shows that this region is null, using recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays.
+Restrict the series for a polylogarithm of positive integer order to the integers whose prime factors lie in a finite set. With numerator 1 on the full support, the resulting radix expansion is normal when some support prime does not divide the radix, and its discrepancy tends to one otherwise. For a nonzero rational polynomial weight *P*(*m*) on the full support, normality holds exactly when *P* vanishes at zero to order less than *s* and some support prime does not divide the radix. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region and shows that this region is null, using recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays.
 '''
 
 [[paper]]

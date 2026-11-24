@@ -32,7 +32,7 @@ and showed that this one is normal in base 2. The reason is arithmetic. Multiply
 </picture>
 </p>
 
-<sub>Figure 1. Squaring the binary Stoneham number creates a two-dimensional lattice of insertions; the pairs kept at one digit position form the upward-closed set used in the proof of ST-01. [Caption, data and generator](../docs/figures.md#stoneham-square-lattice)</sub>
+<sub>Figure 1. At digit 270 the retained pairs form a lower set in the displayed exponents (*i*, *j*). Reflecting the coordinates to (5 − *i*, 5 − *j*) gives the upper set used in ST-01, restricted to the displayed indices. [Caption, data and generator](../docs/figures.md#stoneham-square-lattice)</sub>
 <!-- END FIGURE stoneham-square-lattice -->
 
 The proof shows that, however the terms of a power are arranged, a power of 3 always survives in the denominator, by a short counting argument modulo *p* − 1. The digits of α, α², α³, … are even independent of each other in the limit.

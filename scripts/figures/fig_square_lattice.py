@@ -31,7 +31,7 @@ SIZE = 6           # pairs 1 <= i, j <= SIZE
 N = 270            # representative digit position: 3^5 + 3^3, left end of the cancellation interval
 META = {
     "number": 1,
-    "summary": 'Squaring the binary Stoneham number creates a two-dimensional lattice of insertions; the pairs kept at one digit position form the upward-closed set used in the proof of ST-01.',
+    "summary": 'At digit 270 the retained pairs form a lower set in the displayed exponents (*i*, *j*). Reflecting the coordinates to (5 − *i*, 5 − *j*) gives the upper set used in ST-01, restricted to the displayed indices.',
     "title": "Stoneham square insertion lattice showing the pairwise products of terms",
     "caption": (
         "The *j*th term of α = α₂,₃ is inserted at binary position 3ʲ, a sparse one-dimensional "
