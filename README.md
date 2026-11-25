@@ -140,6 +140,8 @@ On factorial insertion schedules the normal examples are Liouville numbers, and 
 
 One positive sum over infinitely many denominator primes is binary normal. Other positive sums can have any prescribed rational total even when every finite collection of their components is jointly uniform. Geometric partitions of the Taylor and BBP series give such finite joint uniformity for components of ln 2 and π. Their full orbit distributions remain open. [Infinite-sum proofs](notes/phase18/summation.md) · [Taylor grouping delay](notes/phase18/prime-delay.md) · [Phase 18 research and verification](notes/phase18/README.md)
 
+Phase 17’s rounding of an entire Legendre integral also works for π at every sufficiently large binary shift. At shift 600 the Machin construction gives a 257-bit odd denominator and at least 261 bits of absolute accuracy. The orbit of the resulting rational throughout that window still requires a distribution estimate. [All-shift theorem and exact checks](notes/phase18/phase17-transfer.md)
+
 ## How the results fit together
 
 A radix shift can have a rational approximation that follows it for many digit positions. On a long interval, a growing denominator supported on a fixed set of primes can force uniform digit frequencies. Persistent cancellation can concentrate the orbit on a finite set. The proofs below combine these local estimates into statements about every sufficiently long prefix.

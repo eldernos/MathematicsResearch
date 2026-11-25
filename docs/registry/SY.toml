@@ -232,3 +232,26 @@ statement = "For every positive tolerance on the exponential denominator rate th
 scope = "For fixed minimum pole a the explicit limsup bound is log(2)/log(a + √(a² + 1)). Coefficient rounding uses rational arithmetic. The estimate does not control cancellation of exponential sums on observation blocks."
 proof = ["notes/phase18/classical.md","notes/phase18/reviews/classical-sources.md#chebyshev-bounds-and-the-other-classical-targets"]
 computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-23"
+title = "Linear shadowing windows for shifted pi on odd rational grids"
+topic = "classical"
+status = "paper"
+principal = true
+statement = "For a fixed finite integer arctangent identity for π whose smallest denominator is a ≥ 2, put ρ = a + √(a² + 1). At every sufficiently large binary shift n there is a rational model computed from the identity alone, with odd reduced denominator q. The upper limit of log(q)/n is at most log(2)/log(ρ), and the lower limit of the number of correct absolute-error bits divided by n is at least 1/log(ρ)."
+scope = "The model uses an even Legendre polynomial and rounds its entire rational integral to an odd least-common-multiple grid. These are accuracy and denominator bounds for one model throughout each window. Distribution of the grid numerators remains open."
+proof = ["notes/phase18/phase17-transfer.md#linear-windows-for-pi"]
+inputs = ["Laplace’s integral representation and Legendre orthogonality (DLMF 18.10.5 and Table 18.3.1), and the prime number theorem."]
+related = ["SY-22","CC-50"]
+computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-24"
+title = "Sharp translation rates for the multiplicative Lambert families"
+topic = "discrepancy"
+status = "paper"
+statement = "For the Phase 17 binary multiplicative Lambert family of support parameter δ, the worst discrepancy change after translation equals its discrepancy deficit at each positive N. Its asymptotic order is log log N divided by the (1−δ)-th power of log N."
+scope = "The exponent 1−δ applies to log N alone. The two-sided bounds assume the full multiplicative and support hypotheses of CC-48. The maximum over all translated real numbers is attained at zero."
+proof = ["notes/phase18/phase17-transfer.md#an-exact-translation-rate-for-every-lambert-support-density"]
+related = ["SY-04","CC-48"]

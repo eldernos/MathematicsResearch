@@ -320,6 +320,8 @@ For arbitrarily small upper rates start from $4\arctan(1)=\pi$ and repeatedly us
 
 As in Phase 16's $\ln 2$-free Chebyshev-pole construction, rounding eliminates $|T_{2D}(i a_i)|$ from the denominator at the cost of destroying shift persistence across $N \mapsto N+1$, so this provides no binary discrepancy bound for $\pi$.
 
+Replacing the Chebyshev kernel by the even Legendre kernel and rounding the entire integral gives linear accuracy windows at every large shift. [Proof and certified examples](phase17-transfer.md#linear-windows-for-pi)
+
 ### 2. $e$: Complete impossibility of positive dyadic factorial groups
 
 In sharp contrast to $\ln 2$ (where every odd ray admits a dyadic partition), positive dyadic grouping of $e = \sum_{k=0}^\infty 1/k!$ fails completely beyond $k = 2$:

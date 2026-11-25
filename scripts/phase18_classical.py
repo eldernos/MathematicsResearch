@@ -329,7 +329,7 @@ def chebyshev_even_poly(two_d: int) -> list[int]:
 
 
 def poly_div_even_quad(even_coeffs: list[int], a: int) -> tuple[list[int], int]:
-    """Divide T_{2D}(x) = sum c_k y^k (y = x^2) by (y + a^2): returns (quotient in y, remainder T_{2D}(ia))."""
+    """Divide a polynomial in y = x² by y + a², returning quotient and remainder."""
     # Synthetic division by y - (-a^2)
     a2 = a * a
     n = len(even_coeffs) - 1
@@ -339,6 +339,54 @@ def poly_div_even_quad(even_coeffs: list[int], a: int) -> tuple[list[int], int]:
         q[k] = rem
         rem = even_coeffs[k] - a2 * rem
     return q, rem
+
+
+def legendre_grid(degree, poles):
+    """First-crossing threshold and exact moment for the even Legendre kernel."""
+    n = 2 * degree
+    # The coefficient of x^(n-2j) in 2^n P_n(x), in increasing powers of y=x².
+    coefficients = [(-1)**j * math.comb(n, j) * math.comb(2*n-2*j, n)
+                    for j in range(degree, -1, -1)]
+    moment = Fraction()
+    values = []
+    for weight, a in poles:
+        quotient, remainder = poly_div_even_quad(coefficients, a)
+        values.append(abs(remainder))
+        integral = sum(Fraction(c, 2*j+1) for j, c in enumerate(quotient))
+        moment += Fraction(weight*a, remainder) * integral
+    threshold = min(values).bit_length() - 1 - n
+    grid = math.lcm(*range(1, n, 2))
+    return threshold, moment, grid
+
+
+def verify_legendre_windows():
+    """Check every shift through 256 and three larger shifts against rational bounds."""
+    five_low, five_high = atan_inverse_bounds(5, 425)
+    large_low, large_high = atan_inverse_bounds(239, 145)
+    pi_low = 16*five_low - 4*large_high
+    pi_high = 16*five_high - 4*large_low
+    shifts = [*range(1, 257), 512, 600, 800]
+    for poles in (((16, 5), (-4, 239)), ((24, 8), (8, 57), (4, 239))):
+        degree = 0
+        threshold = -1
+        for n in shifts:
+            while threshold < n:
+                degree += 1
+                threshold, moment, grid = legendre_grid(degree, poles)
+            shift = 1 << n
+            model = Fraction(-round(grid*shift*moment), grid)
+            assert model.denominator % 2 == 1 and grid % model.denominator == 0
+            error_upper = max(abs(shift*pi_low-model), abs(shift*pi_high-model))
+            # The absolute Poisson-tail prefactor 8r/((1-r²)(1-r)) is < 1
+            # for a >= 2. Also r < (2a)^-2.
+            bound = Fraction(1, 2*grid) + sum(
+                Fraction(abs(c)*a, (2*a)**(2*degree)) for c, a in poles)
+            assert error_upper <= bound, (poles, degree, n)
+            if n in (256, 600, 800):
+                print(f"Legendre a_min={min(a for _, a in poles)}, shift={n}, "
+                      f"D={degree}, denominator bits={model.denominator.bit_length()}, "
+                      f"certified accuracy bits={-ceil_log2_rational(error_upper)}")
+    print(f"Verified rational pi enclosures at {2*len(shifts)} Legendre-grid shifts.")
 
 
 def verify_f5() -> None:
@@ -582,4 +630,5 @@ if __name__ == "__main__":
     verify_f2()
     verify_f3_f4()
     verify_f5()
+    verify_legendre_windows()
     print("\nAll Phase 18 classical synthesis checks passed.")
