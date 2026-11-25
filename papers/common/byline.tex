@@ -1,0 +1,14 @@
+% Owner-approved author information has NOT yet been supplied.
+% Replace the definitions below only with information confirmed by the repository owner.
+% Do not add names, affiliations, emails or identifiers that the owner has not approved.
+\newcommand{\OwnerAuthor}{Author information pending owner approval}
+\newcommand{\OwnerAffiliation}{}
+\newcommand{\OwnerContact}{Corrections and comments: \url{https://github.com/eldernos/MathematicsResearch/issues}}
+\newcommand{\ReleaseLabel}{manuscripts-v2.0.0 candidate}
+% \makebyline{version}{date}: centred author block used under the title.
+\newcommand{\makebyline}[2]{%
+  {\large \OwnerAuthor\par}%
+  \ifx\OwnerAffiliation\empty\else{\small \OwnerAffiliation\par}\fi
+  \vspace{0.3em}
+  {\small Version #1 \enspace$\cdot$\enspace #2 \enspace$\cdot$\enspace \ReleaseLabel\par}%
+  {\footnotesize \OwnerContact\par}}
