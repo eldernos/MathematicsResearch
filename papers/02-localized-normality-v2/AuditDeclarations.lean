@@ -2,6 +2,7 @@ import NormalityChecker.LocalizedJoint
 import NormalityChecker.LocalizedCertificateModulus
 import NormalityChecker.LocalizedSignedAxis
 import NormalityChecker.LocalizedDiscrepancy
+import NormalityChecker.LocalizedMixed
 import NormalityChecker.MaskPeriods
 import NormalityChecker.MaskDensity
 import NormalityChecker.MaskQuotients
@@ -29,13 +30,17 @@ run_cmd do
      P++"bounded_gap_discrepancy", P++"late_powers_discrepancy", P++"normal_of_late_twos",
      P++"quotient_window_bound", P++"ternary_linear_thirds", P++"dyadic_reciprocal_thirds",
      P++"exact_window_density", P++"periodic_discrepancy", P++"periodic_mask_price",
-     "NormalityChecker.Localized.discrepancy_rate", "NormalityChecker.fixed_support_orbit_estimate"]
+     "NormalityChecker.Localized.discrepancy_rate", "NormalityChecker.Localized.value_eq_series",
+     "NormalityChecker.Localized.series_normal", "NormalityChecker.fixed_support_orbit_estimate"]
+  -- A missing declaration or an unexpected axiom is an error, so that the exit status of
+  -- `lake env lean` can serve as audit evidence, as in `Check.lean`.
   for n in names do
     let decl := n.toName
     let env ← getEnv
-    if env.contains decl then
-      let axioms ← collectAxioms decl
-      let bad := axioms.filter fun a => !permitted.contains a
-      logInfo m!"{if bad.isEmpty then "OK  " else "BAD "}{n}"
-    else
-      logInfo m!"MISSING {n}"
+    unless env.contains decl do
+      throwError "missing declaration {n}"
+    let axioms ← collectAxioms decl
+    let bad := axioms.filter fun a => !permitted.contains a
+    unless bad.isEmpty do
+      throwError "{n} depends on unexpected axioms {bad}"
+    logInfo m!"OK  {n}"
