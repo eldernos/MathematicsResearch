@@ -1,0 +1,19 @@
+# Changes in version 2.0
+
+The revision supersedes Paper V v1.1. It uses the title *Denominator Growth and Rational Shadowing for Classical Constants* and the approved Christopher Anderson byline. The v1.1 sources, proofs, PDF, review records and tags remain in their published locations. [v1.1 manuscript](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/papers/05-classical-denominators/paper.pdf) · [Review guide](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/papers/05-classical-denominators/REVIEW.md) · [Correspondence map](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/papers/05-classical-denominators/CORRESPONDENCE.md)
+
+| v1.1 section | v2.0 treatment |
+| --- | --- |
+| §§1–2, representations and prime cancellation | §§1–3 give the prime-band proof and fixed real optimum, then extend them to signed Gaussian sources and all balanced traces. §4 gives adaptive-height bounds and nearby Taylor cutoffs. The v1.1 quantitative cancellation estimates remain in the archive. |
+| §3, signed integral corrections | §5 develops prescribed-shift Chebyshev and Legendre moment constructions. The earlier beta-integral estimates remain in v1.1. |
+| §§4–5, prescribed numerators and binary word exclusions | §6 isolates the general window–denominator inequality and states the numeral and distribution limits explicitly. The detailed diagonal-residue and finite word estimates remain in v1.1. |
+| §6, arctangents and π | §§5 and 7 include the even-Legendre all-shift construction, the Gaussian (2/3) rate and separate reduced-denominator proofs for the literal BBP and Bellard prefixes. |
+| §7, factorial truncations | §7 retains a factorial and continued-fraction comparison and adds the obstruction to positive dyadic grouping. The periodic-numerator estimates remain in v1.1. |
+| §8, discrepancy and finite observations | §§1, 6 and 7 delimit the digit conclusions for the five named constants. §8 gives exact regrouping results and a differential-algebra obstruction. |
+| §9, formal verification | §10 and the companion map identify the Lean declarations, paper deductions, external dependencies and finite computations separately. |
+
+The finite arithmetic of word counts, transition certificates and Fourier statistics belongs with revised Paper IV. The geometric-ray argument here concerns exact representations of two specific constants and finite collections of components. General summation and growing-support constructions are treated in the synthetic expansions manuscript (Paper C). This revision includes the arithmetic used in its own arguments and retains links to v1.1 for the omitted detail.
+
+The unrefined Legendre numerator agrees with nearest-grid rounding under the stated tie separation test. A rational refinement returns the exact nearest point on the same grid. For unbalanced traces the revision gives upper bounds for shifted error and dyadic denominator cost. A general lower bound would require a separate sampling and cancellation argument. The window estimates are upper bounds on the required denominators. Independent human specialist review is outstanding.
+
+Section 9 incorporates the approved follow-up checkpoint. It gives the exact minimum $p\,k(p)$ for one prime, the mean Taylor denominator-loss bound $O(X^{3/7})$, a superpolynomial period bound for the actual reduced moduli, a sharp threshold for the signed moving cutoff, and a finite discrepancy algorithm for individual horizontal rows. The period bound concerns complete periods and returns modulo the complement of one prime axis. [Follow-up verification](https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/verification.md)

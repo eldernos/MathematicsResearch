@@ -1,0 +1,600 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+
+\title{Denominator Growth and Rational Shadowing for Classical Constants}
+\hypersetup{pdftitle={Denominator Growth and Rational Shadowing for Classical Constants}}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\round}{round}
+\DeclareMathOperator{\dist}{dist}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Ltwo}{\log 2}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Denominator Growth and Rational Shadowing\\
+for Classical Constants\par}
+\vspace{0.8em}
+\makebyline{2.0}{25 November 2026}
+\end{center}
+
+\begin{abstract}
+For fixed finite rational identities for $\log 2$ built from balanced algebraic traces, truncation at a common binary scale gives reduced denominators whose least two exponential rates are $5/12$ and $13/30$. In the real dyadic logarithm class the minimum is $1/2$. We reduce all balanced traces to real and Gaussian sources and use a Lean certificate for the finite comparison of prime bands. We quantify robustness under varying coefficients and exhibit failure of the rate floor at larger heights. Chebyshev and Legendre kernels give rational approximants with smaller denominator exponents. Legendre moment rounding gives linear shadowing windows at all sufficiently large binary shifts of $\log 2$ and $\pi$. An explicit test certifies when the output agrees with rounding to the nearest point of the prescribed grid. A general irrationality-exponent inequality constrains such windows. We prove a prime-dependent completion delay for positive dyadic groupings of the logarithm series, give exact geometric-ray decompositions, and rule out finite functional identities of a specified kind using sparse series. We also determine an exact one-prime completion index, bound the average Taylor denominator loss and prove a superpolynomial lower bound on the corresponding periods, and compute the limiting discrepancies of individual Taylor rows. Lower denominator exponents and longer rational shadowing windows do not establish limiting digit distribution. The paper proves neither normality nor a limiting discrepancy bound below one for $\log 2$, $\pi$, $e$, $\sqrt2$ or the golden ratio.
+\end{abstract}
+
+\section{Introduction}
+
+Write $\den(y)$ for the positive reduced denominator of a rational $y$. All unmarked logarithms are natural. For a monic integer polynomial $f$ whose roots all have the form $2^{a/e}\zeta$ with the same nonnegative rational $a/e$ and with roots of unity $\zeta$, set
+\[
+  S_{f,t}(x)=\sum_{1\le j\le x/(t-a/e)}
+     \frac{\sum_{f(\alpha)=0}\alpha^j}{j\,2^{tj}},\qquad t\in\Z,\quad t>a/e .
+\]
+Roots are counted with multiplicity. We call these sources balanced. The cutoff acts on each source before taking a linear combination.
+
+\begin{maintheorem}\label{th:main}
+\evidence{Lean-supported paper proof}
+Let $S$ be a fixed finite rational linear combination of balanced sources with $S(\infty)=\log 2$. Then $Y_N=2^NS(N)$ has error $|2^N\log 2-Y_N|=O((N+1)^{-1})$. The limit $\lim_{N\to\infty}N^{-1}\log\den(Y_N)$ exists. Its smallest two values are $5/12$ and $13/30$, each realized by a unique prefix function. If only real sources with normalized roots $\pm2^{-k}$, $k\ge1$, are allowed, the minimum is $1/2$, again unique.
+\end{maintheorem}
+
+The minimizers are given explicitly in \cref{th:optimal}. The proof combines a classification at every real cutoff, a prime-number calculation, and a finite comparison of affine forms. Lean checks the finite comparison and specified arithmetic steps. Lower denominator exponents and longer rational shadowing windows do not establish limiting digit distribution. To transfer a rational orbit estimate to a statement about digits one needs estimates across the relevant shifts and denominators, with control of the actual numerators. The results establish neither normality nor limiting discrepancy below one for any of the five constants discussed here.
+
+The analytic constructions below use classical logarithmic integrals and Legendre orthogonality. Alladi and Robinson \cite{alladi}, Beukers \cite{beukers}, and Chudnovsky \cite{chud} give related integral and Pad\'e methods for irrationality proofs and measures. Rivoal \cite{rivoal} studies irrationality measures for logarithms with restricted denominators. Here the binary multiplier is prescribed and the rational polynomial moment is rounded. Bailey, Borwein and Plouffe \cite{bbp} and Bellard \cite{bellard} supply extraction series for $\pi$. Bailey and Crandall's Hypothesis A \cite{bc01} concerns equidistribution of a perturbed radix recurrence. Empirical digit tests, such as those of Borwein and Bailey \cite{experiment} and Bailey et al.\ \cite{empirical}, concern finite prefixes.
+
+\section{Prime bands and the fixed optimum}\label{sec:fixed}
+
+For $k,t\ge1$ and $s=\pm1$ write $z_t=(1+i)/2^t$, $n_t=2t-1$, and use the prefixes
+\[
+ A_{k,s}(x)=\sum_{j\le x/k}\frac{(s2^{-k})^j}{j},\qquad
+ G_{t,s}(x)=2\sum_{j\le 2x/n_t}\frac{\Re((s z_t)^j)}{j}.
+\]
+All sums here start at $j=1$. Omit $s$ for the positive sign. Conjugation leaves $G$ unchanged. The geometric tail of a normalized root of modulus $r<1$ at cutoff $m=\lfloor x/(-\log_2 r)\rfloor$ is bounded by $r^{m+1}/((m+1)(1-r))$. This gives the shifted $O((N+1)^{-1})$ error for any fixed combination. For the Gaussian terms, the real-part coefficient is $s^jw_j2^{-\lceil n_tj/2\rceil}$, where $w_j$ repeats $(1,1,0,-1,-1,-1,0,1)$ starting at $j=0$. In particular the exponents retained at integer $N$ are at most $N$. The coefficient and cutoff computations are checked in
+\lean{GaussianLogarithmRelations}{55}{\texttt{dyadicRe\_eq}} and
+\lean{GaussianLogarithmRelations}{66}{\texttt{insertion\_iff}}.
+
+\begin{proposition}[Prime-band formula]\label{prop:bands}
+\evidence{Lean-supported paper proof}
+For any fixed finite rational combination $S$ of the $A$ and $G$ sources, the reduced denominator $q_N$ of $2^NS(N)$ satisfies
+\[
+ \lim_{N\to\infty}\frac{\log q_N}{N}=\rho(S),\qquad
+ \rho(S)=\sum_{\substack{v\ge1\\S(v/2)\ne0}}\frac{2}{v(v+1)} .
+\]
+\end{proposition}
+\begin{proof}
+Let $D$ clear the coefficients. Then $q_N\mid D\lcm(1,\ldots,2N)$ by the cutoff rule. Take an odd prime $p\nmid D$ with $p^2>2N$. In the reduction of $p\,2^NS(N)$ modulo $p$, only $j=p\ell$ survives. For real terms Fermat reduces the numerator to the one at $\ell$. For Gaussian terms Frobenius in $\F_p[i]=\F_p[X]/(X^2+1)$ either fixes $i$ or sends it to $-i$, leaving the real part unchanged. This step is checked for integer Gaussian numerators in \lean{GaussianLogarithmRelations}{85}{\texttt{gaussian\_re\_frobenius}}. The cutoff after restriction to multiples of $p$ is exactly the original rule at $N/p$. Thus
+\[
+ p\,2^NS(N)\equiv 2^NS(N/p)\pmod p .
+\]
+The left side is $p$-integral and is nonzero modulo $p$ precisely when $p\mid q_N$. On $2N/(v+1)<p\le2N/v$, the short sum is the fixed rational $S(v/2)$. A nonzero one excludes only its finitely many numerator primes. The prime number theorem in the form $\vartheta(x)=\sum_{p\le x}\log p\sim x$ \cite[p.~219, modulus $1$]{hadamard} gives weight $2N/[v(v+1)]+o(N)$ for each fixed band.
+
+Sum first over $1\le v<2V$ for fixed $V$. The remaining first powers have weight at most $\vartheta(N/V)$, and higher powers contribute $O(\sqrt N\log N)$ by charging $O(\log N)$ per prime at most $\sqrt{2N}$. The fixed factor $D$ costs $O(1)$. Let $N$ and then $V$ tend to infinity.
+\end{proof}
+
+Pairing opposite signs gives $A_{k,+}+A_{k,-}=A_{2k}$ and
+$G_{t,+}+G_{t,-}=A_{2n_t,-}$ at every cutoff. Only even indices survive the first pairing, and only multiples of four survive the second. In the latter case $z_t^{4h}=(-2^{-2n_t})^h$, and $j=4h$ enters at $x=2n_th$. The infinite values are
+\[
+ A_k(\infty)=k\log 2-\log(2^k-1),\qquad
+ G_t(\infty)=n_t\log 2-\log H_{n_t}^{-},
+\]
+where $H_n^\pm=2^n\pm2^{(n+1)/2}+1$ for odd $n$. Their product is $2^{2n}+1$ and they are coprime, since their difference is a power of two. The order of $2$ at a prime dividing either factor is $4d$ with $d\mid n$.
+
+\begin{theorem}[Real and Gaussian optima]\label{th:optimal}
+\evidence{Lean-supported paper proof}
+Put $B=2A_2+A_3-A_6$. In the real class the minimum rate is $1/2$, attained only by $B$. In the real and Gaussian class the two smallest rates, with their unique prefix functions, are
+\[
+ \begin{array}{c@{\quad}l}
+ 5/12 & 2A_2+6A_3+10A_4-6A_6-5G_3,\\
+ 13/30 & 2A_2+3A_3+4A_4-3A_6-2G_3 .
+ \end{array}
+\]
+In both cases the combinations have target $\log 2$, rational coefficients and fixed finite support.
+\end{theorem}
+\begin{proof}
+Clear coefficient denominators and compare prime valuations in the exponentiated identity. Bang's theorem for $2^k-1$ supplies a prime of order $k$ when $k>6$ \cite[pp.~70--80]{bang}. This is also the $(2,1)$ case of Zsigmondy's theorem \cite[\S XII, pp.~282--283]{zsigmondy}. For each odd $n\ge7$, Grechkoseeva's theorem supplies a prime of order $4n$ in each of the two factors $H_n^\pm$ \cite[Theorem~2, p.~2, Suzuki case $(v,n,m)=(2,4,n)$]{grech}.
+
+After sign pairing, take the largest occupied height among real strides $k>6$ and Gaussian heights $4n_t$ with $n_t\ge7$. At a Gaussian height $h=4n$, a prime of order $h$ in $H_n^+$ occurs only in the real factor of stride $h$, if that factor is present. The valuation removes the real coefficient. The prime in $H_n^-$ then removes the Gaussian coefficient. At a purely real height the prime of order $h$ removes the real coefficient directly. No lower occupied height can supply that order. The small Gaussian factors ($n=1,3,5$) are $1,5,25$ and have no such prime. Descend and then remove $A_5$ using the prime $31$.
+
+Let $a,u,b,c$ be the coefficients of $A_1,G_1,G_2,G_3$. The valuations at $2,3,5,7$ give
+\[
+ a_6=a+u+b+c-1,\qquad a_4=-b-2c,\qquad
+ a_3=-a_6,\qquad a_2=-a_4-2a_6.
+\]
+The system is sufficient by unique factorization. The rational algebra is checked in the Lean declaration
+\lean{GaussianLogarithmRelations}{122}{\texttt{norm\_valuation\_system}}.
+Equivalently, with $\theta=(a,u,b,c)$,
+\begin{equation}\label{eq:theta}
+ S_\theta=B+a(A_1-B)+u(G_1-B)+b(G_2+A_2-A_4-B)
+                  +c(G_3+2A_2-2A_4-B).
+\end{equation}
+In the real class, $a\ne0$ costs the entire band $1\le x<2$ of mass $1/2$, and the nonzero limit gives further mass. When $a=0$, the combination is $B=2A_2-A_{3,-}$, which vanishes below $2$ and is positive thereafter. Indeed $A_{3,-}(x)$ is a nonpositive partial sum of a decreasing alternating sequence starting with a negative term. This proves the real minimum and uniqueness.
+
+For the Gaussian class let $\ell_v(\theta)=S_\theta(v/2)$, $m_v=2/(v(v+1))$ and $M_{71}(\theta)=\sum_{v=1}^{71}m_v\,1_{\ell_v(\theta)\ne0}$. The declarations
+\lean{AdaptiveLogarithmBounds}{1158}{\texttt{global\_cell\_mass\_bound}},
+\lean{AdaptiveLogarithmBounds}{1210}{\texttt{minimizer\_mass71}} and
+\lean{AdaptiveLogarithmBounds}{1220}{\texttt{runnerup\_mass71}}
+check that outside $\theta_-=(0,0,0,-5)$ and $\theta_+=(0,0,0,-2)$ this mass is at least $13/30$, and that the two points have masses $7/18$ and $73/180$. The input rows are the affine forms in \eqref{eq:theta}, with sums cut at $2kj\le v$ and $n_tj\le v$, respectively. The certificate branches over whether each form vanishes, keeps the corresponding linear equation in the zero branch and pays its mass in the other branch. Pruning at $13/30$ leaves only the two points. In the other branch one may drop the inequation because this enlarges the feasible set.
+
+For each point, direct summation on $8\le v<18$ gives positivity. For $x\ge9$ it follows from
+\[
+ |S(x)-\log 2|\le4C\,2^{-x},\qquad
+ C=\sum_k|a_k|+2\sum_t|g_t|,
+\]
+where $a_k,g_t$ are its real and Gaussian coefficients. The bound follows by summing the geometric tails, since all normalized moduli are at most $2^{-1/2}$. Here $C=34,16$ respectively. Adding the mass $1/36$ beyond the certificate gives $5/12,13/30$. Every other vector has positive mass beyond $36$ because its limit is $\log 2$. The displayed two functions attain distinct rates and hence differ. The uniqueness statements concern the prefix functions, since sign pairing can change their presentations.
+\end{proof}
+
+\section{Completeness for balanced traces}\label{sec:balanced}
+
+\begin{theorem}[Reduction at all cutoffs]\label{th:balanced}
+\evidence{Paper proof}
+Let $a/e\ge0$ be reduced and let $f$ be a balanced source with roots $2^{a/e}\zeta$. Put $r=e$ for odd $e$ and $r=e/2$ for even $e$. Then $f(X)=g(X^r)$ for a monic integer polynomial $g$ of root radius $2^{ar/e}$. For every integer $t>a/e$ the prefix $S_{f,t}$ equals an integer linear combination of the sources $A_k$ and $G_j$ at every real cutoff.
+\end{theorem}
+\begin{proof}
+Let $K$ be the union of the cyclotomic fields and put $\eta=2^{1/e}$. The extension $K(\eta)/K$ is Galois and its automorphisms act on $\eta$ by a subgroup of $\mu_e$, of order $s\mid e$. Hence $\eta^s=2^{1/(e/s)}\in K$. A real subfield of a finite cyclotomic extension is Galois over $\Q$. Since $X^m-2$ is Eisenstein at $2$ and has nonreal roots for $m>2$, $2^{1/m}$ can lie in $K$ only for $m=1,2$. For even $e$, $\sqrt2=\zeta_8+\zeta_8^{-1}$ is in $K$, so $s=e/2$ there. For odd $e$, $s=e$.
+
+For an irreducible factor take a root $\alpha=\eta^a\zeta$ and set $\beta=\alpha^r$. The automorphisms just described exhibit $r$ distinct conjugates of $\alpha$ over $\Q(\beta)$. Since $\alpha^r=\beta$, the relative degree is exactly $r$. If $g$ is the minimal polynomial of $\beta$, the factor is $g(X^r)$ by degree. Multiply over factors to obtain the same assertion with multiplicities. The power sums vanish off multiples of $r$, and on $j=rm$ they equal $r$ times the $m$th power sum of $g$. Substitution therefore preserves the prefix, with base exponent $rt$ and stride $n=2r(t-a/e)\in\N$ in the rule $nm\le2x$. It remains to treat radii $2^{h/2}$, $h\in\N\cup\{0\}$.
+
+For such a source let $n=2t-h$, and set $U=2^{-1/2}$. A phase $\zeta$ contributes the formal series $-\log(1-\zeta U^n)$, evaluated only after truncation at degree $2x$. Replacing $\zeta$ with the multiset of its $n$th roots distributes this series by $\prod_{\xi^n=\zeta}(1-\xi U)=1-\zeta U^n$. Write $P_m$ for the multiset of primitive $m$th roots and $Z_m$ for all $m$th roots, viewed in the free abelian group on roots of unity. Then $P_m=\sum_{d\mid m}\mu_{\mathrm{Mob}}(m/d)Z_d$. Taking $n$th roots distributes $Z_d$ to $Z_{nd}$. The set $Z_{2k}$ gives $A_k$. The preimages of the pair $g_+=\{\zeta_8,\zeta_8^{-1}\}$ under the odd $m$th power give $G_{(m+1)/2}$. For $g_-=P_8-g_+$ the preimages give $A_{4m}-A_{2m}-G_{(m+1)/2}$.
+
+For an irreducible factor, choose a primitive phase of order $M$. If $h$ is even, its phase orbit is $P_M$ and $n$ is even, so the inversion uses only even $nd$. If $h$ is odd and $8\nmid M$, the phase orbit consists of $P_M$ and its negatives, with duplicates taken once. Indeed on the units modulo $\lcm(M,8)$ an automorphism fixing $\zeta_M$ can send $\sqrt2$ to $-\sqrt2$ by taking residue $1$ modulo $M$ and residue $3$ or $5$ modulo $8$ as permitted by their gcd. For odd $m$ and $M=m$ or $2m$, the union is $P_m+P_{2m}=\sum_{d\mid m}\mu_{\mathrm{Mob}}(m/d)Z_{2d}$. For $4\mid M$ the union is $P_M$, and the inversion terms for odd $d$ vanish.
+
+For $8\mid M$, automorphisms act on $\sqrt2$ with sign $+1$ for unit residues $\pm1\bmod8$ and $-1$ for $\pm3\bmod8$. If $16\mid M$, the induced twist on the units modulo $M$ adds $M/2$ on the negative-sign classes. It is an involution because it preserves the class modulo $8$, and it preserves units. Thus the phase orbit is again $P_M$, handled as above. If $M=8m$, $m$ odd, the orbit is the product of $g_+$ or $g_-$ with $P_m$. Indeed for initial $8$-phase $\zeta_8^b$, $b$ odd, the twisted exponents $b\sigma+4\,1_{\sigma\equiv\pm3\ (8)}$ are $\pm b\bmod8$, independently of the odd phase by CRT. Invert $P_m$ as before. For odd $d$, the product of either pair with $Z_d$ is the set of $d$th roots of one of the two pairs, since the $d$th power permutes the odd exponents modulo $8$. After taking $n$th roots we therefore obtain an integer combination of the indicated $A$ and $G$ sources. Formal coefficient equality gives equality at each real cutoff.
+\end{proof}
+
+\noindent
+\Cref{th:balanced,th:optimal,prop:bands} prove \cref{th:main}. The extremizers belong to the balanced class because $A_k$ comes from $X-1$ and $G_t$ from $X^2-2X+2$.
+
+\begin{remark}[Balance and unbalanced sources]\label{rem:unbal}
+For any monic $f$ with nonzero constant term, degree $d$, largest complex root modulus $2^A$, and least $2$-adic root valuation $\lambda$ normalized by $v_2(2)=1$, the constant term gives
+\[
+ \lambda\le v_2(f(0))/d\le \log_2|f(0)|/d\le A .
+\]
+If $\lambda=A$, every root has complex modulus $2^A$ and $2$-adic valuation $A$, and $dA=v_2(f(0))\in\Z$. For each root $\alpha$, $\alpha^d/2^{dA}$ is integral at every finite place, and all its conjugates have modulus one. All its powers have monic minimal polynomials of bounded degree and bounded integer coefficients, so only finitely many powers occur and it is a root of unity. This recovers precisely the balanced class. For $\lambda<A<t$, keeping $J$ terms gives shifted error $O_f(2^{N-(J+1)(t-A)}/(J+1))$. The dyadic denominator exponent is at most $\max(0,J(t-\lambda)-N)+O(\log(J+1))$ by $v_2(\sum\alpha^j)\ge j\lambda$. In particular $J\sim N/(t-A)$ with $J-N/(t-A)=O(1)$ gives shifted error $O(1/N)$, with a possible linear dyadic denominator cost. These are upper bounds. A lower bound from a single prime-adic term would also have to control cancellation within a batch of Taylor terms entering between consecutive integer shifts.
+\end{remark}
+
+\section{Adaptive heights and the rate floor}\label{sec:adaptive}
+
+For each $N$ let $S_{\theta_N}$ be given by \eqref{eq:theta}, where
+$\theta_N\in\Q^4$ may vary. This includes adaptive balanced formulas by \cref{th:balanced}. Let $D_N$ be the common denominator of $\theta_N$ and let $H_N=\max(D_N,\|D_N\theta_N\|_\infty)$. This is the height of the four coefficients after reduction to \eqref{eq:theta}. In a real and signed Gaussian presentation, the four coordinates are signed sums of the aggregated coefficients of $A_{1,\pm}$ and of the phases of $G_1,G_2,G_3$, respectively. With a common denominator for those coefficients their height bounds $H_N$ up to a factor of four. For trace presentations one can instead apply the explicit expansion in \cref{th:balanced} and take its resulting height.
+
+\begin{theorem}[Adaptive rate and thresholds]\label{th:adaptive}
+\evidence{Lean-supported paper proof}
+Write $q_N=\den(2^NS_{\theta_N}(N))$. If $\log H_N=o(N)$, then
+\[
+ \frac{\log q_N}{N}=\rho(S_{\theta_N})+o(1).
+\]
+In particular the lower limit is at least $5/12$, and no limit point lies in $(5/12,13/30)$. If the minimizer is eventually excluded, the lower limit is at least $13/30$. The following sufficient linear height bounds give the indicated lower limits:
+\[
+\begin{array}{lcc}
+ & \theta_N\in\Z^4 & \theta_N\in\Q^4\\
+ \liminf N^{-1}\log q_N\ge5/12 & N/528 & N/562\\
+ \liminf N^{-1}\log q_N\ge13/30,\quad \theta_N\ne\theta_-\text{ eventually}
+             & N/839 & N/862
+\end{array}
+\]
+The entries are upper bounds on $\log H_N$. The linear thresholds use a separate exact rational enumeration.
+\end{theorem}
+\begin{proof}
+Fix an integer $V\ge36$. In each band $v<2V$ in \cref{prop:bands}, the congruence works uniformly outside $p\mid D_N$. For $\ell_v(\theta_N)\ne0$, a fixed denominator for the row times $D_N\ell_v(\theta_N)$ is a nonzero integer of absolute value at most $C_v H_N$. Thus at most $\log H_N+O_v(1)$ in log-prime weight can be lost on each such band outside $p\mid D_N$. Primes dividing $D_N$ cost at most $\log D_N$ in the lower bound, since the bands are disjoint. For the upper bound all powers coming from $D_N$ cost at most $\log D_N$, and their first powers from the lcm cost at most a further $\log D_N$. The higher powers from the lcm cost $O(\sqrt N\log N)$ as before. Outside the bands the first-power contribution is at most $\vartheta(N/V)$. The missing mass in $\rho$ from $v\ge2V$ is at most $1/V$. The PNT errors for the finitely many bands are uniform in which bands are selected. Taking the limit with fixed $V$ and then letting $V\to\infty$ proves the approximation to $\rho$, and \cref{th:optimal} gives the gap. The finite-cell input for that gap is the Lean certificate cited there.
+
+For the linear bounds set $\varepsilon=1/k$ for the indicated integer $k$ and use the cells $1\le v\le71$ with $m_v>\varepsilon$. Branch on zero and nonzero evaluations as in \cref{th:optimal}, with zero equations defining an affine space $F$. A forced nonzero constant contributes $m_v$ to the bound before the global rational-height charge. A nonconstant active cell individually contributes at least $(m_v-\varepsilon)_+$ before that charge. This sum suffices for pruning at the target, plus $\varepsilon$ in the rational case. At a leaf, restrict all recorded active rows to $F$. If any becomes identically zero, discard that branch. Count a nonzero constant at full mass. For each class of proportional nonconstant rows charge $(\sum m_v-\varepsilon)_+$: up to a fixed finite exceptional set, all cancelled primes in that class divide the same cleared numerator of size $O(H_N)$. Subtract $\varepsilon$ once for rational coefficients and zero times for integer coefficients. At a point leaf use its exact fixed rate, with no charge. The bound is asymptotic and uniform across the finite tree.
+
+The rational arithmetic enumeration specified in the verification material uses exactly these steps. Its minimum lower bound over retained leaves is at least the corresponding target for each of the four indicated $k$ values, with $\theta_-$ omitted in the search and included separately at rate $5/12$ for the first row. Pruned branches already meet the target. This enumeration certifies sufficient thresholds and gives no necessary thresholds.
+\end{proof}
+
+\begin{proposition}[Failure of the floor at large height]\label{prop:crt}
+\evidence{Paper proof}
+For each $1/12<\varepsilon<3/20$, there are integer choices $\theta_N=(0,0,0,c_N)$ with $\log H_N=(\varepsilon+o(1))N$ and
+\[
+ \limsup_{N\to\infty}\frac{\log q_N}{N}\le \frac12-\varepsilon<\frac5{12}.
+\]
+Their shifted error grows exponentially along multiples of $60$.
+\end{proposition}
+\begin{proof}
+The cells $v=1,2,3$ vanish identically on this line. Cells $5,6,7$ have values $(c+2)/4,(c+5)/8,(c+5)/8$ by substitution. Their total mass is $1/15+1/12=3/20$. Take all eligible primes in cells $6,7$ and enough in cell $5$ so the product $M$ of chosen primes has $\log M=(\varepsilon+o(1))N$. The PNT gives the available weight and each added prime changes it by $O(\log N)$. Use CRT to take $c_N\in[M,2M)$ equal to the respective roots modulo each chosen prime. The congruence in \cref{prop:bands} removes those primes and those in cells $1,2,3$ for large $N$. All remaining first powers lie below $N/2$ and higher powers cost $o(N)$. This gives the claimed rate.
+
+The $c$ direction is $F_c=G_3-A_3-2A_4+A_6$ with limit zero. Along $60\mid N$, for $k=3,4,6$ the shifted $A_k$ tail times $N$ tends to $k/(2^k-1)$ by dominated convergence of the geometric series starting just after $N/k$. With $z=(1+i)/8$, the corresponding $G_3$ limit is $5\Re(z/(1-z))=3/5$ because $2^Nz^{2N/5}=1$. Their combination yields $N2^N F_c(N)\to4/15$. The fixed $B$ error is $O(1/N)$ and cannot offset the exponentially large coefficient along this subsequence.
+\end{proof}
+
+\begin{proposition}[Nearby Taylor cutoffs]\label{prop:near}
+\evidence{Paper proof}
+Let $T_j=\sum_{m=1}^j1/(m2^m)$. For $h=o(K)$, any integer affine combination $\sum_i a_i T_{j_i}$, with $j_i\in[K,K+h]$ and $\sum_i a_i=1$, has odd reduced denominator $q$ satisfying $\log q=K+o(K)$ uniformly. A binary shift $2^N$ has no effect on $q$.
+\end{proposition}
+\begin{proof}
+For fixed $v\ge1$ and $(K+h)/(v+1)<p\le K/v$, each row contains exactly the multiples $p,\ldots,vp$. For large $K$ the prime is odd and has $p^2>K+h$. Multiplication by $p$ then gives the same residue $T_v\bmod p$ in every row, hence also in the combination. The short sum is positive, so all but finitely many primes in the band survive. Sum weights for finitely many $v$ by the PNT and then exhaust the bands. The matching upper bound follows from $\log\lcm(1,\ldots,K+h)=K+o(K)$, which is $\vartheta(K+h)+O(\sqrt{K+h}\log(K+h))$.
+\end{proof}
+
+\section{Integral kernels and prescribed grids}\label{sec:kernels}
+
+Fix an identity
+\[
+\log 2=\sum_i c_i\int_0^1\frac{dx}{a_i-\sigma_i x},
+\qquad c_i\in\Z,\quad a_i\in\Z_{\ge1},\quad \sigma_i\in\{1,-1\},
+\]
+with positive denominators on $[0,1]$. Combine repeated poles and discard coefficients zero. Put $x_i=\sigma_i a_i$, $z_i=|2x_i-1|\ge3$ and $\rho_i=z_i+\sqrt{z_i^2-1}$, with $\rho=\min_i\rho_i$. For a kernel $K_D(x)$ of degree $D$ with $K_D(x_i)\ne0$, set
+\[
+ R_D(x)=\sum_i\frac{c_i}{K_D(x_i)}
+            \frac{K_D(x)-K_D(x_i)}{a_i-\sigma_i x},\qquad
+ I_D=\sum_i\frac{c_i}{K_D(x_i)}\int_0^1\frac{K_D(x)}{a_i-\sigma_i x}\,dx.
+\]
+These satisfy $\log 2+\int_0^1R_D(x)\,dx=I_D$ by division of the numerator. Let $L_D=\lcm(1,\ldots,D)$ and set $E=2^N I_D$. The window of a model $Y_N$ at fixed tolerance $\eta\in(0,1)$ is the largest integer $j\ge0$ for which $2^j|2^N\xi-Y_N|\le\eta$, empty if the initial error exceeds $\eta$. This real inequality implies the corresponding circle inequality at each shift through $j$. We also use $T_N=-\log_2|2^N\xi-Y_N|$ for its precision in bits, so the endpoint of a nonempty window is $\lfloor T_N+\log_2\eta\rfloor$.
+
+\begin{proposition}[B\'ezout moment rounding]\label{prop:bezout}
+\evidence{Paper proof}
+The integrals of integer polynomials of degree $<D$ are exactly $L_D^{-1}\Z$. For a rational polynomial $R=\sum_{k<D}r_k x^k$ one can obtain a polynomial $Q\in\Z[X]$ of degree $<D$ such that
+\[
+ \int_0^1Q(x)\,dx=L_D^{-1}\round\!\left(L_D\int_0^1R(x)\,dx\right).
+\]
+The same assertion for $Q(x^2),R(x^2)$ holds on the grid with denominator $\lcm(1,3,\ldots,2D-1)$.
+\end{proposition}
+\begin{proof}
+With $L=L_D$, the integer weights $m_k=L/(k+1)$ have gcd one because for each prime $p\le D$, a weight $L/P_p$ is prime to $p$, where $P_p$ is the largest power of $p$ at most $D$. Independently round the $r_k$ and let $\Delta=\round(L\int R)-\sum m_k\round(r_k)$. For each $p$ correct the coefficient at $P_p-1$ by a centered representative $s_p$ of $\Delta(L/P_p)^{-1}\bmod P_p$. The remaining defect is divisible by every $P_p$, hence by $L$, and is absorbed by the constant coefficient. Thus the displayed grid point is attained. The nonconstant corrections are bounded by $D/2$, and the constant correction by $(\sum_{k=1}^D1/k+\#\{p\le D\})/2+1$. In the odd case replace $k+1$ by $2k+1$ and choose the largest available power of each odd prime. The same divisibility gives the conclusion.
+\end{proof}
+
+\begin{theorem}[Chebyshev approximation and its analytic floor]\label{th:cheb}
+\evidence{Lean-supported paper proof}
+For $K_D(x)=T_D(2x-1)$, coefficientwise rounding yields, for every large $N$, a model of $2^N\log 2$ of shifted error $O(1/N)$ and
+\[
+ \limsup_{N\to\infty}\frac{\log\den(Y_N)}{N}\le\frac{\log 2}{\log\rho}.
+\]
+Suppose the nearest pole in the transformed coordinate is unique, that is, $z_i$ has a unique minimum at $i_*$. At $N=\lfloor\log_2\min_i|K_D(x_i)|\rfloor$, the scaled analytic residual satisfies $|E|\asymp D^{-2}$. Consequently any rational moment within $O(D^{-3})$ of $2^N\int R_D$ has shifted approximation error $\asymp D^{-2}$ for this kernel and scale.
+\end{theorem}
+\begin{proof}
+$T_D(u)$ denotes the Chebyshev polynomial satisfying $T_D(\cos\theta)=\cos(D\theta)$. For $|u|>1$ its absolute value is $(\rho_u^D+\rho_u^{-D})/2$, with $\rho_u=|u|+\sqrt{u^2-1}$, by the recurrence. Let $w=\lceil\log_2(D(1+\sum_{k\le D}1/k))\rceil$. For a given $N$ choose the first $D$ such that $\min_i |K_D(x_i)|\ge2^{N+w}$. The exponential bounds and the first crossing imply $D/N\to\log 2/\log\rho$. Round the coefficients of $2^{N+w}R_D$ to get $Q$ and put $Y_N=-2^{-w}\int Q$. Then
+\[
+ |2^N\log 2-Y_N|
+ \le 2^{-w}\left(\sum_i |c_i|\int_0^1\frac{dx}{a_i-\sigma_i x}
+                      +\frac12\sum_{k\le D}\frac1k\right)=O(D^{-1}).
+\]
+The denominator divides $2^w L_D$. The integration and rounding steps for the polynomial moment are checked in
+\lean{ChebyshevPoleApproximation}{73}{\texttt{shifted\_poly\_integral\_den\_dvd}} and
+\lean{ChebyshevPoleApproximation}{94}{\texttt{rounding\_integral\_error}}.
+The PNT gives $\log L_D=D+o(D)$.
+
+For the second assertion fix a pole and write $g(u)=1/(2a_i-\sigma_i-\sigma_i u)$. Its unnormalized integral equals $\int_0^\pi\cos(D\theta)h(\theta)\,d\theta$ with $h(\theta)=g(\cos\theta)\sin\theta$. Four integrations by parts give
+\[
+ -\frac{g(1)+(-1)^D g(-1)}{D^2}+O(D^{-4}).
+\]
+Indeed the first sine boundary term vanishes, and the second boundary term uses $h'(0)=g(1)$, $h'(\pi)=-g(-1)$. The remaining integral after two integrations is $O(D^{-2})$ before its prefactor. The bracket is nonzero for each parity. After normalization, the closest pole has $2^N/|K_D(x_{i_*})|\in(1/2,1]$ for large $D$, and the other poles contribute exponentially smaller terms. This proves the residual bound and its stability under the indicated moment perturbation. This floor concerns moments close to this specific analytic model.
+\end{proof}
+
+\begin{theorem}[All-shift Legendre--B\'ezout models]\label{th:legendre}
+\evidence{Paper proof}
+For $\log 2$ and any fixed pole identity above, every sufficiently large $N$ admits a model $Y_N$ computed by rational arithmetic from the identity, with $q_N\mid L_D$ and
+\[
+ |2^N\log 2-Y_N|\le (2L_D)^{-1}+O(\rho^{-D}),
+ \qquad D/N\longrightarrow\frac{1}{\log_2\rho}.
+\]
+For $\pi$ suppose $\pi=\sum_i c_i\arctan(1/a_i)$ with $c_i\in\Z$ and $a_i\in\Z_{\ge2}$, and set $\rho=\min_i(a_i+\sqrt{a_i^2+1})$ over nonzero terms. At every sufficiently large $N$ a rational algorithm gives $q_N\mid L=\lcm(1,3,\ldots,2D-1)$ and
+\[
+ |2^N\pi-Y_N|\le (2L)^{-1}+O(\rho^{-2D}),
+ \qquad D/N\longrightarrow\frac{1}{2\log_2\rho}.
+\]
+In each case $\limsup N^{-1}\log q_N\le\log 2/\log\rho$ and $\liminf T_N/N\ge1/\log\rho$.
+\end{theorem}
+\begin{proof}
+Use $K_D(x)=P_D(2x-1)$ for the logarithm, with $P_j(1)=1$ the Legendre normalization. Choose the first $D\ge1$ such that $\min_i|K_D(x_i)|\ge2^N$. Apply \cref{prop:bezout} to $2^N R_D$, and let $Y_N$ be the negative rounded integral. For $z>1$ put $r=(z+\sqrt{z^2-1})^{-1}$, so
+\[
+ \frac{1}{z-\sigma u}=\frac{2r}{1-r^2}
+        \left(1+2\sum_{j\ge1}(\sigma r)^j T_j(u)\right),\qquad -1\le u\le1.
+\]
+This is the cosine geometric series with $u=\cos\theta$. The first $D$ terms form a polynomial of degree $<D$ and the uniform remaining error is $O(r^D)$. Legendre orthogonality and $|P_D(u)|\le1$ imply that the pole integral against $P_D$ is $O(r^D)$. Hence $|2^N I_D|\ll\rho^{-D}$.
+
+For $\pi$ use $H_D(y)=P_{2D}(\sqrt y)$, a rational polynomial in $y$, and $h_{i,D}=H_D(-a_i^2)$. Choose the first $D\ge1$ with $\min_i|h_{i,D}|\ge2^N$ and set
+\[
+ R_D^\pi(y)=\sum_i \frac{c_i a_i}{h_{i,D}}\,
+              \frac{H_D(y)-h_{i,D}}{y+a_i^2}.
+\]
+Then $\pi+\int_0^1 R_D^\pi(x^2)\,dx$ is the sum of the pole integrals against $P_{2D}(x)$, with prefactors $c_i a_i/h_{i,D}$. For a pole $a_i=a$, write $r=(a+\sqrt{a^2+1})^{-2}$. Applying the same cosine series with angle $2\theta$ gives
+\[
+ \frac{1}{x^2+a^2}=\frac{4r}{1-r^2}
+       \left(1+2\sum_{j\ge1}(-r)^j T_{2j}(x)\right).
+\]
+The polynomial part through $j=D-1$ is even of degree $<2D$. Orthogonality on $[-1,1]$ annihilates its integral against $P_{2D}$ on $[0,1]$ by evenness. The remaining scaled integral is $O(\rho^{-2D})$. Apply the odd-grid version of \cref{prop:bezout}.
+
+For the degree estimates use Laplace's formula
+$P_m(z)=\pi^{-1}\int_0^\pi(z+\sqrt{z^2-1}\cos\theta)^m\,d\theta$
+\cite[Eq.~18.10.5]{dlmf}. Its continuation is polynomial by vanishing of the odd cosine moments. It gives $|P_m(u)|\le1$ on $[-1,1]$. For real $z>1$ the integrand is positive, with maximum base $z+\sqrt{z^2-1}$. Integrating near $\theta=0$ gives the matching lower exponential order. At $z=ia$ and $m=2D$ the factor $i^{2D}$ is a constant sign, and the real base $a+\sqrt{a^2+1}\cos\theta$ has maximal absolute value $a+\sqrt{a^2+1}$, so the same argument applies. Negative real poles use parity. Consequently the logarithm of the minimum of the absolute kernel values is $(\log\rho+o(1))D$ for $\log 2$ and $(2\log\rho+o(1))D$ for $\pi$. Apply the asymptotic at $D$ and $D-1$ to the first crossing. The comparisons and the division and rounding above are all rational operations. Orthogonality here is the standard Legendre identity \cite[Table~18.3.1]{dlmf}.
+
+Finally $\log L_D=D+o(D)$ and $\log L=2D+o(D)$ by the PNT, since removing powers of two costs $O(\log D)$. In both cases $\log\rho>1$, so the analytic residual is $o(1/L_D)$ or $o(1/L)$, respectively. The estimates in bits and in natural logarithms follow.
+\end{proof}
+
+\begin{proposition}[Identification of the rounded numerator]\label{prop:grid}
+\evidence{Paper proof}
+For the unrefined logarithm construction of \cref{th:legendre}, set $E=2^NI_D$. The numerator on the grid of denominator $L_D$ is
+\[
+ L_DY_N=\round(L_D2^N\log 2)
+\]
+whenever $\dist(L_D2^N\log 2,\Z+\tfrac12)>L_D|E|$. Here $\dist$ denotes distance. The same holds for $\pi$ with its grid and residual. For both targets a rational refinement on the original grid certifies and returns the exact nearest-grid numerator at every shift.
+\end{proposition}
+\begin{proof}
+Write $S=2^N\int R_D$ in the logarithm case, so $-LS=L2^N\log 2-LE$ with $L=L_D$. The corresponding equality holds for $R_D^\pi(x^2)$. A perturbation smaller than the distance to the nearest half-integer preserves the rounded numerator. Use a tie convention symmetric under negation, or round $-LS$ directly.
+
+For the refinement hold $L$ fixed and increase the kernel degree $d$ used in $S$, computing a rational center $-LS_d$ and the rational error bound
+\[
+ 2^N L\sum_i \frac{b_i}{|h_{i,d}|},
+\]
+where $h_{i,d}$ is the relevant pole value and $b_i$ bounds the absolute unnormalized pole integral including its coefficient. One may take $b_i=|c_i|/\min_{[0,1]}(a_i-\sigma_i x)$ for the logarithm and $b_i=|c_i|/a_i$ for $\pi$, using $|P_j|\le1$. The error bound tends to zero by the degree estimates. Stop when the interval is inside one open rounding cell. The irrationality of both targets \cite{alladi,hata} ensures termination. The resulting error is at most half the original grid spacing. The unrefined numerator also agrees whenever its own certified interval passes this test.
+\end{proof}
+
+For example, the single logarithm pole $1/(1+x)$ gives $\rho=3+2\sqrt2$. The identity with $2/(4-x)+1/(8+x)$ gives $\rho=7+4\sqrt3$, and the telescoping identity with poles $a=M+1,\ldots,2M$, $\sigma=1$, gives $\rho=2M+1+2\sqrt{M(M+1)}$. These give upper denominator rates approximately $0.39322$, $0.26316$, and arbitrarily small positive upper bounds as $M$ increases. The guaranteed window slope decreases as $\rho$ increases.
+For $\pi$, Machin's $16\arctan(1/5)-4\arctan(1/239)$ and St{\o}rmer's $24\arctan(1/8)+8\arctan(1/57)+4\arctan(1/239)$ give bounds $\log 2/\log(5+\sqrt{26})$ and $\log 2/\log(8+\sqrt{65})$ \cite{taka}. The arctangent addition identity $\arctan(1/a)=\arctan(1/(a+1))+\arctan(1/(a^2+a+1))$ allows arbitrary fixed lower bounds on the smallest pole by successive splitting, starting from $4\arctan(1)$. The rate estimates are upper bounds for reduced denominators. The hypotheses of the unrefined nearest-grid test need separate verification for each shift.
+
+The Chebyshev construction also works for the same arctangent identities. Use $H_D(y)=T_{2D}(\sqrt y)$ in the division formula for $R_D^\pi$. For $z=ia$, the two characteristic roots of the Chebyshev recurrence are $i(a+\sqrt{a^2+1})$ and its inverse. Thus
+$|T_{2D}(ia)|=(\rho_a^{2D}+\rho_a^{-2D})/2$, where $\rho_a=a+\sqrt{a^2+1}$. Choose the first $D$ with $\min_i|H_D(-a_i^2)|\ge2^{N+w}$, where $w=\lceil\log_2(D(1+\sum_{k=1}^D(2k-1)^{-1}))\rceil$. Round the coefficients of $2^{N+w}R_D^\pi$, integrate at $y=x^2$ and multiply by $-2^{-w}$. The bounded kernel and harmonic sum give $O(D^{-1})$ shifted error and the denominator divides $2^w\lcm(1,3,\ldots,2D-1)$. The same first-crossing calculation gives the upper rate $\log 2/\log\rho$.
+
+\section{The window--denominator inequality}\label{sec:barrier}
+
+For an irrational $\xi$, let $\mu(\xi)$ be the supremum of the real exponents $\nu$ for which $|\xi-a/q|<q^{-\nu}$ has infinitely many reduced rational solutions $a/q$. Use $\|x\|=\dist(x,\Z)$.
+
+\begin{theorem}[Window--denominator inequality]\label{th:barrier}
+\evidence{Paper proof}
+Suppose $\mu(\xi)<\mu<\infty$ and $Y_N=a_N/q_N$ is reduced with
+$|2^N\xi-Y_N|\le2^{-T_N}$. Then
+\[
+ T_N\le(\mu-1)N+\mu\log_2 q_N+O_{\xi,\mu}(1).
+\]
+If $T_N\ge q_N^\delta$ along a sequence for fixed $\delta>0$, then $q_N=O_{\xi,\mu,\delta}(N^{1/\delta})$ there. If $\log q_N\ge\rho_0N$ along a sequence for fixed $\rho_0>0$, then $T_N=O_{\xi,\mu,\rho_0}(\log q_N)$ there.
+\end{theorem}
+\begin{proof}
+The definition gives $|\xi-a/q|\ge c_{\xi,\mu}q^{-\mu}$ for all reduced rationals. Only finitely many violate it with $c=1$, and each has positive error. Reduce $a_N/(2^Nq_N)$, whose denominator is at most $2^Nq_N$. Comparing its error with $2^{-N-T_N}$ proves the inequality. The polynomial bound follows from $\log q=o(q^\delta)$, and the logarithmic bound follows by substituting $N\le(\log q_N)/\rho_0$.
+\end{proof}
+
+On any prescribed grid there is also the identity
+\[
+ \min_{a\in\Z}|2^N\xi-a/q|=\frac{\|q2^N\xi\|}{q}.
+\]
+Additional bits beyond $\log_2 q$ require control of this fractional part. For the reduced denominators of the Legendre models, \cref{th:legendre} supplies upper bounds and does not give a positive lower exponential rate. A modular estimate with fixed prime support and windows of length at least $q^\delta$ requires both hypotheses. The grid divisibilities do not supply them \cite[Corollary~1.2]{vandehey}.
+
+\begin{remark}[Limiting digit distribution]\label{rem:digits}
+Lower denominator exponents and longer rational shadowing windows do not establish limiting digit distribution. Every real target has a nearest point on any rational grid with error at most half the mesh. Finite error bounds and finite checks of numerator residues give only the windows or tests stated. The paper gives neither binary normality nor limiting upper discrepancy below one for $\log 2$, $\pi$, $e$, $\sqrt2$ or $\varphi=(1+\sqrt5)/2$. Write $D_N(x)$ for the supremum, over half-open circle intervals, of the absolute difference between the observed and uniform frequencies for $\{2^n x\bmod 1:0\le n<N\}$, counting visits with multiplicity. Limiting upper discrepancy means $\limsup_N D_N(x)$.
+\end{remark}
+
+\section{Scope for individual constants}\label{sec:classical}
+
+The published bounds of Rukhadze and Marcovecchio for $\log 2$ and of Hata and Zeilberger--Zudilin for $\pi$ supply finite choices of $\mu$ in \cref{th:barrier} \cite{ruk,marc,hata,zz}. For example $\mu=3.575$ and $\mu=7.104$ are admissible, respectively, by Marcovecchio and Zeilberger--Zudilin. A run of $L$ identical binary digits immediately after position $N$ puts $2^N\xi$ within $2^{-L}$ of an integer and hence satisfies the $q_N=1$ case. The resulting bound is on individual run lengths.
+
+\begin{proposition}[Gaussian arctangent prefixes]\label{prop:angles}
+\evidence{Paper proof}
+Let $A=\arctan(1/3)$ and $C=\arctan(1/7)$. For positive integers $a,c$, take the Gaussian logarithm prefixes for $aA+cC$ at common binary cutoff $N$. Their shifted errors are $O(1/N)$ and their reduced denominator rate is $2/3$. This includes $\arctan(1/2)=A+C$ and $\pi=8A+4C$.
+\end{proposition}
+\begin{proof}
+For $t=2,3$, put $z=(1-i)/2^t$ and $B_t(m)=-\sum_{j=1}^m\Im(z^j)/j$. The full sum is $\arctan(1/(2^t-1))$ from the argument of $1-z$. The imaginary part of $(1-i)^j$ divided by $2^{\lfloor j/2\rfloor}$ is integral, as follows from its powers modulo eight. Take $M_t=\lfloor2N/(2t-1)\rfloor$ and
+$Y_N=2^N(aB_2(M_2)+cB_3(M_3))$. The geometric tail gives the error, and the denominator divides $\lcm(1,\ldots,M_2)$. The tangent addition formula gives the stated identities with angles in the principal range \cite[Eqs.~(11)--(19)]{taka}.
+
+For odd $p$ with $p^2>M_2$, the residue of $pY_N$ is $2^N(-1)^{(p-1)/2}$ times the corresponding short sum with both cutoffs at $x=N/p$. This is the same Frobenius argument as in \cref{prop:bands}, now with the sign on imaginary parts. Each $B_t(m)$ is positive for $m\ge1$. The first term is $2^{-t}$ and the absolute contribution of later terms is at most $1/(2^t(2^t-\sqrt2))<2^{-t}$. The short sum is therefore nonzero on every half-cell with $x\ge3/2$, zero below. For a fixed finite collection of these cells all sufficiently large primes in the corresponding bands survive. Exhausting the bands gives the lower mass $\int_{3/2}^\infty dx/x^2=2/3$ by the PNT. The lcm bound gives the same upper rate.
+\end{proof}
+
+\begin{proposition}[Denominators of the BBP and Bellard prefixes]\label{prop:digitseries}
+\evidence{Paper proof}
+Truncate the hexadecimal BBP formula \cite[Eq.~(1.2)]{bbp} and the binary Bellard formula \cite[Eq.~(1)]{bellard} for $\pi$ through $k=M$ inclusive. Multiply the respective sums by $2^N$, with $N=4M$ and $N=10M$. The shifted errors are $O(1/(M+1))$. The limits of $N^{-1}\log q_N$ for their reduced denominators are respectively $3/2$ and $1$.
+\end{proposition}
+\begin{proof}
+Both error bounds follow from geometric summation. For the denominator fix $\varepsilon>0$ and take an odd prime $p>\varepsilon N$. For large $N$ none of the raw denominators is divisible by $p^2$. Write $pj$ for the odd denominator part of a contributing term, where $j$ is odd, and reduce $p$ times the \emph{unshifted} prefix modulo $p$. The shift is a unit. For BBP the rational representatives from the four slots are
+\[
+\begin{array}{c@{\qquad}l}
+ pj=8k+1,\ 8k+5 & \phantom{-}4\chi\,2^{-(j-1)/2}/j,\quad -4\chi\,2^{-(j-1)/2}/j\\
+ pj=4k+3 & -4\,2^{-j}/j\\
+ pj=2k+1 & -2\,2^{-2j}/j ,
+\end{array}
+\]
+where $\chi=(2/p)$. For example in the first row $2^{-4k}=2^{-(pj-a)/2}\equiv\chi\,2^{-(j-a)/2}$ for $a=1,5$ by Euler's criterion. The other rows use Fermat's theorem. For $p\equiv1\bmod4$ and $p\le2N$, the first row has a $j=1$ contribution of $4$. All its later terms have absolute sum at most $4/3$, and the last two rows have absolute sums at most $2/9$ and $8/15$. For $p\equiv3\bmod4$ and $p\le N$ the middle row has a $j=1$ contribution of $-2$. The first row has absolute sum at most $4/3$ and the other contributions are negative. In each range the rational sum is nonzero. For fixed $\varepsilon$, $j$ is bounded, so only finitely many nonzero sums occur and only finitely many primes can divide their numerators.
+
+Conversely the largest possible primes in the two classes are at most $2N+O(1)$ and $N+O(1)$. In the first row a prime congruent to $3\bmod4$ needs $j\ge3$. All prime powers divide a fixed constant times $L_{8M+6}$ after shifting, and powers beyond the first contribute $O(\sqrt N\log N)$. The shifted dyadic part is bounded. The prime number theorem in progressions \cite[p.~219, modulus $4$]{hadamard} gives the two main terms $N$ and $N/2$, with loss $O(\varepsilon N)+o(N)$. Let $\varepsilon$ tend to zero.
+
+For Bellard omit the fixed prefactor $1/64$. In the slots $10k+a=pj$ with $a=1,3,5,7,9$ and signed coefficients $c_a=256,-64,-4,-4,1$, the representatives are $(-1)^kc_a2^a2^{-j}/j$. For $p\ne 2,5$ and $p\le N$, the $j=1$ term has magnitude $256$ and the others together have magnitude at most $512/18$ by geometric summation. In the two slots $4k+a=pj$ with $a=1,3$, the representative has magnitude $32\,2^{-5(j-1)/2}/j$, as follows by reducing $2^{-5(pj-a)/2}$ as above. These two slots together use at most one term per $j$ and hence contribute at most $32/(1-2^{-5})$. The two bounds sum to less than $256$. Finitely many patterns again yield survival throughout $\varepsilon N<p\le N$ except for finitely many primes. All shifted denominators divide $64L_{N+9}$. The prime number theorem and the limit $\varepsilon\downarrow0$ complete the proof.
+\end{proof}
+
+BBP and Bellard digit extraction concerns isolated digits. The rates above concern the corresponding prescribed rational prefixes.
+
+\begin{proposition}[Positive factorial grouping obstruction]\label{prop:factorial}
+\evidence{Paper proof}
+A finite subset of the terms $1/m!$ in the series for $e$, with largest index $M\ge3$, cannot have a dyadic sum.
+\end{proposition}
+\begin{proof}
+Multiply by $M!$. If $M$ has an odd prime divisor $p$, every smaller term vanishes modulo $p$, while the largest contributes $1$. If $M$ is a power of two, choose an odd prime $p\mid M-1$. The only additional term that may contribute is the one at $M-1$, which contributes $M\equiv1\bmod p$. The numerator is then $1$ or $2$ modulo $p$, so $p$ survives in the denominator.
+\end{proof}
+
+For $e$ the ordinary factorial truncations at the least $m$ with $m!\ge2^N$ give shifted error $O(1/m)$ and log-denominator at most $(\log2)N+O(\log m)$ before reduction. The Euler continued fraction $[2;1,2,1,1,4,1,1,6,\ldots]$ gives $\mu(e)=2$. Its entries grow at most linearly in their index, while convergent denominators grow at least geometrically, so the standard continued fraction error bounds give exponent $2$ \cite{euler}. For $\sqrt2$ and $\varphi$ the exponents are also $2$. Indeed for a quadratic irrational $\alpha$ and its conjugate $\alpha'$ the nonzero integer $q^2(p/q-\alpha)(p/q-\alpha')$ for these monic quadratics gives a lower bound $\gg q^{-2}$ when $p/q$ stays close to $\alpha$. Continued fractions supply the matching upper approximation order infinitely often.
+
+In particular the convergents of $\sqrt2$ and $\varphi$ have precision $\log_2|\xi-a/q|^{-1}=2\log_2 q+O(1)$. The same statement for $e$ has an $O(\log\log q)$ error term by its continued fraction. Shifting at effective precision therefore gives log-denominator upper rate $(\log2)/2$ along the corresponding shifts, with a bounded accuracy window if the shift is rounded to effective precision. The log-denominator rate alone is thus a weak comparator. For $\varphi$, a separate exact criterion relates limiting discrepancy below one to positive lower density of powers $2^n$ with bounded least Zeckendorf index. See \lean{GoldenOrbit}{190}{\texttt{golden\_discrepancy\_iff\_small\_index}}. This leaves the density question open in this paper.
+
+For the Pell convergents $p_m/q_m$ defined by $p_m+q_m\sqrt2=(1+\sqrt2)^m$, the reduced rate at effective precision is exactly $(\log 2)/2$. Indeed $p_m$ is odd, $q_m$ has the parity of $m$, and $q_{2m}=2p_mq_m$. Hence $v_2(q_m)=v_2(m)=O(\log m)$, so the shift changes $\log q_m$ by at most $O(\log m)$.
+
+A different pair of rational models for $\sqrt2$ and $\varphi$ comes from
+\[
+ \sqrt{1+4x}=1+2\sum_{k\ge1}(-1)^{k-1}C_{k-1}x^k,\qquad
+ C_{k-1}=\frac1k\binom{2k-2}{k-1}.
+\]
+At $x=2^{-5}$ this is $3\sqrt2/4$. At $x=2^{-4}$ adding $1/2$ gives $\varphi$. For $x=2^{-h}$, $h=5,4$, the term at $k$ has exact dyadic exponent $hk-s_2(k)$, with $s_2(k)$ the binary digit sum. This follows from $v_2(k!)=k-s_2(k)$ and $s_2(k)=s_2(k-1)+1-v_2(k)$. The exponents increase strictly, so the last term determines the dyadic exponent of the prefix. Truncating at $K=\lfloor N/(h-2)\rfloor$ gives shifted error $O(N^{-3/2})$ by $C_{k-1}=O(4^k k^{-3/2})$ and a geometric tail. The shifted dyadic exponent is $\frac{2}{h-2}N+O(\log N)$. Rescaling by $4/3$ for $\sqrt2$ changes that exponent by at most two and introduces at most a fixed odd factor of three.
+
+\section{Positive groups, geometric rays and sparse functions}\label{sec:groups}
+
+\begin{theorem}[Delay in positive Taylor grouping]\label{th:delay}
+\evidence{Paper proof}
+In any partition of $a_m=1/(m2^m)$, $m\ge1$, into finite groups of dyadic sum, the last original index $M(p)$ in the group containing $a_p$ satisfies
+\[
+  \liminf_{\substack{p\to\infty\\p\ {\rm prime}}}
+            \frac{M(p)}{p\log p}\ge\frac1{1+\log2}.
+\]
+The shifted sum of all unfinished groups' portions through cutoff $N$ has exactly the same odd reduced denominator as $2^N\sum_{m\le N}a_m$, whose odd log-denominator is $N+o(N)$.
+\end{theorem}
+\begin{proof}
+Take an odd prime $p$, $1\le k<p$ and a finite set of indices bounded by $(k+1)p-1$ meeting $p\Z$. Multiply its sum by $p$ and reduce modulo $p$. The residue is $\sum_{j\in J}1/(j2^j)$ for a nonempty $J\subseteq[1,k]$, by Fermat and $p^2>(k+1)p-1$ when $k<p$. Multiplying by $2^k L_k$ gives an integer strictly between zero and $2^k L_k$, since the full sum of these positive terms is less than one. Thus if $2^k L_k\le p$, the residue is nonzero and the original sum is not dyadic. For any $c<1/(1+\log2)$ with $c>0$, the choice $k=\lfloor c\log p\rfloor$ satisfies this inequality for large $p$ by $\log L_k=k+o(k)$. The group containing $a_p$ must reach $(k+1)p$. Let $c$ increase to the given constant.
+
+At cutoff $N$, the completed groups contribute a dyadic rational. Adding or subtracting it preserves the negative $p$-adic valuation of the remaining rational at each odd prime, as well as its integrality whenever that valuation is nonnegative. The odd log-denominator of the standard series is $N+o(N)$ by \cref{prop:near} with $K=N$, $h=0$.
+\end{proof}
+
+Such partitions exist. On a fixed odd ray $m=d2^j$ the residue of $1/(m2^m)$ in $d^{-1}\Z[1/2]/\Z[1/2]$ is represented by the unit $2^{-(d2^j+j)}\bmod d$ for $d>1$. The sequence of exponents modulo $\ord_d(2)$ is eventually periodic. Any initial residue can be cancelled using at most $d-1$ copies of one recurring unit. The remaining positions of each recurring class can be grouped in sets of $d$. For $d=1$ all terms are dyadic. The last original index and the reduced dyadic exponent of a group measure different quantities. For instance the indices $5,8,10$ give $7/1024$, while the largest individual dyadic exponent is $11$.
+
+For large $N$, the sum of only groups completed by cutoff $N$ omits the prime term at the first prime $p>N/2$, since cancelling that term requires another multiple of $p$. By the prime number theorem $p=(1/2+o(1))N$, so the shifted error is at least $2^{(1/2-o(1))N}$. Closing all groups touching the prefix instead reaches at least order $N\log N$, by applying \cref{th:delay} to a prime near $N$. This produces a dyadic approximant with shifted error at most $1/(N+1)$ whose doubling orbit eventually reaches zero.
+
+\begin{theorem}[Exact geometric-ray decompositions]\label{th:rays}
+\evidence{Lean-supported paper proof}
+There is a partition of $\N_{\ge1}$ into rays $rp^j$, $j\ge0$, with a distinct odd prime $p$ for each ray, giving the positive identity
+\[
+ \log 2=\sum_{\rm rays}\sum_{j\ge0}\frac{2^{-rp^j}}{rp^j}.
+\]
+There is also a residue-preserving partition of the denominators in the BBP formula, giving the absolutely convergent identity
+\[
+ \pi=\sum_{\rm rays}\frac{c_a}{r}\sum_{j\ge0}
+            \frac{16^{-(rp^j-a)/8}}{p^j},
+ \qquad r\equiv a\pmod8,\quad (a,c_a)\in\{(1,4),(4,-2),(5,-1),(6,-1)\}.
+\]
+Here the ray primes are distinct and $p\equiv1\bmod8$. Each finite set of ray components in either partition has a jointly uniform binary orbit at unrestricted prefix lengths.
+\end{theorem}
+\begin{proof}
+In the logarithm series choose the least unused index $r$ and a fresh odd prime $p$ larger than all current and previous initial indices and primes. The new ray is disjoint because $r$ is unused and all later terms contain a prime dividing no previous term. The initial indices increase strictly, and any omitted index would bound them all, so the rays exhaust the series. For BBP run the algorithm in the union of the four classes with $p\equiv1\bmod8$. Such primes can be chosen arbitrarily large. If an even integer $u$ is divisible by all forbidden primes, any prime of $u^4+1$ is new and has $\ord_p(u)=8$. The rays stay in their original classes. Splitting the four original series is justified by absolute convergence and gives the second identity. The separate fixed-prime partition $m=rp^j$ with $p\nmid r$ is also available for the logarithm. The equality between the sum of those components and $\log2$ is checked in \lean{OrderedComponents}{32}{\texttt{hasSum\_prime\_rays\_logTwo}}.
+
+The individual fixed-prime logarithm rays are rational affine images of Stoneham numbers in a power of the binary base \cite[Corollary~4.9(i)]{bc02}. Joint uniformity of finite Stoneham families, including distinct orders at a shared prime, is also stated in Mira Cult's public note \cite[Theorem~1]{mira}. The argument below applies directly to the two indicated partitions with distinct primes, including the offset exponents in the BBP classes.
+
+For finite-dimensional uniformity, take a nonzero integer linear combination of the selected components. In base $b=2$ or $16$ this gives finitely many series with terms $d_i p_i^{-j}b^{-\lambda_{ij}}$, with fixed nonzero rational $d_i$, distinct off-base primes $p_i$ and strictly increasing integer insertion positions $\lambda_{ij}\asymp p_i^j$ as $j\to\infty$. Consider multiplication by $b^n$ of the prefix retaining $\lambda_{ij}\le n$. For the last retained index $j_i$ on axis $i$, its term has $p_i$-valuation $v_{p_i}(d_i)-j_i$. Earlier terms on that axis have strictly larger valuations, while other axes have a fixed lower bound for their $p_i$-valuations. Thus for all large $n$ the reduced denominator has $p_i$-exponent $j_i-v_{p_i}(d_i)$. All denominator primes lie in a fixed set and the denominator is polynomially bounded in $n$. Primes dividing $b$ from the fixed $d_i$ disappear after a fixed number of steps following an insertion.
+
+In a shell $[M,2M)$ use blocks of length $\lfloor\sqrt M\rfloor$. There are $O(\log M)$ insertions up to $2M$ across the selected rays. Discard blocks meeting an insertion or its fixed buffer, and the last partial block. Their total length is $O(\sqrt M\log M)$. On each other block the shifted prefixes are one modular orbit with fixed off-base prime support, a denominator tending uniformly to infinity, and denominator bounded by a fixed power of the block length. The fixed-support estimate gives Fourier sum $o(\sqrt M)$ uniformly, by \lean{SmoothOrbit}{207}{\texttt{fixed\_support\_orbit\_estimate}} or \cite[Corollary~1.2]{vandehey}. The omitted shifted tails tend uniformly to zero for $n\ge M$. Their magnitudes are bounded by the tails of the convergent sums $\sum_{i,j}|d_i|p_i^{-j}$ because uninserted powers satisfy $b^{n-\lambda_{ij}}<1$. Thus the same Fourier sum bound applies asymptotically to the true orbit on good blocks. The resulting error $o(M)$ holds on every initial segment of each shell by also charging its last partial block. Summing over dyadic shells gives zero limiting Fourier averages. Weyl's criterion in each nonzero integer direction gives joint Haar uniformity. For the BBP rays, the four residue classes of binary shifts modulo four are images of the hexadecimal orbit under integer dilations, which preserve Haar measure.
+\end{proof}
+
+Finite-dimensional uniformity concerns fixed finite sets of components. A transfer to the full classical sum could use control of the shifted tail over a density-one set of positions together with estimates for growing partial sums. Absolute convergence bounds the unshifted tail. In fact, take distinct odd primes and positive single-ray components $\alpha_i$, and start with a positive rational remainder $r_0$. Choose a positive rational $c_i$ with $r_{i-1}/3<c_i\alpha_i<2r_{i-1}/3$ and subtract it to obtain $r_i$. Every finite collection of $c_i\alpha_i$ is jointly uniform by the same proof, yet their sum is $r_0$.
+
+\begin{proposition}[Obstruction to sparse functional identities]\label{prop:functional}
+\evidence{Paper proof}
+Over a characteristic-zero coefficient field, let finitely many formal power series $F_i(X)$ each have $O((\log(2+N))^A)$ occupied exponents through $N$. The differential algebra generated by the $F_i$ over the rational-function field contains none of the following:
+\[
+ \operatorname{Li}_s(X)\ (s\in\Z_{\ge1}),\quad
+ \sum_{n\ge0}X^n\sum_{(a,c_a)}\frac{c_a}{8n+a},\quad
+ e^X,\quad (1-X)^\gamma\ (\gamma\in\Q\setminus\Z),\quad
+ \sum_{n\ge1}\frac{(-1)^{n-1}X^n}{n^3\binom{2n}{n}}.
+\]
+The sum over $(a,c_a)$ uses the four BBP slots.
+\end{proposition}
+\begin{proof}
+Each element is a finite sum of products of derivatives of finite order with rational-function coefficients. Clear the finitely many coefficient denominators with a polynomial $Q$. Fixed derivatives and polynomial shifts preserve the sparsity bound up to constants, and the support count of a fixed product is bounded by the product of the counts for its factors through $N$ plus a fixed shift. Thus $QF$ has polylogarithmic support through $N$ for every element $F$.
+
+For $\operatorname{Li}_s$ the coefficient of $X^n$ in $QF$ is eventually the rational function $\sum_t q_t/(n-t)^s$ where $Q=\sum_t q_tX^t$. It has a pole at each $t$ with $q_t\ne0$ and hence only finitely many zeros. For the BBP series the poles of the coefficient function are at $t-a/8$, all distinct. For $e^X$ the coefficient multiplied by $n!$ is a nonzero polynomial, a combination of falling factorials of distinct degrees.
+
+For each of the last two series the coefficients $u_n$ are eventually nonzero and each $u_{n-t}/u_n$ is a rational function of $n$ for fixed $t$. Identical vanishing of the coefficient function would make $QF$ polynomial. A rational function has integral order at $X=1$, whereas $(1-X)^\gamma$ has fractional order, as seen by raising to the denominator of $\gamma$. For the last series Stirling's formula gives $|u_n|4^n\asymp n^{-5/2}$. Thus the series stays bounded as $X$ approaches $-4$ from the right, but its second derivative is unbounded there. Its terms have constant sign for $-4<X<0$, and their endpoint magnitudes are of order $n^{-1/2}$. A rational function bounded at a finite point extends analytically across it. This analytic argument excludes rationality over $\C$, which suffices in characteristic zero because any putative rational expression uses only a finitely generated coefficient subfield, which embeds into $\C$. In every case the polynomial multiple has cofinite support, a contradiction.
+\end{proof}
+
+The obstruction applies to functional identities before specialization. It allows derivatives and rational-function weights, and leaves open identities at a single value of $X$, infinite summation, and expressions that divide by a sparse generator.
+
+\section{Taylor prefix arithmetic and horizontal summands}\label{sec:taylor}
+
+\begin{proposition}[Exact completion at one prime]\label{prop:completion}
+\evidence{Paper proof}
+For an odd prime $p$ let $x_j(p)=(j2^j)^{-1}\bmod p$ for $1\le j<p$. Let $k(p)$ be the least $k$ for which there is a subset $S\subseteq[1,k]$ containing $1$ with $\sum_{j\in S}x_j(p)=0$ modulo $p$. For $p\ge5$ this minimum exists and the smallest last index of a finite positive dyadic group containing $a_p=1/(p2^p)$ is exactly $p\,k(p)$. A group attaining it has reduced denominator $2^{p k(p)+v_2(k(p))}$. The smallest last index for $p=3$ is $12$. For $p\ge41$,
+\[
+ k(p)\le\left\lceil3\sqrt{4p-3}\right\rceil .
+\]
+Outside a set of relative density $O(1/\log X)$ among primes in $(X/2,X]$, one has $k(p)\ge\log_2p-2\log_2\log_2p$.
+\end{proposition}
+\begin{proof}
+Subset sums of a list of nonzero residues modulo a prime grow by at least one when a residue is appended, until they fill the field. A proper nonempty subset is never invariant under a nonzero translation. For $p\ge5$ the subset sums of $x_2,x_3$ start with four distinct elements because $x_2/x_3=3\ne\pm1\bmod p$. The remaining $p-4$ residues $x_4,\ldots,x_{p-1}$ therefore suffice to represent $-x_1$. This gives $k(p)<p$. Before cutoff $p\,k(p)$ the one-pole reduction in \cref{th:delay} precludes cancellation at $p$.
+
+Start with the indices $pS$ for a minimizing set $S$ and write $k=k(p)$. Their sum is integral at $p$, and its odd denominator divides $L_k$. Process odd primes $q\le k$ in decreasing order. At depth $e$ with $q^e$ the largest remaining pole at $q$, add a subset of the terms with indices $q^e t$, $1\le t<q$. Multiplication by $q^e$ gives the residues $x_t(q)$, whose subset sums fill the field by the growth argument. Choose a subset cancelling the leading digit, then continue at lower depths. The candidate pools are disjoint by largest odd prime and depth, avoid the multiples of $p$, and cannot disturb any already processed prime. Other prime powers introduced divide $t<q\le k$, so every new index is at most $k(k-1)<pk$. This makes the sum dyadic. The last index $pk$ is the unique largest value of $m+v_2(m)$ because earlier multiples give at most $p(k-1)+\log_2 k<pk$ and the added terms give at most $k(k-1)+2\log_2 k<pk$. This fixes the reduced denominator of the constructed group. For $p=3$, through cutoff 11 a term at 9 would be the only double pole. The terms at 3 and 6 have the same nonzero simple residue and their pair does not cancel. The indices $\{3,12\}$ give $683/2^{14}$.
+
+Two equal residues with indices $i,i+h$ force $i(2^h-1)\equiv-h2^h\bmod p$. Thus for $1\le h<p$ there is at most one collision at each lag. In $n$ consecutive indices, let $r_1,\ldots,r_s$ be the multiplicities of the distinct values. Then $\sum\binom{r_i}{2}\le n-1$. Since $3(r-1)\le r+\binom r2$, this gives $s\ge(n+1)/3$. Take $K=\lceil3\sqrt{4p-3}\rceil\le p-1$ for $p\ge41$. The indices $2,\ldots,K$ supply a set $A$ of at least $K/3$ distinct residues. The restricted sumset theorem of Dias da Silva and Hamidoune \cite[Theorem~4.1, p.~144]{dias} gives at least $\min(p,h(|A|-h)+1)=p$ sums of $h=\lfloor |A|/2\rfloor$ distinct elements of $A$. In particular they represent $-x_1$.
+
+For the lower bound, for any $k<p$ each subset containing 1 gives a positive numerator less than $2^kL_k$ after multiplying by that denominator. For $p>X/2$ dividing this numerator the number of possibilities is $O(k/\log X)$ per subset because $\log L_k=O(k)$. Use $k=\lfloor\log_2X-2\log_2\log_2X\rfloor$. There are $2^{k-1}$ subsets, giving $O(X/(\log X)^2)$ exceptional primes. Divide by the prime count in $(X/2,X]$. For all sufficiently large $X$, the function $\log_2p-2\log_2\log_2p$ is increasing in $p$ and bounded above by its value at $X$. This proves the claim.
+\end{proof}
+
+The minimum above is for one prescribed prime. In a single partition different primes may compete for the same small corrections. The reduced exponent computed for the constructed group need not be the least reduced exponent across all admissible groups.
+
+\begin{proposition}[Mean denominator loss]\label{prop:meanloss}
+\evidence{Paper proof}
+Let $Q_n$ be the full reduced denominator of $R_n=2^n\sum_{j=1}^n a_j$. Then
+\[
+ \frac1X\sum_{1\le n\le X}\log\frac{L_n}{Q_n}=O(X^{3/7}).
+\]
+\end{proposition}
+\begin{proof}
+Write $U(k)$ for the reduced numerator of $A_k=\sum_{1\le j\le k}a_j$. If $p$ is odd and $p^a\le n<p^{a+1}$, then $p^a R_n\equiv 2^n A_k\bmod p$ with $k=\lfloor n/p^a\rfloor<p$. Thus a loss of $p$-weight requires $p\mid U(k)$ and costs at most $a\log p$. For fixed $k$, the sum of $\log p$ over these primes is $O(k)$ because $0<U(k)\le2^k L_k$.
+
+Let $Z_p(K)$ count zeros of $A_k\bmod p$ for $1\le k\le K<p$. Two zeros at distance $h$ force $\sum_{j=1}^h 2^{-j}/(k+j)=0\bmod p$. Clearing denominators gives a polynomial of degree at most $h-1$ in $k$. At $k=-1$ its value is $(h-1)!/2\ne0\bmod p$. There are at most $h-1$ pairs at lag $h$. The short gaps up to $H$ between consecutive zeros number $O(H^2)$ and the longer ones number at most $K/H$. With $H=\lceil K^{1/3}\rceil$ this yields $Z_p(K)=O(K^{2/3})$. This is the weighted counterpart of Sanna's short-range bound for harmonic numbers \cite[Lemma~2.2]{sanna}.
+
+The primes $p\le X^{3/7}$, including 2, cost at most $\pi(X^{3/7})\log X=O(X^{3/7})$ at any cutoff. All larger primes have $a\le2$. A band with a fixed triple $(a,k,p)$ contains at most $p^a\le X/k$ cutoffs, so its contribution to the mean is at most $a\log p/k$. When $a=2$ this gives $O(X^{1/7})$ over $k\le X^{1/7}$ by the numerator bound. When $a=1$ and $p>X^{4/7}$ it gives $O(X^{3/7})$ over $k\le X^{3/7}$. For the remaining primes with $a=1$ use $Z_p(\min(p-1,\lfloor X/p\rfloor))$. Their total cost is at most a constant times
+\[
+ X^{-1/3}\sum_{p\le X^{4/7}}p^{1/3}\log p=O(X^{3/7}),
+\]
+by the prime number theorem. This proves the upper bound.
+\end{proof}
+
+\begin{theorem}[Orders of the actual Taylor moduli]\label{th:taylororder}
+\evidence{Paper proof}
+Write $q_N$ for the odd part of $Q_N$. Let $M_N$ be any odd modulus retaining a fixed positive proportion of the primes in $(N/2,N]$, for example $q_N$ or its quotient by any one of its full prime-power factors. Then
+\[
+ \liminf_{N\to\infty}\frac{\log\ord_{M_N}(2)}{\log N\,\log\log N}
+ \ge\frac1{2\log 2}.
+\]
+In particular, for a unit numerator and any fixed $A>0$, a window of $N^A$ successive powers modulo $q_N$ contains neither a full period nor two terms in the same residue class modulo the complement of one prime-power factor, for all sufficiently large $N$.
+\end{theorem}
+\begin{proof}
+For $R=\ord_{M_N}(2)$, the local order $d=\ord_p(2)$ divides $R$. For a given $d$, all such primes are $1\bmod d$ and divide $2^d-1$. There are at most $N/d$ candidates by the first constraint and at most $d\log 2/\log(N/2)$ by the second. Their minimum is bounded by the geometric mean. Writing $H$ for the number of retained primes, one gets
+\[
+ H\le \tau(R)\sqrt{\frac{N\log2}{\log(N/2)}} ,
+\]
+where $\tau(R)$ counts divisors. The prime number theorem gives $H\gg N/\log N$, so $\log\tau(R)\ge(1/2-o(1))\log N$.
+
+For $u=\log R$ and fixed $0<\delta<1$, primes dividing $R$ up to $u^{1-\delta}$ contribute $O(u^{1-\delta}\log(u+2))$ to $\log\tau(R)$, since each exponent is at most $u/\log2$. For the remaining primes with exponents $\alpha_p$, use $\alpha_p+1\le2^{\alpha_p}$ and $\sum_p\alpha_p\le u/((1-\delta)\log u)$. Letting $\delta\downarrow0$ gives $\log\tau(R)\le(\log2+o(1))u/\log u$. Since $\tau(R)\le R$, the lower bound already gives $\log u\ge\log\log N-O(1)$. Combining proves the inequality.
+
+Every odd prime in $(N/2,N]$ survives in $Q_N$, since only the term at that prime has a pole there. Removing one axis preserves the prime-count hypothesis uniformly in the choice of axis. For a unit numerator any congruence between two distinct iterates modulo the complement requires the difference of exponents to be a multiple of its order. This rules out both proposed complete sampling methods on polynomial windows.
+\end{proof}
+
+\begin{proposition}[Moving cutoff of a signed transform]\label{prop:signed}
+\evidence{Paper proof}
+Let $H(x)=\sum_{j\ge0}x^{2^j}$ and put $A_K=\sum_{k=1}^K(-1)^{k-1}H(2^{-k})/k$. Then $2^N|\log 2-A_{K(N)}|\to0$ exactly when $K+1+\log_2(K+1)-N\to+\infty$. Under this condition, the chronological prefix of $A_{K(N)}$ retaining the powers $2^{-k2^j}$ with $k2^j\le N$ has an odd reduced denominator satisfying \cref{th:taylororder}, even after removing any one prime-power factor.
+\end{proposition}
+\begin{proof}
+The telescoping product $\prod_{j=0}^J(1+x^{2^j})=(1-x^{2^{J+1}})/(1-x)$ gives, on taking logarithms and expanding the factors,
+\[
+ -\log(1-x)=\sum_{k\ge1}\frac{(-1)^{k-1}}k H(x^k),\qquad 0<x<1.
+\]
+The expansion converges absolutely by summing $-\log(1-x^{2^j})$. With $z=2^{-2^j}$, the remainder of $\log(1+z)$ after term $K$ is $(-1)^K\int_0^z u^K/(1+u)\,du$. All these remainders have the same sign. The first gives the lower bound $(2/3)\,2^{-(K+1)}/(K+1)$, and the full sum is at most $2^{-(K+1)}/((K+1)(1-2^{-(K+1)}))$. Scaling by $2^N$ gives the equivalence. It implies $K\ge N-O(\log N)$. For odd $N/2<p\le\min(K,N)$ the unique term with a pole at $p$ is $2^{-p}/p$. These primes retain a positive proportion of $(N/2,N]$ by the prime number theorem. Multiplication by $2^N$ preserves the odd denominator, so \cref{th:taylororder} applies.
+\end{proof}
+
+\begin{theorem}[Discrepancy of horizontal logarithm rows]\label{th:horizontal}
+\evidence{Paper proof}
+For odd $d\ge1$, set $Z_d=\sum_{j\ge0}2^{-d2^j-j}$ and $L_d^{\rm row}=Z_d/d$. Then $\log2=\sum_{d\ {\rm odd}}L_d^{\rm row}$. For a finite collection of distinct odd indices, let $z=r+\sum_d c_d Z_d$ with rational $r,c_d$. Every limiting empirical binary orbit law of $z$ is supported on a finite rational grid. The uniform change $\sup_x|D_N(x+z)-D_N(x)|$ in extreme interval discrepancy tends to zero if and only if $r$ and all $c_d$ are dyadic. Each individual row admits a finite rational algorithm for its lower and upper limiting discrepancies. In particular
+\[
+ D_N(L_3^{\rm row})\longrightarrow2/3,\qquad
+ \bigl(\liminf_N D_N(L_5^{\rm row}),\,\limsup_N D_N(L_5^{\rm row})\bigr)
+      =(1/5,8/15).
+\]
+\end{theorem}
+\begin{proof}
+Writing each Taylor index uniquely as $d2^j$ gives the positive identity. For a finite collection, choose $Q$ as a common odd denominator after multiplication by a power of two. This multiplication merely reindexes the orbit of $z$ by a fixed number of shifts. At all positions except $O((\log(2N))^2)$ below $N$, the shifted orbit is within $O(N^{-2})$ of its completed prefix in the grid $Q^{-1}\Z/\Z$. Indeed there are $O(\log(2N))$ insertions up to $N+2\log_2 N+2$. Outside the $2\log_2 N+O(1)$ positions before each insertion, the shifted tails are bounded by the geometric sum from that distance. All empirical limits are invariant under doubling and have finite support, hence have zero entropy.
+
+Uniform discrepancy preservation is equivalent to vanishing mean distance of the orbit of $z$ from zero. In one direction, expand and contract arcs by a fixed tolerance and bound the unmatched pairs by the fraction exceeding that tolerance. In the other direction, taking $x=0$ forces $D_N(z)\to1$. Such a discrepancy requires almost all the orbit mass in an arc of length tending to zero, by taking complements when necessary. Any empirical limit is a point mass, and doubling invariance forces its support to be zero. Compactness then gives vanishing mean distance. The same criterion is unaffected by shifting the orbit finitely many times.
+
+If every coefficient and $r$ is dyadic, the grid is the singleton zero. If only $r$ is nondyadic, the grid states are in the finite orbit of a nonzero rational with odd denominator and stay away from zero. If some row weight is nondyadic, late insertions have gaps proportional to their positions. Indeed, put $h_d=\lfloor\log_2 d\rfloor$ and $u_d=d/2^{h_d}\in[1,2)$. The positions in shell $k$ are $u_d2^k+k-h_d$. The $u_d$ are distinct, and the last to next-first leading gap is also positive. At an insertion of a nondyadic weight the grid state changes from its doubled predecessor by a nonzero increment modulo $Q$. Therefore at least one of its two adjacent plateaus has nonzero residues throughout. These plateaus occupy a fixed positive fraction of the prefix ending at their right endpoints. With the tail bound they force a positive upper limit of the mean distance. This proves the criterion.
+
+For an individual row put $e_j=d2^j+j$. At $e_j$ the grid state is $r_j/d$ with $r_0=1$ modulo $d$ and
+\[
+ r_{j+1}=2^{d2^j+1}r_j+1\bmod d.
+\]
+The multipliers are eventually periodic because $d2^j+1$ is eventually periodic modulo $\ord_d(2)$ for $d>1$. The states together with the multiplier phase are then eventually periodic. Let $\nu_j$ be uniform on the doubling cycle of $r_j/d$. Use a bi-infinite periodic extension of the eventual cycles. At a boundary $e_j$, the preceding gaps of lengths $d2^{j-h}+1$ have limiting weights $2^{-h}$, $h\ge1$. The initial transient has vanishing weight. At any cutoff $e_j\le N<e_{j+1}$, the last gap contributes a weight $v=(N-e_j)/N$ asymptotically ranging over $[0,1/2]$. The empirical laws for discrepancy purposes are thus approximated by the measures
+\[
+ (1-v)\sum_{h\ge1}2^{-h}\nu_{j-h}+v\nu_j,\qquad 0\le v\le1/2,
+\]
+over the eventual phases. On any partial gap, counting a rational cycle differs from its uniform weight by at most one period, which is bounded in terms of $d$. Together with the tail estimate and arc expansion, this gives $o(1)$ discrepancy error uniformly in the unfinished gap. The geometric sum is rational. For a grid law, discrepancy is the largest total mass of a consecutive cyclic group of grid points minus the length from its first point to its last. This follows by shortening positive-excess arcs and taking endpoint limits. Along each measure segment it is a maximum of finitely many rational affine functions of $v$, so endpoints and breakpoints give both extrema. For $d=1$ the grid is zero.
+
+For $d=3$, all cycles consist of the two nonzero thirds, giving discrepancy $2/3$. For $d=5$, after $r_1=0$ and $r_2=1$ the update is $r\mapsto2r+1\bmod5$. Zero occurs every fourth gap and each nonzero cycle visits all four nonzero fifths. The possible limiting zero weights $w$ fill $[1/15,8/15]$. The maximum boundary weight is $(1/2)/(1-2^{-4})=8/15$, which is halved three times before the next zero gap, and intermediate times interpolate. The other four points have weight $(1-w)/4$. If $w\ge1/5$ the maximum excess is $w$ by taking just zero. If $w\le1/5$ it is $2/5-w$ by taking the four nonzero fifths in succession. These give the two stated extrema.
+\end{proof}
+
+The finite combinations in \cref{th:horizontal} are deterministic in the sense of zero upper point entropy. The numerical limits concern individual summands. The tail of the infinite sum requires estimates after binary shifting, so the finite-grid argument does not transfer them to the full logarithm. The period lower bound in \cref{th:taylororder} concerns methods that use complete periods or fixed complementary residue classes.
+
+\section{Formal verification and data availability}
+
+The Lean declarations are pinned to \repo{}{the repository checkpoint}. The finite branch-and-bound is over rational coefficient vectors and verifies the mass on precisely the first 71 half-cells. The passage to reduced-denominator rates is the paper argument using cutoff reduction and the prime number theorem. Lean also checks the indicated Gaussian arithmetic, moment inequalities, fixed-prime logarithm partition and fixed-support modular estimate. The linear-height enumeration is separate exact Python arithmetic. The companion verification map gives the pins and commands.
+
+The rational approximation scripts check selected Chebyshev and Legendre rows with interval enclosures, including nearest-grid agreement in the ten reported logarithm Legendre rows and 518 checks for $\pi$ across two pole families. At binary shift 600 the $\pi$ script gives $D=91$ for Machin and $D=76$ for St{\o}rmer, with certified errors at most $2^{-261}$ and $2^{-213}$, respectively. \evidence{Finite certificate} The main code and source material are available under \repo{scripts}{scripts} and \repo{notes}{notes}.
+
+The arguments of \cref{sec:taylor} are paper proofs. The follow-up source includes
+\href{https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/classical.md}{the completion proof and exact arithmetic},
+\href{https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/taylor-periods.md}{the order and signed cutoff proofs}, and
+\href{https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/logarithm-rays.md}{the horizontal cycle calculation}.
+
+\section{Use of AI tools}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
