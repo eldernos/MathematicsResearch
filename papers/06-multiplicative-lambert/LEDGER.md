@@ -1,0 +1,87 @@
+# Claim-to-source novelty ledger: Disjunctive but Nonnormal Multiplicative Lambert Series (v1.0)
+
+Search date: 25 November 2026. No search result proves novelty. “Apparently new in the sources examined” means only that we did not find the statement in the sources listed under the search records. Phase 19 material was not used, except for one check requested by the coordinator (see Corollary 1.2). Human specialist review is outstanding. Cross-model review is not peer review.
+
+Development source in this repository: `notes/phase17/multiplicative-lambert.md` (registry CC-48, superseding CC-46 from `notes/phase16/weighted-lambert.md`), the Phase 17 review record `notes/phase17/review.md`, and the translation consequence `notes/phase18/phase17-transfer.md` (SY-24). Finite computation: `scripts/phase17_multiplicative_lambert.py`.
+
+### Theorem A: moving-window word counts
+
+- **Statement and hypotheses:** Under (H1)–(H4) (S ⊇ a reduced class mod q₀, Σ_{p≤x,p∈S} 1/p = δ log log x + O(1), 0 < δ < 1; c ≥ 0 integer multiplicative, c(pᵉ) ≤ e+1, c = 2 on S, c = 0 on other primes ∤ q₀, c(p₀^{2u}) = 2u+1), with κ = 1−δ and fixed 7/12 < a ≤ 1: for N ≥ N₀(w,a) and N^a ≤ H ≤ N, #_w(N,H) ≍ H/(log N)^κ for every fixed word containing a 1, and H − #_{0^k}(N,H) ≍ H/(log N)^κ. The upper bounds hold for every fixed a > 0.
+- **Evidence:** Lean-supported paper proof (paper §§3–6). Lean: `ErdosBorweinArrivals.arrival_sum` (L41), `WeightedLambertIdentities.nonneg_one_bit_count_le` (L166), pinned at e4809cf.
+- **Earliest relevant literature:** P. Erdős, *On arithmetical properties of Lambert series*, J. Indian Math. Soc. (N.S.) 12 (1948) 63–66, https://users.renyi.hu/~p_erdos/1948-04.pdf: irrationality of E = Σ 1/(2ᵐ−1) by a congruence construction forcing a long prescribed block.
+- **Closest published results:** Campbell, arXiv:2605.24160 (2026): the word 11 occurs infinitely often in the binary expansion of E, via an Erdős-style congruence construction and the Alford–Granville–Pomerance estimate (abstract). Crandall, Integers 12 (2012), DOI 10.1515/integers-2012-0007: posed the 11 problem. Bailey–Crandall, Experiment. Math. 10 (2001) 175–190: normality framework for E (normality of E open). None treats sparse multiplicative coefficients, two-sided counts or non-normality.
+- **Closest unpublished or public-repository results:** Captain Sude, `erdos-borwein-disjunctivity` tag v1.0.0 at [bd98789](https://github.com/CaptainSude/erdos-borwein-disjunctivity/tree/bd98789a177470cc4b3e33e6769e859f6144c906): `lean/ErdosBorwein/Main.lean` L140 `binaryDisjunctive_lambertE (hAGP : AGP) (hSupply : PrimeIntervalSupply)`, i.e. conditional Lean disjunctivity of E. The paper gives a quantitative bound N exp(−C_w(log log N)³). Captain Sude, [elementary release d51e93e](https://github.com/CaptainSude/erdos-borwein-disjunctivity-elementary/tree/d51e93e91ff43efef6918efdd4258bbd43bad7aa): unconditional disjunctivity and prefix count ≥ N exp(−70000(log log N)³). Captain Sude, [`generalized-Lambert-disjunctivity-and-nonnormality` fe33be2](https://github.com/CaptainSude/generalized-Lambert-disjunctivity-and-nonnormality/blob/fe33be210446c6c0b127ca7757fc8f1182c5b541/lean/PowerLambert/Results.lean): Σ 1/(b^{m^r}−1), r ≥ 2, positive word frequencies and non-normality (different family). Mira Cult, [claim 0002 at 1498319](https://github.com/Mira-Cult/math/blob/149831943806a656c9efaa14cacbd9c915b2a2ba/notes/number-theory/normal-numbers/erdos-borwein-positive-word-density/README.md): every fixed word has ≥ c_{a,w}H occurrences in every late window [N, N+H), N^a ≤ H ≤ N, 7/12 < a ≤ 1, for E. Same window range and same planted-midpoint mechanism. The paper credits GPT-6.2 Astra under Mira's guidance. Mira-acc gists [Normality research #2 rev 41b5a78](https://gist.github.com/Mira-acc/79be9a5d4aa54a9df41e702c4f3113ea/41b5a780f79f7bdd275cd96e7e310b000a897d35) (S06, *Logarithmic divisor encoders and Lambert-series digits*: fixed-word prefix counts N exp[−C_w(log log N)² log log log N] for E) and [survey d699a69](https://gist.github.com/Mira-acc/ea2791119de611279237096e35cbc976/d699a69c2037ee4420bfb8e1e0ad0b310bbc8eb0).
+- **Relation:** Different method for a different family. The planted-midpoint mechanism and the window range a > 7/12 are inherited from the Erdős–Borwein work above, especially Mira Cult's window theorem. The new ingredients are the sieve forcing nearby coefficients to vanish (possible only because δ < 1), the odd-part reindexing with Shiu's theorem giving the matching upper bound, and the general class (H1)–(H4). Apparently new in the sources examined.
+- **Search record:** Web searches: “binary digits Lambert series sum chi(n)/(2^n-1) disjunctive not normal”; “binary expansion of theta function value sum 2^{-n^2} digits normal disjunctive”; “digits of power series sum a(n) 2^{-n} multiplicative function coefficients normality discrepancy Lambert series arXiv” (extended mode). zbMATH Open API: `Lambert series & digit*`, `Lambert series & normal*`, `Lambert series & irrational* & binary`, `disjunctive & multiplicative function`, `Erdős-Borwein`, `theta & binary expansion`, `sums of two squares & digit*`, `rich numbers & discrepancy`, `multiplicative function & dyadic expansion`. arXiv metadata for 2605.24160. Reference trails: Campbell → Crandall → Bailey–Crandall; repository notes `notes/phase13/erdos-borwein.md`, `notes/phase14/erdos-borwein-frequencies.md`. Not consulted: MathSciNet (no access), Google Scholar directly. zbMATH hits judged unrelated except Crandall 2012, Campbell 2026 and Murakami–Tachiya 2025 (*Linear independence of certain infinite series with monomial orders*, Zbl 1579.11115; concerns linear independence of Erdős–Borwein-type series, not digits).
+- **Dependencies and outstanding review:** The sieve removal in Prop. 5.3 (dimension 1+κ Selberg sieve with lower cutoff z₀ = (log N)²); the uniformity of Lemma 4.4 over b ≤ N^θ; the far-tail divisor-sum bound with Montgomery–Vaughan; the injectivity of (m,p) ↦ n.
+
+### Theorem B: exact discrepancy gap
+
+- **Statement and hypotheses:** Under (H1)–(H4), 1 − D_N(L) ≍ (log log N)/(log N)^κ, where D_N is the extreme (unanchored) interval discrepancy of {2ⁿL}, 0 ≤ n < N.
+- **Evidence:** Lean-supported paper proof. Lean: `Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits` (L98), `upper_freq_le_one_bits` (L77), `one_sub_discrepancy_ge_of_separated_mass` (L123).
+- **Earliest relevant literature:** Discrepancy and normality: a real number is normal iff D_N → 0 (classical; Kuipers–Niederreiter). We did not locate published exact-order discrepancy gaps 1 − D_N for explicit arithmetic constants.
+- **Closest published results:** None found. Combinatorially constructed disjunctive non-normal sequences are classical. See Calude–Priese–Staiger, *Disjunctive sequences: an overview*, CDMTCS Research Report 63 (1997); bibliographic record only, full text not examined (**unverified**).
+- **Closest unpublished or public-repository results:** Repository registry CC-46/CC-48 (development notes for this paper). For E, the repository's Phase 13 note derives D⁺(E) < 1 from Mira Cult's density theorem. That result goes in the opposite direction.
+- **Relation:** Apparently new in the sources examined. The lower-bound mechanism, runs of about (κ/2) log₂ log N zeros before isolated ones detected by a separated-mass inequality, appears specific to this setting.
+- **Search record:** As for Theorem A, plus “discrepancy binary digits multiplicative function” and zbMATH `rich numbers & discrepancy`.
+- **Dependencies and outstanding review:** The disjointness of the marked preceding starts, and the choice R = ⌊(κ/2) log₂ log M⌋ balancing ε against Δ.
+
+### Corollary 1.2: translation rate
+
+- **Statement and hypotheses:** For every N ≥ 1, sup_x |D_N(x+L) − D_N(x)| = 1 − D_N(L), attained at x = 0, and hence ≍ (log log N)/(log N)^κ under (H1)–(H4).
+- **Evidence:** The identity (for every real translation z) is Kernel-verified: `SharpTranslation.sharp_translation_isGreatest` (L386). It is a result of the companion manuscript *Synthetic Arithmetic Expansions and Prescribed Discrepancy* (papers/07-synthetic-expansions) and is not reproved here. The order is a paper deduction from Theorem B.
+- **Earliest relevant literature:** Classical: normality is preserved under addition of rationals (Wall) and under certain translations (Rauzy's characterization of normality-preserving translations, via deterministic sequences). We did not consult these primary sources for this manuscript; they are not cited in the paper.
+- **Closest published results:** None examined state the exact supremum identity.
+- **Closest unpublished or public-repository results:** `notes/phase18/translations.md` and SY-24 (`notes/phase18/phase17-transfer.md`). At the coordinator's request we also checked `notes/phase19/geometry.md` at c2c9da6. It recasts 1 − D_N(x − y) as a pseudometric and shows that the identity fails for anchored (star) discrepancy and for two-dimensional box discrepancy. This confirms the scope of the corollary, which concerns one-dimensional unanchored discrepancy only, and changes nothing in it. Not cited in the paper.
+- **Relation:** Specializes the companion manuscript's identity. The new content is the order of the right-hand side.
+- **Search record:** Reference trail through the companion manuscript and repository notes only. No independent literature search on translation identities was made for this manuscript.
+- **Dependencies and outstanding review:** None beyond Theorem B and the companion theorem.
+
+### Theorem C: transcendence for odd characters
+
+- **Statement and hypotheses:** χ an odd Dirichlet character of any modulus (primitive or imprimitive), q algebraic, 0 < |q| < 1 ⇒ Σ χ(m)qᵐ/(1−qᵐ) transcendental; in particular L_χ for odd real χ.
+- **Evidence:** Paper proof (paper §9).
+- **Earliest relevant literature:** Yu. V. Nesterenko, *Modular functions and transcendence questions*, Sb. Math. 187 (1996) 1319–1348, DOI 10.1070/SM1996v187n09ABEH000158.
+- **Closest published results:** A. Hamieh and M. R. Murty, *A note on q-analogues of Dirichlet L-functions*, Int. J. Number Theory 12 (2016) 765–773, DOI 10.1142/S1793042116500494. Theorem 1.1 (p. 766): “Let N and k be positive integers, and let χ be a primitive Dirichlet character of conductor N such that χ(−1) = (−1)^k. If q is an algebraic number with |q| < 1, then L_q(k, χ) is transcendental”, where L_q(s,χ) = Σ_n (Σ_{d|n} χ(n/d) d^{s−1}) qⁿ. At k = 1 this is our series for primitive odd χ. Theorem 3.1 (p. 771): “Let f be a non-zero modular form of level N and weight k with algebraic Fourier coefficients. If τ ∈ H is such that e^{2πiτ} is algebraic, then f(τ) is transcendental.” Imprimitive characters are not treated explicitly. Duverney, Ke. Nishioka, Ku. Nishioka, Shiokawa, *Transcendence of Jacobi's theta series*, Proc. Japan Acad. Ser. A 72 (1996) 202–203, DOI 10.3792/pjaa.72.202: transcendence of theta values at algebraic q from Nesterenko's theorem. Our account comes from secondary descriptions; we did not read the full text. It is cited only as an aside for χ₄. Bell–Bruin–Coons, Trans. AMS 364 (2012) 933–959: a generating function of a multiplicative function is rational or transcendental as a function. This concerns functions, not values.
+- **Closest unpublished or public-repository results:** None beyond the development note.
+- **Relation:** Inherited for primitive χ (Hamieh–Murty Thm 1.1). The imprimitive extension specializes Hamieh–Murty Thm 3.1 through the oldform combination F(τ) = Σ_{d|P} μ(d)χ*(d) E_{1,χ*}(dτ), which is routine.
+- **Search record:** “Hamieh Murty International Journal of Number Theory 2016 Lambert series transcendence Dirichlet character q-analogue”; “q-analogues of Dirichlet L-functions Hamieh Murty theorem primitive character …” (extended); “Duverney Nishioka Shiokawa transcendence of Jacobi's theta series”; “Bell Bruin Coons transcendence of generating functions whose coefficients are multiplicative”. The full text of Hamieh–Murty was read from the archived author PDF with journal pagination (web.archive.org copy of mast.queensu.ca/~murty/hamieh-murty.pdf).
+- **Dependencies and outstanding review:** That “modular form of level N” in Hamieh–Murty Thm 3.1 covers forms on Γ₁(M) with integral-power q-expansions (it does, since Γ(M) ⊂ Γ₁(M) and the proof uses Prop. 2.3(b) for level-M modular functions). That E_{1,χ*}(dτ) ∈ M₁(Γ₁(q*d)). Even characters remain open.
+
+### Proposition 6.1: density of the support
+
+- **Statement:** #{m ≤ x : c(m) > 0} ≍ x/(log x)^κ under (H1)–(H4).
+- **Evidence:** Paper proof (upper bound from Shiu; lower bound from the planted construction).
+- **Closest published results:** For χ₄ this is Landau's theorem. For S a union of classes, Wirsing, Math. Ann. 143 (1961), Satz 1, p. 76, gives an asymptotic formula. Its hypothesis Σ_{p≤x} f(p) = (τ + o(1)) x/log x is not implied by the harmonic hypothesis (1) alone.
+- **Relation:** Inherited in the regular cases; the general harmonic-hypothesis case is a routine consequence of Shiu's theorem and the construction.
+
+## Audit record (mandatory mathematical audit)
+
+Each external input was checked against the primary source on 25 November 2026.
+
+| Input | Primary statement located | Finding |
+| --- | --- | --- |
+| Shiu 1980, Thm 1 | J. Reine Angew. Math. 313, p. 163 (GDZ scan); class M p. 162; condition (1.1) 0 < a < k, (a,k) = 1, p. 161; 0 < α, β < 1/2; k < y^{1−α}, x^β < y ≤ x. | Correct as used. The modulus k = 1 is excluded by 0 < a < k; Lemma 3.1 uses k = 2, a = 1. Location corrected from “pp. 162–163” to “Thm 1, p. 163”. |
+| Wirsing 1961, Satz 1 | Math. Ann. 143, p. 76 (GDZ scan): f ≥ 0 multiplicative, f(p^ν) ≤ γ₁γ₂^ν with γ₂ < 2 (ν ≥ 2), Σ_{p≤x} f(p) = (τ+o(1))x/log x ⇒ asymptotic (5). | **Narrowed.** The development note applied Satz 1 to the general class. Its hypothesis (4) needs a prime-counting asymptotic, which the harmonic hypothesis does not give. In the paper Wirsing appears only in a remark for unions of classes. The general order is proved without it (Prop. 6.1). |
+| Perelli–Pintz–Salerno 1985 | Invent. Math. 79, Theorem on p. 2: (1.1) holds for y = x^θ, 7/12 < θ ≤ 1, Q = x^{1/40}; (1.1) has max over (a,q) = 1, h ≤ y, x/2 < z ≤ x (p. 1). | Correct. **Why a > 7/12:** this is Huxley's short-interval exponent, and it enters the paper only through Lemma 4.4 (primes in the fixed class a₀ mod q₀ in intervals of length ≥ (X+Y)^ν). The far tail needs only a > 1/2. **Repaired/simplified:** the development note used the level Q = x^{1/40} for Bombieri–Vinogradov remainders in a sieve on primes. The paper uses an integer sieve with trivial remainders, so only the single modulus q₀ ≤ x^{1/40} is used. |
+| Selberg upper-bound sieve, G(z) | Proved in full in Lemma 4.7: |λ_d| ≤ 1, Σ₁ = 1/G(z), G(z) ≥ ½ Π_{q≤z^{1/8}}(1−g(q))^{−1} by a Rankin/Markov argument with Σ g(q) log q ≤ 2 log w + O(1). Background reference Halberstam–Richert, *Sieve Methods* (1974), Ch. 3. | Self-contained. The sieve has dimension 1+κ (primality plus the inert classes above z₀), with ω(q) ≤ 2 < q for q > z₀ ≥ 3. |
+| Montgomery–Vaughan 1973, Thm 2 | Mathematika 20, p. 121, (1.10): π(x+y;k,l) − π(x;k,l) < 2y/(φ(k) log(y/k)) for y > k. | Correct as used with d′ ≤ 2√N ≤ Y^{7/8}, which needs (a−θ)·7/8 > 1/2. Holds since a − θ > 7/12 > 4/7. Nonunit residue classes are excluded because p > 2√N ≥ d′. |
+| Hamieh–Murty 2016 | Thm 1.1 p. 766 (primitive only, χ(−1) = (−1)^k, k ≥ 1); Thm 3.1 p. 771 (nonzero modular forms of level N, algebraic coefficients). | Correct. Primitive case is Thm 1.1 at k = 1. **Imprimitive case** deduced from Thm 3.1 (also in the development note). **Citation correction:** registry CC-48 lists the title as “Transcendence of certain Lambert series”; the actual title is “A note on q-analogues of Dirichlet L-functions”. |
+
+Further claims of the development note that were changed:
+
+- **Withheld:** “the harmonic hypothesis also permits every real δ ∈ (0,1)” via an ordered selection of primes. Not needed and not checked in detail. The paper states only that unions of residue classes give every rational δ ∈ (0,1).
+- **Restated to match Lean:** the discrepancy upper bound (note's (9), using L·B_{M+L−1}/M) is replaced by the kernel-verified form 2^{−L} + (L−1)/N + L·F_N(1/2,1).
+- **Scope made explicit:** the translation identity is for one-dimensional unanchored extreme discrepancy.
+- **Not claimed:** transcendence for even real characters and for the δ = 1/4 example. Any extension of a below 7/12 is also not claimed.
+
+No step of the development note was found to be false. The changes above are simplifications, narrowings and citation corrections.
+
+## Bibliography verification
+
+All entries in `references.bib` were checked against Crossref records (DOI, volume, pages, year) or the primary text, except:
+
+- Calude–Priese–Staiger 1997 (CDMTCS Research Report 63): **unverified**. Bibliographic data were confirmed in secondary sources only, and the entry is marked `note = {unverified …}`.
+- Halberstam–Richert 1974 and Davenport 1980: book records (publisher, series, year) confirmed via library catalogue, AMS review and Springer DOI.
+- Erdős 1948: no DOI. Stable URL to the Rényi Institute scan, first page checked.
+- The companion manuscript (papers/07-synthetic-expansions) is in the same release; its theorem numbering was not available to us and is not cited.
