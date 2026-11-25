@@ -71,7 +71,7 @@ In particular, a rate $O(1/U(N))$ follows if the three count budgets $E+B_H$, $\
 At an insertion indexed by $\ell^j$ the new coefficient has strictly deeper $\ell$-pole than all earlier terms on that axis. The multiplier $2^{n-16^{\ell^j}}$ is always an $\ell$-unit. Other axes are integral at $\ell$. Thus with $J_\ell=\lfloor\log_\ell L\rfloor$ its reduced prefix denominator is exactly
 
 $$
- q(L)=3^{J_3}\prod_{3\le\ell\le L,\ \ell\ {\rm prime}}\ell^{J_\ell},\qquad
+ q(L)=3^{2J_3}\prod_{5\le\ell\le L,\ \ell\ {\rm prime}}\ell^{J_\ell},\qquad
  e=2J_3 .
 $$
 

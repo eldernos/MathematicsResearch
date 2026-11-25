@@ -9,6 +9,12 @@ The branch starts at `research-checkpoint-18` (`e4809cf561573aef588e6ffc491a35cd
 - The [nonlinear review](reviews/nonlinear.md) independently checked the derivative estimate, removed degeneracies, localized grid intersections, second moments and the frozen-prefix transfer. A second [schedule review](reviews/joint-and-rapid.md) covers rapid variation and weighted generators. The [distinct-prime review](reviews/independent-axes.md) checks the cross-prime congruences and all three competing pole losses. These asymptotic results are written proofs.
 - The [geometry and period review](reviews/geometry-periods.md) covers finite pseudometrics, quotient kernels, scalar actions, boundary spectra and the lower bound on actual Taylor periods. The later [classical review](reviews/classical.md) corrects an overlap count in the earlier review's rate suggestion and checks the sharper rate, the inverse dilation estimate, and the horizontal logarithm spectra. Primary-source comparisons and the limits of priority claims appear in the [literature note](literature.md).
 
+## Verification evidence
+
+The integrated Lean build ran 8,754 Lake jobs using the pinned toolchain. The axiom audit accepted 1,719 public theorem declarations using only `propext`, `Classical.choice` and `Quot.sound`. The generated directory indexes 1,332 named public theorems and lemmas. The exact qualitative addition spectrum is unconditional in every radix. The cubic rate, computable algebraic independence and analytic proof for the flagship square are written theorems.
+
+The independent classical audit resumed after a provider error. Its first committed report contains the same-cutoff lifting and sharpened mean denominator-loss estimate. The [final audit](reviews/classical-final.md) independently reproduced the million-prime local histogram and checked the 2,260 constructed dyadic groups, theorem conventions and primary-source precedents. Rogers studied the weighted harmonic-prefix zero problem and Sanna gives the comparison for counting pairs of zeros. These precedents inform the scope of the new arithmetic bounds.
+
 ## Reproduce
 
 Use the pinned Lean toolchain and Mathlib manifest as in the [repository verification guide](../../docs/verification.md). From the repository root run:

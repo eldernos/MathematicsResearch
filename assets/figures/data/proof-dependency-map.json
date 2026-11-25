@@ -1218,6 +1218,15 @@
     ]
    },
    {
+    "result": "OP-01",
+    "declaration_used": "primePower_period_count",
+    "used_in": "AdditionSpectrum",
+    "import_path": [
+     "AdditionSpectrum",
+     "PrimePowerGrid"
+    ]
+   },
+   {
     "result": "OP-05",
     "declaration_used": "sharp_translation",
     "used_in": "DiscrepancyGeometry",

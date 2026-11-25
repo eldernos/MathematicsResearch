@@ -196,3 +196,27 @@ scope = "The reference measure is full-dimensional Haar measure. The proof uses 
 proof = ["notes/phase19/joint-rate.md"]
 related = ["OP-04","OP-08"]
 computation = ["scripts/test_phase19_forms.py"]
+
+[[result]]
+id = "OP-19"
+title = "Earliest positive dyadic group containing a prime-index logarithm term"
+topic = "classical"
+principal = true
+status = "paper"
+statement = "For p ≥ 5 prime, the minimum largest original index in a positive dyadic Taylor group containing index p is exactly p times the first k<p for which a subset of the residues 1/(j 2ʲ), j ≤ k, containing j=1 sums to zero modulo p. The first k is O(√p) for every prime and at least (1−o(1))log₂ p outside a relative-density-zero set of primes."
+scope = "Remaining odd primary factors can be eliminated with positive terms by that same original cutoff. This minimizes the completion index for one group, not the denominator exponent over all groups or the simultaneous costs of an entire partition. The worst-case logarithmic upper bound remains open."
+proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical.md"]
+related = ["SY-10","SY-15"]
+inputs = ["Dias da Silva and Hamidoune, Cyclic spaces for Grassmann derivatives and additive theory (1994)."]
+computation = ["scripts/phase19_classical.py"]
+
+[[result]]
+id = "OP-20"
+title = "Mean denominator loss in the shifted binary Taylor series"
+topic = "classical"
+status = "paper"
+statement = "For n ≤ X let Qₙ be the reduced denominator of the ordinary shifted binary Taylor prefix of log 2 and Lₙ the least common multiple of 1 through n. The mean of log(Lₙ/Qₙ) is O(X raised to 3/7)."
+scope = "A polynomial bound on pairs of zero residues at a prescribed gap sharpens the split into prime bands. This is an upper bound on average cancellation, with no inference about word frequencies."
+proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical.md"]
+related = ["SY-10","OP-11"]
+computation = ["scripts/phase19_classical.py"]

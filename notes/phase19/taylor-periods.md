@@ -29,3 +29,23 @@ $$
  \liminf \frac{\log F(L)}{\log L\,\log\log L}\ \ge\ \frac1{2A\log2}
 $$
 along the cutoffs where both properties hold. A schedule polynomial in $L$ fails this test, regardless of the pole depth on the distinguished axis. This lower bound concerns complete-period methods; an incomplete-orbit theorem could have a different range.
+
+## An infinite signed Mahler transform of the logarithm
+
+Let $H(x)=\sum_{j\ge0}x^{2^j}$, so $H(x^2)=H(x)-x$. The telescoping product $\prod_{j=0}^J(1+x^{2^j})=(1-x^{2^{J+1}})/(1-x)$ gives the exact infinite identity
+$$
+ -\log(1-x)=\sum_{k\ge1}\frac{(-1)^{k-1}}{k}\,H(x^k),\qquad 0<x<1 .
+$$
+After taking logarithms and Taylor expanding, absolute convergence follows from $\sum_j-\log(1-x^{2^j})<\infty$. This is outside the *finite* differential algebra in the Phase 18 obstruction. The issue for synthesis is how much of the identity must be retained at an observation scale; here the answer is sharp up to an absolute factor.
+
+Let $A_K$ retain $1\le k\le K$ at $x=1/2$. For each $j$, the alternating Taylor remainder for $\log(1+z)$ equals $(-1)^K\int_0^z u^K/(1+u)\,du$ at $z=2^{-2^j}$. All outer remainders therefore have the same sign. The first term bounds their absolute sum below by $(2/3)\,2^{-(K+1)}/(K+1)$. Summing the geometric upper bound over all positive integer exponents in place of the powers of two gives
+$$
+ \frac23\,\frac{2^{-(K+1)}}{K+1}
+ \le (-1)^K(\log2-A_K)
+ \le\ \frac{2^{-(K+1)}}{(K+1)(1-2^{-(K+1)})}.
+$$
+Thus $2^N|\log2-A_{K(N)}|\to0$ exactly when $K+1+\log_2(K+1)-N\to+\infty$.
+
+Each fixed $A_K$ is a finite rational combination of the sparse rows $H(2^{-k})$, hence a universal normality-preserving translation by the finite-grid entropy argument. Its numerators also admit a precise test. Reducing $k=d2^a$ to odd $d$ by the functional equation leaves coefficient $1/(d2^{\lfloor\log_2(K/d)\rfloor})$ on $H(2^{-d})$ and a rational constant. The isolated-insertion proof for horizontal logarithm rows applies with exponents $d2^j$ (here there is no $+j$). For $K\ge3$ the coefficient at $d=3$ is nondyadic, so $A_K$ lies outside the numerical-preserver kernel. [Residue criterion](logarithm-rays.md)
+
+At a moving cutoff with the required absolute accuracy one has $K\ge N-O(\log N)$, or $K$ is even larger. For every odd prime $N/2<p\le\min(K,N)$, the chronological radix prefix of $A_K$ contains the term $2^{-p}/p$ and no other term whose coefficient denominator is divisible by $p$: an eligible index $k$ divisible by $p$ is already at least $p$ and its next multiple or next doubled exponent exceeds $N$. Consequently its odd denominator, even after deletion of one prime axis, satisfies the same superpolynomial order lower bound as the Taylor prefix. The infinite signed identity supplies computable deterministic components and a quantified moving-tail obstruction. It leaves the distribution of the full logarithm open.

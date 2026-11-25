@@ -84,7 +84,7 @@ Couple the samples after a rotation by $c$, then use the rotation invariance of 
 
 ### Editorial
 
-The link `[Literature comparison](literature.md)` points to a file that does not exist in `notes/phase19/` of the parent checkout.
+At review time the linked literature note was absent in the parent checkout. The [integrated literature comparison](../literature.md) is now available.
 
 ## products-of-remainders.md (verified, with precedent and a scope remark)
 
