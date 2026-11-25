@@ -5,6 +5,9 @@ open Lean in
 run_cmd do
   let permitted := [``propext, ``Classical.choice, ``Quot.sound]
   let results := [
+    ``NormalityChecker.DiscrepancyGeometry.discDist_eq_zero_iff,
+    ``NormalityChecker.DiscrepancyGeometry.asymDist_triangle,
+    ``NormalityChecker.SurvivingGrid.stride_order,
     ``NormalityChecker.normalIn_iff_uniform_approx,
     ``NormalityChecker.not_normal_of_frequent_excess,
     ``NormalityChecker.logTwo_tail_bounds,
