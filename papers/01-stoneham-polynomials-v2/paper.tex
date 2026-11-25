@@ -3,6 +3,7 @@
 \input{../common/byline.tex}
 \hypersetup{pdftitle={Polynomial Images of Stoneham Numbers}}
 \newcommand{\ee}[1]{\exp(2\pi i #1)}
+\DeclareUrlCommand\lname{\def\UrlFont{\ttfamily}\def\UrlBreaks{\do\_}}
 \begin{document}
 \begin{center}
 {\LARGE Polynomial Images of Stoneham Numbers\par}
@@ -10,20 +11,27 @@
 \makebyline{2.0}{25 November 2026}
 \end{center}
 \begin{abstract}
-Every nonconstant rational polynomial in the Stoneham number with coprime
-radix \(b\ge2\) and parameter \(c>2\) is normal in base \(b\).
-Mira Cult's public notes of 7 October 2026 state a more general theorem
-with independent denominator and insertion parameters. We give a
-kernel-verified proof for the ordinary Stoneham series. A periodic
-geometric sum fails to be an algebraic integer, which bounds cancellation
-in the leading denominator.
-Vandehey's exponential-sum estimate gives an effective discrepancy rate.
-At parameter two a square can lose its leading denominator on half a shell.
-We give its exact denominator and distinguish it from a resonant quadratic
-whose normality remains open. Exact finite certificates and cyclic descent
-give all polynomial degrees from 3 through 120, degree 128, and sixteen
-infinite families. A separate counting argument determines the least
-possible 2-adic valuation of an orbit contribution in every degree.
+For coprime integers \(b\ge2\) and \(c\ge2\) let
+\(\alpha_{b,c}=\sum_{j\ge1}c^{-j}b^{-c^j}\). Mira Cult's public, unrefereed
+notes S08 (2026, Theorem 1.1 and Corollaries 1.2--1.3) show that for
+\(c>2\) every nonconstant rational polynomial in \(\alpha_{b,c}\) is normal
+in base \(b\) and that the distinct powers of \(\alpha_{b,c}\) are jointly
+normal. We give a complete kernel-verified Lean~4 proof of this ordinary
+case; its arithmetic step is an inclusion--exclusion argument showing that
+the leading prefix denominators lose only a bounded power of each prime
+of \(c\). S08, Theorem 1.1(b), already gives an effective power saving
+with an unspecified exponent; we give the explicit scalar exponent
+\(\delta_d=1/(2(2^{d+1}-2))\) in degree \(d\).
+At \(c=2\) and odd \(b\ge3\) we determine the prefix denominators of
+\(\alpha_{b,2}^2\), prove its normality, and give a denominator criterion
+for quadratics. A written transfer from exact finite certificates proves
+normality of every rational polynomial of degree \(3\) through \(120\), of
+degree \(128\), or of degree \(ep^r\) for sixteen pairs \((e,p)\) and
+\(r\ge0\). We determine the least \(2\)-adic valuation of the leading mass
+in every degree, and show that nonvanishing of this mass on a family of open
+intervals of full measure would suffice in each degree. Normality of the
+resonant quadratic \(\alpha_{b,2}^2-2\alpha_{b,2}\) remains open for every
+odd radix \(b\ge3\).
 \end{abstract}
 
 \section{Polynomial values and simultaneous digits}
@@ -34,23 +42,35 @@ For coprime integers \(b,c\ge2\), let
 A real number \(x\) is normal in base \(b\) if every word of length \(m\ge1\)
 has limiting frequency \(b^{-m}\) in its fractional digits. Equivalently,
 the fractional parts \(\{b^nx\}\), \(n=0,1,\ldots\), are uniformly distributed.
-\begin{maintheorem}\label{main}
-If \(c>2\), then \(P(\alpha_{b,c})\) is normal in base \(b\) for every
-nonconstant \(P\in\Q[X]\). \evidence{Kernel-verified}
+
+Theorems A and B below are not new. They are the case \(q=c\) of
+Theorem~1.1(a) and Corollary~1.2 in Mira Cult's public, unrefereed notes
+S08 \cite{mira2}. The contributions of this paper are a complete
+kernel-verified proof of them (Section~\ref{mass}), whose arithmetic step
+is an inclusion--exclusion argument on upper sets; the boundary case
+\(c=2\) (Sections~\ref{two}--\ref{leastsec}); and an explicit exponent
+in the effective discrepancy bound (Section~\ref{ratesec}).
+\begin{maintheorem}[{Mira Cult \cite[S08, Thm.~1.1(a)]{mira2}, case \(q=c\)}]\label{main}
+Let \(b\ge2\) and \(c>2\) be coprime integers. Then \(P(\alpha_{b,c})\)
+is normal in base \(b\) for every nonconstant \(P\in\Q[X]\).
+\evidence{Kernel-verified}
 \end{maintheorem}
-\begin{maintheorem}\label{joint}
-Under the same hypotheses let \(r_1,\ldots,r_m\) be distinct positive integers.
-For \(0\le u_i\le v_i\le1\) and \(\alpha=\alpha_{b,c}\),
+\begin{maintheorem}[{Mira Cult \cite[S08, Cor.~1.2]{mira2}}]\label{joint}
+Let \(b\ge2\) and \(c>2\) be coprime, put \(\alpha=\alpha_{b,c}\), and let
+\(r_1,\ldots,r_m\) be distinct positive integers. For half-open intervals
+\(I_1,\ldots,I_m\subseteq[0,1)\),
 \[
- \lim_{N\to\infty}\frac1N\#\{0\le n<N:\ \{b^n\alpha^{r_i}\}\in[u_i,v_i)
-             \text{ for all }i\}=\prod_{i=1}^m(v_i-u_i).
+ \lim_{N\to\infty}\frac1N\#\{0\le n<N:\ \{b^n\alpha^{r_i}\}\in I_i
+             \text{ for all }i\}=\prod_{i=1}^m|I_i|.
 \]
 \evidence{Kernel-verified}
 \end{maintheorem}
-The \lean{PeriodicPolynomialNormal}{145}{polynomial theorem} and
-\lean{PeriodicPolynomialNormal}{170}{rectangle theorem} use the same
+The \lean{PeriodicPolynomialNormal}{145}{polynomial theorem}
+(\lname{coprime_polynomial_normal}) and the
+\lean{PeriodicPolynomialNormal}{170}{rectangle theorem}
+(\lname{coprime_joint_powers}) use the same
 starting digit in every coordinate. Transcendence of the generator follows
-already from Coons's Mahler argument \cite[preprint, Cor.~A.3]{coons}.
+already from Coons's Mahler-method argument \cite[Cor.~A.3 of the 2013 preprint]{coons}.
 It also follows from Theorem~\ref{main}, since a polynomial relation would
 produce the nonnormal value zero.
 
@@ -60,25 +80,32 @@ criterion \cite{korobov,kano} and Bailey--Crandall's coprime-parameter
 theorem \cite[Cor.~4.9]{bc} account for the generator itself.
 Bugeaud surveys the discrepancy of its radix orbit \cite[\S5.1]{bugeaud}.
 Kano--Shiokawa and Wagner constructed rings with normal polynomial values
-\cite{ks,wagner}. The hypotheses (15)--(16) of \cite{ks} require two
+\cite{ks,wagner}. The hypotheses of \cite[Thms.~4--5, institutional preprint (15)--(16)]{ks} require two
 growth ratios to diverge. For the standard exponents
 \(\lambda_j=j,\ \mu_j=c^j\), these ratios are \(j/c^{j-1}\) and \(\log c\).
 Nakai--Shiokawa's construction concatenates polynomial values at primes
 \cite{ns}. Here the polynomial is evaluated on a single real number.
 N.~M.~Korobov studied synchronized digit distributions \cite{jointkorobov}.
 
-Mira Cult's archive of 7 October 2026 \cite[S08, Thm.~1.1 and Cor.~1.2]{mira2} states polynomial
+Mira Cult's archive of 7 October 2026 \cite[S08, Thm.~1.1 and Cors.~1.2--1.3]{mira2} states polynomial
 normality for \(\sum_{j\ge1}q^{-j}b^{-c^j}\) when \(q>2\) and some prime
 divides both \(c\) and \(q\) but does not divide \(b\). It also gives a
 power saving for the synchronized vector of the first \(m\) powers.
 Setting \(q=c\) gives Theorem~\ref{main}, and coordinate projection gives
-Theorem~\ref{joint}. S08 obtains its monic polynomial by separating high
+Theorem~\ref{joint}. More generally, S08, Corollary 1.3 gives joint
+normality precisely when the polynomial classes in \(\Q[X]/\Q\) are
+linearly independent: every nonzero integer projection then has positive
+degree, whereas a rational constant projection has finite radix orbit. S08 obtains its monic polynomial by separating high
 and low indices outside short intervals following insertions. Here
 inclusion--exclusion gives a monic polynomial on every reflected upper set.
 Both arguments evaluate at a nonintegral algebraic tail. The notes
 of 23 September 2026 \cite[S07, S09]{mira} contain the earlier
-single-series and joint prime/order results. The explicit scalar rates below
-are deductions from Vandehey's bounds \cite{vandehey}. Normality here
+single-series and joint prime/order results. S08, Theorem 1.1(b), also
+gives an effective power saving for the vector of the first \(m\) powers,
+from which a scalar saving for each \(P(\alpha_{b,c})\) follows; the
+explicit exponent in Theorem~\ref{rate} is deduced from Lemma~\ref{vandestep},
+a version of Vandehey's all-length estimate \cite{vandehey} whose proof we
+repair. Normality here
 concerns the defining radix. Bailey--Borwein \cite[Thm.~2]{bb}
 establish nonnormality of generators in certain other radices. For the
 square of \(\alpha_{2,3}\), the same value is normal in base two and
@@ -86,50 +113,84 @@ square of \(\alpha_{2,3}\), the same value is normal in base two and
 \evidence{Kernel-verified}. Degree one in the
 discrepancy estimate is also classical: Bailey--Crandall give the rate
 after their Theorem~4.8, and Bugeaud records it for the real orbit
-\cite[p.~535]{bc}\cite[\S5.1]{bugeaud}.
+\cite[p.~535]{bc}, \cite[\S5.1]{bugeaud}.
+
+\subsection{Notation and terminology}\label{notation}
+Throughout, \(b\ge2\) is the radix, \(c\ge2\) the parameter, \(d\ge1\) a
+degree, \(n\ge0\) a digit position and \(p\) a prime dividing \(c\);
+\(v_p\) is the \(p\)-adic valuation, with \(v_p(0)=+\infty\), and \(\N\)
+contains \(0\). We write \(\den x\) for the reduced denominator of a
+rational number \(x\) and \(\{x\}\) for its fractional part.
+
+\emph{Shells.} The \(k\)th \emph{shell} is the range of positions
+\(c^k\le n<c^{k+1}\); we write \(k=\lfloor\log_c n\rfloor\) and call
+\(t=n/c^k\in[1,c)\) the \emph{shell parameter}. A property holds
+\emph{on late shells} if it holds for all \(n\) in shells with \(k\)
+sufficiently large.
+
+\emph{Insertions and prefixes.} For a tuple \(j=(j_1,\ldots,j_d)\) of
+positive indices write \(\sigma(j)=\sum_i c^{j_i}\). The term of
+\(\alpha^d\) indexed by \(j\) is \(c^{-\sum_ij_i}b^{-\sigma(j)}\), and
+\(b^n\) times it is an integer multiple of \(c^{-\sum_ij_i}\) exactly when
+\(n\ge\sigma(j)\). The \emph{insertion point} of \(j\) is \(\sigma(j)\).
+The \emph{shifted prefix} \(R_d(n)\) is the rational number obtained from
+\(b^n\alpha^d\) by keeping exactly the tuples with \(\sigma(j)\le n\):
+\[
+ R_d(n)=\sum_{\substack{j_i\ge1\\\sigma(j)\le n}}
+             c^{-\sum_i j_i} b^{n-\sigma(j)},\qquad R_0(n)=b^n .
+\]
+Absolute convergence justifies the expansion. For \(P=\sum_e P_e X^e\)
+put \(R_P(n)=\sum_e P_e R_e(n)\). Its reduced denominator is the
+\emph{prefix denominator}, and \(b^nP(\alpha)-R_P(n)\) is the
+\emph{real tail}.
+
+\emph{Deficits and cuts.} On shell \(k\) the \emph{deficit} of an index
+\(j_i\) is \(v_i=k-j_i\): it records how far the index lies below the
+largest index \(k\) that can have entered. Write \(|v|=\sum_iv_i\). Since
+\(\sigma(j)\le n\) if and only if \(\sum_ic^{-v_i}\le t\), the retained
+tuples correspond to the \emph{weak cut}
+\[
+ U_t=\{v\in\N^d:\ \textstyle\sum_i c^{-v_i}\le t\};
+\]
+the prefix uses only the \(v\in U_t\) with every \(v_i<k\). The
+\emph{strict cut} \(U_t^{<}\) is defined with \(<t\). Both are
+\emph{upper sets}: increasing any coordinate preserves membership. A
+\emph{cut} means a weak or strict cut with \(t\) in the closed shell
+range. Every weak cut with \(t\ge1\) contains the vertex
+\((J,\ldots,J)\), where \(J\) is least with \(c^J\ge d\); we call it the
+\emph{anchor}.
+
+\emph{Mass and loss.} Given weights \(u_0,u_1,\ldots\) that are units of
+\(\Z_p\), the \emph{mass} of an upper set \(U\subseteq\N^d\) is
+\[
+ H(U)=\sum_{v\in U}\prod_{i=1}^d c^{v_i}u_{v_i}\qquad\text{in }\Z_p .
+\]
+Only finitely many summands are nonzero modulo any \(p^L\), so the series
+converges in \(\Z_p\). The \emph{loss} of \(U\) is \(v_p(H(U))\). Each unit
+of loss removes one power of \(p\) from the nominal denominator
+\(c^{dk}\) of the leading prefix (Lemma~\ref{refllemma}). The weights are
+fixed in Section~\ref{mass}; they depend on the residue of \(k\) modulo a
+period, which we call the \emph{phase}.
+
+Terms used only in later sections are defined where they first occur:
+the \emph{resonant} quadratic (Section~\ref{two}), the \emph{Hilbert
+series} of a cut, \emph{live} and \emph{absorbed} transitions of the
+certificate recurrence (Section~\ref{certs}), the \emph{orbit order}
+(Section~\ref{leastsec}) and the \emph{plateaus} of the shell
+(Proposition~\ref{plateaus}).
 
 \section{A nonintegral sum controls the denominator}\label{mass}
-Write \(R_d(n)\) for the shifted prefix of \(\alpha^d\).
-Absolute convergence allows expansion into ordered tuples,
-\[
- s(j)=\sum_{i=1}^d c^{j_i},\qquad
- R_d(n)=\sum_{\substack{j_i\ge1\\s(j)\le n}}
-             c^{-\sum_i j_i} b^{n-s(j)},\qquad R_0(n)=b^n.
-\]
-We extend \(R\) to polynomials by linearity. With \(k=\lfloor\log_c n\rfloor\)
-and \(t=n/c^k\), each retained index satisfies \(j_i\le k\). Reflection
-\(v_i=k-j_i\) changes the insertion condition into membership in
-\[
- U_t=\{v\in\N^d:\ \textstyle\sum_i c^{-v_i}\le t\}.
-\]
-Here \(\N\) includes zero. The positive-index condition is \(v_i<k\).
-Every \(U_t\) is closed upwards in the coordinate order and contains
-\((J,\ldots,J)\) for \(c^J\ge d\).
-
-Fix a prime \(p\mid c\), put \(a=v_p(c)\), and let \(\omega\in\Z_p\) be the
-root of unity of order dividing \(p-1\) congruent to \(b^{-1}\bmod p\)
-(\(\omega=1\) at two). A principal unit raised to the \(p\)th power gains
-at least one power of \(p\) in its difference from one, by the binomial
-theorem. Thus \(b^{-c^j}\equiv\omega^{c^j}\pmod {p^{1+aj}}\).
-The residues of \(c^j\) modulo the order of \(\omega\) are eventually
-periodic, with period \(h\). In a fixed class of \(k\bmod h\), define
-\(u_v=\omega^{c^j}\) using any late \(j\equiv k-v\bmod h\).
-For every \(L\ge1\), uniformly in \(n\) on late shells of this class,
-\begin{equation}\label{reflection}
- c^{dk} b^{-n}R_d(n)\equiv H(U_t)
- :=\sum_{v\in U_t}\prod_i c^{v_i}u_{v_i}\pmod{p^L}.
-\end{equation}
-Indeed, with \(|v|=\sum_i v_i\), all terms of \(a|v|\ge L\) vanish at
-this precision. On the remaining finite set the indices \(k-v_i\) are
-positive and in the periodic range once \(k\) is sufficiently large.
-
 \begin{proposition}\label{massprop}
-For \(c>2\), a periodic sequence of roots of unity in a number field
-embedded in \(\Q_p\), and \(p\mid c\), the mass \(H(U)\) of every nonempty
-upper set \(U\subseteq\N^d\) is nonzero. \evidence{Kernel-verified}
+Let \(c>2\), let \(p\) be a prime dividing \(c\), let \(K\) be a number
+field with an embedding \(K\to\Q_p\), and let \(u_0,u_1,\ldots\) be a
+periodic sequence of roots of unity in \(K\), viewed in \(\Z_p\). Then
+the mass \(H(U)\) of every nonempty upper set \(U\subseteq\N^d\) is
+nonzero. \evidence{Kernel-verified}
 \end{proposition}
 \begin{proof}
-In the number field \(K\) put \(S=(\sum_{j=0}^{h-1}c^ju_j)/(1-c^h)\).
+Let \(\pi_0\ge1\) be a period of \((u_v)\). In \(K\) put
+\(S=(\sum_{j=0}^{\pi_0-1}c^ju_j)/(1-c^{\pi_0})\). Reversing the periodic indices identifies
+\(S\) with \(-C_t\) in S08, equation (3), for \(q=c\).
 In every complex embedding the final numerator term dominates the sum
 of the absolute values of all preceding terms. Thus every conjugate
 has absolute value strictly positive and at most \(1/(c-1)<1\).
@@ -138,28 +199,89 @@ is not an algebraic integer. In \(\Q_p\) it is the sum of the convergent
 one-dimensional series. The finite sums \(B_l=\sum_{v<l}c^vu_v\) are
 algebraic integers.
 
-Dickson's lemma gives finitely many minimal vertices \(a_1,\ldots,a_s\),
-where \(s\ge1\). For nonempty \(I\subseteq\{1,\ldots,s\}\), let \(a_I\)
+Dickson's lemma gives finitely many minimal vertices \(w_1,\ldots,w_g\),
+where \(g\ge1\). For nonempty \(I\subseteq\{1,\ldots,g\}\), let \(w_I\)
 be the coordinatewise maximum. The intersection of the corresponding
-orthants has mass \(\prod_i(S-B_{(a_I)_i})\).
+orthants has mass \(\prod_i(S-B_{(w_I)_i})\).
 Inclusion--exclusion therefore expresses \(H(U)=F(S)\), where
 \[
- F(X)=\sum_{\varnothing\ne I\subseteq\{1,\ldots,s\}}(-1)^{|I|+1}
-                 \prod_{i=1}^d(X-B_{(a_I)_i}).
+ F(X)=\sum_{\varnothing\ne I\subseteq\{1,\ldots,g\}}(-1)^{|I|+1}
+                 \prod_{i=1}^d(X-B_{(w_I)_i}).
 \]
-The leading coefficient is \(1-(1-1)^s=1\). A zero would make \(S\)
+The leading coefficient is \(1-(1-1)^g=1\). A zero would make \(S\)
 integral over the ring of integers of \(K\), hence over \(\Z\).
-This is the \lean{PeriodicPolynomialMass}{174}{periodic mass theorem}.
+This is the \lean{PeriodicPolynomialMass}{174}{periodic mass theorem}
+(\texttt{periodic\_upper\_mass\_nonzero}); the Lean statement allows any
+complete normed field in place of \(\Q_p\) in which \(|c|<1\).
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{main}]
+Fix a prime \(p\mid c\), put \(\rho=v_p(c)\), and let \(\omega\in\Z_p\) be the
+root of unity of order dividing \(p-1\) congruent to \(b^{-1}\bmod p\)
+(\(\omega=1\) at two). A principal unit raised to the \(p\)th power gains
+at least one power of \(p\) in its difference from one, by the binomial
+theorem. Thus \(b^{-c^j}\equiv\omega^{c^j}\pmod {p^{1+\rho j}}\).
+The residues of \(c^j\) modulo the order of \(\omega\) are eventually
+periodic, with period \(\pi_0\). The \emph{phase} of shell \(k\) is
+\(k\bmod\pi_0\). In a fixed phase define \(u_v=\omega^{c^j}\) using any
+sufficiently large \(j\equiv k-v\bmod\pi_0\); this sequence of roots of
+unity is periodic in \(v\), so Proposition~\ref{massprop} applies to it.
+
+\emph{Example: the loss can be positive.} In base two with \(c=35\), the
+local cycles at 5 and 7 both have length two. At \(p=5\), for even shell
+index, \(u_v=(-1)^v\omega\) with \(\omega^2=-1\). Thus \(S=\omega/36\), and
+in degree two the cut \(1+1/35\le t<2\) omits only the origin. Its mass
+\(S^2-\omega^2=1295/1296\) is divisible by 5. Thus Proposition~\ref{massprop}
+can give only a bounded loss, not zero loss; Lemma~\ref{losslemma} shows
+that a bounded loss is what holds in general.
+
+\begin{lemma}[Reflection at fixed precision]\label{refllemma}
+Let \(b\ge2\) and \(c>2\) be coprime, \(p\mid c\), \(\rho=v_p(c)\), and
+fix a phase. For every \(L\ge1\), uniformly in \(n\) on late shells of
+this phase, with \(t=n/c^k\),
+\begin{equation}\label{reflection}
+ c^{dk} b^{-n}R_d(n)\equiv H(U_t)
+\pmod{p^L}.
+\end{equation}
+\evidence{Paper proof}
+\end{lemma}
+\begin{proof}
+Multiplying the term of a retained tuple \(j\) by \(c^{dk}b^{-n}\) gives
+\(\prod_i c^{v_i}b^{-c^{k-v_i}}\) with \(v_i=k-j_i\). With \(|v|=\sum_i v_i\), all terms of \(\rho|v|\ge L\) vanish at
+this precision. On the remaining finite set the indices \(k-v_i\) are
+positive, in the periodic range and satisfy \(1+\rho(k-v_i)\ge L\) once
+\(k\) is sufficiently large. For them
+\(b^{-c^{k-v_i}}\equiv\omega^{c^{k-v_i}}=u_{v_i}\pmod{p^L}\), and every
+such \(v\) lies in \(U_t\) exactly when its tuple is retained.
+\end{proof}
+
+\begin{lemma}[Uniform loss]\label{losslemma}
+For fixed coprime \(b\ge2\), \(c>2\), and fixed \(d\ge1\) and \(p\mid c\),
+there is \(L\) such that \(v_p(H(U))<L\) for every upper set
+\(U\subseteq\N^d\) containing the anchor and every phase; in particular
+the losses of all weak cuts \(U_t\), \(1\le t<c\), are bounded
+independently of the shell. \evidence{Paper proof}
+\end{lemma}
+\begin{proof}
 The indicators of upper sets containing the fixed anchor form a compact
 space in the product topology on \(\{0,1\}^{\N^d}\), since all defining
 conditions are closed. The mass is continuous into \(\Z_p\) by finite
 truncation at each precision. Its compact image omits zero, so one \(L\)
-bounds the loss \(v_p(H(U))<L\) on the entire family. Take the maximum
-over the finitely many phases. By \eqref{reflection} the denominator of
-the leading prefix retains \(p^{adk-O(1)}\).
+bounds the loss \(v_p(H(U))<L\) on the entire family, by
+Proposition~\ref{massprop}. Take the maximum over the finitely many phases.
+\end{proof}
+
+\begin{lemma}[Denominators of polynomial prefixes]\label{poles}
+Let \(b\ge2,\ c>2\) be coprime. For \(Y\in\Z[X]\) of degree \(d\ge1\), \(q_n=\den R_Y(n)\) divides
+\(c^{dk}\) and satisfies \(q_n\asymp n^d\) on late shells.
+For \(P\in\Q[X]\) of degree \(d\) there are \(t_0\ge0\), \(D_0\ge1\) coprime
+to \(b\) and \(Y\in\Z[X]\) with \(b^{t_0}P=Y/D_0\); the prefix denominators
+\(Q_n\) of \(Y/D_0\) satisfy \(q_n\mid Q_n\mid D_0q_n\), so they have the same
+order and prime support in the fixed set of primes dividing \(cD_0\).
+\evidence{Paper proof}
+\end{lemma}
+\begin{proof}
+By Lemmas~\ref{refllemma} and \ref{losslemma}, the denominator of
+the leading prefix retains \(p^{\rho dk-O(1)}\).
 For an integral polynomial \(Y\) of degree \(d\), multiplication by the
 leading coefficient costs a fixed order. Lower powers have denominator
 dividing \(c^{(d-1)k}\). Their poles are strictly smaller for large \(k\).
@@ -170,12 +292,21 @@ shells and divides \(c^{dk}\).
 For rational \(P\), choose \(t_0\ge0\) so \(b^{t_0}P=Y/D_0\) with integral
 \(Y\) and \(D_0\) coprime to \(b\), by removing the radix primes of a common
 denominator. The new prefix denominator \(Q_n\) satisfies
-\(q_n\mid Q_n\mid D_0 q_n\); its prime support is fixed and coprime to \(b\).
-The real error in replacing \(b^n\alpha^a\) by \(R_a(n)\) tends to zero:
+\(q_n\mid Q_n\mid D_0 q_n\); its prime support is contained in a fixed set coprime to \(b\).
+\end{proof}
+
+\begin{lemma}[Cancellation on blocks between insertions]\label{block}
+Under the hypotheses of Theorem~\ref{main}, each nonzero integer
+frequency has vanishing mean on the radix orbit of \(P(\alpha)\).
+\evidence{Lean-supported paper proof}
+\end{lemma}
+\begin{proof}
+Use the shifted polynomial \(Y/D_0=b^{t_0}P\) from Lemma~\ref{poles}.
+The real error in replacing \(b^n\alpha^\ell\) by \(R_\ell(n)\) tends to zero:
 every fixed tuple eventually enters, and its omitted weight is dominated
 by \(c^{-\sum j_i}\), a summable majorant.
 
-Fix \(h'\in\Z\setminus\{0\}\). Up to \(N\) there are
+Fix a frequency \(h'\in\Z\setminus\{0\}\). Up to \(N\) there are
 \(O((1+\log N)^d)\) insertion locations. Discard the first and last
 incomplete portions of length at most \(B=\lfloor\sqrt N\rfloor\) each,
 starting the partition at \(B\). Discard also any length-\(B\) block
@@ -189,7 +320,11 @@ on these blocks. This estimate states cancellation for every reduced
 denominator \(q\to\infty\) supported on a fixed finite set coprime to \(b\)
 when \(q\le B^C\) for a fixed \(C\). Vandehey's Corollary~1.2 gives a
 stronger quantitative form. The vanishing real error transfers cancellation
-to the actual orbit. Weyl's criterion now gives uniform distribution.
+to the actual orbit. Removing finitely many initial positions preserves
+a limiting mean.
+\end{proof}
+\begin{proof}[Proof of Theorem~\ref{main}]
+Lemma~\ref{block} and Weyl's criterion give uniform distribution.
 A shift of \(t_0\) positions changes each prefix count by at most \(t_0\).
 \end{proof}
 \begin{proof}[Proof of Theorem~\ref{joint}]
@@ -198,16 +333,8 @@ has a surviving coefficient of positive degree. Theorem~\ref{main} gives
 vanishing of the corresponding character mean. Multidimensional Weyl
 equidistribution follows by uniform approximation of continuous functions
 by trigonometric polynomials. Every half-open box has boundary of Haar
-measure zero, including boxes of zero volume (the empty box convention in
-dimension zero gives frequency one).
+measure zero, including boxes of zero volume. For \(m=0\) the statement is trivial.
 \end{proof}
-
-For example, in base two with \(c=35\), the local cycles at 5 and 7 both
-have length two. At 5, for even shell index, \(u_v=(-1)^v\omega\) with
-\(\omega^2=-1\). Thus \(S=\omega/36\), and in degree two the cut
-\(1+1/35\le t<2\) omits only the origin. Its mass
-\(S^2-\omega^2=1295/1296\) is divisible by 5. Bounded loss allows this
-cancellation.
 
 \paragraph{Other conclusions of the one-axis proof.}
 For a common odd prime \(p\nmid b\), products of factors
@@ -217,7 +344,7 @@ degree is normal \cite[Theorem~2]{archive} \evidence{Kernel-verified}
 (\lean{StonehamPolynomial}{107}{one-axis sum}). Indeed, reflect each index
 about \(\lfloor\log_p(n)/e_i\rfloor\). The weight becomes
 \(p^{\sum e_i v_i}\) times a common unit modulo any fixed precision on a
-late shell, since \(p^s\bmod\varphi(p^L)\) stabilizes. The inclusion--exclusion
+late shell, since the residues of \(p^{j}\bmod\varphi(p^L)\) stabilize. The inclusion--exclusion
 numerator of this weighted series has value one at \(1\) and hence is
 \(1\bmod(p-1)\) at \(p\). The anchor and pole comparison above apply.
 For \(\alpha_{2,3}^2\) the exact late-shell denominator exponents on the four
@@ -234,7 +361,8 @@ to one, and the full one-dimensional mass is \(\sum_{v\ge0}2^v=-1\) in
 so the two-dimensional mass is \((-1)^2-1=0\).
 
 \begin{theorem}\label{square}
-The number \(\alpha^2\) is normal in base \(b\).
+Let \(b\ge3\) be odd and \(\alpha=\alpha_{b,2}\). Then \(\alpha^2\) is
+normal in base \(b\).
 For \(k\ge2\) and \(2^k\le n<2^{k+1}\) its shifted square prefix has
 reduced denominator
 \[
@@ -256,13 +384,15 @@ index is at most \(k-2\), giving an even total. On the upper half all
 pairs through \(k\) except \((k,k)\) have entered, so
 \(b^{2^{k+1}-n}R_2(n)=(A_k^2-1)/2^{2k}\).
 The two factors \(A_k+1,A_k-1\) have valuations \(k,1\), respectively.
-This proves the \lean{ParameterTwoSquareProfile}{155}{profile}.
+This proves the \lean{ParameterTwoSquareProfile}{155}{profile}
+(\texttt{ParameterTwoSquare.exact\_profile}).
 The minimum denominator on successive shells tends to infinity; the block
-argument of Section~\ref{mass} gives
-\lean{ParameterTwoSquare}{20}{square normality}.
+argument of Lemma~\ref{block} gives
+\lean{ParameterTwoSquare}{20}{square normality} (\texttt{square\_normal}).
 \end{proof}
 
 \begin{theorem}\label{quad}
+Let \(b\ge3\) be odd and \(\alpha=\alpha_{b,2}\).
 For integers \(A\ne0,B,C\) and \(D\ge1\) put
 \(x=(A\alpha^2+B\alpha+C)/D\). Let \(q_k\) be the reduced denominator
 of the \emph{numerator polynomial's} shifted prefix at \(n=3\cdot2^{k-1}\).
@@ -282,13 +412,24 @@ the upper halves, whose lengths are \(2^{k-1}\), are uniformly distributed
 as \(k\to\infty\). If \(q_k\) were bounded on a subsequence, all rational
 prefixes on those halves would lie on a fixed finite dyadic grid.
 The real errors tend uniformly to zero, so an interval between grid points
-contradicts uniformity. See the \lean{ParameterTwoQuadraticOrbits}{16}{equivalence}.
+contradicts uniformity. See the \lean{ParameterTwoQuadraticOrbits}{16}{equivalence}
+(\texttt{normal\_iff\_upper\_denominator}, whose index \(j\) is \(k-1\)).
 \end{proof}
 
-Here is a coefficient test and the remaining arithmetic question. Write
-\(s=v_2(b^2-1)-1\), with \(v_2(0)=\infty\), and
-\(\delta_j=(b^{-2^j}-1)/2^j\in 2^s\Z_2\) for \(j\ge1\);
-the inclusion follows by successive squaring of \(b^{-2}\).
+\begin{proposition}[A sufficient coefficient test]\label{coeff}
+Let \(b\ge3\) be odd, \(\alpha=\alpha_{b,2}\), and let \(A,B,C,D,q_k\)
+be as in Theorem~\ref{quad}. Put \(\beta=v_2(b^2-1)-1\).
+If, with \(v_2(0)=+\infty\),
+\begin{equation}\label{nonres}
+ v_2(2A+B)<v_2(2A)+\beta ,
+\end{equation}
+then \(q_k=2^{\max(0,k-v_2(2A+B))}\) for \(k\ge2\), and
+\((A\alpha^2+B\alpha+C)/D\) is normal in base \(b\).
+\evidence{Lean-supported paper proof}
+\end{proposition}
+\begin{proof}
+For \(j\ge1\) put \(\delta_j=(b^{-2^j}-1)/2^j\).
+Successive squaring gives \(\delta_j\in2^\beta\Z_2\).
 The unshifted linear prefix equals \(H_k-2^{-k}\), with
 \(H_k=1+\sum_{j=1}^k\delta_j\). Subtracting the missing diagonal
 \((2^{-k}+\delta_k)^2\) from its square shows that the upper-half
@@ -296,12 +437,18 @@ unshifted numerator polynomial, modulo \(\Z_2\), equals
 \[
  -2^{-k}\bigl(2A+B+2A(\textstyle\sum_{j=1}^k\delta_j+\delta_k)\bigr).
 \]
-The shift is a 2-adic unit. Hence the strict inequality
-\begin{equation}\label{nonres}
- v_2(2A+B)<v_2(2A)+s
-\end{equation}
-gives \(q_k=2^{\max(0,k-v_2(2A+B))}\). Normality follows from
-Theorem~\ref{quad} \evidence{Lean-supported paper proof}.
+The shift is a 2-adic unit. Under \eqref{nonres} the perturbation inside
+the parentheses has strictly higher valuation than \(2A+B\).
+Taking the denominator gives the formula. The kernel-verified equivalence
+\lean{ParameterTwoQuadraticOrbits}{16}{\texttt{normal\_iff\_upper\_denominator}}
+then gives normality.
+\end{proof}
+We call the quadratic numerator \(AX^2+BX+C\) \emph{resonant} when
+\(2A+B=0\). Then the term \(2A+B\) in the display above vanishes, the
+upper-half denominator is decided by the perturbation
+\(2A(\sum_j\delta_j+\delta_k)\), whose \(2\)-adic valuation depends on the
+\(2\)-adic digits of \(b^{-2^j}\) at a depth that grows with \(k\), and
+Proposition~\ref{coeff} does not apply.
 For the resonant polynomial \(X^2-2X\), put \(Z_1=2-2b^2\) and
 \(Z_{k+1}=2+2b^{2^k}(Z_k-1)\). Its
 \lean{Phase16StonehamBounds}{126}{exact denominator} is
@@ -310,21 +457,29 @@ Whether this tends to infinity for even one specified odd radix remains
 open. For instance, at \(b=3\) the prefix for this polynomial at
 \(n=12\) is \(7315/4-2(249399/8)=-60521\). This integer accounts for
 one upper half; failure of normality requires a bounded subsequence of
-upper-half denominators. The resulting exceptional cycles, their plateau
-discrepancies and products with independent parameters are the subject
-of the companion manuscript \emph{Exceptional Orbits and Discrepancy of
-Stoneham Products}.
+upper-half denominators.
 
 \section{Degrees certified by the dyadic mass}\label{certs}
-Write \(M_d(t)=\sum_{v\in U_t}2^{|v|}\) for \(c=2\).
-The orthant calculation gives
+In this section \(b\ge3\) is odd, \(c=2\) and \(\alpha=\alpha_{b,2}\);
+each statement repeats these hypotheses. In \(\Z_2\) the local units
+\(b^{-2^j}\) tend to one, so the weights of Section~\ref{notation} become
+\(u_v=1\). For real \(t\ge0\) the \emph{dyadic mass} is
+\[
+ M_d(t)=\sum_{v\in U_t}2^{|v|}\in\Z_2,\qquad
+ U_t=\{v\in\N^d:\ \textstyle\sum_i2^{-v_i}\le t\}.
+\]
+The \emph{Hilbert series} of the cut is the formal power series
+\(\sum_{v\in U_t}z^{|v|}\in\Z[[z]]\); its coefficient of \(z^j\) is the
+number of \(v\in U_t\) with \(|v|=j\). Writing \(U_t\) as a finite union of
+orthants and using inclusion--exclusion gives
 \[
  \sum_{v\in U_t}z^{|v|}=\frac{K_{d,t}(z)}{(1-z)^d},
  \qquad K_{d,t}\in\Z[z],\qquad M_d(t)=(-1)^d K_{d,t}(2).
 \]
-These identities also define the integer mass at a real threshold outside
-the basic shell. A uniform bound \(v_2(M_d(t))<L\) on \(1\le t<2\)
-implies normality for every polynomial of degree \(d\):
+For \(t\ge d\) the cut is all of \(\N^d\) and \(M_d(t)=(-1)^d\); for
+\(t<1\) every \(v\in U_t\) has all \(v_i\ge1\). A uniform bound
+\(v_2(M_d(t))<L\) on \(1\le t<2\) implies normality of every rational
+polynomial of degree \(d\) in \(\alpha\):
 at \(k\ge2L\) every term of weight exponent below \(L\) has positive
 original indices and radix unit \(1\bmod2^L\). The leading denominator
 exponent is \(dk-v_2(M_d(t))\). The lower-degree comparison and the orbit
@@ -343,6 +498,7 @@ approached from within the shell on its right. Mass is continuous for
 pointwise convergence of indicators, by truncation modulo \(2^L\).
 
 \begin{theorem}\label{special}
+Fix an odd radix \(b\ge3\) and put \(\alpha=\alpha_{b,2}\).
 Every rational polynomial of degree four or of degree \(p^r\) for an odd
 prime \(p\) and integer \(r\ge0\) has a normal value at \(\alpha\) in
 base \(b\). \evidence{Kernel-verified}
@@ -351,14 +507,18 @@ base \(b\). \evidence{Kernel-verified}
 For \(d=p^r\) use the orbit argument below with \(e=1\), where
 \(M_1(y)=-1\) throughout the shell. For \(r=0\) this last identity applies
 directly. In degree four the \lean{DyadicMassCells}{151}{finite grid
-calculation} bounds the loss on all cuts: after removing the factor
-\(2^4\) from the zero-index normalization, it is \(8,7,8\) on
-\([1,3/2),[3/2,7/4),[7/4,2)\), respectively. Reflection and the preceding
+calculation} bounds the loss on all cuts. The Lean proof works with the
+series \(2\alpha=\sum_{j\ge0}2^{-j}b^{-2^{j+1}}\), whose fourth power
+carries an extra factor \(2^4\); after removing it the loss is \(8,7,8\) on
+\([1,3/2),[3/2,7/4),[7/4,2)\), respectively. The middle interval
+joins two cells meeting at \(13/8\): their residues modulo \(2^{13}\)
+are \(2^{11}\) and \(3\cdot2^{11}\), both of valuation \(11=4+7\). Reflection and the preceding
 transfer give the \lean{StonehamOddDegree}{63}{prime-power} and
 \lean{DyadicQuartic}{109}{quartic} theorems.
 \end{proof}
 
 \begin{proposition}\label{finite}
+Fix an odd radix \(b\ge3\) and put \(\alpha=\alpha_{b,2}\).
 For \(3\le d\le120\), and for \(d=128\), a finite binary partition of
 \([1,2)\) certifies that \(v_2(M_d(t))\) is finite throughout.
 For each pair \((e,p)\) in Table~\ref{pairs}, the residues of
@@ -378,28 +538,10 @@ For each pair \((e,p)\) in Table~\ref{pairs}, the residues of
 \label{pairs}
 \end{table}
 
-\begin{proof}[Certificate and its interpretation]
-For a state \(M_a(n+f)\), \(0\le n<a,\ 0\le f<1\), write
-\(2f=c_1+f'\) with first binary digit \(c_1\in\{0,1\}\). Choosing the
-\(m\) coordinates of deficit zero and subtracting one from all other
-deficits gives
-\[
- M_a(n+f)=\sum_{m=0}^n {a\choose m}2^{a-m}
-                  M_{a-m}(2(n-m)+c_1+f').
-\]
-For argument at least \(a'\), \(M_{a'}=(-1)^{a'}\); this is an absorbed
-constant. Each live transition has weight divisible by \(2^{a-n}\).
-Consequently for a fixed prefix of digits the remaining contribution
-in state \((a,n)\) is divisible by the current coefficient times
-\(2^{a-n}\). A nonzero residue of smaller order fixes the valuation
-on the whole half-open interval. Once the threshold has \(d\) ones
-(including its integer digit), all remaining bits may be discarded,
-since no sum of \(d\) powers of two has more than \(d\) ones. Terminating
-binary expansions are read with trailing zeros. These rules give an
-exhaustive binary tree; each processed digit gains at least one bit of
-precision on every live branch.
-
-With maximum degree 120, the
+\begin{proof}[Verification of the certificate]
+The verifiers run the algorithm of Section~\ref{algsec}; by
+Lemmas~\ref{tree} and \ref{words} a successful run proves the stated
+nonvanishing. With maximum degree 120, the
 \repo{scripts/phase16_dyadic_stoneham.py}{first verifier} checks the least
 passing precision in each degree. For example \(d=3,4,15,120\) have
 largest losses \(6,8,64,835\). At \(d=120\) the least loss is 716
@@ -409,31 +551,34 @@ with its degree-128 option closes 345 leaves at precision 907.
 The least and greatest losses are 776 and 906; the latter first occurs at
 \(1+2^{-5}+2^{-6}+2^{-7}+2^{-17}\).
 
-For an odd prime modulus, read the same two linear digit transitions over
-\(\mathbb F_p\), tracking the absorbed constant. For a finite word, dot
-the resulting row with the vector of masses at the zero continuation.
-All values occur at a finite word by truncation after \(e\) ones.
-Exhaustion under both successors proves the claim on arbitrary words.
 The first verifier covers seven pairs and the second the other nine;
 the latter includes an orbit of 338544 vectors for \((5,524287)\).
 For \((3,31)\) the reduced orbit has 57 vectors in dimension five.
-Lean verifies the \lean{Phase17DiscrepancyBounds}{563}{Boolean certificate}
-and \lean{Phase17DiscrepancyBounds}{579}{induction on all words}.
+For this pair only, Lean verifies the
+\lean{Phase17DiscrepancyBounds}{563}{Boolean certificate}
+(\texttt{descent31Check\_true}) and the
+\lean{Phase17DiscrepancyBounds}{579}{induction on all words}
+(\texttt{descent31\_all\_words\_nonzero}).
 The identification of the reduced matrices with this mass recurrence uses
 the intertwining identities checked by the exact script.
 \end{proof}
 
+
 \begin{theorem}\label{degrees}
+Fix an odd radix \(b\ge3\) and put \(\alpha=\alpha_{b,2}\).
 Every rational polynomial of degree \(3\le d\le120\), of degree 128, or
 of degree \(d=ep^r\) for a pair in Table~\ref{pairs} and \(r\ge0\), is
-normal at \(\alpha\) in base \(b\). \evidence{Lean-supported paper proof}
+normal at \(\alpha\) in base \(b\).
+\evidence{Lean-supported paper proof; uses the finite certificate of
+Proposition~\ref{finite}}
 \end{theorem}
 \begin{proof}
 For the finite range use Proposition~\ref{finite} and
-\lean{DyadicQuartic}{80}{normality from retention}. The zero-index
-prefix in this implication has insertion multiplier 2, hence equals
-\(2^d R_d(n)\) by shifting every coordinate by one. This changes the
-denominator loss by at most \(d\).
+\lean{DyadicQuartic}{80}{normality from retention}
+(\lname{binary_polynomial_normal_of_retention}). That implication is
+stated for the series \(2\alpha=\sum_{j\ge0}2^{-j}b^{-2^{j+1}}\); the
+prefix of \((2\alpha)^d\) is \(2^dR_d(n)\), so its denominator loss differs
+from that of \(R_d(n)\) by at most \(d\).
 For \(r\ge1\), rotate each of \(e\) blocks of \(p^r\) coordinates by one
 place simultaneously. On each finite weight slice every nonfixed orbit
 has size divisible by \(p\). Fixed tuples are constant on each block;
@@ -451,19 +596,25 @@ each fixed degree. The \(r=0\) case is the certificate itself.
 \end{proof}
 
 \begin{corollary}\label{echelon}
+Fix an odd radix \(b\ge3\) and put \(\alpha=\alpha_{b,2}\).
 Let \(P_1,\ldots,P_m\in\Q[X]\) be linearly independent. Choose a basis
 of their span with distinct leading degrees (the pivot degrees). Assume
-each pivot belongs to Theorem~\ref{special} or \ref{degrees}, or is 2.
-If 2 is a pivot, assume there is no pivot of degree 1 and that the
+the span contains no nonzero constant, equivalently that all pivot degrees
+are positive. Each pivot degree must be covered by Theorem~\ref{special}
+or \ref{degrees}, or equal to 2.
+If 2 is a pivot degree, assume 1 is absent and that the
 quadratic basis element satisfies \eqref{nonres} after clearing its
 denominators. Then the vector of values \(P_i(\alpha)\) has the
-half-open box limits of Theorem~\ref{joint}. \evidence{Lean-supported paper proof}
+half-open box limits of Theorem~\ref{joint}.
+\evidence{Lean-supported paper proof; pivot degrees taken from
+Theorem~\ref{degrees} use the finite certificate of
+Proposition~\ref{finite}}
 \end{corollary}
 \begin{proof}
 A nonzero integer combination of the \(P_i\) has the highest occupied pivot
 degree in its expansion in this basis. If the degree is two, no lower
-pivot exists, so the polynomial is a nonzero rational multiple of the
-quadratic pivot. Inequality~\eqref{nonres} is invariant under this scaling.
+pivot degree exists, so the polynomial is a nonzero rational multiple of the
+quadratic basis element. Inequality~\eqref{nonres} is invariant under this scaling.
 Every nonzero character thus has a normal scalar projection. Apply the
 Fourier argument of Theorem~\ref{joint}. The \lean{Phase17DiscrepancyBounds}{311}
 {formal echelon implication} starts with integer polynomials of distinct
@@ -476,18 +627,117 @@ For example \((\alpha^2+\alpha,\alpha^7)\) satisfies the criterion at
 \(X^2-2X\); the separate proofs of normality of its two coordinates do
 not decide their joint distribution.
 
+\subsection{The certificate algorithm}\label{algsec}
+This subsection states the algorithm behind Proposition~\ref{finite} and
+proves that its output certifies the asserted nonvanishing.
+
+\emph{States and the digit recurrence.} For \(\ell\ge1\) and an integer
+\(0\le n<\ell\), a \emph{state} \((\ell,n)\) stands for the function
+\(f\mapsto M_\ell(n+f)\) of the unread fraction \(0\le f<1\). Write
+\(2f=\epsilon+f'\) with first binary digit \(\epsilon\in\{0,1\}\) and
+\(0\le f'<1\). Splitting the tuples \(v\in U_{n+f}\) according to the set
+of \(m\) coordinates with \(v_i=0\), and subtracting one from every other
+coordinate, gives
+\begin{equation}\label{digitrec}
+ M_\ell(n+f)=\sum_{m=0}^n \binom{\ell}{m}2^{\ell-m}
+                  M_{\ell-m}(2(n-m)+\epsilon+f').
+\end{equation}
+Indeed the remaining \(\ell-m\) coordinates \(v_i=1+v_i'\) satisfy
+\(\sum 2^{-v_i'}\le2(n+f-m)\) and carry weight \(2^{\ell-m}2^{|v'|}\); the
+terms with \(m>n\) are empty. A successor \((\ell',n')\) with
+\(n'\ge\ell'\) (including \(\ell'=0\)) is \emph{absorbed}: its cut is all of
+\(\N^{\ell'}\) and its mass is the constant \((-1)^{\ell'}\). Every other
+successor is a state and is called \emph{live}: its value still depends
+on the unread digits. With \(f=0\), \eqref{digitrec} computes the integer
+masses \(M_\ell(n)\) exactly: \(M_\ell(0)=0\) for \(\ell>0\), and for
+\(0<n<\ell\) the term \(m=0\) doubles \(n\) while every term \(m>0\)
+lowers the dimension, so the recursion terminates.
+
+\emph{Algorithm (binary interval certificate in degree \(d\), precision
+\(L\)).} A node is a binary prefix of \(t\in[1,2)\), that is, a dyadic
+interval \([t_0,t_0+2^{-s})\), together with an integer \(C\) (the sum of
+absorbed constants) and integer coefficients \(w_{\ell,n}\) on live states,
+such that \(M_d(t)=C+\sum w_{\ell,n}M_\ell(n+f)\) on the interval, where
+\(f\) encodes the unread digits.
+\begin{enumerate}
+\item The root is \([1,2)\) with \(C=0\) and the single coefficient
+\(w_{d,1}=1\).
+\item At a node put \(g=\min\bigl(L,\min_{\ell,n}(v_2(w_{\ell,n})+\ell-n)\bigr)\),
+with the inner minimum \(+\infty\) if there is no live state. If
+\(v_2(C)<g\), close the node with loss \(v_2(C)\) (rule~A).
+\item If the prefix, including its integer digit, already contains \(d\)
+binary ones, close the node with the loss \(v_2(M_d(t_0))\), computed
+exactly from the zero continuation (rule~B).
+\item Otherwise, if \(g=L\), stop: the certificate fails at this
+precision. If not, split the node into its two children by reading one
+more digit with \eqref{digitrec}, combining equal successor states and
+discarding coefficients divisible by \(2^L\).
+\end{enumerate}
+The verifier succeeds when every branch closes with a finite loss.
+
+\begin{lemma}[Correctness of the binary certificate]\label{tree}
+If the algorithm closes every branch, then \(M_d(t)\ne0\) for every real
+\(t\in[1,2)\), and \(v_2(M_d(t))\) is at most the largest loss at a closed
+node. \evidence{Paper proof}
+\end{lemma}
+\begin{proof}
+By induction on the depth, each node represents \(M_d\) on its interval
+exactly: \eqref{digitrec} preserves the represented function, and
+discarding coefficients divisible by \(2^L\) changes it only modulo
+\(2^L\), which does not affect a valuation below \(L\). Rule~A: since
+\(m\le n\) in \eqref{digitrec}, every term arising from a live state
+\((\ell,n)\) has a factor \(2^{\ell-n}\); as each \(M_{\ell'}\) lies in
+\(\Z_2\), the live part has valuation at least \(g>v_2(C)\) at every point
+of the interval, so \(v_2(M_d(t))=v_2(C)\) there. Rule~B: a sum of \(d\)
+powers \(2^{-v_i}\) has at most \(d\) binary ones after carrying. If the
+prefix already contains \(d\) ones, every tuple threshold in the interval
+\([t_0,t_0+2^{-s})\) equals \(t_0\), since a larger one would have an
+additional one; hence the cut, and \(M_d\), are constant on the interval.
+Each split replaces a half-open dyadic interval by its two half-open
+halves. Hence a finite tree whose leaves are closed covers \([1,2)\), and
+every real threshold, including a dyadic endpoint, lies in exactly one
+leaf. Termination is not needed for the lemma, which concerns a finished
+tree; in practice each live update gains at least one factor of two
+modulo \(2^L\).
+\end{proof}
+
+\begin{lemma}[Odd-prime word certificate]\label{words}
+Let \(p\) be an odd prime and \(e\ge1\). Reduce the recurrence
+\eqref{digitrec} modulo \(p\), recording a node as a row vector of
+coefficients on the live states and the absorbed constant. If every row
+reachable from the root \((e,1)\) by reading digits gives a nonzero value at
+the zero continuation, then \(M_e(t)\not\equiv0\pmod p\) for every
+\(t\in[1,2)\). \evidence{Paper proof}
+\end{lemma}
+\begin{proof}
+Evaluate a row against the column of the integer masses \(M_\ell(n)\),
+with an entry one for the constant. There are finitely many states
+(\(1\le\ell\le e\), \(0\le n<\ell\)), so the set of rows over
+\(\mathbb F_p\) is finite and the closure under the two digit updates
+terminates. By induction on word length, every finite prefix of every
+\(t\) gives a row in this set. A real threshold either has a terminating
+binary expansion, in which case its value is a zero continuation, or has
+a prefix containing \(e\) ones, in which case rule~B of the proof of
+Lemma~\ref{tree} shows that the value equals the zero continuation at
+that prefix.
+\end{proof}
+
 \section{The least orbit order in every degree}\label{leastsec}
-A permutation orbit of deficits is described by multiplicities
-\(c_i\), only finitely many positive, with \(\sum c_i=d\).
-Here the subscripted \(c_i\) are counts, and the Stoneham parameter is two.
-Write
+We keep the dyadic mass \(M_d\) of Section~\ref{certs}. Permuting the
+coordinates of \(v\in\N^d\) preserves both \(|v|\) and the threshold
+\(\sum_i2^{-v_i}\), so the cut \(U_t\) is a union of permutation orbits. An
+orbit is described by its \emph{multiplicities} \(m=(m_0,m_1,\ldots)\), where
+\(m_i\) is the number of coordinates equal to \(i\); only finitely many are
+positive and \(\sum_im_i=d\). Write
 \[
- K(c)=\sum_i c_i2^{-i},\qquad
- \Phi(c)=\sum_i\bigl(i c_i-v_2(c_i!)\bigr),\qquad
- F(d)=\min_{K(c)<2,\,\sum c_i=d}\Phi(c).
+ K(m)=\sum_i m_i2^{-i},\qquad
+ \Phi(m)=\sum_i\bigl(i m_i-v_2(m_i!)\bigr),\qquad
+ F(d)=\min_{K(m)<2,\,\sum m_i=d}\Phi(m).
 \]
-The orbit contributes \(2^{\sum i c_i} d!/\prod c_i!\) to \(M_d(t)\)
-when \(K(c)\le t\). Thus its actual order is \(v_2(d!)+\Phi(c)\).
+The orbit lies in \(U_t\) exactly when \(K(m)\le t\), and then contributes
+the integer \(2^{\sum i m_i} d!/\prod m_i!\) to \(M_d(t)\). Its
+\emph{orbit order} is the \(2\)-adic valuation of this integer,
+\(v_2(d!)+\Phi(m)\).
 
 \begin{theorem}\label{least}
 For all \(d\ge1\),
@@ -495,8 +745,8 @@ For all \(d\ge1\),
  F(d)=\sum_{k=1}^d\lfloor\log_2 k\rfloor .
 \]
 Let \(2^r-1\le d\le2^{r+1}-2\) and \(j=d-2^r+1\).
-For \(d\ge2\) the minimum valuation of \(M_d(t)\) on \(1\le t<2\) is
-\(v_2(d!)+F(d)\). It occurs precisely on
+For \(d\ge2\) the minimum of \(v_2(M_d(t))\) over \(1\le t<2\) is
+\(v_2(d!)+F(d)\). It is attained precisely on
 \[
  J_d=
  \begin{cases}
@@ -504,183 +754,459 @@ For \(d\ge2\) the minimum valuation of \(M_d(t)\) on \(1\le t<2\) is
  [2-2^{1-r},\,2),&j=0.
  \end{cases}
 \]
-In particular \(M_d(t)\ne0\) there. \evidence{Paper proof}
+In particular \(M_d(t)\ne0\) for \(t\in J_d\). \evidence{Paper proof}
 \end{theorem}
 \begin{proof}
-Denote the sum of logarithmic floors by \(G\). For each \(D\ge0\) put
+Denote the sum of logarithmic floors by \(G\). For each level \(\ell\ge0\) put
 \[
- N_D=\sum_{i\le D}c_i,\qquad A_D=\sum_{i\le D}2^{D-i}c_i,\qquad
- S_D=\sum_{i>D}\lfloor c_i/2^{i-D}\rfloor .
+ N_\ell=\sum_{i\le \ell}m_i,\qquad A_\ell=\sum_{i\le \ell}2^{\ell-i}m_i,\qquad
+ S_\ell=\sum_{i>\ell}\lfloor m_i/2^{i-\ell}\rfloor .
 \]
 Counting the levels below each \(i\) gives
-\(\sum i c_i=\sum_D(d-N_D)\), and counting the powers of two up to
-each \(k\) gives \(G=\sum_D\max(0,d+1-2^{D+1})\).
-Since \(c_i<2^{i+1}\), Legendre's factorial formula gives
-\(\sum_i v_2(c_i!)=\sum_D S_D\), including \(i=0\). Subtraction yields
+\(\sum i m_i=\sum_\ell(d-N_\ell)\), and counting the powers of two up to
+each \(k\) gives \(G=\sum_\ell\max(0,d+1-2^{\ell+1})\).
+Since \(K(m)<2\) forces \(m_i<2^{i+1}\), Legendre's formula
+\(v_2(m!)=\sum_{s\ge1}\lfloor m/2^s\rfloor\) gives
+\(\sum_i v_2(m_i!)=\sum_\ell S_\ell\), including \(i=0\). Subtraction yields
 \[
- \Phi(c)-G=\sum_{D\ge0}
- \bigl[\min(d-N_D,2^{D+1}-1-N_D)-S_D\bigr].
+ \Phi(m)-G=\sum_{\ell\ge0}
+ \bigl[\min(d-N_\ell,2^{\ell+1}-1-N_\ell)-S_\ell\bigr].
 \]
-Each summand is nonnegative. Indeed \(S_D\le d-N_D\), and
-\(A_D+S_D\le 2^D K(c)<2^{D+1}\), with \(A_D\ge N_D\).
+Each summand is nonnegative. Indeed \(S_\ell\le d-N_\ell\), and
+\(A_\ell+S_\ell\le 2^\ell K(m)<2^{\ell+1}\), with \(A_\ell\ge N_\ell\).
+Hence \(\Phi(m)\ge G\).
 
 Suppose equality holds and the largest occupied index is \(I\ge1\).
-For \(D<I\), \(S_D<d-N_D\), so the second bound must be tight, forcing
-\(A_D=N_D\). At \(D=I-1\) this leaves only levels \(I-1,I\) with
-multiplicities \(x,y\) satisfying \(y>0,\ x+\lfloor y/2\rfloor=2^I-1\).
-Conversely, any such pair has \(K(c)<2\) and attains equality: for
-\(D=I-1-m\), \(m\ge1\), the binary digits of \(x,\lfloor y/2\rfloor\)
-are complementary through \(I\) bits. The sum of their quotients rounded
-down after division by \(2^m\) is \(2^{I-m}-1\), exactly the second
-bound. For \(D\ge I\) the summands are zero.
+For \(\ell<I\), \(S_\ell<d-N_\ell\), so the second bound must be tight,
+forcing \(A_\ell=N_\ell\), that is, \(m_i=0\) for \(i<\ell\). At
+\(\ell=I-1\) this leaves only levels \(I-1,I\) with multiplicities \(x,y\)
+satisfying \(y>0,\ x+\lfloor y/2\rfloor=2^I-1\). Conversely, any such
+pair has \(K(m)<2\) and attains equality: for \(\ell=I-1-s\), \(s\ge1\),
+the binary digits of \(x\) and \(\lfloor y/2\rfloor\) are complementary
+through \(I\) bits, so the sum of their quotients rounded down after
+division by \(2^s\) is \(2^{I-s}-1\), exactly the second bound. For
+\(\ell\ge I\) the summands are zero.
 
 For \(y\) even one obtains \(I=r,\ (x,y)=(2^r-1-j,2j)\) when \(j>0\).
 For \(y\) odd and \(j>0\) one obtains
 \(I=r,\ (x,y)=(2^r-j,2j-1)\). These exhaust the choices since
 \(d=2^I-1+\lceil y/2\rceil\) and \(0\le\lfloor y/2\rfloor\le2^I-1\).
 At \(d=2^r-1\) the sole choice has all entries at \(r-1\)
-(including \(d=1,I=0\)). This proves the minimum formula.
-For \(j>0\) the two minimizing orbits enter at \(2-2^{1-r}\) and
-\(2-2^{-r}\), in that order. Exactly one odd multiple of
-\(2^{v_2(d!)+F(d)}\) is present on \(J_d\). Before it there is none;
-after the second entry there are two, whose sum is even at that scale.
-For \(j=0\) the sole minimizer enters at the left endpoint of \(J_d\).
-All other contributions have greater order, and the series converges
-2-adically. This proves the valuation assertion.
+(including \(d=1,I=0\)). This proves the formula for \(F(d)\).
+
+For \(1\le t<2\) every orbit present in \(U_t\) has \(K(m)\le t<2\), so
+its order is at least \(v_2(d!)+F(d)\); the series defining \(M_d(t)\)
+converges \(2\)-adically, so \(v_2(M_d(t))\ge v_2(d!)+F(d)\), with equality
+exactly when an odd number of minimizing orbits is present. For \(j>0\)
+the two minimizing orbits enter at \(K=2-2^{1-r}\) and \(K=2-2^{-r}\), in
+that order: exactly one is present on \(J_d\), none before it, and two,
+whose contributions sum to an even multiple of \(2^{v_2(d!)+F(d)}\), after
+the second entry. For \(j=0\) the sole minimizer enters at the left
+endpoint of \(J_d\). This proves the valuation assertion.
 \end{proof}
-For \(d=2\), the interval is \([1,3/2)\). The vanishing on the other half
-shows why a least-order calculation on one interval cannot by itself
-prove a whole-shell denominator bound. Whether \(M_d\) is nonzero on
-the entire shell for every \(d\ge3\) remains open.
+For \(d=2\), the interval is \([1,3/2)\), and \(M_2\) vanishes on
+\([3/2,2)\) (Section~\ref{two}). Thus a least-order calculation on one
+interval cannot by itself prove a whole-shell denominator bound. Whether
+\(M_d\) is nonzero on the entire shell \([1,2)\) for every \(d\ge3\)
+remains open.
+
+\subsection{A sufficient test on the open plateaus}
+Let \(D_*=\{0\}\cup\{2^{-i}:i\ge0\}\) and let \(dD_*\) be the set of sums of
+\(d\) elements of \(D_*\). Every tuple threshold \(\sum_i2^{-v_i}\) lies
+in \(dD_*\), and \(dD_*\) also contains the limits of thresholds as
+coordinates tend to infinity. We call the connected components of
+\((1,2)\setminus dD_*\) the \emph{plateaus} of the shell.
+
+\begin{proposition}[Plateau test]\label{plateaus}
+Let \(d\ge1\).
+\begin{enumerate}
+\item The set \(dD_*\) is compact and countable. Hence the plateaus are
+countably many open intervals whose union has Lebesgue measure one, and
+\(M_d\) is constant on each plateau. In particular the distribution of
+\(M_d(t)\) for \(t\) uniform in \([1,2)\) is purely atomic, and the zero
+set of \(M_d\) in \([1,2)\) is Lebesgue-null if and only if \(M_d\) is
+nonzero on every plateau.
+\item Let \(b\ge3\) be odd. If \(M_d\) is nonzero on every plateau, then
+every rational polynomial of degree \(d\) in \(\alpha_{b,2}\) is normal in
+base \(b\). This holds even if \(M_d\) vanishes at some points of
+\(dD_*\).
+\end{enumerate}
+\evidence{Paper proof}
+\end{proposition}
+\begin{proof}
+(1) \(D_*\) is compact and countable, hence so are its \(d\)-fold product
+and the image \(dD_*\) under the continuous addition map. On a plateau no
+threshold occurs, so the cut \(U_t\), and with it \(M_d(t)\), is constant.
+The complement of the plateaus in \([1,2)\) is contained in the countable
+set \(dD_*\cup\{1\}\), which is null. The remaining assertions follow,
+since a plateau has positive length.
+
+(2) Fix \(L\ge1\). Modulo \(2^L\) only the finitely many \(v\) with
+\(|v|<L\) contribute to \(M_d(t)\), so the \emph{failed set}
+\(E_L=\{t\in[1,2):M_d(t)\equiv0\pmod{2^L}\}\) is a finite union of
+intervals whose endpoints are thresholds. The sets \(E_L\) decrease in
+\(L\) and their intersection is the zero set of \(M_d\), which is null by
+(1). By continuity of measure, \(|E_L|\to0\).
+
+Write \(b^{t_0}P=Y/D_0\) as in Lemma~\ref{poles}, with \(Y\in\Z[X]\) of
+degree \(d\) and \(D_0\) odd. For \(n=2^kt\) on a late shell, the retained
+\(v\) with \(|v|<L\) have \(k-v_i\ge L\), so
+\(b^{-2^{k-v_i}}\equiv1\pmod{2^L}\) and, exactly as in
+Lemma~\ref{refllemma}, \(2^{dk}b^{-n}R_d(n)\equiv M_d(t)\pmod{2^L}\). For
+\(t\notin E_L\) the leading prefix therefore has denominator exponent at
+least \(dk-L+1\). The leading coefficient of \(Y\) costs a fixed
+valuation, and the lower powers have denominator exponent at most
+\((d-1)k\). Hence on late shells the prefix denominator of \(Y/D_0\) at
+\(n\) is at least \(c_L2^{k}\) for some \(c_L>0\) whenever
+\(n/2^k\notin E_L\).
+
+The failed positions, those \(n\) with \(n/2^k\in E_L\), are few: since
+\(E_L\) is a union of \(O_L(1)\) intervals, shell \(k\) contains at most
+\(2^k|E_L|+O_L(1)\) of them. Up to a cutoff \(N\) in shell \(K\) their
+number is at most \(2^{K+1}|E_L|+O_L(K+1)\), and \(N\ge2^K\), so their
+upper density is at most \(2|E_L|\).
+
+Now fix a nonzero frequency \(h'\) and run the block argument of
+Lemma~\ref{block}. On each insertion-free block the prefix follows an
+exact radix orbit, so its denominator is constant, multiplication by the
+odd radix preserving a dyadic denominator. The endpoints of the intervals
+forming \(E_L\) are thresholds, that is, insertion points, so each such
+block consists either of failed positions or of positions with
+denominator at least \(c_L2^k\). After reduction by \(\gcd(|h'|,\cdot)\)
+the blocks of the second kind have reduced denominators tending to
+infinity, supported on the primes of \(2D_0\) and polynomially bounded,
+so the fixed-support estimate makes their contribution to the character
+mean tend to zero. The blocks of the first kind contribute at most their
+upper density \(2|E_L|\). The insertion count and the vanishing real tail
+are as in Lemma~\ref{block}. Hence the upper limit of the absolute
+character mean is at most \(2|E_L|\) for every \(L\), and therefore zero.
+Weyl's criterion completes the proof.
+\end{proof}
+
+\begin{remark}[Scope of the plateau test and of the curvature method]\label{curvature}
+The test of Proposition~\ref{plateaus} is weaker than whole-shell
+nonvanishing, and it holds in every degree covered by
+Theorems~\ref{special} and~\ref{degrees}. It fails in degree two, where
+\(M_2=0\) on \([3/2,2)\). Whether it holds in any degree \(d\ge3\) outside
+those theorems is open; the values of \(M_d\) on the plateaus in those
+degrees have not been determined.
+
+For comparison, consider the synthetic schedule
+\(x=\sum_{i\ge1}3^{-v_3(i)}2^{-2i^3}\). The
+\href{https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/nonlinear.md}{accompanying written proof}
+shows that \(x^2\) is normal in base two by a curvature argument. There
+the shell parameter \(u\) enters through thresholds \(z^3+y^3\le u\) on
+curved two-dimensional grids of \(3\)-adic rationals \(z,y\). Infinitely
+many isolated grid points produce jumps of the square mass whose
+coefficient is \(2\not\equiv0\pmod3\), and a density-point argument then
+shows that every level set of that mass, in particular its zero set, is
+Lebesgue-null. For \(\alpha_{b,2}\) the thresholds are sums of powers of
+two, the mass is constant on the plateaus by
+Proposition~\ref{plateaus}(1), and the conclusion of the curvature
+argument is false already in degree two: the level set \(\{M_2=0\}\)
+contains \([3/2,2)\), which has measure \(1/2\). Accordingly the curvature
+argument does not apply to \(\alpha_{b,2}^2-2\alpha_{b,2}\). For this
+resonant quadratic the leading mass vanishes on the upper half of every
+shell, the square and linear parts have poles of the same order there,
+and by Section~\ref{two} the relevant denominator
+\(2^{\max(0,2k-1-v_2(Z_k))}\) depends on the \(2\)-adic digits of the
+numbers \(b^{2^i}\), \(i<k\), to a depth growing with \(k\). Neither
+Proposition~\ref{plateaus} nor the curvature argument, each of which
+works at a fixed \(2\)-adic precision, controls it. Normality of
+\(\alpha_{b,2}^2-2\alpha_{b,2}\) remains open for every odd radix
+\(b\ge3\), and nonvanishing of \(M_d\) on the whole shell remains open for
+general \(d\ge3\).
+\end{remark}
 
 \section{Discrepancy through an arbitrary digit}\label{ratesec}
+For the ordinary case \(c>2\), Mira Cult's S08, Theorem 1.1(b)
+\cite{mira2}, already gives an effective power saving, with an unspecified
+exponent, for the synchronized vector of the first \(m\) powers of the
+generator; a scalar saving for each \(P(\alpha_{b,c})\) follows. The only
+refinement here is the explicit exponent \(\delta_d\) in
+Theorem~\ref{rate}. The cases at parameter two require separate
+denominator estimates, supplied by Sections~\ref{two} and~\ref{certs}.
+
 Let \(D_N(x;b)=\sup_I|N^{-1}\sum_{n<N}\mathbf1_I(\{b^nx\})-|I||\),
 where the supremum is over half-open subintervals of \([0,1)\).
-Write \(L_N=1+\log N\).
+Write \(\Lambda_N=1+\log N\).
 \begin{theorem}\label{rate}
-If \(c>2\) under the hypotheses of Theorem~\ref{main}, then for \(d=\deg P\ge1\)
-and every \(N\ge2\),
+Let \(b\ge2\) and \(c>2\) be coprime and let \(P\in\Q[X]\) have degree
+\(d\ge1\). For every \(N\ge2\),
 \[
  D_N(P(\alpha_{b,c});b)\le C(b,c,P)N^{-\delta_d},\qquad
- \delta_d=\frac{1}{2(2^{d+1}-2)}.
+ \delta_d=\frac{1}{2(2^{d+1}-2)},
 \]
-The constant is computable. For \(c=2\) the same estimate holds in
-degree one, in odd prime-power degrees, and for quadratics satisfying
-\eqref{nonres}. In the indicated degrees \(1,2,3\) the respective
-bounds are \(O(N^{-1/2}L_N^2)\), \(O(N^{-1/6}L_N^{3/2})\) and
-\(O(N^{-1/14}L_N^{5/4})\). \evidence{Lean-supported paper proof}
+with a computable constant. For \(c=2\) and odd \(b\ge3\) the same
+estimate holds in degree one, in odd prime-power degrees, and for
+quadratics satisfying \eqref{nonres}. In degrees \(1,2,3\), within these
+cases, the bounds are \(O(N^{-1/2}\Lambda_N^2)\),
+\(O(N^{-1/6}\Lambda_N^{3/2})\) and \(O(N^{-1/14}\Lambda_N^{5/4})\),
+respectively. \evidence{Lean-supported paper proof}
 \end{theorem}
+The Lean steps are the \lean{QuantitativeStonehamSupport}{49}{finite
+transfer} (\texttt{discrepancy\_of\_denominator\_range}), which takes the two
+analytic inequalities as hypotheses, and the denominator, tail, length and
+exponent lemmas listed in the verification map. The analytic input is
+Lemma~\ref{vandestep} together with the Erd\H os--Tur\'an inequality.
+
+\subsection{Exponential sums on reduced supports}
+For an integer \(q\ge1\), an integer \(y\) prime to \(q\) and an integer
+\(T\ge1\), put
+\[
+ S(y,q,T)=\sum_{n=1}^T \ee{yb^n/q}.
+\]
+Define exponents by \(a_k=(2^{k+2}-2)^{-1}\), \((\gamma_0,\nu_0)=(0,1)\) and,
+writing \(a,\gamma,\nu\) for the values at depth \(k\) and
+\(a',\gamma',\nu'\) for those at depth \(k+1\),
+\begin{equation}\label{exprec}
+ a'=\frac a{2(1+a)},\quad
+ \gamma'=\frac{1+\gamma+a\nu}{2(1+a)},\quad
+ \nu'=\frac{1+\nu}{2}+\frac{a(1+\gamma-\nu)}{2(1+a)} .
+\end{equation}
+
+\begin{lemma}[Vandehey's estimate on reduced supports]\label{vandestep}
+Fix \(b\ge2\) and a finite set \(\mathcal P\) of primes not dividing \(b\).
+For each \(k\ge0\) there are effective constants \(A_k,B_k\), depending
+only on \(b,\mathcal P,k\), such that for every \(q\ge1\) whose prime
+factors lie in \(\mathcal P\), every \(y\) prime to \(q\) and every
+\(T\ge1\),
+\[
+ |S(y,q,T)|\le (A_k q^{a_k}T^{\gamma_k}+B_k q^{-a_k}T^{\nu_k})
+                 (1+\log q)^{2^{-k}} .
+\]
+\evidence{Paper proof, modifying the proof of \cite[preprint, Thm.~5.1]{vandehey}}
+\end{lemma}
+\emph{Relation to the published statement.} The inequality, the
+exponents and the logarithmic factor are those of Vandehey's Theorem~5.1
+\cite[preprint, pp.~13--14]{vandehey}, which is stated for all moduli in
+the multiplicative semigroup generated by a finite set of primes, with
+\(b\) prime to that set. The statement is therefore not new. We give a
+proof because the published argument does not establish it as written: in
+equation~(12) of the preprint the auxiliary divisor is formed with the
+product of \emph{all} primes of the ambient set, and the proof needs this
+divisor to divide the current modulus, which fails whenever a prime of the
+set does not divide that modulus. Such moduli arise inside the induction,
+because the inner sums in equation~(11) have moduli that can lose primes.
+The proof below forms the auxiliary divisor from the radical of the
+current modulus and makes the constants uniform by taking maxima over the
+finitely many subsets of \(\mathcal P\). We were unable to check whether
+the journal version \cite{vandehey} changes equation~(12).
 
 \begin{proof}
-We give the estimates for the last incomplete shell as well as whole
-shells. Use the fixed shift and \(D_0\) of Section~\ref{mass}. If a tuple
-is omitted at \(n\), one coordinate has \(c^{j_i}\ge(n+1)/d'\) for its
-degree \(d'\ge1\). Summing that geometric tail and the unrestricted weights
-in other coordinates gives a total real error \(O(1/(n+1))\).
-On \(X\le n<2X,\ X=2^u\), the rational denominators obey
-\(X^\lambda\ll Q_n\ll X^d\), with \(\lambda=d\) by the pole bounds above,
-except that \(\lambda=1\) for dyadic quadratics by Section~\ref{two}.
-All implicit constants below may depend on the fixed input.
+\emph{Base case and invariants.} At depth zero the bound is the
+complete-period and incomplete-period estimate of
+\cite[preprint, Lemma~2.3, eq.~(7)]{vandehey}: its terms are \(\sqrt q\) and
+\(O_{b,\mathcal P}(T/\sqrt q)\), both multiplied by \(1+\log q\), with
+effective constants; here \(a_0=1/2\). The case \(q=1\) at every depth
+follows from the trivial bound \(T\). The recursion \eqref{exprec}
+preserves \(\nu\ge1\), \(\gamma+\nu<2\) and \(\nu-\gamma\le1\): the formula
+gives \(\nu'\ge1\) because \(1+\gamma-\nu\ge0\); the new sum is
+\(\gamma'+\nu'=1+(\gamma+\nu)/2<2\); and the new difference is
+\(a/(1+a)+(1-a)(\nu-\gamma)/(2(1+a))\le1/2\).
 
-For \(1\le T\le X\), split \([X,X+T)\) at its distinct interior
-insertions, retaining each insertion at the start of its piece.
-For each \(\gamma>0\) the lengths satisfy
-\begin{equation}\label{length}
- \sum_i L_i^\gamma\ll_{d,\gamma} X^\gamma.
-\end{equation}
-Indeed, starts of pieces of length in \([U,2U)\), \(U=2^j\), are
-\(U\)-separated. Except for \(X\) they are sums of at most \(d\) powers
-of \(c\). Discard summands below \(U\); the new sum is within \(dU\)
-of the start and there are \(O_d((1+u-j)^d)\) possible truncated
-tuples. Each accounts for at most \(d+1\) separated starts.
-Weighting by \((2U)^\gamma\) and summing in \(u-j\) proves \eqref{length}.
-For \(d=1,\gamma=0\) there is at most one interior insertion. For
-\(\nu\ge1\) one has \(\sum_i L_i^\nu\le X^\nu\).
-
-The \evidence{External input} at this step is Vandehey's preprint
-Theorem~5.1, pp.~13--14 \cite{vandehey}. For fixed primes coprime to \(b\),
-a supported modulus \(q\), \((a,q)=1\), \(k\ge0\), and every positive
-integer \(L\), it gives
+\emph{Induction step.} Assume the bound at depth \(k\) for all moduli
+supported on \(\mathcal P\), and write \(a,\gamma,\nu\) for the depth-\(k\)
+exponents. Let \(q>1\). If \(T^{1+\gamma-\nu}\ge q\), the new second term
+satisfies \(q^{-a'}T^{\nu'}\ge T^{(1+\nu)/2}\ge T\), so the trivial bound
+suffices once \(B_{k+1}\ge1\). Otherwise put
 \[
- \left|\sum_{i=1}^L \ee{ab^i/q}\right|
- \le (A_k q^{a_k}L^{\gamma_k}+B_k q^{-a_k}L^{\nu_k})
-            (1+\log q)^{2^{-k}},\qquad a_k=(2^{k+2}-2)^{-1}.
+ W=q^{a/(1+a)}T^{(1+\gamma-\nu)/(1+a)}=q^x,\qquad 0<x<1.
 \]
-Here \(A_k,B_k\) are effective constants for the fixed base and support.
-Starting at zero uses \(ab^{-1}\bmod q\); \(q=1\) is trivial since
-\(\nu_k\ge1\). In computing support factors (in particular (12) of the
-preprint), use primes dividing the actual modulus and the additional
-factor for 4 only when 4 divides it. More precisely, in the nontrivial
-case \(0<x<1\) of (12), for \(p^e\parallel q\) use exponent
-\(1+\lfloor xe\rfloor\), raised to at least two for \(p=2,\ e\ge2\).
-The auxiliary divisor lies between \(q^x\) and
-\(2\,\mathrm{rad}(q)q^x\) and divides \(q\). Taking the maximum over
-the finitely many supports at each induction depth gives common constants.
 
-For frequency \(h\ge1\), \(q=Q/\gcd(h,Q)\) on a piece of starting
-denominator \(Q\). The negative exponent costs at most a bounded factor
-after harmonic averaging, apart from the usual logarithm:
+\emph{The auxiliary divisor.} For each prime power \(p^e\parallel q\) take
+\(v_p(q')=1+\lfloor xe\rfloor\), raised to two if \(p=2\) and \(e\ge2\),
+and let \(q'\) have no other prime factors. Each exponent is at most
+\(e\). Multiplying the prime-power bounds gives the replacement for
+(12)--(13) of the preprint:
+\[
+ q'\mid q,\qquad \mathrm{rad}(q')=\mathrm{rad}(q),\qquad
+ W\le q'\le 2\,\mathrm{rad}(q) W.
+\]
+
+\emph{Orders and gcds.} Let \(\tau\) be the multiplicative order of
+\(b\bmod q'\), put \(g=\gcd(q,b^\tau-1)\) and \(\bar q=q/g\). Then
+\(q'\mid g\) and \(g\ll_{b,\mathcal P}\tau\le q'\). Indeed
+\(v_p(b^s-1)\le C_p+v_p(s)\) whenever \(p\mid b^s-1\): for odd \(p\) apply
+the binomial theorem to powers of \(b^{\mathrm{ord}_p(b)}\), noting that a
+\(p\)th power raises the valuation of the difference from one by exactly
+one and a power prime to \(p\) preserves it; at two use
+\(b^2\equiv1\bmod8\) for even \(s\) and \(v_2(b^s-1)=v_2(b-1)\) for odd
+\(s\). Multiplying over the finite support gives an effective constant.
+Moreover \(\gcd(q,b^{i\tau}-1)=g\gcd(i,\bar q)\) for \(i\ge1\). At a prime
+\(p\) with \(v_p(g)=v_p(q)\) both sides have valuation \(v_p(q)\). At a
+prime with \(v_p(g)<v_p(q)\) the same binomial calculation adds
+\(v_p(i)\) to \(v_p(b^\tau-1)\); this uses \(p\mid b^\tau-1\), which holds
+because \(\mathrm{rad}(q')=\mathrm{rad}(q)\), and at \(p=2\) it uses
+\(4\mid b^\tau-1\), which holds because \(4\mid q'\) whenever \(4\mid q\).
+This is the point at which the radical of the current modulus is needed.
+
+\emph{Differencing.} Split the sum by \(n\bmod\tau\), apply
+Cauchy--Schwarz and expand the squares. A difference \(i\tau\) gives a sum
+of length at most \(T\) with numerator \(y(b^{i\tau}-1)\) over \(q\), whose
+reduced modulus is \(\bar q/\gcd(i,\bar q)\), again supported on
+\(\mathcal P\). Thus
+\[
+ |S(y,q,T)|^2\le\tau T+2\tau\sum_{1\le i<T/\tau}
+ \bigl|S\bigl(y_i,\bar q/\gcd(i,\bar q),T_i\bigr)\bigr|
+\]
+for suitable \(y_i\) prime to the modulus, where \(T_i=T-i\tau\). For \(Z>0\),
+\[
+ \sum_{1\le i<Z}\gcd(i,\bar q)^a
+ \le Z\sum_{l\mid \bar q}l^{a-1}
+ \le Z\prod_{p\in\mathcal P}(1-p^{a-1})^{-1},
+\]
+by counting the multiples of each divisor. Applying the induction
+hypothesis to the inner sums and using \(\tau\le q'\ll W\) and
+\(\bar q\asymp q/W\) gives
+\[
+ |S|^2\ll WT+
+ \big[(q/W)^a T^{1+\gamma}+(q/W)^{-a}T^{1+\nu}\big]
+ (1+\log q)^{2^{-k}}.
+\]
+By the definition of \(W\), the first bracketed term equals \(WT^\nu\),
+which absorbs \(WT\) since \(\nu\ge1\). Substituting \(W\) and taking
+square roots gives \(q^{a'}T^{\gamma'}\) and \(q^{-a'}T^{\nu'}\) with the
+asserted logarithm.
+
+\emph{Uniformity.} Every constant above is computable from the
+depth-\(k\) constants, the local valuation bounds \(C_p\), \(\mathrm{rad}(q)\)
+and finite Euler products over \(\mathcal P\). Taking the maximum over the
+finitely many possible radicals, that is, over the subsets of
+\(\mathcal P\), gives constants \(A_{k+1},B_{k+1}\) valid for every modulus
+supported on \(\mathcal P\), including those inner moduli that have lost a
+prime.
+\end{proof}
+
+\subsection{Pieces between insertions and the exponent margin}
+\begin{lemma}[Piece lengths]\label{piecelemma}
+Let \(c\ge2\), \(d\ge1\) and let \(X\ge1\) be a power of two. For
+\(1\le T\le X\), split \([X,X+T)\) at its distinct interior insertion
+points of tuples of degree at most \(d\), each insertion starting a new
+piece, and let \(\ell_i\) be the piece lengths. Then for each
+\(\gamma>0\)
+\begin{equation}\label{length}
+ \sum_i \ell_i^\gamma\ll_{c,d,\gamma} X^\gamma,
+\end{equation}
+and \(\sum_i\ell_i^\nu\le X^\nu\) for \(\nu\ge1\).
+\evidence{Lean-supported paper proof}
+\end{lemma}
+\begin{proof}
+The second claim holds because the lengths sum to at most \(X\). For the
+first, write \(X=2^\mu\). Starts of pieces of length in \([U,2U)\),
+\(U=2^s\), are \(U\)-separated. Apart from \(X\) itself they are sums of at
+most \(d\) powers of \(c\). Discarding the summands below \(U\) changes such
+a start by at most \(dU\), and there are \(O_d((1+\mu-s)^d)\) possible
+truncated tuples. Each truncated tuple accounts for at most \(d+1\)
+separated starts. Weighting by \((2U)^\gamma\) and summing the geometric
+series in \(\mu-s\) proves \eqref{length}. The counting step, in the
+form of an explicit sum over the dyadic length levels, is the
+\lean{QuantitativeStonehamGaps}{86}{length moment}
+(\texttt{clean\_length\_moment}); the summation over levels is a paper
+step.
+\end{proof}
+
+\begin{lemma}[Exponent margin]\label{marginlemma}
+Put \(s_i=(1-\gamma_i)/a_i\) and \(t_i=(\nu_i-1)/a_i\). Then \(s_0=2\),
+\(t_i=s_i-4+2^{1-i}\) and \(s_{i+1}=s_i+1-a_it_i\). Moreover
+\(s_k>k+3/2\) and \(t_k\le\max(0,k-1)\) for all \(k\ge0\). Consequently,
+for \(d=k+1\),
+\[
+ \eta=\min\bigl(1/2,\ a_k(s_k-d),\ a_k(d-t_k)\bigr)>a_k/2=\delta_d .
+\]
+\evidence{Lean-supported paper proof}
+\end{lemma}
+\begin{proof}
+The three identities follow by substituting \eqref{exprec}, using
+\(\gamma_i+\nu_i=2-2^{-i}\), which follows from \(\gamma_0+\nu_0=1\) and the
+recursion for the sum in the proof of Lemma~\ref{vandestep}. Since
+\(\nu_i\ge1\), \(t_i\ge0\), so \(s_{i+1}\le s_i+1\) and \(s_i\le i+2\).
+Hence \(t_i\le i-2+2^{1-i}\), which gives \(t_0=t_1=0\) (as \(s_1=3\)) and
+\(t_i\le i-1\) for \(i\ge2\). Hence every finite partial sum of
+\(a_it_i\) is strictly below \(\sum_{i\ge2}(i-1)2^{-i-1}=1/2\), because
+\(a_i<2^{-i-1}\). Summing the recursion gives \(s_k>2+k-1/2=k+3/2\), so
+\(a_k(s_k-d)>a_k/2\); and \(d-t_k\ge1\), so \(a_k(d-t_k)\ge a_k\). Finally
+\(a_k\le1/2\). The inequality \(k+3/2<s_k\le k+2\) for the recursion of
+\(s_k\) is the \lean{QuantitativeStonehamExponents}{12}{exponent lemma}
+(\texttt{differencing\_margin}); the derivation of that recursion from
+\eqref{exprec} and the bound on \(t_k\) are paper steps.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{rate}]
+We bound the counts on whole dyadic ranges and on the last incomplete
+range. Use the fixed shift and \(D_0\) of Lemma~\ref{poles}. If a tuple
+of degree \(d'\ge1\) is omitted at \(n\), one coordinate has
+\(c^{j_i}\ge(n+1)/d'\). Summing that geometric tail and the unrestricted
+weights in the other coordinates gives a total real error \(O(1/(n+1))\).
+On \(X\le n<2X\), with \(X\) a power of two, the rational denominators obey
+\(X^\lambda\ll Q_n\ll X^d\). Here \(\lambda=d\) by Lemma~\ref{poles} when
+\(c>2\); at \(c=2\), \(\lambda=d\) in degree one and in the odd prime-power
+degrees by the bounded dyadic loss established in the proofs of
+Theorems~\ref{special} and~\ref{degrees}, and \(\lambda=1\) for
+nonresonant quadratics by Proposition~\ref{coeff}. All implicit
+constants below may depend on \(b,c,P\).
+
+For \(1\le T\le X\), split \([X,X+T)\) into the pieces of
+Lemma~\ref{piecelemma}. On a piece the prefix follows an exact radix
+orbit, so for frequency \(h\ge1\) the corresponding exponential sum is
+\(S(y,q,\ell_i)\) with \(q=Q/\gcd(h,Q)\), where \(Q\) is the starting
+denominator of the piece; the sum may start at \(n=1\) after replacing its
+numerator \(y\) by \(yb^{-1}\bmod q\). Apply Lemma~\ref{vandestep} with
+\(k=d-1\) and \(\mathcal P\) the primes of \(cD_0\). The negative power of
+\(q\) costs at most a bounded factor after harmonic averaging, apart from
+the usual logarithm:
 \[
  \sum_{h\le H}\frac{\gcd(h,Q)^{a_k}}h
  \le (1+\log H)\sum_{l\mid Q}l^{a_k-1}
- \le (1+\log H)\prod_{p\mid cD_0}(1-p^{a_k-1})^{-1}.
+ \le (1+\log H)\prod_{p\mid cD_0}(1-p^{a_k-1})^{-1},
 \]
-The first inequality enlarges each gcd class to all multiples of \(l\).
-In the unnormalized Erd\H os--Tur\'an inequality
-\cite[Thm.~2.2(9), pp.~529--530]{bc} the real tail costs \(O(H)\),
-since the phase error costs \(O(hT/X)\) at frequency \(h\).
-With \(H=\lfloor\sqrt X\rfloor,\ k=d-1\), \eqref{length} gives
-uniformly in the terminal length
+where the first inequality enlarges each gcd class to all multiples of
+\(l\). In the Erd\H os--Tur\'an inequality
+\cite[Thm.~2.2(9), pp.~529--530]{bc}, multiplied by \(T\), the real tail
+costs \(O(H)\), since the phase error costs \(O(hT/X)\) at frequency \(h\).
+With \(H=\lfloor\sqrt X\rfloor\), \eqref{length} gives, uniformly in the
+terminal length \(T\),
 \[
  T D_{X,T}\ll \sqrt X+
- (1+\log X)^{1+2^{-k}}\bigl(X^{d a_k+\gamma_k}+X^{\nu_k-\lambda a_k}\bigr).
+ (1+\log X)^{1+2^{-k}}\bigl(X^{d a_k+\gamma_k}+X^{\nu_k-\lambda a_k}\bigr),
 \]
-Here \(D_{X,T}\) denotes discrepancy on that shell prefix.
-The \lean{QuantitativeStonehamSupport}{49}{finite transfer} takes both
-analytic inequalities as hypotheses.
+where \(D_{X,T}\) denotes the discrepancy of the positions in \([X,X+T)\).
 
-For clarity the margin in the power saving can be checked directly from
-the recurrence in the cited theorem. It starts at \(\gamma_0=0,\nu_0=1\);
-with \(a=a_i,\gamma=\gamma_i,\nu=\nu_i\), the next pair is
-\[
- \gamma'=\frac{1+\gamma+a\nu}{2(1+a)},\qquad
- \nu'=\frac{1+\nu}{2}+\frac{(1+\gamma-\nu)a}{2(1+a)}.
-\]
-Set \(s_i=(1-\gamma_i)/a_i,\ t_i=(\nu_i-1)/a_i\). Substitution gives
-\(s_0=2,\ t_i=s_i-4+2^{1-i}\) and
-\(s_{i+1}=s_i+1-a_i t_i\).
-Since \(\nu_i\ge1\), \(s_i\le i+2\); \(t_0=t_1=0\) and \(t_i\le i-1\)
-for \(i\ge2\). Each finite partial sum of \(a_it_i\) is strictly below
-\(\sum_{i\ge2}(i-1)2^{-i-1}=1/2\).
-Thus \(s_k>k+3/2\) and \(d-t_k\ge1\).
-For \(\lambda=d\), both powers in the last estimate are at most
-\(1-\eta\) with \(\eta=\min(1/2,a_k(s_k-d),a_k(d-t_k))>a_k/2\).
-For \((d,\lambda)=(2,1)\), the exponents are both \(5/6\).
-Substitution in degrees one to three yields the stated log-refined bounds.
-Summing the \emph{count} errors over complete dyadic shells and the last
-partial shell costs a convergent geometric factor, since \(1-\eta\ge1/2\).
-Divide by \(N\), absorb the fixed shift error and use \(\eta>\delta_d\)
-to absorb the logarithm.
+For \(\lambda=d\), Lemma~\ref{marginlemma} shows that both powers of \(X\)
+are at most \(X^{1-\eta}\) with \(\eta>\delta_d\): indeed
+\(da_k+\gamma_k=1-a_k(s_k-d)\) and \(\nu_k-da_k=1-a_k(d-t_k)\). For
+\((d,\lambda)=(2,1)\) both exponents equal \(5/6\). Substitution in
+degrees one to three yields the stated logarithmically refined bounds.
+Summing the count errors over the complete dyadic ranges and the last
+partial range costs a convergent geometric factor, since
+\(1-\eta\ge1/2\). Divide by \(N\), absorb the fixed shift error, and use
+\(\eta>\delta_d\) to absorb the logarithm.
 
-For effectivity, test successive precisions \(L\) in \eqref{reflection}.
-At each prime, cycle phase and precision, only the finitely many
-\(|v|\le(L-1)/v_p(c)\) can contribute. Test \(t=1\) and every jump in
-\((1,c)\), including all tuples tied at a jump. The compactness bound
-ensures termination. The preperiod, unit residues and threshold
+\emph{Effectivity.} Test successive precisions \(L\) in
+\eqref{reflection}. At each prime, phase and precision, only the
+finitely many \(v\) with \(|v|\le(L-1)/v_p(c)\) contribute. Test \(t=1\)
+and every jump in \((1,c)\), including all tuples tied at a jump.
+Lemma~\ref{losslemma} ensures that the search terminates. The preperiod,
+the unit residues and the threshold
 \(k-v_i\ge\max(1,\text{preperiod},\lceil(L-1)/v_p(c)\rceil)\)
 are computable. The same search terminates on the dyadic cuts of the
 odd prime-power degrees. For a nonresonant quadratic use the explicit
-valuation test. The remaining products, geometric bounds and constants
-of the two analytic estimates are effective.
+valuation test of Proposition~\ref{coeff}. The remaining products,
+geometric bounds and constants of the two analytic estimates are
+effective.
 \end{proof}
 
 \section{Formal verification and data availability}
 The \repo{notes/phase18/verification.md}{checkpoint audit} records Lean
 4.36.0 kernel replay with propositional extensionality, classical choice
 and quotient soundness. The independent
-\lean{StonehamStatements}{31}{public statement} uses the series starting
-at one. The proof's zero-index axis at dilation \(c\) equals
-\(c\alpha_{b,c}\), term by term after reindexing.
+\lean{StonehamStatements}{31}{public statement} uses the series
+\(\alpha_{b,c}\) starting at \(j=1\). Internally the proofs work with the
+series \(\sum_{j\ge0}c^{-j}b^{-c^{j+1}}\), which equals \(c\alpha_{b,c}\)
+term by term after reindexing. A statement check accompanying this
+manuscript confirms the interface equality by definitional unfolding and
+audits the axioms of the fifteen declarations named below and in the
+verification map; each depends on at most the three axioms above.
 The accompanying verification map distinguishes complete declarations,
 implications and finite certificates. In particular the all-degree
 least-order formula is a written proof. Exact Python commands, parameters
@@ -688,6 +1214,29 @@ and observed outputs are given alongside the source. The superseded
 \repo{papers/01-stoneham-polynomials}{first edition} retains the one-axis
 product proofs, the binary square's initial denominator table and the
 worked figures.
+
+The following names identify the complete kernel declarations for the
+statements labelled \emph{Kernel-verified}. The two profile names include
+the namespace to distinguish the squares.
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+\toprule Statement & Lean declaration \\ \midrule
+A, B & \texttt{coprime\_polynomial\_normal}, \texttt{coprime\_joint\_powers}\\
+Radix 48 (Section~1) & \texttt{square\_nonnormal\_48}\\
+Proposition~\ref{massprop} & \texttt{periodic\_upper\_mass\_nonzero}\\
+Common prime (Section~2) & \texttt{same\_prime\_sum\_normal}\\
+Square of \(\alpha_{2,3}\) (Section~2) & \texttt{StonehamSquare.exact\_profile}\\
+Theorem~\ref{square} & \texttt{ParameterTwoSquare.exact\_profile}, \texttt{square\_normal}\\
+Theorem~\ref{quad} & \texttt{normal\_iff\_upper\_denominator}\\
+Resonant prefix (Section~3) & \texttt{quadratic\_upper\_den\_eq\_quadZ}\\
+Theorem~\ref{special} & \texttt{odd\_prime\_power\_degree\_polynomial\_normal}\\
+ & \texttt{quartic\_polynomial\_normal}\\ \bottomrule
+\end{tabular}
+\end{center}
+The \href{https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/nonlinear.md}{nonlinear schedule note}
+gives the written curvature proof for the synthetic cubic schedule and
+the derivation behind Proposition~\ref{plateaus} and
+Remark~\ref{curvature}; neither is a Lean theorem.
 
 \section{Use of AI tools}
 This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.

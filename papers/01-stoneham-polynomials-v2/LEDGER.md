@@ -13,9 +13,11 @@ This ledger uses the numbering of [version 2.0](paper.pdf). A kernel label conce
 - Mira Cult (Mira-acc), *Normality research*, pinned revision d699a69, 23 September 2026, S07/S09, and *Normality research #2*, pinned revision 41b5a78, 7 October 2026, S08. The Gist revision timestamps are 17:18:05 UTC and 16:31:31 UTC respectively. The October archive identifies S08 as a conventional proof awaiting external review. Its Theorem 1.1 explicitly covers q = c > 2 and states an effective power saving in synchronized star discrepancy. Its Corollaries 1.2 and 1.3 state ordinary joint powers and independence of polynomial classes modulo constants. The proof uses Vandehey’s Corollary 1.2, a nonintegral cyclotomic tail and monicity. It explicitly leaves q = 2 outside its polynomial theorem. [September archive][sep] · [October archive][oct]
 - Captain Sude’s September repositories give a two-positive-summand theorem and a single-series prime-support criterion. These concern sums and linear series. Mira Cult’s November write-up also treats families indexed by prime and order. The powers in Theorem B are powers of one real value. [Two-sum paper][sude] · [Prime support][support] · [November write-up][nov]
 
-The search on 25 November 2026 used arXiv title/abstract records, journal and institutional archives, the two Gist revisions, the references in Kano and Vandehey, and the [archived literature comparison](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/papers/01-stoneham-polynomials/REVIEW.md). Queries included “Stoneham polynomial normality”, “simultaneous normality powers Stoneham”, “Stoneham dyadic mass quadratic normality”, “rings normal numbers Kano Shiokawa” and “Stoneham polynomial discrepancy”. A zbMATH Open query returned a challenge and Google Scholar returned a rate limit. MathSciNet was not consulted. The historical comparisons are limited to the sources identified here; independent human specialist review remains outstanding.
+The search on 25 November 2026 used arXiv title/abstract records, journal and institutional archives, the two Gist revisions, the references in Kano and Vandehey, and the [archived literature comparison](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/papers/01-stoneham-polynomials/REVIEW.md). Queries included “Stoneham polynomial normality”, “simultaneous normality powers Stoneham”, “Stoneham dyadic mass quadratic normality”, “rings normal numbers Kano Shiokawa” and “Stoneham polynomial discrepancy”. A zbMATH Open query returned a challenge and Google Scholar returned a rate limit. The original search did not include MathSciNet. The historical comparisons are limited to the sources identified here; independent human specialist review remains outstanding.
 
-### Theorem A: Polynomial images
+The revision checked the Math-Net article record and author listing for N. M. Korobov (1956), issue 20(5), pp. 649–660, identifier im3836. The zbMATH Open structured-search API returned zero records for the literal Anywhere queries “Stoneham quadratic normality” and “Kraft inequality factorial valuation”. “Optimal prefix codes” returned, among others, Linder–Tarokh–Zeger on optimizing mean code length, and work on alphabetic codes. Theorem 5.1 minimizes an integer length cost corrected by factorial valuations with a strict dyadic budget. These queries do not establish priority. An attempt at the MathSciNet publications search for Kraft inequalities and optimal prefix codes reached institutional sign-in. A public site-restricted search did not supply a review of the stated problem. A subscriber search and specialist comparison remain outstanding. [Math-Net][joint] · [Zbl 0905.94024](https://zbmath.org/0905.94024) · [Zbl 0731.94008](https://zbmath.org/0731.94008)
+
+### Theorem A: Mira Cult’s S08 Theorem 1.1(a), ordinary polynomial images
 
 - **Statement and hypotheses:** For coprime b ≥ 2, c > 2, every nonconstant P ∈ ℚ[X] gives a base-b normal P(α).
 - **Evidence:** Kernel-verified. The complete positive-index statement is `coprime_polynomial_normal`, with the interface equality in check.lean.
@@ -26,7 +28,7 @@ The search on 25 November 2026 used arXiv title/abstract records, journal and in
 - **Search record:** The polynomial-value, normal-ring and concatenation queries above distinguish applying P to a real value from applying P to its insertion indices.
 - **Dependencies and outstanding review:** Check the normalization in passing from the dilated zero-index axis to the positive-index series and the reach of older normal-ring criteria.
 
-### Theorem B: Synchronized powers
+### Theorem B: Mira Cult’s S08 Corollary 1.2, synchronized powers
 
 - **Statement and hypotheses:** For distinct positive rᵢ, the synchronized shifts of $(\alpha^{r_1},\ldots,\alpha^{r_m})$ visit each half-open box with frequency equal to its volume under the hypotheses of A.
 - **Evidence:** Kernel-verified. `coprime_joint_powers` includes the limiting frequency, the endpoints and the common starting position.
@@ -116,23 +118,45 @@ The search on 25 November 2026 used arXiv title/abstract records, journal and in
 
 ### Theorem 5.1: Least orbit order and the interval J_d
 
-- **Statement and hypotheses:** For all d ≥ 1 the minimum of Φ(c) over multiplicity vectors of size d with Kraft sum K(c) < 2 equals Σ_{k=1}^d ⌊log₂ k⌋. For d ≥ 2 the mass attains valuation v₂(d!) + F(d) precisely on J_d. For 2ʳ−1 ≤ d ≤ 2^(r+1)−2 its left endpoint is 2−2^(1−r), included. Its right endpoint is 2 if d = 2ʳ−1 and 2−2^(−r) otherwise, excluded.
+- **Statement and hypotheses:** For all d ≥ 1 the minimum of Φ(m) over multiplicity vectors of size d with Kraft sum K(m) < 2 equals Σ_{k=1}^d ⌊log₂ k⌋. For d ≥ 2 the mass attains valuation v₂(d!) + F(d) precisely on J_d. For 2ʳ−1 ≤ d ≤ 2^(r+1)−2 its left endpoint is 2−2^(1−r), included. Its right endpoint is 2 if d = 2ʳ−1 and 2−2^(−r) otherwise, excluded.
 - **Evidence:** Paper proof. Section 5 counts slack at every level and classifies equality. Dynamic programming through 300 checks examples.
 - **Earliest relevant literature:** Legendre’s factorial valuation is the elementary counting input. The digit problem arises from the [Stoneham][stoneham] schedule.
 - **Closest published results:** The normal-ring and orbit-discrepancy sources above give no equality classification for this constrained minimum.
 - **Closest unpublished or public-repository results:** [Finite conjecture and checks][first]; [all-degree proof][second], Thm. 1 and Cor. 2. [Mira, S08][oct] uses a different obstruction for q > 2.
 - **Relation:** Proves the checkpoint’s earlier finite pattern for all d. It establishes nonvanishing on J_d only.
-- **Search record:** Followed the factorial, binary Kraft-budget and least-loss formulations in both notes. No exhaustive search of prefix-code optimization literature was conducted.
+- **Search record:** Followed the factorial, binary Kraft-budget and least-loss formulations in both notes. The prefix-code and Kraft-inequality queries and access limits are recorded above.
 - **Dependencies and outstanding review:** Check completeness of the minimizing multiplicities at d = 2ʳ−1 and possible antecedents in combinatorial optimization.
 
-### Theorem 6.1: Effective discrepancy
+### Proposition 5.2 and Remark 5.3: The open-plateau test and the scope of the curvature method
+
+- **Statement and hypotheses:** Let D\* = {0} ∪ {2^(−i) : i ≥ 0} and dD\* the set of sums of d elements. (1) dD\* is compact and countable; its complementary open intervals in (1,2) (the plateaus) have total measure one, M_d is constant on each, the distribution of M_d(t) for uniform t is purely atomic, and the zero set of M_d is null if and only if M_d is nonzero on every plateau. (2) For odd b ≥ 3, nonvanishing on every plateau implies normality of every rational polynomial of degree d in α(b,2). Remark 5.3: the test holds in the degrees of Theorems 4.1 and 4.3, fails in degree 2 (M_2 = 0 on [3/2,2)), and is undetermined in every other degree; the curvature argument that proves normality of the square of the synthetic schedule Σ 3^(−v₃(i)) 2^(−2i³) shows that every level set of its mass is null, a conclusion that is false for the dyadic mass in degree 2, so that argument does not apply to α(b,2)² − 2α(b,2).
+- **Evidence:** Paper proof (§5.1). The block step uses `fixed_support_orbit_estimate` through Lemma 2.5.
+- **Earliest relevant literature:** none located for this measure-theoretic formulation; the transfer uses the rational-prefix method of [Stoneham][stoneham] and [Kano][kano].
+- **Closest published results:** none in the sources examined.
+- **Closest unpublished or public-repository results:** [Phase 19 nonlinear note](https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/nonlinear.md), dyadic paragraph after “Scope of the jump argument”, with its [independent audit](https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/reviews/nonlinear.md), §5 (“closed as stated; it fails in degree 2”).
+- **Relation:** A sufficient condition only. It does not settle any new degree, the resonant quadratic or whole-shell nonvanishing, all of which remain open.
+- **Search record:** Covered by the dyadic-mass and quadratic queries above; no separate search.
+- **Dependencies and outstanding review:** Check that the endpoints of the failed sets E_L are insertion points, the failed-position density bound 2|E_L|, and the statement that the curvature conclusion fails for M_2.
+
+### Lemma 6.2: Vandehey’s all-length estimate with repaired proof
+
+- **Statement and hypotheses:** For b ≥ 2, a finite set 𝒫 of primes not dividing b, and k ≥ 0, |Σ_{n=1}^T e(yb^n/q)| ≤ (A_k q^(a_k) T^(γ_k) + B_k q^(−a_k) T^(ν_k))(1 + log q)^(2^(−k)) for every q supported on 𝒫, y prime to q and T ≥ 1, with effective constants depending on b, 𝒫, k.
+- **Evidence:** Paper proof, modifying the proof of [Vandehey][van], preprint Theorem 5.1, eqs. (11)–(13); depth zero is preprint Lemma 2.3, eq. (7).
+- **Earliest relevant literature:** [Vandehey][van], 2016 preprint and 2019 journal version.
+- **Closest published results:** The statement coincides with preprint Theorem 5.1, pp. 13–14. Its proof forms the auxiliary divisor in (12) from the product of all primes of the ambient set, so the divisor need not divide the current modulus when a prime is absent; inner moduli in (11) can lose primes.
+- **Closest unpublished or public-repository results:** [Checkpoint calculation][rate] (support-restriction remark).
+- **Relation:** Same statement, repaired proof (auxiliary divisor from rad(q), constants maximized over subsets of 𝒫). No priority is claimed.
+- **Search record:** The journal edition’s proof was not accessible; whether it corrects (12) is unverified.
+- **Dependencies and outstanding review:** Check the gcd identity gcd(q, b^(iτ) − 1) = g·gcd(i, q/g), which needs rad(q′) = rad(q), and uniformity of the constants when an inner modulus loses a prime.
+
+### Theorem 6.1: Explicit scalar discrepancy exponent
 
 - **Statement and hypotheses:** For c > 2 every degree d ≥ 1 has scalar interval discrepancy ≤ C N^(−1/[2(2^(d+1)−2)]) for all N ≥ 2. For c = 2 the assertion covers degree one, odd prime-power degrees and quadratics satisfying the coefficient test. In covered degrees 1,2,3 the refined pairs of saving and log exponent are (1/2,2), (1/6,3/2), (1/14,5/4).
 - **Evidence:** Lean-supported paper proof. The finite support transfer and denominator, tail, length and exponent lemmas are identified in [the map](VERIFICATION.md).
 - **Earliest relevant literature:** [Stoneham][stoneham], pp. 282–284, on digits in periodic fractions; [Kano][kano], (13), pp. 914–915, on lacunary-series discrepancy.
-- **Closest published results:** [Bailey–Crandall][bc], p. 535, give the linear rate for the perturbed orbit. [Bugeaud][bug], §5.1, records the real orbit rate. [Vandehey][van], Thm. 5.1, pp. 13–14, supplies the two all-length terms.
-- **Closest unpublished or public-repository results:** [Mira, S08][oct], Thm. 1.1, already states an effective vector power saving for q > 2. Its analytic input is Vandehey’s Cor. 1.2. The [checkpoint calculation][rate] specifies scalar exponents and treats stated dyadic cases.
-- **Relation:** An explicit scalar application of published analytic estimates. No optimal exponent or improvement on an unspecified exponent is asserted.
+- **Closest published results:** [Bailey–Crandall][bc], p. 535, give the linear rate for the perturbed orbit. [Bugeaud][bug], §5.1, records the real orbit rate. [Vandehey][van], Thm. 5.1, pp. 13–14, states the two all-length terms. Lemma 6.2 (Paper proof) repairs the auxiliary divisor in preprint (12), starting with Lemma 2.3. The journal preview excludes the proof, so the status of (12) in the journal edition remains unverified.
+- **Closest unpublished or public-repository results:** [Mira, S08][oct], Thm. 1.1(b), already states an effective vector power saving for q > 2. Its analytic input is Vandehey’s Cor. 1.2. The [checkpoint calculation][rate] specifies scalar exponents and treats stated dyadic cases.
+- **Relation:** For the ordinary case the refinement over S08 is the explicit scalar exponent. No optimal exponent or improvement on an unspecified exponent is asserted.
 - **Search record:** Compared scalar discrepancy, synchronized star discrepancy, arbitrary terminal cuts and the short-orbit estimate against both primary texts.
 - **Dependencies and outstanding review:** Check the dependence on prime support after frequency reduction, counts on partial shells and effective constants. Erdős–Turán is used in the interval normalization of [Bailey–Crandall][bc], Thm. 2.2(9), p. 530.
 
