@@ -1,0 +1,83 @@
+name: Publish to alphaXiv
+# Manual only. Publishing is public and screened by alphaXiv; it is never triggered by a push.
+# Before the first run, the owner creates the GitHub environment `alphaxiv` with themselves as a required
+# reviewer and stores the alphaXiv API key (Settings > MCP/API on alphaxiv.org) as its secret ALPHAXIV_API_KEY.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Release tag or commit to publish from (must contain the recorded PDF)
+        required: true
+        default: manuscripts-v2.0.0
+      paper:
+        description: Manuscript directory under papers/
+        required: true
+        type: choice
+        options:
+          - 06-multiplicative-lambert
+          - 01-stoneham-polynomials-v2
+          - 07-synthetic-expansions
+          - 10-discrepancy-arithmetic
+          - 08-stoneham-product-orbits
+          - 02-localized-normality-v2
+          - 05-classical-denominators-v2
+          - 04-arithmetic-certificates-v2
+          - 03-signed-resonance-v1.2
+          - 09-erdos-borwein-note
+      publish:
+        description: Actually submit (unchecked = dry run that only validates and prints the request)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: alphaxiv   # alphaXiv accepts one in-progress submission per account
+  cancel-in-progress: false
+jobs:
+  dry-run:
+    if: ${{ !inputs.publish }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Check the archived PDFs and their review records
+        run: python3 -B papers/check_release.py --require-reviews
+      - name: Prepare or publish
+        env:
+          ALPHAXIV_API_KEY: ${{ secrets.ALPHAXIV_API_KEY }}
+        run: |
+          set -o pipefail
+          flag=""
+          if [ "${{ inputs.publish }}" = "true" ]; then flag="--publish"; fi
+          python3 -B scripts/alphaxiv_publish.py "papers/${{ inputs.paper }}" $flag --result "$RUNNER_TEMP/alphaxiv.json" | tee "$RUNNER_TEMP/request.txt"
+          {
+            echo "### alphaXiv: ${{ inputs.paper }} at ${{ inputs.ref }}"
+            echo '```json'; cat "$RUNNER_TEMP/request.txt"; echo '```'
+            if [ -f "$RUNNER_TEMP/alphaxiv.json" ]; then echo '```json'; cat "$RUNNER_TEMP/alphaxiv.json"; echo '```'; fi
+            echo "Record the returned URL in papers/alphaxiv-records.toml so later versions use new_version_of."
+          } >> "$GITHUB_STEP_SUMMARY"
+  publish:
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-latest
+    environment: alphaxiv
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Check the archived PDFs and their review records
+        run: python3 -B papers/check_release.py --require-reviews
+      - name: Prepare or publish
+        env:
+          ALPHAXIV_API_KEY: ${{ secrets.ALPHAXIV_API_KEY }}
+        run: |
+          set -o pipefail
+          flag=""
+          if [ "${{ inputs.publish }}" = "true" ]; then flag="--publish"; fi
+          python3 -B scripts/alphaxiv_publish.py "papers/${{ inputs.paper }}" $flag --result "$RUNNER_TEMP/alphaxiv.json" | tee "$RUNNER_TEMP/request.txt"
+          {
+            echo "### alphaXiv: ${{ inputs.paper }} at ${{ inputs.ref }}"
+            echo '```json'; cat "$RUNNER_TEMP/request.txt"; echo '```'
+            if [ -f "$RUNNER_TEMP/alphaxiv.json" ]; then echo '```json'; cat "$RUNNER_TEMP/alphaxiv.json"; echo '```'; fi
+            echo "Record the returned URL in papers/alphaxiv-records.toml so later versions use new_version_of."
+          } >> "$GITHUB_STEP_SUMMARY"

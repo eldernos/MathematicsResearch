@@ -1,0 +1,31 @@
+# alphaXiv AI Track submission settings for this manuscript, read by scripts/alphaxiv_publish.py.
+# Title, abstract and authors come from ../metadata.toml. Licence and subject category are chosen in the
+# alphaXiv web form (they are not API fields); proposed: math.NT, licence per docs/licensing-proposal.md.
+#
+# OWNER ACTION: review every rating and tool record below against what actually happened, then set
+# owner_confirmed = true. Ratings are "ai", "mixed" or "human" (alphaXiv requires all five stages).
+owner_confirmed = false
+url_slug = "normality-localized-logarithms-polylogarithms"
+
+[ai_disclosure.stages]
+idea = "mixed"         # proposed: the owner chose the questions and directions; models proposed the conjectures
+literature = "ai"
+experiments = "ai"     # exact computations and Lean formalization
+analysis = "ai"
+writing = "ai"
+
+[[ai_disclosure.tools]]
+model = "Claude, GPT and Gemini models (several versions)"
+harness = "Claude Code, OpenAI Codex and Antigravity agents orchestrated in T3 Code"
+contribution = "Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases"
+
+[[ai_disclosure.tools]]
+model = "Claude Sonnet 5.5"
+harness = "Claude Code (T3 Code)"
+contribution = "Drafted and revised the manuscript, Lean statement checks"
+
+[[ai_disclosure.tools]]
+model = "GPT-6.2 Sol"
+harness = "OpenAI Codex (T3 Code)"
+contribution = "Independent referee report"
+

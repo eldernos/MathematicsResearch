@@ -1,0 +1,41 @@
+# alphaXiv AI Track submission settings for this manuscript, read by scripts/alphaxiv_publish.py.
+# Title, abstract and authors come from ../metadata.toml. Licence and subject category are chosen in the
+# alphaXiv web form (they are not API fields); proposed: math.NT, licence per docs/licensing-proposal.md.
+#
+# OWNER ACTION: review every rating and tool record below against what actually happened, then set
+# owner_confirmed = true. Ratings are "ai", "mixed" or "human" (alphaXiv requires all five stages).
+owner_confirmed = false
+url_slug = "resonance-discrepancy-signed-stoneham-expansions"
+
+[ai_disclosure.stages]
+idea = "mixed"         # proposed: the owner chose the questions and directions; models proposed the conjectures
+literature = "ai"
+experiments = "ai"     # exact computations and Lean formalization
+analysis = "ai"
+writing = "ai"
+
+[[ai_disclosure.tools]]
+model = "Claude, GPT and Gemini models (several versions)"
+harness = "Claude Code, OpenAI Codex and Antigravity agents orchestrated in T3 Code"
+contribution = "Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases"
+
+[[ai_disclosure.tools]]
+model = "GPT models (OpenAI Codex)"
+harness = "OpenAI Codex"
+contribution = "Drafted the v1.1 exposition, figures and correspondence checks"
+
+[[ai_disclosure.tools]]
+model = "Gemini 4 Neon"
+harness = "Antigravity (T3 Code)"
+contribution = "Independent referee report (v1.1)"
+
+[[ai_disclosure.tools]]
+model = "Claude Sonnet 5.5"
+harness = "Claude Code (T3 Code)"
+contribution = "Independent referee report (v1.1)"
+
+[[ai_disclosure.tools]]
+model = "Claude Opus 5.5"
+harness = "Claude Code (T3 Code)"
+contribution = "Prepared the named-author edition"
+

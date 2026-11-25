@@ -1,0 +1,8 @@
+# alphaXiv records of published manuscripts, read by scripts/alphaxiv_publish.py.
+# After alphaXiv accepts a submission, add its URL here so that later versions are posted with
+# `new_version_of` instead of creating a duplicate record. One entry per manuscript directory.
+#
+# [[record]]
+# dir = "06-multiplicative-lambert"
+# alphaxiv = "https://www.alphaxiv.org/abs/<id>"
+# versions = [{ version = "1.0", release = "manuscripts-v2.0.0", published = "YYYY-MM-DD" }]
