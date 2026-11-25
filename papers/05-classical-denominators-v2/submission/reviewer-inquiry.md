@@ -9,11 +9,11 @@ I would appreciate your view on Theorem 2.2 of this preprint. Your corrected The
 Christopher Anderson\
 Independent Researcher
 
-## Legendre approximation at prescribed shifts
+## Restricted denominators and prescribed shifts
 
 Dear [Name],
 
-I would appreciate your view on Theorem 5.3 of this preprint. It fixes a binary shift of $\log 2$ or $\pi$, then uses an orthogonal polynomial kernel and rounds its moment on a least-common-multiple grid. Your work on Legendre polynomials and irrationality with Robinson gives the related integral comparison for logarithms. Is there a published construction that already obtains this same grid approximation with the multiplier prescribed independently of the degree? [Theorem and proof](../paper.pdf) · [Alladi and Robinson](https://doi.org/10.1515/crll.1980.318.137)
+I would appreciate your view on Theorem 5.3 of this preprint. It fixes a binary shift of $\log 2$ or $\pi$, then uses an orthogonal polynomial kernel and rounds its moment on the grid $(2^N\operatorname{lcm}(1,\dots,D))^{-1}\mathbb Z$. This is the denominator shape $d_m^sB^m$ of your Theorems 1 and 4 on convergents and irrationality measures of logarithms, with independent indices $N$ and $D$ in place of one index $m$. Does a published statement already give the nearest point of such a grid to $2^N\log 2$ or $2^N\pi$, or limit its distance from below along the independent indices? [Theorem and proof](../paper.pdf) · [Rivoal](https://doi.org/10.4171/RMI/519)
 
 Christopher Anderson\
 Independent Researcher
