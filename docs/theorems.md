@@ -2,7 +2,7 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1087 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1096 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
@@ -14,7 +14,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 - [Signed expansions, exact discrepancy and symbolic spectra](#signed-expansions-exact-discrepancy-and-symbolic-spectra) · 39 declarations
 - [Rational-orbit certificates](#rational-orbit-certificates) · 44 declarations
 - [Complementary coverage, rigidity and limitations of models](#complementary-coverage-rigidity-and-limitations-of-models) · 17 declarations
-- [Classical constant arithmetic](#classical-constant-arithmetic) · 225 declarations
+- [Classical constant arithmetic](#classical-constant-arithmetic) · 234 declarations
 
 ## Normality, discrepancy and Fourier criteria
 
@@ -2181,6 +2181,15 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`logShadow_adjacent_theta`](../NormalityChecker/AdjacentShadow.lean#L36) | Joint logarithmic denominator growth, including all primes in the open overlap. |
 | [`logShadow_adjacent_growth`](../NormalityChecker/AdjacentShadow.lean#L52) | At least one model in every sufficiently large adjacent pair has an exponential denominator. |
 
+### AffineDenominator
+
+[`NormalityChecker/AffineDenominator.lean`](../NormalityChecker/AffineDenominator.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AffineDenominator.feasible_iff_gcd`](../NormalityChecker/AffineDenominator.lean#L47) [CC-34](results.md#cc-34) | Feasibility of denominator removal in an affine integer combination. |
+| [`AffineDenominator.combined_error`](../NormalityChecker/AffineDenominator.lean#L69) [CC-34](results.md#cc-34) | The unwrapped error spent by an affine combination of approximations. |
+
 ### AggregateGaps
 
 [`NormalityChecker/AggregateGaps.lean`](../NormalityChecker/AggregateGaps.lean)
@@ -2376,6 +2385,20 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`logTwo_discrepancy_of_fixed_window`](../NormalityChecker/FixedGap.lean#L52) | The fixed-window estimate gives an explicit conditional discrepancy bound. |
 | [`middle_miss_intervals`](../NormalityChecker/FixedGap.lean#L59) | Missing the closed middle third for `k+1` successive binary shifts confines the starting value to either end of the unit interval, with exact endpoint… |
 | [`middle_miss_volume`](../NormalityChecker/FixedGap.lean#L85) | Lebesgue probability of `k+1` consecutive misses, for a uniform starting point. |
+
+### FredholmOrbit
+
+[`NormalityChecker/FredholmOrbit.lean`](../NormalityChecker/FredholmOrbit.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`FredholmOrbit.summable_fredholm`](../NormalityChecker/FredholmOrbit.lean#L13) |  |
+| [`FredholmOrbit.fredholm_eq`](../NormalityChecker/FredholmOrbit.lean#L18) [CC-31](results.md#cc-31) |  |
+| [`FredholmOrbit.product_at_one`](../NormalityChecker/FredholmOrbit.lean#L25) | The finite product identity also holds at the removable point w = 1. |
+| [`FredholmOrbit.radial_cutoff`](../NormalityChecker/FredholmOrbit.lean#L60) | Replacing radial weights by a sharp cutoff incurs error at most two for any real nonnegative observable bounded by two. |
+| [`FredholmOrbit.radialDeficit_eq`](../NormalityChecker/FredholmOrbit.lean#L108) |  |
+| [`FredholmOrbit.fredholm_radial_deficit`](../NormalityChecker/FredholmOrbit.lean#L136) [CC-31](results.md#cc-31) [CC-35](results.md#cc-35) | Uniform radial correspondence with a sharp binary cutoff. |
+| [`FredholmOrbit.discrepancy_lt_one_iff_radial`](../NormalityChecker/FredholmOrbit.lean#L147) [CC-31](results.md#cc-31) | A positive normalized radial deficit is equivalent to strict asymptotic discrepancy. |
 
 ### GaussianLogarithmCharacters
 

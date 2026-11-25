@@ -110,6 +110,15 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-28](#cc-28) | A local law for individual Erdős–Borwein divisor coefficients | Written proof | V |
 | [CC-29](#cc-29) | A narrower divisor band for the Erdős–Borwein Fourier phase | Lean + written deduction | V |
 | [CC-30](#cc-30) | A 32-position obstruction to the independent Poisson model for Erdős–Borwein | Lean + written deduction | V |
+| [CC-31](#cc-31) | A radial criterion for strict binary discrepancy | Lean | V |
+| [CC-33](#cc-33) | The mesh contribution to pooled prime variance | Written proof | V |
+| [CC-34](#cc-34) | Exact feasibility and error of affine denominator removal | Lean | V |
+| [CC-35](#cc-35) | Short-window radial growth deficit for the Erdős–Borwein orbit | Lean + written deduction | V |
+| [CC-37](#cc-37) | Normal fixed-width projections of the logarithm | Written proof | V |
+| [CC-38](#cc-38) | Incomplete runs and lower transition density | Written proof | V |
+| [CC-39](#cc-39) | Rational ambiguity in eventual upper-band data | Written proof | V |
+| [CC-40](#cc-40) | Affine combinations of nearby Taylor cutoffs retain the odd-denominator rate | Written proof | V |
+| [CC-41](#cc-41) | Cyclotomic trace sources with half-integral binary exponents | Written proof | V |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -117,6 +126,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [DS-10](#ds-10) | Division by an integer can change the discrepancy factor | Lean | III |
 | [AC-09](#ac-09) | Concentration near finitely many residues forces nonnormality | Lean | IV |
 | [AC-10](#ac-10) | Accurate polynomial-denominator models are rare on a fixed schedule | Lean + written deduction | IV |
+| [CC-32](#cc-32) | A moving product parameter can miss maximal discrepancy | Written proof | V |
+| [CC-36](#cc-36) | Multiplier height and escape from a sparse binary orbit | Written proof | V |
 
 ★ marks the principal results presented in the [README](../README.md).
 
@@ -2359,6 +2370,137 @@ Define a comparison law *Q*₃₂ for the same packed integer by using independe
 - **Computation:** [erdos_borwein_poisson.py](../scripts/erdos_borwein_poisson.py) · [erdos_borwein_arrivals.py](../scripts/erdos_borwein_arrivals.py)
 - **Related:** [CC-20](#cc-20) · [CC-21](#cc-21) · [CC-28](#cc-28) · [CC-29](#cc-29)
 
+<a id="cc-31"></a>
+
+### CC-31 · A radial criterion for strict binary discrepancy
+
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+At radius exp(−2⁻ᴺ), the positive-axis value of the Fredholm series minus its real part at angle 2π*x* differs from the unnormalized first binary frequency deficit by at most two. Strict upper binary discrepancy below one is equivalent to a positive lower limit of this radial difference divided by *N*.
+
+**Scope.** Every real angle parameter and every integer cutoff. The equivalence requires a lower limit over all growing prefixes.
+
+- **Lean:** [`discrepancy_lt_one_iff_radial`](../NormalityChecker/FredholmOrbit.lean#L147) · [`fredholm_radial_deficit`](../NormalityChecker/FredholmOrbit.lean#L136) · [`fredholm_eq`](../NormalityChecker/FredholmOrbit.lean#L18)
+- **Fully qualified:** `NormalityChecker.FredholmOrbit.discrepancy_lt_one_iff_radial`, `NormalityChecker.FredholmOrbit.fredholm_radial_deficit`, `NormalityChecker.FredholmOrbit.fredholm_eq`
+- **Proof:** [fredholm-and-products.md § a uniform radial comparison](../notes/phase15/fredholm-and-products.md#a-uniform-radial-comparison)
+- **Computation:** [phase15_fredholm.py](../scripts/phase15_fredholm.py)
+
+<a id="cc-33"></a>
+
+### CC-33 · The mesh contribution to pooled prime variance
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For fixed equal mesh cells the prime-pooled conditional variance of the first primary character is one minus the squared first target moment times the squared sinc factor of a cell, up to a power-saving error.
+
+**Scope.** Uniform positions in a consecutive window of positive power length in the standard moving Taylor band, then uniform good primes per position. The error is uniform in the target sequence. A positive excess over the mesh floor for the logarithm remains open.
+
+- **Proof:** [pooled-prime-variance.md](../notes/phase15/pooled-prime-variance.md)
+- **External inputs:** Bourgain–Chang, Theorem 2.5 Erdős–Turán inequality Prime number theorem
+- **Computation:** [phase15_pooled_primes.py](../scripts/phase15_pooled_primes.py)
+- **Related:** [CC-24](#cc-24) · [CC-25](#cc-25)
+
+<a id="cc-34"></a>
+
+### CC-34 · Exact feasibility and error of affine denominator removal
+
+**Evidence:** Lean · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+A combination of numerators with integer coefficients summing to one vanishes modulo a given modulus exactly when the gcd of the modulus and all differences from the reference numerator divides that numerator. The combined unwrapped approximation error is bounded by the errors weighted by the absolute coefficients.
+
+**Scope.** Any nonempty finite family with a common denominator, including repeated numerators. Feasibility alone gives no useful upper bound on the cost of the coefficients.
+
+- **Lean:** [`feasible_iff_gcd`](../NormalityChecker/AffineDenominator.lean#L47) · [`combined_error`](../NormalityChecker/AffineDenominator.lean#L69)
+- **Fully qualified:** `NormalityChecker.AffineDenominator.feasible_iff_gcd`, `NormalityChecker.AffineDenominator.combined_error`
+- **Proof:** [affine-experiment.md](../notes/phase15/affine-experiment.md) · [nearby-taylor.md § feasible rows with large minimum height](../notes/phase15/nearby-taylor.md#feasible-rows-with-large-minimum-height)
+- **Computation:** [phase15_affine.py](../scripts/phase15_affine.py)
+
+<a id="cc-35"></a>
+
+### CC-35 · Short-window radial growth deficit for the Erdős–Borwein orbit
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For each exponent above 7/12 and at most one, the radial deficit of the Erdős–Borwein constant increases by at least a positive constant times the window length minus four on every sufficiently late window in Mira Cult’s theorem.
+
+**Scope.** A paper corollary of an external word-density input and the kernel radial bound. The constant depends on the exponent and the word 01. The conclusion concerns the actual Erdős–Borwein orbit.
+
+- **Lean:** [`fredholm_radial_deficit`](../NormalityChecker/FredholmOrbit.lean#L136)
+- **Fully qualified:** `NormalityChecker.FredholmOrbit.fredholm_radial_deficit`
+- **Proof:** [README.md § an external comparison on the actual real orbit](../notes/phase15/README.md#an-external-comparison-on-the-actual-real-orbit) · [erdos-local-limit.md](../notes/phase13/reviews/erdos-local-limit.md)
+- **External inputs:** Mira Cult, Every binary word occurs with positive density in the Erdős–Borwein constant
+- **Related:** [CC-30](#cc-30) · [CC-31](#cc-31)
+
+<a id="cc-37"></a>
+
+### CC-37 · Normal fixed-width projections of the logarithm
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Retain the binary logarithm terms whose index has cofactor at most a fixed width after removing all powers of primes in a fixed finite set containing three. The resulting real number is binary normal, and its shifted prefix denominator retains the full largest power of three up to every cutoff.
+
+**Scope.** Width and prime set are fixed before the orbit limit. Uniform cancellation as the width grows with the cutoff remains open.
+
+- **Proof:** [projection-and-returns.md](../notes/phase15/projection-and-returns.md)
+- **External inputs:** Vandehey’s fixed-prime-support exponential sum estimate Paper IV rational-orbit transfer
+- **Computation:** [phase15_projection.py](../scripts/phase15_projection.py)
+
+<a id="cc-38"></a>
+
+### CC-38 · Incomplete runs and lower transition density
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+The reciprocal of the upper mean return time is the lower transition density of the binary orbit. A bound below one on the normalized excess of run lengths over a fixed threshold, even just at dyadic cutoffs, gives positive lower density when the unfinished run is counted.
+
+**Scope.** Irrational binary expansions. The note gives an explicit sparse counterexample for completed runs alone and a logarithmic improvement in the finite discrepancy gap under a subcritical moment bound.
+
+- **Proof:** [projection-and-returns.md](../notes/phase15/projection-and-returns.md)
+- **Computation:** [phase15_projection.py](../scripts/phase15_projection.py)
+
+<a id="cc-39"></a>
+
+### CC-39 · Rational ambiguity in eventual upper-band data
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For diagonal beta-corrected logarithm prefixes, preserving all exact displacements, common-denominator bounds and first upper-band residues from some index onward specifies the limiting real number up to precisely the rational translates.
+
+**Scope.** The starting index may depend on the rational translate. At a fixed initial index the permissible rational subgroup is smaller.
+
+- **Proof:** [conditional-variation.md](../notes/phase15/conditional-variation.md)
+- **Computation:** [phase15_variation.py](../scripts/phase15_variation.py)
+
+<a id="cc-40"></a>
+
+### CC-40 · Affine combinations of nearby Taylor cutoffs retain the odd-denominator rate
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Take any finite family of binary logarithm Taylor cutoffs between *K* and *K* + *h*, with *h* = *o*(*K*). For every integer combination with coefficient sum one and any common binary shift, the logarithm of the reduced odd denominator is *K* + *o*(*K*), uniformly in all rows and coefficients.
+
+**Scope.** The number of cutoffs and coefficient height may grow without bound. With all cutoffs available and no precision constraint, the exact minimum odd-denominator rate at width *K*/2 is 1/4 and at width *K* is zero. The proof also computes the dyadic cost of an explicit family with controlled approximation error.
+
+- **Proof:** [nearby-taylor.md](../notes/phase15/nearby-taylor.md)
+- **External inputs:** Prime number theorem
+- **Computation:** [phase15_taylor.py](../scripts/phase15_taylor.py)
+- **Related:** [CC-03](#cc-03) · [CC-34](#cc-34)
+
+<a id="cc-41"></a>
+
+### CC-41 · Cyclotomic trace sources with half-integral binary exponents
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Suppose every root of a monic integer polynomial, after a common dyadic scaling, equals a root of unity times the same positive integer power of 1/√2. At every homogeneous real cutoff its logarithmic trace prefix equals an integer combination of real dyadic and Gaussian logarithm prefixes. For fixed rational formulas for ln 2 in this class, the least and second least denominator rates remain 5/12 and 13/30.
+
+**Scope.** Polynomial degree and root-of-unity order are unrestricted. The proof uses the common half-integral binary exponent and the fixed-coefficient optimum from CC-23. Other radii have separate truncation and precision costs.
+
+- **Proof:** [arithmetic-lifts.md](../notes/phase15/arithmetic-lifts.md)
+- **External inputs:** Cyclotomic distribution and Möbius inversion Phase 14 classification in CC-23
+- **Computation:** [phase15_arithmetic.py](../scripts/phase15_arithmetic.py)
+- **Related:** [CC-23](#cc-23) · [CC-34](#cc-34)
+
 ## Counterexamples and impossibility results
 
 <a id="ls-08"></a>
@@ -2518,6 +2660,32 @@ Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of le
 - **Proof:** [finite-support-discrepancy.md § how far polynomial denominator models can reach](../notes/finite-support-discrepancy.md#how-far-polynomial-denominator-models-can-reach)
 - **External inputs:** First Borel–Cantelli lemma (standard measure theory).
 - **Related:** [AC-01](#ac-01)
+
+<a id="cc-32"></a>
+
+### CC-32 · A moving product parameter can miss maximal discrepancy
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For any prescribed real sequence of interior parameters converging to one, an irrational binary orbit has discrepancy tending to one and normalized product log growth tending to zero along both that sequence and the endpoint. At every fixed positive interior parameter the same orbit attains maximal normalized log growth.
+
+**Scope.** The orbit may depend on the prescribed sequence. The argument extends the sparse separation construction from Phase 13.
+
+- **Proof:** [fredholm-and-products.md § a moving parameter still cannot recover a fixed interior deficit](../notes/phase15/fredholm-and-products.md#a-moving-parameter-still-cannot-recover-a-fixed-interior-deficit)
+- **Related:** [CC-31](#cc-31)
+
+<a id="cc-36"></a>
+
+### CC-36 · Multiplier height and escape from a sparse binary orbit
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For any prescribed subexponential multiplier height, some irrational has mean maximum cosine escape tending to zero even when a multiplier is chosen at each position. With exponentially large height, powers of three alone give a positive upper limiting adaptive mean for every irrational.
+
+**Scope.** The exponential-height assertion gives only an upper limit of the adaptive statistic. For any height sequence a sparse irrational can have lower limit zero.
+
+- **Proof:** [multiplier-height.md](../notes/phase15/multiplier-height.md)
+- **Computation:** [phase15_fredholm.py](../scripts/phase15_fredholm.py)
 
 ## Manuscripts
 

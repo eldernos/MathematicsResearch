@@ -784,3 +784,124 @@ lean = ["NormalityChecker.ErdosBorweinArrivals.one_bit_carry"]
 proof = ["notes/phase14/erdos-borwein-frequencies.md#a-test-for-independence-and-a-conditional-word-law", "notes/phase14/reviews/classical-frequencies.md"]
 computation = ["scripts/erdos_borwein_poisson.py", "scripts/erdos_borwein_arrivals.py"]
 related = ["CC-20", "CC-21", "CC-28", "CC-29"]
+
+[[result]]
+id = "CC-31"
+title = "A radial criterion for strict binary discrepancy"
+topic = "classical"
+status = "lean"
+statement = "At radius exp(−2⁻ᴺ), the positive-axis value of the Fredholm series minus its real part at angle 2π*x* differs from the unnormalized first binary frequency deficit by at most two. Strict upper binary discrepancy below one is equivalent to a positive lower limit of this radial difference divided by *N*."
+scope = "Every real angle parameter and every integer cutoff. The equivalence requires a lower limit over all growing prefixes."
+lean = ["NormalityChecker.FredholmOrbit.discrepancy_lt_one_iff_radial", "NormalityChecker.FredholmOrbit.fredholm_radial_deficit", "NormalityChecker.FredholmOrbit.fredholm_eq"]
+proof = ["notes/phase15/fredholm-and-products.md#a-uniform-radial-comparison"]
+computation = ["scripts/phase15_fredholm.py"]
+
+[[result]]
+id = "CC-32"
+title = "A moving product parameter can miss maximal discrepancy"
+topic = "counterexamples"
+status = "paper"
+statement = "For any prescribed real sequence of interior parameters converging to one, an irrational binary orbit has discrepancy tending to one and normalized product log growth tending to zero along both that sequence and the endpoint. At every fixed positive interior parameter the same orbit attains maximal normalized log growth."
+scope = "The orbit may depend on the prescribed sequence. The argument extends the sparse separation construction from Phase 13."
+proof = ["notes/phase15/fredholm-and-products.md#a-moving-parameter-still-cannot-recover-a-fixed-interior-deficit"]
+related = ["CC-31"]
+
+[[result]]
+id = "CC-33"
+title = "The mesh contribution to pooled prime variance"
+topic = "classical"
+status = "paper"
+statement = "For fixed equal mesh cells the prime-pooled conditional variance of the first primary character is one minus the squared first target moment times the squared sinc factor of a cell, up to a power-saving error."
+scope = "Uniform positions in a consecutive window of positive power length in the standard moving Taylor band, then uniform good primes per position. The error is uniform in the target sequence. A positive excess over the mesh floor for the logarithm remains open."
+inputs = ["Bourgain–Chang, Theorem 2.5", "Erdős–Turán inequality", "Prime number theorem"]
+proof = ["notes/phase15/pooled-prime-variance.md"]
+computation = ["scripts/phase15_pooled_primes.py"]
+related = ["CC-24", "CC-25"]
+
+[[result]]
+id = "CC-34"
+title = "Exact feasibility and error of affine denominator removal"
+topic = "classical"
+status = "lean"
+statement = "A combination of numerators with integer coefficients summing to one vanishes modulo a given modulus exactly when the gcd of the modulus and all differences from the reference numerator divides that numerator. The combined unwrapped approximation error is bounded by the errors weighted by the absolute coefficients."
+scope = "Any nonempty finite family with a common denominator, including repeated numerators. Feasibility alone gives no useful upper bound on the cost of the coefficients."
+lean = ["NormalityChecker.AffineDenominator.feasible_iff_gcd", "NormalityChecker.AffineDenominator.combined_error"]
+proof = ["notes/phase15/affine-experiment.md", "notes/phase15/nearby-taylor.md#feasible-rows-with-large-minimum-height"]
+computation = ["scripts/phase15_affine.py"]
+
+[[result]]
+id = "CC-35"
+title = "Short-window radial growth deficit for the Erdős–Borwein orbit"
+topic = "classical"
+status = "lean+paper"
+statement = "For each exponent above 7/12 and at most one, the radial deficit of the Erdős–Borwein constant increases by at least a positive constant times the window length minus four on every sufficiently late window in Mira Cult’s theorem."
+scope = "A paper corollary of an external word-density input and the kernel radial bound. The constant depends on the exponent and the word 01. The conclusion concerns the actual Erdős–Borwein orbit."
+lean = ["NormalityChecker.FredholmOrbit.fredholm_radial_deficit"]
+inputs = ["Mira Cult, Every binary word occurs with positive density in the Erdős–Borwein constant"]
+proof = ["notes/phase15/README.md#an-external-comparison-on-the-actual-real-orbit", "notes/phase13/reviews/erdos-local-limit.md"]
+related = ["CC-30", "CC-31"]
+
+[[result]]
+id = "CC-36"
+title = "Multiplier height and escape from a sparse binary orbit"
+topic = "counterexamples"
+status = "paper"
+statement = "For any prescribed subexponential multiplier height, some irrational has mean maximum cosine escape tending to zero even when a multiplier is chosen at each position. With exponentially large height, powers of three alone give a positive upper limiting adaptive mean for every irrational."
+scope = "The exponential-height assertion gives only an upper limit of the adaptive statistic. For any height sequence a sparse irrational can have lower limit zero."
+proof = ["notes/phase15/multiplier-height.md"]
+computation = ["scripts/phase15_fredholm.py"]
+
+[[result]]
+id = "CC-37"
+title = "Normal fixed-width projections of the logarithm"
+topic = "classical"
+status = "paper"
+statement = "Retain the binary logarithm terms whose index has cofactor at most a fixed width after removing all powers of primes in a fixed finite set containing three. The resulting real number is binary normal, and its shifted prefix denominator retains the full largest power of three up to every cutoff."
+scope = "Width and prime set are fixed before the orbit limit. Uniform cancellation as the width grows with the cutoff remains open."
+inputs = ["Vandehey’s fixed-prime-support exponential sum estimate", "Paper IV rational-orbit transfer"]
+proof = ["notes/phase15/projection-and-returns.md"]
+computation = ["scripts/phase15_projection.py"]
+
+[[result]]
+id = "CC-38"
+title = "Incomplete runs and lower transition density"
+topic = "classical"
+status = "paper"
+statement = "The reciprocal of the upper mean return time is the lower transition density of the binary orbit. A bound below one on the normalized excess of run lengths over a fixed threshold, even just at dyadic cutoffs, gives positive lower density when the unfinished run is counted."
+scope = "Irrational binary expansions. The note gives an explicit sparse counterexample for completed runs alone and a logarithmic improvement in the finite discrepancy gap under a subcritical moment bound."
+proof = ["notes/phase15/projection-and-returns.md"]
+computation = ["scripts/phase15_projection.py"]
+
+[[result]]
+id = "CC-39"
+title = "Rational ambiguity in eventual upper-band data"
+topic = "classical"
+status = "paper"
+statement = "For diagonal beta-corrected logarithm prefixes, preserving all exact displacements, common-denominator bounds and first upper-band residues from some index onward specifies the limiting real number up to precisely the rational translates."
+scope = "The starting index may depend on the rational translate. At a fixed initial index the permissible rational subgroup is smaller."
+proof = ["notes/phase15/conditional-variation.md"]
+computation = ["scripts/phase15_variation.py"]
+
+[[result]]
+id = "CC-40"
+title = "Affine combinations of nearby Taylor cutoffs retain the odd-denominator rate"
+topic = "classical"
+status = "paper"
+statement = "Take any finite family of binary logarithm Taylor cutoffs between *K* and *K* + *h*, with *h* = *o*(*K*). For every integer combination with coefficient sum one and any common binary shift, the logarithm of the reduced odd denominator is *K* + *o*(*K*), uniformly in all rows and coefficients."
+scope = "The number of cutoffs and coefficient height may grow without bound. With all cutoffs available and no precision constraint, the exact minimum odd-denominator rate at width *K*/2 is 1/4 and at width *K* is zero. The proof also computes the dyadic cost of an explicit family with controlled approximation error."
+inputs = ["Prime number theorem"]
+proof = ["notes/phase15/nearby-taylor.md"]
+computation = ["scripts/phase15_taylor.py"]
+related = ["CC-03", "CC-34"]
+
+[[result]]
+id = "CC-41"
+title = "Cyclotomic trace sources with half-integral binary exponents"
+topic = "classical"
+status = "paper"
+statement = "Suppose every root of a monic integer polynomial, after a common dyadic scaling, equals a root of unity times the same positive integer power of 1/√2. At every homogeneous real cutoff its logarithmic trace prefix equals an integer combination of real dyadic and Gaussian logarithm prefixes. For fixed rational formulas for ln 2 in this class, the least and second least denominator rates remain 5/12 and 13/30."
+scope = "Polynomial degree and root-of-unity order are unrestricted. The proof uses the common half-integral binary exponent and the fixed-coefficient optimum from CC-23. Other radii have separate truncation and precision costs."
+inputs = ["Cyclotomic distribution and Möbius inversion", "Phase 14 classification in CC-23"]
+proof = ["notes/phase15/arithmetic-lifts.md"]
+computation = ["scripts/phase15_arithmetic.py"]
+related = ["CC-23", "CC-34"]

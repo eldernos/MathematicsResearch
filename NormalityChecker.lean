@@ -120,3 +120,5 @@ public import NormalityChecker.TransitionWindows
 
 public import NormalityChecker.ProductThreeFiveNonrectangularOrdinary
 public import NormalityChecker.QuadraticPlateauSpectrum
+public import NormalityChecker.FredholmOrbit
+public import NormalityChecker.AffineDenominator

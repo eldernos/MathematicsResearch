@@ -94,7 +94,7 @@ modules = [
 title = "Classical constant arithmetic"
 modules = [
   "ErdosBorweinArrivals", "GaussianLogarithmRelations", "LogarithmPrimaryCharacters",
-  "TransitionWindows",
+  "TransitionWindows", "FredholmOrbit", "AffineDenominator",
   "CorrectedNumeratorIncidence", "ErdosBorweinFourier", "GaussianLogarithmCharacters",
   "LogarithmTransitionBounds", "StrideResidueReturns",
   "LogTwo", "LogTwoLinearForms", "LogTwoTransitions", "PrimeCancellation", "DenominatorGrowth", "OrderedTail",
