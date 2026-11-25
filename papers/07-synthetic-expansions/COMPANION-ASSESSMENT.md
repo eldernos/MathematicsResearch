@@ -1,50 +1,44 @@
-# Do the nonlinear and polynomial-closure results justify a companion paper?
+# Do the remaining nonlinear constructions justify a separate later manuscript?
 
-**Assessment: yes.** They justify one focused companion paper on *polynomial images of synthetic expansions*, built around the now-proved normality of the flagship square. That paper should not be written until a specialist has reviewed the priority comparison with normal-number rings and with Paper I, and has checked the analytic square proof. No paper was written here; this file records the assessment only.
+**Recommendation: not now. Defer, and if anything write one short note later, centred on rapidly varying schedules, after a primary-source comparison with Kano–Shiokawa and Wagner.** No companion paper was written; this file records the assessment only.
 
-The results in question are the Phase 18 algebra results (`notes/phase18/algebra.md` at `e4809cf`) and the Phase 19 nonlinear results (`notes/phase19/nonlinear.md` and `independent-axes.md` at `c2c9da6`). None of them is a theorem of Manuscript C. Manuscript C mentions the square theorem, without claiming it, in its Section 11.
+The earlier version of this assessment proposed a companion on polynomial images built around the normality of the flagship square. Under the owner decision of 25 November 2026 the square theorem, and the general theorem for total degree two in distinct valuation orders, are now theorems of Manuscript C (Theorem 7.1, Corollary 7.2, with full proofs). That removes the centrepiece of the proposed companion. What remains is assessed below.
 
-## Inventory and evidence
+## The remaining material
 
-| Result | Source | Evidence | Status for a companion |
+Sources: `notes/phase19/nonlinear.md` §§2–3 and `notes/phase19/independent-axes.md` at `c2c9da6`, with the independent audits `notes/phase19/reviews/nonlinear.md` (claims U and G) and `notes/phase19/reviews/independent-axes.md`. All are paper proofs, reviewed only by AI models.
+
+| Result | Statement | Evidence | Assessment |
 | --- | --- | --- | --- |
-| Rational affine combinations and joint normality across distinct primes and orders, under a common sparsity bound | P18 algebra E1 | Paper proof using the fixed-support criterion (the kernel-verified short-orbit estimate is an input) | Include. Must be compared with Mira Cult's joint-normality note and Captain Sude's results for the classical $p^j$ schedules. |
-| Every rational polynomial of degree $r<d$ in $C(b,p,s,d)$ is normal when $s\ge r$; joint normality of $(X,\ldots,X^{\min(s,d-1)})$ | P18 algebra E2b | Paper proof; independent AI review found it correct and asked for a stated lateness threshold | Include. This is the core combinatorial layer lemma. |
-| Universal polynomial normality on the factorial schedule (normal Liouville algebra) | P18 algebra | Paper proof | Include, compared with Kano–Shiokawa, whose rings consist of Liouville irrationals. |
-| Products whose opposite-axis prefix stays a unit (affine modification) | P18 algebra E3 | Paper proof | Optional. The result is narrow because it modifies one factor. |
-| **Square theorem:** every rational quadratic polynomial in $C(b,p,s,d)$, $d\ge3$, $s\ge1$, is normal. In particular $(C(2,3,1,3),C(2,3,1,3)^2)$ is jointly normal. The result extends to total degree two in finitely many orders. | P19 nonlinear | Paper proof without a rate; independently audited (AI); not kernel-verified | **Centerpiece.** This resolves what Phase 18 left open: the earlier certified bound $\limsup D_N<2.94\cdot10^{-10}$ is now superseded by normality. |
-| Every polynomial on rapidly varying power schedules ($\log n_k\sim(\log k)^2$, $n_{k+1}/n_k\to1$) | P19 nonlinear | Paper proof, AI-reviewed | Include. It gives non-Liouville-type schedules, which contrast with Kano–Shiokawa. |
-| Polynomial-normal algebras on separated depths or distinct retained primes | P19 nonlinear and independent-axes | Paper proof, AI-reviewed | Include as the algebra chapter. |
-| Products of remainders (sparse preservers with a visible product) | P19 products-of-remainders | Paper proof | Possible appendix: it is multiplicative and fits the "operations" theme. |
-| Rational scalar classification of the kernel of $\limsup(1-D_N(x-y))$; integer-dilation spectra | P19 geometry | Partly Lean, partly paper | Better suited to a later short note on operations; see below. |
+| Rapidly varying schedules (OP-15) | For $X=\sum_ip^{-sv_p(i)}b^{-n_i}$ with $n_{\lfloor ci\rfloor}/n_i\to0$ for each $0<c<1$ and $b^{-n_i}\to1$ in $\mathbb Z_p$ when $v_p(i)\to\infty$, every nonconstant rational polynomial in $X$ is normal; example $n_i=ti\lceil e^{(\log(i+1))^2}\rceil$, with $n_{i+1}/n_i\to1$. Hence $X$ is transcendental although truncation does not make it a Liouville number. | Paper proof; audit claim U closed | The most distinctive item. Transcendence follows from normality of all polynomial images rather than from Liouville approximation. |
+| Separated pole growth (OP-16) | Generators $X_a=\sum_kp^{-\lfloor\gamma_af_k\rfloor}b^{-n_k}$ with $\mathbb Q$-independent $\gamma_a$; every nonconstant polynomial in them is normal and Liouville; generators algebraically independent. | Paper proof; audit claim G closed | Close to Kano–Shiokawa: a finitely generated ring all of whose irrational elements are normal Liouville numbers. |
+| Distinct retained primes with cross-prime congruences (OP-17) | Positive series $X_i$ with coefficient denominators exactly $p_i^{E_k}$, numerators fixed by congruences at the other primes so that $U_{j,k}\to\theta_{ij}$ in $\mathbb Z_{p_i}$; every nonconstant polynomial normal and Liouville. | Paper proof; independent audit of the three pole losses | A constructed compatible family; the congruences are designed for the conclusion. Also close to Kano–Shiokawa in outcome. |
+| Dyadic interval criterion | Sufficient condition for degree-$r$ images of $\alpha_{b,2}$ | Paper proof; fails in degree 2 (audit §5) | Not a result; no place in a paper. |
 
-## Reasons for a separate paper
+## Comparison with the normal-ring literature
 
-1. **The method differs.** Manuscript C rests on the exact linear denominator identity (Theorem 4.2), on complete periods and on programmed states. The polynomial results need convolution layers, top-residue counts $M_r(u)\bmod p$, pole-loss lemmas and, for the square, an analytic argument: the localized jump count, the second moment and density points of the limiting $p$-adic mass. Adding them would roughly double the length of C and blur its theme, which is what can be prescribed by choosing rational states.
-2. **The headline result is substantial and self-contained.** The joint normality of $(\xi,\xi^2)$ for $\xi=\sum3^{-v_3(k)}2^{-2k^3}$ is a natural main theorem. Its proof is long, has no rate, and deserves its own exposition and its own specialist review.
-3. **The priority questions differ and are delicate.** Normal-number rings (Kano–Shiokawa 1993; Wagner 1995; Bailey–Crandall 2002) and the project's own Paper I (polynomial images of standard Stoneham numbers, v1.1) are the direct comparison points. A specialist must judge how much the finite-irrationality-exponent schedules and the valuation weights add. It is cleaner to make that comparison in one paper than to spread it across two.
-4. **Duplicate publication is easy to avoid.** C cites the square theorem only as a result recorded with the source files, not as a theorem of C, and C contains none of the polynomial-image proofs. The companion would own all of them. It would cite C for the denominator identity (Theorem 4.2), the switch (Theorem 4.4) and the transfer lemmas.
+- **Kano and Shiokawa**, *Rings of normal and nonnormal numbers*, Israel J. Math. 84 (1993) 403–416, doi:10.1007/BF02760950. They construct rings of numbers normal to one base and nonnormal to another, using rapidly growing generator schedules; by their Remark 2 (as recorded in the checkpoint-18 primary-source audit `notes/phase18/sources.md` §1) every irrational element is a Liouville number. The publisher page was behind a login on 25 November 2026 and was not re-read for this assessment. OP-16 and OP-17 produce finitely generated rings with the same two properties (all irrational elements normal and Liouville) by a different arithmetic mechanism (valuation weights and exact pole depths, checked by an all-prefix denominator criterion). In outcome they appear to be specializations or variants of Kano–Shiokawa, not new phenomena. OP-15 differs in outcome: its single generator is not shown to be Liouville, and the schedule has consecutive ratios tending to one.
+- **Kano**, *General constructions of normal numbers of Korobov type*, Osaka J. Math. 30 (1993) 909–919 (Osaka repository PDF, read on 25 November 2026). §1 states that Wagner "constructed rings of normal numbers for the first time", for generators of the form $\sum_na^{-\lambda_n}b^{-\mu_n}$ under rapid-growth conditions including $\lim_n(\log\mu_n)/\lambda_n=\infty$ (Kano notes they can be weakened to $\lim\lambda_n/\mu_{n-1}=\lim(\log\mu_n)/\lambda_n=\infty$), and that Kano and Shiokawa "gave rings of normal numbers of another type". §3, Theorem 2, proves that single normal numbers of Korobov type with $\limsup\mu_{n+1}/\mu_n<\infty$ and $\liminf\mu_{n+1}/\mu_n>1$ are non-Liouville and transcendental (extending Stoneham's Theorem 2), and a following example gives numbers normal to base $b$, nonnormal to base $ab$, non-Liouville and transcendental. These are statements about **single numbers**, not about polynomial images, and their schedules have consecutive ratios bounded away from one. The rings in Kano's survey (Wagner, Kano–Shiokawa) rest on rapid growth. So Kano (1993) is a precedent for non-Liouville transcendental normal numbers, but not for OP-15's conclusion (normality of every nonconstant polynomial image of one generator) or for its schedules with $n_{i+1}/n_i\to1$, which lie outside Kano's Theorem 2.
+- **Wagner**, *On rings of numbers which are normal to one base but non-normal to another*, J. Number Theory 54 (1995) 211–231, doi:10.1006/jnth.1995.1114: rings generated by Korobov-type series under the rapid-growth conditions described above (per Kano's survey; the paper itself was not re-read). Same comparison as Kano–Shiokawa.
+- **Nakai and Shiokawa**, *Discrepancy estimates for a class of normal numbers*, Acta Arith. 62 (1992) 271–284, doi:10.4064/aa-62-3-271-284 (and *A class of normal numbers*, Japan. J. Math. 16 (1990)): Champernowne-type numbers formed by concatenating values of a polynomial, with discrepancy estimates. They concern numbers *built from* polynomial values, not polynomial *images* of a given number, and they contain no ring statement. They are relevant only as a contrast and for the discrepancy benchmark $O(1/\log N)$.
+- **Bugeaud**, *Nombres de Liouville et nombres normaux*, C. R. Math. 335 (2002) 117–120, doi:10.1016/S1631-073X(02)02456-1: there exist normal Liouville numbers and Liouville numbers normal to no base; **Becher–Heiber–Slaman** (2015) give a computable absolutely normal Liouville number. These show that normal Liouville numbers are plentiful; they make the Liouville conclusions of OP-16 and OP-17 unremarkable on their own.
+- **Paper I** (this project, v1.1): polynomial images of standard Stoneham numbers. OP-15 to OP-17 concern different series.
 
-## Conditions before drafting
+## Reasons for the recommendation
 
-- Specialist review of the square proof (`notes/phase19/nonlinear.md`), in particular the localized grid-intersection count and the frozen-prefix transfer. The AI audit found no error, but cross-model review is not peer review.
-- A priority comparison with Kano–Shiokawa (Remark 2: irrational elements are Liouville), with Wagner (rings for bases $g$ and $gp$), and with Paper I. A rate for $\xi^2$ would strengthen the paper but is not required.
-- A decision on Phase 18 E2b's lateness threshold (review objection O1). It should be stated explicitly.
+1. **The centrepiece has moved.** The analytic square theorem was the strongest reason for a companion. It is now in C, proved in full. The remaining items are combinatorial pole-counting arguments, each a few pages, without a comparable headline.
+2. **Priority is uncertain for two of the three items.** OP-16 and OP-17 reach the same conclusion as Kano–Shiokawa and Wagner (rings of normal Liouville numbers) by a different route. OP-15's distinctive feature (normality of all polynomial images of one generator whose schedule has consecutive ratios tending to one) is not in Kano (1993), which was read, but the full texts of Kano–Shiokawa (1993) and Wagner (1995), which were not, must be checked first; Kano's description of the Kano–Shiokawa rings as "of another type" leaves open whether their generators can have slowly growing ratios.
+3. **The method duplicates C.** All three constructions use C's all-prefix criterion (Proposition 4.4) and exact-pole arguments of the kind in C's Theorem 4.2. A separate paper would mostly restate C's tools.
+4. **Review capacity.** C's Section 7 already needs specialist review. Adding a second nonlinear manuscript before that review would multiply unreviewed written proofs.
 
-## Other Phase 19 operations not placed in C
+## Conditions under which a later short note would be justified
 
-The following remain research-note material for now:
-
-- finite linear-form spectra and their polyhedral approximation;
-- joint box rates;
-- the rational-scalar kernel classification;
-- dilation spectra;
-- algebraic independence of the addition witnesses.
-
-Together with products of remainders, they could form a later short paper on discrepancy under arithmetic operations. They do not yet justify one, because several results are qualitative and their relation to the specification and entropy literature (Sigmund; Bergelson–Downarowicz §§4–8) needs a fuller comparison.
+- The full texts of Kano–Shiokawa (1993) and Wagner (1995) show no single generator on a schedule with $n_{i+1}/n_i\to1$, or more generally no non-Liouville generator, all of whose nonconstant polynomial images are normal. Then OP-15 would justify a note of about 10 pages, titled along the lines of *Polynomial normality of valuation-weighted series on rapidly varying schedules*, with OP-16 and OP-17 as remarks credited as variants of Kano–Shiokawa.
+- A specialist has reviewed C's Section 7, so that the note can cite it.
+- A rate, or an extension to cubes ($\xi^3$), would change the assessment: either would be a substantial new result and would merit its own paper.
 
 ## Open status, stated plainly
 
-- **The flagship square is no longer open.** $\xi^2$ is normal and $(\xi,\xi^2)$ is jointly normal, by a written proof that has been audited by AI only. Its discrepancy rate is open.
-- Transcendence of $\xi$ is open; normality excludes only rationality.
-- Normality of $\xi^3$ and of higher powers is open in the sources examined: the Phase 19 argument covers degree two, and the Phase 18 layer lemma needs $s\ge r$, whereas $s=1$ for $\xi$.
+- $\xi^2$ is normal and $(\xi,\xi^2)$ is jointly normal: C, Corollary 7.2 (paper proof, AI-audited only). No rate is known.
+- Normality of $\xi^3$ and of higher powers at $s=1$ is open in the sources examined; the second-moment method fails for $r\ge3$ (C, Remark 7.9).
+- Transcendence of $\xi$ is open; C shows only that an algebraic $\xi$ has degree at least three.

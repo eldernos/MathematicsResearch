@@ -10,7 +10,7 @@ $$D_N(x)=\sup_{0\le a<c\le1}\Bigl|\tfrac1N\#\{n<N:\{b^nx\}\in[a,c)\}-(c-a)\Bigr|
 
 Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 Thm 8.1, p. 70; Ch. 2 Thm 1.1, p. 89).
 
-## 1. Normality switch (Theorem 4.4) and exact denominators (Theorem 4.2)
+## 1. Normality switch (Theorem 4.5) and exact denominators (Theorem 4.2)
 
 **Statement.** Let $p\nmid b$ be prime and $t=\operatorname{ord}_p b$, and let $(n_k)$ be strictly increasing multiples of $t$ with $n_k\ge k^2$. Put $X_s=\sum_kp^{-sv_p(k)}b^{-n_k}$. Then:
 
@@ -23,7 +23,7 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 
 1. Modulo $p$, only the indices $k=p^Jm$ with $p\nmid m$ and $m<p$ survive in $p^{sJ}b^nU_K$. Each contributes $b^n$, and there are between 1 and $p-1$ of them.
 2. For $s=0$ every prefix is an integer and the tail is $O(b^{-W})$ away from insertions, so the orbit concentrates at $0$.
-3. For $s\ge1$, take blocks of length $N^{1/4}$. A fixed-support estimate (Lemma 4.3, kernel-verified, the qualitative form of Vandehey's Corollary 1.2) controls Weyl sums on blocks whose denominator is large and polynomially bounded.
+3. For $s\ge1$, apply the all-prefix criterion (Proposition 4.4): on blocks of length $N^{\eta/2}$ free of insertions, a fixed-support estimate (Lemma 4.3, kernel-verified, the qualitative form of Vandehey's Corollary 1.2) controls Weyl sums whenever the denominator is large and polynomially bounded.
 
 **Review wanted.** Is the switch already a corollary of Kano (1993, Theorem 1), of Bailey–Crandall (2002, Theorem 4.8), or of Vandehey (Theorem 7.4) after regrouping?
 
@@ -55,39 +55,23 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 
 **Review wanted.** The summation by parts in (2), and uniformity in $\delta$.
 
-## 4. Sharp translation identity (Theorem 7.1) and preservers (Theorem 7.4)
+## 4. Quadratic images (Theorem 7.1, Corollary 7.2)
 
-**Statement.** $\sup_x|D_N(x+z)-D_N(x)|=1-D_N(z)$, attained at $x=0$. Moreover $D_N(z)\to1$ if and only if $z=c+w$ with $(b-1)c\in\mathbb Z$ and $N^{-1}\sum_{n<N}\lVert b^nw\rVert\to0$, and this is equivalent to preservation of both limiting discrepancies for every $x$.
+**Statement.** Let $p\nmid b$ be an odd prime, $t=\operatorname{ord}_pb$, $d\ge3$, and $X_a=\sum_{i\ge1}p^{-av_p(i)}b^{-ti^d}$. For every finite set $S$ of positive integers and every nonconstant $P\in\mathbb Q[z_a:a\in S]$ of total degree at most two, $P((X_a))$ is normal to base $b$. In particular $\xi^2$ is normal and $(\xi,\xi^2)$ is jointly normal for $\xi=\sum_k3^{-v_3(k)}2^{-2k^3}$.
 
-**Evidence.** The identity is kernel-verified (`SharpTranslation.sharp_translation_isGreatest`, L386). The classification is a paper proof.
-
-**Proof sketch.**
-
-- *Identity.* For an arc $J$ of length $l$ and centre $c$ containing a proportion $1-e$ of the orbit of $z$, the orbit of $x+z$ is within $l/2$ of the rotated orbit of $x$ off a proportion $e$. Lemma 2.2 then bounds the change by $e+l$. Taking the infimum over $J$ gives $1-D_N(z)$, and $D_N(0)=1$ gives equality.
-- *Classification.* Nearly maximizing arcs shrink while carrying almost all the mass, so every limit measure is a point mass at a fixed point. The limit set is connected, so the fixed point is unique.
-
-**Review wanted.** Is the identity folklore, for instance via Lévy's concentration function or Kuiper's statistic?
-
-## 5. Addition spectrum (Theorems 8.1–8.3)
-
-**Statement.** The limits $(\alpha,\beta,\gamma)$ of $D_N(x)$, $D_N(y)$ and $D_N(x+y)$ are exactly the triples with $\max(0,\alpha+\beta-1)\le\gamma\le1-|\alpha-\beta|$. They are realized at rate $O(N^{-1/3})$ by one-prime cubic positive expansions. For $d$ summands the deficits are exactly the vectors with $e_i\le\sum_{j\ne i}e_j$.
-
-**Evidence.**
-
-- The qualitative triple theorem is kernel-verified (`AdditionSpectrum.exact_addition_spectrum`, L1486, commit `c2c9da6`).
-- The rate is a Lean-supported paper proof.
-- The $d$-summand case is a Lean-supported paper proof; its realization step is `mixtureRealizable`.
+**Evidence.** Paper proof (Section 7), not formalized. External inputs: Graham–Kolesnik, *Van der Corput's Method of Exponential Sums* (1991), Lemma 2.5 and Theorem 2.2; Kuipers–Niederreiter Ch. 2 Thm 2.5 (Erdős–Turán, p. 112); the Lebesgue density theorem. Internal inputs: Proposition 4.4 (all-prefix criterion, resting on the kernel-verified short-orbit estimate) and Theorem 4.2 (kernel-verified exact denominator).
 
 **Proof sketch.**
 
-- *Necessity:* two applications of the identity.
-- *Sufficiency:* five types with state pairs $(0,0)$, $(u,0)$, $(0,u)$, $(u,-u)$, $(u,u)$ and weights $\sigma$, $\beta-\sigma$, $\alpha-\sigma$, $\gamma-\sigma$, $1-\alpha-\beta-\gamma+2\sigma$, where $\sigma=\max(0,(\alpha+\beta+\gamma-1)/2)$, chosen by a deficit scheduler.
+1. *Freezing (Lemma 7.4).* With $J=\lfloor\log_p\lfloor(n/t)^{1/d}\rfloor\rfloor$ and $u=n/(tp^{dJ})\in[1,p^d)$, the normalized prefix $p^{(a+c)J}b^{-n}R_n(X_aX_c)$ agrees modulo $p^L$ with $M_{a,c}(u)=\sum_{z^d+y^d\le u}p^{a\lambda(z)+c\lambda(y)}$ (sum over $z,y\in\{a'/p^h:p\nmid a'\}$, $\lambda$ = loss $h$) once $J\ge L(1+1/d)$, by lifting the exponent.
+2. *Primitive jumps (Lemma 7.5).* In $x=(u-1)^{1/d}$, the pairs $(1,x_0)$ and $(x_0,1)$ jump at $x_0=c/p^H$, $p\nmid c$, by $A(p^{a_*H}+p^{(D-a_*)H})$, of valuation $a_*H+g$ ($p$ odd).
+3. *Isolation (Lemmas 7.6, 7.7).* Competing endpoints $x=(z^d+y^d-1)^{1/d}$ of total loss $\le H$ within $\epsilon/(Hp^H)$ of $p^{-H}\mathbb Z$ number at most $C\epsilon|I|p^H+o(p^H)$: remove degenerate rows and points, split the rest into $O(\log H)$ pieces with $|f'''|\asymp\Lambda$, apply a third-derivative bound (derived from the Weyl–van der Corput inequality and the second-derivative test) and Erdős–Turán with $H^4$ frequencies, and count lattice points in the slab.
+4. *Null level sets (Proposition 7.8).* With $G_H$ the union of radius-$\epsilon/(Hp^H)$ intervals about isolated centres, $|I\cap G_H|\gg\epsilon|I|/H$ and $|I\cap G_n\cap G_m|\ll|I|(\epsilon^2/(nm)+\epsilon p^{n-m}/m)$; since $\sum1/H=\infty$, Cauchy–Schwarz and the density theorem give a.e. point in infinitely many $G_H$; at such points one flank misses each level set.
+5. *Transfer.* Small denominators force $u(n)$ into $E_L=\{M\equiv0\bmod p^L\}$, of upper density $\le p^d|E_L|/(p^d-1)\to0$; Proposition 4.4 gives normality.
 
-**Prior work to compare.** Bergelson–Downarowicz (arXiv:2506.12929, Proposition 4.9 and Corollary 4.10) give the same inequalities for point entropy.
+**Review wanted.** The collision bound (3) in Lemma 7.7 (uniformity in $I$, the lattice count of the slab, the removal costs); the third-derivative regime $\lambda=lp^H\Lambda/p^{3v}$ with $2H/5\le v\le H$; the second-moment constants in Proposition 7.8; the freezing threshold. An independent AI audit (`notes/phase19/reviews/nonlinear.md`) found no error; human review is outstanding.
 
-**Review wanted.** Is the discrepancy version a routine consequence of the entropy version? It should not be, because $1-D$ and normalized entropy differ off the mixtures $\theta\delta_0+(1-\theta)\lambda$.
-
-## 6. Infinite sums (Theorems 10.2–10.4)
+## 5. Infinite sums (Theorems 8.2–8.4)
 
 **Statement.** $Y=\sum_{\ell\ \mathrm{odd}}\sum_{j\ge1}\ell^{-s_\ell j}2^{-16^{\ell^j}}$, with $s_3=2$ and $s_\ell=1$ otherwise, is binary normal and Liouville with $D_N\ll1/\log N$. Finite rational combinations of the components are normal. Some positive rational multiples of the components sum to $1$.
 
@@ -107,8 +91,8 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 
 ## Not claimed
 
-- The normality of $\xi^2$ is mentioned in Section 11, with a pinned link to a written proof and its AI audit. It is not a claim of this paper.
+- No rate for $D_N(\xi^2)$ and no statement for cubes or higher powers.
 - Rates for $d\le s+1$ are not claimed.
-- A rate for the $d$-summand spectrum is not claimed.
+- The translation identity (Theorem 2.6) is quoted from the companion manuscript *The Arithmetic of Extreme Discrepancy* and is not reproved; the addition spectrum and preserver classification are claims of that manuscript, not of this one.
 
 **Reproduction.** See `VERIFICATION.md` (Reproduce) for the Lean and Python commands, and for the build command `wsl -d Ubuntu -- bash papers/wsl-build.sh 07-synthetic-expansions`.
