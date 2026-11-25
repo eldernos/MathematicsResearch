@@ -6,7 +6,7 @@ public import NormalityChecker.ParameterTwoSquareProfile
 /-! Reduced upper-shell denominators of the positive-index Stoneham quadratic.
 The use of norms includes an exact zero in the cancellation factor. -/
 @[expose] public noncomputable section
-open Finset
+open Finset Filter
 open NormalityChecker.ParameterTwoSquare
 namespace NormalityChecker.ParameterTwoQuadratic
 
@@ -174,5 +174,59 @@ theorem upper_denominator {b n j : ℕ} (hb : 3 ≤ b) (odd : Odd b)
     (by rw [id]; exact sub uu (error_integral hb odd A j))
   rw [shifted, norm_mul, norm_pow, radix_norm odd, one_pow, one_mul, same, norm_div, norm_pow,
     show ‖(2 : ℚ_[2])‖ = (2 : ℝ)⁻¹ from Padic.norm_p (p:=2), inv_pow, div_inv_eq_mul, mul_comm]
+
+theorem linear_norm {b n k : ℕ} (hb : 0 < b) (odd : Odd b) (hk : 1 ≤ k)
+    (lo : 2^k ≤ n) (hi : n < 2^(k+1)) :
+    ‖(linearPrefix b n : ℚ_[2])‖ = (2 : ℝ)^k := by
+  have ao := axis_odd (b:=b) hk
+  have h : ‖(axisNumerator b k : ℚ_[2])‖ = 1 := by
+    rw [← norm_natAbs, Padic.norm_natCast_eq_one_iff]; exact ao.natAbs.coprime_two_left
+  rw [linear_form hb lo hi]
+  push_cast
+  rw [norm_div, norm_mul, norm_pow, radix_norm odd, h, norm_pow,
+    show ‖(2 : ℚ_[2])‖ = (2 : ℝ)⁻¹ from Padic.norm_p (p:=2)]
+  simp
+
+/-- In the lower half, the square contributes the larger pole as soon as the
+displayed inequality holds. Its right side bounds the full linear perturbation. -/
+theorem lower_denominator {b n j : ℕ} (hb : 3 ≤ b) (odd : Odd b) (hj : 1 ≤ j)
+    (lo : 2^(j+1) ≤ n) (early : n < 3*2^j) (A B C₀ : ℤ)
+    (dom : (2 : ℝ)^(j+1) < ‖(A : ℚ_[2])‖ * 2^(j+j)) :
+    ((«prefix» b n A B C₀).den : ℝ) = ‖(A : ℚ_[2])‖ * 2^(j+j) := by
+  have hi : n < 2^(j+2) := by rw [pow_add]; have := Nat.two_pow_pos j; omega
+  have den := (first_half_reduction (by omega : 0 < b) odd hj lo hi early).2
+  have gt : 1 < (2 : ℝ)^(j+j) := one_lt_pow₀ (by norm_num) (by omega)
+  have sqnorm : ‖(pre b n : ℚ_[2])‖ = (2 : ℝ)^(j+j) := by
+    have hd := dyadic_den_eq_norm (x:= pre b n) (D:=j+j) (den ▸ dvd_refl _)
+    rw [den] at hd
+    push_cast at hd
+    rcases max_cases 1 ‖(pre b n : ℚ_[2])‖ with h | h <;> linarith [h.1]
+  have lnorm := linear_norm (by omega : 0 < b) odd (by omega : 1 ≤ j+1) lo hi
+  have bnd : ‖(B : ℚ_[2])*linearPrefix b n + C₀*(b : ℚ_[2])^n‖ ≤ (2 : ℝ)^(j+1) := by
+    apply (Padic.nonarchimedean _ _).trans
+    rw [norm_mul, norm_mul, norm_pow, radix_norm odd, one_pow, mul_one, lnorm]
+    exact max_le (mul_le_of_le_one_left (by positivity) (Padic.norm_int_le_one _))
+      ((Padic.norm_int_le_one _).trans (one_le_pow₀ (by norm_num)))
+  have ha : ‖(A : ℚ_[2]) * pre b n‖ = ‖(A : ℚ_[2])‖ * 2^(j+j) := by rw [norm_mul,sqnorm]
+  have small : ‖(B : ℚ_[2])*linearPrefix b n + C₀*(b : ℚ_[2])^n‖ < ‖(A : ℚ_[2])*pre b n‖ :=
+    ha ▸ bnd.trans_lt dom
+  obtain ⟨_, hd⟩ := prefix_dyadic (by omega : 0 < b) lo hi A B C₀
+  rw [dyadic_den_eq_norm hd, «prefix»]
+  push_cast
+  rw [add_assoc, Padic.add_eq_max_of_ne small.ne', max_eq_left small.le, ha,
+    max_eq_right ((one_le_pow₀ (by norm_num : 1 ≤ (2 : ℝ))).trans dom.le)]
+
+/-- The lower-half threshold is uniform in the cutoff and in the perturbing
+linear and constant integer coefficients. -/
+theorem eventually_lower_denominator {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (A : ℤ) (hA : A ≠ 0) :
+    ∀ᶠ j : ℕ in Filter.atTop, ∀ n : ℕ, 2^(j+1) ≤ n → n < 3*2^j → ∀ B C₀ : ℤ,
+      ((«prefix» b n A B C₀).den : ℝ) = ‖(A : ℚ_[2])‖ * 2^(j+j) := by
+  have tend := (tendsto_pow_atTop_atTop_of_one_lt (by norm_num : 1 < (2 : ℝ))).const_mul_atTop
+    (norm_pos_iff.mpr (Int.cast_ne_zero.mpr hA : (A : ℚ_[2]) ≠ 0))
+  filter_upwards [tend.eventually_gt_atTop 2, Filter.eventually_ge_atTop 1] with j hj jpos n lo hi B C₀
+  apply lower_denominator hb odd jpos lo hi
+  rw [pow_succ, pow_add]
+  change 2 < ‖(A : ℚ_[2])‖ * 2^j at hj
+  nlinarith [mul_lt_mul_of_pos_right hj (show 0 < (2 : ℝ)^j by positivity)]
 
 end NormalityChecker.ParameterTwoQuadratic
