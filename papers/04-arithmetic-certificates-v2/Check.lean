@@ -1,4 +1,5 @@
 import NormalityChecker.QualityCoverage
+import NormalityChecker.PartialUniformity
 import NormalityChecker.OrbitRigidity
 import NormalityChecker.ModelCounting
 import NormalityChecker.ComputableNormalityUndecidability
