@@ -28,7 +28,7 @@ The revision checked the Math-Net article record and author listing for N. M. Ko
 - **Search record:** The polynomial-value, normal-ring and concatenation queries above distinguish applying P to a real value from applying P to its insertion indices.
 - **Dependencies and outstanding review:** Check the normalization in passing from the dilated zero-index axis to the positive-index series and the reach of older normal-ring criteria.
 
-### Theorem B: Mira Cult’s S08 Corollaries 1.2–1.3, synchronized powers
+### Theorem B: Mira Cult’s S08 Corollary 1.2, synchronized powers
 
 - **Statement and hypotheses:** For distinct positive rᵢ, the synchronized shifts of $(\alpha^{r_1},\ldots,\alpha^{r_m})$ visit each half-open box with frequency equal to its volume under the hypotheses of A.
 - **Evidence:** Kernel-verified. `coprime_joint_powers` includes the limiting frequency, the endpoints and the common starting position.
@@ -127,10 +127,27 @@ The revision checked the Math-Net article record and author listing for N. M. Ko
 - **Search record:** Followed the factorial, binary Kraft-budget and least-loss formulations in both notes. The prefix-code and Kraft-inequality queries and access limits are recorded above.
 - **Dependencies and outstanding review:** Check completeness of the minimizing multiplicities at d = 2ʳ−1 and possible antecedents in combinatorial optimization.
 
-### Proposition 5.2: The open-plateau test
+### Proposition 5.2 and Remark 5.3: The open-plateau test and the scope of the curvature method
 
-- **Statement and hypotheses:** For odd b ≥ 3, the complement of the compact countable sumset of d dyadic powers (allowing zero) has full measure on the shell. Nonzero mass on each open plateau suffices for all rational polynomial values of degree d.
-- **Evidence and relation:** Paper proof. Finite-precision reflection, integer sampling and the block argument transfer almost-everywhere nonvanishing. The result concerns the sufficient test; whole-shell nonvanishing in every degree d ≥ 3 and normality of the resonant quadratic remain open. The synthetic cubic square uses curved grids and an odd-prime jump absent here. [Derivation and comparison](https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/nonlinear.md)
+- **Statement and hypotheses:** Let D\* = {0} ∪ {2^(−i) : i ≥ 0} and dD\* the set of sums of d elements. (1) dD\* is compact and countable; its complementary open intervals in (1,2) (the plateaus) have total measure one, M_d is constant on each, the distribution of M_d(t) for uniform t is purely atomic, and the zero set of M_d is null if and only if M_d is nonzero on every plateau. (2) For odd b ≥ 3, nonvanishing on every plateau implies normality of every rational polynomial of degree d in α(b,2). Remark 5.3: the test holds in the degrees of Theorems 4.1 and 4.3, fails in degree 2 (M_2 = 0 on [3/2,2)), and is undetermined in every other degree; the curvature argument that proves normality of the square of the synthetic schedule Σ 3^(−v₃(i)) 2^(−2i³) shows that every level set of its mass is null, a conclusion that is false for the dyadic mass in degree 2, so that argument does not apply to α(b,2)² − 2α(b,2).
+- **Evidence:** Paper proof (§5.1). The block step uses `fixed_support_orbit_estimate` through Lemma 2.5.
+- **Earliest relevant literature:** none located for this measure-theoretic formulation; the transfer uses the rational-prefix method of [Stoneham][stoneham] and [Kano][kano].
+- **Closest published results:** none in the sources examined.
+- **Closest unpublished or public-repository results:** [Phase 19 nonlinear note](https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/nonlinear.md), dyadic paragraph after “Scope of the jump argument”, with its [independent audit](https://github.com/eldernos/MathematicsResearch/blob/c2c9da683666b3b9368e5d4b5cb858caccf528f5/notes/phase19/reviews/nonlinear.md), §5 (“closed as stated; it fails in degree 2”).
+- **Relation:** A sufficient condition only. It does not settle any new degree, the resonant quadratic or whole-shell nonvanishing, all of which remain open.
+- **Search record:** Covered by the dyadic-mass and quadratic queries above; no separate search.
+- **Dependencies and outstanding review:** Check that the endpoints of the failed sets E_L are insertion points, the failed-position density bound 2|E_L|, and the statement that the curvature conclusion fails for M_2.
+
+### Lemma 6.2: Vandehey’s all-length estimate with repaired proof
+
+- **Statement and hypotheses:** For b ≥ 2, a finite set 𝒫 of primes not dividing b, and k ≥ 0, |Σ_{n=1}^T e(yb^n/q)| ≤ (A_k q^(a_k) T^(γ_k) + B_k q^(−a_k) T^(ν_k))(1 + log q)^(2^(−k)) for every q supported on 𝒫, y prime to q and T ≥ 1, with effective constants depending on b, 𝒫, k.
+- **Evidence:** Paper proof, modifying the proof of [Vandehey][van], preprint Theorem 5.1, eqs. (11)–(13); depth zero is preprint Lemma 2.3, eq. (7).
+- **Earliest relevant literature:** [Vandehey][van], 2016 preprint and 2019 journal version.
+- **Closest published results:** The statement coincides with preprint Theorem 5.1, pp. 13–14. Its proof forms the auxiliary divisor in (12) from the product of all primes of the ambient set, so the divisor need not divide the current modulus when a prime is absent; inner moduli in (11) can lose primes.
+- **Closest unpublished or public-repository results:** [Checkpoint calculation][rate] (support-restriction remark).
+- **Relation:** Same statement, repaired proof (auxiliary divisor from rad(q), constants maximized over subsets of 𝒫). No priority is claimed.
+- **Search record:** The journal edition’s proof was not accessible; whether it corrects (12) is unverified.
+- **Dependencies and outstanding review:** Check the gcd identity gcd(q, b^(iτ) − 1) = g·gcd(i, q/g), which needs rad(q′) = rad(q), and uniformity of the constants when an inner modulus loses a prime.
 
 ### Theorem 6.1: Explicit scalar discrepancy exponent
 

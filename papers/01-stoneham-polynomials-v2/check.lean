@@ -5,6 +5,9 @@ import NormalityChecker.DyadicQuartic
 import NormalityChecker.StonehamOddDegree
 import NormalityChecker.Phase16StonehamBounds
 import NormalityChecker.Phase17DiscrepancyBounds
+import NormalityChecker.AlternateBaseStoneham
+import NormalityChecker.StonehamPolynomial
+import NormalityChecker.StonehamSquare
 import Lean.Util.CollectAxioms
 
 open NormalityChecker StonehamPolynomial
@@ -22,7 +25,8 @@ run_cmd do
       ``ParameterTwoQuadratic.normal_iff_upper_denominator, ``odd_prime_power_degree_polynomial_normal,
       ``quartic_polynomial_normal, ``Phase16StonehamBounds.quadratic_upper_den_eq_quadZ,
       ``Phase17DiscrepancyBounds.descent31Check_true, ``Phase17DiscrepancyBounds.descent31_all_words_nonzero,
-      ``Phase17DiscrepancyBounds.jointUniform_of_echelon_degrees] do
+      ``Phase17DiscrepancyBounds.jointUniform_of_echelon_degrees,
+      ``AlternateBase.square_nonnormal_48, ``same_prime_sum_normal, ``StonehamSquare.exact_profile] do
     let deps ← collectAxioms decl
     unless deps.all allowed.contains do
       throwError "{decl} has unexpected dependencies {deps}"
