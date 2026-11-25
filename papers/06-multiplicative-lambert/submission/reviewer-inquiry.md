@@ -19,15 +19,15 @@ Christopher Anderson
 
 ---
 
-## Inquiry 2: the short-interval prime input behind a > 7/12 (Proposition 5.3, Theorem A)
+## Inquiry 2: a fixed-progression lower bound from the minorant theorem (Lemma 10.2, Theorem 10.3)
 
 Dear [Name],
 
-In a preprint draft we prove two-sided counts for binary words in the expansion of Lambert series such as Σ χ₄(m)/(2ᵐ−1), on windows [N, N+H) with N^a ≤ H ≤ N. The lower bound needs, for one fixed modulus q₀ and class a₀, the asymptotic (or only a lower bound of the correct order) for primes p ≡ a₀ (mod q₀) in every interval (X, X+Y] with Y ≥ X^ν. We take this from the single term q = q₀ of the theorem in your paper with [Name] and [Name], *Bombieri's theorem in short intervals. II* (Invent. Math. 79 (1985) 1–9, Theorem on p. 2), valid for ν > 7/12 with Q = x^{1/40}; we use only q₀ ≤ Q. Every other step of our argument works for any ν > 1/2, so this input is exactly what fixes a > 7/12.
+In a preprint draft we prove two-sided counts for binary words in the expansion of Lambert series such as Σ χ₄(m)/(2ᵐ−1), on windows [N, N+H) with N^a ≤ H ≤ N. The lower bound needs, for one fixed modulus q₀ and class a₀, a lower bound ≫ Y/log X for primes p ≡ a₀ (mod q₀) in every interval (X, X+Y] with Y ≥ (X+Y)^ν. With Perelli–Pintz–Salerno this gives a > 7/12. Your paper *The difference between consecutive primes in an arithmetic progression* (Q. J. Math. 53 (2002) 479–501) constructs a minorant λ of the primes with Σ_{y−h₀<n≤y} λ(n) ≫ h₀/log x and proves (1.10) for x^{0.53} ≤ z ≤ x and Q ≤ z x^{−0.53+η}. We use only the term q = q₀ of (1.10), with h = z = Y and x = 3(X+Y)/2, to obtain the lower bound for every ν > 0.53, and hence our result for a > 0.53. Every other step of our argument works for any a > 1/2.
 
-Our question: for a fixed modulus q₀, is a lower bound ≫ Y/log X for primes in a fixed reduced class in all intervals (X, X+Y], Y ≥ X^{ν₀+ε}, known for some ν₀ < 7/12? If so, which reference should we cite? We make no claim in this direction at present.
+Our question: is this use of a single modulus in (1.10) legitimate as stated, and does the published version of the theorem agree with the text posted on your web page, from which we quoted it? We would also be glad to know of any fixed-modulus lower bound below exponent 0.53.
 
-The relevant lemma (Lemma 4.4) and its use (Proposition 5.3) are at [link]. The manuscript was produced with substantial AI assistance, which is disclosed in it, and it has not yet had human expert review.
+The relevant lemma (Lemma 10.2) and its use (Theorem 10.3 and Proposition 5.3) are at [link]. The manuscript was produced with substantial AI assistance, which is disclosed in it, and it has not yet had human expert review.
 
 With thanks,
 Christopher Anderson
