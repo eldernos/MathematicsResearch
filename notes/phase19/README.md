@@ -4,7 +4,7 @@ In any integer radix the ordinary discrepancy limits of $x,y,x+y$ are exactly th
 $$
  \max(0,\alpha+\beta-1)\le\gamma\le1-|\alpha-\beta|.
 $$
-The five extremal triples have explicit rational-orbit models. Balancing their time proportions on one cubic schedule gives every admissible triple simultaneously to $O_{b,p}(N^{-1/3})$ for all prefixes, using positive coefficients. Inputs may be computable and algebraically independent. The [addition proof](addition.md), [Lean module](../../NormalityChecker/AdditionSpectrum.lean) and [verification record](verification.md) distinguish the qualitative theorem, its formal components and the quantitative arithmetic witnesses.
+The five extremal triples have explicit rational-orbit models. Balancing their time proportions on one cubic schedule gives every admissible triple simultaneously to $O_{b,p}(N^{-1/3})$ for all prefixes, using positive coefficients. Inputs may be computable and algebraically independent. Lean verifies unconditional necessity and sufficiency in every radix. The uniform rate and independence proofs are on paper. The [addition proof](addition.md), [Lean module](../../NormalityChecker/AdditionSpectrum.lean) and [verification record](verification.md) distinguish the qualitative theorem, its formal components and the quantitative arithmetic witnesses.
 
 ## Operations
 

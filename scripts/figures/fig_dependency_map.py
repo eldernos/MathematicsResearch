@@ -352,6 +352,7 @@ def compute():
         ("SmoothOrbit", "RetirementDenominator", "SY-02", "fixed_support_orbit_estimate"),
         ("SharpTranslation", "Phase18Synthetic", "SY-12", "sharp_translation"),
         ("SharpTranslation", "AdditionSpectrum", "OP-01", "sharp_translation"),
+        ("PrimePowerGrid", "AdditionSpectrum", "OP-01", "primePower_period_count"),
         ("SharpTranslation", "DiscrepancyGeometry", "OP-05", "sharp_translation"),
         ("SurvivingGrid", "PrimePowerGrid", "OP-08", "stride_order"),
     ]:

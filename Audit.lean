@@ -5,6 +5,9 @@ open Lean in
 run_cmd do
   let permitted := [``propext, ``Classical.choice, ``Quot.sound]
   let results := [
+    ``NormalityChecker.AdditionSpectrum.exact_addition_spectrum,
+    ``NormalityChecker.AdditionSpectrum.mixtureRealizable,
+    ``NormalityChecker.PrimePowerGrid.crt_period_count,
     ``NormalityChecker.AdditionSpectrum.finite_necessity,
     ``NormalityChecker.AdditionSpectrum.polytope_eq_convexHull,
     ``NormalityChecker.PrimePowerGrid.primePower_period_count,

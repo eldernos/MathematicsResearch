@@ -25,6 +25,8 @@ The same constant works on the whole closed region. Both series are uniformly co
 
 Generic-point existence for invariant torus laws and the five vertex laws already give a short qualitative sufficiency proof. The constructive assertions here are the common cubic schedule, uniform all-prefix rate, computability and algebraic independence. The same facets occur in the point-entropy inequalities of Bergelson and Downarowicz; the entropy and discrepancy observables differ on general orbit laws. [Source comparison](literature.md)
 
+The unconditional qualitative theorem for every radix and simultaneous rank-one mixture realization are [proved in Lean](../../NormalityChecker/AdditionSpectrum.lean). The formal construction uses a block schedule adapted to complete periods. The following cubic schedule also gives the stated rate, a separate written conclusion.
+
 ## The five vertices
 
 At any cutoff write $a=D_N(x)$, $b'=D_N(y)$ and $c=D_N(x+y)$. The sharp translation theorem gives $|c-a|\le1-b'$ and, interchanging the summands, $|c-b'|\le1-a$. Thus $c\ge a+b'-1$, $c\le1+a-b'$ and $c\le1+b'-a$. This proves necessity even at each finite cutoff and along any common subsequence of convergent values. [Phase 18 proof](../phase18/translations.md) · [Lean theorem sharp_translation](../../NormalityChecker/SharpTranslation.lean)

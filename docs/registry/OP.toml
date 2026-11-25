@@ -2,7 +2,8 @@
 id = "OP-01"
 title = "Exact limiting discrepancy spectrum for addition"
 topic = "discrepancy"
-status = "paper"
+status = "lean"
+lean = ["NormalityChecker.AdditionSpectrum.exact_addition_spectrum", "NormalityChecker.AdditionSpectrum.addSpectrum_eq", "NormalityChecker.AdditionSpectrum.mixtureRealizable", "NormalityChecker.AdditionSpectrum.finite_necessity"]
 principal = true
 statement = "In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting extreme discrepancies of x, y and x+y exactly when max(0, α+β−1) ≤ γ ≤ 1−|α−β|."
 scope = "The inequalities hold at every positive finite prefix. Five rational orbit types suffice for the limiting realization. The discrepancy is unanchored."
@@ -80,9 +81,9 @@ topic = "certificates"
 status = "lean+paper"
 principal = true
 statement = "For an odd prime p and coprime complement Q, the stride that fixes Q and the residue modulo p generates precisely a grid of size p to the positive part of e minus the valuation of b raised to the stride minus one, for modulus pᵉQ."
-scope = "The kernel proves the exact return/order and exhaustive lifts, given the fixed residue congruences. The written deduction identifies the CRT progression through any unit and bounds complete-period interval discrepancy by the inverse grid size."
+scope = "Lean proves the exact stride order, exhaustive lifts and a complete-period interval count within t of its expected count on tG samples. The written deduction identifies the largest p-power grid for the minimal simultaneous stride, including the trivial-grid case."
 proof = ["notes/phase19/grids.md"]
-lean = ["NormalityChecker.SurvivingGrid.stride_order","NormalityChecker.SurvivingGrid.return_iff","NormalityChecker.SurvivingGrid.visits_every_lift"]
+lean = ["NormalityChecker.SurvivingGrid.stride_order","NormalityChecker.SurvivingGrid.return_iff","NormalityChecker.SurvivingGrid.visits_every_lift","NormalityChecker.PrimePowerGrid.crt_period_count"]
 related = ["SY-06"]
 
 [[result]]
@@ -135,7 +136,7 @@ id = "OP-13"
 title = "Numerical classification of horizontal logarithm rows"
 topic = "classical"
 status = "paper"
-statement = "For a finite rational combination of the dyadic rows Z_d at positions d·2ʲ+j indexed by distinct odd d, the combination including its rational constant is a numerical preserver precisely when every coefficient and the constant are dyadic. The original d=3 row of ln 2 has binary limiting discrepancy 2/3."
+statement = "For a finite rational combination of the dyadic rows Z_d at positions d·2ʲ+j indexed by distinct odd d, the combination including its rational constant is a numerical preserver precisely when every coefficient and the constant are dyadic. The original d=3 row of ln 2 has binary limiting discrepancy 2/3. Odd part five has lower discrepancy 1/5 and upper discrepancy 8/15."
 scope = "Every such finite combination preserves normality. Individual rows have a finite rational algorithm for both discrepancy extrema. No digit-frequency assertion about their infinite sum is implied."
 proof = ["notes/phase19/logarithm-rays.md"]
 related = ["OP-06","SY-04","SY-15"]

@@ -8,7 +8,7 @@
 \max(0,\alpha+\beta-1)\le\gamma\le 1-|\alpha-\beta|.
 ```
 
-Positive rational coefficients at cubic insertion positions realize every permitted triple. At each prefix the error in all three coordinates is at most a constant times 1/∛*N*, uniformly in the target triple for fixed radix and retained prime. [Lean statements](NormalityChecker/AdditionSpectrum.lean) · [Proof, quantitative realization and examples](notes/phase19/addition.md)
+Positive rational coefficients at cubic insertion positions realize every permitted triple. At each prefix the error in all three coordinates is at most a constant times 1/∛*N*, uniformly in the target triple for fixed radix and retained prime. [Exact spectrum in Lean](NormalityChecker/AdditionSpectrum.lean#L1486) · [Proof, quantitative realization and examples](notes/phase19/addition.md)
 
 **A binary example.** For each positive integer *k*, let *v* count how many times 3 divides *k*. At binary position 2*k*³ insert the rational coefficient 1/3ᵛ, and let *x* be the sum of these coefficients times the corresponding inverse powers of two. Among the first *N* fractional parts of 2ⁿ*x*, starting at *n* = 0, the fraction that falls in any half-open interval differs from its length by at most a constant times 1/∛*N*. In particular *x* is binary normal. Lean verifies normality and the denominator of every shifted rational prefix. A written complete-period argument gives the rate. [Lean denominator theorem](NormalityChecker/RetirementDenominator.lean) · [Proof and general family](notes/phase18/principal.md)
 
