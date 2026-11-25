@@ -1,0 +1,14 @@
+id = "F"
+title = "Denominator Growth and Rational Shadowing for Classical Constants"
+authors = ["Christopher Anderson"]
+affiliation = "Independent Researcher"
+short_title = "Denominator Growth and Rational Shadowing"
+version = "2.0"
+status = "preprint draft"
+abstract = "Fixed finite rational identities for log 2 built from balanced algebraic traces reduce, at every cutoff, to real and Gaussian logarithm sources. The least two exponential rates for the reduced denominators are 5/12 and 13/30, with a unique prefix function at each rate. The real dyadic minimum is 1/2. A Lean certificate checks a finite prime-band comparison used in the proof. We establish sufficient coefficient-height thresholds for varying identities and construct large-height identities that fall below the denominator floor with growing error. Chebyshev and Legendre kernels give smaller denominator-rate upper bounds. Legendre moment rounding yields linear rational shadowing windows at all sufficiently large binary shifts of log 2 and pi, with an explicit test for agreement with nearest-grid rounding. An irrationality-exponent inequality bounds the length of a window in terms of the shift and the reduced denominator. Positive Taylor groupings have a prime-dependent completion delay. We give exact geometric-ray decompositions and a differential-algebra obstruction for sparse generating functions. We determine the exact one-prime completion index, bound the mean Taylor denominator loss and prove superpolynomial growth of rational periods, and compute the limiting discrepancy of selected horizontal Taylor rows. Lower denominator exponents and longer rational shadowing windows do not establish limiting digit distribution. We obtain neither normality nor limiting binary discrepancy below one for log 2, pi, e, the square root of 2, or the golden ratio."
+keywords = ["reduced denominators", "dyadic logarithms", "Gaussian logarithms", "Legendre polynomials", "irrationality exponent", "rational approximation", "geometric rays"]
+msc_primary = "11J04"
+msc_secondary = ["11J82", "11K16", "11N05", "33C45"]
+supersedes = "papers/05-classical-denominators"
+lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
+registry_ids = ["CC-01", "CC-02", "CC-03", "CC-07", "CC-08", "CC-12", "CC-14", "CC-23", "CC-40", "CC-41", "CC-42", "CC-43", "CC-44", "CC-50"]

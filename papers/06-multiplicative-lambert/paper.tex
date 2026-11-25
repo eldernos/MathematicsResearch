@@ -1,0 +1,1091 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\usepackage[numbers,sort&compress]{natbib}
+\hypersetup{pdftitle={Disjunctive but nonnormal multiplicative Lambert series}}
+
+\DeclareMathOperator{\lcm}{lcm}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\Mset}{\mathcal M}
+\newcommand{\Qset}{\mathcal Q}
+\newcommand{\Pset}{\mathcal P}
+\newcommand{\Gset}{\mathcal G}
+\newcommand{\decl}[1]{\nolinkurl{#1}}
+\newcommand{\cnt}{\#}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Disjunctive but Nonnormal\\[3pt] Multiplicative Lambert Series\par}
+\vspace{10pt}
+\makebyline{1.0}{25 November 2026}
+\end{center}
+
+\begin{abstract}
+Let $c$ be a nonnegative integer-valued multiplicative function with
+$c(p^e)\le e+1$, taking the value $2$ on a set $S$ of primes of
+reciprocal-sum density $\delta\in(0,1)$ that contains a full reduced
+residue class, and vanishing at the remaining primes not dividing a fixed
+modulus. Examples are $c=\chi*1$ for a nonprincipal real Dirichlet character
+$\chi$ ($\delta=1/2$; for $\chi=\chi_{4}$ this is $r_2(n)/4$) and the
+analogous function supported on primes $p\equiv1\pmod 5$ ($\delta=1/4$).
+We study the binary expansion of
+$L=\sum_{n\ge1}c(n)2^{-n}=\sum_{m\ge1}(c*\mu)(m)/(2^m-1)$.
+For every fixed $a>7/12$, every fixed binary word containing a one occurs
+$\asymp H/(\log N)^{1-\delta}$ times among the shifts in $[N,N+H)$, uniformly
+for $N^a\le H\le N$, and the all-zero word of length $k$ occurs
+$H-\Theta(H/(\log N)^{1-\delta})$ times. Hence $L$ is irrational and
+disjunctive in base two, while the frequency of the digit one tends to zero.
+The extreme discrepancy of $(\{2^nL\})_{n<N}$ satisfies
+$1-D_N\asymp(\log\log N)/(\log N)^{1-\delta}$, and consequently
+translation by $L$ changes the discrepancy of any real number by at most this
+amount, with equality at $0$. For odd characters, $L$ is transcendental by a
+theorem of Hamieh and Murty, extended here to imprimitive characters. The
+proofs combine Shiu's Brun--Titchmarsh theorem for multiplicative functions,
+a planted-prime construction with a Selberg upper-bound sieve, and the
+short-interval prime number theorem of Perelli, Pintz and Salerno. The finite
+discrepancy transfer inequalities are verified in Lean~4.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+A real number is \emph{simply normal} in base two if the digit one has
+asymptotic frequency $1/2$, \emph{normal} if every binary word of length $k$
+has frequency $2^{-k}$, and \emph{disjunctive} (or \emph{rich}) if every finite
+binary word occurs in its expansion. Normal numbers are disjunctive, and
+disjunctive numbers are irrational. Explicit arithmetic constants for which any
+of these properties can be decided are rare. The Erd\H{o}s--Borwein constant
+$E=\sum_{m\ge1}(2^m-1)^{-1}=\sum_{n\ge1}\tau(n)2^{-n}$ is irrational by
+Erd\H{o}s~\cite{Erdos1948}, its normality is open~\cite{BaileyCrandall2001},
+and the infinitude of the word $11$, disjunctivity and positive lower densities
+of words have only recently been obtained in public preprints and repositories~\cite{Campbell2026,SudeDisj,SudeElem,MiraCult}.
+This paper treats the sparse relatives of $E$ in which the divisor function is
+replaced by a multiplicative function supported on a set of primes of density
+less than one. For these constants we determine the order of every word count
+in moving windows, prove disjunctivity and non-normality, and compute the exact
+order of the discrepancy gap.
+
+\subsection{Setting}\label{subsec:setting}
+
+Throughout, $p$ and $q$ denote primes. We fix the following data.
+
+\begin{enumerate}[label=\textup{(H\arabic*)},leftmargin=3.2em]
+\item\label{H1} An integer $q_0\ge1$, a residue $a_0$ with $\gcd(a_0,q_0)=1$, a real
+  number $\delta\in(0,1)$, and a set $S$ of primes not dividing $q_0$ that
+  contains every prime $p\equiv a_0\pmod{q_0}$ and satisfies
+  \begin{equation}\label{eq:harmonic}
+  \sum_{p\le x,\ p\in S}\frac1p=\delta\log\log x+O(1)\qquad(x\ge3).
+  \end{equation}
+\item\label{H2} A multiplicative function $c:\N\to\Z_{\ge0}$ with $c(1)=1$ and
+  $c(p^e)\le e+1$ for every prime power $p^e$.
+\item\label{H3} $c(p)=2$ for $p\in S$, and $c(p)=0$ for every prime $p\notin S$ with
+  $p\nmid q_0$.
+\item\label{H4} A prime $p_0\in S$ with $c(p_0^{2u})=2u+1$ for every integer $u\ge0$.
+\end{enumerate}
+
+Put $\kappa=1-\delta\in(0,1)$. Since $S$ contains a reduced class and has
+density $\delta<1$, necessarily $q_0\ge3$. We write
+\[
+L=L_c=\sum_{n\ge1}c(n)2^{-n},\qquad x_n=\{2^nL\}\quad(n\ge0),
+\]
+where $\{\cdot\}$ is the fractional part. With $f=c*\mu$ (Dirichlet convolution
+with the M\"obius function) we also have
+$L=\sum_{m\ge1}f(m)/(2^m-1)$ (\cref{lem:lambert}), so $L$ is a Lambert series
+with multiplicative coefficients.
+
+Binary digits are taken with the floor convention: the $i$th digit of $x$ is
+$\lfloor 2^ix\rfloor-2\lfloor2^{i-1}x\rfloor$, and the first digit of $x_n$ is
+digit $n+1$ of $x$. A word $w=w_1\cdots w_k\in\{0,1\}^k$ has \emph{value}
+$u=\sum_{i=1}^k w_i2^{k-i}$ and \emph{cylinder}
+$I_w=[u2^{-k},(u+1)2^{-k})$; it occurs at shift $n$ exactly when $x_n\in I_w$.
+For integers $N\ge0$ and $H\ge1$ put
+\[
+\cnt_w(N,H)=\#\{N\le n<N+H:\ x_n\in I_w\}.
+\]
+An occurrence counted here may extend at most $k-1$ digits beyond the window;
+counting only occurrences wholly inside the $H$ digits after digit $N$ changes
+$\cnt_w(N,H)$ by at most $k-1$, which is negligible in every statement below.
+The \emph{extreme discrepancy} of the first $N$ shifts is
+\[
+D_N(x)=\sup_{0\le s<t\le1}\left|\frac{\#\{0\le n<N:\ s\le\{2^nx\}<t\}}{N}-(t-s)\right| .
+\]
+A real $x$ is normal in base two if and only if $D_N(x)\to0$.
+
+Implied constants and thresholds may depend on the data in
+\ref{H1}--\ref{H4} and on any explicitly displayed parameter; they never depend
+on $N$, $H$ or $M$. We write $A\asymp B$ when $A\ll B\ll A$.
+
+\subsection{Main results}
+
+\begin{maintheorem}[Moving-window word counts]\label{thm:words}
+Assume \ref{H1}--\ref{H4}. Fix $7/12<a\le1$ and a binary word $w$ of length
+$k\ge1$. There is $N_0=N_0(w,a)$ such that for all integers $N\ge N_0$ and
+$N^a\le H\le N$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item if $w$ contains the digit $1$, then
+  $\displaystyle \cnt_w(N,H)\asymp_{w,a}\frac{H}{(\log N)^{\kappa}}$;
+\item for the all-zero word,
+  $\displaystyle H-\cnt_{0^k}(N,H)\asymp_{k,a}\frac{H}{(\log N)^{\kappa}}$.
+\end{enumerate}
+The upper bound in \textup{(i)} and the bound $H-\cnt_{0^k}(N,H)\ll H/(\log N)^\kappa$
+hold for every fixed $0<a\le1$.
+\end{maintheorem}
+
+\begin{corollary}\label{cor:disjunctive}
+Under \ref{H1}--\ref{H4}, every word $w$ containing a one satisfies
+$\cnt_w(0,M)\asymp_w M/(\log M)^{\kappa}$. In particular the digit one has
+asymptotic frequency zero, so $L$ is not simply normal in base two. Every
+finite word occurs in every window $[N,N+N^a)$ with $N$ large, so $L$ is
+disjunctive in base two and irrational.
+\end{corollary}
+
+\begin{maintheorem}[Exact discrepancy gap]\label{thm:discrepancy}
+Under \ref{H1}--\ref{H4},
+\[
+1-D_N(L)\asymp\frac{\log\log N}{(\log N)^{\kappa}}\qquad(N\ge3).
+\]
+In particular $D_N(L)\to1$.
+\end{maintheorem}
+
+The upper bound uses only the density of ones. The lower bound shows that the
+factor $\log\log N$ is genuinely present: it comes from runs of approximately
+$\frac{\kappa}{2}\log_2\log N$ consecutive zeros that precede isolated ones.
+
+\begin{corollary}[Translation by $L$]\label{cor:translation}
+Under \ref{H1}--\ref{H4}, for every $N\ge1$,
+\[
+\sup_{x\in\R}\bigl|D_N(x+L)-D_N(x)\bigr|=1-D_N(L),
+\]
+the supremum being attained at $x=0$. Consequently this supremum is
+$\asymp(\log\log N)/(\log N)^{\kappa}$, and translation by $L$ preserves $\limsup_N D_N(x)$ and $\liminf_N D_N(x)$ for every real $x$.
+\end{corollary}
+
+The identity in \cref{cor:translation} holds for every real translation $z$ in
+place of $L$; it is a result of the companion manuscript~\cite{SyntheticCompanion}
+and is a kernel-checked Lean declaration. The present contribution is the
+two-sided order of its right-hand side for the numbers $L$.
+
+\begin{maintheorem}[Transcendence for odd characters]\label{thm:transcendence}
+Let $\chi$ be an odd Dirichlet character of any modulus, primitive or not. For
+every algebraic $q$ with $0<|q|<1$, the number
+$\sum_{m\ge1}\chi(m)q^m/(1-q^m)$ is transcendental. In particular, for every
+odd real character $\chi$ the number $L_\chi=\sum_{m\ge1}\chi(m)/(2^m-1)$,
+which satisfies \ref{H1}--\ref{H4}, is transcendental.
+\end{maintheorem}
+
+For primitive characters \cref{thm:transcendence} is Theorem~1.1 of Hamieh and
+Murty~\cite{HamiehMurty2016} at weight one; the imprimitive case follows from
+their Theorem~3.1 by a short oldform argument given in \cref{sec:transcendence}.
+
+\subsection{Examples}\label{subsec:examples}
+
+\begin{example}[Real characters]\label{ex:characters}
+Let $\chi$ be a nonprincipal real Dirichlet character modulo $q_0\ge3$
+(primitive or imprimitive; $q_0$ is the modulus at which $\chi$ is defined) and
+let $c_\chi=\chi*1$. At primes with $\chi(p)=1,-1,0$ respectively,
+$c_\chi(p^e)$ equals $e+1$, the indicator that $e$ is even, and $1$. Take
+$S=\{p:\chi(p)=1\}$, $a_0=1$ and any $p_0\in S$. Since
+$\sum_{p\le x}\chi(p)/p=O(1)$ by Dirichlet's theorem~\cite[Chs.~1 and~4]{Davenport},
+$\sum_{p\le x,\,\chi(p)=1}1/p=\tfrac12\sum_{p\le x,\,p\nmid q_0}(1+\chi(p))/p
+=\tfrac12\log\log x+O(1)$, so $\delta=\kappa=1/2$ and
+$L_\chi=\sum_{m}\chi(m)/(2^m-1)$ satisfies all theorems above with
+$(\log N)^\kappa=\sqrt{\log N}$.
+
+For $\chi=\chi_4$, Jacobi's two-square theorem gives $c_{\chi_4}(n)=r_2(n)/4$,
+where $r_2(n)$ is the number of ordered representations $n=s^2+t^2$ with
+$s,t\in\Z$. Hence
+\[
+1+4L_{\chi_4}=\sum_{n\ge0}r_2(n)2^{-n}=\theta_3(1/2)^2,\qquad
+\theta_3(q)=\sum_{j\in\Z}q^{j^2}.
+\]
+The nonzero binary coefficients of $L_{\chi_4}$ sit exactly at the sums of two
+squares, a set of density $\asymp(\log N)^{-1/2}$ by Landau's theorem. The
+character $\chi_4$ is odd, so $L_{\chi_4}$ is transcendental by
+\cref{thm:transcendence}. (Transcendence of $\theta_3(q)$ for algebraic
+$0<|q|<1$ was also deduced from Nesterenko's theorem~\cite{Nesterenko1996} by
+Duverney, Ke.~Nishioka, Ku.~Nishioka and Shiokawa~\cite{DNNS1996}.)
+\end{example}
+
+\begin{example}[Density one quarter]\label{ex:quarter}
+Let $q_0=5$, $S=\{p:p\equiv1\pmod5\}$, and let $f$ be completely
+multiplicative with $f(p)=1$ for $p\in S$, $f(p)=-1$ for $p\equiv2,3,4\pmod5$
+and $f(5)=0$. Then $c=f*1$ satisfies \ref{H2}--\ref{H4} with any $p_0\in S$
+(for instance $p_0=11$), and \eqref{eq:harmonic} holds with $\delta=1/4$ by
+Dirichlet's theorem in the form
+$\sum_{p\le x,\,p\equiv1\ (5)}1/p=\tfrac14\log\log x+O(1)$. Thus
+$L=\sum_m f(m)/(2^m-1)$ has word counts of order $H/(\log N)^{3/4}$ and
+$1-D_N(L)\asymp(\log\log N)/(\log N)^{3/4}$. The function $f$ is not a
+Dirichlet character, and we do not know whether this $L$ is transcendental.
+\end{example}
+
+More generally, $S$ may be any nonempty proper union of reduced classes modulo
+$q_0$ with the analogous $f$; this gives $\delta=j/\varphi(q_0)$ for
+$1\le j<\varphi(q_0)$. Choosing a prime $q_0\equiv1\pmod s$, every rational
+$\delta=r/s\in(0,1)$ arises.
+
+\begin{remark}[The local hypotheses matter]\label{rem:local}
+Let $c(n)=1$ if every prime factor of $n$ is $\equiv1\pmod4$ and $c(n)=0$
+otherwise. Its support has the same density $\asymp(\log N)^{-1/2}$ as in the
+$\chi_4$ example, but $c(p)=1$ violates \ref{H3}. Here $L=\sum c(n)2^{-n}$ has
+binary digits equal to $c(n)$, every supported index is $\equiv1\pmod 4$, and the
+word $11$ never occurs after the first digit. The value $c(p)=2$ is what allows a
+single planted coefficient to fill an arbitrary cylinder (\cref{sec:planting}).
+\end{remark}
+
+\subsection{Context and prior work}\label{subsec:context}
+
+\emph{Erd\H{o}s--Borwein and the planted-prime method.} Erd\H{o}s proved
+irrationality of $E$ by forcing a long block of a prescribed shape through
+congruences~\cite{Erdos1948}; P.~Borwein extended irrationality to
+$\sum1/(b^m-r)$~\cite{Borwein1992}. Crandall asked whether $11$ occurs
+infinitely often in $E$~\cite{Crandall2012}; Campbell gave an affirmative
+proof~\cite{Campbell2026}. A public repository of Captain Sude proves
+disjunctivity of $E$, first conditionally and with a Lean formalization, then
+unconditionally with a prefix count $N\exp(-C(\log\log N)^3)$~\cite{SudeDisj,SudeElem}.
+Mira Cult's public note proves a positive lower density for every word in every
+window $[N,N+H)$ with $N^a\le H\le N$, $7/12<a\le1$~\cite{MiraCult}. Our lower
+bounds use the same basic mechanism: one coefficient $c(bp)$, with $b$ a
+product of small primes and $p$ a prime in a short interval, is placed so that
+its binary weight is the midpoint of the target cylinder, and all other nearby
+coefficients are shown to be negligible. For $E$ every coefficient is positive,
+so the nearby terms cannot vanish and one controls their sum; in our setting the
+support is sparse and we force the nearby coefficients to \emph{vanish} with an
+upper-bound sieve over the primes outside $S$. This sparsity is also what makes
+the upper bounds, and hence non-normality, accessible. We have not located the
+two-sided window counts, the discrepancy order or the general class
+\ref{H1}--\ref{H4} in the sources examined; this is a statement about our
+search, not a claim of priority.
+
+\emph{Disjunctive nonnormal numbers.} Disjunctive sequences that are not normal
+are easy to construct combinatorially; see, e.g., the survey of Calude, Priese and
+Staiger~\cite{CaludePrieseStaiger1997}. The point here is that the constants are
+natural Lambert series, and that the deviation from normality is quantified
+exactly.
+
+\emph{Transcendence.} Nesterenko's theorem~\cite{Nesterenko1996} implies that
+nonzero modular forms with algebraic Fourier coefficients take transcendental
+values at algebraic $q$ (Hamieh--Murty~\cite[Thm.~3.1]{HamiehMurty2016}). For
+generating functions of multiplicative functions, Bell, Bruin and
+Coons~\cite{BellBruinCoons2012} proved that $\sum c(n)z^n$ is either rational or
+transcendental as a \emph{function}; this concerns the function, not its
+values.
+
+\subsection{Scope of verification}\label{subsec:scope}
+
+\cref{thm:words,thm:discrepancy} and \cref{cor:disjunctive} are
+\evidence{Lean-supported paper proof}s: their analytic estimates are written
+proofs with the external inputs listed in \cref{sec:inputs}, while the finite
+transfer steps are Lean declarations, namely the source-reindexing identity
+(\cref{lem:windows}), the one-bit Markov inequality (\cref{prop:upper}), and both
+finite discrepancy inequalities used in \cref{sec:discrepancy}. The identity in
+\cref{cor:translation} is a \evidence{Kernel-verified} statement for every real
+translation; the order is a paper deduction. \cref{thm:transcendence} is a
+\evidence{Paper proof} from~\cite{HamiehMurty2016}. No statement in this paper
+is formally verified in its entirety except the finite inequalities named in
+\cref{sec:formal}.
+
+\subsection{Organization}
+
+\cref{sec:prelim} collects the Lambert identity and the odd-part reindexing.
+\cref{sec:upper} proves the upper bounds. \cref{sec:inputs} states the external
+analytic inputs and proves the sieve lemmas. \cref{sec:planting} contains the
+planted-prime construction, from which \cref{sec:words} deduces
+\cref{thm:words} and \cref{cor:disjunctive}. \cref{sec:discrepancy,sec:translation,sec:transcendence}
+prove \cref{thm:discrepancy}, \cref{cor:translation} and
+\cref{thm:transcendence}. \cref{sec:remarks} discusses the range $a>7/12$, a
+finite numerical illustration, and open questions.
+
+\section{Preliminaries}\label{sec:prelim}
+
+\begin{lemma}[Lambert form]\label{lem:lambert}
+Let $c$ satisfy \ref{H2} and let $f=c*\mu$. Then $|f(n)|\le\tau(n)$ and
+\[
+\sum_{m\ge1}\frac{f(m)}{2^m-1}=\sum_{n\ge1}c(n)2^{-n}.
+\]
+\end{lemma}
+
+\begin{proof}
+For a prime power, $f(p^e)=c(p^e)-c(p^{e-1})$, so $|f(p^e)|\le e+1$ by
+\ref{H2}, and multiplicativity gives $|f(n)|\le\tau(n)$. Expanding
+$(2^m-1)^{-1}=\sum_{r\ge1}2^{-mr}$, the double series
+$\sum_{m,r}f(m)2^{-mr}$ converges absolutely because $\tau(m)\le m$, and
+collecting the terms with $mr=n$ gives $\sum_n(\sum_{m\mid n}f(m))2^{-n}=\sum_n c(n)2^{-n}$.
+\end{proof}
+
+The finite head of this rearrangement is the Lean identity
+\lean{WeightedLambertIdentities}{21}{\decl{lambert_head_eq_taylor}}.
+
+\subsection{Odd parts and displaced sources}
+
+For $m$ with $c(m)>0$ write $c(m)=2^{V(m)}U(m)$ with $U(m)$ odd, and put
+$U(m)=0$ when $c(m)=0$. Let $\mathcal N=\{m\ge1:c(m)>0\}$ and, for
+$m\in\mathcal N$, $t(m)=m-V(m)$.
+
+\begin{lemma}\label{lem:oddpart}
+Assume \ref{H1}--\ref{H3}.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $U$ is multiplicative, $0\le U(p^e)\le e+1$, $U(p)=1$ for $p\in S$, and
+  $U(p)=0$ for $p\notin S$, $p\nmid q_0$. Moreover $U(m)\ge1$ for $m\in\mathcal N$.
+\item For $m\in\mathcal N$, $V(m)\le\log_2m$ and $m/2\le t(m)\le m$.
+\item For every $n\ge0$,
+  \[
+  x_n=\{A(n)\},\qquad
+  A(n)=\sum_{m\in\mathcal N,\ t(m)>n}U(m)2^{\,n-t(m)}=\sum_{d\ge1}C(n+d)2^{-d},
+  \]
+  where $C(t)=\sum_{m\in\mathcal N,\ t(m)=t}U(m)$. In particular
+  $0\le x_n\le A(n)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) If $\gcd(m_1,m_2)=1$ and $c(m_1)c(m_2)>0$, then $2$-adic valuations add
+and odd parts multiply; if either value is $0$ both sides vanish. The remaining
+claims follow from \ref{H2}, \ref{H3} and $U(m)\mid c(m)$.
+
+(b) $V(m)\le\log_2c(m)\le\log_2\tau(m)\le\log_2 m$. For $m\ge4$,
+$\log_2m\le m/2$; for $m\le3$, $\tau(m)\le2$ gives $V(m)\le1\le m/2$ when
+$m\in\{2,3\}$ and $V(1)=0$.
+
+(c) Since $c(m)\le\tau(m)\le m$ the series
+$2^nL=\sum_{m\in\mathcal N}U(m)2^{n-t(m)}$ converges absolutely. The terms
+with $t(m)\le n$ are integers, so $x_n$ is the fractional part of the remaining
+sum, which is $A(n)\ge0$. Grouping by $d=t(m)-n$ gives the second expression.
+The fractional part of a nonnegative number is at most that number.
+\end{proof}
+
+The point of the reindexing is that $c$ itself has mean of order one for the
+character examples (for instance $\sum_{n\le x}r_2(n)/4\sim\pi x/4$), whereas
+the odd part $U$ has mean of order $(\log x)^{-\kappa}$ (\cref{lem:shiu}).
+A coefficient $c(m)=2^{V(m)}U(m)$ contributes to the fractional parts only
+through its odd part, displaced from position $m$ to position $t(m)$.
+
+\section{Upper bounds}\label{sec:upper}
+
+\begin{lemma}[Short sums of the odd part]\label{lem:shiu}
+Assume \ref{H1}--\ref{H3} and fix $0<\sigma\le1$. Uniformly for $x\ge2$ and
+$x^\sigma\le y\le x$,
+\[
+\sum_{x-y<m\le x}U(m)\ll_\sigma\frac{y}{(\log x)^{\kappa}},\qquad
+\#\{x-y<m\le x:\ c(m)>0\}\ll_\sigma\frac{y}{(\log x)^{\kappa}} .
+\]
+\end{lemma}
+
+\begin{proof}
+The second bound follows from the first since $U(m)\ge1$ on $\mathcal N$. We
+apply Shiu's theorem (\cref{thm:shiu}) to $U$, which lies in Shiu's class: by
+\cref{lem:oddpart}(a), $U(p^l)\le l+1\le2^l$, and $U(n)\le\tau(n)\ll_\epsilon n^\epsilon$.
+Shiu's theorem is stated for progressions $a\bmod k$ with $0<a<k$, so we use
+$k=2$, $a=1$ and separate the power of two. Write $m=2^ev$ with $v$ odd; then
+\[
+\sum_{x-y<m\le x}U(m)=\sum_{e\ge0}U(2^e)\sum_{\substack{(x-y)/2^e<v\le x/2^e\\ v\equiv1\ (2)}}U(v).
+\]
+For $2^e\le x^{\sigma/2}$ put $x'=x/2^e$ and $y'=y/2^e$. Then
+$y'\ge x^{\sigma/2}$, so $2<y'^{3/4}$ and $x'^{\sigma/4}<y'\le x'$ for large $x$;
+\cref{thm:shiu} with $\alpha=1/4$, $\beta=\sigma/4$ bounds the inner sum by
+\[
+\ll_\sigma\frac{y'}{\log x'}\exp\Bigl(\sum_{p\le x',\,p\ne2}\frac{U(p)}{p}\Bigr)
+\ll\frac{y}{2^e}\cdot\frac{(\log x)^{\delta}}{\log x},
+\]
+because $\log x'\ge\frac12\log x$ and, by \cref{lem:oddpart}(a) and \eqref{eq:harmonic},
+$\sum_{p\le x}U(p)/p\le\sum_{p\le x,\,p\in S}1/p+\sum_{p\mid q_0}2/p=\delta\log\log x+O(1)$.
+Summing over $e$ with weights $U(2^e)\le e+1$ costs the convergent factor
+$\sum_e(e+1)2^{-e}$. For $x^{\sigma/2}<2^e\le x$ the inner sum has at most
+$y2^{-e}+1$ terms, each $\ll_\epsilon x^{\epsilon}$; these $e$ contribute
+$\ll x^{\epsilon}\log x\,(yx^{-\sigma/2}+\log x)$, which is
+$o(y(\log x)^{-\kappa})$ for $\epsilon=\sigma/8$ since $y\ge x^\sigma$.
+\end{proof}
+
+\begin{lemma}[Mass of the displaced sources]\label{lem:windows}
+Assume \ref{H1}--\ref{H3}. Fix $0<\sigma\le1$ and an integer $s\ge0$. Uniformly
+for $N\ge2$ and $N^\sigma\le H\le N$, and for $M\ge2$,
+\[
+\sum_{N+s\le n<N+s+H}A(n)\ll_{\sigma,s}\frac{H}{(\log N)^{\kappa}},\qquad
+\sum_{0\le n<M}A(n)\ll\frac{M}{(\log M)^{\kappa}} .
+\]
+\end{lemma}
+
+\begin{proof}
+Put $N'=N+s$. All terms are nonnegative, so we may sum over $d$ last. For each
+$d$, interchanging the two finite sums gives the exact identity
+\begin{equation}\label{eq:arrival}
+\sum_{N'\le n<N'+H}C(n+d)=\sum_{m\in\mathcal N:\ N'+d\le t(m)<N'+H+d}U(m),
+\end{equation}
+which is the arrival identity
+\lean{ErdosBorweinArrivals}{41}{\decl{arrival_sum}} with sources $\mathcal N$,
+locations $t$ and marks $U$ (restricted to the finitely many eligible sources).
+
+If $d\le N'$, an eligible $m$ satisfies $m\le2t(m)<6N'$ by
+\cref{lem:oddpart}(b), hence $V(m)<B:=\lceil\log_2(6N')\rceil$ and
+$N'+d\le m<N'+H+d+B$. By \cref{lem:shiu} with exponent $\sigma/2$, applied to
+the interval $(N'+d-1,\,N'+H+d+B-1]$ of length $H+B\ge N^\sigma$ and right
+endpoint at most $5N$, the right side of \eqref{eq:arrival} is
+$\ll(H+B)(\log N)^{-\kappa}\ll H(\log N)^{-\kappa}$. If $d>N'$, then
+$C(t)\le\sum_{m\le2t}U(m)\le4t^2$, so the left side of \eqref{eq:arrival} is
+at most $4H(3N'+d)^2$. Therefore
+\[
+\sum_{N'\le n<N'+H}A(n)\ll\sum_{d\le N'}2^{-d}\frac{H}{(\log N)^{\kappa}}
++\sum_{d>N'}2^{-d}H(3N'+d)^2\ll\frac{H}{(\log N)^{\kappa}} .
+\]
+For the prefix, \eqref{eq:arrival} with the window $[0,M)$ and $d\le M$ involves
+only $m\le2t(m)<4M$, so it is at most $\sum_{m\le4M}U(m)\ll M(\log M)^{-\kappa}$
+by \cref{lem:shiu} with $y=x=4M$; the levels $d>M$ contribute $O(M^32^{-M})$.
+\end{proof}
+
+\begin{proposition}[Upper bounds]\label{prop:upper}
+Assume \ref{H1}--\ref{H3}. Fix $0<a\le1$, $k\ge1$ and $s\ge0$. For
+$N^a\le H\le N$ and $M\ge2$:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\#\{N+s\le n<N+s+H:\ x_n\ge1/2\}\le2\sum_{N+s\le n<N+s+H}A(n)\ll_{a,s}H(\log N)^{-\kappa}$;
+\item if $w$ has length $k$ and $w_i=1$, then $\cnt_w(N,H)\ll_{a,k}H(\log N)^{-\kappa}$;
+\item $H-\cnt_{0^k}(N,H)\ll_{a,k}H(\log N)^{-\kappa}$;
+\item $\#\{0\le n<M:\ x_n\ge1/2\}\ll M(\log M)^{-\kappa}$, and for every
+  $0<\varepsilon\le1$, $\#\{0\le n<M:\ x_n\ge\varepsilon\}\ll\varepsilon^{-1}M(\log M)^{-\kappa}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) If $x_n\ge1/2$ then $A(n)\ge x_n\ge1/2$ by \cref{lem:oddpart}(c), so the
+count is at most $2\sum A(n)$; this finite Markov step is
+\lean{WeightedLambertIdentities}{166}{\decl{nonneg_one_bit_count_le}}. Apply
+\cref{lem:windows}. (b) If $x_n\in I_w$ then digit $n+i$ of $L$ equals $1$, that
+is, $x_{n+i-1}\ge1/2$; apply (a) with $s=i-1$. (c) A start $n$ with
+$x_n\notin I_{0^k}$ has $x_{n+i-1}\ge1/2$ for some $1\le i\le k$; apply (a) for
+each $i$. (d) As in (a), using $x_n\le A(n)$ and the prefix bound of
+\cref{lem:windows}.
+\end{proof}
+
+\section{Analytic inputs}\label{sec:inputs}
+
+We use the following published theorems as black boxes. Each was checked
+against the printed source.
+
+\begin{theorem}[{Shiu~\cite[Theorem~1, p.~163]{Shiu1980}}]\label{thm:shiu}
+Let $g\ge0$ be multiplicative with $g(p^l)\le A_1^l$ for all primes $p$ and
+$l\ge1$, and $g(n)\le A_2(\epsilon)n^\epsilon$ for every $\epsilon>0$. Let
+$0<\alpha,\beta<1/2$. Then, as $x\to\infty$,
+\[
+\sum_{\substack{x-y<n\le x\\ n\equiv a\ (\mathrm{mod}\ k)}}g(n)\ll
+\frac{y}{\varphi(k)}\frac{1}{\log x}\exp\Bigl(\sum_{p\le x,\ p\nmid k}\frac{g(p)}{p}\Bigr),
+\]
+uniformly in integers $0<a<k$ with $\gcd(a,k)=1$ and in $y$, provided
+$k<y^{1-\alpha}$ and $x^\beta<y\le x$. The implied constant depends on
+$\alpha,\beta$ and $g$.
+\end{theorem}
+
+\begin{theorem}[{Perelli, Pintz and Salerno~\cite[Theorem, p.~2]{PPS1985}}]\label{thm:pps}
+Let $\psi(x;q,a)=\sum_{n\le x,\ n\equiv a\ (q)}\Lambda(n)$. If $y=x^\theta$
+with $7/12<\theta\le1$ and $Q=x^{1/40}$, then for every $A>0$
+\[
+\sum_{q\le Q}\max_{(a,q)=1}\max_{h\le y}\max_{x/2<z\le x}
+\Bigl|\psi(z+h;q,a)-\psi(z;q,a)-\frac{h}{\varphi(q)}\Bigr|\ll_{A,\theta}y(\log x)^{-A}.
+\]
+\end{theorem}
+
+The exponent $7/12$ is Huxley's exponent for the prime number theorem in short
+intervals~\cite{Huxley1972}; \cref{thm:pps} extends it to progressions on
+average. We use only the single term $q=q_0$.
+
+\begin{theorem}[{Montgomery and Vaughan~\cite[Theorem~2, (1.10), p.~121]{MontgomeryVaughan1973}}]\label{thm:mv}
+For positive reals $x,y$ and coprime positive integers $k,l$ with $y>k$,
+\[
+\pi(x+y;k,l)-\pi(x;k,l)<\frac{2y}{\varphi(k)\log(y/k)} .
+\]
+\end{theorem}
+
+We also use Mertens' estimates~\cite[Theorem~2.7]{MontgomeryVaughanBook}
+\begin{equation}\label{eq:mertens}
+\sum_{p\le x}\frac{\log p}{p}=\log x+O(1),\qquad
+\sum_{p\le x}\frac1p=\log\log x+O(1),\qquad
+\prod_{p\le x}\Bigl(1-\frac1p\Bigr)\asymp\frac1{\log x}.
+\end{equation}
+
+\subsection{Consequences}
+
+\begin{lemma}[Primes in a fixed progression in short intervals]\label{lem:shortprimes}
+Fix $q_0$, $a_0$ with $\gcd(a_0,q_0)=1$ and $7/12<\nu\le1$. Uniformly for
+real $X>Y\ge(X+Y)^\nu$,
+\[
+\#\{X<p\le X+Y:\ p\equiv a_0\ (\mathrm{mod}\ q_0)\}=(1+o(1))\frac{Y}{\varphi(q_0)\log X}\qquad(X\to\infty).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $x=X+Y$; then $x/2<X<x$ and $q_0\le x^{1/40}$ for large $x$. Split
+$(X,X+Y]$ into $m=\lceil Y/x^\nu\rceil\le2Y/x^\nu$ consecutive intervals
+$(z,z+h]$ with $X\le z<x$ and $h\le x^\nu$. Retaining only $q=q_0$ in
+\cref{thm:pps} with $\theta=\nu$ gives
+$\psi(X+Y;q_0,a_0)-\psi(X;q_0,a_0)=Y/\varphi(q_0)+O_A(mx^\nu(\log x)^{-A})
+=Y/\varphi(q_0)+O_A(Y(\log x)^{-A})$. Prime powers $p^e\le x$ with $e\ge2$
+contribute $O(\sqrt x\log^2x)=o(Y/\log x)$ because $\nu>1/2$. Finally
+$\log p=\log X+O(1)$ for $X<p\le 2X$.
+\end{proof}
+
+Let $\Qset=\{q\text{ prime}:\ q\nmid q_0,\ q\notin S\}$; by \ref{H3},
+$c(q)=0$ for $q\in\Qset$.
+
+\begin{lemma}[Harmonic sums]\label{lem:harmonic}
+$\sum_{q\le x,\,q\in\Qset}1/q=\kappa\log\log x+O(1)$, and for $3\le w_0<w$,
+\[
+\prod_{q\in\Qset,\ w_0<q\le w}\Bigl(1-\frac1{q-1}\Bigr)\ll\Bigl(\frac{\log w_0}{\log w}\Bigr)^{\kappa}.
+\]
+\end{lemma}
+
+\begin{proof}
+The first claim is \eqref{eq:mertens} minus \eqref{eq:harmonic} and the finitely
+many primes dividing $q_0$. For the second use
+$1-1/(q-1)\le\exp(-1/q)$.
+\end{proof}
+
+\begin{lemma}[Small factors]\label{lem:small}
+Fix $0<\theta<1/2$ and let $\Mset_N$ be the set of squarefree $m\le N^\theta$
+whose prime factors lie in $S\setminus\{p_0\}$ and with $\omega(m)\le2\log\log N$.
+Then $\sum_{m\in\Mset_N}1/m\gg_\theta(\log N)^\delta$ for $N\ge N_0(\theta)$.
+\end{lemma}
+
+\begin{proof}
+Let $S'=S\setminus\{p_0\}$, $z_1=N^{\theta/8}$, and let $\mathcal R$ be the set
+of squarefree products of primes of $S'$ up to $z_1$. By \eqref{eq:harmonic},
+$\Pi:=\sum_{m\in\mathcal R}1/m=\prod_{p\in S',\,p\le z_1}(1+1/p)\asymp_\theta(\log N)^\delta$.
+Since $\log m=\sum_{p\mid m}\log p$,
+\[
+\sum_{m\in\mathcal R,\ m>N^\theta}\frac1m\le\frac{1}{\theta\log N}\sum_{m\in\mathcal R}\frac{\log m}{m}
+=\frac{\Pi}{\theta\log N}\sum_{p\in S',\,p\le z_1}\frac{\log p}{p+1}
+\le\Pi\Bigl(\frac18+O\Bigl(\frac{1}{\theta\log N}\Bigr)\Bigr)
+\]
+by \eqref{eq:mertens}. By Rankin's trick and \eqref{eq:harmonic},
+\[
+\sum_{m\in\mathcal R,\ \omega(m)>2\log\log N}\frac1m\le
+2^{-2\log\log N}\prod_{p\in S',\,p\le z_1}\Bigl(1+\frac2p\Bigr)
+\ll(\log N)^{2\delta-2\log2}=o\bigl((\log N)^\delta\bigr),
+\]
+since $\delta<1<2\log2$. Hence $\sum_{\Mset_N}1/m\ge\Pi/2$ for large $N$.
+\end{proof}
+
+\subsection{An upper-bound sieve}
+
+We use Selberg's upper-bound sieve in the following explicit form. For
+completeness we include the standard proof (see~\cite[Ch.~3]{HalberstamRichert}).
+
+\begin{lemma}[Selberg sieve]\label{lem:selberg}
+Let $q_0\ge1$, $\gcd(a_0,q_0)=1$, $X\in\R$, $Y\ge1$ and $z\ge2$. Let $\Pset$ be
+a set of primes $q\le z$ with $q\nmid q_0$, and for $q\in\Pset$ let
+$\Omega_q\subset\Z/q\Z$ have $\omega(q):=|\Omega_q|$ with
+$1\le\omega(q)\le\min(2,q-1)$. Put $g(q)=\omega(q)/q$. If $z\ge z_*$ for a
+suitable absolute constant $z_*$, then
+\[
+\#\{X<n\le X+Y:\ n\equiv a_0\ (q_0),\ n\bmod q\notin\Omega_q\ \forall q\in\Pset\}
+\le\frac{2Y}{q_0}\prod_{q\in\Pset,\ q\le z^{1/8}}(1-g(q))+z^2(1+\log z)^2 .
+\]
+\end{lemma}
+
+\begin{proof}
+Let $P=\prod_{q\in\Pset}q$ and extend $g$ and $\omega$ multiplicatively to
+divisors of $P$. For $d\mid P$ let $\mathcal A_d$ be the set of
+$n\in(X,X+Y]$, $n\equiv a_0\ (q_0)$, with $n\bmod q\in\Omega_q$ for all $q\mid d$.
+By the Chinese remainder theorem $\mathcal A_d$ is a union of $\omega(d)$
+residue classes modulo $q_0d$, so $|\mathcal A_d|=(Y/q_0)g(d)+r_d$ with
+$|r_d|\le\omega(d)\le2^{\omega(d)}$. For $n$ in the progression let $d(n)$ be the
+product of the $q\in\Pset$ with $n\bmod q\in\Omega_q$; then $n\in\mathcal A_d$
+if and only if $d\mid d(n)$, and the sifted $n$ are those with $d(n)=1$.
+
+Let $\lambda_d\in\R$ ($d\mid P$, $d\le z$) with $\lambda_1=1$. The sifted count is
+at most $\sum_n(\sum_{d\mid d(n)}\lambda_d)^2
+=\frac{Y}{q_0}\Sigma_1+\Sigma_2$ with
+$\Sigma_1=\sum_{d_1,d_2}\lambda_{d_1}\lambda_{d_2}g([d_1,d_2])$ and
+$\Sigma_2=\sum_{d_1,d_2}\lambda_{d_1}\lambda_{d_2}r_{[d_1,d_2]}$.
+Define $h(q)=g(q)/(1-g(q))>0$, extended multiplicatively, so that
+$1/g(m)=\sum_{r\mid m}1/h(r)$ for $m\mid P$. Since
+$g([d_1,d_2])=g(d_1)g(d_2)/g((d_1,d_2))$,
+\[
+\Sigma_1=\sum_{r\mid P,\ r\le z}\frac{y_r^2}{h(r)},\qquad
+y_r=\sum_{d:\ r\mid d}\lambda_dg(d),
+\]
+and $\lambda_1=1$ becomes $\sum_r\mu(r)y_r=1$ by M\"obius inversion. With
+$G(z)=\sum_{r\mid P,\ r\le z}h(r)$, the choice $y_r=\mu(r)h(r)/G(z)$ gives
+$\Sigma_1=1/G(z)$, and inversion gives
+\[
+\lambda_d=\frac{\mu(d)}{G(z)}\prod_{q\mid d}\frac{1}{1-g(q)}
+\sum_{\substack{s\mid P,\ s\le z/d\\ (s,d)=1}}h(s),\qquad
+|\lambda_d|=\frac1{G(z)}\sum_{l\mid d}h(l)\sum_{\substack{s\mid P,\ s\le z/d\\(s,d)=1}}h(s)\le1,
+\]
+because $\prod_{q\mid d}(1-g(q))^{-1}=\prod_{q\mid d}(1+h(q))=\sum_{l\mid d}h(l)$
+and the products $ls$ are distinct divisors of $P$ not exceeding $z$. Hence
+$|\Sigma_2|\le\sum_{d_1,d_2\le z}2^{\omega(d_1)+\omega(d_2)}
+\le(\sum_{d\le z}\tau(d))^2\le z^2(1+\log z)^2$.
+
+It remains to bound $G(z)$ below. Let $P'$ be the product of the $q\in\Pset$
+with $q\le w:=z^{1/8}$ and $\Pi'=\sum_{d\mid P'}h(d)=\prod_{q\mid P'}(1-g(q))^{-1}$.
+Then
+\[
+\sum_{d\mid P',\ d>z}h(d)\le\frac1{\log z}\sum_{d\mid P'}h(d)\log d
+=\frac{\Pi'}{\log z}\sum_{q\mid P'}\frac{h(q)\log q}{1+h(q)}
+=\frac{\Pi'}{\log z}\sum_{q\mid P'}g(q)\log q
+\le\Pi'\,\frac{2\log w+O(1)}{\log z}
+\]
+by \eqref{eq:mertens} and $g(q)\le2/q$. The last factor is $1/4+O(1/\log z)\le1/2$
+for $z\ge z_*$, so $G(z)\ge\Pi'/2$ and $\frac{Y}{q_0}\Sigma_1\le\frac{2Y}{q_0}\prod_{q\mid P'}(1-g(q))$.
+\end{proof}
+
+\section{Planting and isolating one coefficient}\label{sec:planting}
+
+Fix a word $w$ of length $k\ge1$ and value $u$, and let
+$J=J(N)=\lceil10\log\log N\rceil$.
+
+\begin{definition}\label{def:isolated}
+Let $R\ge0$ be an integer. An integer $n\ge R$ is \emph{$R$-isolated for $w$}
+if there is an integer $j_0$ with $1\le j_0\le J$ such that
+\begin{enumerate}[label=\textup{(I\arabic*)}]
+\item\label{I1} $c(n+j_0)2^{-j_0}=(2u+1)2^{-k-1}$;
+\item\label{I2} $c(n+j)=0$ for every integer $j$ with $1-R\le j\le J$ and $j\ne j_0$;
+\item\label{I3} $E(n):=\sum_{j>J}c(n+j)2^{-j}<2^{-k-2}$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}\label{lem:isolated}
+Let $n$ be $R$-isolated for $w$. Then $j_0$ is the least
+$j\ge1$ with $c(n+j)\ne0$,
+\[
+x_n=(2u+1)2^{-k-1}+E(n)\in I_w,\qquad\text{and}\qquad x_{n-r}=2^{-r}x_n\quad(1\le r\le R).
+\]
+\end{lemma}
+
+\begin{proof}
+The first claim is \ref{I1}--\ref{I2}. Write
+$2^{n}L=\sum_{i\le n}c(i)2^{n-i}+T(n)$ with $T(n)=\sum_{j\ge1}c(n+j)2^{-j}$. The
+first sum is an integer, and by \ref{I1}--\ref{I3},
+$T(n)\in[(2u+1)2^{-k-1},(2u+1)2^{-k-1}+2^{-k-2})$. This interval lies in
+$I_w=[u2^{-k},(u+1)2^{-k})\subset[0,1)$, because the midpoint
+$(2u+1)2^{-k-1}$ is at distance $2^{-k-1}$ from both endpoints; so
+$x_n=T(n)$. For $1\le r\le R$, the coefficients $c(n-r+j)$ with $1\le j\le r$
+vanish by \ref{I2} (their offsets from $n$ lie in $[1-R,0]$), hence
+$T(n-r)=2^{-r}T(n)\in[0,1)$ and $x_{n-r}=2^{-r}x_n$. All indices are positive
+since $n\ge R$.
+\end{proof}
+
+\begin{proposition}[Planted occurrences]\label{prop:planting}
+Assume \ref{H1}--\ref{H4}. Fix $7/12<a\le1$, a word $w$ and a constant
+$C_R\ge0$. There are $c_*=c_*(w,a)>0$ and $N_0=N_0(w,a,C_R)$ such that for all
+$N\ge N_0$, all $N^a\le H\le N$ and all integers $0\le R\le C_R\log\log N$,
+\[
+\#\{N\le n<N+H:\ n\text{ is $R$-isolated for $w$}\}\ge c_*\frac{H}{(\log N)^{\kappa}} .
+\]
+\end{proposition}
+
+\begin{proof}
+\emph{Parameters.} Put $\theta=\min\{1/4,(a-7/12)/2\}$ and
+$\nu=\frac12(\frac7{12}+a-\theta)$, so that $7/12<\nu<a-\theta$. Put
+$z_0=(\log N)^2$. All thresholds below depend only on $w,a,C_R$ and the data.
+
+\emph{Construction.} Let $m\in\Mset_N$ (\cref{lem:small} with this $\theta$),
+$\ell=\omega(m)$, $b=p_0^{2u}m$ and $j_0=k+2+\ell$. Then $b\ll_wN^\theta$ and
+$j_0\le k+2+2\log\log N\le J$. Put
+\[
+X=\frac{N+j_0-1}{b},\qquad Y=\frac Hb,\qquad
+\Pset_m=\{p:\ X<p\le X+Y,\ p\equiv a_0\ (\mathrm{mod}\ q_0)\}.
+\]
+For integers $p$, the condition $X<p\le X+Y$ is equivalent to
+$N\le bp-j_0<N+H$. We have $Y<X$, $X\gg_wN^{1-\theta}$, $X+Y\le3N$ and
+$Y\gg_wN^{a-\theta}\ge(X+Y)^\nu$ for large $N$. By \cref{lem:shortprimes},
+\begin{equation}\label{eq:Pm}
+|\Pset_m|\ge\frac{Y}{2\varphi(q_0)\log N}\qquad(N\ge N_0),
+\end{equation}
+uniformly in $m$ and $H$. For $p\in\Pset_m$ we have $p>X>b$ and
+$p>2\sqrt{3N}$ for large $N$ (as $\theta\le1/4$); moreover $p\in S$ by \ref{H1},
+$p\ne p_0$ and $p\nmid m$. By multiplicativity, \ref{H3} and \ref{H4},
+\[
+c(bp)=c(p_0^{2u})\,c(m)\,c(p)=(2u+1)2^{\ell}\cdot2,\qquad
+c(bp)2^{-j_0}=(2u+1)2^{-k-1}.
+\]
+Thus $n=bp-j_0$ satisfies \ref{I1}. We now remove the primes for which
+\ref{I2} or \ref{I3} fails.
+
+\emph{Vanishing of nearby coefficients.} Fix $j\in[1-R,J]\setminus\{j_0\}$
+and put $h=j-j_0$, so $1\le|h|\le(11+C_R)\log\log N<z_0$. Let $z=Y^{1/4}$ and
+apply \cref{lem:selberg} to the interval $(X,X+Y]$ and the progression
+$a_0\bmod q_0$, with $\Pset$ the primes $q\le z$ not dividing $q_0$ and
+\[
+\Omega_q=\{0\}\ \ \text{if }q\notin\Qset\text{ or }q\le z_0,\qquad
+\Omega_q=\{0,\,-h\bar b\}\ \ \text{if }q\in\Qset,\ z_0<q\le z,
+\]
+where $\bar b$ is the inverse of $b$ modulo $q$ (the prime factors of $b$ lie in
+$S$, so $q\nmid b$ for $q\in\Qset$). The two classes are distinct since
+$q>z_0>|h|$, and $\omega(q)\le q-1$ since $z_0\ge3$. Suppose $p\in\Pset_m$ has
+$c(bp+h)>0$ and $q^2\nmid bp+h$ for every $q\in\Qset$ with $z_0<q\le z$. Then
+$p\bmod q\ne0$ for all $q\le z$ (as $p>z$), and for $q\in\Qset$ with
+$z_0<q\le z$ we have $q\nmid bp+h$, since $q\parallel bp+h$ would give
+$c(bp+h)=c(q)c((bp+h)/q)=0$; so $p\not\equiv-h\bar b\pmod q$. Hence $p$ is
+counted by \cref{lem:selberg}. With $w=z^{1/8}=Y^{1/32}>z_0$, \eqref{eq:mertens}
+and \cref{lem:harmonic},
+\[
+\prod_{q\in\Pset,\ q\le w}(1-g(q))\le
+\prod_{q\le w,\ q\nmid q_0}\Bigl(1-\frac1q\Bigr)
+\prod_{q\in\Qset,\ z_0<q\le w}\Bigl(1-\frac1{q-1}\Bigr)
+\ll\frac1{\log w}\Bigl(\frac{\log z_0}{\log w}\Bigr)^{\kappa}
+\ll\frac{(\log\log N)^\kappa}{(\log N)^{1+\kappa}},
+\]
+using $(1-2/q)/(1-1/q)=1-1/(q-1)$ and $\log w\gg\log N$. The integers
+$p\in(X,X+Y]$ with $q^2\mid bp+h$ for some $q\in\Qset\cap(z_0,z]$ number at
+most $\sum_{z_0<q\le z}(Y/q^2+1)\le Y/z_0+z$, as $b$ is invertible modulo
+$q^2$. Therefore the number of $p\in\Pset_m$ with $c(bp+h)>0$ is
+\[
+\ll\frac{Y(\log\log N)^\kappa}{(\log N)^{1+\kappa}}+\frac{Y}{(\log N)^2}+Y^{1/2}(1+\log Y)^2,
+\]
+and summing over the $O(\log\log N)$ values of $j$, we find that \ref{I2}
+fails for at most
+\[
+O\bigl(Y(\log\log N)^{1+\kappa}(\log N)^{-1-\kappa}\bigr)=o(Y/\log N)
+\]
+primes of $\Pset_m$. This is where $\kappa>0$, that is $\delta<1$, is used.
+
+\emph{The far tail.} For $j>J$ put $h=j-j_0\ge1$, so $bp+h=n+j$. First let
+$J<j\le N$; then $bp+h<3N$ and $c(bp+h)\le\tau(bp+h)\le2\sum_{d\le2\sqrt N}\ind_{d\mid bp+h}$.
+Fix $d\le2\sqrt N$ and let $g=\gcd(d,b)$. If $d\mid bp+h$ then $g\mid h$;
+writing $d'=d/g$, $b'=b/g$, $h'=h/g$ we have $\gcd(b',d')=1$ and the condition
+becomes $p\equiv r_d:=-h'\bar{b'}\pmod{d'}$. If $\gcd(r_d,d')>1$, every prime in
+this class divides $d'\le2\sqrt N<X$, so there is no such $p\in\Pset_m$.
+Otherwise \cref{thm:mv} applies. Since $(a-\theta)\cdot\frac78>\frac7{12}\cdot\frac78>\frac12$,
+we have $d'\le2\sqrt N\le Y^{7/8}$ for large $N$, so $\log(Y/d')\ge\frac18\log Y$ and
+the number of primes $p\in(X,X+Y]$ in the class is at most
+$16Y/(\varphi(d')\log Y)$ (for $d'=1$ this is the bound for all primes). The
+map $d\mapsto(g,d')$ is injective and $g\mid h$, so
+\[
+\sum_{p\in\Pset_m}c(bp+h)\le\frac{32Y}{\log Y}\sum_{g\mid h}\sum_{d'\le2\sqrt N}\frac1{\varphi(d')}
+\ll\tau(h)\,Y,
+\]
+using $\log Y\gg\log N$ and $\sum_{d\le t}1/\varphi(d)\ll\log(2t)$; the latter follows
+from $d/\varphi(d)=\sum_{l\mid d}\mu^2(l)/\varphi(l)$ and the convergence of
+$\sum_l\mu^2(l)/(l\varphi(l))$. For $j>N$ use $c(n+j)\le n+j\le2N+j$ and
+$|\Pset_m|\le Y+1$. Since $\tau(h)\le h\le j$,
+\[
+\sum_{p\in\Pset_m}E(bp-j_0)\ll Y\sum_{j>J}j2^{-j}+(Y+1)\sum_{j>N}(2N+j)2^{-j}
+\ll YJ2^{-J}.
+\]
+By Markov's inequality, \ref{I3} fails for at most
+$2^{k+2}\cdot O(YJ2^{-J})=O_k\bigl(Y\log\log N\,(\log N)^{-10\log2}\bigr)=o(Y/\log N)$
+primes of $\Pset_m$.
+
+\emph{Counting.} By \eqref{eq:Pm} and the two removals, for $N\ge N_0$ every
+$m\in\Mset_N$ has at least $Y/(4\varphi(q_0)\log N)$ primes $p\in\Pset_m$ for
+which $n=bp-j_0\in[N,N+H)$ is $R$-isolated for $w$ (note $n\ge N\ge R$). The map
+$(m,p)\mapsto n$ is injective: by \cref{lem:isolated}, $n$ determines $j_0$ as
+the least $j\ge1$ with $c(n+j)\ne0$, hence determines $bp=n+j_0$; since $p>b$,
+$p$ is the largest prime factor of $bp$, which determines $b$ and $m$.
+Summing over $m$ and using $Y=H/b$ and \cref{lem:small},
+\[
+\#\{\text{$R$-isolated }n\}\ge\frac{H}{4\varphi(q_0)p_0^{2u}\log N}\sum_{m\in\Mset_N}\frac1m
+\gg_{w,a}\frac{H}{(\log N)^{1-\delta}} .\qedhere
+\]
+\end{proof}
+
+\section{Word counts}\label{sec:words}
+
+\begin{proof}[Proof of \cref{thm:words}]
+(i) The upper bound is \cref{prop:upper}(b), valid for every $a>0$. For the
+lower bound, every $0$-isolated $n\in[N,N+H)$ satisfies $x_n\in I_w$ by
+\cref{lem:isolated}, so \cref{prop:planting} with $R=0$ gives
+$\cnt_w(N,H)\gg H(\log N)^{-\kappa}$.
+(ii) The upper bound for $H-\cnt_{0^k}(N,H)$ is \cref{prop:upper}(c). Every
+start $n$ with $x_n\ge1/2$ is rejected, and their number is
+$\cnt_1(N,H)\gg H(\log N)^{-\kappa}$ by (i).
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:disjunctive}]
+For $M\ge4$ the window $[\lfloor M/2\rfloor,2\lfloor M/2\rfloor)\subset[0,M)$ has
+$N=H=\lfloor M/2\rfloor$, so \cref{thm:words} gives the lower bound; the upper
+bound follows from \cref{prop:upper}(d): if $w_i=1$, each occurrence at a
+shift $n<M$ gives $x_{n+i-1}\ge1/2$ with $n+i-1<M+k$.
+In particular $\cnt_1(0,M)=o(M)$. Every word occurs in each window
+$[N,N+\lceil N^a\rceil)$ with $N\ge N_0(w,a)$ (for $0^k$ by (ii)), hence
+infinitely often. An eventually periodic expansion with period $r$ contains at
+most $r$ distinct words of each length $k$ beyond its preperiod, whereas
+$2^k>r$ for large $k$; hence $L$ is irrational.
+\end{proof}
+
+\begin{proposition}[Density of the support]\label{prop:support}
+Under \ref{H1}--\ref{H4},
+$\#\{m\le x:\ c(m)>0\}\asymp x/(\log x)^{\kappa}$ for $x\ge3$.
+\end{proposition}
+
+\begin{proof}
+The upper bound is \cref{lem:shiu} with $y=x$. For the lower bound take $w=0$
+(so $u=0$), $N=H=\lfloor x/3\rfloor$ and $a=1$ in the construction of
+\cref{prop:planting}. The integers $bp$ with $m\in\Mset_N$ and $p\in\Pset_m$ are
+at most $3N\le x$, satisfy $c(bp)=2^{\omega(m)+1}>0$, and are pairwise distinct
+because $p$ is the largest prime factor of $bp$. By \eqref{eq:Pm} and
+\cref{lem:small} their number is $\gg N(\log N)^{-\kappa}$.
+\end{proof}
+
+When $S$ is a union of residue classes, Wirsing's mean-value theorem
+\cite[Satz~1, p.~76]{Wirsing1961} applied to $\ind_{c(m)>0}$ refines
+\cref{prop:support} to an asymptotic formula; for $\chi_4$ it is Landau's theorem.
+We do not need this.
+
+\section{Discrepancy}\label{sec:discrepancy}
+
+We use two finite inequalities, each of which is a Lean declaration for every
+real $x$ (\cref{sec:formal}). Write
+$F_N(s,t)=\#\{0\le n<N:\ s\le\{2^nx\}<t\}/N$.
+
+\begin{lemma}[Upper gap transfer]\label{lem:upperlean}
+For every real $x$ and integers $L\ge1$, $N\ge1$,
+\[
+1-D_N(x)\le2^{-L}+\frac{L-1}N+L\,F_N(1/2,1).
+\]
+\end{lemma}
+
+This is \lean{Phase17DiscrepancyBounds}{98}{\decl{one_sub_discrepancy_le_one_bits}};
+the auxiliary count $F_N(2^{-L},1)\le(L-1)/N+LF_N(1/2,1)$ is
+\lean{Phase17DiscrepancyBounds}{77}{\decl{upper_freq_le_one_bits}}. The proof
+compares the interval $[0,2^{-L})$ with its complement: a point in $[2^{-L},1)$
+reaches $[1/2,1)$ within $L-1$ doublings.
+
+\begin{lemma}[Lower gap transfer]\label{lem:lowerlean}
+Let $x\in\R$, $N\ge1$, $0<\varepsilon\le1/6$ and $\Delta\le\varepsilon$. If
+$F_N(0,\varepsilon)\ge\Delta$ and $F_N(3\varepsilon,1/2)\ge\Delta$, then
+$1-D_N(x)\ge\Delta$.
+\end{lemma}
+
+This is \lean{Phase17DiscrepancyBounds}{123}{\decl{one_sub_discrepancy_ge_of_separated_mass}}.
+The argument: for an interval $I=[s,t)$ of length $|I|$ and empirical mass
+$m(I)$, the deficit $|I|-m(I)$ is at most $1-\varepsilon$ if
+$|I|\le1-\varepsilon$, and otherwise $I\supset[3\varepsilon,1/2)$, so
+$m(I)\ge\Delta$. The excess $m(I)-|I|$ is at most $1-\varepsilon$ if
+$|I|\ge\varepsilon$, and otherwise $I$ misses $[0,\varepsilon)$ or
+$[3\varepsilon,1/2)$, so $m(I)\le1-\Delta$.
+
+\begin{proof}[Proof of \cref{thm:discrepancy}]
+\emph{Upper bound for $1-D_N$.} By \cref{prop:upper}(d),
+$F_N(1/2,1)\le C_1(\log N)^{-\kappa}$ for $N\ge2$. Take
+$L=\lceil\kappa\log_2\log N\rceil$ in \cref{lem:upperlean}: then
+$2^{-L}\le(\log N)^{-\kappa}$ and
+$1-D_N(L)\ll(\log\log N)(\log N)^{-\kappa}$.
+
+\emph{Lower bound for $1-D_M$.} Let $M$ be large, $N=H=\lfloor M/2\rfloor$ and
+$R=\lfloor\frac\kappa2\log_2\log M\rfloor\ge1$. Apply \cref{prop:planting} to
+the word $w=1$ ($k=1$, $u=1$) with $C_R=1$: the set $\Gset$ of $R$-isolated
+$n\in[N,2N)$ has $|\Gset|\ge c_*N(\log N)^{-\kappa}$. By \cref{lem:isolated},
+every $n\in\Gset$ has $x_n\in[3/4,7/8)$ and, for $1\le r\le R$,
+\[
+x_{n-r}=2^{-r}x_n\in\bigl[\tfrac34 2^{-R},\tfrac7{16}\bigr)\subset[3\varepsilon,1/2),
+\qquad\varepsilon:=2^{-R}/4 .
+\]
+The sets $\{n-1,\dots,n-R\}$ for distinct $n\in\Gset$ are disjoint: if
+$n<n'$ and $n-r=n'-r'$ with $1\le r,r'\le R$, then $n=n'-(r'-r)$ with
+$1\le r'-r<R$, so $x_n=2^{-(r'-r)}x_{n'}<1/2$, contradicting $x_n\ge3/4$. These
+starts lie in $[0,M)$ since $N-R\ge0$. Put $\Delta=R|\Gset|/M$; then
+$F_M(3\varepsilon,1/2)\ge\Delta$. Next, $|\Gset|\le\#\{n<M:x_n\ge1/2\}\ll M(\log M)^{-\kappa}$
+by \cref{prop:upper}(d), so $\Delta\ll(\log\log M)(\log M)^{-\kappa}$, whereas
+$\varepsilon\ge\frac14(\log M)^{-\kappa/2}$; hence $\Delta\le\varepsilon\le1/8$
+for large $M$. By \cref{prop:upper}(d),
+$F_M(0,\varepsilon)\ge1-O(\varepsilon^{-1}(\log M)^{-\kappa})=1-O((\log M)^{-\kappa/2})\ge1/2\ge\Delta$.
+\cref{lem:lowerlean} now gives
+\[
+1-D_M(L)\ge\Delta\ge\frac{R\,c_*N}{M(\log N)^{\kappa}}\gg\frac{\log\log M}{(\log M)^{\kappa}} .\qedhere
+\]
+\end{proof}
+
+\begin{remark}\label{rem:transition}
+The weaker bound $1-D_N(L)\gg(\log N)^{-\kappa}$ follows from the transition
+inequality $1-D_N(x)\ge\min\{1/3,F_N(1/4,3/4)\}-1/N$
+(\lean{Phase17DiscrepancyBounds}{28}{\decl{one_sub_discrepancy_ge_transition}}),
+since $[1/4,3/4)=I_{01}\cup I_{10}$ and $\cnt_{01}(0,N)\gg N(\log N)^{-\kappa}$.
+The separated-mass argument is needed for the factor $\log\log N$. Together, the two halves of the proof
+show that $\min_{L\ge1}\bigl(2^{-L}+F_N(2^{-L},1)\bigr)$, the shortfall of the best
+all-zero cylinder $[0,2^{-L})$ from the maximal deviation $1$, is already of the
+exact order of $1-D_N(L)$.
+\end{remark}
+
+\section{\texorpdfstring{Translation by $L$}{Translation by L}}\label{sec:translation}
+
+\begin{theorem}[Sharp translation; {\cite{SyntheticCompanion}}]\label{thm:sharp}
+For all real $x,z$ and every integer $N\ge1$,
+$|D_N(x+z)-D_N(x)|\le1-D_N(z)$, with equality at $x=0$.
+\end{theorem}
+
+This is the kernel-verified declaration
+\lean{SharpTranslation}{386}{\decl{sharp_translation_isGreatest}} (with base $b=2$),
+which packages \lean{SharpTranslation}{343}{\decl{sharp_translation}} and the
+equality case. We do not reprove the inequality, which is a result of the
+companion manuscript~\cite{SyntheticCompanion}. The equality at $x=0$ is
+elementary: the orbit of $0$ is constant, so $D_N(0)=1$
+(\lean{SharpTranslation}{357}{\decl{radixDiscrepancy_zero}}) and
+$|D_N(z)-1|=1-D_N(z)$.
+
+\begin{proof}[Proof of \cref{cor:translation}]
+The identity is \cref{thm:sharp} with $z=L$. The order follows from
+\cref{thm:discrepancy}. Since $\sup_x|D_N(x+L)-D_N(x)|\to0$, the sequences
+$D_N(x+L)$ and $D_N(x)$ have the same upper and lower limits for every $x$.
+\end{proof}
+
+The identity concerns the extreme (unanchored) one-dimensional discrepancy
+defined in \cref{subsec:setting}; we make no claim for star discrepancy or for
+multidimensional discrepancies. The supremum in \cref{cor:translation} is an
+exact identity at every $N$; only
+its asymptotic order involves unspecified constants, which depend on the data
+\ref{H1}--\ref{H4} (for $L_\chi$, on the character). Neither disjunctivity nor
+sparse word counts alone would give such a rate: \cref{cor:translation} needs
+the full two-sided estimate of \cref{thm:discrepancy}.
+
+\section{Transcendence for odd characters}\label{sec:transcendence}
+
+For a Dirichlet character $\chi$ and $|q|<1$ put
+$\Lambda_\chi(q)=\sum_{m\ge1}\chi(m)q^m/(1-q^m)=\sum_{n\ge1}(\chi*1)(n)q^n$.
+In the notation of~\cite{HamiehMurty2016}, $\Lambda_\chi(q)=L_q(1,\chi)$, where
+$L_q(s,\chi)=\sum_{n\ge1}(\sum_{d\mid n}\chi(n/d)d^{s-1})q^n$.
+
+\begin{theorem}[{Hamieh and Murty~\cite[Theorem~1.1, p.~766; Theorem~3.1, p.~771]{HamiehMurty2016}}]\label{thm:hm}
+\textup{(a)} Let $N,k\ge1$ and let $\chi$ be a primitive Dirichlet character of
+conductor $N$ with $\chi(-1)=(-1)^k$. If $q$ is algebraic with $|q|<1$, then
+$L_q(k,\chi)$ is transcendental. (In~\cite{HamiehMurty2016}, $q=e^{2\pi i\tau}$,
+so $q\ne0$.)
+\textup{(b)} Let $F$ be a nonzero modular form of level $N$ and weight $k$ with
+algebraic Fourier coefficients. If $\tau$ lies in the upper half-plane and
+$e^{2\pi i\tau}$ is algebraic, then $F(\tau)$ is transcendental.
+\end{theorem}
+
+Both parts rest on Nesterenko's theorem~\cite{Nesterenko1996}. Part~(a) at $k=1$
+is \cref{thm:transcendence} for primitive odd $\chi$.
+
+\begin{proof}[Proof of \cref{thm:transcendence}]
+Let $\chi$ be odd modulo $q_1$, induced by the primitive character $\chi^*$ of
+conductor $q_*\mid q_1$, and let $P$ be the product of the primes dividing $q_1$
+but not $q_*$. Then $\chi(m)=\chi^*(m)\ind_{(m,P)=1}$, and inclusion--exclusion
+gives
+\[
+\Lambda_\chi(q)=\sum_{d\mid P}\mu(d)\chi^*(d)\,\Lambda_{\chi^*}(q^d).
+\]
+For the weight-one Eisenstein series
+$E_{1,\chi^*}(\tau)=L(0,\chi^*)+2\sum_{n\ge1}(\chi^**1)(n)e^{2\pi in\tau}
+\in M_1(\Gamma_0(q_*),\chi^*)$ (\cite[\S2, p.~769]{HamiehMurty2016}; see also~\cite[\S\S4.5--4.8]{DiamondShurman})
+we have $2\Lambda_{\chi^*}(q)=E_{1,\chi^*}(\tau)-L(0,\chi^*)$ with $q=e^{2\pi i\tau}$,
+and $L(0,\chi^*)=-B_{1,\chi^*}$ is algebraic. Put
+\[
+F(\tau)=\sum_{d\mid P}\mu(d)\chi^*(d)E_{1,\chi^*}(d\tau),
+\qquad 2\Lambda_\chi(q)=F(\tau)-L(0,\chi^*)\sum_{d\mid P}\mu(d)\chi^*(d).
+\]
+If $G\in M_k(\Gamma_1(M))$ then $G(d\tau)\in M_k(\Gamma_1(dM))$, because
+$\begin{psmallmatrix}d&0\\0&1\end{psmallmatrix}\gamma\begin{psmallmatrix}d&0\\0&1\end{psmallmatrix}^{-1}\in\Gamma_1(M)$
+for $\gamma\in\Gamma_1(dM)$. Hence $F$ is a modular form of weight one on
+$\Gamma_1(q_*P)\supset\Gamma(q_*P)$, so of level $q_*P$ in the sense
+of~\cite{HamiehMurty2016}, with algebraic Fourier coefficients. Its
+coefficient of $e^{2\pi i\tau}$ is $2$ (only $d=1$ contributes), so $F\ne0$.
+Given algebraic $q$ with $0<|q|<1$, choose $\tau$ with $e^{2\pi i\tau}=q$;
+\cref{thm:hm}(b) shows that $F(\tau)$ is transcendental, hence so is
+$\Lambda_\chi(q)$. For real odd $\chi$ and $q=1/2$ we get $L_\chi=\Lambda_\chi(1/2)$, and
+\cref{ex:characters} shows that \ref{H1}--\ref{H4} hold.
+\end{proof}
+
+\begin{remark}\label{rem:even}
+For even $\chi$ there is no weight-one Eisenstein series with character $\chi$,
+and Hamieh and Murty leave the case $\chi(-1)\ne(-1)^k$ open~\cite[p.~767]{HamiehMurty2016}.
+For even real characters, for instance the Legendre symbol modulo $5$, and for
+\cref{ex:quarter}, our results give irrationality and the digit statistics but
+not transcendence.
+\end{remark}
+
+\section{Remarks}\label{sec:remarks}
+
+\subsection{\texorpdfstring{The range $a>7/12$}{The range a > 7/12}}\label{subsec:range}
+
+The upper bounds in \cref{thm:words} hold for every fixed $a>0$; only the lower
+bounds use $a>7/12$. In \cref{prop:planting}, that hypothesis enters solely
+through \cref{lem:shortprimes}, the asymptotic count of primes in a fixed
+progression in intervals of length $(X+Y)^\nu$ with $\nu>7/12$, which we
+derive from \cref{thm:pps}. The far-tail argument needs only $a>1/2$, and the
+sieve and small-factor steps need no restriction. Consequently, if for some
+$\nu_0\ge1/2$ one has a lower bound $\gg Y/\log X$ for primes in each fixed
+reduced progression in all intervals $(X,X+Y]$ with $X^{\nu_0+\epsilon}\le Y\le X$,
+then the lower bounds in \cref{thm:words}, and with them \cref{prop:planting}, extend to
+every $a>\nu_0$. We have not checked whether such an estimate for fixed
+progressions below $7/12$ is available in the literature, and we make no claim
+in that direction.
+
+The sieve step uses integer sifting with trivial remainders
+(\cref{lem:selberg}), so the level $Q=x^{1/40}$ in \cref{thm:pps} is not needed;
+only the single modulus $q_0$ enters.
+
+\subsection{A finite illustration}
+
+The script \repo{scripts/phase17_multiplicative_lambert.py}{\nolinkurl{scripts/phase17_multiplicative_lambert.py}}
+certifies, by exact integer arithmetic, the first $132{,}096$ binary digits of
+$L_{\chi_4}$ and of the $\delta=1/4$ example of \cref{ex:quarter}. At
+coefficient cutoff $K$ the omitted tail, scaled by $2^K$, lies in $[0,K+2]$
+because $c(n)\le n$, and the digits are accepted only where both carries agree.
+The script also checks $c_{\chi_4}=r_2/4$ up to $4096$ and the reindexing of
+\cref{lem:oddpart}(c). For prefixes $N\in\{4096,16384,65536,131072\}$ it
+encloses $1-D_N$ using $24$-bit truncations (each changes the discrepancy by less
+than $2^{-24}$). It reports, for instance,
+\begin{align*}
+1-D_{131072}(L_{\chi_4})&\in[0.59475892,\,0.59475905],\\
+1-D_{131072}(L)&\in[0.28070837,\,0.28070850]\qquad(\text{the example with }\delta=1/4).
+\end{align*}
+These are finite measurements far below any explicit threshold and say nothing
+about the asymptotic constants. On windows of length $\lceil N^{3/5}\rceil$ some
+short words have zero occurrences, consistent with \cref{thm:words} holding only
+for $N\ge N_0$.
+\evidence{Finite certificate} (command: \texttt{python -B scripts/phase17\_multiplicative\_lambert.py}).
+
+\subsection{Questions}
+
+\begin{enumerate}[label=\textup{(Q\arabic*)}]
+\item Do the counts $\cnt_w(N,H)(\log N)^{\kappa}/H$ converge for fixed $w$,
+  and if so to what constants? For $\chi_4$ this concerns the joint distribution
+  of sums of two squares in short configurations together with their odd parts.
+\item Can the range $a>7/12$ be lowered, either through better short-interval
+  estimates for fixed progressions or by avoiding them?
+\item Is $L$ transcendental in \cref{ex:quarter}, or for even real characters?
+\end{enumerate}
+
+\section{Formal verification and data availability}\label{sec:formal}
+
+All Lean links point to the repository at commit
+\texttt{e4809cf561573aef588e6ffc491a35cdb79fd9ec}, at which the full library
+built, the axiom audit accepted only \texttt{propext}, \texttt{Classical.choice}
+and \texttt{Quot.sound}, and an independent kernel replay covered every module.
+The Lean definitions match those of \cref{subsec:setting}:
+$\{2^nx\}$ is \lean{Basic}{15}{\decl{shift}} with base $2$, the empirical
+frequency of $[s,t)$ among $0\le n<N$ is \lean{Basic}{18}{\decl{frequency}},
+and $D_N$ is \lean{BinaryDiscrepancy}{11}{\decl{radixDiscrepancy}} with base $2$.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.47\linewidth}p{0.46\linewidth}@{}}
+\toprule
+Declaration & Used in\\
+\midrule
+\lean{Phase17DiscrepancyBounds}{98}{\decl{one_sub_discrepancy_le_one_bits}} & \cref{lem:upperlean}, upper bound in \cref{thm:discrepancy}\\
+\lean{Phase17DiscrepancyBounds}{77}{\decl{upper_freq_le_one_bits}} & auxiliary to \cref{lem:upperlean}\\
+\lean{Phase17DiscrepancyBounds}{123}{\decl{one_sub_discrepancy_ge_of_separated_mass}} & \cref{lem:lowerlean}, lower bound in \cref{thm:discrepancy}\\
+\lean{Phase17DiscrepancyBounds}{28}{\decl{one_sub_discrepancy_ge_transition}} & \cref{rem:transition}\\
+\lean{ErdosBorweinArrivals}{41}{\decl{arrival_sum}} & identity \eqref{eq:arrival} in \cref{lem:windows}\\
+\lean{WeightedLambertIdentities}{166}{\decl{nonneg_one_bit_count_le}} & Markov step in \cref{prop:upper}(a)\\
+\lean{WeightedLambertIdentities}{21}{\decl{lambert_head_eq_taylor}} & finite head of \cref{lem:lambert}\\
+\lean{SharpTranslation}{386}{\decl{sharp_translation_isGreatest}} & \cref{thm:sharp}, \cref{cor:translation}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These declarations are finite statements valid for every real number; Lean does
+not check any of the analytic estimates of \cref{sec:upper,sec:inputs,sec:planting}
+or the transcendence argument. The theorem-by-theorem evidence map, the
+reproduction commands and the novelty ledger accompany the source of this
+manuscript (directory \texttt{papers/06-multiplicative-lambert}, files
+\texttt{VERIFICATION.md} and \texttt{LEDGER.md}). Human specialist review
+of the written proofs is outstanding.
+
+\section{Use of AI tools}
+
+This manuscript was produced in an AI-assisted research project. Large language
+models proposed conjectures and proof strategies, wrote the proofs and the text,
+implemented the exact computations and Lean~4 formalizations, searched the
+literature and reviewed drafts across several model providers. The repository
+owner directed the project and is responsible for its release. The Lean kernel
+checked the declarations listed in the verification map. The written proofs,
+literature comparisons and priority statements have been checked only by AI
+models from different providers. They have not been checked by an independent
+human expert. Cross-model review is not peer review.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
