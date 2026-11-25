@@ -2,7 +2,7 @@
 
 [Research objectives](#research-objectives) · [Distribution terminology](#distribution-terminology) · [Principal theorems](#principal-theorems) · [Classical targets](#classical-targets-status) · [Manuscripts and PDFs](#research-papers) · [Proofs by topic](#results-by-topic) · [Reproduce and review](#reproduce-and-review)
 
-**The addition spectrum.** Fix an integer radix *b* ≥ 2. Let *D*<sub>*N*</sub>(*x*) be the largest absolute difference between a half-open interval’s length and its visit frequency among the first *N* fractional parts of *b*ᵏ*x*, starting at *k* = 0. Three numbers α, β, γ in [0, 1] occur as the respective limits for *x*, *y*, and *x* + *y* exactly when
+**The addition spectrum.** Fix an integer radix *b* ≥ 2. Let *D*<sub>*N*</sub>(*x*) be the supremum over half-open intervals of the absolute difference between interval length and visit frequency among the first *N* fractional parts of *b*ᵏ*x*, starting at *k* = 0. Three numbers α, β, γ in [0, 1] occur as the respective limits for *x*, *y*, and *x* + *y* exactly when
 
 ```math
 \max(0,\alpha+\beta-1)\le\gamma\le 1-|\alpha-\beta|.
