@@ -46,7 +46,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-34](#st-34) | Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics | Written proof | VIII |
 | [ST-35](#st-35) | Empirical-mixture cycle discrepancy, zero-slack 4/11 reduction and infinite family of mixed-prime products | Lean + written deduction | VIII |
 | [SY-17](#sy-17) | Polynomial and linear images of synthetic series | Written proof | VII |
-| [OP-14](#op-14) ★ | Normality of the flagship square and quadratic forms | Written proof |  |
+| [OP-14](#op-14) ★ | Normality of the flagship square and quadratic forms | Written proof | VII |
 | [OP-15](#op-15) | Every polynomial on rapidly varying power schedules | Written proof |  |
 | [OP-16](#op-16) | Polynomial-normal algebras with separated pole depths | Written proof |  |
 | [OP-17](#op-17) | A polynomial-normal algebra on distinct retained primes | Written proof |  |
@@ -91,11 +91,11 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-13](#sy-13) | Prescribing limits of orbit measures with rational insertions | Written proof | VII |
 | [SY-16](#sy-16) ★ | Quantitative convergence on polynomial schedules | Written proof | VII |
 | [SY-24](#sy-24) | Sharp translation rates for the multiplicative Lambert families | Written proof | VI |
-| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean | VII |
-| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof | VII |
-| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof | VII |
+| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean |  |
+| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof |  |
+| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof |  |
 | [OP-04](#op-04) | Finite rational forms and approximating their joint spectra | Written proof |  |
-| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean | VII |
+| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean |  |
 | [OP-06](#op-06) | Rational scalar ring and fixed-point lifts | Written proof |  |
 | [OP-07](#op-07) | Boundary spectrum and inverse inequality for integer dilation | Written proof |  |
 | [OP-18](#op-18) | Quantitative joint box distribution from an algebraic direction | Written proof |  |
@@ -944,7 +944,7 @@ For factorial schedules and positive valuation order, every nonconstant rational
 
 ### OP-14 · Normality of the flagship square and quadratic forms
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 For a fixed odd off-radix prime and positions t kᵈ with d ≥ 3, every nonconstant rational polynomial of total degree at most two in distinct positive valuation orders is normal. In particular the binary cubic-schedule number and its square are jointly normal.
 
@@ -1892,7 +1892,7 @@ For the Phase 17 binary multiplicative Lambert family of support parameter δ, t
 
 ### OP-01 · Exact limiting discrepancy spectrum for addition
 
-**Evidence:** Lean · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
+**Evidence:** Lean
 
 In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting extreme discrepancies of x, y and x+y exactly when max(0, α+β−1) ≤ γ ≤ 1−|α−β|.
 
@@ -1907,7 +1907,7 @@ In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting ex
 
 ### OP-02 · Uniform cubic realization with algebraically independent inputs
 
-**Evidence:** Written proof · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
+**Evidence:** Written proof
 
 Every admissible addition triple is realized with simultaneous all-prefix error O(N raised to −1/3), uniformly over triples for fixed radix and retained odd off-radix prime. The inputs may be algebraically independent and computable from computable target weights.
 
@@ -1921,7 +1921,7 @@ Every admissible addition triple is realized with simultaneous all-prefix error 
 
 ### OP-03 · Spectrum of any finite family of summands and its sum
 
-**Evidence:** Written proof · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
+**Evidence:** Written proof
 
 For d summands and their total, the d+1 limiting discrepancy deficits range over the unit cube subject to each deficit being at most the sum of the others.
 
@@ -1948,7 +1948,7 @@ For every fixed rational matrix the limiting discrepancy spectrum of its rows is
 
 ### OP-05 · Translation deficits form finite and asymptotic pseudometrics
 
-**Evidence:** Lean · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
+**Evidence:** Lean
 
 One minus the extreme discrepancy of x−y is a translation-invariant pseudometric at every positive sample length. At length at least two its zero set consists exactly of differences fixed modulo one by radix multiplication. Its upper limit is again a pseudometric. Integer multiplication has Lipschitz bound equal to the absolute multiplier.
 
@@ -3711,7 +3711,7 @@ For coprime integers b ≥ 2 and c > 2, every nonconstant rational polynomial in
 
 **Status:** draft · **Results:** [LS-01](#ls-01) · [MW-01](#mw-01) · [LS-02](#ls-02) · [LS-03](#ls-03) · [Directory](../papers/02-localized-normality-v2)
 
-Let M(S) be the set of positive integers whose prime factors lie in a finite set S of primes. For integers b >= 2 and s >= 1 we show that the series sum over m in M(S) of m^{-s} b^{-m} has base-b interval discrepancy tending to 0 if some prime of S does not divide b, and to 1 otherwise. For a nonzero rational polynomial P, the series with numerator P(m) is normal exactly when P(X)/X^s has a pole at zero and such a prime exists. The proof shows that persistent cancellation at an off-radix prime has measure zero, using multiplicative differences on a logarithmic circle and separation of the remaining thresholds. The shifts of these series at distinct positive orders on one fixed support, with rational numerators nonzero at zero, are jointly equidistributed in the unit cube. For retained subsets of the support we bound the discrepancy by the missed density of retained prime-power windows and classify normality on a single prime-power axis. For a fixed prime, finitely many orders and a positive tolerance, a depth at which all finite certificates fall below the tolerance is computable. The principal classifications and the joint theorem are verified by the Lean kernel. Priority statements are provisional, and no human expert has reviewed the written proofs.
+Let M(S) be the set of positive integers whose prime factors lie in a finite set S of primes, b >= 2 a radix and J the set of primes of S not dividing b. For s >= 1 the series sum over m in M(S) of m^{-s} b^{-m} has base-b interval discrepancy tending to 0 if J is nonempty and to 1 otherwise. For nonzero rational P, the series with numerator P(m) over all of M(S) is normal exactly when P(X)/X^s has a pole at zero and J is nonempty. Work of Captain Sude, Mira and Mira Cult covers order one for supports prime to the radix, binary supports containing 3 and two generators, and all orders for supports prime to the radix; their arguments extend further. The remaining cases use a measure-zero statement on persistent cancellation. If J is nonempty, the shifts of the series at distinct positive orders on one support, with rational numerators nonzero at zero, are jointly equidistributed in the unit cube. For p in J, a polynomial with a pole at zero and a retained subset of M(S), the discrepancy is bounded by the missed density of retained windows [p^k, 2p^k); on S = {p} normality holds exactly when infinitely many p^k are retained. For p in J, finitely many orders and a tolerance, a depth with every finite certificate below the tolerance is computable. Lean verifies the classifications and the joint theorem; written proofs and priority statements are provisional, without expert review.
 
 ### III. Resonance and Discrepancy in Signed Stoneham Expansions (version 1.1)
 
@@ -3741,7 +3741,7 @@ Let c be a nonnegative integer-valued multiplicative function with c(p^e) <= e+1
 
 **Status:** draft · **Results:** [SY-02](#sy-02) · [SY-01](#sy-01) · [SY-03](#sy-03) · [SY-04](#sy-04) · [Directory](../papers/07-synthetic-expansions)
 
-Fix an integer base b >= 2, a prime p not dividing b, and let t be the order of b modulo p. Insert the coefficient p^(-s v_p(k)) at base-b position t k^d for every k >= 1. For s = 0 the extreme discrepancy tends to one, while for every integer s >= 1 the number is normal to base b; this switch holds on every strictly increasing schedule of multiples of t dominating k^2 and is kernel-verified in Lean 4 together with the exact reduced denominator of every shifted prefix. For odd p and d >= s+2 complete periods give an explicit power rate, and for sum_k 3^(-v_3(k)) 2^(-2k^3) a short proof gives D_N <= 200 N^(-1/3). Positive rational state corrections on a cubic schedule realize every limiting discrepancy in [0,1] with error O(N^(-1/3)), every pair of lower and upper limits, and every nonempty compact connected set of invariant measures as a limit set. We prove sup_x |D_N(x+z) - D_N(x)| = 1 - D_N(z), characterize the translations preserving discrepancy for every input, and determine the exact set of limit triples for x, y, x+y, realized at rate O(N^(-1/3)). A positive binary series using every odd prime as a denominator prime is normal and Liouville with D_N = O(1/log N), while positive rational multiples of its jointly normal components can sum to any positive rational.
+Fix an integer base b >= 2, a prime p not dividing b, and let t be the order of b modulo p. Insert the coefficient p^(-s v_p(k)) at base-b position t k^d for every k >= 1. For s = 0 the extreme discrepancy tends to one, while for every integer s >= 1 the number is normal to base b; this switch holds on every strictly increasing schedule of multiples of t dominating k^2, and it has been checked by the Lean 4 kernel together with the exact reduced denominator of every shifted prefix. For odd p and d >= s+2 complete periods give an explicit power rate, and for xi = sum_k 3^(-v_3(k)) 2^(-2k^3) a short self-contained proof gives D_N <= 200 N^(-1/3). Choosing the rational state after each cubic insertion by a positive correction realizes every limiting discrepancy in [0,1] with error O(N^(-1/3)), every pair of lower and upper limits, and every nonempty compact connected set of invariant measures as a limit set. For odd p, s >= 1 and d >= 3, every nonconstant rational polynomial of total degree at most two in the numbers of this family with distinct orders s on a common schedule is normal; in particular xi^2 is normal and (xi, xi^2) is jointly normal. The proof shows that the limiting p-adic mass of the shifted prefixes has Lebesgue-null level sets, by counting isolated jumps with van der Corput's method and a second-moment argument. Finally a positive binary series using every odd prime as a denominator prime is normal and Liouville with D_N = O(1/log N), while positive rational multiples of its jointly normal components can sum to any positive rational.
 
 ### VIII. Exceptional Orbits and Discrepancy of Stoneham Products (version 1.0)
 
