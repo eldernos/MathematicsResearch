@@ -1,6 +1,7 @@
 module
 
 public import NormalityChecker.SharpTranslation
+import Mathlib.Topology.Algebra.Order.LiminfLimsup
 
 /-! # The discrepancy pseudometric on the circle
 
@@ -17,8 +18,11 @@ exact translation inequality `|D_N(x+z) - D_N(x)| ≤ 1 - D_N(z)` of `SharpTrans
   (`discDist_eq_zero_iff`); otherwise `d_N(x,y)` is bounded below by an explicit positive
   constant (`discDist_pos_bound`);
 * multiplication by an integer `m` is `|m|`-Lipschitz (`discDist_intMul_le`);
-* the asymptotic quantity `limsup_N d_N` is again symmetric, translation invariant and
-  satisfies the triangle inequality, and integer multipliers are `|m|`-Lipschitz for it.
+* the asymptotic quantity `asymDist = limsup_N d_N` is again symmetric, translation invariant and
+  satisfies the triangle inequality, vanishes when `(b-1)(x-y)` is an integer, equals one when
+  `D_N(x-y) → 0`, and integer multipliers are `|m|`-Lipschitz for it.  (It is only a pseudometric:
+  by a density argument, which is not formalized here, its kernel also contains the `x - y`
+  whose shift orbit is eventually constant.)
 -/
 
 @[expose] public section
@@ -297,35 +301,124 @@ theorem discDist_pos_bound (b : ℕ) {N : ℕ} (hN : 2 ≤ N) (x y : ℝ)
 
 /-! ### Integer multipliers -/
 
-/-- Multiplication by a natural number `m` is `m`-Lipschitz. -/
-theorem discDist_natMul_le (b : ℕ) {N : ℕ} (hN : 0 < N) (m : ℕ) (x y : ℝ) :
-    discDist b N (m * x) (m * y) ≤ m * discDist b N x y := by
+/-- Any translation-invariant function satisfying the triangle inequality and `d x x = 0`
+is `m`-Lipschitz for multiplication by a natural number `m`. -/
+theorem natMul_le_of_triangle {d : ℝ → ℝ → ℝ} (hself : ∀ x, d x x = 0)
+    (htri : ∀ x y z, d x z ≤ d x y + d y z) (htrans : ∀ x y t, d (x + t) (y + t) = d x y)
+    (m : ℕ) (x y : ℝ) : d (m * x) (m * y) ≤ m * d x y := by
   induction m with
-  | zero => simp [discDist, radixDiscrepancy_zero]
+  | zero => simp [hself]
   | succ m ih =>
-    have h := discDist_triangle b hN (((m : ℝ) + 1) * x) (m * x + y) (((m : ℝ) + 1) * y)
-    have h1 : discDist b N (((m : ℝ) + 1) * x) (m * x + y) = discDist b N x y := by
-      have := discDist_translate b N x y (m * x)
+    have h := htri (((m : ℝ) + 1) * x) (m * x + y) (((m : ℝ) + 1) * y)
+    have h1 : d (((m : ℝ) + 1) * x) (m * x + y) = d x y := by
+      have := htrans x y (m * x)
       rw [add_comm x] at this
       rw [← this]; congr 1 <;> ring
-    have h2 : discDist b N (m * x + y) (((m : ℝ) + 1) * y) = discDist b N (m * x) (m * y) := by
-      have := discDist_translate b N (m * x) (m * y) y
+    have h2 : d (m * x + y) (((m : ℝ) + 1) * y) = d (m * x) (m * y) := by
+      have := htrans (m * x) (m * y) y
       rw [← this]; congr 1; ring
     push_cast
     linarith
 
+/-- Integer version of `natMul_le_of_triangle`, for symmetric `d` with `d (-x) (-y) = d x y`
+reflected through symmetry. -/
+theorem intMul_le_of_triangle {d : ℝ → ℝ → ℝ} (hself : ∀ x, d x x = 0)
+    (htri : ∀ x y z, d x z ≤ d x y + d y z) (htrans : ∀ x y t, d (x + t) (y + t) = d x y)
+    (hcomm : ∀ x y, d x y = d y x) (m : ℤ) (x y : ℝ) :
+    d (m * x) (m * y) ≤ |(m : ℝ)| * d x y := by
+  rcases Int.eq_nat_or_neg m with ⟨n, rfl | rfl⟩
+  · simpa using natMul_le_of_triangle hself htri htrans n x y
+  · have key : d (((-(n : ℤ) : ℤ) : ℝ) * x) (((-(n : ℤ) : ℤ) : ℝ) * y) = d (n * y) (n * x) := by
+      have e1 : (((-(n : ℤ) : ℤ) : ℝ) * x) = -(n * x) := by push_cast; ring
+      have e2 : (((-(n : ℤ) : ℤ) : ℝ) * y) = -(n * y) := by push_cast; ring
+      rw [e1, e2, ← htrans _ _ (n * x + n * y)]
+      congr 1 <;> ring
+    rw [key, hcomm]
+    simpa using natMul_le_of_triangle hself htri htrans n x y
+
+/-- Multiplication by a natural number `m` is `m`-Lipschitz. -/
+theorem discDist_natMul_le (b : ℕ) {N : ℕ} (hN : 0 < N) (m : ℕ) (x y : ℝ) :
+    discDist b N (m * x) (m * y) ≤ m * discDist b N x y :=
+  natMul_le_of_triangle (discDist_self b N) (discDist_triangle b hN) (discDist_translate b N)
+    m x y
+
 /-- **Integer multipliers are Lipschitz:** `d_N(m x, m y) ≤ |m| d_N(x,y)`. -/
 theorem discDist_intMul_le (b : ℕ) {N : ℕ} (hN : 0 < N) (m : ℤ) (x y : ℝ) :
-    discDist b N (m * x) (m * y) ≤ |(m : ℝ)| * discDist b N x y := by
-  rcases Int.eq_nat_or_neg m with ⟨n, rfl | rfl⟩
-  · simpa using discDist_natMul_le b hN n x y
-  · have key : discDist b N (((-(n : ℤ) : ℤ) : ℝ) * x) (((-(n : ℤ) : ℤ) : ℝ) * y)
-        = discDist b N (n * y) (n * x) := by
-      unfold discDist
-      congr 2
-      push_cast
-      ring
-    rw [key, discDist_comm b hN]
-    simpa using discDist_natMul_le b hN n x y
+    discDist b N (m * x) (m * y) ≤ |(m : ℝ)| * discDist b N x y :=
+  intMul_le_of_triangle (discDist_self b N) (discDist_triangle b hN) (discDist_translate b N)
+    (discDist_comm b hN) m x y
+
+/-! ### The asymptotic distance -/
+
+/-- The asymptotic discrepancy distance `limsup_N d_N(x,y) = 1 - liminf_N D_N(x - y)`. -/
+noncomputable def asymDist (b : ℕ) (x y : ℝ) : ℝ := limsup (fun N => discDist b N x y) atTop
+
+private lemma discDist_boundedLE (b : ℕ) (x y : ℝ) :
+    IsBoundedUnder (· ≤ ·) atTop (fun N => discDist b N x y) :=
+  isBoundedUnder_of ⟨1, fun N => discDist_le_one b N x y⟩
+
+private lemma discDist_boundedGE (b : ℕ) (x y : ℝ) :
+    IsBoundedUnder (· ≥ ·) atTop (fun N => discDist b N x y) :=
+  isBoundedUnder_of ⟨0, fun N => discDist_nonneg b N x y⟩
+
+private lemma discDist_cobLE (b : ℕ) (x y : ℝ) :
+    IsCoboundedUnder (· ≤ ·) atTop (fun N => discDist b N x y) :=
+  (discDist_boundedGE b x y).isCoboundedUnder_le
+
+theorem asymDist_nonneg (b : ℕ) (x y : ℝ) : 0 ≤ asymDist b x y :=
+  le_limsup_of_frequently_le (Frequently.of_forall fun N => discDist_nonneg b N x y)
+    (discDist_boundedLE b x y)
+
+theorem asymDist_le_one (b : ℕ) (x y : ℝ) : asymDist b x y ≤ 1 :=
+  limsup_le_of_le (discDist_cobLE b x y) (Eventually.of_forall fun N => discDist_le_one b N x y)
+
+theorem asymDist_self (b : ℕ) (x : ℝ) : asymDist b x x = 0 := by
+  simp [asymDist, discDist_self]
+
+theorem asymDist_comm (b : ℕ) (x y : ℝ) : asymDist b x y = asymDist b y x :=
+  limsup_congr (eventually_atTop.mpr ⟨1, fun _ hN => discDist_comm b hN x y⟩)
+
+theorem asymDist_translate (b : ℕ) (x y t : ℝ) :
+    asymDist b (x + t) (y + t) = asymDist b x y := by
+  simp [asymDist, discDist_translate]
+
+theorem asymDist_add_intCast (b : ℕ) (x y : ℝ) (k : ℤ) :
+    asymDist b (x + k) y = asymDist b x y := by
+  simp [asymDist, discDist_add_intCast]
+
+/-- **Triangle inequality for the asymptotic distance.** -/
+theorem asymDist_triangle (b : ℕ) (x y z : ℝ) :
+    asymDist b x z ≤ asymDist b x y + asymDist b y z := by
+  have hle : (fun N => discDist b N x z) ≤ᶠ[atTop]
+      (fun N => discDist b N x y) + (fun N => discDist b N y z) :=
+    eventually_atTop.mpr ⟨1, fun N hN => discDist_triangle b hN x y z⟩
+  refine (limsup_le_limsup hle (discDist_cobLE b x z) ?_).trans ?_
+  · exact (isBoundedUnder_le_add (discDist_boundedLE b x y) (discDist_boundedLE b y z))
+  · exact limsup_add_le (discDist_boundedGE b x y) (discDist_boundedLE b x y)
+      (discDist_cobLE b y z) (discDist_boundedLE b y z)
+
+/-- If `(b-1)(x-y)` is an integer, the asymptotic distance vanishes. -/
+theorem asymDist_eq_zero_of_int (b : ℕ) (x y : ℝ) (h : ∃ k : ℤ, ((b : ℝ) - 1) * (x - y) = k) :
+    asymDist b x y = 0 := by
+  unfold asymDist
+  have hev : (fun N => discDist b N x y) =ᶠ[atTop] fun _ => (0 : ℝ) :=
+    eventually_atTop.mpr ⟨2, fun N hN => (discDist_eq_zero_iff b hN x y).mpr h⟩
+  rw [limsup_congr hev]
+  simp
+
+/-- If `D_N(x - y) → 0` (for instance when `x - y` is simply normal to base `b` in the
+discrepancy sense), the asymptotic distance attains its maximum value one. -/
+theorem asymDist_eq_one_of_tendsto (b : ℕ) (x y : ℝ)
+    (h : Tendsto (fun N => radixDiscrepancy b (x - y) N) atTop (nhds 0)) :
+    asymDist b x y = 1 := by
+  have h1 : Tendsto (fun N => discDist b N x y) atTop (nhds 1) := by
+    simpa [discDist] using (tendsto_const_nhds (x := (1 : ℝ))).sub h
+  exact h1.limsup_eq
+
+/-- **Integer multipliers are Lipschitz for the asymptotic distance.** -/
+theorem asymDist_intMul_le (b : ℕ) (m : ℤ) (x y : ℝ) :
+    asymDist b (m * x) (m * y) ≤ |(m : ℝ)| * asymDist b x y :=
+  intMul_le_of_triangle (asymDist_self b) (asymDist_triangle b) (asymDist_translate b)
+    (asymDist_comm b) m x y
 
 end NormalityChecker.DiscrepancyGeometry
