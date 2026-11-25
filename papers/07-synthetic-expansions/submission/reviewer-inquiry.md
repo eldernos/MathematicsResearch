@@ -25,17 +25,15 @@ Christopher Anderson
 
 ---
 
-## Inquiry 2: the sharp translation identity and Rauzy's theorem
+## Inquiry 2: normality of the square of a valuation-weighted series
 
 Dear [Name],
 
-A preprint draft of mine, *Synthetic Arithmetic Expansions and Prescribed Discrepancy*, proves the finite identity
+A preprint draft of mine proves that for $\xi=\sum_{k\ge1}3^{-v_3(k)}2^{-2k^3}$ the number $\xi^2$ is normal to base $2$ and that $(\xi,\xi^2)$ is jointly normal; more generally every rational polynomial of total degree two in the series $\sum_ip^{-av_p(i)}b^{-ti^d}$, $d\ge3$, with distinct orders $a$, is normal. The leading $p$-adic residue of the shifted prefixes of $\xi^2$ vanishes on a set of shifts of positive density, so the linear method does not apply. The proof shows instead that the limiting $p$-adic mass $M(u)$ of the normalized prefixes, a step function of the position $u$ of the shift in its $p$-adic shell, has Lebesgue-null level sets: primitive jumps on the grids $p^{-H}\mathbb Z$ are isolated in positive proportion by a third-derivative van der Corput estimate for the curves $x=(z^d+y^d-1)^{1/d}$, and a second-moment argument shows that almost every point lies in infinitely many isolated neighbourhoods.
 
-$$\sup_{x\in\mathbb R}\bigl|D_N(x+z;b)-D_N(x;b)\bigr|=1-D_N(z;b),$$
+Your work on [cite: the addressee's paper on rings of normal numbers, e.g. Kano and Shiokawa, *Rings of normal and nonnormal numbers*, Israel J. Math. 84 (1993), or on van der Corput estimates in uniform distribution] is the closest I found.
 
-attained at $x=0$, for the extreme discrepancy $D_N$ of the radix orbit. It deduces that adding $z$ preserves the limiting discrepancies of every real number exactly when $z=c+w$, where $(b-1)c\in\mathbb Z$ and the mean of $\lVert b^nw\rVert$ tends to zero. This class is strictly smaller than Rauzy's class of normality-preserving translations; for example, $z=1/3$ in base 2 preserves normality but not numerical discrepancy. As a consequence, the possible limits of $D_N(x)$, $D_N(y)$ and $D_N(x+y)$ are exactly the triples with $\max(0,\alpha+\beta-1)\le\gamma\le1-|\alpha-\beta|$. Your Proposition 4.9 and Corollary 4.10 in [cite: *On preservation of normality and determinism under arithmetic operations*, arXiv:2506.12929] give the same inequalities for point entropy.
-
-**Question.** Is the finite identity above, or its consequence for the addition spectrum of discrepancy, recorded in the literature on concentration functions or on Kuiper's statistic? I would like to cite the earliest source correctly.
+**Question.** Is normality of polynomial images of numbers on polynomial schedules, as opposed to rapidly growing ones, treated in the literature on normal-number rings? And does the localized counting argument (Lemma 7.7 of the draft) appear in a known form, for instance in work on the distribution of $(z^d+y^d)^{1/d}$ on rational grids?
 
 With thanks,
 Christopher Anderson

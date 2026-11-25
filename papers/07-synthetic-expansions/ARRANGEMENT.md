@@ -1,57 +1,82 @@
 # Arrangement decisions for Manuscript C
 
-Manuscript C is *Synthetic Arithmetic Expansions and Prescribed Discrepancy*, version 1.0, in `papers/07-synthetic-expansions/`. This file records which results it contains, which it leaves to other manuscripts, and why. The goal was a readable paper in which each substantive theorem appears in exactly one manuscript.
+Manuscript C is *Synthetic Arithmetic Expansions and Prescribed Discrepancy*, version 1.0 (unreleased), in `papers/07-synthetic-expansions/`. This file records which results it contains, which it leaves to other manuscripts, and why. The rule is that each substantive theorem appears as a theorem in exactly one manuscript.
 
-## 1. The sharp translation identity stays in this paper
+## 1. The split of 25 November 2026 (owner decision)
 
-**Decision.** The finite identity
+**Decision.** The arithmetic of extreme discrepancy is separated into a focused standalone manuscript,
 
-$$
-\sup_{x\in\mathbb R}\lvert D_N(x+z)-D_N(x)\rvert = 1-D_N(z),
-$$
+> **H.** *The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations*, version 1.0, `papers/10-discrepancy-arithmetic/`.
 
-attained at $x=0$ (Theorem 7.1 = Theorem D), and the classification of universal numerical discrepancy preservers (Theorem 7.4) remain sections of this paper. There is **no separate translation note**, and `translation-note/` was not created.
+Manuscript C cites H and no longer proves any of the moved results. This reverses the earlier arrangement (recorded in the previous version of this file), under which the translation identity stayed in C and no separate note was written.
 
 **Reasons.**
 
-1. *The paper uses the result itself.* The finite comparison behind the identity (Lemma 2.2) drives every quantitative proof here: the worked example (Theorem 3.1), the general rate (Theorem 4.6), the programming theorems (Section 5) and the infinite-sum estimate (Theorem 10.2). Necessity in the addition spectrum (Theorem 8.1) and its $d$-summand version (Theorem 8.3) are two applications of the identity. A split would force this paper to cite a separate note for its central tool, or to restate it, and restating it would be duplicate publication.
-2. *The identity is elementary and short.* Its proof takes one paragraph once the arc lemmas are in place. The literature check (`LEDGER.md`, Theorem 7.1) identifies it as an exact reformulation in terms of classical objects: Kuiper's circular statistic (1960), Lévy's circular concentration function (1939), and Ky Fan and Lévy–Prokhorov distances to a point mass. A stand-alone note would be thin, and its novelty claim is necessarily modest. Inside this paper it has a natural role as the sharp form of the transfer step.
-3. *The classification needs context from this paper.* The preserver theorem (Theorem 7.4) and its comparison with Rauzy's theorem (Remark 7.5) use the limit-set machinery of Section 6 (Lemma 6.2). They also gain from the programmed examples, for instance $D_N(1/3;2)\to2/3$.
-4. *Companion citations stay simple.* The multiplicative Lambert paper (`papers/06-multiplicative-lambert/`) cites the identity as a result of this paper, so no new citation target is needed. Corollary 9.3 here states the Lambert consequence with the Lambert deficit estimate as an input from that manuscript. The deficit theorem itself stays in Paper 06.
+1. *One home per theorem, with two citing manuscripts.* The sharp translation identity is used by C (once, in Proposition 8.5) and by the multiplicative Lambert manuscript (`papers/06-multiplicative-lambert`, Corollary 1.2 and Theorem 8.1 there), which until now cited it as a theorem of C. A separate manuscript gives both a neutral citation target and keeps C focused on its own subject, synthetic expansions.
+2. *The moved material forms a coherent paper.* The identity, the classification of universal preservers, the discrepancy pseudometric, the exact addition spectrum (kernel-verified in Phase 19), the $d$-summand polytope, the rational-scalar ring $\mathbb Z[1/b]$, the residue test and the dilation boundary spectrum all concern the behaviour of $D_N$ under arithmetic operations. Together they make a 16-page paper with its own novelty questions (Kuiper, Lévy, Ky Fan, Prokhorov, Rauzy, Bergelson–Downarowicz), which were awkward to discuss inside C.
+3. *C gains room for the Phase 19 nonlinear theorem.* The quadratic-image theorem (normality of $\xi^2$ and of every total-degree-two polynomial in distinct valuation orders) is a natural continuation of C's denominator method, and its full written proof needs about six pages.
 
-**Coordination note for Paper 06.** Cite Theorem 7.1 (Theorem D in the introduction) of *Synthetic Arithmetic Expansions and Prescribed Discrepancy*. Corollary 9.3 here only *combines* that identity with Paper 06's two-sided deficit estimate. Paper 06 should prove its deficit estimate and may state the same combination as a remark citing Theorem 7.1. It should not reprove the identity.
+**What moved from C to H** (old C numbering → H numbering):
 
-## 2. Phase 19 material: what is included here and what is not
+| Old C | Result | New home |
+| --- | --- | --- |
+| Thm D, 7.1 | Sharp translation identity | H, Theorem A = Theorem 3.1 (kernel-verified) |
+| 7.2 | Transfer corollary | H, Corollary 3.2 (kernel-verified) |
+| 7.3 | Discrepancy pseudometric | H, Proposition 4.1 (kernel-verified), with the concentration and Ky Fan comparison as new Proposition 4.2 |
+| 7.4, Remark 7.5 | Universal numerical preservers; comparison with Rauzy | H, Theorem 3.3, Remark 3.4 (new proof of (i)⇒(vi) without connectedness of limit sets) |
+| Thm E, 8.1–8.3 | Addition spectrum, cubic rate, $d$ summands, six forms | H, Theorems 5.1, 5.3, 5.5, Proposition 5.6; computability and algebraic independence added as Theorem 5.4 |
+| 9.1, 9.2 | Quadratic and factorial sparse remainders | H, Theorem 3.5, Proposition 3.6 |
+| 9.3 | Lambert remainder corollary | **Dropped**: it is Corollary 1.2 of manuscript A (multiplicative Lambert); H only mentions it |
 
-On the coordinator's instruction (owner decision), the Phase 19 results at commit `c2c9da683666b3b9368e5d4b5cb858caccf528f5` were reviewed for incorporation. Phase 19 Lean links in the paper are pinned to that commit with a local macro `\leanXIX`. When the shared `\leanat` macro is merged, the macro can be replaced mechanically.
+New in H (Phase 19, not previously in any manuscript): the asymptotic distance and kernel $K_b$ (Proposition 4.3), the rational-scalar ring $\mathbb Z[1/b]$ (Theorem 4.5), the residue-density test (Proposition 4.6), the finite dilation bounds and the boundary spectrum $[1/m_0,1]$ (Proposition 6.1, Theorem 6.2), the Moser–de Bruijn product example (Proposition 6.3) and the anchored and two-dimensional counterexamples (Remark 6.4).
+
+**What C keeps or adds:**
+
+- Kept: the normality switch and exact denominators (Theorems A, 4.2, 4.5), the rates (Theorem B), prescribed discrepancy, pairs and limit sets (Theorem C), the all-odd-prime normal Liouville series and its companions (Theorem E = Theorems 8.2–8.4), the exact prime-power grid (Lemma 2.4).
+- Added: the all-prefix criterion as an explicit proposition (Proposition 4.4; previously only the written outline of the switch), the **quadratic-image theorem** (Theorem D = Theorem 7.1, Corollary 7.2), with its full proof (Section 7).
+- Quoted once, not reproved: the sharp translation identity, as Theorem 2.6, citing H by title, same release, Theorem 3.1, with the Lean links.
+- Proposition 8.5 (consecutive tails) now uses the quoted identity and holds in every base (previously stated in base 2 via the preserver classification).
+
+**Shared elementary lemmas.** The arc lemma and the finite comparison lemma (C Lemmas 2.1, 2.2 = H Lemmas 2.1, 2.2) appear with short proofs in both manuscripts. They are standard tools, not results claimed by either paper, and each manuscript needs them to be readable on its own. H uses C's positive state recurrence (C Lemma 5.1) and prime-power orbit count (C Corollary 2.5) by citation as H Lemmas 2.5 and 2.4; H reproves the latter in three lines from the Lean full-period count and states the former with its Lean links only.
+
+## 2. Coordination note for manuscript A (multiplicative Lambert)
+
+Manuscript A currently cites the translation identity as a result of C (`SyntheticCompanion` in its bibliography). It should instead cite H. Suggested citation string:
+
+> C. Anderson, *The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations*, version 1.0, preprint, same release (manuscripts-v2.0.0), Theorem 3.1 (Sharp translation identity; Theorem A in the introduction). Lean: `NormalityChecker.SharpTranslation.sharp_translation_isGreatest`, https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/SharpTranslation.lean#L386 (with `sharp_translation`, L343).
+
+Suggested BibTeX key `DiscrepancyArithmetic`, directory `papers/10-discrepancy-arithmetic`. Manuscript A should keep its own Corollary 1.2 (translation by $L$, with its deficit order); H mentions that corollary without restating it, and C no longer contains a Lambert corollary. This worktree did not modify manuscript A.
+
+## 3. Phase 19 material: what is included where
 
 | Phase 19 result (registry) | Placement | Reason |
 | --- | --- | --- |
-| Exact addition spectrum for $(x,y,x+y)$, qualitative in every radix (OP-01, Lean) | **Included**: Theorem 8.1 = Theorem E | It extends the programmed-discrepancy theme directly. Necessity is two applications of Theorem 7.1. |
-| Uniform cubic rate for the addition spectrum (part of OP-02) | **Included**: Theorem 8.2 | It reuses Lemma 5.1, Proposition 5.2 and Corollary 2.5 verbatim, so the proof costs one page. |
-| Algebraic independence and uniform computability of the witnesses (rest of OP-02) | Not included | It is a separate effective-construction theme. It would lengthen Section 8 without changing the spectrum. It remains in the research notes. |
-| Spectrum for $d$ summands (OP-03) | **Included**: Theorem 8.3, qualitative only | Necessity follows from Theorem 7.1. Realization follows from the kernel-verified `mixtureRealizable`. The claimed rate is not included and is explicitly not claimed. |
-| Finite rational linear forms, polyhedral approximation, joint box rate (OP-04, OP-18) | Not included | These involve a different technique (word flows, Hausdorff approximation, multidimensional exponential sums). A one-sentence remark records the six-form obstruction to show why triples alone do not suffice. |
-| Pseudometric $1-D_N(x-y)$ (OP-05, finite part) | **Included**: Proposition 7.3 | Immediate from Theorem 7.1 and kernel-verified. It gives the identity its natural geometric statement. |
-| Rational scalar ring, fixed-point lifts, integer-dilation boundary spectrum (OP-06, OP-07) | Not included | These concern multiplication, not translation. They are left for a later operations paper or the companion (see `COMPANION-ASSESSMENT.md`). |
-| Exact prime-power grid with complementary modulus (OP-08) | **Included**: Lemma 2.4 | It is needed for Section 10. The Lean steps `stride_order` and `crt_period_count` are cited. |
-| Normal Liouville series retaining every odd prime, $D_N=O(1/\log N)$ (OP-09) | **Included**: Theorem 10.2 = Theorem F | It completes item 8 and supersedes the Phase 18 construction on $\{3\}\cup\{\ell\equiv2\bmod3\}$ (SY-06). That construction is mentioned in one sentence as the case $c=1$. |
-| Superpolynomial denominators, accelerated schedules (OP-10) | Not included | The extra sieve inputs are not needed for the main line. |
-| Sparse preservers with visible product (OP-12) | Not included | It concerns products of remainders, a multiplicative question. It belongs to the companion assessment. |
-| Flagship square and quadratic forms (OP-14) | **Mentioned, not claimed** (Section 11) | The proof is analytic and long, and it belongs with the nonlinear material. The paper says plainly that the square is normal, and that $(\xi,\xi^2)$ is jointly normal. It links the written proof and its independent audit at the pinned commit, says the result is not a claim of this paper, and asks for a rate. |
-| Rapidly varying schedules, polynomial-normal algebras (OP-15, OP-16, OP-17) | Not included | Companion material. |
-| Classical-constant results (OP-11, OP-13, OP-19 to OP-22) | Not included | These belong to the classical-denominators manuscripts. |
+| Exact addition spectrum, qualitative in every radix (OP-01, Lean) | H, Theorem 5.1 | Arithmetic of discrepancy. |
+| Uniform cubic rate; computability; algebraically independent witnesses (OP-02) | H, Theorems 5.3, 5.4 | Written proofs, labelled Lean-supported (the coefficient recurrence is kernel-verified). |
+| Spectrum for $d$ summands (OP-03) | H, Theorem 5.5, qualitative only | Realization by `mixtureRealizable`; the rate is not claimed. |
+| Finite rational forms, polyhedral approximation; joint box rate (OP-04, OP-18) | Not included; six-form obstruction in H, Prop. 5.6 | Different techniques; listed as further work in H. |
+| Pseudometric $1-D_N(x-y)$ (OP-05) | H, Propositions 4.1, 4.3 | Kernel-verified finite part. |
+| Rational scalar ring, residue test (OP-06) | H, Theorem 4.5, Proposition 4.6 | Rational operations. |
+| Integer-dilation boundary spectrum (OP-07) | H, Proposition 6.1, Theorem 6.2 | The inverse dilation estimate is not included. |
+| Exact prime-power grid (OP-08) | C, Lemma 2.4 | Needed for Section 8; Lean steps `stride_order` and `crt_period_count` cited. |
+| Normal Liouville series retaining every odd prime (OP-09) | C, Theorem 8.2 = Theorem E | Unchanged. |
+| Superpolynomial denominators, accelerated schedules (OP-10) | Not included | Not needed for the main line. |
+| Sparse preservers with visible product (OP-12) | H, Proposition 6.3 (product example only) | The sharp missing-digit rates are not claimed. |
+| Flagship square and quadratic forms in distinct orders (OP-14) | **C, Theorem 7.1 and Corollary 7.2** (paper proof, full proof written) | Owner decision; supersedes the Phase 18 bound $2.94\cdot10^{-10}$ (SY-20), now a historical remark. |
+| Rapidly varying schedules, polynomial-normal algebras (OP-15, OP-16, OP-17) | Not included | Assessed in `COMPANION-ASSESSMENT.md`. |
+| Classical-constant results (OP-11, OP-13, OP-19 to OP-22) | Not included | Belong to the classical-denominators manuscripts. |
 
-## 3. The Phase 18 prime-5 review claim
+## 4. The withdrawn prime-5 grid inference
 
-The Phase 19 handoff identifies an invalid prime-5 valuation argument in the Phase 18 translation and summation review. **This paper uses no prime-5 claim.**
+The Phase 19 handoff and GitHub issue 1 identify an invalid prime-5 valuation argument in the Phase 18 translation and summation review (now corrected in `notes/phase18/reviews/translation-summation.md`). **Manuscript C uses no prime-5 claim.**
 
-- Theorem 10.2 uses the distinguished prime 3 with a doubled order. It bounds the loss $c=v_3(2^\tau-1)\le1+J_3$ through $v_3(\ell-1)<\log_3L$, which is a valid upper bound.
-- Theorem 10.3 uses a distinguished prime $\ell_0$ against a **fixed finite** set of other primes, so its loss is bounded by a constant.
-- No statement infers a lower bound on an order's valuation from a congruence of primes.
+- Theorem 8.2 uses the distinguished prime 3 with a doubled order. It bounds the loss $c=v_3(2^\tau-1)\le1+J_3$ through $v_3(\ell-1)<\log_3L$, which is a valid upper bound; no lower bound on an order valuation is inferred from a congruence.
+- Theorem 8.3 uses a distinguished prime $\ell_0$ against a fixed finite set of other primes, so its loss is bounded by a constant.
+- The remark after Theorem 8.2 on the support $\{3\}\cup\{\ell\equiv2\bmod3\}$ uses $3\nmid\mathrm{ord}_Q(2)$, which holds because $3\nmid\ell-1$ for those primes; it is an upper-bound argument.
 
-## 4. Duplicate-publication safeguards
+## 5. Duplicate-publication safeguards
 
-- The normality switch, the denominator identity and the geometric grouping (SY-01, SY-02, SY-11) were not stated as theorems in any released paper (`papers/0[1-5]-*`). Paper I v1.1 contains the fixed-support short-orbit theorem, which this paper cites as Lemma 4.3 (kernel-verified) and attributes to Vandehey's Corollary 1.2 in qualitative form. It is not restated as a new result.
-- Mira Cult's joint-normality note and Captain Sude's sum results concern Stoneham series $\sum p^{-sj}b^{-p^j}$. Theorems 10.3–10.4 concern different series, and the ledger credits the overlap.
-- Paper 06 owns the Lambert deficit estimate. This paper owns the translation identity.
+- The normality switch, the denominator identity and the geometric grouping (SY-01, SY-02, SY-11) are not theorems of any released paper (`papers/0[1-5]-*`). Paper I v1.1 contains the fixed-support short-orbit theorem, which C cites as Lemma 4.3 (kernel-verified) and attributes to Vandehey's Corollary 1.2 in qualitative form.
+- The quadratic-image theorem is not stated in any other manuscript. Paper I v1.1 concerns polynomial images of standard Stoneham numbers, a different family.
+- Mira Cult's joint-normality note and Captain Sude's sum results concern Stoneham series $\sum p^{-sj}b^{-p^j}$. Theorems 8.3–8.4 concern different series, and the ledger credits the overlap.
+- Manuscript A owns the Lambert deficit estimate and its translation corollary. Manuscript H owns the translation identity. Manuscript C owns the synthetic constructions and the quadratic-image theorem.
