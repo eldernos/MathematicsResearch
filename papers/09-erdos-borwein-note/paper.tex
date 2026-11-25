@@ -1,0 +1,412 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\hypersetup{pdftitle={Finite-statistic thresholds and statistical obstructions for the binary digits of the Erd\H{o}s--Borwein constant},pdfauthor={}}
+
+\DeclareMathOperator{\Pois}{Pois}
+\renewcommand{\Pr}{\mathbb P}
+\newcommand{\Ex}{\mathbb E}
+\newcommand{\Av}{\mathbb E}
+\newcommand{\dTV}{d_{\mathrm{TV}}}
+\newcommand{\fl}[1]{\left\lfloor #1\right\rfloor}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\Qinf}{{Q_\infty}}
+
+\title{Finite-statistic thresholds and statistical obstructions\\
+for the binary digits of the Erd\H{o}s--Borwein constant\\[2pt]
+\large A research note inviting collaboration}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2.2em}
+\begin{center}
+\makebyline{1.0 (research note)}{25 November 2026}
+\end{center}
+
+\begin{abstract}
+Let $E=\sum_{n\ge1}1/(2^n-1)$ be the Erd\H{o}s--Borwein constant. Whether its binary digits are normal is open, and this note proves neither normality nor nonnormality. Writing $\tau(m)=2^{V(m)}U(m)$ with $U(m)$ odd, the digits of $E$ are governed by the integers $V(n+j)$ and $U(n+j)$. We compare them with an explicit random model of independent Poisson columns whose first-digit frequency lies in $[0.492450290,\,0.492460864]$ (finite certificate). Using an unconditional estimate for the mean discarded tail, we determine which finite statistics of this model would force a digit frequency below $1/2$: one bounded statistic of $16$ columns suffices, while for every $D\le15$ there are exact countermodels with the same $D$-column law and tail mean whose first-digit frequency is at least $1/2$. Exact joint laws of every set of at most four columns do not decide the bias. Factorial-moment information of order at most $4$ never decides it, order at most $8$ fails on $16$ columns, and an explicit order-$92$ witness suffices. The parity inequality behind these statements is verified in Lean. A Selberg--Vaaler majorant of degree $116$ suffices, whereas no trigonometric certificate of degree at most $110$ exists. We list the arithmetic correlation estimates that would settle these statistics, audit the bit counts in Crandall's 2012 paper against exact digits, credit related public work of Campbell, Captain Sude and Mira Cult, and propose three concrete collaborative computations and estimates.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+The Erd\H{o}s--Borwein constant
+\[
+E=\sum_{n\ge1}\frac1{2^n-1}=\sum_{m\ge1}\frac{\tau(m)}{2^m}=1.1001101101010000010111111\ldots_2,
+\]
+where $\tau(m)$ counts the positive divisors of $m$, is irrational by a theorem of Erd\H{o}s~\cite{erdos1948}; the irrationality of the more general series $\sum 1/(q^n+r)$ was proved by P.~Borwein~\cite{borwein1992}. Crandall~\cite{crandall2012} determined individual remote bits (for example the bit in position $10^{100}$ is $1$) and posed the question whether $E$ is normal in base~$2$, and even whether the word $11$ occurs infinitely often. Campbell~\cite{campbell2026} has since shown that $11$ occurs infinitely often. Public work of Captain Sude and of Mira Cult on the occurrence of fixed words is described in \cref{sec:related}.
+
+\medskip\noindent\textbf{Scope of this note.} \emph{We do not claim that $E$ is normal, and we do not claim that it is not normal.} Neither statement is known to us. The note addresses a narrower question. The binary digits of $E$ are determined by the arithmetic of $\tau$ at consecutive integers, and a natural random model for that arithmetic (independent Poisson columns, \cref{sec:model}) predicts a first-digit frequency different from $1/2$. We ask which \emph{finite} pieces of the model would suffice to force a digit frequency below $1/2$, and which would not. The answers are sharp in the number of columns, and they translate into explicit arithmetic targets. The mathematical content below is a set of statements about this finite-information question, each with an evidence label (\cref{tab:summary}), together with a literature audit and a list of concrete questions on which we would welcome collaboration.
+
+\medskip\noindent\textbf{Setting.} Write $\tau(m)=2^{V(m)}U(m)$ with $U(m)$ odd. The term $\tau(m)2^{-m}$ of the series deposits the odd integer $U(m)$ at the binary position $t(m)=m-V(m)$; we call $m$ a \emph{source} at $t(m)$ with \emph{mark} $U(m)$. Let $C(t)$ be the sum of the marks at position $t$. For a shift $n$ (the digit read is the $(n{+}1)$-st), the sources at positions $n+1,n+2,\ldots$ form the \emph{columns} $C(n+1),C(n+2),\ldots$ and
+$\{2^nE\}=\{\sum_{d\ge1}C(n+d)2^{-d}\}$ (\cref{lem:digit}). The comparison law $\Qinf$ makes the columns independent, each a Poisson$(1)$ number of independent marks with the law $\nu$ of the odd part of $\tau$ at a random integer.
+
+\medskip\noindent\textbf{Summary of results.} Let $R_D(n)$ be the residue modulo $2^D$ of the packed first $D$ columns, let $Q_D$ be its law under $\Qinf$, and let $f_I$ be the proportion of $1$'s among the digits $n+1$, $N\le n<2N$.
+
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item (\cref{thm:sufficient,thm:sharp}) \emph{One bounded statistic $\Psi_{16}(R_{16})$ of $16$ columns suffices:} if $\limsup\Av_I\Psi_{16}(R_{16})<0.4962723$ along a sequence of windows,\linebreak[3] then $\limsup f_I<1/2$ and $E$ is not simply normal. Its value in the model is at most $0.4960081$. For every $D\le15$ there is an exact countermodel (a law of a column process with $R_D\sim Q_D$ and tail mean at most $\mu$) with first-digit frequency at least $1/2$. The tail-mean input is proved in \cref{prop:tail}.
+\item (\cref{thm:constants}) $p_*\in[0.492450290,\,0.492460864]$, where $p_*$ is the first-digit frequency under $\Qinf$.
+\item (\cref{thm:hierarchy}) For every $k\le4$, exact joint laws of all sets of $k$ columns are compatible both with first-digit frequency exactly $1/2$ and with frequency above $1/2$.
+\item (\cref{thm:parity,thm:order}) \emph{A parity Bonferroni inequality:} for odd $r$, matching the first $r$ Poisson factorial moments forces $\Ex(-1)^N\ge\sum_{k\le r}(-2)^k/k!$, which becomes positive exactly at $r=5$. Moments of order $\le4$ cannot decide the bias on any number of columns; on $16$ columns order $\le8$ cannot; and order $92$ can (so $9\le r_{\min}(16)\le 92$).
+\item (\cref{thm:fourier,thm:nodegree}) A Selberg--Vaaler majorant of degree $116$ certifies the bias from $58$ odd Fourier harmonics of the orbit; no trigonometric polynomial of degree $\le110$ can.
+\item (\cref{sec:arith,sec:crandall,sec:targets}) What the arithmetic of $\tau$ would have to supply, an audit of Crandall's bit counts, and three collaborative targets.
+\end{enumerate}
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}p{0.50\textwidth}p{0.34\textwidth}l@{}}
+\toprule
+Result & Evidence label & Section\\
+\midrule
+Digit identity; tail mean $\Av_IY_D=\mu+o(1)$ & Paper proof & \ref{sec:model}, \ref{sec:inputs}\\
+$\mu$, $p_*$, carry parity: certified enclosures & Finite certificate & \ref{sec:constants}\\
+$16$-column sufficiency (\cref{thm:sufficient}) & Lean-supported paper proof & \ref{sec:threshold}\\
+$D\le15$ countermodels (\cref{thm:sharp}) & Finite certificate & \ref{sec:threshold}\\
+Column hierarchy, $k\le4$ (\cref{thm:hierarchy}) & Finite certificate & \ref{sec:hierarchy}\\
+Parity Bonferroni (\cref{thm:parity}) & Lean-supported paper proof & \ref{sec:moments}\\
+Order $\le4$ and $\le8$ fail (\cref{thm:order}) & Finite certificate & \ref{sec:moments}\\
+Order-$92$ witness (\cref{thm:92}) & Lean-supported paper proof & \ref{sec:moments}\\
+Degree-$116$ majorant; degree $\le110$ barrier & Finite certificate (floating point) & \ref{sec:fourier}\\
+Crandall audit (\cref{prop:crandall}) & Finite certificate & \ref{sec:crandall}\\
+\bottomrule
+\end{tabular}
+\caption{Evidence labels. ``Finite certificate'' statements are computations; in \cref{sec:fourier} they use IEEE arithmetic with explicit error radii and are weaker than interval-arithmetic proofs (see \cref{rem:float}). Human specialist review is outstanding; cross-model review is not peer review.}\label{tab:summary}
+\end{table}
+
+\medskip\noindent\textbf{Priority.} We have not located the statements of \cref{thm:sufficient,thm:sharp,thm:hierarchy,thm:parity,thm:order,thm:92,thm:fourier,thm:nodegree} in the sources we examined; that is a statement about our search, not a claim of priority. The ledger accompanying this note records the sources and searches. The one-source facts of \cref{sec:inputs} are elementary and probably known in some form.
+
+\section{The digit identity and the comparison law}\label{sec:model}
+
+Throughout, $m,n,t,d,N,D$ denote integers, $\tau(m)=2^{V(m)}U(m)$ with $U(m)$ odd, $t(m)=m-V(m)$ and $C(t)=\sum_{m:\,t(m)=t}U(m)$. Since $V(m)\le\log_2m$, $t(m)\ge m/2$ for $m\ge4$, so $C(t)\le\sum_{m\le2t+3}\tau(m)\le(2t+3)^2$ and every sum below converges.
+
+\begin{lemma}[Digit identity]\evidence{Paper proof}\label{lem:digit}
+For every $n\ge0$ the number $2^nE$ equals an integer plus $x_n=\sum_{d\ge1}C(n+d)2^{-d}$. For $D\ge1$ put
+\[
+R_D(n)=\Bigl(\sum_{d=1}^{D}2^{D-d}C(n+d)\Bigr)\bmod 2^D,\qquad
+Y_D(n)=\sum_{d>D}C(n+d)\,2^{D-d}.
+\]
+Then the $(n{+}1)$-st binary digit of $E$ is the top bit of $\bigl(R_D(n)+\lfloor Y_D(n)\rfloor\bigr)\bmod 2^D$, that is, it equals $1$ exactly when $2^{D-1}\le (R_D+\lfloor Y_D\rfloor)\bmod 2^D$.
+\end{lemma}
+
+\begin{proof}
+$2^nE=\sum_m\tau(m)2^{n-m}=\sum_mU(m)2^{n-m+V(m)}=\sum_mU(m)2^{n-t(m)}$. The terms with $t(m)\le n$ are integers. The terms with $t(m)=n+d$, $d\ge1$, sum to $C(n+d)2^{-d}$; this gives the first claim. The digit $n{+}1$ is $\lfloor2\cdot2^nE\rfloor\bmod2=\lfloor2x_n\rfloor\bmod2$, since $2^nE-x_n\in\mathbb Z$. Write $2^Dx_n=S_D+Y_D$ with $S_D=\sum_{d\le D}2^{D-d}C(n+d)\in\mathbb Z$. Then $\lfloor2^Dx_n\rfloor=S_D+\lfloor Y_D\rfloor$ and $\lfloor2x_n\rfloor=\lfloor2^Dx_n/2^{D-1}\rfloor$. The quotient of an integer by $2^{D-1}$, taken modulo $2$, is its bit of weight $2^{D-1}$, which is the top bit of its residue modulo $2^D$.
+\end{proof}
+
+The finite exponential analogue of the first claim and the reindexing of the sums over $n$ by sources are Lean-verified: \lean{ErdosBorweinArrivals}{16}{\texttt{source\_phase}} and \lean{ErdosBorweinArrivals}{41}{\texttt{arrival\_sum}}.
+
+\subsection{Column processes and the comparison law}
+
+A \emph{marked column process} is a random sequence of finite multisets $(\mathcal M_d)_{d\ge1}$ of odd positive integers (the sources in column $d$ with their marks), $C_d=\sum\mathcal M_d$, such that $\sum_dC_d2^{-d}<\infty$ almost surely. Its \emph{first digit} is $1$ exactly when $\bigl(C_1+\lfloor\sum_{d\ge2}C_d2^{1-d}\rfloor\bigr)$ is odd (this is \cref{lem:digit} with $D=1$), and $f(1)$ denotes the probability of that event. For $n$ uniform in a window $I$, the actual sources form such a process, and its $f(1)$ is the proportion of ones among digits $n{+}1$, $n\in I$.
+
+\emph{Marks.} For each prime $p$ let $B_p\ge0$ be independent with $\Pr(B_p=a)=(1-1/p)p^{-a}$ and let $U_*=\prod_p\operatorname{odd}(B_p+1)$, where $\operatorname{odd}$ removes factors of $2$. The product is almost surely finite (only $B_p\ge2$ can change a factor, and $\sum p^{-2}<\infty$). Let $\nu$ be the law of $U_*$ and
+\[
+\mu=\Ex U_*=\prod_p\Ex\operatorname{odd}(B_p+1).
+\]
+(The product converges, \cref{prop:tail}.) \emph{Columns.} Let $J=U_1+\dots+U_K$ with $K\sim\Pois(1)$ and $U_i\sim\nu$ independent. The \emph{comparison law} $\Qinf$ is the law of the process whose columns are independent copies $J_1,J_2,\ldots$ of $J$ (with their marks). Under $\Qinf$, $\Ex J=\mu$, and since all marks are odd $J\equiv K\pmod 2$, so $\Ex(-1)^J=\Ex(-1)^K=e^{-2}$ and the larger parity probability is $p_0=(1+e^{-2})/2<3/5$. Let $Q_D$ be the law of $\bigl(\sum_{d\le D}2^{D-d}J_d\bigr)\bmod 2^D$ and let $p_*=\Qinf(\text{first digit}=1)$.
+
+\begin{proposition}[Value of $p_*$]\evidence{Paper proof}\label{prop:pstar}
+$p_*=\tfrac12-\tfrac12e^{-2}\,\Ex(-1)^{c_1}$ with $c_1=\lfloor\sum_{d\ge2}J_d2^{1-d}\rfloor$.
+\end{proposition}
+\begin{proof}
+The digit is $(J_1+c_1)\bmod2$ with $J_1$ independent of $c_1$, so $\Ex(-1)^{\text{digit}}=\Ex(-1)^{J_1}\Ex(-1)^{c_1}=e^{-2}\Ex(-1)^{c_1}$, and $p_*=(1-\Ex(-1)^{\text{digit}})/2$.
+\end{proof}
+
+\paragraph{Status of $\Qinf$.} $\Qinf$ is a model, not a theorem about $E$. Its first-order features are proved: the expected number of sources in a column tends to one and the mean mark total tends to $\mu$ (\cref{prop:tail}). That the columns behave like independent Poisson variables is the Kubilius-type heuristic that the arithmetic correlation problems of \cref{sec:arith} would have to confirm. Exact data on the shells $2^s\le n<2^{s+1}$ are consistent with it but do not test the limit: the shell proportion of ones is $0.514404,\ 0.510254,\ 0.500923,\ 0.493996,\ 0.493676,\ 0.493723$ for $s=12,15,18,21,22,23$ (finite computation, \texttt{phase16\_erdos\_borwein.py}), while the model value is $p_*\approx0.49245$, and the natural scale $\log\log N$ is below $2.8$ at these sizes. These numbers are observations on finite shells and bear on no limit.
+
+\section{Arithmetic inputs}\label{sec:inputs}
+
+\begin{proposition}[One-source mean and tail mean]\evidence{Paper proof}\label{prop:tail}
+Let $I=[N,2N)$ and $\Av_I$ denote the average over $n\in I$.
+\begin{enumerate}[label=(\alph*)]
+\item $U$ is multiplicative with $U(p^e)=\operatorname{odd}(e+1)$. The Dirichlet convolution $a=U*\mu_{\mathrm M}$ is supported on squarefull integers, $|a(q)|\le\tau(q)$, and $\sum_qa(q)/q=\mu<\infty$.
+\item For every $\varepsilon>0$, uniformly for $1\le d\le N$,
+$\ N^{-1}\sum_{n\in I}C(n+d)=\mu+O_\varepsilon(N^{-1/2+\varepsilon})$.
+\item For every fixed $D\ge1$, $\ \Av_I\,Y_D=\mu+o(1)$ as $N\to\infty$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Multiplicativity is clear since $\tau(p^e)=e+1$. As $U(p)=1=U(1)$, $a(p)=U(p)-U(1)=0$, and $a$ is multiplicative, so $a(q)=0$ unless every prime exponent of $q$ is at least $2$. For prime powers $|a(p^e)|=|\operatorname{odd}(e+1)-\operatorname{odd}(e)|\le e+1=\tau(p^e)$. Hence $|a(q)|\le\tau(q)$ and $\sum_{q>x}|a(q)|/q\ll_\varepsilon x^{-1/2+\varepsilon}$, because the squarefull integers up to $x$ number $O(\sqrt x)$. Moreover $\sum_qa(q)/q=\prod_p\bigl(1+\sum_{e\ge2}a(p^e)p^{-e}\bigr)=\prod_p(1-p^{-1})\sum_{e\ge0}U(p^e)p^{-e}$ (the last because $a(p^e)=U(p^e)-U(p^{e-1})$), and $(1-p^{-1})\sum_eU(p^e)p^{-e}=\Ex\operatorname{odd}(B_p+1)$. The Euler product converges absolutely, and by independence and monotone convergence it equals $\Ex U_*=\mu$.
+
+(b) Each source $m$ contributes $U(m)$ to $\sum_{n\in I}C(n+d)$ exactly once, at $n=t(m)-d$, provided this $n$ lies in $I$ (the reindexing verified in Lean as \texttt{arrival\_sum}). Thus the sum is $\sum U(m)$ over $m$ with $N+d\le t(m)<2N+d$. As $0\le V(m)\le\log_2m$, this set differs from $[N+d,2N+d)$ by at most $2\log_2(4N)+2$ integers $m\le3N+\log_2 N$, each with $U(m)\le\tau(m)\ll_\varepsilon N^\varepsilon$. Finally $g=U=1*a$, so $\sum_{N+d\le m<2N+d}U(m)=\sum_qa(q)\bigl(N/q+O(1)\bigr)$ over $q\le3N+\log_2 N$ (squarefull), which equals $N\mu-N\sum_{q>4N}a(q)/q+O\bigl(\sum_{q\le4N,\ q\text{ squarefull}}\tau(q)\bigr)=N\mu+O(N^{1/2+\varepsilon})$. Dividing by $N$ and adding the strip contribution $O(N^{-1+\varepsilon}\log N)$ gives (b).
+
+(c) $\Av_IY_D=\sum_{d>D}2^{D-d}\Av_IC(n+d)$. For $D<d\le N$ use (b). For $d>N$ we have $n+d\le3d$ for $n\in I$, so $C(n+d)\le(6d+3)^2$ and $\sum_{d>N}2^{D-d}(6d+3)^2\to0$. The weights $2^{D-d}$ sum to $1$ over $d>D$.
+\end{proof}
+
+\begin{remark}\label{rem:local}
+The expected number of sources at a column, $\Av_I\#\{m:t(m)=n+d\}$, tends to $1$ by the same reindexing. Local limit laws for $V$ (Poisson with mean $\log\log N$) and the exact $p$-adic two-point laws are obtained in the repository notes cited in \cref{sec:formal}; this note does not use them.
+\end{remark}
+
+\section{Certified comparison constants}\label{sec:constants}
+
+\begin{lemma}[Depth truncation]\evidence{Paper proof}\label{lem:trunc}
+Under $\Qinf$ every value of $R_D$ has probability at most $p_0^D$, and the first digit differs from the top bit of $R_D$ with probability at most $2\mu\,p_0^D$.
+\end{lemma}
+\begin{proof}
+Reveal columns from $D$ down to $1$. Bit $0$ of $R_D$ is the parity of $J_D$; the bit of weight $2^i$ is the parity of $J_{D-i}$ plus a carry determined by the already revealed columns $J_D,\dots,J_{D-i+1}$, and $J_{D-i}$ is independent of these. Each prescribed parity has conditional probability at most $p_0$, so $\Pr(R_D=r)\le p_0^D$. The first digit is the top bit of $(R_D+c)\bmod 2^D$ with $c=\lfloor Y_D\rfloor$ (\cref{lem:digit}); it differs from the top bit of $R_D$ only if $R_D$ lies within $c$ of $2^{D-1}$ or $2^D$ from below, a set of $\le2c$ residues (if $2c\ge2^D$ the bound $2c\,p_0^D\ge(2p_0)^D\ge1$ is trivial). Since $c=\lfloor Y_D\rfloor$ depends only on columns $d>D$, it is independent of $R_D$ under $\Qinf$; averaging $2c\,p_0^D$ over $c\le Y_D$, $\Ex Y_D=\mu$, gives the claim.
+\end{proof}
+
+\begin{theorem}[Certified enclosures]\evidence{Finite certificate}\label{thm:constants}
+\begin{align*}
+\mu&\in[2.0762592,\ 2.0763285],\\
+\Ex(-1)^{c_1}&\in[0.111481733,\ 0.111502881],\\
+p_*&\in[0.492450290,\ 0.492460864],\qquad \tfrac12-p_*\in[0.00753913,\ 0.00754971].
+\end{align*}
+\end{theorem}
+\emph{Method and reproduction.} The mark law is computed as a multiplicative convolution, using integer lower bounds at scale $2^{-64}$: primes $p\le2^{12}$ individually; primes in $(2^{12},2^{22}]$ as one combined factor (no exponent reaching $2$, or exactly one exponent equal to $2$, with the remaining mass charged to the error); primes above $2^{22}$ charged $\sum_{n>2^{22},\,n\text{ odd}}n^{-2}$; marks up to $511$ and column totals up to $511$ retained. The missing mass is at most $2.21\times10^{-7}$. The column law follows from $jb_j=\sum_{u\ge1}u\,\nu(u)\,b_{j-u}$, $b_0=e^{-1}$. A carry dynamic programme over $48$ columns computes $\Ex(-1)^{c_1}$, and the depth truncation costs at most $2\mu\,p_0^{48}$ by \cref{lem:trunc}; \cref{prop:pstar} gives $p_*$. All losses are charged outward. Run \texttt{python -B scripts/phase17\_erdos\_borwein\_bias.py} (about $20$\,s; sections A and D). An independent floating-point recomputation by a different route (per-prime Euler product to $2\times10^5$, FFT convolution, direct carry recursion; \texttt{crosscheck.py} in this directory) gives $\mu\approx2.07632$, $\Ex(-1)^{c_1}\approx0.111493$ and $p_*\approx0.492456$, consistent with the enclosures. This cross-check is not a certificate.
+
+\section{The sharp $16$-column threshold}\label{sec:threshold}
+
+Let $\lambda=1/557$ and
+\[
+\Psi_{16}(r)=\ind[r\ge2^{15}]+\sum_{k=1}^{556}\Bigl(1-\frac k{557}\Bigr)\ind[r=2^{15}-k],\qquad 0\le r<2^{16}.
+\]
+
+\begin{theorem}[Sufficiency at $16$ columns]\evidence{Lean-supported paper proof}\label{thm:sufficient}
+Let $f_I=\Av_I\ind[\text{digit }n{+}1\text{ is }1]$. For every sequence of windows $I=[N,2N)$, $N\to\infty$,
+\[
+\limsup f_I\le\limsup\Av_I\Psi_{16}\bigl(R_{16}(n)\bigr)+\frac{\mu}{557}.
+\]
+Consequently, if $\limsup\Av_I\Psi_{16}(R_{16})<0.4962723$ along some such sequence, then $\limsup f_I<1/2$ along it and $E$ is not simply normal. Under $\Qinf$, $\Ex\,\Psi_{16}(R_{16})\le0.4960081$, a margin of $2.6\times10^{-4}$.
+\end{theorem}
+
+\begin{proof}
+Put $r=R_{16}(n)$ and $c=\lfloor Y_{16}(n)\rfloor\in\mathbb Z_{\ge0}$. By \cref{lem:digit} the digit is $\ind[2^{15}\le(r+c)\bmod2^{16}]$. The Lean theorem \lean{Phase17DiscrepancyBounds}{375}{\texttt{carry\_knapsack\_le}} states, for all $D,r,c\in\mathbb N$ and $\lambda\ge0$,
+\[
+\ind\bigl[2^{D-1}\le(r+c)\bmod2^D\bigr]\le\ind[r\ge2^{D-1}]+\lambda c+\ind[r<2^{D-1}]\max\bigl(0,\,1-\lambda(2^{D-1}-r)\bigr).
+\]
+With $D=16$, $\lambda=1/557$ the last term is $(1-k/557)^+$ at $r=2^{15}-k$, which vanishes for $k\ge557$; so the right side is $\Psi_{16}(r)+\lambda c$. Average over $n\in I$, use $c\le Y_{16}$ and \cref{prop:tail}(c): $\Av_Ic\le\mu+o(1)$. This proves the displayed inequality. For the numerical consequence, $\mu\le2.0763285$ (\cref{thm:constants}) gives $\mu/557\le0.0037277$, and $0.4962723+0.0037277=0.5$. The bound $\Ex_{Q_{16}}\Psi_{16}\le0.4960081$ is the output of the certified column-law computation (script section C): the knapsack value $\lambda\mu_{\max}+\Ex_{Q_{16}}\Psi_{16}\le0.49973577$ with $\mu_{\max}=2.0763285$.
+\end{proof}
+
+The choice $\lambda=1/557$ is the optimal dual variable of the linear programme ``maximise $f(1)$ over joint laws of $(R_D,c)$ with $R_D\sim Q_D$, $c\in\mathbb Z_{\ge0}$, $\Ex c\le\mu$'': the primal value is $Q_D(R_D\ge2^{D-1})$ plus a fractional knapsack in which moving a unit of mass from the cell $2^{D-1}-k$ costs $k$ against the budget $\mu$.
+
+\begin{corollary}[Quantitative consequence of normality]\evidence{Lean-supported paper proof}\label{cor:tv}
+If $E$ is simply normal, then $\liminf_{N\to\infty}\dTV\bigl(\mathcal L(R_{16}(n)),Q_{16}\bigr)\ge2.6\times10^{-4}$, for $n$ uniform in $[N,2N)$.
+\end{corollary}
+\begin{proof}
+Simple normality gives $f_I\to1/2$ on $[N,2N)$ by subtracting prefix counts at $N$ and $2N$. By \cref{thm:sufficient}, $\liminf\Av_I\Psi_{16}\ge1/2-\mu/557\ge0.4962723$. Since $0\le\Psi_{16}\le1$, $\dTV\ge\Av_I\Psi_{16}-\Ex_{Q_{16}}\Psi_{16}\ge0.4962723-0.4960081$.
+\end{proof}
+
+\begin{corollary}\evidence{Conditional}\label{cor:cond16}
+Hypothesis: $\mathcal L(R_{16}(n))\to Q_{16}$ along a sequence of windows $[N_j,2N_j)$, $N_j\to\infty$. Conclusion: $\limsup f_I<1/2$ along it, so $E$ is not simply normal.
+\end{corollary}
+\begin{proof}
+$\Psi_{16}$ is bounded, so $\Av_I\Psi_{16}\to\Ex_{Q_{16}}\Psi_{16}\le0.4960081<0.4962723$.
+\end{proof}
+
+\begin{theorem}[Sharpness: countermodels for $D\le15$]\evidence{Finite certificate}\label{thm:sharp}
+For $D\ge1$ let $\mathcal I_D$ be the set of laws of marked column processes in which (i) the first $D$ columns are independent copies of $J$ (so $R_D\sim Q_D$ exactly) and (ii) every later column has mean $\Ex C_d\le\mu$ (so $\Ex Y_D\le\mu$). Let $f^{\sup}_D=\sup f(1)$ over $\mathcal I_D$. Then, with outward-rounded certified bounds,
+\begin{center}\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lccccccccccc@{}}
+\toprule
+$D$ & 4 & 6 & 8 & 10 & 12 & 14 & \textbf{15} & \textbf{16} & 17 & 20 & 23\\
+\midrule
+$f^{\sup}_D\le$ & .958104 & .733276 & .614119 & .553082 & .522477 & .509093 & .502828 & \textbf{.499736} & .498500 & .494499 & .493205\\
+$f^{\sup}_D\ge$ & .958093 & .733270 & .614114 & .553078 & .521878 & .505523 & \textbf{.502823} & .499732 & .496678 & .493964 & .492945\\
+\bottomrule
+\end{tabular}
+\end{center}
+In particular $f^{\sup}_D\ge0.502823>1/2$ for every $D\le15$ (the $D=15$ law is a member of $\mathcal I_{D'}$ for all $D'\le15$), whereas $f^{\sup}_{16}\le0.499736<1/2$. Hence $16$ is the least number of columns $D$ for which the law of $R_D$ together with the tail mean can force a first-digit frequency below $1/2$.
+\end{theorem}
+
+\emph{Proof of the lower bounds (construction).} The law of $(R_D,c)$ is built greedily: let the cell $r=2^{D-1}-k$ ($1\le k$) be \emph{moved} with a conditional probability; on a moved cell put $k$ sources of mark $1$ in \emph{every} column $d>D$, so that $Y_D=k$ exactly and the top bit becomes $1$. Elsewhere leave all later columns empty. Then $\Ex C_d=\sum_k k\Pr(\text{moved},k)$ is the total knapsack cost and must be at most $\mu$; cells are moved in increasing order of cost $k$ and the last cell partially. For $D'<D$ the same law lies in $\mathcal I_{D'}$: columns $1,\dots,D'$ are independent copies of $J$, columns $D'+1,\dots,D$ are copies of $J$ with mean $\mu$, and later columns have mean at most $\mu$. The cell masses of $Q_D$ for the cells $r=2^{D-1}-k$ are certified by a carry trie over the lowest columns with integer lower bounds; larger $k$ are grouped in dyadic blocks (cost taken at the upper end for the construction, at the lower end for the upper bound), which explains the small gaps in the table. \emph{Upper bounds} are the dual values $\lambda\mu_{\max}+\Ex\Psi$ of the same linear programme, with each $D$ using its optimal $\lambda$ (for $D=16$, $\lambda=1/557$, \cref{thm:sufficient}). Reproduction: script section C.
+
+\begin{remark}
+The countermodels live in the abstract class $\mathcal I_D$. They show that no argument can use \emph{only} the law of $R_D$ and the tail mean for $D\le15$. They say nothing about whether the actual columns of $E$ have richer structure. Richer information buys fewer columns: a numerical, uncertified experiment suggests that knowing the law of the integer column totals (rather than residues) would reduce the threshold by about four columns. We also record, as a remark rather than a result, that the earlier $32$-column statement ($\mathrm{TV}>0.006$ if $E$ is simply normal) (registered in the repository as CC-30) is in the same spirit with a weaker tail estimate; we do not reprove it here.
+\end{remark}
+
+\section{Exact joint laws of few columns do not decide}\label{sec:hierarchy}
+
+\begin{theorem}[Column hierarchy]\evidence{Finite certificate}\label{thm:hierarchy}
+Let $K\in\{2,3,4,5\}$. There are explicit sets $S_1,\dots,S_K\subset\{0,\dots,47\}$ (listed in script section E) such that, with $\pi_i=\Qinf(J\in S_i)$, $g_i=(\ind_{S_i}(C_i)-\pi_i)/\max(\pi_i,1-\pi_i)$ and $|\varepsilon|\le1$,
+\[
+dQ^\varepsilon=\Bigl(1+\varepsilon\prod_{i=1}^Kg_i(C_i)\Bigr)\,d\Qinf
+\]
+is a probability law on marked column processes with these properties: (1) every set of columns omitting at least one of $1,\dots,K$ has exactly its $\Qinf$-joint law, marks included; in particular every $(K{-}1)$-column law is exact, and the tail beyond column $K$ is unchanged. (2) $f^\varepsilon(1)=p_*+\varepsilon s_K$ with certified $s_K\ge0.102248,\ 0.055920,\ 0.038866,\ 0.015222$ for $K=2,3,4,5$ respectively. Since each $s_K>\tfrac12-p_*$, some $\varepsilon\in(0,1)$ gives $f^\varepsilon(1)=\tfrac12$ exactly, and $\varepsilon=1$ gives $f^\varepsilon(1)>\tfrac12$.
+\end{theorem}
+\begin{proof}
+$|g_i|\le1$ gives positivity of the density. Under $\Qinf$ the columns are independent and each $g_i(C_i)$ has mean zero, so integrating out any one of the perturbed columns kills the perturbation; this is (1). The digit is a function of the columns, so $f^\varepsilon(1)=p_*+\varepsilon s_K$ with $s_K=\Ex_{\Qinf}[\prod g_i\cdot\ind(\text{digit}=1)]$, which expands into $2^K$ probabilities $\Qinf(C_i\in S_i\ (i\in T),\ \text{digit}=1)$ and the $\pi_i$. Each is enclosed by the certified carry dynamic programme; interval arithmetic gives the stated lower bounds. By \cref{thm:constants}, $\tfrac12-p_*\le0.00754971<s_K$.
+\end{proof}
+
+Thus first and second moments of column totals, exact one-column laws, pairwise independence with exact marginals, and exact three- and four-column laws cannot certify a bias in either direction: for every $k\le4$ the joint laws of all $k$-column sets leave both $f(1)=1/2$ and $f(1)>1/2$ attainable. A numerical search over $\pm1$-valued factors at $K=6$ (not certified) found no perturbation reaching $1/2-p_*\approx0.00754$. Whether exact five-column laws certify is open; exact sixteen-column laws do (\cref{thm:sufficient}).
+
+\section{Moment hierarchies and the parity Bonferroni inequality}\label{sec:moments}
+
+\begin{theorem}[Parity Bonferroni inequality]\evidence{Lean-supported paper proof}\label{thm:parity}
+Let $r\ge1$ be odd and put $e_r=\sum_{k=0}^r(-2)^k/k!$. For every probability law of a random variable $N\in\mathbb Z_{\ge0}$ with $\Ex\binom Nk=1/k!$ (equivalently $\Ex(N)_k=1$) for $1\le k\le r$,
+\[
+\Ex(-1)^N\ge e_r,
+\]
+and equality holds for an explicit law on $\{0,\dots,r\}$. The values are $e_1=-1$, $e_3=-\tfrac13$, $e_5=\tfrac1{15}$, $e_7=\tfrac{41}{315}$, $e_9=\tfrac{383}{2835}$, $e_{11}=\tfrac{21101}{155925}$, increasing to $e^{-2}$. In particular $e_r>0$ exactly when $r\ge5$.
+\end{theorem}
+
+\begin{proof}
+\emph{Dual (Lean-verified step).} Let $q_r(n)=\sum_{k\le r}(-2)^k\binom nk$. The Lean theorem \lean{Phase17DiscrepancyBounds}{432}{\texttt{parity\_bonferroni\_\allowbreak dual\_le}} states $q_{2m+1}(n)\le(-1)^n$ for all $m,n\in\mathbb N$. (Sketch of its proof: $\Delta(t)=(-1)^t-q_r(t)$ satisfies $\Delta(t)=0$ for $t\le r$, since then $q_r(t)=(1-2)^t$, and, using Pascal's rule and $r$ odd, $\Delta(t+1)+\Delta(t)=2^{r+1}\binom tr$. Hence
+\[
+\Delta(t+2)-\Delta(t)=2^{r+1}\Bigl(\tbinom{t+1}r-\tbinom tr\Bigr)\ge0,
+\]
+and $\Delta(r)=0$, $\Delta(r+1)=2^{r+1}>0$ give $\Delta\ge0$ by induction.) Since $q_r$ has degree $r$, $\Ex q_r(N)=\sum_{k\le r}(-2)^k\Ex\binom Nk=e_r$, so $\Ex(-1)^N\ge e_r$.
+
+\emph{Primal.} Put $w_n=\frac1{n!}\sum_{j=0}^{r-n}\frac{(-1)^j}{j!}$ for $0\le n\le r$. The alternating partial sums of $e^{-1}$ are nonnegative, so $w_n\ge0$, and
+$\sum_nw_n\binom nk=\frac1{k!}\sum_{i+j\le r-k}\frac{(-1)^j}{i!\,j!}=\frac1{k!}\sum_{l\le r-k}\frac{(1-1)^l}{l!}=\frac1{k!}$ for $0\le k\le r$ (so $w$ is a probability law with the required moments). As $(-1)^n=\sum_k(-2)^k\binom nk$ and $w$ is supported on $\{0,\dots,r\}$, $\Ex(-1)^N=e_r$.
+\end{proof}
+
+\begin{remark}[Even order]
+For even $r$ the case $r-1$ gives $\Ex(-1)^N\ge e_{r-1}$. This is the infimum for even $r\le10$ (laws on $\{0,\dots,r-1\}\cup\{L\}$ with $L=50{,}000$ verified in exact arithmetic to have the required moments, nonnegative weights and parity within $10^{-2}$ of $e_{r-1}$) and is never attained. We do not claim the infimum for general even $r$.
+\end{remark}
+
+We now turn to the marked column counts. For $1\le d\le D$ and an odd residue $c$ modulo $2^d$ let $N_{d,c}(n)$ be the number of sources at position $n+d$ whose mark is $\equiv c\pmod{2^d}$. The packed residue $R_D(n)$ is a function of these counts. Under $\Qinf$ the $N_{d,c}$ are independent Poisson variables with means $\nu_d(c)=\Pr(U_*\equiv c\bmod2^d)$.
+
+\begin{definition}[Information classes]
+For $D\ge1$, $r\ge1$ let $\mathcal I_{D,r}$ be the set of laws of marked column processes in which (i) all mixed factorial moments of total order $\le r$ of $(N_{d,c})_{d\le D}$ equal their $\Qinf$ values $\prod\nu_d(c)^{k_{d,c}}$ and (ii) every column $d>D$ has $\Ex C_d\le\mu$. Let $r_{\min}(D)$ be the least $r$ such that every law in $\mathcal I_{D,r}$ has $f(1)<\tfrac12$ ($\infty$ if none).
+\end{definition}
+
+\begin{theorem}[Low order fails]\evidence{Finite certificate}\label{thm:order}
+(a) For every $D\ge1$ and every $r\le4$ the class $\mathcal I_{D,r}$ contains a law with $f(1)=\tfrac12$ exactly. Hence $r_{\min}(D)\ge5$ for all $D$. (b) $\mathcal I_{16,8}$ contains a law with $f(1)\ge0.5000126$, and $\mathcal I_{16,7}$ one with $f(1)\ge0.5000161$. Hence $r_{\min}(16)\ge9$. (c) $\mathcal I_{17,6}$ contains a law with $f(1)\ge0.5000762$, so $r_{\min}(17)\ge7$.
+\end{theorem}
+
+\begin{proof}[Proof and reproduction]
+(a) Consider the rational laws on $\mathbb Z_{\ge0}$
+\[
+\rho_3=\{0:\tfrac{13}{36},\ 1:\tfrac{19}{48},\ 2:\tfrac5{36},\ 3:\tfrac7{72},\ 5:\tfrac1{144}\},\qquad
+\rho_4=\tfrac{99}{404}L^{(12)}+\tfrac{305}{404}L_5,
+\]
+where $L_5$ is the primal law $w$ of \cref{thm:parity} for $r=5$ and $L^{(12)}=\{0:\tfrac{25}{72},\ 1:\tfrac5{11},\ 2:\tfrac1{20},\ 3:\tfrac4{27},\ 12:\tfrac1{11880}\}$. Exact rational arithmetic (rechecked independently, \texttt{crosscheck.py}) shows that $\rho_3$ has $\Ex(N)_k=1$ for $k\le3$ and $\rho_4$ for $k\le4$, and $\Ex(-1)^N=0$ for both ($L^{(12)}$ has parity $-61/297$, $L_5$ has parity $1/15$, and $\tfrac{99}{404}\cdot\tfrac{-61}{297}+\tfrac{305}{404}\cdot\tfrac1{15}=0$). Give column $1$ the count law $\rho$ with i.i.d.\ marks of law $\nu$, and let all other columns be as under $\Qinf$, independent. Given the count $n$ of column $1$, the marked counts are multinomial, so $\Ex\prod_c(N_{1,c})_{k_c}=\Ex(N_1)_{\sum k_c}\prod\nu_1(c)^{k_c}$, and all mixed factorial moments of total order $\le r$ coincide with those of $\Qinf$ on any number of columns; the tail means are those of $\Qinf$ (equal to $\mu$). Since marks are odd, $C_1\equiv N_1\pmod2$, and $C_1$ is independent of the carry $c_1$ from deeper columns, the first digit has $f(1)=\tfrac12-\tfrac12\Ex(-1)^{N_1}\Ex(-1)^{c_1}=\tfrac12$.
+
+(b), (c) Column $1$ receives the count law on $\{0,\dots,r-1\}\cup\{L\}$ (or $\{0,..,r\}$ for odd order) with the prescribed factorial moments; $L=400$ for $r=8$ and $L=40$ for $r=6$, or the primal law $L_7$ ($\Ex(-1)^N=\tfrac{41}{315}$), $L_5$ ($\tfrac1{15}$). Columns $2,\dots,D$ are as in $\Qinf$. The law of $R_D$ is then recomputed with the modified parity of column $1$, and the tail is coupled to $R_D$ by the knapsack construction of \cref{thm:sharp} with budget $\mu_{\min}=2.0762592$. The certified lower bounds are $f(1)\ge0.5000161\ (D=16,r=7)$, $0.5000126\ (16,8)$, $0.5004691\ (17,5)$, $0.5000762\ (17,6)$. The same family is exhausted one order later: $f(1)\le0.499749$ at $(16,9)$ and $\le0.498786$ at $(17,7)$. A law in $\mathcal I_{16,8}$ lies in $\mathcal I_{16,r}$ for every $r\le8$. Reproduction: script section F.
+\end{proof}
+
+\begin{theorem}[An order-$92$ witness on $16$ columns]\evidence{Lean-supported paper proof}\label{thm:92}
+Suppose that, along a sequence of windows $[N_j,2N_j)$, every mixed factorial moment of total order at most $92$ of $(N_{d,c}(n))_{1\le d\le16,\ c\text{ odd mod }2^d}$ converges to its $\Qinf$ value. Then $\limsup f_I\le0.499856<\tfrac12$. Together with \cref{thm:order}, $9\le r_{\min}(16)\le92$.
+\end{theorem}
+
+\begin{proof}
+Let $\vec N$ be the count vector, $K=\sum N_i$. For a configuration $\vec n$ and even $t\ge0$ let $B_t(\vec n)$ be the truncation at total degree $|\vec n|+t$ of Jordan's inversion $\ind[\vec N=\vec n]=\sum_{\vec k\ge\vec n}(-1)^{|\vec k-\vec n|}\binom{\vec k}{\vec n}\prod_i\binom{N_i}{k_i}$. Since $\binom{N_i}{k_i}\binom{k_i}{n_i}=\binom{N_i}{n_i}\binom{N_i-n_i}{k_i-n_i}$, Vandermonde's identity collapses the sum over $|\vec k-\vec n|=j$ to $\prod_i\binom{N_i}{n_i}\binom{M}{j}$ with $M=K-|\vec n|$, and $\sum_{j\le t}(-1)^j\binom Mj=(-1)^t\binom{M-1}t$ for $M\ge1$. As $t$ is even, pointwise
+\[
+B_t(\vec n)=\ind[\vec N=\vec n]+\prod_i\tbinom{N_i}{n_i}\tbinom{M-1}t\ind[M\ge1]\ \ge\ \ind[\vec N=\vec n].
+\]
+Define $t(\vec n)$ as the largest even integer $\le92-|\vec n|$ and $\Phi=\sum_{|\vec n|<92}\Psi_{16}(\vec n)B_{t(\vec n)}(\vec n)+\binom K{92}$, where $\Psi_{16}(\vec n)$ denotes $\Psi_{16}$ of the residue determined by $\vec n$. Then $\Phi\ge\Psi_{16}(R_{16})$ pointwise (configurations with $|\vec n|\ge92$ are covered by $\binom K{92}\ge1$), and $\Phi$ is a polynomial of degree $\le92$ in the counts, hence a combination of mixed factorial moments of order $\le92$. By hypothesis $\Av_I\Phi\to\Ex_\Qinf\Phi$, and, using $\sum_{|\vec n|=j}\prod_i\binom{N_i}{n_i}=\binom Kj$, $\Psi_{16}\le1$ and $K\sim\Pois(16)$ under $\Qinf$ (16 columns of mean $1$),
+\[
+\Ex_\Qinf\Phi\le\Ex_{Q_{16}}\Psi_{16}+\Ex\sum_{j<92}\binom Kj\binom{K-j-1}{t_j}+\frac{16^{92}}{92!}\le\Ex_{Q_{16}}\Psi_{16}+1.197\times10^{-4},
+\]
+where only $K\ge92$ contribute to the sum. The excess is evaluated in exact rational arithmetic for $K\le360$ with the bound $\binom Kj\binom{K-j-1}{t_j}\le 4^K$ beyond (script section F; an independent floating-point evaluation gives $1.1967\times10^{-4}$). Adding $\mu/557\le0.0037277$ via \cref{thm:sufficient} gives $\limsup f_I\le0.4960081+0.0001197+0.0037277<0.499856$.
+\end{proof}
+
+\begin{remark}
+Bonferroni is wasteful here: the excess arises only from $K\ge92$ and is weighted like a Poisson variable of mean $16$ with factor $2$ per unit. Closing the interval $9\le r_{\min}(16)\le92$ would require a genuinely multivariate moment linear programme on the sixteen-column count vector, which we have not attempted. Lean verifies the pointwise inequalities \texttt{carry\_knapsack\_le} and \texttt{parity\_bonferroni\_dual\_le}; the multivariate Jordan truncation and the numerical excess are not formalized.
+\end{remark}
+
+\section{The Fourier route}\label{sec:fourier}
+
+Let $\varphi(m)=\Ex_\Qinf e(mX)$, $X=\sum_dJ_d2^{-d}$, $e(x)=e^{2\pi ix}$, and $A_I(m)=\Av_{n\in I}e(m2^nE)$.
+
+\begin{proposition}[Structure of the model coefficients]\evidence{Paper proof}\label{prop:phi}
+$\varphi(m)=\exp\kappa(m)$ with $\kappa(m)=\sum_{d\ge1}(\hat\nu(m/2^d)-1)$, $\hat\nu(\theta)=\Ex e(\theta U_*)$, and $\varphi(2m)=\varphi(m)$. For the orbit, $A_I(2m)=A_{I+1}(m)=A_I(m)+O(m/N)$. For odd $m$, $\kappa(m)$ contains the exact terms $-2$ (from $d=1$) and $-1+i(\cdot)$ (from $d=2$).
+\end{proposition}
+\begin{proof}
+The columns are independent compound Poisson, so $\Ex e(mJ2^{-d})=\exp(\hat\nu(m/2^d)-1)$, and the product over $d$ gives $\varphi$. Replacing $m$ by $2m$ shifts $d$ by one, and the extra factor is $\exp(\hat\nu(m)-1)=1$ since $U_*\in\mathbb Z$. For the orbit, $e(2m\cdot2^nE)=e(m2^{n+1}E)$. For odd $m$ and odd $u$ we have $e(mu/2)=-1$ and $\mathrm{Re}\,e(mu/4)=0$, so $\hat\nu(m/2)-1=-2$ and $\mathrm{Re}(\hat\nu(m/4)-1)=-1$.
+\end{proof}
+
+\begin{theorem}[Degree $116$ suffices]\evidence{Finite certificate}\label{thm:fourier}
+Let $S^+_{N}$ be the Selberg--Vaaler majorant of degree $N=116$ of $\ind_{[1/2,1)}$ on $\mathbb R/\mathbb Z$, with Fourier coefficients $\hat S(0)=\tfrac12+\tfrac1{N+1}$, $\hat S(m)=\frac{i}{\pi m}\hat J\bigl(\tfrac{|m|}{N+1}\bigr)$ for odd $m$ and $\hat S(m)=\frac1{N+1}\bigl(1-\tfrac{|m|}{N+1}\bigr)$ for even $m\ne0$, where $\hat J(u)=\pi u(1-u)\cot(\pi u)+u$. Then $\Ex_\Qinf S^+_{116}(X)\le0.4999592$. Consequently, \emph{if} $A_I(m)\to\varphi(m)$ for the $58$ odd $m\le115$ along a sequence of windows, \emph{then} $\limsup f_I\le0.49996<\tfrac12$ along it.
+\end{theorem}
+
+\begin{proof}[Proof and scope]
+\emph{External input:} the inequality $S^+_N\ge\ind_{[1/2,1)}$ with these coefficients is the Selberg--Vaaler majorant property, quoted from Vaaler~\cite{vaaler1985} (we have not re-derived it; our access to the paper's full text during this review was blocked, so we did not confirm the theorem number, and we rely on the standard form $S^+_N(x)=\tfrac12+\psi^*_N(x-1)-\psi^*_N(x-\tfrac12)+\frac{1}{2N+2}\bigl(K_N(x-1)+K_N(x-\tfrac12)\bigr)$; as a numerical sanity check we verified $S^+_{116}-\ind\ge3.6\times10^{-5}>0$ on a grid of $2^{18}$ points, which is evidence for, not a proof of, the majorant property). \emph{Computation:} $\Ex_\Qinf S^+(X)=\sum_m\hat S(m)\varphi(m)$, evaluated from the certified mark law of \cref{thm:constants} with $\varphi(m)=\exp\kappa(m)$ (columns $d\le64$, explicit radii, \cref{rem:float}). Then $f_I=\Av_I\ind_{[1/2,1)}(\{2^nE\})\le\Av_IS^+(2^nE)=\sum_m\hat S(m)A_I(m)$; even harmonics are determined by odd ones (\cref{prop:phi}).
+\end{proof}
+
+\begin{theorem}[No certificate of degree $\le110$]\evidence{Finite certificate}\label{thm:nodegree}
+There is a probability measure $\rho$ on $\mathbb R/\mathbb Z$ with $\hat\rho(m)=\varphi(m)$ for all $|m|\le110$ and $\rho([\tfrac12,1])\ge0.500192$. Hence every real trigonometric polynomial $P$ of degree $\le110$ with $P\ge\ind_{[1/2,1)}$ satisfies $\sum_m\hat P(m)\varphi(m)\ge0.500192>\tfrac12$.
+\end{theorem}
+
+\begin{proof}[Construction and scope]
+A linear programme on $8192$ grid points gives a discrete measure $\rho_0$ ($221$ atoms) with $|\hat\rho_0(m)-\varphi(m)|\le4.3\times10^{-13}$ for $|m|\le110$ and $\rho_0([\tfrac12,1])=0.5002921$ (the atoms are embedded in the script). Put $\rho=(1-\vartheta)\rho_0+\vartheta\rho_\psi$ with $\vartheta=2\times10^{-4}$, where $\rho_\psi$ is the $221$-node equally spaced quadrature measure with prescribed coefficients $\psi(m)=(\varphi(m)-(1-\vartheta)\hat\rho_0(m))/\vartheta$ ($|m|\le110$); the number of nodes is $2\cdot110+1$, so no aliasing occurs. The weights of $\rho_\psi$ are at least $3.2\times10^{-3}>0$, a bound computed with the radii of $\varphi$ included, so positivity is robust against the numerical uncertainty in $\varphi$. Then $\hat\rho=\varphi$ exactly on $|m|\le110$ and $\rho([\tfrac12,1])\ge(1-\vartheta)\cdot0.5002921\ge0.500192$. A continuous $P\ge\ind_{[1/2,1)}$ is $\ge1$ on the closed arc $[\tfrac12,1]$ and $\ge0$ elsewhere, so $\sum\hat P(m)\varphi(m)=\int P\,d\rho\ge\rho([\tfrac12,1])$.
+\end{proof}
+
+\begin{remark}[Numerical only]
+Grid linear programmes give optimal values $0.501093$, $0.500292$, $0.500150$, $0.500012$, $0.500009$, $0.499879$ at degrees $100$, $110$, $112$, $114$, $115$, $116$ respectively; so the least certifying degree is $116$ if these are exact, which is proved for $\le110$ and for $116$ but only numerical in between. Harmonic $1$ alone carries $92.4\%$ of the model bias ($\tfrac2\pi\,\mathrm{Im}\,\varphi(1)=0.006977$ against $\tfrac12-p_*=0.007545$). The Fourier route needs more, not less, than \cref{thm:sufficient}: truncating to $D$ columns costs $2\pi m\mu2^{-D}$, and each harmonic is itself an infinite-order statistic whose odd-$m$ factor at column $1$ is $(-1)^{N(n+1)}$. By the Weyl criterion and the standard equivalence of normality with equidistribution of $\{2^nE\}$, $\limsup|A_I(1)|>0$ along any sequence of windows would show that $E$ is not normal, with no precision requirement; the model value is $|\varphi(1)|=0.0153860$.
+\end{remark}
+
+\begin{remark}[Floating point]\label{rem:float}
+The values $\varphi(m)$ in this section use IEEE double arithmetic with explicit error radii (the truncation of the series at $64$ columns, the missing mark mass, the uncertainty of $\mu$, and absolute margins $10^{-9}$--$10^{-12}$ for rounding) rather than interval arithmetic. We regard the margins ($4.1\times10^{-5}$ at degree $116$ and $>0$ for the quadrature weights) as comfortable but not as a formal proof; an interval-arithmetic recomputation is a clean task for an interested reader.
+\end{remark}
+
+\section{What the arithmetic would have to supply}\label{sec:arith}
+
+A source $m$ lies in column $d$ of shift $n$ exactly when $t(m)=m-V(m)=n+d$, i.e.\ for the raw offset $j=m-n$ when $V(n+j)=j-d$. Hence $R_{16}(n)$ is a function of the finite array $\bigl(V(n+j),\,U(n+j)\bmod2^{16}\bigr)_{1\le j\le J_N}$ with $J_N=16+\lceil\log_2(3N)\rceil$ (using $V(m)\le\log_2 m$). \emph{The single inequality $\limsup\Av_I\Psi_{16}(R_{16})<0.4962723$ of \cref{thm:sufficient} is therefore a statement about the joint law of the $2$-adic valuation and the odd part of $\tau$ at consecutive integers}; it must hold only along some infinite sequence of windows.
+
+In the model the relevant offsets cluster at $j=\log\log N+O(\sqrt{\log\log N})$, since $V(m)$ is approximately Poisson with that mean (a local limit law derived in the repository notes cited in \cref{sec:formal}; not used here). Writing $\ind[V=v]=\int_0^1e(\theta(V-v))\,d\theta$ and expanding $U\bmod2^{16}$ in characters, each mixed factorial moment of order $r$ in \cref{thm:92} becomes an $r$-fold integral of $r$-point correlations
+\[
+\frac1N\sum_{N\le k<2N}\ \prod_{i=1}^{r}e\bigl(\theta_iV(k+h_i)\bigr)\,\chi_i\bigl(U(k+h_i)\bigr),\qquad h_i\le\log\log N+O(\sqrt{\log\log N}),
+\]
+with relative shifts filling a window of width $\asymp\sqrt{\log\log N}$. We do not carry out the uniformity, and we regard the following as bookkeeping rather than theorem: by \cref{thm:order} the order $r\ge9$ is unavoidable for any argument using only the moment information of $16$ columns and the tail mean, and $r\ge5$ is unavoidable on any number of columns. A saving that is polynomial in $\log\log N$ over $r-1$ relative shifts is what the sum over $\asymp(\sqrt{\log\log N})^{\,r-1}$ shifts requires.
+
+\paragraph{What we know of the literature.} The inputs we have checked are as follows.
+\begin{itemize}[leftmargin=1.5em]
+\item \emph{One point.} Elementary (\cref{prop:tail}); a Selberg--Delange local limit is in the repository notes.
+\item \emph{Two points, almost all scales.} Tao and Ter\"av\"ainen~\cite{tt2025} (arXiv:2512.01739v2, Theorem~3.1) prove, for $1$-bounded multiplicative $g_1,g_2$ with $g_1$ either real, equidistributed in residue classes and satisfying a technical condition on primes in $[\exp(\log^{1/11}X),\exp(\log^{1/10}X)]$, or non-pretentious in a quantitative sense, a bound $\ll L^{-c}$ for $\frac WN\sum_{N<n\le2N}(g_1(n+h_1)-\delta_N)g_2(n+h_2)\ind_{n\equiv b\,(W)}$ for shifts $h_1\ne h_2=O(L^c)$, $N\in[\sqrt X,X]$ outside a set of logarithmic density $\ll L^{-c}$. Their Theorem~1.7 gives $\Pr(\tau(n)=\tau(n+1))=(c_\tau+O(\log_2^{-c}x))/\sqrt{2\pi\log_2x}$ (with $\log_2=\log\log$ and $n$ uniform in $[1,x]$) for $x$ outside an exceptional set $\mathcal X^c$ with $(\log X)^{-1}\sum_{n\le X,\,n\in\mathcal X^c}1/n\ll\log_2^{-c}X$. A Theorem~3.1-type bound for the family $e(\theta V)\chi(U)$ uniformly in $\theta$ would be a good ingredient for the two-point Hypothesis E below; we have \emph{not} verified the hypotheses of their theorem for this family and do not assert that it applies.
+\item \emph{Higher order.} The logarithmically averaged Chowla conjecture is known in odd orders for the Liouville function~\cite{tt2019}, with fixed shifts and no rate; in two points, Tao~\cite{tao2016}. Matom\"aki--Radziwi\l\l--Tao~\cite{mrt2015} give an averaged form with logarithmic savings, which in our bookkeeping cannot suffice here since the sum over $\asymp\sqrt{\log\log N}$ shifts needs a power-type saving in $\log\log N$. We know of no published result for $r\ge3$ points for the family $e(\theta V)\chi(U)$ with such a saving.
+\item \emph{Second moments of $\tau$ itself.} The asymptotic for $\sum_{n\le x}\tau(n)\tau(n+1)$ (Heath-Brown~\cite{heathbrown1984}, among others) controls moments of $\tau$ but not the discrete statistics of $V$ and $U$ needed here.
+\end{itemize}
+
+\begin{definition}[Two-point and $r$-point hypotheses]
+\emph{Hypothesis E} (lattice-scale pair correlation): there are $L_N$ with $L_N\log\log T/\log T\to\infty$ ($T=\log\log N$) and $A_N\to\infty$ slowly such that uniformly for $1/L_N\le\|\theta\|\le1/2$, $0<|k|\le A_N\sqrt T$ and characters $\chi_1,\chi_2$ modulo $2^r$,
+$\bigl|N^{-1}\sum_{N\le m<2N}\overline{e(\theta V(m))\chi_1(U(m))}\,e(\theta V(m{+}k))\chi_2(U(m{+}k))\bigr|=o\bigl((A_N\sqrt T)^{-1}\bigr)$.
+\emph{Hypothesis $P_{D,r}$}: along a sequence of windows, all mixed factorial moments of total order $\le r$ of $(N_{d,c})_{d\le D}$ converge to their $\Qinf$ values (\cref{thm:92} is the case $(16,92)$).
+\end{definition}
+Hypothesis~E is a two-point statement, and by \cref{thm:hierarchy} two-column information alone cannot decide the bias; so even a complete proof of Hypothesis~E would be only a first step.
+
+\section{Audit of Crandall's 2012 paper}\label{sec:crandall}
+
+Crandall's paper~\cite{crandall2012} (INTEGERS 12 (2012), \#A23; received 11/5/11, accepted 2/25/12, published 3/1/12) was read from the journal PDF. Section~6 (``The Contiguous Terabyte has `Too Many 1s'\,'') reports a computation by D.~Mitchell of the first $2^{43}$ bits of $E$ with the counts $4359105565638$ (zeros) and $4436987456570$ (ones), together with non-overlapping base-$4$, $8$ and $16$ tables; Section~7 asks, among other questions, whether $E$ is $2$-normal.
+
+\begin{proposition}[Agreement and unresolved orientation]\evidence{Finite certificate}\label{prop:crandall}
+\begin{enumerate}[label=(\alph*)]
+\item The binary digits of $E$ computed here from an exact $\tau$ table with certified carries begin $1.1001101101010000010111111\ldots$, as in Crandall's abstract. The first $512$ bits agree with a direct evaluation of $\sum1/(2^m-1)$ with certified carries (hexadecimal \texttt{1.9b505f9e43f22437}\allowbreak\texttt{f372c52812463bc1}\dots).
+\item With full factorizations of $Q+j$ and a certified carry, $e_{10^{10}}=0$ and $e_{10^{20}}=0$, as in Crandall's Table~1 (bit $Q$ is the bit in position $Q$ right of the point).
+\item The tables in his Section~6, as transcribed, are internally consistent: each sums to $2^{43}/\beta$ (rounded down in base $8$), and the base-$4$ and base-$16$ tables reproduce the binary count of ones $4436987456570$ exactly; the base-$8$ table gives one fewer, consistent with the two leftover bits.
+\item As labelled, the table gives one-frequency $4436987456570/2^{43}=0.504427$ on bits $1$ to $2^{43}$. Our exact prefix frequencies of ones are $0.500678$ at $2^{20}$, $0.495743$ at $2^{22}$ and $0.494216$ at $2^{24}$ (ones: $524999$, $2079296$, $8291575$), and the shell frequencies decrease from $0.514404$ ($s=12$) to $0.4937$ ($s=21,22,23$).
+\end{enumerate}
+\end{proposition}
+
+\emph{Interpretation.} The data below $2^{24}$ cannot decide whether Crandall's counts of $0$'s and $1$'s are correctly labelled: as labelled, the bits in $(2^{24},2^{43}]$ would have to average $0.50443$, a rise of $0.0107$ above the shell plateau; read complemented they would average $0.49557$, a rise of $0.0019$. Both readings require an upward drift, and the model value $p_*\approx0.49245$ lies below both, but the approach to the model is expected at the slow rate $(\log\log N)^{-1/2}$ and need not be monotone. Crandall reports that the stored bits passed remote-bit checks at the first $10^9$ random positions; if so, any labelling error would sit in the counting step. Correlating block residuals of the base-$4$, $8$, $16$ tables with our digits is inconclusive. An earlier internal remark that the table ``appears to have its labels interchanged'' is therefore withdrawn as unverified. \emph{We make no claim about which reading is correct.} Settling it requires Mitchell's output or certified shell frequencies up to $s\approx30$ (\cref{sec:targets}). Reproduction: script section H.
+
+\section{Related public work}\label{sec:related}
+
+We list related work as we have read it; precise statements, pinned commits and verification scope are in the ledger.
+
+\emph{Erd\H{o}s.} The theorem of~\cite{erdos1948} states that $f(x)=\sum_{n\ge1}x^n/(1-x^n)$ takes an irrational value at $x=1/t$ for every integer $|t|>1$ (and likewise a companion series); for $t=2$ this is $E$. Crandall quotes from it that the first $N$ bits of $E$ contain a run of zeros of length at least $c\log^{1/10}N$.
+
+\emph{Campbell.} Campbell~\cite{campbell2026} proves that the word $11$ occurs infinitely often in the binary expansion of $E$, solving the problem of Crandall, using a congruence construction in the spirit of Erd\H{o}s and an estimate of Alford--Granville--Pomerance for counting primes in progressions. The result gives no lower frequency.
+
+\emph{Captain Sude.} The repository~\cite{sude1} (tag \texttt{v1.0.0}, commit \texttt{bd98789}) contains a Lean theorem \texttt{binaryDisjunctive\_lambertE (hAGP : AGP) (hSupply : PrimeIntervalSupply)}, i.e.\ binary disjunctivity of $E$ \emph{conditional} on two explicitly stated analytic inputs, together with a paper claiming an occurrence count $N\exp[-C_w(\log\log N)^3]$ for each fixed word $w$. A second repository~\cite{sude2} (commit \texttt{d51e93e}) contains \texttt{binaryDisjunctive\_lambertE\_unconditional} and a theorem \texttt{quantitative\_occurrences\_lambertE} with the count $N\exp[-70000(\log\log N)^3]$ for every fixed word and all sufficiently large $N$; we checked these declaration statements and the archive hash, not the Lean build.
+
+\emph{Mira Cult.} The claim~\cite{mira} (README at commit \texttt{1498319}) is that for fixed $7/12<a\le1$ and every fixed nonempty word $w$, every sufficiently late window of $N^a\le H\le N$ digits after digit $N$ contains at least $c_{a,w}H$ occurrences of $w$ lying wholly in the window. Earlier gists~\cite{miragist} state weaker quantitative lower bounds. In the repository notes the window theorem was audited by an independent written check; we did not re-audit it for this note, and it is an internally reviewed conventional proof. As \cref{sec:arith} explains, such lower bounds are compatible both with $f(1)=1/2$ and with $f(1)=p_*$; they do not give the two-sided asymptotics the criteria above require. In the words of the targets below, Mira Cult's framework is a lower-bound sieve at a planted incidence and an upper-bound analogue would be new.
+
+\emph{Tao--Ter\"av\"ainen.} The paper~\cite{tt2025} also proves that $\sum_n\omega(n)2^{-n}$ is irrational; we cite it only for the correlation estimate above.
+
+\section{Targets for collaboration}\label{sec:targets}
+
+We would welcome collaboration on any of the following, each of which the results above make precise.
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em]
+\item \emph{Certified shell frequencies to $s\approx30$.} Compute, by an independent segmented-sieve computation of $\tau$ and certified carries, the exact proportion of ones (and of all words of length $\le4$) on the shells $[2^s,2^{s+1})$ up to $s\approx30$. This would test the orientation of Crandall's table (\cref{prop:crandall}) and show whether the plateau $\approx0.4937$ drifts toward $p_*\approx0.49245$ or elsewhere. Our exact runs go to $s=23$ in pure Python; Crandall reports about one day on an $8$-core machine in 2012 for $2^{43}$ bits. Finite data cannot determine a limit: $\log\log N<3.1$ throughout this range.
+\item \emph{An upper-bound sieve analogue for $\Psi_{16}$.} $\Psi_{16}$ is a nonnegative combination of $557$ cylinder events of $R_{16}$ (the $556$ cells $R_{16}=2^{15}-k$ and the top half). By \cref{thm:sufficient}, if $\limsup\Pr_{n\in I}(R_{16}\in B)\le(1+\eta)Q_{16}(B)$ for each of these $557$ sets with $\eta<5.3\times10^{-4}$ along a sequence of windows, then $\limsup f_I<1/2$ (because $0.4962723/0.4960081-1>5.3\times10^{-4}$). Mira Cult's planted-incidence framework gives \emph{lower} bounds of strength $\exp(-O(2^kk^2))$ with an ineffective threshold; whether an upper-bound sieve method can reach relative accuracy $5\times10^{-4}$ on a joint $16$-column statistic is open, and we have no evidence either way.
+\item \emph{Almost-all-scales $r$-point correlations.} Only a subsequence of scales is needed for \cref{thm:sufficient,thm:92}. Tao--Ter\"av\"ainen's Theorem~3.1 is an almost-all-scales two-point estimate; the missing input is an $r$-point version for $e(\theta V)\chi(U)$ with $r\ge9$ (at least, by \cref{thm:order}, and at most $92$ by \cref{thm:92}), with a power saving in $\log\log N$ over shifts of size $\sqrt{\log\log N}$. A first step is to check which hypotheses of their Theorem~3.1 hold for this family (and Hypothesis~E); we regard that check as open. Even then the two-column laws are insufficient by \cref{thm:hierarchy}.
+\end{enumerate}
+
+\section{Formal verification and data availability}\label{sec:formal}
+
+All material is at research-checkpoint-18 of \url{https://github.com/eldernos/MathematicsResearch} (commit \repo{}{\texttt{e4809cf}}). The Lean declarations used are \lean{Phase17DiscrepancyBounds}{375}{\texttt{carry\_knapsack\_le}} (the pointwise carry-knapsack dual) and \lean{Phase17DiscrepancyBounds}{432}{\texttt{parity\_bonferroni\_dual\_le}} (the pointwise parity inequality $q_{2m+1}(n)\le(-1)^n$), and, for finite reindexing, \lean{ErdosBorweinArrivals}{16}{\texttt{source\_phase}}, \lean{ErdosBorweinArrivals}{41}{\texttt{arrival\_sum}} and \lean{ErdosBorweinArrivals}{86}{\texttt{one\_bit\_carry}}. Their modules are among those covered by the axiom audit (only \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}) and the independent kernel replay of all $248$ modules recorded in \texttt{notes/phase18/verification.md}. \emph{Lean checks only these pointwise inequalities and finite identities.} The Jordan truncation, the tail mean, all linear-programming and dynamic-programming certificates, the Selberg--Vaaler computations and every probabilistic step are written proofs or computations; no theorem in this note is claimed to be completely kernel-verified.
+
+The numerical certificates are produced by \texttt{scripts/phase17\_erdos\_borwein\_bias.py} (about $20$\,s), \texttt{scripts/erdos\_borwein\_poisson.py} and \texttt{scripts/erdos\_borwein\_arrivals.py} (earlier $32$-column enclosure and exact counts), and \texttt{scripts/phase16\_erdos\_borwein.py} (shell data, with \texttt{--smin 20 --smax 23}). The independent cross-check \texttt{crosscheck.py} in this directory recomputes $\mu$, $\Ex_{Q_{16}}\Psi_{16}$, $p_*$, the rational laws of \cref{thm:order}, the Bonferroni excess and the majorant property on a grid. \texttt{VERIFICATION.md} maps each numbered statement to its evidence and reproduction command.
+
+\section{Use of AI tools}\label{sec:ai}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
