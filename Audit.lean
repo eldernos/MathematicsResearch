@@ -5,6 +5,16 @@ open Lean in
 run_cmd do
   let permitted := [``propext, ``Classical.choice, ``Quot.sound]
   let results := [
+    ``NormalityChecker.AdditionSpectrum.exact_addition_spectrum,
+    ``NormalityChecker.AdditionSpectrum.mixtureRealizable,
+    ``NormalityChecker.PrimePowerGrid.crt_period_count,
+    ``NormalityChecker.AdditionSpectrum.finite_necessity,
+    ``NormalityChecker.AdditionSpectrum.polytope_eq_convexHull,
+    ``NormalityChecker.PrimePowerGrid.primePower_period_count,
+    ``NormalityChecker.PrimePowerGrid.grid_count,
+    ``NormalityChecker.DiscrepancyGeometry.discDist_eq_zero_iff,
+    ``NormalityChecker.DiscrepancyGeometry.asymDist_triangle,
+    ``NormalityChecker.SurvivingGrid.stride_order,
     ``NormalityChecker.normalIn_iff_uniform_approx,
     ``NormalityChecker.not_normal_of_frequent_excess,
     ``NormalityChecker.logTwo_tail_bounds,

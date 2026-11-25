@@ -113,7 +113,8 @@ class PageTests(unittest.TestCase):
         d = self.root / "papers/06-x"
         d.mkdir(parents=True)
         (d / "metadata.toml").write_text(
-            'id = "06-x"\ntitle = "Disjunctive but Nonnormal"\nshort_title = "Lambert"\nversion = "1.0"\n'
+            'id = "06-x"\ntitle = "Disjunctive but Nonnormal"\nauthors = ["Christopher Anderson"]\n'
+            'affiliation = "Independent Researcher"\nshort_title = "Lambert"\nversion = "1.0"\n'
             'status = "preprint draft"\n'
             "abstract = '''We show $D_N \\to 1$ for *every* series.\n\nSecond paragraph.'''\n"
             'keywords = ["normal numbers", "Lambert series"]\nmsc_primary = "11K16"\nmsc_secondary = ["11A63"]\n'

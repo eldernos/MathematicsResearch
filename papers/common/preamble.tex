@@ -45,6 +45,10 @@
 \newcommand{\leanbase}{https://github.com/eldernos/MathematicsResearch/blob/\leancommit}
 % \lean{File}{line}{label}: link to NormalityChecker/File.lean#Lline at the pinned commit.
 \newcommand{\lean}[3]{\href{\leanbase/NormalityChecker/#1.lean\#L#2}{#3}}
+% \leanat{commit}{File}{line}{label}: Lean link at another immutable commit, for example the
+% completed Phase 19 tip c2c9da683666b3b9368e5d4b5cb858caccf528f5.
+\newcommand{\leanat}[4]{\href{https://github.com/eldernos/MathematicsResearch/blob/#1/NormalityChecker/#2.lean\#L#3}{#4}}
+\newcommand{\phaseXIXcommit}{c2c9da683666b3b9368e5d4b5cb858caccf528f5}
 % \repo{path}{label}: link to any repository path at the pinned commit.
 \newcommand{\repo}[2]{\href{https://github.com/eldernos/MathematicsResearch/tree/\leancommit/#1}{#2}}
 

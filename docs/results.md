@@ -15,23 +15,23 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-03](#st-03) ★ | Exact denominator profile of the binary Stoneham square | Lean | I |
 | [ST-04](#st-04) | Combinations with a unique leading monomial | Lean | I |
 | [ST-05](#st-05) ★ | Joint uniform distribution of distinct Stoneham powers | Lean | I |
-| [ST-06](#st-06) | A product on two prime axes: discrepancy below one and irrationality | Lean | I |
-| [ST-07](#st-07) | Transcendence of products of two independent Stoneham numbers | Written proof | I |
+| [ST-06](#st-06) | A product on two prime axes: discrepancy below one and irrationality | Lean | VIII |
+| [ST-07](#st-07) | Transcendence of products of two independent Stoneham numbers | Written proof | VIII |
 | [ST-08](#st-08) | Normality of single Stoneham components with odd parameter | Lean | I |
 | [ST-09](#st-09) | Polynomially spaced insertions preserve binary normality | Lean | I |
 | [ST-10](#st-10) | Superlinear ternary word complexity of the binary Stoneham number | Written proof | I |
 | [ST-11](#st-11) | Polynomial images for every coprime Stoneham parameter above two | Lean | I |
 | [ST-12](#st-12) | The parameter-two square and its exact prefix denominators | Lean | I |
 | [ST-13](#st-13) | Odd prime-power degrees at Stoneham parameter two | Lean | I |
-| [ST-14](#st-14) | A discrepancy bound of 27/40 for the product on two prime axes | Lean | I |
-| [ST-15](#st-15) | Exact tests and persistent denominator loss on two prime axes | Lean | I |
+| [ST-14](#st-14) | A discrepancy bound of 27/40 for the product on two prime axes | Lean | VIII |
+| [ST-15](#st-15) | Exact tests and persistent denominator loss on two prime axes | Lean | VIII |
 | [ST-16](#st-16) | Tied leading degrees with divisible coefficients | Lean | I |
 | [ST-17](#st-17) | Alternate radices for polynomial images and excess zeros in radix 48 | Lean | I |
 | [ST-18](#st-18) | Power-saving discrepancy for odd-prime Stoneham polynomials | Lean + written deduction | I |
 | [ST-19](#st-19) | Exact prefix denominators of a parameter-two quadratic | Lean | I |
 | [ST-20](#st-20) | A normality criterion and discrepancy bounds for every rational quadratic | Lean | I |
-| [ST-21](#st-21) | The exact upper discrepancy in terms of rational cycles | Lean + written deduction | I |
-| [ST-22](#st-22) | Two resonant radix classes for the shifted Stoneham square | Lean | I |
+| [ST-21](#st-21) | The exact upper discrepancy in terms of rational cycles | Lean + written deduction | VIII |
+| [ST-22](#st-22) | Two resonant radix classes for the shifted Stoneham square | Lean | VIII |
 | [ST-23](#st-23) | Normality of all quartics at parameter two | Lean | I |
 | [ST-24](#st-24) | Parameter-two polynomial normality in degrees three through fifteen | Lean + written deduction | I |
 | [ST-25](#st-25) | A discrepancy bound of 143881/250000 for the two-prime product | Lean | VIII |
@@ -43,9 +43,13 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-31](#st-31) | Parameter-two polynomial normality in degrees 3 through 120 and seven infinite cyclic-descent families | Lean + written deduction | I |
 | [ST-32](#st-32) | Discrepancy within 2.85 × 10⁻¹⁰ of 4/11 and iterated-logarithmic sparsity for α(2, 3) α(2, 5) | Lean + written deduction | VIII |
 | [ST-33](#st-33) | Least orbit order, p-adic cyclic descent, degree 128 and sixteen infinite parameter-two families | Lean + written deduction | I |
-| [ST-34](#st-34) | Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics | Written proof | I |
+| [ST-34](#st-34) | Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics | Written proof | VIII |
 | [ST-35](#st-35) | Empirical-mixture cycle discrepancy, zero-slack 4/11 reduction and infinite family of mixed-prime products | Lean + written deduction | VIII |
 | [SY-17](#sy-17) | Polynomial and linear images of synthetic series | Written proof | VII |
+| [OP-14](#op-14) ★ | Normality of the flagship square and quadratic forms | Written proof |  |
+| [OP-15](#op-15) | Every polynomial on rapidly varying power schedules | Written proof |  |
+| [OP-16](#op-16) | Polynomial-normal algebras with separated pole depths | Written proof |  |
+| [OP-17](#op-17) | A polynomial-normal algebra on distinct retained primes | Written proof |  |
 | [LS-01](#ls-01) ★ | Unsigned finite-support dichotomy | Lean | II |
 | [LS-02](#ls-02) ★ | Exact discrepancy from persistent cancellation at every order | Lean | II |
 | [LS-03](#ls-03) ★ | Persistent failed regions are null | Lean | II |
@@ -87,6 +91,14 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-13](#sy-13) | Prescribing limits of orbit measures with rational insertions | Written proof | VII |
 | [SY-16](#sy-16) ★ | Quantitative convergence on polynomial schedules | Written proof | VII |
 | [SY-24](#sy-24) | Sharp translation rates for the multiplicative Lambert families | Written proof | VII |
+| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean |  |
+| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof |  |
+| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof |  |
+| [OP-04](#op-04) | Finite rational forms and approximating their joint spectra | Written proof |  |
+| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean |  |
+| [OP-06](#op-06) | Rational scalar ring and fixed-point lifts | Written proof |  |
+| [OP-07](#op-07) | Boundary spectrum and inverse inequality for integer dilation | Written proof |  |
+| [OP-18](#op-18) | Quantitative joint box distribution from an algebraic direction | Written proof |  |
 | [AC-01](#ac-01) ★ | Normality from rational orbit models on most blocks | Lean | IV |
 | [AC-04](#ac-04) | Cancellation in short radix orbits with smooth denominators | Lean | IV |
 | [AC-05](#ac-05) | Exact rational discrepancy certificates for prime-restricted logarithmic series | Lean | IV |
@@ -97,6 +109,9 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-11](#sy-11) | Geometric grouping and positive programmed states | Lean | VII |
 | [SY-18](#sy-18) | A positive product with a surviving prime at every cutoff | Written proof | VII |
 | [SY-19](#sy-19) | A normal Liouville family on factorial schedules | Written proof | VII |
+| [OP-08](#op-08) ★ | Exact prime-power grid inside a complete rational orbit | Lean + written deduction |  |
+| [OP-09](#op-09) ★ | Normal Liouville series retaining every odd prime | Written proof |  |
+| [OP-10](#op-10) | Full-support series with superpolynomial denominators | Written proof |  |
 | [AC-02](#ac-02) ★ | Partial coverage bounds the discrepancy | Lean | IV |
 | [AC-03](#ac-03) ★ | Rigidity of overlapping smooth rational models | Lean | IV |
 | [AC-07](#ac-07) | Discrepancy bounds from certified paths between prefix endpoints | Lean | IV |
@@ -155,6 +170,12 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-21](#sy-21) | Reduced denominator rates for BBP and Bellard prefixes | Written proof | VII |
 | [SY-22](#sy-22) | Chebyshev approximations to shifted pi from fixed arctangent identities | Written proof | VII |
 | [SY-23](#sy-23) ★ | Linear shadowing windows for shifted pi on odd rational grids | Written proof | VII |
+| [OP-11](#op-11) | Superpolynomial rational periods for actual Taylor prefixes | Written proof |  |
+| [OP-13](#op-13) | Numerical classification of horizontal logarithm rows | Written proof |  |
+| [OP-19](#op-19) ★ | Earliest positive dyadic group containing a prime-index logarithm term | Written proof |  |
+| [OP-20](#op-20) | Mean denominator loss in the shifted binary Taylor series | Written proof |  |
+| [OP-21](#op-21) | Wieferich bands in the actual logarithm and dilogarithm prefixes | Written proof |  |
+| [OP-22](#op-22) | Moving-tail and period obstruction for a signed logarithm transform | Written proof |  |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -168,6 +189,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-50](#cc-50) | Legendre–Bezout linear windows, nearest-grid identification and the window–denominator barrier for ln 2 | Written proof | V |
 | [SY-07](#sy-07) | Positive rational multiples with prescribed total | Lean | VII |
 | [SY-14](#sy-14) | A limit on finite functional constructions from lacunary rays | Written proof | VII |
+| [OP-12](#op-12) | Sparse numerical preservers with visible product and sharp rates | Written proof |  |
 
 ★ marks the principal results presented in the [README](../README.md).
 
@@ -304,7 +326,7 @@ are uniformly distributed in the unit cube [0, 1)ᵈ: for every box with sides [
 
 ### ST-06 · A product on two prime axes: discrepancy below one and irrationality
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Lean · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>) over *j* ≥ 1, and put *x* = α(2, 3) · α(2, 5). For *N* ≥ 1 let *D*<sub>*N*</sub> be the supremum, over 0 ≤ *u* < *v* ≤ 1, of the absolute difference between the proportion of 0 ≤ *n* < *N* with {2ⁿ*x*} ∈ [*u*, *v*) and *v* − *u*. Then *x* is irrational and
 
@@ -324,7 +346,7 @@ For an integer *c* ≥ 2 let α(2, *c*) be the sum of 1/(*c*ʲ 2<sup>*c*ʲ</sup>
 
 ### ST-07 · Transcendence of products of two independent Stoneham numbers
 
-**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Written proof · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 Let *b* ≥ 2 and let *c*, *d* ≥ 2 be multiplicatively independent integers, both coprime to *b*. Write α(*b*, *c*) for the sum of 1/(*c*ʲ *b*<sup>*c*ʲ</sup>) over *j* ≥ 1. Then the product α(*b*, *c*) · α(*b*, *d*) is transcendental, and its base-*b* interval discrepancy *D*<sub>*N*</sub> (defined as in ST-06 with radix *b*) satisfies
 
@@ -461,7 +483,7 @@ Let *b* ≥ 3 be odd, let *q* be an odd prime and let *r* ≥ 0. For every ratio
 
 ### ST-14 · A discrepancy bound of 27/40 for the product on two prime axes
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Lean · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 Put *x* = α<sub>2,3</sub> α<sub>2,5</sub> with both sums starting at index one. For the binary interval discrepancy of ST-06,
 
@@ -483,7 +505,7 @@ The bound includes prefixes ending inside a quinary shell. More precisely, let *
 
 ### ST-15 · Exact tests and persistent denominator loss on two prime axes
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Lean · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 For the product of ST-14, let *R*ₙ be its rational prefix, summing 2<sup>*n*−3ⁱ−5ʲ</sup>/(3ⁱ5ʲ) over *i*, *j* ≥ 1 with 3ⁱ + 5ʲ ≤ *n*. For *n* ≥ 5 put *K* = ⌊log₃ *n*⌋, *L* = ⌊log₅ *n*⌋, *P* = 3ᴷ and *Q* = 5ᴸ. The reduced denominator contains *P* exactly when ⌊log₅(*n* − *P*)⌋ is odd. It contains *Q* exactly when ⌊log₃(*n* − *Q*)⌋ is nonzero modulo four. Set the integer logarithm of zero to zero.
 
@@ -614,7 +636,7 @@ For every half-open interval in [0, 1), the frequency weighted by 1/(*n* + 1) an
 
 ### ST-21 · The exact upper discrepancy in terms of rational cycles
 
-**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Lean + written deduction · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 For *x* and *R*ₙ as in ST-19 and ST-20, take *y*ₖ to be the rational point *R*ₙ/*D* modulo one at the midpoint *n* = 3 · 2ᵏ⁻¹. Write Δₖ for the extreme interval discrepancy of the uniform measure on the eventual cycle of *y*ₖ under multiplication by *b* modulo one. Then
 
@@ -635,7 +657,7 @@ Every positive value of the left side is rational. It equals 1/4 precisely when 
 
 ### ST-22 · Two resonant radix classes for the shifted Stoneham square
 
-**Evidence:** Lean · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Lean · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 Choose *A* = 1 and *B* = −2 in ST-19. Fix integers *k* ≥ 1, *s* ≥ 2 and *H* ≥ 0 with *t* = *k* − 1 − *s* − *H* > *s*. Among the odd integer radices *b* ≥ 3 satisfying *v*₂(*b*² − 1) = *s* + 1, the upper-half prefix denominator *q*ₖ(*b*) is at most 2ᴴ precisely on two opposite residue classes modulo 2ᵗ if *v*₂(*k* + 1) = *s*. If *v*₂(*k* + 1) ≠ *s*, there are no such radices.
 
@@ -867,7 +889,7 @@ For every odd prime *p* and *e*, *k* ≥ 1, *p*-adic cyclic descent reduces *M*<
 
 ### ST-34 · Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics
 
-**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers](../papers/01-stoneham-polynomials-v2) (draft)
+**Evidence:** Written proof · **Paper:** [VIII. Exceptional Orbits and Discrepancy of Stoneham Products](../papers/08-stoneham-product-orbits) (draft)
 
 For *x* = (*A*α² + *B*α + *C*₀)/*D* at parameter *c* = 2 with odd radix *b* ≥ 3 and gcd(*D*, *b*) = 1, the plateau point of *X*² − 2*X* on shell *k* is {−*Z*<sub>*k*</sub> *b*<sup>2<sup>*k*−1</sup></sup> / 2<sup>2*k*−1</sup>}. For *D* = 1 with *H* = liminf<sub>*k*</sub> log₂ *q*<sub>*k*</sub>: if *b* ≡ 1 (mod 4), then limsup *D*<sub>*N*</sub>(*x*) = 2<sup>−2−[*H*−*s*]<sub>+</sub></sup> exactly; for every odd *b*, limsup *D*<sub>*N*</sub>(*x*) = 1/4 if and only if *v*₂(*Z*<sub>*k*</sub>) ≥ 2*k* − 1 − *v*₂(*b* − 1) infinitely often.
 
@@ -917,6 +939,62 @@ For factorial schedules and positive valuation order, every nonconstant rational
 - **Proof:** [algebra.md](../notes/phase18/algebra.md)
 - **Computation:** [phase18_principal.py](../scripts/phase18_principal.py) · [phase18_review_algebra.py](../scripts/phase18_review_algebra.py)
 - **Related:** [AC-04](#ac-04) · [SY-01](#sy-01)
+
+<a id="op-14"></a>
+
+### OP-14 · Normality of the flagship square and quadratic forms
+
+**Evidence:** Written proof
+
+For a fixed odd off-radix prime and positions t kᵈ with d ≥ 3, every nonconstant rational polynomial of total degree at most two in distinct positive valuation orders is normal. In particular the binary cubic-schedule number and its square are jointly normal.
+
+**Scope.** The limiting p-adic mass has no positive-measure level set. A derivative estimate for competing jumps and a localized second-moment argument yield all-prefix normality; the proof gives no effective discrepancy rate. The analogous persistent zero set for higher powers remains open.
+
+- **Proof:** [nonlinear.md](../notes/phase19/nonlinear.md) · [nonlinear.md](../notes/phase19/reviews/nonlinear.md)
+- **External inputs:** Van der Corput second-derivative estimate, Erdős–Turán inequality and Lebesgue density theorem.
+- **Computation:** [phase19_nonlinear.py](../scripts/phase19_nonlinear.py)
+- **Supersedes:** [SY-20](#sy-20)
+- **Related:** [SY-17](#sy-17) · [SY-20](#sy-20)
+
+<a id="op-15"></a>
+
+### OP-15 · Every polynomial on rapidly varying power schedules
+
+**Evidence:** Written proof
+
+If n_floor(ck)/n_k tends to zero for every fixed 0<c<1 and the radix powers freeze p-adically on deeply divisible indices, every nonconstant rational polynomial of the valuation-weighted series is normal. A concrete schedule has log n_k asymptotic to (log k)² and consecutive ratios tending to one.
+
+**Scope.** The retained order is positive, the insertion positions are positive increasing multiples of the order of the radix modulo p, and p is an odd off-radix prime. Polynomial normality implies transcendence; these dense schedules are not asserted to be Liouville.
+
+- **Proof:** [nonlinear.md](../notes/phase19/nonlinear.md)
+- **Related:** [SY-17](#sy-17) · [SY-19](#sy-19) · [AC-04](#ac-04)
+
+<a id="op-16"></a>
+
+### OP-16 · Polynomial-normal algebras with separated pole depths
+
+**Evidence:** Written proof
+
+A finite collection of series with rationally independent depth-growth weights on one prime can be chosen so every nonconstant rational polynomial in the series is normal and Liouville.
+
+**Scope.** This is a simultaneous construction for all polynomials in the chosen generators. The unique leading pole is justified outside explicitly bounded exceptional windows.
+
+- **Proof:** [nonlinear.md](../notes/phase19/nonlinear.md)
+- **Related:** [OP-15](#op-15)
+
+<a id="op-17"></a>
+
+### OP-17 · A polynomial-normal algebra on distinct retained primes
+
+**Evidence:** Written proof
+
+For any finite list of distinct off-radix primes, positive series with one dedicated coefficient-denominator prime each can be synthesized so that every nonconstant rational polynomial in the generators is normal and Liouville. In particular the generators are algebraically independent.
+
+**Scope.** Off-axis prefix limits are programmed by congruences. They keep the leading coefficient of each fixed polynomial nonzero p-adically. Counts are over all prefixes; the local depth formula permits a density-zero set of cutoff windows.
+
+- **Proof:** [independent-axes.md](../notes/phase19/independent-axes.md)
+- **Computation:** [phase19_independent_axes.py](../scripts/phase19_independent_axes.py)
+- **Related:** [SY-18](#sy-18) · [OP-16](#op-16)
 
 ## Localized logarithms and polylogarithms
 
@@ -1810,13 +1888,124 @@ For the Phase 17 binary multiplicative Lambert family of support parameter δ, t
 - **Proof:** [phase17-transfer.md § an exact translation rate for every lambert support density](../notes/phase18/phase17-transfer.md#an-exact-translation-rate-for-every-lambert-support-density)
 - **Related:** [SY-04](#sy-04) · [CC-48](#cc-48)
 
+<a id="op-01"></a>
+
+### OP-01 · Exact limiting discrepancy spectrum for addition
+
+**Evidence:** Lean
+
+In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting extreme discrepancies of x, y and x+y exactly when max(0, α+β−1) ≤ γ ≤ 1−|α−β|.
+
+**Scope.** The inequalities hold at every positive finite prefix. Five rational orbit types suffice for the limiting realization. The discrepancy is unanchored.
+
+- **Lean:** [`exact_addition_spectrum`](../NormalityChecker/AdditionSpectrum.lean#L1486) · [`addSpectrum_eq`](../NormalityChecker/AdditionSpectrum.lean#L1480) · [`mixtureRealizable`](../NormalityChecker/AdditionSpectrum.lean#L1470) · [`finite_necessity`](../NormalityChecker/AdditionSpectrum.lean#L248)
+- **Fully qualified:** `NormalityChecker.AdditionSpectrum.exact_addition_spectrum`, `NormalityChecker.AdditionSpectrum.addSpectrum_eq`, `NormalityChecker.AdditionSpectrum.mixtureRealizable`, `NormalityChecker.AdditionSpectrum.finite_necessity`
+- **Proof:** [addition.md](../notes/phase19/addition.md)
+- **Related:** [SY-03](#sy-03) · [SY-04](#sy-04)
+
+<a id="op-02"></a>
+
+### OP-02 · Uniform cubic realization with algebraically independent inputs
+
+**Evidence:** Written proof
+
+Every admissible addition triple is realized with simultaneous all-prefix error O(N raised to −1/3), uniformly over triples for fixed radix and retained odd off-radix prime. The inputs may be algebraically independent and computable from computable target weights.
+
+**Scope.** Positive rational state programming supplies the types. The avoidance construction handles the countably many polynomial relations and preserves the quantitative estimate.
+
+- **Proof:** [addition.md](../notes/phase19/addition.md)
+- **Computation:** [phase19_addition.py](../scripts/phase19_addition.py)
+- **Related:** [OP-01](#op-01)
+
+<a id="op-03"></a>
+
+### OP-03 · Spectrum of any finite family of summands and its sum
+
+**Evidence:** Written proof
+
+For d summands and their total, the d+1 limiting discrepancy deficits range over the unit cube subject to each deficit being at most the sum of the others.
+
+**Scope.** For at least two summands. The generating binary vectors have zero or at least two active coordinates. This convex polytope need not classify other prescribed collections of linear forms.
+
+- **Proof:** [addition.md](../notes/phase19/addition.md)
+- **Related:** [OP-01](#op-01)
+
+<a id="op-04"></a>
+
+### OP-04 · Finite rational forms and approximating their joint spectra
+
+**Evidence:** Written proof
+
+For every fixed rational matrix the limiting discrepancy spectrum of its rows is the projection of the invariant joint laws under scalar discrepancy. Finite stationary block-flow polytopes give effective outer accuracy bounds and finite unions of rational polytopes approximating that image in Hausdorff distance.
+
+**Scope.** A common change of input variables clears the fixed denominators. A rank-three six-form example satisfies the separate addition-triple tests while violating a further finite-prefix inequality.
+
+- **Proof:** [addition.md](../notes/phase19/addition.md)
+- **Computation:** [phase19_addition.py](../scripts/phase19_addition.py)
+- **Related:** [SY-13](#sy-13) · [OP-03](#op-03)
+
+<a id="op-05"></a>
+
+### OP-05 · Translation deficits form finite and asymptotic pseudometrics
+
+**Evidence:** Lean
+
+One minus the extreme discrepancy of x−y is a translation-invariant pseudometric at every positive sample length. At length at least two its zero set consists exactly of differences fixed modulo one by radix multiplication. Its upper limit is again a pseudometric. Integer multiplication has Lipschitz bound equal to the absolute multiplier.
+
+**Scope.** The quotient topology and the full asymptotic kernel description are further written deductions. The distance uses unanchored interval discrepancy.
+
+- **Lean:** [`discDist_eq_zero_iff`](../NormalityChecker/DiscrepancyGeometry.lean#L243) · [`discDist_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L78) · [`asymDist_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L390) · [`asymDist_intMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L419)
+- **Fully qualified:** `NormalityChecker.DiscrepancyGeometry.discDist_eq_zero_iff`, `NormalityChecker.DiscrepancyGeometry.discDist_triangle`, `NormalityChecker.DiscrepancyGeometry.asymDist_triangle`, `NormalityChecker.DiscrepancyGeometry.asymDist_intMul_le`
+- **Proof:** [geometry.md](../notes/phase19/geometry.md)
+- **Related:** [SY-04](#sy-04)
+
+<a id="op-06"></a>
+
+### OP-06 · Rational scalar ring and fixed-point lifts
+
+**Evidence:** Written proof
+
+A rational multiplier preserves the entire numerical-preserver kernel exactly when its reduced denominator divides a radix power. Membership for one scaled preserver is decided mathematically by concentration of its nearest-integer residues on a single class. For power-related radices the intersection kernel is that of the common gcd power.
+
+**Scope.** The residue-density criterion need not be computationally decidable. General independent radices need individual study.
+
+- **Proof:** [geometry.md](../notes/phase19/geometry.md)
+- **Related:** [OP-05](#op-05)
+
+<a id="op-07"></a>
+
+### OP-07 · Boundary spectrum and inverse inequality for integer dilation
+
+**Evidence:** Written proof
+
+When the discrepancy of mx tends to one, the attainable full discrepancy limits of x form the closed interval from 1/m₀ to 1, where m₀ is the largest divisor of |m| coprime to the radix. An explicit finite inverse bound also forces discrepancy of x to tend to zero when that of mx tends to zero.
+
+**Scope.** Nonzero integer m. The boundary examples are obtained by programming finite periodic cycles. The separate inverse modulus is an upper estimate, with constants depending on b and m.
+
+- **Proof:** [geometry.md](../notes/phase19/geometry.md)
+- **Related:** [OP-05](#op-05) · [SY-13](#sy-13)
+
+<a id="op-18"></a>
+
+### OP-18 · Quantitative joint box distribution from an algebraic direction
+
+**Evidence:** Written proof
+
+For every fixed dimension d ≥ 2 there are computable positive rational-coefficient series on a common cubic schedule with joint box discrepancy O(N raised to −1/(3d+1) times log(2N) to the power d).
+
+**Scope.** The reference measure is full-dimensional Haar measure. The proof uses an algebraic p-adic direction of degree d, a height bound from its norm and the multidimensional Erdős–Turán–Koksma inequality.
+
+- **Proof:** [joint-rate.md](../notes/phase19/joint-rate.md)
+- **Computation:** [test_phase19_forms.py](../scripts/test_phase19_forms.py)
+- **Related:** [OP-04](#op-04) · [OP-08](#op-08)
+
 ## Rational-orbit certificates
 
 <a id="ac-01"></a>
 
 ### AC-01 · Normality from rational orbit models on most blocks
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b* ≥ 2 and let *c* ≥ 2 be an integer coprime to *b*. Let *x* be real and let *P*₀, *P*₁, … be rational numbers with *bⁿx* − *P*ₙ → 0. Fix integers *B* ≥ 1, *L* ≥ 2 and *d* ≥ 0. At scale *k*, for each integer *u* with 1 ≤ *u* < *LB* and each 0 ≤ *l* < *Lᵏ*, consider the block of *T* = *Bᵏ* positions starting at *n* = (*u Lᵏ* + *l*) *Bᵏ*. Suppose that for every such *u*, every integer *M* and every η > 0, for all sufficiently large *k* there is an exceptional set of at most η*Lᵏ* indices *l* such that every other block admits a rational number *y* whose reduced denominator *q* satisfies
 
@@ -1844,7 +2033,7 @@ where ‖·‖ is the distance to the nearest integer. Then *x* is normal in bas
 
 ### AC-04 · Cancellation in short radix orbits with smooth denominators
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b*, *c* ≥ 2 be coprime integers and let *d* ≥ 0. For every η > 0 there is an integer *M* such that for every rational *y* and every integer *T* ≥ 0, if the reduced denominator *q* of *y* satisfies *q* ≥ *M*, *q* divides a power of *c*, and *q* ≤ *Tᵈ*, then
 
@@ -1864,7 +2053,7 @@ Let *b*, *c* ≥ 2 be coprime integers and let *d* ≥ 0. For every η > 0 there
 
 ### AC-05 · Exact rational discrepancy certificates for prime-restricted logarithmic series
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b* ≥ 2 and *s* ≥ 1, let *P* be a finite set of primes, and let
 
@@ -1893,7 +2082,7 @@ For *b* = 7, *P* = {2, 3, 5} and *p* = 5 the right side equals 5/12, 1/4 and 0 a
 
 ### AC-06 · Charging only simultaneous failures of several prime tests
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 In the setting of AC-05, let *J* be a nonempty set of primes of *P* none of which divides *b*, each with its own precision. Write *B*ₚ for the set of positions *n* whose cell coordinate fails the test for *p*. If for every ε > 0 and all sufficiently large *N* the number of *n* < *N* lying in every *B*ₚ, *p* ∈ *J*, is at most (*D* + ε)*N*, then *D*∞(*X*) ≤ *D*.
 
@@ -1912,7 +2101,7 @@ For *b* = 2, *s* = 1 and *P* = {2, 5, 13}, the two first-precision tests at 5 an
 
 ### AC-08 · Square-root bound for incomplete orbits of 2 modulo powers of 3
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *k* ≥ 2, let *A* be an integer not divisible by 3, and let *u*, *N* ≥ 0. Then
 
@@ -1995,13 +2184,56 @@ On the schedule t times k factorial, every strictly positive valuation order in 
 - **Proof:** [principal.md](../notes/phase18/principal.md)
 - **Related:** [SY-01](#sy-01) · [SY-02](#sy-02) · [SY-17](#sy-17)
 
+<a id="op-08"></a>
+
+### OP-08 · Exact prime-power grid inside a complete rational orbit
+
+**Evidence:** Lean + written deduction
+
+For an odd prime p and coprime complement Q, the stride that fixes Q and the residue modulo p generates precisely a grid of size p to the positive part of e minus the valuation of b raised to the stride minus one, for modulus pᵉQ.
+
+**Scope.** Lean proves the exact stride order, exhaustive lifts and a complete-period interval count within t of its expected count on tG samples. The written deduction identifies the largest p-power grid for the minimal simultaneous stride, including the trivial-grid case.
+
+- **Lean:** [`stride_order`](../NormalityChecker/SurvivingGrid.lean#L43) · [`return_iff`](../NormalityChecker/SurvivingGrid.lean#L13) · [`visits_every_lift`](../NormalityChecker/SurvivingGrid.lean#L56) · [`crt_period_count`](../NormalityChecker/PrimePowerGrid.lean#L337)
+- **Fully qualified:** `NormalityChecker.SurvivingGrid.stride_order`, `NormalityChecker.SurvivingGrid.return_iff`, `NormalityChecker.SurvivingGrid.visits_every_lift`, `NormalityChecker.PrimePowerGrid.crt_period_count`
+- **Proof:** [grids.md](../notes/phase19/grids.md)
+- **Related:** [SY-06](#sy-06)
+
+<a id="op-09"></a>
+
+### OP-09 · Normal Liouville series retaining every odd prime
+
+**Evidence:** Written proof
+
+Insert a term at position 2 raised to 4m for each odd prime power m=pʲ. Use coefficient 1/m for p different from 3 and 1/m² for p=3. The binary series is normal and Liouville, with all-prefix discrepancy O(1/log N).
+
+**Scope.** For L=floor(log₂ n/4), the maximal ternary grid exceeds L/9, and the ratio of its size to L is unbounded along a subsequence. A subgrid of size comparable to L always suffices.
+
+- **Proof:** [grids.md](../notes/phase19/grids.md)
+- **Computation:** [phase19_grids.py](../scripts/phase19_grids.py)
+- **Related:** [OP-08](#op-08)
+
+<a id="op-10"></a>
+
+### OP-10 · Full-support series with superpolynomial denominators
+
+**Evidence:** Written proof
+
+All off-radix primes can occur with selectable depths while the actual period remains subpolynomial in the shift. The accelerated schedules in the note yield normality even with superpolynomial reduced denominators.
+
+**Scope.** The sharper period bounds use an upper estimate for the lcm of shifted primes. Interval-error, real-tail and insertion costs are separate uniform hypotheses.
+
+- **Proof:** [grids.md](../notes/phase19/grids.md)
+- **External inputs:** Ford, Luca and Pomerance, the shifted-prime least-common-multiple estimate cited in the proof.
+- **Related:** [OP-08](#op-08) · [OP-09](#op-09)
+
 ## Complementary coverage and rigidity
 
 <a id="ac-02"></a>
 
 ### AC-02 · Partial coverage bounds the discrepancy
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b* ≥ 2 and *x* be real, and write *u*ₙ = {*bⁿx*}. Let *N* > 0 and let *G*₁, …, *G*ₖ be pairwise disjoint subsets of {0, …, *N* − 1} with union of size *G*. Suppose that, for some real *d* and every interval [α, β) ⊆ [0, 1] and every *i*,
 
@@ -2025,7 +2257,7 @@ In particular, if a family of selected sets covering a lower proportion *g* is a
 
 ### AC-03 · Rigidity of overlapping smooth rational models
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b*, *c* ≥ 2 be coprime and let *d* ≥ 0. There is δ > 0 with the following property. Let *T* ≥ 1, let *x* and *y* be rationals whose reduced denominators are at most *Tᵈ* and have all prime factors dividing *c*, and suppose *x* − *y* is not an integer. Then for all real numbers *f*₀, *f*₁, …, with ‖·‖ the distance to the nearest integer,
 
@@ -2047,7 +2279,7 @@ Consequently, if two such families of models *xₙ*, *yₙ* on common blocks of 
 
 ### AC-07 · Discrepancy bounds from certified paths between prefix endpoints
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b* ≥ 2, *x* real and *N* > 0. For an interval [α, β) ⊆ [0, 1] let *S*(*v*) be the number of *n* < *v* with α ≤ {*bⁿx*} < β, minus *v*(β − α). Suppose that for every such interval there are integers 0 = *v*₀, *v*₁, …, *v*ₘ = *N* and costs *c*₀, …, *c*ₘ₋₁ with |*S*(*v*ᵢ₊₁) − *S*(*v*ᵢ)| ≤ *c*ᵢ and *c*₀ + ⋯ + *c*ₘ₋₁ ≤ *DN*. Then *D*<sub>*N*</sub>(*x*) ≤ *D*.
 
@@ -2067,7 +2299,7 @@ Let *b* ≥ 2, *x* real and *N* > 0. For an interval [α, β) ⊆ [0, 1] let *S*
 
 For the square of the binary example with p = 3, s = 1 and d = 3, the upper extreme discrepancy is at most 14035285166320179631 / 47872170047321719707829651794, below 2.94 times 10 to the power −10.
 
-**Scope.** A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. The normality of the square is open.
+**Scope.** A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. This was the quantitative Phase 18 bound. OP-14 subsequently proves normality by a null-level argument.
 
 - **Proof:** [algebra.md § refining the failed cells at smaller orders](../notes/phase18/algebra.md#refining-the-failed-cells-at-smaller-orders)
 - **Computation:** [phase18_principal.py](../scripts/phase18_principal.py) · [phase18_review_algebra.py](../scripts/phase18_review_algebra.py)
@@ -3115,6 +3347,92 @@ For a fixed finite integer arctangent identity for π whose smallest denominator
 - **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
 - **Related:** [SY-22](#sy-22) · [CC-50](#cc-50)
 
+<a id="op-11"></a>
+
+### OP-11 · Superpolynomial rational periods for actual Taylor prefixes
+
+**Evidence:** Written proof
+
+For the reduced odd denominator of a shifted binary Taylor prefix of ln 2, the lower limit of log(ord(2)) divided by log N times log log N is at least 1/(2 log 2). This still holds after removing one arbitrary prime-power axis or retaining a positive proportion of the top-band primes.
+
+**Scope.** The order is that of 2 modulo the specified denominator. The same proof applies to eligible polylogarithm, BBP and Bellard prefixes. It rules out complete-period or fixed-complement grid traversals in polynomial-length windows for these models.
+
+- **Proof:** [taylor-periods.md](../notes/phase19/taylor-periods.md)
+- **External inputs:** Prime number theorem.
+- **Computation:** [test_phase19_geometry.py](../scripts/test_phase19_geometry.py)
+- **Related:** [SY-10](#sy-10) · [SY-21](#sy-21) · [OP-08](#op-08)
+
+<a id="op-13"></a>
+
+### OP-13 · Numerical classification of horizontal logarithm rows
+
+**Evidence:** Written proof
+
+For a finite rational combination of the dyadic rows Z_d at positions d·2ʲ+j indexed by distinct odd d, the combination including its rational constant is a numerical preserver precisely when every coefficient and the constant are dyadic. The original d=3 row of ln 2 has binary limiting discrepancy 2/3. Odd part five has lower discrepancy 1/5 and upper discrepancy 8/15.
+
+**Scope.** Every such finite combination preserves normality. Individual rows have a finite rational algorithm for both discrepancy extrema. No digit-frequency assertion about their infinite sum is implied.
+
+- **Proof:** [logarithm-rays.md](../notes/phase19/logarithm-rays.md)
+- **Related:** [OP-06](#op-06) · [SY-04](#sy-04) · [SY-15](#sy-15)
+
+<a id="op-19"></a>
+
+### OP-19 · Earliest positive dyadic group containing a prime-index logarithm term
+
+**Evidence:** Written proof
+
+For p ≥ 5 prime, the minimum largest original index in a positive dyadic Taylor group containing index p is exactly p times the first k<p for which a subset of the residues 1/(j 2ʲ), j ≤ k, containing j=1 sums to zero modulo p. The first k is O(√p) for every prime and at least (1−o(1))log₂ p outside a relative-density-zero set of primes.
+
+**Scope.** Remaining odd primary factors can be eliminated with positive terms by that same original cutoff. This minimizes the completion index for one group, not the denominator exponent over all groups or the simultaneous costs of an entire partition. The worst-case logarithmic upper bound remains open.
+
+- **Proof:** [classical.md](../notes/phase19/classical.md) · [classical.md](../notes/phase19/reviews/classical.md)
+- **External inputs:** Dias da Silva and Hamidoune, Cyclic spaces for Grassmann derivatives and additive theory (1994).
+- **Computation:** [phase19_classical.py](../scripts/phase19_classical.py)
+- **Related:** [SY-10](#sy-10) · [SY-15](#sy-15)
+
+<a id="op-20"></a>
+
+### OP-20 · Mean denominator loss in the shifted binary Taylor series
+
+**Evidence:** Written proof
+
+For n ≤ X let Qₙ be the reduced denominator of the ordinary shifted binary Taylor prefix of log 2 and Lₙ the least common multiple of 1 through n. The mean of log(Lₙ/Qₙ) is O(X raised to 3/7).
+
+**Scope.** A polynomial bound on pairs of zero residues at a prescribed gap sharpens the split into prime bands. This is an upper bound on average cancellation, with no inference about word frequencies.
+
+- **Proof:** [classical.md](../notes/phase19/classical.md) · [classical.md](../notes/phase19/reviews/classical.md)
+- **Computation:** [phase19_classical.py](../scripts/phase19_classical.py)
+- **Related:** [SY-10](#sy-10) · [OP-11](#op-11)
+
+<a id="op-21"></a>
+
+### OP-21 · Wieferich bands in the actual logarithm and dilogarithm prefixes
+
+**Evidence:** Written proof
+
+For a prime p ≥ 5, a ≥ 1 and (p−1)pᵃ ≤ n < pᵃ⁺¹, the reduced shifted logarithm denominator retains pᵃ exactly when p is not a base-2 Wieferich prime. In the same band the dilogarithm denominator retains p to the power 2a under the same condition.
+
+**Scope.** The exponent for the dilogarithm is twice a. Loss of this full power may leave smaller powers in the denominator. These are modular classifications of the indicated prefixes, using finite logarithm congruences.
+
+- **Proof:** [classical.md](../notes/phase19/classical.md) · [classical-final.md](../notes/phase19/reviews/classical-final.md)
+- **External inputs:** Glaisher’s congruence and its order-two analogue as specified in the proof. Rogers studied the associated weighted harmonic zero set.
+- **Computation:** [phase19_classical.py](../scripts/phase19_classical.py)
+- **Related:** [OP-20](#op-20)
+
+<a id="op-22"></a>
+
+### OP-22 · Moving-tail and period obstruction for a signed logarithm transform
+
+**Evidence:** Written proof
+
+Euler’s dyadic product expresses log 2 as an alternating sum of sparse Mahler rows. After retaining the first K row indices, absolute shifted error tends to zero exactly when K+1+log₂(K+1)−N tends to positive infinity. At such moving cutoffs the chronological rational prefix still has a superpolynomial complementary period.
+
+**Scope.** Each fixed finite truncation is a deterministic number. For K ≥ 3 it fails numerical discrepancy preservation. The period obstruction concerns the rational prefix of the moving truncation on polynomial-length windows.
+
+- **Proof:** [taylor-periods.md § an infinite signed mahler transform of the logarithm](../notes/phase19/taylor-periods.md#an-infinite-signed-mahler-transform-of-the-logarithm) · [signed-transform.md](../notes/phase19/reviews/signed-transform.md)
+- **Computation:** [test_phase19_geometry.py](../scripts/test_phase19_geometry.py)
+- **Related:** [OP-11](#op-11) · [OP-13](#op-13)
+
 ## Counterexamples and impossibility results
 
 <a id="ls-08"></a>
@@ -3240,7 +3558,7 @@ Let *b* = 2, *p* = 3, let *Y* be the expansion of DS-01 with phases repeating 1,
 
 ### AC-09 · Concentration near finitely many residues forces nonnormality
 
-**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Let *b* ≥ 2, let *x* be real and let *C* be a finite set of real numbers. Suppose there is η > 0 such that for every ε > 0 there are infinitely many *N* for which at least η*N* of the integers 0 ≤ *n* < *N* satisfy |*bⁿx* − *t* − *z*| < ε for some *t* ∈ *C* and some integer *z*. Then *x* is not normal in base *b*.
 
@@ -3258,7 +3576,7 @@ In particular, if *P*ₙ are real numbers with *bⁿx* − *P*ₙ → 0 and, for
 
 ### AC-10 · Accurate polynomial-denominator models are rare on a fixed schedule
 
-**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of length *T* = *Bᵏ* at the starts used in AC-01. For Lebesgue-almost every *x* in [0, 1), only finitely many of these blocks admit a rational *y* with denominator at most *Tᵈ* and, with ‖·‖ the distance to the nearest integer,
 
@@ -3279,7 +3597,7 @@ Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of le
 
 ### AC-11 · Method-obstruction taxonomy, computable undecidability on digit-oracle codes and Rosser independence
 
-**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates-v2) (draft)
+**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Mathematical Limitations](../papers/04-arithmetic-certificates-v2) (draft)
 
 Eight classes of existing normality-proof methods (fixed-support smooth models, overlapping models, nearby Taylor cutoffs, balanced algebraic trace sources, single-prime/single-band statistics, higher-rank density and fixed-width projections, complex product endpoints, and irrationality-exponent run bounds) each admit explicit obstructions and paired witnesses separating *D* = 0 from *D* = 1.
 
@@ -3366,6 +3684,19 @@ The generating functions for positive-order polylogarithms, the standard four-te
 
 - **Proof:** [functional-obstruction.md](../notes/phase18/functional-obstruction.md)
 
+<a id="op-12"></a>
+
+### OP-12 · Sparse numerical preservers with visible product and sharp rates
+
+**Evidence:** Written proof
+
+Two explicit irrational numerical preservers in every radix have product bʳ/(bʳ−1) outside the numerical-preserver kernel for r ≥ 2. For missing-digit insertion sets of dimension σ as specified in the note, the exact order of the worst discrepancy change is (log N / N) raised to 1−σ.
+
+**Scope.** The Moser–de Bruijn generating-function factorization gives the product. The two-sided rate counts overlapping neighborhoods. The rational product still preserves normality.
+
+- **Proof:** [products-of-remainders.md](../notes/phase19/products-of-remainders.md)
+- **Related:** [OP-06](#op-06) · [SY-04](#sy-04)
+
 ## Manuscripts
 
 Publication status is maintained in [papers/README.md](../papers/README.md). No manuscript has been peer reviewed or accepted. The current manuscripts are listed first. Each superseded version is the historical record of release `manuscripts-v1.1.0` and is never edited.
@@ -3374,7 +3705,7 @@ Publication status is maintained in [papers/README.md](../papers/README.md). No 
 
 **Status:** draft · **Results:** [ST-11](#st-11) · [ST-01](#st-01) · [ST-02](#st-02) · [ST-03](#st-03) · [Directory](../papers/01-stoneham-polynomials-v2)
 
-Revision of Paper I. Every nonconstant rational polynomial in the Stoneham number with coprime parameters b and c > 2 is normal in base b, and distinct positive powers are jointly uniformly distributed.
+For coprime integers b ≥ 2 and c > 2, every nonconstant rational polynomial in the Stoneham number α(b,c) = Σ (1/(c^j b^(c^j))), summed over j ≥ 1, is normal in base b. Mira Cult’s October 7, 2026 public notes state a broader theorem with independent parameters. We give a kernel-verified proof for the ordinary Stoneham series. Distinct positive powers are jointly uniformly distributed. A nonintegral periodic geometric sum bounds the cancellation in rational prefixes, and Vandehey’s exponential-sum estimate gives an effective discrepancy rate. At c = 2 we determine the square’s prefix denominators. Exact finite certificates and cyclic descent prove polynomial normality in degrees 3 through 120, degree 128 and sixteen infinite families. A counting argument determines the least 2-adic valuation among the contributions of permutation orbits in every degree. Normality of the resonant quadratic α(b,2)^2 − 2α(b,2) remains open for each specified odd radix.
 
 ### II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports (version 2.0)
 
@@ -3388,11 +3719,11 @@ Revision of Paper II. Zero-or-one discrepancy classification of localized polylo
 
 A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
 
-### IV. Arithmetic Certificates for Normality and Their Limitations (version 2.0)
+### IV. Arithmetic Certificates for Normality and Mathematical Limitations (version 2.0)
 
 **Status:** draft · **Results:** [AC-01](#ac-01) · [AC-02](#ac-02) · [AC-03](#ac-03) · [Directory](../papers/04-arithmetic-certificates-v2)
 
-Revision of Paper IV. Rational-orbit certificates for normality, partial coverage, overlapping certificates and the limits of smooth rational models.
+A radix orbit is equidistributed if almost all blocks on a prescribed geometric schedule admit small mean-error rational models with growing reduced denominators on a fixed coprime prime support and a polynomial denominator cap. Partial coverage gives a quantitative discrepancy bound. Accurate models on long overlaps must agree after alignment, and a counting estimate shows that such polynomial-denominator approximations on prescribed schedules occur only finitely often for almost every real. Explicit pairs of binary streams separate odd-primary rational data and logarithmic word laws from ordinary normality, and eight obstructions isolate the information lost by specific normality-proof methods. Two uniform halting reductions show that neither normality nor nonnormality is computably enumerable on digit-program names, even when their values are transcendental and their binary discrepancy tends to zero or one; Lean checks the reductions under explicit endpoint hypotheses. A separate written Rosser argument establishes consistency-relative independence for the normality sentence of a theory-dependent digit program, with no implication for any named classical constant.
 
 ### V. Reduced Denominators of Binary Logarithm and Arctangent Series (version 2.0)
 
@@ -3416,7 +3747,7 @@ Valuation-weighted sparse series with an all-prefix normality switch, positive r
 
 **Status:** draft · **Results:** [ST-32](#st-32) · [ST-35](#st-35) · [ST-29](#st-29) · [Directory](../papers/08-stoneham-product-orbits)
 
-Upper discrepancy bounds and exceptional orbits for products of Stoneham numbers with different prime parameters.
+For the product of two Stoneham numbers with distinct odd prime parameters, every subsequential distribution of the radix shifts is a mixture of Lebesgue measure and rational periodic orbits, and the scalar extreme interval discrepancy converges to that of the mixture. For the binary product α(2,3)α(2,5), the upper interval discrepancy is at most 4/11 + 2.85e-10, and the sharp bound 4/11 is equivalent to the upper density of integer shifted prefixes being at most 4/11; ordinary binary normality remains open. Under finite local simple-zero tests satisfied by infinitely many radices for every distinct odd prime pair, the product orbit is logarithmically equidistributed with lower discrepancy zero and at most O_ε(log* T) exceptional logarithmic scales up to T. We also consolidate the kernel-verified 43/45 bound for α(2,3)α(2,5), transcendence and strict upper discrepancy for general multiplicatively independent integer parameters, and the exact plateau-cycle discrepancy formulas and unconditional sub-quarter bounds for rational quadratics in a parameter-two Stoneham number.
 
 ### IX. Erdős–Borwein Constant: Structural Limits of Certificate Methods (version 1.0)
 

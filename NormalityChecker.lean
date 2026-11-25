@@ -132,3 +132,7 @@ public import NormalityChecker.SharpTranslation
 public import NormalityChecker.Phase18Synthetic
 public import NormalityChecker.PositiveSummation
 public import NormalityChecker.RetirementDenominator
+public import NormalityChecker.DiscrepancyGeometry
+public import NormalityChecker.SurvivingGrid
+public import NormalityChecker.PrimePowerGrid
+public import NormalityChecker.AdditionSpectrum

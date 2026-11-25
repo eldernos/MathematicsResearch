@@ -55,6 +55,7 @@ FAMILIES = {
     "AC": ("Rational-orbit certificates, coverage and rigidity", "IV"),
     "CC": ("Classical constant arithmetic", "V"),
     "SY": ("Synthetic expansions and translations", None),
+    "OP": ("Arithmetic of discrepancy and unrestricted prime support", None),
 }
 TOPICS = {
     "stoneham": "Stoneham polynomial images and products",
@@ -88,13 +89,15 @@ PAPER_LABEL = {"draft": "Preprint draft", "planned": "Planned", "internally revi
 CANDIDATE_TAG = "manuscripts-v2.0.0"  # release candidate that carries the wave-2 manuscripts
 RELEASED_TAG = "manuscripts-v1.1.0"   # release that carries the historical v1.1 manuscripts
 WAVE2_LEAN_COMMIT = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"  # research-checkpoint-18
-META_REQUIRED = ("id", "title", "short_title", "version", "status", "abstract", "keywords", "msc_primary",
+META_REQUIRED = ("id", "title", "authors", "affiliation", "short_title", "version", "status", "abstract", "keywords", "msc_primary",
                  "msc_secondary", "supersedes", "lean_commit", "registry_ids")
 META_STATUS = "preprint draft"
+META_AUTHORS = ["Christopher Anderson"]  # owner decision of 2026-11-25; no other author, ORCID or email
+META_AFFILIATION = "Independent Researcher"
 MSC_RE = re.compile(r"^\d{2}[A-Z](\d{2}|xx)$")
 WAVE2_FILES = ("paper.pdf", "paper.tex", "references.bib", "VERIFICATION.md", "LEDGER.md", "submission")
 REQUIRED = ("id", "title", "topic", "status", "statement", "scope", "proof")
-ID_RE = re.compile(r"\b(ST|LS|MW|CR|DS|AC|CC|SY)-(\d{2})\b")
+ID_RE = re.compile(r"\b(ST|LS|MW|CR|DS|AC|CC|SY|OP)-(\d{2})\b")
 
 FIGURE_PAGES = ("README.md", "docs/survey.md", "docs/framework.md", "docs/guide-newcomers.md",
                 "docs/open-problems.md")
@@ -530,6 +533,7 @@ FAMILY_SURVEY = {
     "MW": "polynomial-weights-and-masked-supports", "CR": "cyclotomic-resonance-and-signed-expansions",
     "DS": "exact-discrepancy-and-symbolic-spectra", "AC": "rational-orbit-certificates",
     "CC": "classical-constant-arithmetic", "SY": "iv-designing-the-distribution-through-rational-insertions",
+    "OP": "v-arithmetic-operations-and-all-prime-support",
 }
 
 
@@ -652,7 +656,8 @@ def markdown_files():
     files = [ROOT / "README.md", ROOT / "CONTRIBUTING.md"]
     files += sorted((ROOT / "docs").rglob("*.md"))
     files += sorted((ROOT / "notes").glob("*.md"))
-    files += sorted((ROOT / "notes/phase18").rglob("*.md"))
+    for phase in ("phase18", "phase19"):
+        files += sorted((ROOT / "notes" / phase).rglob("*.md"))
     files += sorted((ROOT / "papers").rglob("*.md")) if (ROOT / "papers").exists() else []
     files += sorted((ROOT / ".github").rglob("*.md")) if (ROOT / ".github").exists() else []
     return [f for f in files if f.exists()]
@@ -786,6 +791,11 @@ def validate_metadata(meta: dict, p: dict, ids) -> list:
         errs.append(f"version {meta['version']} differs from papers.toml ({p['version']})")
     if meta["lean_commit"] != WAVE2_LEAN_COMMIT:
         errs.append(f"lean_commit must be {WAVE2_LEAN_COMMIT}")
+    if meta["authors"] != META_AUTHORS:
+        errs.append(f"authors must be {META_AUTHORS}")
+    if meta["affiliation"] != META_AFFILIATION:
+        errs.append(f"affiliation must be {META_AFFILIATION!r}")
+    errs += [f"field {k} is not approved by the owner" for k in ("orcid", "email") if k in meta]
     if dir_name(str(meta["supersedes"])) != dir_name(p.get("supersedes", "")):
         errs.append(f"supersedes {meta['supersedes']!r} differs from papers.toml ({p.get('supersedes', '')!r})")
     for k in ("id", "title", "short_title", "abstract"):

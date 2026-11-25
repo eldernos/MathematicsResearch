@@ -124,7 +124,8 @@ class ManuscriptTests(unittest.TestCase):
 
 
 class MetadataTests(unittest.TestCase):
-    META = {"id": "06-x", "title": "T", "short_title": "T", "version": "1.0", "status": "preprint draft",
+    META = {"id": "06-x", "title": "T", "authors": ["Christopher Anderson"], "affiliation": "Independent Researcher",
+            "short_title": "T", "version": "1.0", "status": "preprint draft",
             "abstract": "An abstract.", "keywords": ["normal numbers"], "msc_primary": "11K16",
             "msc_secondary": ["11A63", "37A45"], "supersedes": "", "lean_commit": portal.WAVE2_LEAN_COMMIT,
             "registry_ids": ["CC-48"]}
@@ -151,6 +152,9 @@ class MetadataTests(unittest.TestCase):
         self.assertTrue(any("unknown registry" in e for e in self.check(registry_ids=["ST-99"])))
         self.assertTrue(any("peer-reviewed" in e for e in self.check(abstract="This is peer-reviewed.")))
         self.assertTrue(any("version" in e for e in self.check(version="2.0")))
+        self.assertTrue(any("authors" in e for e in self.check(authors=["Someone Else"])))
+        self.assertTrue(any("affiliation" in e for e in self.check(affiliation="University")))
+        self.assertTrue(any("orcid" in e for e in self.check(orcid="0000-0000-0000-0000")))
 
     def test_supersedes_accepts_directory_spellings(self):
         meta = copy.deepcopy(self.META)
