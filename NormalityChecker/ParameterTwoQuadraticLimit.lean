@@ -128,13 +128,44 @@ theorem slope_norm {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) :
   nlinarith [delta_zero_norm_lt_one odd, norm_pos_iff.mpr (delta_zero_ne hb),
     mul_pos (norm_pos_iff.mpr (delta_zero_ne hb)) (sub_pos.mpr (delta_zero_norm_lt_one odd))]
 
+theorem slope_valuation {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) :
+    (slope b).valuation = (padicValInt 2 ((b : ℤ)^2-1) : ℤ) - 1 := by
+  have hn : slope b ≠ 0 := norm_ne_zero_iff.mp (by rw [slope_norm hb odd]; exact norm_ne_zero_iff.mpr (delta_zero_ne hb))
+  have hz : (b : ℤ)^2-1 ≠ 0 := by
+    have h : (3 : ℤ) ≤ b := by exact_mod_cast hb
+    nlinarith
+  have e := (slope_norm hb odd).trans (delta_zero_norm odd)
+  have cast : (b : ℚ_[2])^2-1 = (((b : ℤ)^2-1 : ℤ) : ℚ_[2]) := by push_cast; rfl
+  rw [cast, Padic.norm_eq_zpow_neg_valuation hn,
+    Padic.norm_eq_zpow_neg_valuation (Int.cast_ne_zero.mpr hz), Padic.valuation_intCast] at e
+  have pow : (2 : ℝ)^(-(slope b).valuation) = 2^((1 : ℤ)-padicValInt 2 ((b : ℤ)^2-1)) := by
+    rw [sub_eq_add_neg, zpow_add₀ (by norm_num), zpow_one]; exact e
+  rw [zpow_right_inj₀ (by norm_num) (by norm_num)] at pow
+  omega
+
+private lemma bound_strict {b : ℕ} (hb : 3 ≤ b) (j : ℕ) :
+    (1/2 : ℝ)^(j+1) * ‖delta b 0‖^2 < (1/2 : ℝ)^j * ‖delta b 0‖^2 := by
+  rw [pow_succ]
+  have pos : 0 < (1/2 : ℝ)^j * ‖delta b 0‖^2 :=
+    mul_pos (by positivity) (sq_pos_of_pos (norm_pos_iff.mpr (delta_zero_ne hb)))
+  linarith
+
+theorem delta_error_norm {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (j : ℕ) :
+    ‖delta b j - slope b‖ = (1/2 : ℝ)^j * ‖delta b 0‖^2 := by
+  have e : delta b j - slope b = -step b j + (delta b (j+1)-slope b) := by
+    rw [delta_succ, step]; ring
+  have lt : ‖delta b (j+1)-slope b‖ < ‖-step b j‖ := by
+    rw [norm_neg, step_norm hb odd]
+    exact (delta_error_le hb odd _).trans_lt (bound_strict hb j)
+  rw [e, Padic.add_eq_max_of_ne lt.ne', max_eq_left lt.le, norm_neg, step_norm hb odd]
+
 def intercept (b : ℕ) : ℚ_[2] := slope b + ∑' j, (delta b j - slope b)
 
 /-- The paper's `T_(j+1)`. -/
 def cancellation (b j : ℕ) : ℚ_[2] := (∑ i ∈ range (j+1), delta b i) + delta b j
 
-theorem affine_error_le {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (j : ℕ) :
-    ‖cancellation b j - ((j+1 : ℕ) : ℚ_[2]) * slope b - intercept b‖ ≤
+theorem affine_error_norm {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (j : ℕ) :
+    ‖cancellation b j - ((j+1 : ℕ) : ℚ_[2]) * slope b - intercept b‖ =
       (1/2 : ℝ)^j * ‖delta b 0‖^2 := by
   have h := (correction_summable hb odd).sum_add_tsum_nat_add (j+1)
   have eqn : cancellation b j - ((j+1 : ℕ) : ℚ_[2]) * slope b - intercept b =
@@ -142,10 +173,14 @@ theorem affine_error_le {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (j : ℕ) :
     rw [intercept, ← h, sum_sub_distrib]
     simp only [sum_const, card_range, nsmul_eq_mul, cancellation]
     ring
-  rw [eqn, sub_eq_add_neg]
-  refine (Padic.nonarchimedean _ _).trans (max_le (delta_error_le hb odd _) ?_)
-  rw [norm_neg]
-  refine (tail_bound (sq_nonneg _) (delta_error_le hb odd) (j+1)).trans ?_
-  rw [pow_succ]; nlinarith [show 0 ≤ (1/2 : ℝ)^j * ‖delta b 0‖^2 by positivity]
+  have lt : ‖-(∑' i : ℕ, (delta b (i+(j+1)) - slope b))‖ < ‖delta b j - slope b‖ := by
+    rw [norm_neg, delta_error_norm hb odd]
+    exact (tail_bound (sq_nonneg _) (delta_error_le hb odd) (j+1)).trans_lt (bound_strict hb j)
+  rw [eqn, sub_eq_add_neg (delta b j - slope b), Padic.add_eq_max_of_ne lt.ne', max_eq_left lt.le,
+    delta_error_norm hb odd]
+
+theorem affine_error_le {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (j : ℕ) :
+    ‖cancellation b j - ((j+1 : ℕ) : ℚ_[2]) * slope b - intercept b‖ ≤
+      (1/2 : ℝ)^j * ‖delta b 0‖^2 := (affine_error_norm hb odd j).le
 
 end NormalityChecker.ParameterTwoQuadratic
