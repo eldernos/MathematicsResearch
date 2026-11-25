@@ -345,7 +345,19 @@ def compute():
             assert (src, dst) in HISTORY
         if style == "dotted":
             assert (src, dst) in PAPER
+    # Research extensions to the archived eight-result figure. These targets
+    # cite the specified declaration in their own proof text.
+    synthetic = []
+    for source, target, result, name in [
+        ("SmoothOrbit", "RetirementDenominator", "SY-02", "fixed_support_orbit_estimate"),
+        ("SharpTranslation", "Phase18Synthetic", "SY-12", "sharp_translation"),
+    ]:
+        assert source in clo[target] and any(n == name for _, n in decls[source])
+        assert word(re.escape(name)).search(text[target]) or f"{source}.{name}" in text[target]
+        synthetic.append({"result": result, "declaration_used": name, "used_in": target,
+                          "import_path": shortest_path(graph, target, source)})
     return {"verified": verified, "foundation": foundation, "historical": historical,
+            "synthetic": synthetic,
             "paper": paper, "modules": len(graph),
             "joint_public_declarations_unused": joint_names}
 
@@ -363,6 +375,8 @@ def data_files(data):
            "nodes": nodes, "edges": edges, "verified_solid_edges": data["verified"],
            "foundation_imports": data["foundation"], "historical_edges": data["historical"],
            "paper_inputs": data["paper"],
+           "synthetic_extension": {"proof_map": "notes/phase18/dependencies.md",
+                                   "checked_imports": data["synthetic"]},
            "joint_persistent_public_declarations_unused": data["joint_public_declarations_unused"]}
     return {"proof-dependency-map.json": json.dumps(out, indent=1, ensure_ascii=False) + "\n"}
 

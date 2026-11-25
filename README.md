@@ -136,7 +136,7 @@ On late nonzero shells the shifted points approach uniform distribution. On late
 
 A positive rational expansion at cubic positions realizes every ordinary discrepancy limit between zero and one, with error of order 1/∛*N*. Changing the schedule gives Liouville numbers with any of the same limits. For translations, the worst possible change of finite discrepancy over all starting numbers equals one minus the discrepancy of the added number. [Programmable limits](notes/phase18/programming.md) · [Liouville realizations](notes/phase18/liouville-realization.md) · [Sharp translation theorem](notes/phase18/translations.md#the-exact-worst-case-change)
 
-On factorial insertion schedules the normal examples are Liouville numbers, and every nonconstant rational polynomial in one of them is normal in the same base. On degree-*d* polynomial schedules, powers through degree min(*s*, *d* − 1) are jointly normal. [Polynomial and product theorems](notes/phase18/algebra.md)
+On factorial insertion schedules the normal examples are Liouville numbers, and every nonconstant rational polynomial in one of them is normal in the same base. For insertions at *t k*ᵈ, let *p* be the retained odd prime, *t* the order of the radix modulo *p*, and *s* the positive power to which the *p*-part of *k* is raised in its coefficient denominator. The first min(*s*, *d* − 1) powers of this number are jointly normal. [Polynomial and product theorems](notes/phase18/algebra.md)
 
 One positive sum over infinitely many denominator primes is binary normal. Other positive sums can have any prescribed rational total even when every finite collection of their components is jointly uniform. Geometric partitions of the Taylor and BBP series give such finite joint uniformity for components of ln 2 and π. Their full orbit distributions remain open. [Infinite-sum proofs](notes/phase18/summation.md) · [Taylor grouping delay](notes/phase18/prime-delay.md) · [Phase 18 research and verification](notes/phase18/README.md)
 
@@ -144,7 +144,7 @@ One positive sum over infinitely many denominator primes is binary normal. Other
 
 A radix shift can have a rational approximation that follows it for many digit positions. On a long interval, a growing denominator supported on a fixed set of primes can force uniform digit frequencies. Persistent cancellation can concentrate the orbit on a finite set. The proofs below combine these local estimates into statements about every sufficiently long prefix.
 
-Every theorem above follows one pattern. The arrows are mathematical steps, not the order in which results were found.
+The arithmetic normality proofs use the sequence of steps shown here. The Phase 18 dependency map also covers rational-state programming, translations and infinite sums. [Phase 18 proof dependencies](notes/phase18/dependencies.md)
 
 ```mermaid
 flowchart TD

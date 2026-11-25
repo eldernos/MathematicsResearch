@@ -175,7 +175,7 @@ id = "SY-17"
 title = "Polynomial and linear images of synthetic series"
 topic = "stoneham"
 status = "paper"
-statement = "For factorial schedules and positive valuation order, every nonconstant rational polynomial of the principal series is normal. For polynomial schedules of degree d, every rational polynomial image of degree r with 1 ≤ r < d and r ≤ s is normal. Distinct retained primes and distinct positive orders on the common schedule also give jointly uniform families under the stated growth hypotheses."
+statement = "For factorial schedules and positive valuation order, every nonconstant rational polynomial of the principal series is normal. For insertion positions t times the d-th powers, every rational polynomial image of degree r with 1 ≤ r < d and r ≤ s is normal. Distinct retained primes and distinct positive orders on the common schedule also give jointly uniform families under the stated growth hypotheses."
 scope = "The power-series proof controls the pole after tuple insertions coincide. The finite residual certificates for smaller orders give discrepancy bounds rather than a general normality theorem."
 proof = ["notes/phase18/algebra.md"]
 related = ["AC-04","SY-01"]
@@ -200,3 +200,35 @@ statement = "On the schedule t times k factorial, every strictly positive valuat
 scope = "The general normality switch is verified in Lean. The full Liouville and transcendence assertions are written deductions."
 proof = ["notes/phase18/principal.md"]
 related = ["SY-01","SY-02","SY-17"]
+
+[[result]]
+id = "SY-20"
+title = "A certified upper discrepancy for the binary cubic example squared"
+topic = "coverage"
+status = "paper"
+statement = "For the square of the binary example with p = 3, s = 1 and d = 3, the upper extreme discrepancy is at most 14035285166320179631 / 47872170047321719707829651794, below 2.94 times 10 to the power −10."
+scope = "A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. The normality of the square is open."
+proof = ["notes/phase18/algebra.md#refining-the-failed-cells-at-smaller-orders"]
+computation = ["scripts/phase18_principal.py", "scripts/phase18_review_algebra.py"]
+related = ["SY-16","SY-17"]
+
+[[result]]
+id = "SY-21"
+title = "Reduced denominator rates for BBP and Bellard prefixes"
+topic = "classical"
+status = "paper"
+statement = "For the literal signed row sums through row M, the logarithm of the reduced shifted denominator divided by the binary shift tends to 3/2 for the hexadecimal BBP series and to 1 for Bellard’s series."
+scope = "Binary shift 4M for BBP and 10M for Bellard. Fixed-band signed residue estimates establish survival and include possible finite exceptions. These are denominator rates for the given representations."
+inputs = ["Bailey, Borwein and Plouffe (1997), Bellard’s 1997 formula and the prime number theorem in arithmetic progressions."]
+proof = ["notes/phase18/reviews/classical-sources.md#the-bbp-and-bellard-denominators-f5","notes/phase18/classical.md"]
+computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-22"
+title = "Chebyshev approximations to shifted pi from fixed arctangent identities"
+topic = "classical"
+status = "paper"
+statement = "For every positive tolerance on the exponential denominator rate there is a fixed finite arctangent identity giving rational approximants to shifted π with error O(1/N) and an upper rate below the tolerance along the specified shifts."
+scope = "For fixed minimum pole a the explicit limsup bound is log(2)/log(a + √(a² + 1)). Coefficient rounding uses rational arithmetic. The estimate does not control cancellation of exponential sums on observation blocks."
+proof = ["notes/phase18/classical.md","notes/phase18/reviews/classical-sources.md#chebyshev-bounds-and-the-other-classical-targets"]
+computation = ["scripts/phase18_classical.py"]

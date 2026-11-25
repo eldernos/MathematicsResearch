@@ -1181,6 +1181,30 @@
    "justification": "results.md, Phase 10: transcendence of signed expansions follows on paper using Roth or Ridout (notes/signed-shell-discrepancy.md). No Lean module."
   }
  ],
+ "synthetic_extension": {
+  "proof_map": "notes/phase18/dependencies.md",
+  "checked_imports": [
+   {
+    "result": "SY-02",
+    "declaration_used": "fixed_support_orbit_estimate",
+    "used_in": "RetirementDenominator",
+    "import_path": [
+     "RetirementDenominator",
+     "ArithmeticCertificate",
+     "SmoothOrbit"
+    ]
+   },
+   {
+    "result": "SY-12",
+    "declaration_used": "sharp_translation",
+    "used_in": "Phase18Synthetic",
+    "import_path": [
+     "Phase18Synthetic",
+     "SharpTranslation"
+    ]
+   }
+  ]
+ },
  "joint_persistent_public_declarations_unused": [
   "failedWidth",
   "fixed_deep_loss_bound",

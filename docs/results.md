@@ -99,6 +99,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [AC-02](#ac-02) ★ | Partial coverage bounds the discrepancy | Lean | IV |
 | [AC-03](#ac-03) ★ | Rigidity of overlapping smooth rational models | Lean | IV |
 | [AC-07](#ac-07) | Discrepancy bounds from certified paths between prefix endpoints | Lean | IV |
+| [SY-20](#sy-20) | A certified upper discrepancy for the binary cubic example squared | Written proof |  |
 | [CC-01](#cc-01) ★ | Half-rate denominators for binary shifts of ln 2 | Lean | V |
 | [CC-02](#cc-02) ★ | The rate 1/2 is optimal among finite dyadic logarithm identities | Lean + written deduction | V |
 | [CC-03](#cc-03) | Exact prime cancellation in the standard series for ln 2 | Lean | V |
@@ -150,6 +151,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-09](#sy-09) | Taylor rays of a fixed prime sum to the logarithm of two | Lean |  |
 | [SY-10](#sy-10) | Completion delay for positive dyadic Taylor groups | Written proof |  |
 | [SY-15](#sy-15) | Finite positive dyadic groups for the logarithm and factorial series | Written proof |  |
+| [SY-21](#sy-21) | Reduced denominator rates for BBP and Bellard prefixes | Written proof |  |
+| [SY-22](#sy-22) | Chebyshev approximations to shifted pi from fixed arctangent identities | Written proof |  |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -905,7 +908,7 @@ For every pair of distinct odd primes *p* < *q*, infinitely many radices *B* ≥
 
 **Evidence:** Written proof
 
-For factorial schedules and positive valuation order, every nonconstant rational polynomial of the principal series is normal. For polynomial schedules of degree d, every rational polynomial image of degree r with 1 ≤ r < d and r ≤ s is normal. Distinct retained primes and distinct positive orders on the common schedule also give jointly uniform families under the stated growth hypotheses.
+For factorial schedules and positive valuation order, every nonconstant rational polynomial of the principal series is normal. For insertion positions t times the d-th powers, every rational polynomial image of degree r with 1 ≤ r < d and r ≤ s is normal. Distinct retained primes and distinct positive orders on the common schedule also give jointly uniform families under the stated growth hypotheses.
 
 **Scope.** The power-series proof controls the pole after tuple insertions coincide. The finite residual certificates for smaller orders give discrepancy bounds rather than a general normality theorem.
 
@@ -2041,6 +2044,20 @@ Let *b* ≥ 2, *x* real and *N* > 0. For an interval [α, β) ⊆ [0, 1] let *S*
 - **Proof:** [overlapping-certificates.md § an interval as a bound between endpoints](../notes/overlapping-certificates.md#an-interval-as-a-bound-between-endpoints)
 - **Related:** [AC-02](#ac-02)
 
+<a id="sy-20"></a>
+
+### SY-20 · A certified upper discrepancy for the binary cubic example squared
+
+**Evidence:** Written proof
+
+For the square of the binary example with p = 3, s = 1 and d = 3, the upper extreme discrepancy is at most 14035285166320179631 / 47872170047321719707829651794, below 2.94 times 10 to the power −10.
+
+**Scope.** A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. The normality of the square is open.
+
+- **Proof:** [algebra.md § refining the failed cells at smaller orders](../notes/phase18/algebra.md#refining-the-failed-cells-at-smaller-orders)
+- **Computation:** [phase18_principal.py](../scripts/phase18_principal.py) · [phase18_review_algebra.py](../scripts/phase18_review_algebra.py)
+- **Related:** [SY-16](#sy-16) · [SY-17](#sy-17)
+
 ## Classical constant arithmetic
 
 <a id="cc-01"></a>
@@ -3040,6 +3057,33 @@ All binary Taylor terms of ln 2 can be partitioned into finite groups with dyadi
 - **Proof:** [classical.md](../notes/phase18/classical.md)
 - **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
 - **Related:** [SY-10](#sy-10)
+
+<a id="sy-21"></a>
+
+### SY-21 · Reduced denominator rates for BBP and Bellard prefixes
+
+**Evidence:** Written proof
+
+For the literal signed row sums through row M, the logarithm of the reduced shifted denominator divided by the binary shift tends to 3/2 for the hexadecimal BBP series and to 1 for Bellard’s series.
+
+**Scope.** Binary shift 4M for BBP and 10M for Bellard. Fixed-band signed residue estimates establish survival and include possible finite exceptions. These are denominator rates for the given representations.
+
+- **Proof:** [classical-sources.md § the bbp and bellard denominators f5](../notes/phase18/reviews/classical-sources.md#the-bbp-and-bellard-denominators-f5) · [classical.md](../notes/phase18/classical.md)
+- **External inputs:** Bailey, Borwein and Plouffe (1997), Bellard’s 1997 formula and the prime number theorem in arithmetic progressions.
+- **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
+
+<a id="sy-22"></a>
+
+### SY-22 · Chebyshev approximations to shifted pi from fixed arctangent identities
+
+**Evidence:** Written proof
+
+For every positive tolerance on the exponential denominator rate there is a fixed finite arctangent identity giving rational approximants to shifted π with error O(1/N) and an upper rate below the tolerance along the specified shifts.
+
+**Scope.** For fixed minimum pole a the explicit limsup bound is log(2)/log(a + √(a² + 1)). Coefficient rounding uses rational arithmetic. The estimate does not control cancellation of exponential sums on observation blocks.
+
+- **Proof:** [classical.md](../notes/phase18/classical.md) · [classical-sources.md § chebyshev bounds and the other classical targets](../notes/phase18/reviews/classical-sources.md#chebyshev-bounds-and-the-other-classical-targets)
+- **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
 
 ## Counterexamples and impossibility results
 
