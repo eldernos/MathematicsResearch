@@ -126,3 +126,5 @@ public import NormalityChecker.WeightedLambertIdentities
 public import NormalityChecker.ChebyshevPoleApproximation
 public import NormalityChecker.Phase16StonehamBounds
 public import NormalityChecker.AdaptiveLogarithmBounds
+public import NormalityChecker.Phase17DiscrepancyBounds
+public import NormalityChecker.ComputableNormalityUndecidability

@@ -42,6 +42,9 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-30](#st-30) | Functional equation, transcendence, isometry and integer recurrence for parameter-two quadratics | Lean + written deduction | I |
 | [ST-31](#st-31) | Parameter-two polynomial normality in degrees 3 through 120 and seven infinite cyclic-descent families | Lean + written deduction | I |
 | [ST-32](#st-32) | Discrepancy within 2.85 × 10⁻¹⁰ of 4/11 and iterated-logarithmic sparsity for α(2, 3) α(2, 5) | Lean + written deduction | I |
+| [ST-33](#st-33) | Least orbit order, p-adic cyclic descent, degree 128 and sixteen infinite parameter-two families | Lean + written deduction | I |
+| [ST-34](#st-34) | Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics | Written proof | I |
+| [ST-35](#st-35) | Empirical-mixture cycle discrepancy, zero-slack 4/11 reduction and infinite family of mixed-prime products | Lean + written deduction | I |
 | [LS-01](#ls-01) ★ | Unsigned finite-support dichotomy | Lean | II |
 | [LS-02](#ls-02) ★ | Exact discrepancy from persistent cancellation at every order | Lean | II |
 | [LS-03](#ls-03) ★ | Persistent failed regions are null | Lean | II |
@@ -128,6 +131,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-45](#cc-45) | Weighted Lambert series for ln 2 and structural failure of local isolation | Lean + written deduction | V |
 | [CC-46](#cc-46) | Non-normality and exact disjunctive word order for character Lambert series | Lean + written deduction | V |
 | [CC-47](#cc-47) | Two-source local Euler factors and mesoscopic Poisson correlations for Erdős–Borwein | Written proof | V |
+| [CC-48](#cc-48) | Moving-window word counts, exact discrepancy gap and transcendence for multiplicative Lambert series | Lean + written deduction | V |
+| [CC-49](#cc-49) | Sharp 16-column statistic, parity Bonferroni threshold and trigonometric degree barrier for Erdős–Borwein | Lean + written deduction | V |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -135,8 +140,10 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [DS-10](#ds-10) | Division by an integer can change the discrepancy factor | Lean | III |
 | [AC-09](#ac-09) | Concentration near finitely many residues forces nonnormality | Lean | IV |
 | [AC-10](#ac-10) | Accurate polynomial-denominator models are rare on a fixed schedule | Lean + written deduction | IV |
+| [AC-11](#ac-11) | Method-obstruction taxonomy, computable undecidability on digit-oracle codes and Rosser independence | Lean + written deduction | IV |
 | [CC-32](#cc-32) | A moving product parameter can miss maximal discrepancy | Written proof | V |
 | [CC-36](#cc-36) | Multiplier height and escape from a sparse binary orbit | Written proof | V |
+| [CC-50](#cc-50) | Legendre–Bezout linear windows, nearest-grid identification and the window–denominator barrier for ln 2 | Written proof | V |
 
 ★ marks the principal results presented in the [README](../README.md).
 
@@ -812,6 +819,66 @@ For each fixed nonrectangular shape (*a*, *b*), distinct active shells retaining
 - **Proof:** [mixed-product-precision.md](../notes/phase16/mixed-product-precision.md)
 - **Computation:** [phase16_mixed_product.py](../scripts/phase16_mixed_product.py)
 - **Related:** [ST-14](#st-14) · [ST-25](#st-25) · [ST-26](#st-26) · [ST-27](#st-27) · [ST-29](#st-29)
+
+<a id="st-33"></a>
+
+### ST-33 · Least orbit order, p-adic cyclic descent, degree 128 and sixteen infinite parameter-two families
+
+**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Let *b* ≥ 3 be odd and α = α(*b*, 2). For every degree *d* ≥ 1, the minimum orbit order *F*(*d*) = min {Φ(*c*) : |*c*| = *d*, *K*(*c*) < 2} equals *G*(*d*) = Σ<sub>*k*=1..*d*</sub> ⌊log₂ *k*⌋, attained by exactly two multisets when *d* + 1 is not a power of two and one when it is. Consequently the minimum 2-adic valuation of the leading mass *M*<sub>*d*</sub>(*t*) on [1, 2) is *v*₂(*d*!) + *G*(*d*), attained on the explicit interval *J*<sub>*d*</sub> = [2 − 2<sup>1−*r*</sup>, 2 − 2<sup>−*r*</sup>) of length at least 2<sup>−*r*</sup>, where *M*<sub>*d*</sub> never vanishes.
+
+For every odd prime *p* and *e*, *k* ≥ 1, *p*-adic cyclic descent reduces *M*<sub>*e p*ʳ</sub>(*t*) modulo *p*ᵏ for *r* ≥ max(1, 2*k* − 2) to a twisted mass of degree *e p*<sup>*k*−1</sup> independent of *r*. Exhaustive automaton certificates establish *M*<sub>128</sub> ≠ 0 on [1, 2) (maximal loss 906, minimal loss 776, 345 leaves), global zero sets on (0, ∞) for all 3 ≤ *a* ≤ 64, and nine new first-order good descent pairs (*e*, *p*) ∈ {(3, 65537), (4, 65537), (3, 131071), (4, 131071), (3, 524287), (4, 524287), (5, 524287), (3, 2³¹ − 1), (4, 2³¹ − 1)}. Hence *P*(α) is normal in base *b* for every rational polynomial of degree 3 through 120, degree 128, every odd prime-power degree, and every degree *e p*ʳ across all sixteen good pairs. Linearly independent families of polynomials whose echelon pivot degrees are resolved (or non-resonant degree 2 with no pivot 1) are jointly normal in base *b*.
+
+**Scope.** Lean kernel-verifies the echelon-degree multidimensional Weyl transfer (`jointUniform_of_echelon_degrees`, `jointUniform_of_established_degrees`) and the 57-vector closed-orbit nonvanishing certificate for (3, 31) across all finite binary words (`descent31Check_true`, `descent31_all_words_nonzero`). The least-orbit-order theorem, general Kraft budget formula, top-state closed form, *p*-adic cyclic descent, and degree-128 / 16-family / middle-state certificates are paper deductions and exact integer computations. Nonvanishing of *M*<sub>*d*</sub> for all *d* ≥ 3 remains open.
+
+- **Lean:** [`jointUniform_of_echelon_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L311) · [`jointUniform_of_established_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L254) · [`descent31Check_true`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L563) · [`descent31_all_words_nonzero`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L579)
+- **Fully qualified:** `NormalityChecker.Phase17DiscrepancyBounds.jointUniform_of_echelon_degrees`, `NormalityChecker.Phase17DiscrepancyBounds.jointUniform_of_established_degrees`, `NormalityChecker.Phase17DiscrepancyBounds.descent31Check_true`, `NormalityChecker.Phase17DiscrepancyBounds.descent31_all_words_nonzero`
+- **Proof:** [dyadic-stoneham-classification.md](../notes/phase17/dyadic-stoneham-classification.md)
+- **Computation:** [phase17_dyadic_stoneham.py](../scripts/phase17_dyadic_stoneham.py)
+- **Supersedes:** [ST-31](#st-31)
+- **Related:** [ST-12](#st-12) · [ST-13](#st-13) · [ST-23](#st-23) · [ST-30](#st-30) · [ST-31](#st-31)
+
+<a id="st-34"></a>
+
+### ST-34 · Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics
+
+**Evidence:** Written proof · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+For *x* = (*A*α² + *B*α + *C*₀)/*D* at parameter *c* = 2 with odd radix *b* ≥ 3 and gcd(*D*, *b*) = 1, the plateau point of *X*² − 2*X* on shell *k* is {−*Z*<sub>*k*</sub> *b*<sup>2<sup>*k*−1</sup></sup> / 2<sup>2*k*−1</sup>}. For *D* = 1 with *H* = liminf<sub>*k*</sub> log₂ *q*<sub>*k*</sub>: if *b* ≡ 1 (mod 4), then limsup *D*<sub>*N*</sub>(*x*) = 2<sup>−2−[*H*−*s*]<sub>+</sub></sup> exactly; for every odd *b*, limsup *D*<sub>*N*</sub>(*x*) = 1/4 if and only if *v*₂(*Z*<sub>*k*</sub>) ≥ 2*k* − 1 − *v*₂(*b* − 1) infinitely often.
+
+For general *D* coprime to *b*, admissible plateau cycles form a computable finite union of CRT classes. In particular, for *D* = 3, *b* ≡ 2 (mod 3), and *C*₀ ≢ 1 (mod 3) in the *X*² − 2*X* family, the exact supremum over admissible cycles yields the unconditional bound
+```math
+\limsup_{N\to\infty} D_N\left(\frac{\alpha^2-2\alpha+C_0}{3}\right) \le \frac{1}{4}\left(1 - \frac{1}{3 \cdot 2^{v_2(b+1)}}\right) < \frac{1}{4}.
+```
+For *b* = 5 and *D* = 9, limsup *D*<sub>*N*</sub>((α² − 2α)/9) ≤ 5/72.
+
+**Scope.** Written deductions building on the kernel-verified Phase 14 plateau law and Phase 16 integer recurrence *Z*<sub>*k*</sub>, verified across 14,336 exact dyadic cycles and direct rational prefixes. Normality of α² − 2α for any specified odd integer radix *b* remains open.
+
+- **Proof:** [dyadic-stoneham-classification.md § part a2 resonant quadratics](../notes/phase17/dyadic-stoneham-classification.md#part-a2-resonant-quadratics)
+- **Computation:** [phase17_dyadic_stoneham.py](../scripts/phase17_dyadic_stoneham.py)
+- **Related:** [ST-19](#st-19) · [ST-20](#st-20) · [ST-21](#st-21) · [ST-30](#st-30)
+
+<a id="st-35"></a>
+
+### ST-35 · Empirical-mixture cycle discrepancy, zero-slack 4/11 reduction and infinite family of mixed-prime products
+
+**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+For a mixed-prime Stoneham product *x* = α(*B*, *p*) α(*B*, *q*) with distinct odd primes *p* < *q* not dividing *B*, the upper discrepancy *D*⁺(*x*) equals max<sub>*w* ∈ 𝒲</sub> Δ(σ(*w*)) over subsequential rational-cycle mixtures σ(*w*) = (1 − Σ *w*<sub>*c*</sub>)λ + Σ *w*<sub>*c*</sub> ν<sub>*c*</sub>. For *x* = α(2, 3) α(2, 5), every nonrectangular 3-adic and 5-adic root ζ<sub>*p*,*a*,*d*</sub> is non-integral (by Eisenstein linear independence), and
+```math
+D^+(\alpha(2,3)\alpha(2,5)) \le \frac{4}{11} \iff \limsup_{N\to\infty}\frac{\#\{n < N : R_n \in \mathbb{Z}\}}{N} \le \frac{4}{11}.
+```
+
+For every pair of distinct odd primes *p* < *q*, infinitely many radices *B* ≥ 2 (explicit residue classes modulo (*pq*)²) satisfy the one-sheet simple-zero hypotheses, yielding exact single-shape maximum *M*<sub>*p*,*q*</sub> = (*p* − 1)(*q* − 1)/(2*pq* − *p* − *q*), logarithmic equidistribution, *D*⁻(*x*) = 0, power-tower spacing between bounded-denominator plateaus, and *O*<sub>ε</sub>(log* *T*) scale sparsity. Exact multi-depth certificates give *D*⁺(α(2, 3) α(2, 7)) ≤ 11250083/30000000, *D*⁺(α(2, 3) α(2, 13)) ≤ 720004991/1860000000, and *D*⁺(α(36, 5) α(36, 7)) ≤ 720004379/1740000000.
+
+**Scope.** Lean kernel-verifies the general single-shape maximum *M*<sub>*p*,*q*</sub> and its attainment (`general_single_shape_one_one_max`, `general_single_shape_one_one_attained`). The empirical-mixture limit theorem, binary cycle discrepancies, Eisenstein non-integrality proof, zero-slack 4/11 equivalence, infinite-radix admissibility theorem, and certified bounds for (2, 3, 7), (2, 3, 13) and (36, 5, 7) are paper deductions and exact rational computations. Ordinary normality of any mixed-prime product remains open.
+
+- **Lean:** [`general_single_shape_one_one_max`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L184) · [`general_single_shape_one_one_attained`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L232)
+- **Fully qualified:** `NormalityChecker.Phase17DiscrepancyBounds.general_single_shape_one_one_max`, `NormalityChecker.Phase17DiscrepancyBounds.general_single_shape_one_one_attained`
+- **Proof:** [mixed-product-orbits.md](../notes/phase17/mixed-product-orbits.md)
+- **Computation:** [phase17_mixed_product_orbits.py](../scripts/phase17_mixed_product_orbits.py)
+- **Related:** [ST-14](#st-14) · [ST-27](#st-27) · [ST-29](#st-29) · [ST-32](#st-32)
 
 ## Localized logarithms and polylogarithms
 
@@ -2674,6 +2741,52 @@ For the Erdős–Borwein source displacements *V*(*m*) = *v*₂(τ(*m*)), the ex
 - **Computation:** [phase16_erdos_borwein.py](../scripts/phase16_erdos_borwein.py)
 - **Related:** [CC-20](#cc-20) · [CC-28](#cc-28) · [CC-29](#cc-29) · [CC-30](#cc-30) · [CC-35](#cc-35)
 
+<a id="cc-48"></a>
+
+### CC-48 · Moving-window word counts, exact discrepancy gap and transcendence for multiplicative Lambert series
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *q*₀ ≥ 3, let *S* be a set of primes coprime to *q*₀ containing all primes in at least one reduced residue class modulo *q*₀ with reciprocal-sum density δ ∈ (0, 1), and let *c*(*n*) be a nonnegative integer multiplicative function with *c*(*p*ᵉ) ≤ *e* + 1, *c*(*p*) = 2 on *S*, and *c*(*p*) = 0 on other primes coprime to *q*₀ (for example *L*<sub>χ</sub> = Σ χ(*m*)/(2ᵐ − 1) for any nonprincipal real Dirichlet character χ, where δ = 1/2, or the index-four family supported on *p* ≡ 1 (mod 5), where δ = 1/4). Set *L*<sub>*f*</sub> = Σ<sub>*n*≥1</sub> *c*(*n*) 2⁻ⁿ.
+
+For every fixed binary word *w* ≠ 0ᵏ of length *k* and every 7/12 < *a* ≤ 1, the occurrence count #<sub>*w*</sub>(*N*, *H*) in [*N*, *N* + *H*) satisfies
+```math
+\#_w(N, H) \asymp_{w,a} \frac{H}{(\log N)^{1-\delta}}
+```
+uniformly for *N*ᵃ ≤ *H* ≤ *N*, while #<sub>0ᵏ</sub>(*N*, *H*) = *H* − Θ<sub>*k*,*a*</sub>(*H*/(log *N*)<sup>1−δ</sup>). Every such *L*<sub>*f*</sub> is irrational, base-2 disjunctive, and non-normal with limiting binary discrepancy 1 and exact two-sided discrepancy gap
+```math
+1 - D_N(L_f) \asymp \frac{\log\log N}{(\log N)^{1-\delta}}.
+```
+For every odd Dirichlet character χ (primitive or imprimitive), *L*<sub>χ</sub> is transcendental over ℚ.
+
+**Scope.** Lean kernel-verifies both directions of the finite binary discrepancy transfer (`one_sub_discrepancy_le_one_bits`, `one_sub_discrepancy_ge_of_separated_mass`, `one_sub_discrepancy_ge_transition`, `upper_freq_le_one_bits`) together with the Phase 14/16 arrival reindexing. The moving-window two-sided word counts, left-extension separated-mass construction, and transcendence via weight-1 oldforms are written deductions from the listed analytic inputs. Exact integer computations certify 132,096 binary digits each for *L*<sub>χ₄</sub> and the δ = 1/4 example.
+
+- **Lean:** [`one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) · [`one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) · [`one_sub_discrepancy_ge_transition`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L28) · [`upper_freq_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L77)
+- **Fully qualified:** `NormalityChecker.Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`, `NormalityChecker.Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`, `NormalityChecker.Phase17DiscrepancyBounds.one_sub_discrepancy_ge_transition`, `NormalityChecker.Phase17DiscrepancyBounds.upper_freq_le_one_bits`
+- **Proof:** [multiplicative-lambert.md](../notes/phase17/multiplicative-lambert.md)
+- **External inputs:** P. Shiu, A Brun–Titchmarsh theorem for multiplicative functions (1980), Theorem 1 E. Wirsing, Das asymptotische Verhalten von Summen über multiplikative Funktionen (1961), Satz 1 A. Perelli, J. Pintz and S. Salerno, Bombieri's theorem in short intervals, Invent. Math. 79 (1985), 1–9 Selberg upper-bound sieve and Montgomery–Vaughan Brun–Titchmarsh inequality A. Hamieh and M. R. Murty, Transcendence of certain Lambert series, Int. J. Number Theory 12 (2016), 765–773, Theorems 1.1 and 3.1
+- **Computation:** [phase17_multiplicative_lambert.py](../scripts/phase17_multiplicative_lambert.py)
+- **Supersedes:** [CC-46](#cc-46)
+- **Related:** [CC-20](#cc-20) · [CC-45](#cc-45) · [CC-46](#cc-46) · [CC-47](#cc-47)
+
+<a id="cc-49"></a>
+
+### CC-49 · Sharp 16-column statistic, parity Bonferroni threshold and trigonometric degree barrier for Erdős–Borwein
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For the Erdős–Borwein constant *E* = Σ τ(*m*) 2⁻ᵐ, define the bounded 16-column statistic Ψ₁₆(*R*₁₆) = **1**[*R*₁₆ ≥ 2¹⁵] + Σ<sub>*k*=1..556</sub> (1 − *k*/557) **1**[*R*₁₆ = 2¹⁵ − *k*]. Combined with Phase 14's unconditional tail-mean bound μ ∈ [2.0762592, 2.0763285], limsup 𝔼<sub>*I*</sub>[Ψ₁₆(*R*₁₆)] < 0.4962723 along any sequence of dyadic shells implies limsup *f*<sub>*I*</sub>(1) < 1/2 (hence *E* is not simply normal); the comparison law *Q*<sub>∞</sub> gives 𝔼<sub>*Q*₁₆</sub>[Ψ₁₆] ≤ 0.4960081 and *p*<sub>∗</sub> ∈ [0.492450290, 0.492460864]. Conversely, every truncation *D* ≤ 15 admits an exact countermodel with *R*<sub>*D*</sub> ~ *Q*<sub>*D*</sub>, tail mean ≤ μ, and *f*(1) ≥ 1/2.
+
+Exact product perturbations matching all joint laws of every *k*-column subset (*k* ≤ 4) allow *f*(1) = 1/2 and *f*(1) > 1/2. For odd *r*, the minimum of 𝔼[(−1)<sup>*N*</sup>] over count laws matching the first *r* Poisson factorial moments is Σ<sub>*k*≤*r*</sub> (−2)<sup>*k*</sup>/*k*!, which first becomes positive at *r* = 5 (1/15); hence factorial moments of order ≤ 4 fail on any number of columns, order ≤ 8 fails at *D* = 16, and an explicit order-92 Bonferroni witness certifies *f*(1) < 1/2 on 16 columns. In Fourier coordinates, a Selberg–Vaaler majorant of degree 116 certifies *f*(1) < 1/2 (margin 4.1 × 10⁻⁵), whereas an explicit positive dual measure matching all harmonics |*m*| ≤ 110 rules out every trigonometric certificate of degree ≤ 110.
+
+**Scope.** Lean kernel-verifies the pointwise carry-knapsack dual (`carry_knapsack_le`) and the exact integer parity Bonferroni dual inequality for all odd *r* (`parity_bonferroni_dual_le`). The 16-column LP certificates, depth-48 enclosure of *p*<sub>∗</sub>, *k*-column and moment countermodels, order-92 Bonferroni excess, Selberg–Vaaler degree-116 majorant, degree-110 dual measure, and Crandall (2012) digit/table audit are paper deductions and certified computations. The actual limiting one-digit frequency of *E* remains open; closing the arithmetic gap requires lattice-scale *r*-point correlations of *e*(θ*V*)χ(*U*) with *r* ≥ 9 at *D* = 16.
+
+- **Lean:** [`carry_knapsack_le`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L375) · [`parity_bonferroni_dual_le`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L432)
+- **Fully qualified:** `NormalityChecker.Phase17DiscrepancyBounds.carry_knapsack_le`, `NormalityChecker.Phase17DiscrepancyBounds.parity_bonferroni_dual_le`
+- **Proof:** [erdos-borwein-bias.md](../notes/phase17/erdos-borwein-bias.md)
+- **Computation:** [phase17_erdos_borwein_bias.py](../scripts/phase17_erdos_borwein_bias.py)
+- **Related:** [CC-20](#cc-20) · [CC-28](#cc-28) · [CC-29](#cc-29) · [CC-30](#cc-30) · [CC-47](#cc-47)
+
 ## Counterexamples and impossibility results
 
 <a id="ls-08"></a>
@@ -2834,6 +2947,24 @@ Fix *b* ≥ 2, *d* ≥ 0, *B* ≥ 2 and *L* ≥ 2, and consider the blocks of le
 - **External inputs:** First Borel–Cantelli lemma (standard measure theory).
 - **Related:** [AC-01](#ac-01)
 
+<a id="ac-11"></a>
+
+### AC-11 · Method-obstruction taxonomy, computable undecidability on digit-oracle codes and Rosser independence
+
+**Evidence:** Lean + written deduction · **Paper:** [IV. Arithmetic Certificates for Normality and Their Limitations](../papers/04-arithmetic-certificates) (internally reviewed)
+
+Eight classes of existing normality-proof methods (fixed-support smooth models, overlapping models, nearby Taylor cutoffs, balanced algebraic trace sources, single-prime/single-band statistics, higher-rank density and fixed-width projections, complex product endpoints, and irrationality-exponent run bounds) each admit explicit obstructions and paired witnesses separating *D* = 0 from *D* = 1.
+
+Given any computable transcendental binary-normal digit oracle *a* and computable transcendental maximal-discrepancy digit oracle *b*, explicit forward and reverse halting switches prove that recognizing binary normality of arbitrary digit-oracle program codes (`Nat.Partrec.Code`) is neither computable, nor computably enumerable, nor co-computably enumerable—even under the promise that the named real is transcendental over ℚ with limiting binary discrepancy in {0, 1}. Replacing the halting switch by a consistency-only Rosser proof predicate yields an explicit computable transcendental real whose binary normality is independent of PA or ZFC assuming consistency alone.
+
+**Scope.** Lean kernel-verifies finite-edit dyadic invariance, uniform computability of the switched oracle, s-m-n parameter specialization (`exists_switchedDigit_index_map`), and all six non-computability / non-c.e. / non-co-c.e. theorems both on the switched family and uniformly over arbitrary digit-oracle codes (`Names`), taking the endpoint properties of *a* and *b* as explicit inputs. The endpoint proofs for *C*₂, *L*₂ and an elementary Liouville-normal substitute, the eight-class taxonomy, Pairs A and B, and the PA/ZFC Rosser independence construction (with weak-arithmetic transfer boundaries via *I*Δ₀ + ¬Exp₂) are written deductions. Neither the undecidability reductions nor the Rosser construction implies any independence conclusion for ln 2, π or *e* in PA or ZFC.
+
+- **Lean:** [`no_computable_normality_decider_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L468) · [`no_re_normality_recognizer_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L428) · [`no_re_nonnormality_recognizer_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L448) · [`switched_real_promise_and_reduction`](../NormalityChecker/ComputableNormalityUndecidability.lean#L239) · [`reversed_switched_real_reduction`](../NormalityChecker/ComputableNormalityUndecidability.lean#L295) · [`normality_not_computable`](../NormalityChecker/ComputableNormalityUndecidability.lean#L351) · [`normality_not_re`](../NormalityChecker/ComputableNormalityUndecidability.lean#L367) · [`normality_not_co_re`](../NormalityChecker/ComputableNormalityUndecidability.lean#L380)
+- **Fully qualified:** `NormalityChecker.ComputableNormalityUndecidability.no_computable_normality_decider_on_names`, `NormalityChecker.ComputableNormalityUndecidability.no_re_normality_recognizer_on_names`, `NormalityChecker.ComputableNormalityUndecidability.no_re_nonnormality_recognizer_on_names`, `NormalityChecker.ComputableNormalityUndecidability.switched_real_promise_and_reduction`, `NormalityChecker.ComputableNormalityUndecidability.reversed_switched_real_reduction`, `NormalityChecker.ComputableNormalityUndecidability.normality_not_computable`, `NormalityChecker.ComputableNormalityUndecidability.normality_not_re`, `NormalityChecker.ComputableNormalityUndecidability.normality_not_co_re`
+- **Proof:** [limitations-and-undecidability.md](../notes/phase17/limitations-and-undecidability.md)
+- **Computation:** [phase17_limitations.py](../scripts/phase17_limitations.py)
+- **Related:** [AC-01](#ac-01) · [AC-03](#ac-03) · [AC-10](#ac-10) · [CC-42](#cc-42) · [CC-43](#cc-43) · [CC-48](#cc-48) · [CC-50](#cc-50)
+
 <a id="cc-32"></a>
 
 ### CC-32 · A moving product parameter can miss maximal discrepancy
@@ -2859,6 +2990,27 @@ For any prescribed subexponential multiplier height, some irrational has mean ma
 
 - **Proof:** [multiplier-height.md](../notes/phase15/multiplier-height.md)
 - **Computation:** [phase15_fredholm.py](../scripts/phase15_fredholm.py)
+
+<a id="cc-50"></a>
+
+### CC-50 · Legendre–Bezout linear windows, nearest-grid identification and the window–denominator barrier for ln 2
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For pole-integral approximations to 2ⁿ ln 2, Bezout correlated rounding removes the two-adic shift (*w* = 0, *q*<sub>*N*</sub> | *L*<sub>*D*</sub> = lcm(1, …, *D*)). With the first-kind Chebyshev kernel *T*<sub>*D*</sub>(2*x* − 1), an analytic remainder floor |*E*<sub>*D*</sub>| ≍ *D*⁻² caps the window at 2 log₂ *D* + *O*(1). Replacing *T*<sub>*D*</sub> by the shifted Legendre kernel *P*<sub>*D*</sub>(2*x* − 1) reduces |*E*<sub>*D*</sub>| to *O*(ρ<sub>min</sub><sup>−*D*</sup>), yielding a linear window *T*<sub>*N*</sub> = log₂ *L*<sub>*D*</sub> − *O*(1) ≈ *N*/ln ρ<sub>min</sub> across every large *N* (e.g., *T* = 337 at *D* = 240, *N* = 605). However, whenever *L*<sub>*D*</sub> |*E*<sub>*D*</sub>| < dist(*L*<sub>*D*</sub> 2ⁿ ln 2, ℤ + 1/2), the Legendre–Bezout numerator equals round(*L*<sub>*D*</sub> 2ⁿ ln 2) identically, carrying no arithmetic beyond the digits of ln 2 itself.
+
+Unconditionally from any finite irrationality exponent μ' > μ(ln 2), every rational approximant *Y*<sub>*N*</sub> = *a*/*q*<sub>*N*</sub> with |2ⁿ ln 2 − *Y*<sub>*N*</sub>| ≤ 2<sup>−*T*<sub>*N*</sub></sup> satisfies
+```math
+T_N \le (\mu' - 1) N + \mu' \log_2 q_N + O_{\mu'}(1).
+```
+Consequently, no approximant family with positive denominator rate log *q*<sub>*N*</sub> ≥ ρ *N* (in any dimension, at any height, adaptive or not) can meet the incomplete-orbit hypothesis *T*<sub>*N*</sub> ≥ *q*<sub>*N*</sub><sup>δ</sup> for any δ > 0.
+
+**Scope.** Paper proofs plus exact rational/integer verification across 40 E1/E2 rows, 2D–4D adaptive coset-ceiling scans (where every θ in a cancellation coset shares the ceiling *T* ≤ log₂ *q*\* + log₂(1/η\*)), and unified finite comparisons for ln 2, π, *e*, √2 and φ. Nothing here proves normality or *D*⁺ < 1 for any of these five constants.
+
+- **Proof:** [classical-approximants.md](../notes/phase17/classical-approximants.md)
+- **External inputs:** R. Marcovecchio, The Rhin–Viola method for log 2, Acta Arith. 139 (2009), 147–184, Theorem 1.1 (μ(ln 2) ≤ 3.57455391) E. A. Rukhadze (1987) (μ(ln 2) ≤ 3.89139977)
+- **Computation:** [phase17_classical_approximants.py](../scripts/phase17_classical_approximants.py)
+- **Related:** [CC-01](#cc-01) · [CC-42](#cc-42) · [CC-43](#cc-43) · [CC-44](#cc-44)
 
 ## Manuscripts
 

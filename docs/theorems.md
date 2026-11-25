@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1120 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1150 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 108 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 138 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -98,6 +98,30 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`CircleDiscrepancy.disc_le`](../NormalityChecker/CircleDiscrepancy.lean#L27) |  |
 | [`CircleDiscrepancy.disc_mixture_bound`](../NormalityChecker/CircleDiscrepancy.lean#L35) | A uniform error for interval counts transfers to the discrepancy of a mixture of Lebesgue measure and a finite sample, even at atoms. |
 | [`CircleDiscrepancy.disc_sub_tendsto`](../NormalityChecker/CircleDiscrepancy.lean#L137) | Vanishing signed differences of lifts leave the full prefix discrepancy unchanged asymptotically. |
+
+### ComputableNormalityUndecidability
+
+[`NormalityChecker/ComputableNormalityUndecidability.lean`](../NormalityChecker/ComputableNormalityUndecidability.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ComputableNormalityUndecidability.summable_binarySeries`](../NormalityChecker/ComputableNormalityUndecidability.lean#L44) |  |
+| [`ComputableNormalityUndecidability.binarySeries_finite_edit_dyadic`](../NormalityChecker/ComputableNormalityUndecidability.lean#L57) | If two binary digit sequences agree from index `t` onward, their real values differ by a dyadic rational `m / 2^t`. |
+| [`ComputableNormalityUndecidability.transcendental_add_rat`](../NormalityChecker/ComputableNormalityUndecidability.lean#L85) | Adding a rational number preserves transcendence over `ℚ`. |
+| [`ComputableNormalityUndecidability.shift_add_dyadic_eq`](../NormalityChecker/ComputableNormalityUndecidability.lean#L101) | Adding a dyadic rational `m / 2^t` leaves all binary shifts from index `t` onward unchanged. |
+| [`ComputableNormalityUndecidability.binaryDiscrepancy_sub_le_of_eventually_eq`](../NormalityChecker/ComputableNormalityUndecidability.lean#L155) | If two reals have identical binary shifts from index `t` onward, their binary discrepancies at cutoff `N` differ by at most `t / N`. |
+| [`ComputableNormalityUndecidability.binaryDiscrepancy_tendsto_iff_add_dyadic`](../NormalityChecker/ComputableNormalityUndecidability.lean#L177) | Adding a dyadic rational preserves any limiting binary discrepancy value `L`. |
+| [`ComputableNormalityUndecidability.normalIn_two_iff_add_dyadic`](../NormalityChecker/ComputableNormalityUndecidability.lean#L211) | Adding a dyadic rational preserves binary normality. |
+| [`ComputableNormalityUndecidability.switchedDigit_computable`](../NormalityChecker/ComputableNormalityUndecidability.lean#L223) | Uniform computability of the switched binary digit oracle `(c, n) ↦ switchedDigit a b c n`. |
+| [`ComputableNormalityUndecidability.switched_real_promise_and_reduction`](../NormalityChecker/ComputableNormalityUndecidability.lean#L239) [AC-11](results.md#ac-11) | Fundamental promise and halting-problem reduction for the switched real `binarySeries (switchedDigit a b c)`: for every program code `c`, the real is… |
+| [`ComputableNormalityUndecidability.reversed_switched_real_reduction`](../NormalityChecker/ComputableNormalityUndecidability.lean#L295) [AC-11](results.md#ac-11) | Reversed reduction: `switchedDigit b a c` yields a transcendental real with limiting discrepancy in `{0, 1}` that is binary normal if and only if `c` halts on… |
+| [`ComputableNormalityUndecidability.normality_not_computable`](../NormalityChecker/ComputableNormalityUndecidability.lean#L351) [AC-11](results.md#ac-11) | Binary normality is not decidable (`¬ ComputablePred`), even under the promise that the input code specifies a computable transcendental real with limiting… |
+| [`ComputableNormalityUndecidability.normality_not_re`](../NormalityChecker/ComputableNormalityUndecidability.lean#L367) [AC-11](results.md#ac-11) | Binary normality is not recursively enumerable (`¬ REPred`) on the same computable transcendental `{0, 1}`-discrepancy promise family. |
+| [`ComputableNormalityUndecidability.normality_not_co_re`](../NormalityChecker/ComputableNormalityUndecidability.lean#L380) [AC-11](results.md#ac-11) | Binary normality is not co-recursively enumerable (`¬ REPred` for its complement) on the reversed computable transcendental `{0, 1}`-discrepancy promise family. |
+| [`ComputableNormalityUndecidability.exists_switchedDigit_index_map`](../NormalityChecker/ComputableNormalityUndecidability.lean#L406) | s-m-n parameter specialization: given computable digit oracles `a` and `b`, there is a total computable map `f : Nat.Partrec.Code → Nat.Partrec.Code` sending… |
+| [`ComputableNormalityUndecidability.no_re_normality_recognizer_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L428) [AC-11](results.md#ac-11) | No recursively enumerable predicate on arbitrary digit-oracle codes `Nat.Partrec.Code` can recognize binary normality even under the promise that the named… |
+| [`ComputableNormalityUndecidability.no_re_nonnormality_recognizer_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L448) [AC-11](results.md#ac-11) | No recursively enumerable predicate on arbitrary digit-oracle codes `Nat.Partrec.Code` can recognize binary nonnormality under the same transcendental `{0,… |
+| [`ComputableNormalityUndecidability.no_computable_normality_decider_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L468) [AC-11](results.md#ac-11) | No computable predicate on arbitrary digit-oracle codes `Nat.Partrec.Code` can decide binary normality under the transcendental `{0, 1}`-discrepancy promise. |
 
 ### Concentration
 
@@ -208,6 +232,26 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`stride_cancellation`](../NormalityChecker/OrbitDifferencing.lean#L23) | A finite van der Corput estimate with stride `v`. |
+
+### Phase17DiscrepancyBounds
+
+[`NormalityChecker/Phase17DiscrepancyBounds.lean`](../NormalityChecker/Phase17DiscrepancyBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_transition`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L28) [CC-48](results.md#cc-48) | Lower discrepancy gap in terms of adjacent binary transitions (`01` and `10`): for every real `x` and `N ≥ 1`, `min (1/3) (transitionFrequency x N) - 1/N ≤ 1… |
+| [`Phase17DiscrepancyBounds.nonzero_shift_has_one_bit`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L46) | If `shift 2 x n ≥ 2⁻ᴸ` (`L ≥ 1`), then some position `n + j` with `j ≤ L - 1` has a `1`-bit (`shift 2 x (n + j) ≥ 1/2`). |
+| [`Phase17DiscrepancyBounds.upper_freq_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L77) [CC-48](results.md#cc-48) | Frequency of shifts in `[2⁻ᴸ, 1)` is controlled by `L` times the `1`-bit frequency plus the boundary allowance `(L - 1) / N`. |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) [CC-48](results.md#cc-48) | Upper discrepancy gap in terms of the `1`-bit frequency: for every real `x`, `L ≥ 1`, and `N ≥ 1`, `1 - binaryDiscrepancy x N ≤ (1/2)^L + (L - 1)/N + L *… |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) [CC-48](results.md#cc-48) | Lower discrepancy gap from two separated positive-mass intervals `[0, ε)` and `[3ε, 1/2)`: if `0 < ε ≤ 1/6`, `Δ ≤ ε`, and both `[0, ε)` and `[3ε, 1/2)`… |
+| [`Phase17DiscrepancyBounds.general_single_shape_one_one_max`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L184) [ST-35](results.md#st-35) | Exact single-shape maximum relative length for the primary corner `(1, 1)` of `α(b, p) α(b, q)` for arbitrary real parameters `p, q > 1` and ratio `r = Q / P… |
+| [`Phase17DiscrepancyBounds.general_single_shape_one_one_attained`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L232) [ST-35](results.md#st-35) | Equality in `general_single_shape_one_one_max` is attained at `r = q(p - 1) / (p(q - 1))`. |
+| [`Phase17DiscrepancyBounds.jointUniform_of_established_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L254) [ST-33](results.md#st-33) | If `deg : Fin k → ℕ` lists distinct degrees and every nonzero integer polynomial in `α` whose degree lies in `Set.range deg` is normal in base `b`, then the… |
+| [`Phase17DiscrepancyBounds.jointUniform_of_echelon_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L311) [ST-33](results.md#st-33) | Echelon-basis multidimensional Weyl theorem (Phase 17 Track A, Theorem 8): if `P : Fin k → ℤ[X]` are nonzero integer polynomials with pairwise distinct… |
+| [`Phase17DiscrepancyBounds.carry_knapsack_le`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L375) [CC-49](results.md#cc-49) | Pointwise dual inequality of Track C Theorem 1(a): for any `D`, residue `r`, nonnegative integer carry `c`, and dual weight `lam ≥ 0`, the indicator that the… |
+| [`Phase17DiscrepancyBounds.parity_bonferroni_dual_le`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L432) [CC-49](results.md#cc-49) | Parity Bonferroni dual inequality (Phase 17 Track C, Theorem 4): for every odd `r = 2m + 1` and every nonnegative integer `n`, the truncated binomial… |
+| [`Phase17DiscrepancyBounds.descent31Check_true`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L563) [ST-33](results.md#st-33) | Kernel-checked verification of the 57-vector `(3, 31)` minimized cyclic-descent orbit. |
+| [`Phase17DiscrepancyBounds.descent31_all_words_nonzero`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L579) [ST-33](results.md#st-33) | For every finite binary word `w`, running the minimized `(3, 31)` cyclic-descent automaton from any orbit state stays inside `descent31Orbit` and ends with… |
 
 ### RadixTelescoping
 

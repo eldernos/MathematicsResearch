@@ -5,6 +5,7 @@
 [foundations]
 title = "Normality, discrepancy and Fourier criteria"
 modules = [
+  "Phase17DiscrepancyBounds", "ComputableNormalityUndecidability",
   "JointWeyl", "RectangleFrequency",
   "Basic", "Distribution", "Analysis/Weyl", "FourierTest", "Dilation", "Correlations", "ScaleTransfer",
   "BinaryDiscrepancy", "CircleDiscrepancy", "SharpDiscrepancy", "RationalOrbitCycle", "Concentration",

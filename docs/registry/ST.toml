@@ -797,3 +797,72 @@ lean = [
 proof = ["notes/phase16/mixed-product-precision.md"]
 computation = ["scripts/phase16_mixed_product.py"]
 related = ["ST-14", "ST-25", "ST-26", "ST-27", "ST-29"]
+
+[[result]]
+id = "ST-33"
+title = "Least orbit order, p-adic cyclic descent, degree 128 and sixteen infinite parameter-two families"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+Let *b* ≥ 3 be odd and α = α(*b*, 2). For every degree *d* ≥ 1, the minimum orbit order *F*(*d*) = min {Φ(*c*) : |*c*| = *d*, *K*(*c*) < 2} equals *G*(*d*) = Σ<sub>*k*=1..*d*</sub> ⌊log₂ *k*⌋, attained by exactly two multisets when *d* + 1 is not a power of two and one when it is. Consequently the minimum 2-adic valuation of the leading mass *M*<sub>*d*</sub>(*t*) on [1, 2) is *v*₂(*d*!) + *G*(*d*), attained on the explicit interval *J*<sub>*d*</sub> = [2 − 2<sup>1−*r*</sup>, 2 − 2<sup>−*r*</sup>) of length at least 2<sup>−*r*</sup>, where *M*<sub>*d*</sub> never vanishes.
+
+For every odd prime *p* and *e*, *k* ≥ 1, *p*-adic cyclic descent reduces *M*<sub>*e p*ʳ</sub>(*t*) modulo *p*ᵏ for *r* ≥ max(1, 2*k* − 2) to a twisted mass of degree *e p*<sup>*k*−1</sup> independent of *r*. Exhaustive automaton certificates establish *M*<sub>128</sub> ≠ 0 on [1, 2) (maximal loss 906, minimal loss 776, 345 leaves), global zero sets on (0, ∞) for all 3 ≤ *a* ≤ 64, and nine new first-order good descent pairs (*e*, *p*) ∈ {(3, 65537), (4, 65537), (3, 131071), (4, 131071), (3, 524287), (4, 524287), (5, 524287), (3, 2³¹ − 1), (4, 2³¹ − 1)}. Hence *P*(α) is normal in base *b* for every rational polynomial of degree 3 through 120, degree 128, every odd prime-power degree, and every degree *e p*ʳ across all sixteen good pairs. Linearly independent families of polynomials whose echelon pivot degrees are resolved (or non-resonant degree 2 with no pivot 1) are jointly normal in base *b*.
+'''
+scope = '''
+Lean kernel-verifies the echelon-degree multidimensional Weyl transfer (`jointUniform_of_echelon_degrees`, `jointUniform_of_established_degrees`) and the 57-vector closed-orbit nonvanishing certificate for (3, 31) across all finite binary words (`descent31Check_true`, `descent31_all_words_nonzero`). The least-orbit-order theorem, general Kraft budget formula, top-state closed form, *p*-adic cyclic descent, and degree-128 / 16-family / middle-state certificates are paper deductions and exact integer computations. Nonvanishing of *M*<sub>*d*</sub> for all *d* ≥ 3 remains open.
+'''
+lean = [
+  "NormalityChecker.Phase17DiscrepancyBounds.jointUniform_of_echelon_degrees",
+  "NormalityChecker.Phase17DiscrepancyBounds.jointUniform_of_established_degrees",
+  "NormalityChecker.Phase17DiscrepancyBounds.descent31Check_true",
+  "NormalityChecker.Phase17DiscrepancyBounds.descent31_all_words_nonzero",
+]
+proof = ["notes/phase17/dyadic-stoneham-classification.md"]
+computation = ["scripts/phase17_dyadic_stoneham.py"]
+supersedes = ["ST-31"]
+related = ["ST-12", "ST-13", "ST-23", "ST-30", "ST-31"]
+
+[[result]]
+id = "ST-34"
+title = "Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics"
+topic = "stoneham"
+status = "paper"
+statement = '''
+For *x* = (*A*α² + *B*α + *C*₀)/*D* at parameter *c* = 2 with odd radix *b* ≥ 3 and gcd(*D*, *b*) = 1, the plateau point of *X*² − 2*X* on shell *k* is {−*Z*<sub>*k*</sub> *b*<sup>2<sup>*k*−1</sup></sup> / 2<sup>2*k*−1</sup>}. For *D* = 1 with *H* = liminf<sub>*k*</sub> log₂ *q*<sub>*k*</sub>: if *b* ≡ 1 (mod 4), then limsup *D*<sub>*N*</sub>(*x*) = 2<sup>−2−[*H*−*s*]<sub>+</sub></sup> exactly; for every odd *b*, limsup *D*<sub>*N*</sub>(*x*) = 1/4 if and only if *v*₂(*Z*<sub>*k*</sub>) ≥ 2*k* − 1 − *v*₂(*b* − 1) infinitely often.
+
+For general *D* coprime to *b*, admissible plateau cycles form a computable finite union of CRT classes. In particular, for *D* = 3, *b* ≡ 2 (mod 3), and *C*₀ ≢ 1 (mod 3) in the *X*² − 2*X* family, the exact supremum over admissible cycles yields the unconditional bound
+```math
+\limsup_{N\to\infty} D_N\left(\frac{\alpha^2-2\alpha+C_0}{3}\right) \le \frac{1}{4}\left(1 - \frac{1}{3 \cdot 2^{v_2(b+1)}}\right) < \frac{1}{4}.
+```
+For *b* = 5 and *D* = 9, limsup *D*<sub>*N*</sub>((α² − 2α)/9) ≤ 5/72.
+'''
+scope = '''
+Written deductions building on the kernel-verified Phase 14 plateau law and Phase 16 integer recurrence *Z*<sub>*k*</sub>, verified across 14,336 exact dyadic cycles and direct rational prefixes. Normality of α² − 2α for any specified odd integer radix *b* remains open.
+'''
+proof = ["notes/phase17/dyadic-stoneham-classification.md#part-a2-resonant-quadratics"]
+computation = ["scripts/phase17_dyadic_stoneham.py"]
+related = ["ST-19", "ST-20", "ST-21", "ST-30"]
+
+[[result]]
+id = "ST-35"
+title = "Empirical-mixture cycle discrepancy, zero-slack 4/11 reduction and infinite family of mixed-prime products"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+For a mixed-prime Stoneham product *x* = α(*B*, *p*) α(*B*, *q*) with distinct odd primes *p* < *q* not dividing *B*, the upper discrepancy *D*⁺(*x*) equals max<sub>*w* ∈ 𝒲</sub> Δ(σ(*w*)) over subsequential rational-cycle mixtures σ(*w*) = (1 − Σ *w*<sub>*c*</sub>)λ + Σ *w*<sub>*c*</sub> ν<sub>*c*</sub>. For *x* = α(2, 3) α(2, 5), every nonrectangular 3-adic and 5-adic root ζ<sub>*p*,*a*,*d*</sub> is non-integral (by Eisenstein linear independence), and
+```math
+D^+(\alpha(2,3)\alpha(2,5)) \le \frac{4}{11} \iff \limsup_{N\to\infty}\frac{\#\{n < N : R_n \in \mathbb{Z}\}}{N} \le \frac{4}{11}.
+```
+
+For every pair of distinct odd primes *p* < *q*, infinitely many radices *B* ≥ 2 (explicit residue classes modulo (*pq*)²) satisfy the one-sheet simple-zero hypotheses, yielding exact single-shape maximum *M*<sub>*p*,*q*</sub> = (*p* − 1)(*q* − 1)/(2*pq* − *p* − *q*), logarithmic equidistribution, *D*⁻(*x*) = 0, power-tower spacing between bounded-denominator plateaus, and *O*<sub>ε</sub>(log* *T*) scale sparsity. Exact multi-depth certificates give *D*⁺(α(2, 3) α(2, 7)) ≤ 11250083/30000000, *D*⁺(α(2, 3) α(2, 13)) ≤ 720004991/1860000000, and *D*⁺(α(36, 5) α(36, 7)) ≤ 720004379/1740000000.
+'''
+scope = '''
+Lean kernel-verifies the general single-shape maximum *M*<sub>*p*,*q*</sub> and its attainment (`general_single_shape_one_one_max`, `general_single_shape_one_one_attained`). The empirical-mixture limit theorem, binary cycle discrepancies, Eisenstein non-integrality proof, zero-slack 4/11 equivalence, infinite-radix admissibility theorem, and certified bounds for (2, 3, 7), (2, 3, 13) and (36, 5, 7) are paper deductions and exact rational computations. Ordinary normality of any mixed-prime product remains open.
+'''
+lean = [
+  "NormalityChecker.Phase17DiscrepancyBounds.general_single_shape_one_one_max",
+  "NormalityChecker.Phase17DiscrepancyBounds.general_single_shape_one_one_attained",
+]
+proof = ["notes/phase17/mixed-product-orbits.md"]
+computation = ["scripts/phase17_mixed_product_orbits.py"]
+related = ["ST-14", "ST-27", "ST-29", "ST-32"]
