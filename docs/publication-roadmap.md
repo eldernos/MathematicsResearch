@@ -1,6 +1,6 @@
 # Publication Roadmap (Post-Phase 17)
 
-The [Phase 18 assessment](../notes/phase18/publication.md) proposes a focused paper on synthetic expansions and programmable discrepancy, with a separate treatment of polynomial closure if warranted.
+The [Phase 18 assessment](../notes/phase18/publication.md) proposes a focused paper on synthetic expansions and programmable discrepancy, with a separate treatment of polynomial closure if warranted. The [Legendre extension to π](../notes/phase18/phase17-transfer.md) strengthens the classical-approximants project with all-shift linear windows and explicit odd-denominator bounds.
 
 This roadmap organizes the repository's research into standalone publication candidates following Phase 17. Existing released manuscripts (`papers/01-stoneham-polynomials` through `papers/05-classical-denominators`, release `manuscripts-v1.1.0`) remain immutable archival drafts; the items below guide future revisions and new standalone papers for external mathematical review.
 

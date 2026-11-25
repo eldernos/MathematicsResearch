@@ -86,6 +86,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-12](#sy-12) | A finite circle bound for sparse translations | Lean |  |
 | [SY-13](#sy-13) | Prescribing limits of orbit measures with rational insertions | Written proof |  |
 | [SY-16](#sy-16) ★ | Quantitative convergence on polynomial schedules | Written proof |  |
+| [SY-24](#sy-24) | Sharp translation rates for the multiplicative Lambert families | Written proof |  |
 | [AC-01](#ac-01) ★ | Normality from rational orbit models on most blocks | Lean | IV |
 | [AC-04](#ac-04) | Cancellation in short radix orbits with smooth denominators | Lean | IV |
 | [AC-05](#ac-05) | Exact rational discrepancy certificates for prime-restricted logarithmic series | Lean | IV |
@@ -153,6 +154,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-15](#sy-15) | Finite positive dyadic groups for the logarithm and factorial series | Written proof |  |
 | [SY-21](#sy-21) | Reduced denominator rates for BBP and Bellard prefixes | Written proof |  |
 | [SY-22](#sy-22) | Chebyshev approximations to shifted pi from fixed arctangent identities | Written proof |  |
+| [SY-23](#sy-23) ★ | Linear shadowing windows for shifted pi on odd rational grids | Written proof |  |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -1795,6 +1797,19 @@ For fixed odd p and positive s, the complete-period proof gives exponents s/d an
 - **Computation:** [phase18_principal.py](../scripts/phase18_principal.py)
 - **Related:** [SY-01](#sy-01) · [SY-02](#sy-02)
 
+<a id="sy-24"></a>
+
+### SY-24 · Sharp translation rates for the multiplicative Lambert families
+
+**Evidence:** Written proof
+
+For the Phase 17 binary multiplicative Lambert family of support parameter δ, the worst discrepancy change after translation equals its discrepancy deficit at each positive N. Its asymptotic order is log log N divided by the (1−δ)-th power of log N.
+
+**Scope.** The exponent 1−δ applies to log N alone. The two-sided bounds assume the full multiplicative and support hypotheses of CC-48. The maximum over all translated real numbers is attained at zero.
+
+- **Proof:** [phase17-transfer.md § an exact translation rate for every lambert support density](../notes/phase18/phase17-transfer.md#an-exact-translation-rate-for-every-lambert-support-density)
+- **Related:** [SY-04](#sy-04) · [CC-48](#cc-48)
+
 ## Rational-orbit certificates
 
 <a id="ac-01"></a>
@@ -3084,6 +3099,21 @@ For every positive tolerance on the exponential denominator rate there is a fixe
 
 - **Proof:** [classical.md](../notes/phase18/classical.md) · [classical-sources.md § chebyshev bounds and the other classical targets](../notes/phase18/reviews/classical-sources.md#chebyshev-bounds-and-the-other-classical-targets)
 - **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
+
+<a id="sy-23"></a>
+
+### SY-23 · Linear shadowing windows for shifted pi on odd rational grids
+
+**Evidence:** Written proof
+
+For a fixed finite integer arctangent identity for π whose smallest denominator is a ≥ 2, put ρ = a + √(a² + 1). At every sufficiently large binary shift n there is a rational model computed from the identity alone, with odd reduced denominator q. The upper limit of log(q)/n is at most log(2)/log(ρ), and the lower limit of the number of correct absolute-error bits divided by n is at least 1/log(ρ).
+
+**Scope.** The model uses an even Legendre polynomial and rounds its entire rational integral to an odd least-common-multiple grid. These are accuracy and denominator bounds for one model throughout each window. Distribution of the grid numerators remains open.
+
+- **Proof:** [phase17-transfer.md § linear windows for pi](../notes/phase18/phase17-transfer.md#linear-windows-for-pi)
+- **External inputs:** Laplace’s integral representation and Legendre orthogonality (DLMF 18.10.5 and Table 18.3.1), and the prime number theorem.
+- **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
+- **Related:** [SY-22](#sy-22) · [CC-50](#cc-50)
 
 ## Counterexamples and impossibility results
 
