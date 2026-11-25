@@ -109,7 +109,8 @@ theorem delta_error_le {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) (j : ℕ) :
   rw [norm_sub_rev, slope_sub b j hb odd]
   exact tail_bound (sq_nonneg _) (fun i => (step_norm hb odd i).le) j
 
-private lemma correction_summable {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) :
+/-- Convergence of the series defining the intercept. -/
+theorem correction_summable {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) :
     Summable fun j => delta b j - slope b :=
   Summable.of_norm_bounded
     ((summable_geometric_of_lt_one (by norm_num : 0 ≤ (1/2 : ℝ)) (by norm_num)).mul_right _)
@@ -141,6 +142,22 @@ theorem slope_valuation {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) :
   have pow : (2 : ℝ)^(-(slope b).valuation) = 2^((1 : ℤ)-padicValInt 2 ((b : ℤ)^2-1)) := by
     rw [sub_eq_add_neg, zpow_add₀ (by norm_num), zpow_one]; exact e
   rw [zpow_right_inj₀ (by norm_num) (by norm_num)] at pow
+  omega
+
+theorem two_le_slope_valuation {b : ℕ} (hb : 3 ≤ b) (odd : Odd b) :
+    2 ≤ (slope b).valuation := by
+  rw [slope_valuation hb odd]
+  have hdiv : (2 : ℤ)^3 ∣ (b : ℤ)^2-1 := by
+    obtain ⟨r, hr⟩ := odd
+    rcases Nat.even_or_odd r with ⟨t, ht⟩ | ⟨t, ht⟩
+    · refine ⟨2*(t : ℤ)^2+t, ?_⟩
+      rw [hr, ht]; push_cast; ring
+    · refine ⟨2*(t : ℤ)^2+3*t+1, ?_⟩
+      rw [hr, ht]; push_cast; ring
+  have hn : (b : ℤ)^2-1 ≠ 0 := by
+    have h : (3 : ℤ) ≤ b := by exact_mod_cast hb
+    nlinarith
+  have h := ((padicValInt_dvd_iff (p:=2) 3 _).mp hdiv).resolve_left hn
   omega
 
 private lemma bound_strict {b : ℕ} (hb : 3 ≤ b) (j : ℕ) :
