@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1230 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1332 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 217 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 319 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -17,6 +17,77 @@ Declaration counts describe the size of the library, not the mathematical signif
 - [Classical constant arithmetic](#classical-constant-arithmetic) · 251 declarations
 
 ## Normality, discrepancy and Fourier criteria
+
+### AdditionSpectrum
+
+[`NormalityChecker/AdditionSpectrum.lean`](../NormalityChecker/AdditionSpectrum.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AdditionSpectrum.mem_polytope`](../NormalityChecker/AdditionSpectrum.lean#L67) |  |
+| [`AdditionSpectrum.mem_polytope_iff`](../NormalityChecker/AdditionSpectrum.lean#L71) | The form `max(0, α+β-1) ≤ γ ≤ 1-\|α-β\|`. |
+| [`AdditionSpectrum.polytope_le_one`](../NormalityChecker/AdditionSpectrum.lean#L85) |  |
+| [`AdditionSpectrum.isClosed_polytope`](../NormalityChecker/AdditionSpectrum.lean#L90) |  |
+| [`AdditionSpectrum.convex_polytope`](../NormalityChecker/AdditionSpectrum.lean#L99) |  |
+| [`AdditionSpectrum.fiveWeights_nonneg`](../NormalityChecker/AdditionSpectrum.lean#L124) |  |
+| [`AdditionSpectrum.sum_fiveWeights`](../NormalityChecker/AdditionSpectrum.lean#L135) |  |
+| [`AdditionSpectrum.sum_fiveWeights_smul`](../NormalityChecker/AdditionSpectrum.lean#L141) | The weights reproduce the triple. |
+| [`AdditionSpectrum.fiveVertex_mem`](../NormalityChecker/AdditionSpectrum.lean#L147) |  |
+| [`AdditionSpectrum.polytope_eq_convexHull`](../NormalityChecker/AdditionSpectrum.lean#L150) |  |
+| [`AdditionSpectrum.fiveVertex_extreme`](../NormalityChecker/AdditionSpectrum.lean#L174) |  |
+| [`AdditionSpectrum.extreme_mem_fiveVertex`](../NormalityChecker/AdditionSpectrum.lean#L195) | Every extreme point of the polytope is one of the five vertices. |
+| [`AdditionSpectrum.isExtremeIn_polytope_iff`](../NormalityChecker/AdditionSpectrum.lean#L240) | **The exact five-vertex polytope.** Its extreme points are exactly the five vertices. |
+| [`AdditionSpectrum.finite_necessity`](../NormalityChecker/AdditionSpectrum.lean#L248) [OP-01](results.md#op-01) | **Finite necessity.** At every cutoff the discrepancy triple of `x`, `y`, `x+y` lies in the polytope. |
+| [`AdditionSpectrum.finite_necessity'`](../NormalityChecker/AdditionSpectrum.lean#L260) | The finite statement in the form `max(0, α+β-1) ≤ γ ≤ 1-\|α-β\|`. |
+| [`AdditionSpectrum.clusterPt_necessity`](../NormalityChecker/AdditionSpectrum.lean#L267) | Every joint cluster point of the discrepancy triples lies in the polytope. |
+| [`AdditionSpectrum.limit_necessity`](../NormalityChecker/AdditionSpectrum.lean#L275) | **Limiting necessity.** |
+| [`AdditionSpectrum.addSpectrum_subset_polytope`](../NormalityChecker/AdditionSpectrum.lean#L292) |  |
+| [`AdditionSpectrum.mixtureValue_x`](../NormalityChecker/AdditionSpectrum.lean#L311) |  |
+| [`AdditionSpectrum.mixtureValue_y`](../NormalityChecker/AdditionSpectrum.lean#L314) |  |
+| [`AdditionSpectrum.mixtureValue_xy`](../NormalityChecker/AdditionSpectrum.lean#L317) |  |
+| [`AdditionSpectrum.polytope_subset_addSpectrum_of_realizable`](../NormalityChecker/AdditionSpectrum.lean#L322) | **Realization reduction.** If the five-type mixtures with the weights `fiveWeights` are realizable, the polytope lies in the addition spectrum. |
+| [`AdditionSpectrum.sampleDisc_compare`](../NormalityChecker/AdditionSpectrum.lean#L354) | **Finite comparison.** Paired samples `q n ≡ p n + r n (mod 1)` have discrepancies within `E/N + 2ε`, where `E` counts the positions with `\|r n\| ≥ ε`. |
+| [`AdditionSpectrum.sampleDisc_mixture`](../NormalityChecker/AdditionSpectrum.lean#L390) | **Mixture of a retired and an active part.** If the retired positions carry the model value `0` and the active positions have interval counting error at most… |
+| [`AdditionSpectrum.segStart_zero`](../NormalityChecker/AdditionSpectrum.lean#L461) |  |
+| [`AdditionSpectrum.segStart_succ`](../NormalityChecker/AdditionSpectrum.lean#L463) |  |
+| [`AdditionSpectrum.segStart_mono`](../NormalityChecker/AdditionSpectrum.lean#L473) |  |
+| [`AdditionSpectrum.segStart_strictMono`](../NormalityChecker/AdditionSpectrum.lean#L476) |  |
+| [`AdditionSpectrum.locate_spec`](../NormalityChecker/AdditionSpectrum.lean#L479) |  |
+| [`AdditionSpectrum.locate_eq`](../NormalityChecker/AdditionSpectrum.lean#L493) |  |
+| [`AdditionSpectrum.sum_Ico_segStart`](../NormalityChecker/AdditionSpectrum.lean#L503) |  |
+| [`AdditionSpectrum.block_cesaro`](../NormalityChecker/AdditionSpectrum.lean#L542) | **Block Cesàro lemma.** Suppose consecutive blocks `[S k, S (k+1))` have lengths negligible against their starts, and that a family of functions bounded by… |
+| [`AdditionSpectrum.coef_mem`](../NormalityChecker/AdditionSpectrum.lean#L631) |  |
+| [`AdditionSpectrum.coef_term_summable`](../NormalityChecker/AdditionSpectrum.lean#L643) |  |
+| [`AdditionSpectrum.prefix_state`](../NormalityChecker/AdditionSpectrum.lean#L656) | Prefix sums hit the programmed states modulo one. |
+| [`AdditionSpectrum.programmed_split`](../NormalityChecker/AdditionSpectrum.lean#L680) |  |
+| [`AdditionSpectrum.tailAfter_bound`](../NormalityChecker/AdditionSpectrum.lean#L686) | The real tail after segment `σ` is at most `b/(b-1) · b^(-s (σ+1))`. |
+| [`AdditionSpectrum.form_pairing`](../NormalityChecker/AdditionSpectrum.lean#L714) | **Pairing for integer forms.** Inside segment `σ`, the radix shift of an integer form of programmed numbers is the shifted form of the states plus an integer… |
+| [`AdditionSpectrum.segment_count`](../NormalityChecker/AdditionSpectrum.lean#L767) | **Segment count.** A segment of `M p^ρ` periods of the orbit of `A / p^(v+g)`, where `A = p^ρ a'` with `a'` a unit and `ρ ≤ g`, has interval counting error at… |
+| [`AdditionSpectrum.segLen_pos`](../NormalityChecker/AdditionSpectrum.lean#L876) |  |
+| [`AdditionSpectrum.div_block`](../NormalityChecker/AdditionSpectrum.lean#L881) |  |
+| [`AdditionSpectrum.fin_block`](../NormalityChecker/AdditionSpectrum.lean#L884) |  |
+| [`AdditionSpectrum.segLen_block`](../NormalityChecker/AdditionSpectrum.lean#L889) |  |
+| [`AdditionSpectrum.blockStart_zero`](../NormalityChecker/AdditionSpectrum.lean#L893) |  |
+| [`AdditionSpectrum.blockStart_strictMono`](../NormalityChecker/AdditionSpectrum.lean#L896) |  |
+| [`AdditionSpectrum.blockStart_sum`](../NormalityChecker/AdditionSpectrum.lean#L901) | Block sums split into the `r` typed segments. |
+| [`AdditionSpectrum.blockStart_len`](../NormalityChecker/AdditionSpectrum.lean#L911) |  |
+| [`AdditionSpectrum.locate_block`](../NormalityChecker/AdditionSpectrum.lean#L921) | The block containing a position of segment `r k + i`. |
+| [`AdditionSpectrum.mult_sum_bounds`](../NormalityChecker/AdditionSpectrum.lean#L929) |  |
+| [`AdditionSpectrum.gexp_bounds`](../NormalityChecker/AdditionSpectrum.lean#L950) |  |
+| [`AdditionSpectrum.blockStart_ratio`](../NormalityChecker/AdditionSpectrum.lean#L972) | Block lengths are negligible against block starts. |
+| [`AdditionSpectrum.mixtureValue_mem`](../NormalityChecker/AdditionSpectrum.lean#L1032) |  |
+| [`AdditionSpectrum.mult_balance`](../NormalityChecker/AdditionSpectrum.lean#L1040) |  |
+| [`AdditionSpectrum.mix_pairing`](../NormalityChecker/AdditionSpectrum.lean#L1090) | The true radix samples of an integer form of the realizing reals are the model samples plus the shifted tails, modulo one. |
+| [`AdditionSpectrum.mixTail_bound`](../NormalityChecker/AdditionSpectrum.lean#L1127) | The shifted tail at position `n` is at most `C b/(b-1) b^(-(distance to the segment end)))` with `C = ∑ \|cf j\|`. |
+| [`AdditionSpectrum.mixModel_block`](../NormalityChecker/AdditionSpectrum.lean#L1156) |  |
+| [`AdditionSpectrum.mixPoint_tendsto`](../NormalityChecker/AdditionSpectrum.lean#L1171) | **Mixture realization.** Given the arithmetic period count, for every weighted family of integer type vectors the reals `mixPoint` have, for **every** integer… |
+| [`AdditionSpectrum.mixtureRealizable_of_periodCount`](../NormalityChecker/AdditionSpectrum.lean#L1430) | **Unconditional form, given a prime.** |
+| [`AdditionSpectrum.addSpectrum_eq_of_periodCount`](../NormalityChecker/AdditionSpectrum.lean#L1441) | **The exact addition spectrum, given the arithmetic period count.** |
+| [`AdditionSpectrum.periodCount_holds`](../NormalityChecker/AdditionSpectrum.lean#L1451) | The arithmetic interface holds: it is `PrimePowerGrid.primePower_period_count`. |
+| [`AdditionSpectrum.exists_period_prime`](../NormalityChecker/AdditionSpectrum.lean#L1457) | Every radix `b ≥ 2` has an odd prime `p ∤ b` with `p ∣ b^(p-1) - 1`. |
+| [`AdditionSpectrum.mixtureRealizable`](../NormalityChecker/AdditionSpectrum.lean#L1470) [OP-01](results.md#op-01) | **Realization of rank-one rational mixtures.** In every radix `b ≥ 2`, for all integer type vectors `m i ∈ ℤ^d` and convex weights `w`, there are reals `x₁,… |
+| [`AdditionSpectrum.addSpectrum_eq`](../NormalityChecker/AdditionSpectrum.lean#L1480) [OP-01](results.md#op-01) | **The exact addition spectrum.** In every radix `b ≥ 2` the triples of limiting discrepancies of `x`, `y`, `x+y` form exactly the polytope `max(0, α+β-1) ≤ γ… |
+| [`AdditionSpectrum.exact_addition_spectrum`](../NormalityChecker/AdditionSpectrum.lean#L1486) [OP-01](results.md#op-01) | **The exact three-variable theorem**, in coordinates. |
 
 ### Analysis/Weyl
 
@@ -163,6 +234,43 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`shifted_character_correlation`](../NormalityChecker/Dilation.lean#L102) | A correlation on the exact radix orbit is a single Fourier character. |
 | [`normal_of_dilated_fourier`](../NormalityChecker/Dilation.lean#L114) | To test base-b normality one may test all nonzero frequencies after a fixed positive integer dilation. |
 | [`binary_normal_of_dilated_fourier`](../NormalityChecker/Dilation.lean#L139) |  |
+
+### DiscrepancyGeometry
+
+[`NormalityChecker/DiscrepancyGeometry.lean`](../NormalityChecker/DiscrepancyGeometry.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`DiscrepancyGeometry.discDist_nonneg`](../NormalityChecker/DiscrepancyGeometry.lean#L39) |  |
+| [`DiscrepancyGeometry.discDist_le_one`](../NormalityChecker/DiscrepancyGeometry.lean#L45) |  |
+| [`DiscrepancyGeometry.discDist_self`](../NormalityChecker/DiscrepancyGeometry.lean#L51) |  |
+| [`DiscrepancyGeometry.discDist_translate`](../NormalityChecker/DiscrepancyGeometry.lean#L55) | Translation invariance. |
+| [`DiscrepancyGeometry.discDist_comm`](../NormalityChecker/DiscrepancyGeometry.lean#L68) |  |
+| [`DiscrepancyGeometry.discDist_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L78) [OP-05](results.md#op-05) | **Triangle inequality.** |
+| [`DiscrepancyGeometry.discDist_isGreatest`](../NormalityChecker/DiscrepancyGeometry.lean#L87) | `d_N(x,y)` is the largest change of `D_N` under translation by `x - y`, over all origins. |
+| [`DiscrepancyGeometry.radixDiscrepancy_lipschitz`](../NormalityChecker/DiscrepancyGeometry.lean#L93) | `D_N` is 1-Lipschitz for the discrepancy distance. |
+| [`DiscrepancyGeometry.shift_mem`](../NormalityChecker/DiscrepancyGeometry.lean#L98) |  |
+| [`DiscrepancyGeometry.shift_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L102) | The radix shifts are `ℤ`-periodic in the starting point. |
+| [`DiscrepancyGeometry.radixDiscrepancy_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L108) |  |
+| [`DiscrepancyGeometry.discDist_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L115) |  |
+| [`DiscrepancyGeometry.sampleDisc_le_one_sub`](../NormalityChecker/DiscrepancyGeometry.lean#L169) | If the first two samples are distinct points of `[0,1)`, the discrepancy stays a definite distance below one. |
+| [`DiscrepancyGeometry.sampleDisc_eq_one_of_const`](../NormalityChecker/DiscrepancyGeometry.lean#L217) | A constant sample of `[0,1)` has discrepancy one. |
+| [`DiscrepancyGeometry.discDist_eq_zero_iff`](../NormalityChecker/DiscrepancyGeometry.lean#L243) [OP-05](results.md#op-05) | **Zero set at finite cutoff.** For `N ≥ 2` the discrepancy distance vanishes exactly on the pairs for which `(b - 1)(x - y)` is an integer. |
+| [`DiscrepancyGeometry.discDist_pos_bound`](../NormalityChecker/DiscrepancyGeometry.lean#L293) | Quantitative form of the zero set: if the first two shifts of `x - y` differ, then `d_N(x,y) ≥ min (min g (1 - g)) (1/N)`, where `g` is the gap between them. |
+| [`DiscrepancyGeometry.natMul_le_of_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L306) | Any translation-invariant function satisfying the triangle inequality and `d x x = 0` is `m`-Lipschitz for multiplication by a natural number `m`. |
+| [`DiscrepancyGeometry.intMul_le_of_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L325) | Integer version of `natMul_le_of_triangle`, for symmetric `d` with `d (-x) (-y) = d x y` reflected through symmetry. |
+| [`DiscrepancyGeometry.discDist_natMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L340) | Multiplication by a natural number `m` is `m`-Lipschitz. |
+| [`DiscrepancyGeometry.discDist_intMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L346) | **Integer multipliers are Lipschitz:** `d_N(m x, m y) ≤ \|m\| d_N(x,y)`. |
+| [`DiscrepancyGeometry.asymDist_nonneg`](../NormalityChecker/DiscrepancyGeometry.lean#L368) |  |
+| [`DiscrepancyGeometry.asymDist_le_one`](../NormalityChecker/DiscrepancyGeometry.lean#L372) |  |
+| [`DiscrepancyGeometry.asymDist_self`](../NormalityChecker/DiscrepancyGeometry.lean#L375) |  |
+| [`DiscrepancyGeometry.asymDist_comm`](../NormalityChecker/DiscrepancyGeometry.lean#L378) |  |
+| [`DiscrepancyGeometry.asymDist_translate`](../NormalityChecker/DiscrepancyGeometry.lean#L381) |  |
+| [`DiscrepancyGeometry.asymDist_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L385) |  |
+| [`DiscrepancyGeometry.asymDist_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L390) [OP-05](results.md#op-05) | **Triangle inequality for the asymptotic distance.** |
+| [`DiscrepancyGeometry.asymDist_eq_zero_of_int`](../NormalityChecker/DiscrepancyGeometry.lean#L401) | If `(b-1)(x-y)` is an integer, the asymptotic distance vanishes. |
+| [`DiscrepancyGeometry.asymDist_eq_one_of_tendsto`](../NormalityChecker/DiscrepancyGeometry.lean#L411) | If `D_N(x - y) → 0` (for instance when `x - y` is simply normal to base `b` in the discrepancy sense), the asymptotic distance attains its maximum value one. |
+| [`DiscrepancyGeometry.asymDist_intMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L419) [OP-05](results.md#op-05) | **Integer multipliers are Lipschitz for the asymptotic distance.** |
 
 ### Distribution
 
@@ -317,6 +425,18 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`hasSum_positive_rational_multiples`](../NormalityChecker/PositiveSummation.lean#L15) [SY-07](results.md#sy-07) | Positive rational multiples of any prescribed positive generators can sum to any prescribed positive real. |
 
+### PrimePowerGrid
+
+[`NormalityChecker/PrimePowerGrid.lean`](../NormalityChecker/PrimePowerGrid.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`PrimePowerGrid.grid_count`](../NormalityChecker/PrimePowerGrid.lean#L38) | **Rotated grid count.** For any rotation `s`, the number of the `G` points `fract (s + j / G)` in `[a, c)` differs from `G (c - a)` by at most one. |
+| [`PrimePowerGrid.primePower_periodic`](../NormalityChecker/PrimePowerGrid.lean#L156) | **Periodicity.** The prime-power Stoneham sample repeats after `t p^g` steps, for every integer numerator. |
+| [`PrimePowerGrid.stride_grid_count`](../NormalityChecker/PrimePowerGrid.lean#L179) | **Generic stride grid count.** Let `q = d G` with `1 < d`, suppose `b^t ≡ 1 (mod d)` and `b^t` has order exactly `G` modulo `q`, and let `b` and the numerator… |
+| [`PrimePowerGrid.primePower_period_count`](../NormalityChecker/PrimePowerGrid.lean#L313) | **Prime-power period count.** Over one full period `n < t p^g`, the number of samples `fract (bⁿ a' / p^(e+g))` in `[a, c)` differs from `t p^g (c - a)` by at… |
+| [`PrimePowerGrid.crt_period_count`](../NormalityChecker/PrimePowerGrid.lean#L337) [OP-08](results.md#op-08) | **CRT period count.** Let `q = p^(e+g) Q` with `Q` prime to `p` and `Q ∣ b^t - 1`, where `e` is the exact `p`-adic valuation of `b^t - 1`. |
+
 ### RadixTelescoping
 
 [`NormalityChecker/RadixTelescoping.lean`](../NormalityChecker/RadixTelescoping.lean)
@@ -409,6 +529,16 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
 | [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
 | [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
+
+### SurvivingGrid
+
+[`NormalityChecker/SurvivingGrid.lean`](../NormalityChecker/SurvivingGrid.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`SurvivingGrid.return_iff`](../NormalityChecker/SurvivingGrid.lean#L13) [OP-08](results.md#op-08) | The exact return times for a stride `g` which fixes the complementary modulus and is one modulo the distinguished odd prime. |
+| [`SurvivingGrid.stride_order`](../NormalityChecker/SurvivingGrid.lean#L43) [OP-08](results.md#op-08) | Multiplicative order, hence the exact number of grid points, at any depth. |
+| [`SurvivingGrid.visits_every_lift`](../NormalityChecker/SurvivingGrid.lean#L56) [OP-08](results.md#op-08) | If the return period equals the number of lifts of a fixed residue, every lift is visited. |
 
 ## Stoneham polynomial images and products
 

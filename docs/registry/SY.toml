@@ -207,7 +207,7 @@ title = "A certified upper discrepancy for the binary cubic example squared"
 topic = "coverage"
 status = "paper"
 statement = "For the square of the binary example with p = 3, s = 1 and d = 3, the upper extreme discrepancy is at most 14035285166320179631 / 47872170047321719707829651794, below 2.94 times 10 to the power −10."
-scope = "A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. The normality of the square is open."
+scope = "A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. This was the quantitative Phase 18 bound. OP-14 subsequently proves normality by a null-level argument."
 proof = ["notes/phase18/algebra.md#refining-the-failed-cells-at-smaller-orders"]
 computation = ["scripts/phase18_principal.py", "scripts/phase18_review_algebra.py"]
 related = ["SY-16","SY-17"]
