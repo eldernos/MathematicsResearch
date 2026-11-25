@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import pathlib
 import re
 import shutil
@@ -72,7 +73,7 @@ window.addEventListener('load', () => setTimeout(finish, 50));
 def render_gfm(markdown: str) -> str:
     req = json.dumps({"text": markdown, "mode": "gfm", "context": REPO})
     out = subprocess.run(["gh", "api", "-X", "POST", "/markdown", "--input", "-"], input=req,
-                         capture_output=True, text=True, check=True)
+                         capture_output=True, text=True, encoding="utf-8", check=True)
     return out.stdout
 
 
@@ -117,9 +118,12 @@ math-renderer.js-display-math{{display:block;overflow-x:auto}}</style>
 
 
 def chrome():
-    exe = shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chromium-browser")
+    exe = (os.environ.get("CHROME") or shutil.which("google-chrome") or shutil.which("chromium")
+           or shutil.which("chromium-browser") or shutil.which("chrome")
+           or next((c for c in ("C:/Program Files/Google/Chrome/Application/chrome.exe",
+                                "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe") if pathlib.Path(c).exists()), None))
     if not exe:
-        raise SystemExit("needs google-chrome or chromium")
+        raise SystemExit("needs google-chrome or chromium (or set CHROME to its path)")
     return exe
 
 
@@ -128,7 +132,7 @@ def run_page(html_file: pathlib.Path, width: int, shot: pathlib.Path, profile: s
     # <pre lang="mermaid"> block, which mermaid.run() can process directly.
     cmd = [chrome(), "--headless=new", "--disable-gpu", f"--user-data-dir={profile}", "--hide-scrollbars",
            f"--window-size={width},2000", "--virtual-time-budget=20000", "--run-all-compositor-stages-before-draw"]
-    dom = subprocess.run(cmd + ["--dump-dom", html_file.as_uri()], capture_output=True, text=True, timeout=180).stdout
+    dom = subprocess.run(cmd + ["--dump-dom", html_file.as_uri()], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180).stdout
     m = re.search(r"<title>DONE (.*?)</title>", dom, flags=re.S)
     report = json.loads(html.unescape(m.group(1))) if m else {"done": False}
     subprocess.run(cmd + [f"--screenshot={shot}", html_file.as_uri()], capture_output=True, timeout=180)
@@ -145,7 +149,7 @@ def main(argv):
     with tempfile.TemporaryDirectory() as profile:
         for name in argv[1:]:
             page = (ROOT / name).resolve()
-            md = page.read_text()
+            md = page.read_text(encoding="utf-8")
             raw = render_gfm(md)
             # GitHub serves Mermaid as <pre lang="mermaid"><code>; give mermaid.js its plain text
             raw = re.sub(r'<pre lang="mermaid"[^>]*><code>(.*?)</code></pre>',
@@ -153,7 +157,7 @@ def main(argv):
             stem = name.replace("/", "_").removesuffix(".md")
             for theme in ("light", "dark"):
                 f = out / f"{stem}-{theme}.html"
-                f.write_text(page_html(localize(raw, page, theme), theme))
+                f.write_text(page_html(localize(raw, page, theme), theme), encoding="utf-8")
                 for width in (1280, 390):
                     rep = run_page(f, width, out / f"{stem}-{theme}-{width}.png", profile)
                     bad = {k: v for k, v in rep.items()

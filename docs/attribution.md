@@ -4,7 +4,9 @@
 
 The research is AI-assisted. The repository owner directed the project, chose its questions and decided what to publish. Large language models, used both as conversational assistants and as autonomous coding agents, proposed conjectures and proof strategies, wrote the human-readable proofs, the Lean formalizations, the exact-arithmetic scripts and this documentation, and compared the results with the literature. Every Lean proof was checked by the Lean kernel; the written proofs and literature comparisons were produced in the same process and have not been reviewed by mathematicians outside the project. The research conversation that guided the early phases is [shared publicly](https://chatgpt.com/share/6b04aebe-d930-83e9-9175-772054b7d221), and the [commit history](https://github.com/eldernos/MathematicsResearch/commits/main) records every step.
 
-The project has no institutional affiliation and no external endorsement. The manuscripts in [papers/](../papers/README.md) are drafts; none has been peer reviewed or accepted.
+Models from several providers also reviewed drafts and proofs against one another. That cross-model review found errors that were corrected, but it is not independent human peer review, and human specialist review is outstanding. [Research process](../README.md#how-the-research-was-done)
+
+The author of the release candidate manuscripts is Christopher Anderson, Independent Researcher. The project has no institutional affiliation and no external endorsement. The only contact route is the [issue tracker](https://github.com/eldernos/MathematicsResearch/issues); no email address, ORCID or other affiliation is published. The manuscripts in [papers/](../papers/README.md) are drafts; none has been peer reviewed or accepted.
 
 ## What Lean verification establishes
 
@@ -19,6 +21,24 @@ Verification does **not** establish:
 
 ## How to cite
 
+### Release candidate `manuscripts-v2.0.0`
+
+Cite a manuscript by author, title, version and release tag. The author of the v2 manuscripts is Christopher Anderson, Independent Researcher. The release is a **candidate** until the owner publishes the tag, and no DOI has been issued. A BibTeX entry for every current manuscript is in [papers/BIBLIOGRAPHY.bib](../papers/BIBLIOGRAPHY.bib), and the repository itself is described by [CITATION.cff](../CITATION.cff), which GitHub shows under "Cite this repository". Paper III is retained at version 1.1 in this release. The manuscripts are preprint drafts and have not been peer reviewed.
+
+```bibtex
+@unpublished{anderson-stoneham-polynomials-v2,
+  author = {Anderson, Christopher},
+  title  = {Polynomial Images of Stoneham Numbers},
+  year   = {2026},
+  note   = {Version 2.0, preprint draft in release candidate manuscripts-v2.0.0. Not peer reviewed.},
+  url    = {https://github.com/eldernos/MathematicsResearch/tree/main/papers/01-stoneham-polynomials-v2}
+}
+```
+
+For a formal result, give its identifier, the Lean declaration and the proof commit; `python3 scripts/portal.py link <ID> --commit <sha>` prints the permanent links. The v2 manuscripts pin their Lean links to research-checkpoint-18 (`e4809cf561573aef588e6ffc491a35cdb79fd9ec`). The [research site](site.md) shows the same BibTeX on each manuscript page. Once a DOI is issued, cite the version DOI ([papers/ARCHIVING.md](../papers/ARCHIVING.md)).
+
+### Earlier releases (history)
+
 For a manuscript, cite its title, the release tag `manuscripts-v1.1.0` and the version DOI when available. The release manifest identifies the associated commit and PDF checksum. For a formal result, give its proof commit, result identifier and Lean declaration. The following example cites the Checkpoint 11 polynomial theorem. [Manuscript release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.1.0)
 
 ```bibtex
@@ -30,7 +50,7 @@ For a manuscript, cite its title, the release tag `manuscripts-v1.1.0` and the v
 }
 ```
 
-Replace the commit, identifier and declaration as needed; `python3 scripts/portal.py link <ID> --commit <sha>` prints the permanent links. Use the creator names from the owner-approved archival record when it becomes available. Manuscript releases, DOIs and the recommended form of citation for each paper are described in [papers/ARCHIVING.md](../papers/ARCHIVING.md); once a DOI is issued, cite the version DOI.
+Replace the commit, identifier and declaration as needed; `python3 scripts/portal.py link <ID> --commit <sha>` prints the permanent links. The v1.0.0 and v1.1.0 archives carry no author line. Manuscript releases, DOIs and the recommended form of citation for each paper are described in [papers/ARCHIVING.md](../papers/ARCHIVING.md); once a DOI is issued, cite the version DOI.
 
 ## License
 

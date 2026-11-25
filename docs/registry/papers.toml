@@ -1,10 +1,29 @@
-# Manuscript index used for the README table and docs/results.md.
+# Manuscript index used for the README table, docs/results.md and the research site.
 # The canonical publication status is papers/README.md. Keep `status` in step with it.
 # Allowed status values: planned, draft, internally reviewed, external review, published.
 # None of these manuscripts has been peer reviewed or accepted.
+#
+# Keys of a [[paper]] table (see also docs/registry/SCHEMA.md):
+#   number      Roman numeral of the manuscript; a revision keeps the number of the paper it replaces.
+#   version     Manuscript version, for example "1.1" or "2.0".
+#   release     Release tag that carries this exact manuscript text.
+#   tags        Every release tag that contains this directory (version history, newest last).
+#   supersedes  Directory of the earlier version that this entry replaces ("" if none). The earlier
+#               entry stays below as the historical record and its files are never edited.
+#   families    Registry prefixes mapped to this manuscript (docs/results.md "Paper" column).
+#   principal   Results shown in the README table.
+#   results     Optional extra registry identifiers that map to this manuscript regardless of family.
+#   abstract    Abstract of a released manuscript. For a manuscript with a metadata.toml the
+#               abstract and keywords are read from that file instead and `summary` is ignored.
+#   keywords, msc_primary, msc_secondary   Classification of a released manuscript that has no metadata.toml.
+#   summary     One-sentence description used only until the manuscript's metadata.toml exists.
+# Entries for papers/*-v2 and the new papers 06 to 09 are candidates for release manuscripts-v2.0.0.
 
 [[paper]]
 number = "I"
+version = "1.1"
+release = "manuscripts-v1.1.0"
+tags = ["manuscripts-v1.0.0", "manuscripts-v1.1.0"]
 dir = "papers/01-stoneham-polynomials"
 title = "Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter"
 families = ["ST"]
@@ -16,6 +35,9 @@ For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconst
 
 [[paper]]
 number = "II"
+version = "1.1"
+release = "manuscripts-v1.1.0"
+tags = ["manuscripts-v1.0.0", "manuscripts-v1.1.0"]
 dir = "papers/02-localized-normality"
 title = "Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports"
 families = ["LS", "MW"]
@@ -27,6 +49,14 @@ Restrict the series for a polylogarithm of positive integer order to the integer
 
 [[paper]]
 number = "III"
+version = "1.1"
+release = "manuscripts-v1.1.0"
+# Retained unchanged in the candidate release manuscripts-v2.0.0.
+tags = ["manuscripts-v1.0.0", "manuscripts-v1.1.0", "manuscripts-v2.0.0"]
+# The archived directory has no metadata.toml and is never edited, so its classification is recorded here.
+keywords = ["normal numbers", "Stoneham numbers", "discrepancy", "cyclotomic resonance", "signed expansions"]
+msc_primary = "11K16"
+msc_secondary = ["11K38", "11A63"]
 dir = "papers/03-signed-resonance"
 title = "Resonance and Discrepancy in Signed Stoneham Expansions"
 families = ["CR", "DS"]
@@ -38,6 +68,9 @@ A cyclotomic test decides normality of finite rational combinations of Stoneham-
 
 [[paper]]
 number = "IV"
+version = "1.1"
+release = "manuscripts-v1.1.0"
+tags = ["manuscripts-v1.0.0", "manuscripts-v1.1.0"]
 dir = "papers/04-arithmetic-certificates"
 title = "Arithmetic Certificates for Normality and Their Limitations"
 families = ["AC"]
@@ -49,6 +82,9 @@ Normality follows when most blocks of a radix orbit are approximated in mean by 
 
 [[paper]]
 number = "V"
+version = "1.1"
+release = "manuscripts-v1.1.0"
+tags = ["manuscripts-v1.0.0", "manuscripts-v1.1.0"]
 dir = "papers/05-classical-denominators"
 title = "Reduced Denominators of Binary Logarithm and Arctangent Series"
 families = ["CC"]
@@ -57,3 +93,113 @@ status = "internally reviewed"
 abstract = '''
 A finite dyadic identity for ln 2 has shifted binary prefixes whose reduced denominators grow at exponential rate one half, and this rate is optimal among finite dyadic logarithm identities, using Bang's primitive-divisor theorem. The paper studies corrected rational models, numerator residues, prime-power sieves, and analogous questions for π, *e* and rational arctangents. It does not establish normality, or an asymptotic discrepancy bound below one, for any of these constants.
 '''
+
+# ---------------------------------------------------------------------------
+# Candidate release manuscripts-v2.0.0. Paper III is retained at version 1.1.
+
+[[paper]]
+number = "I"
+version = "2.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/01-stoneham-polynomials-v2"
+supersedes = "papers/01-stoneham-polynomials"
+title = "Polynomial Images of Stoneham Numbers"
+families = ["ST"]
+principal = ["ST-11", "ST-01", "ST-02", "ST-03"]
+status = "draft"
+summary = "Revision of Paper I. Every nonconstant rational polynomial in the Stoneham number with coprime parameters b and c > 2 is normal in base b, and distinct positive powers are jointly uniformly distributed."
+
+[[paper]]
+number = "II"
+version = "2.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/02-localized-normality-v2"
+supersedes = "papers/02-localized-normality"
+title = "Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports"
+families = ["LS", "MW"]
+principal = ["LS-01", "MW-01", "LS-02", "LS-03"]
+status = "draft"
+summary = "Revision of Paper II. Zero-or-one discrepancy classification of localized polylogarithms on a finite prime support, and the classification for rational polynomial weights."
+
+[[paper]]
+number = "IV"
+version = "2.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/04-arithmetic-certificates-v2"
+supersedes = "papers/04-arithmetic-certificates"
+title = "Arithmetic Certificates for Normality and Their Limitations"
+families = ["AC"]
+principal = ["AC-01", "AC-02", "AC-03"]
+status = "draft"
+summary = "Revision of Paper IV. Rational-orbit certificates for normality, partial coverage, overlapping certificates and the limits of smooth rational models."
+
+[[paper]]
+number = "V"
+version = "2.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/05-classical-denominators-v2"
+supersedes = "papers/05-classical-denominators"
+title = "Reduced Denominators of Binary Logarithm and Arctangent Series"
+families = ["CC"]
+principal = ["CC-01", "CC-02"]
+status = "draft"
+summary = "Revision of Paper V. Reduced denominators of shifted prefixes of logarithm and arctangent series, with no normality claim for any classical constant."
+
+[[paper]]
+number = "VI"
+version = "1.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/06-multiplicative-lambert"
+supersedes = ""
+title = "Disjunctive but Nonnormal Multiplicative Lambert Series"
+families = []
+results = ["CC-48"]
+principal = ["CC-48"]
+status = "draft"
+summary = "Binary multiplicative Lambert series of prime-support density between zero and one are disjunctive and not normal, with exact two-sided discrepancy gap of order (log log N)/(log N)^(1 - density)."
+
+[[paper]]
+number = "VII"
+version = "1.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/07-synthetic-expansions"
+supersedes = ""
+title = "Synthetic Arithmetic Expansions and Prescribed Discrepancy"
+families = ["SY"]
+principal = ["SY-02", "SY-01", "SY-03", "SY-04"]
+status = "draft"
+summary = "Valuation-weighted sparse series with an all-prefix normality switch, positive rational expansions with prescribed limiting discrepancy, and the sharp translation identity."
+
+[[paper]]
+number = "VIII"
+version = "1.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/08-stoneham-product-orbits"
+supersedes = ""
+title = "Exceptional Orbits and Discrepancy of Stoneham Products"
+families = []
+results = ["ST-25", "ST-26", "ST-27", "ST-29", "ST-32", "ST-35"]
+principal = ["ST-32", "ST-35", "ST-29"]
+status = "draft"
+summary = "Upper discrepancy bounds and exceptional orbits for products of Stoneham numbers with different prime parameters."
+
+[[paper]]
+number = "IX"
+version = "1.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/09-erdos-borwein-note"
+supersedes = ""
+title = "Erdős–Borwein Constant: Structural Limits of Certificate Methods"
+families = []
+results = ["CC-49"]
+principal = ["CC-49"]
+status = "draft"
+summary = "Research note on what finite column, moment and Fourier tests can and cannot certify for the Erdős–Borwein constant; normality is not claimed."

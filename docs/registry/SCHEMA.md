@@ -13,7 +13,7 @@ Identifiers are editorial and permanent. They stay attached to a mathematical st
 | DS | Exact discrepancy and symbolic spectra | [papers/03-signed-resonance](../../papers/03-signed-resonance) |
 | AC | Rational-orbit certificates, coverage and rigidity | [papers/04-arithmetic-certificates](../../papers/04-arithmetic-certificates) |
 | CC | Classical constant arithmetic | [papers/05-classical-denominators](../../papers/05-classical-denominators) |
-| SY | Synthetic expansions and translations | [Phase 18 research](../../notes/phase18/README.md) |
+| SY | Synthetic expansions and translations | [papers/07-synthetic-expansions](../../papers/07-synthetic-expansions) (candidate; research record in [Phase 18](../../notes/phase18/README.md)) |
 
 ## Fields of a `[[result]]` table
 
@@ -50,4 +50,17 @@ A result has one topic. Counterexamples and impossibility results keep the ident
 
 ## `[[paper]]` tables (`papers.toml`)
 
-`dir`, `number`, `title`, `abstract`, `families`, `principal` (identifiers) and `status`. The canonical publication status is [papers/README.md](../../papers/README.md). The registry copy feeds the README manuscript table and must not claim peer review or acceptance.
+Required: `number`, `dir`, `title`, `status`, `principal` (identifiers), `families` and, for every entry, `version`, `release` and `tags`.
+
+| Field | Meaning |
+| --- | --- |
+| `number` | Roman numeral. A revision keeps the numeral of the paper it replaces; new papers continue the sequence. |
+| `version`, `release`, `tags` | Manuscript version; the release tag that carries this text; every release tag that contains the directory. The v1.1 entries have `release = "manuscripts-v1.1.0"`; the candidate entries have `release = "manuscripts-v2.0.0"`. |
+| `supersedes` | Directory of the version this entry replaces, or `""`. The superseded entry stays as the historical record and its files are never edited. An entry that nothing supersedes is *current*. |
+| `families`, `results` | Registry prefixes mapped to the manuscript, and extra identifiers that map to it regardless of family. Only current manuscripts are shown as the "Paper" of a result. |
+| `abstract`, `summary` | `abstract` for released manuscripts. `summary` is a one-sentence description used only until the manuscript's `metadata.toml` exists. |
+| `keywords`, `msc_primary`, `msc_secondary` | Classification of a released manuscript that has no `metadata.toml`. |
+
+Each wave-2 manuscript directory also holds a `metadata.toml` with the keys `id`, `title`, `short_title`, `version`, `status` (`"preprint draft"`), `abstract`, `keywords`, `msc_primary`, `msc_secondary` (MSC2020), `supersedes`, `lean_commit` and `registry_ids`. When the file is present it overrides the title, abstract, keywords and results of the registry entry, and `python3 scripts/portal.py check` validates it: all keys, the version, the pinned Lean commit, MSC code syntax, registry identifiers and the absence of any claim of peer review. `python3 scripts/portal.py check --strict` also requires the files listed by the contract (`paper.pdf`, `VERIFICATION.md`, `LEDGER.md`, `submission/`). The README table, `docs/results.md`, `papers/BIBLIOGRAPHY.bib` and the research site ([docs/site.md](../site.md)) are built from these files.
+
+The `status` of a registry entry is one of `planned`, `draft`, `internally reviewed`, `external review` or `published`. The canonical publication status is [papers/README.md](../../papers/README.md). The registry copy must not claim peer review or acceptance.
