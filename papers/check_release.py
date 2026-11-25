@@ -23,7 +23,7 @@ ARCHIVED_FILES = ("paper.tex", "references.bib", "REVIEW.md", "paper.pdf")
 V2_FILES = ("paper.tex", "references.bib", "paper.pdf", "metadata.toml", "VERIFICATION.md", "LEDGER.md")
 SUBMISSION_FILES = ("abstract.txt", "alphaxiv.md", "announcement.md", "summary.md",
                     "reviewer-inquiry.md", "reviewer-packet.md")
-METADATA_KEYS = ("id", "title", "short_title", "version", "status", "abstract", "keywords",
+METADATA_KEYS = ("id", "title", "authors", "affiliation", "short_title", "version", "status", "abstract", "keywords",
                  "msc_primary", "msc_secondary", "supersedes", "lean_commit", "registry_ids")
 
 
