@@ -32,7 +32,7 @@ $M_N(w)=N^{-1}\sum_{n<N}\lVert b^nw\rVert$, and $K_b=\{z:D_N(z)\to1\}$. Lean lin
 
 **Proof sketch.** Necessity: two applications of Theorem 3.1. Sufficiency: convex weights $\sigma,\beta-\sigma,\alpha-\sigma,\gamma-\sigma,1-\alpha-\beta-\gamma+2\sigma$ ($\sigma=\max(0,(\alpha+\beta+\gamma-1)/2)$) on the five state pairs $(0,0),(u,0),(0,u),(u,-u),(u,u)$, $u=1/q_k$, $q_k=p^{1+\lfloor\log_pk\rfloor}$; a greedy deficit scheduler keeps overcounts in $[-4,1]$; the positive state recurrence (kernel-verified) sets the states; complete prime-power periods bound the active count error by $O(K^2)$; summation by parts gives $|Z-\delta N|\le t+17h_K$; real tails are geometric. Independence: overrides at blocks $k=2^j$ choose, among $(d_X+1)(d_Y+1)$ candidates with distinct coordinates, one where the next polynomial is nonzero, certified by interval arithmetic that survives all positive continuations.
 
-**Evidence.** Theorem 5.1 Kernel-verified (`AdditionSpectrum.exact_addition_spectrum`, P L1486; `finite_necessity`, L248; `mixtureRealizable`, L1470). Theorems 5.3 and 5.4 Lean-supported paper proofs (positive state recurrence, `Phase18Synthetic.programState_fract`, E L383, and companions). **External inputs:** none. **Review wanted:** scheduler bounds and the certificate argument.
+**Evidence.** Theorem 5.1 Kernel-verified (`AdditionSpectrum.exact_addition_spectrum`, P L1486; `finite_necessity`, L248; `mixtureRealizable`, L1470). Theorems 5.3 and 5.4 Lean-supported paper proofs (positive state recurrence, `Phase18Synthetic.programState_fract`, E L383, and companions; the full-period prime-power count `PrimePowerGrid.primePower_period_count`, P L313, used through Lemma 2.4). **External inputs:** none. **Review wanted:** scheduler bounds and the certificate argument.
 
 **Precedent.** Bergelson–Downarowicz, arXiv:2506.12929, Prop. 4.9 and Cor. 4.10(1): the same polytope for normalized point entropy, a different observable.
 
@@ -42,7 +42,7 @@ $M_N(w)=N^{-1}\sum_{n<N}\lVert b^nw\rVert$, and $K_b=\{z:D_N(z)\to1\}$. Lean lin
 
 **Proof sketch.** A rational lies in $K_b$ iff its denominator divides $b^j(b-1)$. Test the multiplier on $1/(b-1)$. For the individual test, $b^nz/d$ lies near $(c+k_n)/d$, and the $d$ possible values are $1/d$-separated.
 
-**Evidence.** Lean-supported paper proof and paper proof.
+**Evidence.** Theorem 4.5 is a Lean-supported paper proof (Lean step: the subgroup property of $K_b$, from the kernel-verified triangle inequality for the asymptotic distance, `DiscrepancyGeometry.asymDist_triangle`, P L390); Lemma 4.4 and the valuation argument are written. Proposition 4.6 is a paper proof. **External input:** Bergelson–Downarowicz Prop. 4.25 (rational multiples preserve normality), used only for a remark.
 
 ## 5. Integer dilation (Theorem 6.2)
 

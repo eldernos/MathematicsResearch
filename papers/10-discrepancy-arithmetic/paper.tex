@@ -74,7 +74,7 @@ $\gamma=D_N(x+y)$ satisfy
 Conversely every $(\alpha,\beta,\gamma)\in[0,1]^3$ satisfying \eqref{eq:facets} is the triple of
 limits of $D_N(x)$, $D_N(y)$, $D_N(x+y)$ for some real $x,y$. For every odd prime $p\nmid b$ with
 $t=\ord_p(b)$ there is $C_{b,p}$ such that each such triple is realized by
-$x=\sum_kc_kb^{-tk^3}$ and $y=\sum_kd_kb^{-tk^3}$ with rationals $c_k,d_k\in(0,1]$ of $p$-power
+$x=\sum_{k\ge1}c_kb^{-tk^3}$ and $y=\sum_{k\ge1}d_kb^{-tk^3}$ with rationals $c_k,d_k\in(0,1]$ of $p$-power
 denominator and simultaneous error at most $C_{b,p}N^{-1/3}$ for every $N\ge1$. The witnesses can
 be chosen algebraically independent over $\Q$, with the same rate, and they are computable
 uniformly from names of a computable triple.
@@ -110,8 +110,8 @@ $D_N(mx)\to1$, realized by positive rational expansions on a cubic schedule at r
 
 These are \Cref{prop:dilation,thm:boundary}; the lower bound in the first statement is
 kernel-verified. By contrast, nonzero rational multiplication preserves normality, and even the lower
-and upper point entropies, exactly \cite[Proposition~4.25]{BD25}; this refines a classical theorem of
-Wall.
+and upper point entropies, exactly \cite[Proposition~4.25]{BD25}; this refines the classical theorem of Wall on normality
+quoted there.
 
 \paragraph{Relation to earlier work and scope of the contribution.}
 The objects in \Cref{thm:A,thm:C} are classical. The extreme discrepancy on $[0,1)$ is invariant
@@ -132,8 +132,9 @@ For addition the closest precedent is the theory of point entropy. Bergelson and
 that the lower and upper point entropies $\underline h,\overline h$ for multiplication by $b$ on
 $\T$ satisfy, for all $x,y$, a family of inequalities that reduce, when $h(x)$ and $h(y)$ exist, to
 $|h(x)-h(y)|\le\underline h(x+y)\le\overline h(x+y)\le\min(\log b,h(x)+h(y))$
-\cite[Proposition~4.9 and Corollary~4.10(1)]{BD25}; the subadditivity of upper entropy is attributed
-there to Kamae, and the attainability of the bounds is studied in \cite[Section~4.3]{BD25}. In the
+\cite[Proposition~4.9 and Corollary~4.10(1)]{BD25}; the subadditivity bound for upper entropy is
+attributed there to Kamae \cite{Kamae76}, and the attainability of the bounds is studied in
+\cite[Section~4.3]{BD25}. In the
 normalized deficit coordinates $1-D$ the facets in \eqref{eq:facets} are the same three triangle
 inequalities, so the polytope of \Cref{thm:B} coincides with the polytope of normalized entropies
 $h/\log b$. The two observables are different, however. They agree on the mixtures
@@ -184,10 +185,11 @@ $E=\#\{n<N:\dist{u_n-v_n}>\epsilon\}$. Then $|D(u)-D(v)|\le E/N+2\epsilon$.
 \end{lemma}
 
 \begin{proof}
-Let $I=[\theta,\theta+l)$. If $l>1-2\epsilon$ then $\mu_u(I)-l<2\epsilon$. Otherwise every $n$ with
-$u_n\in I$ and $\dist{u_n-v_n}\le\epsilon$ has $v_n$ in the half-open arc $[\theta-\epsilon,
-\theta+l+\epsilon+\eta)$ for every $\eta>0$, so $\mu_u(I)\le l+2\epsilon+\eta+D(v)+E/N$ by
-\Cref{lem:arcs}. Let $\eta\to0$, take the supremum over $I$, and exchange $u$ and $v$.
+Let $I=[\theta,\theta+l)$. If $l\ge1-2\epsilon$ then $\mu_u(I)-l\le1-l\le2\epsilon$. If
+$l<1-2\epsilon$, every $n$ with $u_n\in I$ and $\dist{u_n-v_n}\le\epsilon$ has $v_n$ in the half-open
+arc $[\theta-\epsilon,\theta+l+\epsilon)$, which has length $l+2\epsilon<1$, so
+$\mu_u(I)\le l+2\epsilon+D(v)+E/N$ by \Cref{lem:arcs}. In both cases
+$\mu_u(I)-l\le2\epsilon+D(v)+E/N$; take the supremum over $I$ and exchange $u$ and $v$.
 \end{proof}
 
 For radix orbits $u_n=\fr{b^nx}$ and $v_n=\fr{b^n(x+z)}$ the exceptional set depends only on $z$;
@@ -240,7 +242,7 @@ most $f t+r\le L/p^g+tp^g\le p^vL/p^e+p^e$, since $t<p$.
 \begin{lemma}[Positive state programming {\cite{CompanionC}}]\label{lem:program}\evidence{Kernel-verified}
 Let $0=n_0<n_1<\cdots$ be integers and $u_0=0,u_1,u_2,\ldots$ rationals in $[0,1)$. Define $R_0=0$,
 let $c_k\in(0,1]$ be the representative of $u_k-b^{n_k-n_{k-1}}R_{k-1}$ modulo one, and put
-$R_k=b^{n_k-n_{k-1}}R_{k-1}+c_k$. Then $R_k=b^{n_k}\sum_{i\le k}c_ib^{-n_i}$ and $\fr{R_k}=u_k$ for
+$R_k=b^{n_k-n_{k-1}}R_{k-1}+c_k$. Then $R_k=b^{n_k}\sum_{1\le i\le k}c_ib^{-n_i}$ and $\fr{R_k}=u_k$ for
 every $k$. If every $u_k$ has denominator dividing a power of $p$, so has every $c_k$.
 \end{lemma}
 
@@ -250,8 +252,12 @@ In Lean the statement consists of
 \lean{Phase18Synthetic}{459}{\ttt{programmed\_prefix\_fract}},
 \lean{Phase18Synthetic}{364}{\ttt{programCoeff\_mem}} and
 \lean{Phase18Synthetic}{426}{\ttt{programCoeffs\_prime\_power}}; its two-line inductive proof is in
-\cite{CompanionC}. More generally, $c_k$ has denominator dividing $\mathrm{lcm}(\den u_k,\den u_{k-1})$.
-For $x=\sum_kc_kb^{-n_k}$ and $n_k\le n<n_{k+1}$ the rational part of $b^nx$ is $b^{n-n_k}R_k$, whose
+\cite{CompanionC}. The Lean declaration \lean{Phase18Synthetic}{416}{\ttt{programCoeffs\_den\_dvd}} bounds
+the denominator of $c_k$ by the product $\den u_k\cdot\den u_{k-1}$, which suffices for prime powers. A
+sharper bound is used in \Cref{thm:boundary}: since $\fr{R_{k-1}}=u_{k-1}$, the number
+$c_k-(u_k-b^{n_k-n_{k-1}}u_{k-1})$ is an integer, so $c_k$ has denominator dividing
+$\mathrm{lcm}(\den u_k,\den u_{k-1})$.
+For $x=\sum_{k\ge1}c_kb^{-n_k}$ and $n_k\le n<n_{k+1}$ the rational part of $b^nx$ is $b^{n-n_k}R_k$, whose
 fractional part is $\fr{b^{n-n_k}u_k}$. Since $0<c_i\le1$ and the positions are distinct,
 \begin{equation}\label{eq:tail}
 0<b^nx-b^{n-n_k}R_k\le\frac b{b-1}\,b^{-(n_{k+1}-n)} .
@@ -286,8 +292,9 @@ paired finite samples with $q_n\equiv p_n\pm r_n\pmod1$ it gives $D(q)\le D(p)+1
 (\lean{SharpTranslation}{326}{\ttt{sampleDisc\_paired}}). For $\epsilon\ge0$ let $E_N(z,\epsilon)$
 count the $n<N$ with $\dist{b^nz}>\epsilon$. The arcs $[-\epsilon,\epsilon+h)$ give
 \begin{equation}\label{eq:deficit}
-1-D_N(z)\le2\epsilon+E_N(z,\epsilon)/N .
+1-D_N(z)\le2\epsilon+E_N(z,\epsilon)/N ,
 \end{equation}
+which is the kernel-verified \lean{Phase18Synthetic}{524}{\ttt{discrepancy\_deficit\_le}}.
 
 \begin{corollary}[Transfer]\label{cor:transfer}\evidence{Kernel-verified}
 For all real $x,z$, $\epsilon\ge0$ and $N\ge1$, $|D_N(x+z)-D_N(x)|\le2\epsilon+E_N(z,\epsilon)/N$. If
@@ -352,7 +359,7 @@ sequences have only zero-entropy empirical limit measures \cite[Definitions~3.5 
 Theorem~3.12]{BD25}. The set $K_b$ of \Cref{thm:preserve} is contained in $\mathcal D(b)$: if
 $M_N(w)\to0$, then for each $l$ the length-$l$ digit blocks of $w$ are constant blocks $0^l$ or
 $(b-1)^l$ at all but $o(N)$ positions, so every empirical limit measure of the digit sequence is
-supported on the two fixed points of the shift; since $\mathcal D(b)$ is closed under addition and
+supported on the two fixed points $0^\infty$ and $(b-1)^\infty$ of the shift; since $\mathcal D(b)$ is closed under addition and
 contains the rationals, $c+w\in\mathcal D(b)$. The
 inclusion is strict: in base $2$, $z=1/3$ is rational, hence in $\mathcal D(2)$, but its orbit
 alternates between $1/3$ and $2/3$, so $D_N(1/3)\to2/3$ and $\sup_x|D_N(x+1/3)-D_N(x)|\to1/3$.
@@ -420,6 +427,8 @@ $1-D_N(-z)\le1-D_N(z)$ and, by exchanging $z$ and $-z$, equality. If $N\ge2$ and
 are half-open arcs of length tending to zero containing all $N$ points, so $\fr{u}=\fr{bu}$, that is
 $(b-1)u\in\Z$; conversely such $u$ has a constant orbit. The integer Lipschitz bound follows from
 the triangle inequality and translation invariance. Lean declarations:
+\leanP{DiscrepancyGeometry}{39}{\ttt{discDist\_nonneg}},
+\leanP{DiscrepancyGeometry}{51}{\ttt{discDist\_self}},
 \leanP{DiscrepancyGeometry}{55}{\ttt{discDist\_translate}},
 \leanP{DiscrepancyGeometry}{68}{\ttt{discDist\_comm}},
 \leanP{DiscrepancyGeometry}{78}{\ttt{discDist\_triangle}},
@@ -496,8 +505,10 @@ The pseudometric properties and the Lipschitz bound are
 \leanP{DiscrepancyGeometry}{390}{\ttt{asymDist\_triangle}} and
 \leanP{DiscrepancyGeometry}{419}{\ttt{asymDist\_intMul\_le}}, with the companion declarations at the
 same commit. The maximum formula follows from \Cref{prop:metric} and the choice $w=-y$. The kernel
-consists of the $z$ with $\liminf D_N(z)=1$, which is $K_b$ by \Cref{thm:preserve}, and a kernel of a
-translation-invariant pseudometric is a subgroup.
+consists of the $z$ with $\limsup_N(1-D_N(z))=0$, that is $D_N(z)\to1$ since $D_N\le1$, which is $K_b$;
+the description $F_b+\{w:M_N(w)\to0\}$ is \Cref{thm:preserve}. The kernel of a translation-invariant
+pseudometric is a subgroup, by the triangle inequality and translation invariance
+(\leanP{DiscrepancyGeometry}{381}{\ttt{asymDist\_translate}}).
 \end{proof}
 
 The kernel is dense in $\R$, since it contains every rational whose denominator divides a power of
@@ -530,8 +541,9 @@ multiples preserve $K_b$ because it is a subgroup (\Cref{prop:asymptotic}), and 
 preserves it by \Cref{lem:rationalK}. Conversely suppose that a prime $\ell\mid d$ does not divide $b$.
 The fixed point $1/(b-1)$ lies in $K_b$. The reduced denominator of $a/(d(b-1))$ has $\ell$-adic
 valuation $v_\ell(d)+v_\ell(b-1)>v_\ell(b^j(b-1))$ for every $j$, because $\ell\nmid a$; by
-\Cref{lem:rationalK}, $(a/d)\cdot1/(b-1)\notin K_b$. The Lean-supported step is \Cref{thm:sharp}, through
-\Cref{thm:preserve}.
+\Cref{lem:rationalK}, $(a/d)\cdot1/(b-1)\notin K_b$. The Lean-supported step is the subgroup property of
+$K_b$, which rests on the kernel-verified triangle inequality for $d^+$ (\Cref{prop:asymptotic}); the
+valuation argument, \Cref{lem:rationalK} and, through it, \Cref{thm:preserve} are written proofs.
 \end{proof}
 
 For an individual element of $K_b$ the question is arithmetic.
@@ -546,8 +558,9 @@ $\#\{n<N:k_n\equiv r\pmod d\}=N-o(N)$.
 \begin{proof}
 If $z/d\in K_b$ then $(a/d)z=a(z/d)\in K_b$. Conversely, choose integers $\alpha,\beta$ with
 $\alpha a+\beta d=1$; then $z/d=\alpha(a/d)z+\beta z\in K_b$ if $(a/d)z\in K_b$, since $K_b$ is a group.
-Write $b^nz=c+k_n+e_n$ with $|e_n|\le1/2$; by \Cref{thm:preserve}, $|e_n|\to0$ outside a set of
-density zero. Then $b^nz/d$ is within $|e_n|/d$ of $g_n=(c+k_n)/d$, which depends only on
+Write $b^nz=c+k_n+e_n$ with $|e_n|\le1/2$. Since $bc\equiv c$, $|e_n|=\dist{b^n(z-c)}$, so
+$N^{-1}\sum_{n<N}|e_n|=M_N(z-c)\to0$ by \Cref{thm:preserve}\textup{(vi)}, and Markov's inequality gives
+$\#\{n<N:|e_n|>\rho\}=o(N)$ for every $\rho>0$: $|e_n|\to0$ outside a set of density zero. Then $b^nz/d$ is within $|e_n|/d$ of $g_n=(c+k_n)/d$, which depends only on
 $k_n\bmod d$, and the $d$ possible values of $g_n$ are distinct modulo one and $1/d$ apart. If one
 residue has density one, the orbit of $z/d$ concentrates at one point and $D_N(z/d)\to1$. Conversely,
 if $z/d\in K_b$ its orbit concentrates at one point by \Cref{thm:preserve}, so $g_n$ is constant modulo
@@ -577,7 +590,8 @@ $\gamma\ge0$ these are \eqref{eq:facets}. The region $P$ that \eqref{eq:facets} 
 the convex hull of $(1,1,1)$, $(0,1,0)$, $(1,0,0)$, $(0,0,1)$ and $(0,0,0)$, and these are its extreme
 points; explicit convex weights are given in \eqref{eq:weights} below. The converse is proved in Lean
 by a block schedule adapted to complete periods; \Cref{thm:additionrate} gives a different proof with a
-rate. Lean declarations: \leanP{AdditionSpectrum}{248}{\ttt{finite\_necessity}},
+rate. Lean declarations: \leanP{AdditionSpectrum}{248}{\ttt{finite\_necessity}} (with the form \eqref{eq:facets} as
+\leanP{AdditionSpectrum}{260}{\ttt{finite\_necessity'}}),
 \leanP{AdditionSpectrum}{150}{\ttt{polytope\_eq\_convexHull}},
 \leanP{AdditionSpectrum}{240}{\ttt{isExtremeIn\_polytope\_iff}},
 \leanP{AdditionSpectrum}{1480}{\ttt{addSpectrum\_eq}} and
@@ -624,7 +638,7 @@ induction. A type of weight zero has deficit $-C_i\le0$.
 \begin{theorem}[Uniform rate]\label{thm:additionrate}\evidence{Lean-supported paper proof}
 Let $p\nmid b$ be an odd prime and $t=\ord_p(b)$. There is $C_{b,p}$ such that for every
 $(\alpha,\beta,\gamma)$ satisfying \eqref{eq:facets} there are rationals $c_k,d_k\in(0,1]$ with
-$p$-power denominators for which $x=\sum_kc_kb^{-tk^3}$ and $y=\sum_kd_kb^{-tk^3}$ satisfy, for all
+$p$-power denominators for which $x=\sum_{k\ge1}c_kb^{-tk^3}$ and $y=\sum_{k\ge1}d_kb^{-tk^3}$ satisfy, for all
 $N\ge1$,
 \[
 \max\bigl(|D_N(x)-\alpha|,\ |D_N(y)-\beta|,\ |D_N(x+y)-\gamma|\bigr)\le C_{b,p}N^{-1/3}.
@@ -634,8 +648,8 @@ $\beta\delta_0+(1-\beta)\lambda$ and $\gamma\delta_0+(1-\gamma)\lambda$.
 \end{theorem}
 
 \begin{proof}
-Let $n_k=tk^3$, $h_k=n_{k+1}-n_k=t(3k^2+3k+1)\le7tk^2$, $q_k=p^{1+\lfloor\log_pk\rfloor}$ (so
-$k<q_k\le pk$) and $v=v_p(b^t-1)$. Block $k$ consists of the integers in $[n_k,n_{k+1})$, with
+Let $n_k=tk^3$, $h_k=n_{k+1}-n_k=t(3k^2+3k+1)$, which is at most $7tk^2$ for $k\ge1$,
+$q_k=p^{1+\lfloor\log_pk\rfloor}$ for $k\ge1$ (so $k<q_k\le pk$) and $v=v_p(b^t-1)$. Block $k$ consists of the integers in $[n_k,n_{k+1})$, with
 $n_0=0$; block $0$ has type $1$, and blocks $k\ge1$ receive types by \Cref{lem:scheduler} with the
 weights \eqref{eq:weights}, using $u=1/q_k$ in block $k$. Define the coefficient sequences of $x$ and $y$
 by \Cref{lem:program} from their state sequences. Then the rational part of $b^{n_k}(x+y)$ has
@@ -652,7 +666,7 @@ increasing weights $h_k$ gives
 \]
 Active blocks are orbit segments of $a/q_k$ with $a\in\{1,-1,2\}$, so by \Cref{lem:period} the active
 indices meet every half-open arc $I$ in $(N-Z)|I|+\theta$ points with
-$|\theta|\le H:=\sum_{k\le K}(p^vh_k/q_k+q_k)\le(7tp^v+p)K(K+1)/2$. Retired models are $0$. Hence, with
+$|\theta|\le H:=\sum_{1\le k\le K}(p^vh_k/q_k+q_k)\le(7tp^v+p)K(K+1)/2$. Retired models are $0$. Hence, with
 $\nu=(Z/N)\delta_0+(1-Z/N)\lambda$, the model counts differ from $N\nu(I)$ by at most $H$ on every arc,
 and $D(\nu)=Z/N$ by \eqref{eq:refdisc}. By \eqref{eq:tail}, applied to $x$ and $y$, the real point
 $b^nz$ is within $\frac{2b}{b-1}b^{-W}$ of $y_n$ unless $n$ is one of the $W$ indices preceding an insertion.
@@ -793,9 +807,11 @@ $b$.
 \begin{enumerate}[label=\textup{(\alph*)},nosep]
 \item If $D_N(mx)\to1$, then $\liminf_ND_N(x)\ge1/m_0$.
 \item Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$, and $\delta\in[1/m_0,1]$. There are rationals
-$c_k\in(0,1]$ with denominators dividing $m_0$ such that $x=\sum_kc_kb^{-tk^3}$ satisfies
+$c_k\in(0,1]$ with denominators dividing $m_0$ such that $x=\sum_{k\ge1}c_kb^{-tk^3}$ satisfies
 $|D_N(x)-\delta|+|1-D_N(mx)|\le C_{b,p,m}N^{-1/3}$ for all $N\ge1$.
 \end{enumerate}
+The prime $p$ enters only through $t$, which fixes the schedule $n_k=tk^3$ of \Cref{thm:additionrate};
+the proof below works for every fixed integer $t\ge1$.
 \end{theorem}
 
 \begin{proof}
@@ -811,10 +827,12 @@ $\theta=(\delta-1/m_0)/(1-1/m_0)\in[0,1]$ (any $\theta$ if $m_0=1$), so that by 
 measure $\nu_\theta=\theta\delta_0+(1-\theta)U_{m_0}$ has $D(\nu_\theta)=\delta$. Use types $0$ (state $0$)
 and $1,\ldots,s$ (state a chosen point of $\Gamma_i$), with weights $\theta$ and $(1-\theta)\ell_i/m_0$,
 schedule them by \Cref{lem:scheduler} on the blocks of $n_k=tk^3$, and define $x$ by \Cref{lem:program}.
-The coefficients have denominators dividing $m_0$. In a block of type $i\ge1$ the model runs through
+All states lie in $G$, so each $\den u_k$ divides $m_0$, and the $\mathrm{lcm}$ bound following
+\Cref{lem:program} shows that every $\den c_k$ divides $m_0$; this is a written step, since the Lean
+declaration gives only the product bound $m_0^2$. In a block of type $i\ge1$ the model runs through
 $\Gamma_i$, so its counts on every arc differ from the block length times the uniform measure on
 $\Gamma_i$ by at most $\ell_i\le m_0$. Summation by parts as in \Cref{thm:additionrate} shows that the
-model counts differ from $N\nu_\theta(I)$ by $O_{b,m}(K^2)$, and \Cref{lem:model} with \eqref{eq:tail}
+model counts differ from $N\nu_\theta(I)$ by $O_{b,p,m}(K^2)$, and \Cref{lem:model} with \eqref{eq:tail}
 gives $|D_N(x)-\delta|=O(N^{-1/3})$. Every state is annihilated by $m$, so the model of $mx$ is $0$
 throughout, and the real points of $mx$ are within $|m|\frac b{b-1}b^{-W}$ of $0$ off $(K+1)W$ indices;
 \Cref{lem:model} with $\nu=\delta_0$ gives $1-D_N(mx)=O(N^{-1/3})$. The Lean-supported step is
@@ -837,7 +855,7 @@ and odd positions; absolute convergence gives $UV=\sum_{n\ge0}b^{-rn}$. Below $4
 elements of $A$, so the positions of the nonzero digits of $U-1$ and $V-1$ number $O(\sqrt X)$ below
 $X$.
 At a shift with no position in $(n,n+w]$ the remainder is within $2b^{-w}$ of an integer; this gives
-$M_N\to0$, and \Cref{cor:transfer} with $w=\lceil\log_bN\rceil$ gives the rate. The digits contain
+$M_N\to0$, and \Cref{cor:transfer} with $w=\lceil\log_b(N+1)\rceil$ gives the rate. The digits contain
 infinitely many ones and unbounded runs of zeros, so the numbers are irrational. Finally
 $\fr{UV}=1/(b^r-1)$, whose reduced denominator is prime to $b$ and greater than $b-1$, so it does not
 divide $b^j(b-1)$; by \Cref{lem:rationalK}, $UV\notin K_b$.
@@ -845,10 +863,14 @@ divide $b^j(b-1)$; by \Cref{lem:rationalK}, $UV\notin K_b$.
 
 For $b\ge3$ the rational elements of $K_b$ are already not closed under multiplication, since
 $(b-1)^{-2}\notin K_b$; the content of \Cref{prop:product} lies in base $2$ and in the mean-zero
-subgroup. Bergelson and Downarowicz construct, in base $2$ and with signed sparse digits, two numbers
-whose digit changes or ones have density zero and whose product is normal \cite[Section~8]{BD25}; both
-factors then have $M_N\to0$, so their example is a stronger statement of the same kind. The example
-here uses positive digits, gives an explicit rational product and holds in every base.
+subgroup. Bergelson and Downarowicz construct, in base $2$ and with ordinary binary digits, a number $a$ whose
+expansion has density zero of digit switches ($01$ and $10$) and a number $1/y$ whose expansion has
+density zero of ones, such that $a\cdot(1/y)$ is normal
+\cite[Theorem~8.11, Proposition~8.13 and Corollary~8.14]{BD25}. Both factors satisfy $M_N\to0$, because
+each maximal run of equal digits, respectively each digit $1$, contributes only $O(1)$ to
+$\sum_{n<N}\dist{2^nw}$; so their example is a stronger statement of the same kind in base $2$. The
+example here holds in every base, has an explicit rational product and carries an explicit rate for the
+two factors.
 
 \begin{remark}[Scope of the identities]\label{rem:scope}
 \Cref{thm:sharp} uses rotation invariance of the extreme discrepancy and fails for its anchored and
@@ -893,9 +915,12 @@ definition of $D_N$ in Lean (\ttt{radixDiscrepancy}) is the supremum over $0\le 
 
 The kernel-verified statements are
 \Cref{lem:program,thm:sharp,cor:transfer,prop:metric,thm:addition}, together with the finite
-inequality in \Cref{thm:quadratic} and the lower bound in \Cref{prop:dilation}. The rates in
-\Cref{thm:additionrate,thm:boundary}, the computability and independence in \Cref{thm:independent},
-the preserver classification, the scalar results, the convex geometry in \Cref{thm:dsummands} and
+inequality in \Cref{thm:quadratic} and the lower bound in \Cref{prop:dilation}. The triangle inequality
+and the integer Lipschitz bound for $d^+$ in \Cref{prop:asymptotic} are Lean declarations, but the
+description of its kernel is written, and \Cref{thm:scalars} uses only the subgroup property of the
+kernel from Lean. The rates in \Cref{thm:additionrate,thm:boundary}, the computability and
+independence in \Cref{thm:independent}, the preserver classification, the remaining scalar results, the
+convex geometry in \Cref{thm:dsummands} and
 \Cref{prop:concentration,prop:sixforms,prop:product} have written proofs. Exact rational computations
 exercising the addition spectrum and its cubic witnesses are in \ttt{scripts/phase19\_addition.py} at
 the second commit; they are finite checks, not proofs of the asymptotic statements. The theorem

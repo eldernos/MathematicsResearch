@@ -38,12 +38,12 @@ The finite identity, the pseudometric axioms and the qualitative addition spectr
 Lean declarations checked by the kernel prove the complete statements of:
 
 - the sharp translation identity and its transfer bound;
-- the finite and asymptotic pseudometric axioms of $1-D_N(x-y)$ and its zero set at finite $N\ge2$;
+- the pseudometric axioms of $1-D_N(x-y)$ and its zero set at finite $N\ge2$, and the triangle inequality, translation invariance and integer Lipschitz bound of its asymptotic version;
 - the finite necessity and the qualitative sufficiency of the addition spectrum in every base;
 - the positive state recurrence used in the constructions;
 - the finite sparse-translation inequality and the lower dilation bound.
 
-Both builds' axiom audits accepted only `propext`, `Classical.choice` and `Quot.sound`. The following are written proofs, some with Lean-verified steps: the classification of universal preservers, the concentration and Ky Fan comparison, the rational-scalar theorems, the cubic rate, computability and algebraic independence of the addition witnesses, the convex geometry for $d$ summands, the six-form inequality, the dilation boundary spectrum and the product example. The identity is not presented as a new probability metric: it combines Kuiper's statistic, Lévy's concentration function and the Ky Fan and Lévy–Prokhorov distances. The addition polytope coincides with the polytope of Bergelson and Downarowicz's point-entropy inequalities (arXiv:2506.12929, Prop. 4.9 and Cor. 4.10(1)), for a different observable.
+Both builds' axiom audits accepted only `propext`, `Classical.choice` and `Quot.sound`. The following are written proofs, some with Lean-verified steps: the classification of universal preservers, the concentration and Ky Fan comparison, the description of the asymptotic kernel, the rational-scalar theorems (which use only the subgroup property of the kernel from Lean), the cubic rate, computability and algebraic independence of the addition witnesses, the convex geometry for $d$ summands, the six-form inequality, the dilation boundary spectrum and the product example. The identity is not presented as a new probability metric: it combines Kuiper's statistic, Lévy's concentration function and the Ky Fan and Lévy–Prokhorov distances. The addition polytope coincides with the polytope of Bergelson and Downarowicz's point-entropy inequalities (arXiv:2506.12929, Prop. 4.9 and Cor. 4.10(1)), for a different observable.
 
 ## Use of AI tools
 
