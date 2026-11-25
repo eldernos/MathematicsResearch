@@ -271,13 +271,24 @@ def section_local(limit: int, seed_count: int) -> dict[int, tuple[int, int]]:
         data[p] = local_minima(p)
     print(f"computed {len(data)} primes in {time.time() - t0:.1f}s")
     small = {p: data[p] for p in data if p <= 61}
-    print("small primes (p: k, k*):", small)
+    # The survey searches past p - 1 and skips multipliers divisible by p.
+    # This differs from the note's convention (S inside [1, p-1]) only at
+    # p = 3, where the survey reports 4 while k(3) is infinite in the note.
+    print("small primes (p: k, k*), unrestricted search:", small)
     assert small[3] == (4, 4) and small[5] == (2, 2) and small[7] == (6, 4)
     assert small[13] == (3, 3) and small[37] == (9, 8) and small[41] == (4, 4)
+    assert local_minima(3, jmax=2) == (None, None)
     for p, (k, ks) in data.items():
         assert ks <= k
         if p >= 5:
             assert k <= p - 1, p
+    big_ps = [p for p in data if p > 100]
+    equal = sum(1 for p in big_ps if data[p][0] == data[p][1])
+    gap = max(data[p][0] - data[p][1] for p in big_ps)
+    print(f"k(p) = k*(p) for {equal} of {len(big_ps)} primes 100 < p <= {limit}; "
+          f"largest k(p) - k*(p) = {gap}")
+    if limit == 200000:
+        assert (equal, len(big_ps), gap) == (10575, 17959, 10)
     excess = sorted((k - math.log2(p), p, k) for p, (k, _) in data.items())
     print("largest k(p) - log2 p:", [(round(e, 3), p, k) for e, p, k in excess[-5:]])
     print("smallest k(p) - log2 p:", [(round(e, 3), p, k) for e, p, k in excess[:5]])
@@ -492,6 +503,23 @@ def section_wieferich_denominators() -> None:
         val = top_digit_valuation(n, p, 2)
         print(f"  p={p}, n={n}: v_p(den R(n)) = {val} (full power would be 2)")
         assert val < 2
+    # Order two needs p >= 5: at p = 3, n = 6 the Li_2(1/2) prefix loses a factor 3
+    # although 3 is not a Wieferich prime.
+    from fractions import Fraction
+    li2 = sum(Fraction(2 ** (6 - m), m * m) for m in range(1, 7))
+    assert li2 == Fraction(5587, 150) and v_p(li2.denominator, 3) == 1
+    assert fermat_quotient(2, 3) != 0
+    print("  Li_2(1/2) prefix at p=3, n=6: 5587/150, v_3 = 1 < 2 (order-two statement needs p >= 5)")
+    # Order two at the Wieferich prime 1093: the full p^2 is lost, one factor survives.
+    p = 1093
+    for n in (1092 * p, p * p - 1):
+        mod = p ** 3
+        s = 0
+        for ell in range(1, n // p + 1):
+            s = (s + pow(2, n - ell * p, mod) * pow(ell * ell, -1, mod)) % mod
+        val = 0 if s == 0 else max(0, 2 - v_p(s, p))
+        print(f"  Li_2(1/2) prefix, p={p}, n={n}: v_p(den) = {val} (full power would be 2)")
+        assert val == 1
 
 
 def exact_loss_table(nmax: int) -> list[int]:

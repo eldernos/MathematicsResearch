@@ -3,10 +3,10 @@
 Write $a_m=1/(m2^m)$, so that $\log 2=\sum_{m\ge1}a_m$. For an odd prime $p$, how far must a finite set of these positive terms extend before it contains $a_p$ and has a dyadic rational sum? The answer is exactly $p\,k(p)$ for every $p\ge5$. Here $k(p)$ is the least largest multiplier in a positive cancellation of the simple pole at $p$, a subset-sum problem modulo $p$. The proved range is
 
 ```math
-\left(\frac{1}{\log 2}-o(1)\right)\log p\ \le\ k(p)\ \le\ 3\sqrt{4p-3}
+\left(\frac{1}{\log 2}-o(1)\right)\log p\ \le\ k(p)\ \le\ \left\lceil 3\sqrt{4p-3}\right\rceil
 ```
 
-The lower bound holds for all primes outside a set of relative density $O(1/\log X)$ in $(X/2,X]$, and the upper bound holds for every $p\ge41$. For every $p\le10^6$ the exact value exceeds $\log_2 p$ by at most $5.2$. Its distribution follows a random subset-sum model except in the far lower tail.
+The lower bound holds for all primes outside a set of relative density $O(1/\log X)$ in $(X/2,X]$, and the upper bound holds for every $p\ge41$. For every $p\le10^6$ the computed value exceeds $\log_2 p$ by at most $5.2$. On the computed range its histogram is close to that of a simulated random subset-sum model, except in the far lower tail. This is a description of finite data, not a proved or statistically tested distribution law.
 
 **Scope.** Nothing here gives normality, or an asymptotic discrepancy bound below one, for $\log 2$ or any other classical constant. The results concern finite positive regroupings of the Taylor series and the reduced denominators of its shifted prefixes. All finite assertions are checked in exact arithmetic by [`scripts/phase19_classical.py`](../../scripts/phase19_classical.py). An independent cross-provider review proved the same-cutoff lifting theorem and refined the average-loss exponent. One proof of each is kept below, and the refinement is cited rather than repeated. [Independent review](reviews/classical.md)
 
@@ -38,7 +38,7 @@ Indeed every multiple of $p$ below $p^2$ is $jp$ with $j<p$, and $p\,a_{jp}=1/(j
 
 **Definitions.** Let $k(p)$ be the least value of $\max S$ over sets $S\subset[1,p-1]$ with $1\in S$ and $\sum_{j\in S}x_j(p)\equiv0\pmod p$, with $k(p)=\infty$ if there is none. Let $k^*(p)$ be the same minimum over all nonempty $S$, without requiring $1\in S$. Let $M_{\rm glob}(p)$ be the least $\max G$ over finite $G\ni p$ with $\sum_{m\in G}a_m\in\mathbb Z[1/2]$. In a partition $\mathcal P$ of the positive integers into finite groups with dyadic sums, $M(p)$ denotes the largest index in the group containing $p$, so $M(p)\ge M_{\rm glob}(p)$.
 
-The smallest values are $k(5)=2$, $k(13)=3$, $k(11)=k(41)=4$ and $k(7)=6$. For $p=3$ the residues $x_1(3)=x_2(3)=2$ admit no cancellation inside $[1,2]$; the first admissible multiplier set is $\{1,4\}$.
+The smallest values are $k(5)=2$, $k(13)=3$, $k(11)=k(41)=4$ and $k(7)=6$. For $p=3$ the residues $x_1(3)=x_2(3)=2$ admit no cancellation inside $[1,2]$, so $k(3)=\infty$ in this convention. The script's survey instead extends the search past $p-1$ and skips multipliers divisible by $p$. That changes only $p=3$, where it reports $4$ from the set $\{1,4\}$. For every $p\ge5$ the two searches agree, because $k(p)\le p-1$ (Theorem 3.1). All counts and statistics below concern $p\ge5$.
 
 ## 2. Global completion costs nothing beyond local cancellation
 
@@ -163,7 +163,7 @@ In natural logarithms this replaces the Phase 18 constant $1/(1+\log2)\approx0.5
 
 *Proof.* For $1\le j\le p-1$, $\binom pj=\frac pj\binom{p-1}{j-1}$ and $\binom{p-1}{j-1}\equiv(-1)^{j-1}\pmod p$. Expand $(1-y)^p$, use $(-y)^p=-y^p$, and divide by $p$. $\square$
 
-This is the congruence Granville takes as his starting point, credited there to Glaisher. [Granville, 2004](https://emis.univie.ac.at/journals/INTEGERS/papers/e22/e22.pdf)
+This is the congruence Granville takes as his starting point, credited there to Glaisher. Rogers studied the zero sets modulo $p$ of $G_n(y)=\sum_{j\le n}y^j/j$ as direct prior art. His results include the Wieferich criterion for $G_{p-1}(2)$ and a recursion for $G_{pn+k}$. In his notation the partial sums $A_k$ of §6 are $G_k(y)$ with $y\equiv2^{-1}\pmod p$, so their zeros form his set $J_p(2^{-1})$. Item 1 of Theorem 5.2 below is equivalent to his $y=2$ congruence under $j\mapsto p-j$. [Granville, 2004](https://emis.univie.ac.at/journals/INTEGERS/papers/e22/e22.pdf) · [Rogers, 2007](https://arxiv.org/abs/0708.2439)
 
 **Theorem 5.2 (block sums).** *For every prime $p\ge5$:*
 
@@ -172,7 +172,7 @@ This is the congruence Granville takes as his starting point, credited there to 
 3. *for an integer $b\ge2$ with $p\nmid b(b-1)$, $\sum_{j=1}^{p-1}(jb^j)^{-1}\equiv b^{-1}q_p\bigl(b^b/(b-1)^{b-1}\bigr)$;*
 4. *$\sum_{j=1}^{p-1}(j^22^j)^{-1}\equiv-\frac12q_p(2)^2$.*
 
-*Proof.* Item 1 is Lemma 5.1 at $y=1/2$, since $(1-2^{1-p})/p\equiv q_p(2)$. At $y=-1/2$ the lemma gives $q_p(2)-\frac32q_p(3)$ for the alternating sum. Averaging this with item 1 gives item 2. For item 3 take $y=1/b$ and write $b^p=b(1+p\,q_p(b))$ and $(b-1)^p=(b-1)(1+p\,q_p(b-1))$. The numerator becomes $p\bigl(b\,q_p(b)-(b-1)q_p(b-1)\bigr)$. Logarithmic additivity of $q_p$ modulo $p$ gives the stated form. For item 4, Granville proved $\sum_{j=1}^{p-1}2^j/j^2\equiv-q_p(2)^2$. The substitution $j\mapsto p-j$ turns $(j^22^j)^{-1}$ into $2^{j-1}/j^2$. $\square$
+*Proof.* Item 1 is Lemma 5.1 at $y=1/2$, since $(1-2^{1-p})/p\equiv q_p(2)$. At $y=-1/2$ the lemma gives $q_p(2)-\frac32q_p(3)$ for the alternating sum $\sum_j(-1)^jx_j(p)$. Half the difference between item 1 and this alternating sum is the odd block, which gives item 2. For item 3 take $y=1/b$ and write $b^p=b(1+p\,q_p(b))$ and $(b-1)^p=(b-1)(1+p\,q_p(b-1))$. The numerator becomes $p\bigl(b\,q_p(b)-(b-1)q_p(b-1)\bigr)$. Logarithmic additivity of $q_p$ modulo $p$ gives the stated form. For item 4, Granville proved $\sum_{j=1}^{p-1}2^j/j^2\equiv-q_p(2)^2$. The substitution $j\mapsto p-j$ turns $(j^22^j)^{-1}$ into $2^{j-1}/j^2$. $\square$
 
 The script checks all four items for every prime $5\le p\le5000$, with $b\in\{3,5,10\}$ in item 3. A one-off run extended the check to $p<20000$.
 
@@ -180,9 +180,9 @@ The script checks all four items for every prime $5\le p\le5000$, with $b\in\{3,
 
 The only known Wieferich primes are 1093 and 3511, and there are no others below $6.7\times10^{15}$. The only known base-3 examples are 11 and 1006003. By Theorem 3.3 these complete blocks are far from optimal, yet they are the natural choices of complete residue systems. Arithmetic decides them. [Dorais and Klyve, 2011](https://cs.uwaterloo.ca/journals/JIS/VOL14/Klyve/klyve3.html) · [Montgomery, 1993](https://www.ams.org/mcom/1993-61-203/S0025-5718-1993-1182246-5/)
 
-**Corollary 5.4 (actual reduced denominators).** *Let $Q_n$ be the reduced denominator of the shifted prefix $R_n=2^n\sum_{m\le n}a_m$, and let $p$ be an odd prime with $(p-1)p^a\le n<p^{a+1}$. Then $p^a\mid Q_n$ exactly when $p$ is not a Wieferich prime. For $a=1$ a Wieferich prime disappears from $Q_n$ completely.*
+**Corollary 5.4 (actual reduced denominators).** *Let $Q_n$ be the reduced denominator of the shifted prefix $R_n=2^n\sum_{m\le n}a_m$. Let $p\ge5$ be prime and $a\ge1$, with $(p-1)p^a\le n<p^{a+1}$. Then $p^a\mid Q_n$ exactly when $p$ is not a Wieferich prime. For $a=1$ a Wieferich prime disappears from $Q_n$ completely.*
 
-The same holds for the shifted prefix of $\mathrm{Li}_2(1/2)$ with $p^{2a}$. For the base-$b$ prefix of $\log(b/(b-1))$ the exceptional primes are the Wieferich primes to base $b^b/(b-1)^{b-1}$.
+Under the same hypotheses $p\ge5$ and $a\ge1$, the shifted prefix of $\mathrm{Li}_2(1/2)$ keeps $p^{2a}$ exactly when $p$ is not a Wieferich prime. Losing the full power $p^{2a}$ does not remove every factor $p$. At $p=1093$, $a=1$ and both ends of the band $[1092\cdot1093,\,1093^2)$, the dilogarithm prefix has $v_p=1$. The restriction $p\ge5$ is needed: at $p=3$, $n=6$ the prefix $\sum_{m\le6}2^{6-m}/m^2=5587/150$ has $v_3=1$, although 3 is not a Wieferich prime. Let $b\ge2$, $p\ge5$, $a\ge1$ and $p\nmid b(b-1)$. Then the base-$b$ prefix $b^n\sum_{m\le n}1/(mb^m)$ of $\log(b/(b-1))$, with $(p-1)p^a\le n<p^{a+1}$, keeps $p^a$ exactly when $p$ is not a Wieferich prime to base $b^b/(b-1)^{b-1}$.
 
 *Proof.* The repository classification states that $p^{as}\mid Q_n$ exactly when $p$ does not divide the reduced numerator of $\sum_{j\le k}1/(j^sb^j)$, where $k=\lfloor n/p^a\rfloor$. Here $k=p-1$, so Theorem 5.2 applies. $\square$ [Prime survival in truncated polylogarithms](../denominators.md#which-prime-powers-survive)
 
@@ -206,7 +206,7 @@ Write $L_n=\mathrm{lcm}(1,\ldots,n)$ and let the loss be $\log(L_n/Q_n)$. The re
 
 The small primes contribute at most $2.5102\,X^{-1}\sum_{n\le X}\sqrt n\le1.70\sqrt X$ to the mean for $X\ge100$. $\square$
 
-**Refinement in the review.** The review proves the exponent $3/7$. Zeros of $A_k$ modulo $p$ at both $k$ and $k+h$ make $\sum_{i=1}^h2^{-i}/(k+i)\equiv0$. Clearing denominators gives a polynomial in $k$ of degree at most $h-1$. Its value at $-1$ is $2^{h-1}(h-1)!\not\equiv0$, so at most $h-1$ pairs have lag $h$. Splitting into blocks of length $H=\lceil K^{1/3}\rceil$ gives $Z_p(K)\le K/H+H^2/2+1=O(K^{2/3})$ zeros up to $K<p$. Four ranges of primes then cost $O(X^{3/7})$ each: $p\le X^{3/7}$; exponent two with $k\le X^{1/7}$; exponent one with $p>X^{4/7}$; and the remaining exponent-one primes through the sum $X^{-1/3}\sum_{p\le X^{4/7}}p^{1/3}\log p$. I rechecked the lag polynomial, the block count and each range, and agree. [Full argument](reviews/classical.md#a-refinement-of-the-average-denominator-loss-estimate)
+**Refinement in the review.** The review proves the exponent $3/7$. Zeros of $A_k$ modulo $p$ at both $k$ and $k+h$ make $\sum_{i=1}^h2^{-i}/(k+i)\equiv0$. Clearing denominators gives a polynomial in $k$ of degree at most $h-1$. Its value at $-1$ is $2^{h-1}(h-1)!\not\equiv0$, so at most $h-1$ pairs have lag $h$. Splitting into blocks of length $H=\lceil K^{1/3}\rceil$ gives $Z_p(K)\le K/H+H^2/2+1=O(K^{2/3})$ zeros up to $K<p$. Four ranges of primes then cost $O(X^{3/7})$ each: $p\le X^{3/7}$; exponent two with $k\le X^{1/7}$; exponent one with $p>X^{4/7}$; and the remaining exponent-one primes through the sum $X^{-1/3}\sum_{p\le X^{4/7}}p^{1/3}\log p$. I rechecked the lag polynomial, the block count and each range, and agree. The lag argument is the weighted analogue of Sanna's Lemma 2.2 for harmonic numbers. There the polynomial is $f_d'$ with $f_d(X)=(X+1)\cdots(X+d)$, and the bound is $\#(J_p\cap[x,x+y])<\frac32y^{2/3}+1$ for $1\le y<p$. [Full argument](reviews/classical.md#a-refinement-of-the-average-denominator-loss-estimate) · [Sanna, 2016](https://doi.org/10.1016/j.jnt.2016.02.020)
 
 **Exact losses.** The script computes $Q_n$ exactly for $n\le2000$ and checks the loss prime by prime against this decomposition. That includes $n=3$, where $R_3=16/3$ loses the radix factor 2. The mean losses for $X=100$, $500$, $1000$ and $2000$ are $2.90$, $4.83$, $6.69$ and $7.78$. The largest loss up to 2000 is $19.94$, at $n=1855$. Up to $3\times10^5$ there are exactly 174 large-prime drop pairs $(k,p)$, beginning $(2,5),(4,131),(5,661),(6,1327),(7,1163)$. Their mean contribution over $n\le3\times10^5$ is $3.79$. Heuristically each $U(k)$ meets primes near $X/k$ with probability $\asymp1/p$, so this part should be of order $\log X$. The proved bounds are far larger.
 
@@ -225,7 +225,7 @@ For the 78,473 primes $100<p\le10^6$, the values of $k(p)-\lceil\log_2p\rceil$ a
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | primes | 127 | 200 | 390 | 893 | 1626 | 3179 | 6178 | 10622 | 16097 | 19225 | 14449 | 5011 | 470 | 6 |
 
-The geometric lower tail and the abrupt upper cutoff are the shapes the random model predicts. On $100<p\le2\times10^5$ the script replaces the residues by independent uniform ones, three times with fixed seeds, and compares histograms. The chi-square statistic is $31.0$ on 15 cells. About $16$ of it comes from the pooled far lower tail, where 3 primes have $k(p)\le\lceil\log_2p\rceil-9$ against $21.6$ expected. The 13 central cells and the upper tail contribute about $15$. The mean excess $k(p)-\log_2p$ is $0.680$. Below the bulk the actual primes are slightly rarer than the model's. A small $k(p)$ forces $p$ to divide one of a few fixed integers $N_S$ (Theorem 4.1), while the model draws independent residues at every prime. The $k^*(p)$ minimum agrees with $k(p)$ for 58% of these primes, and the largest difference is 11.
+The data show a roughly geometric lower tail and an abrupt upper cutoff, the shapes the heuristic of §3 suggests. This describes the computed range only. On $100<p\le2\times10^5$ the script replaces the residues by independent uniform ones, three times with fixed seeds, and compares histograms. The chi-square statistic is $31.0$ on 15 cells. About $16$ of it comes from the pooled far lower tail, where 3 primes have $k(p)\le\lceil\log_2p\rceil-9$ against $21.6$ expected. The 13 central cells and the upper tail contribute about $15$. The mean excess $k(p)-\log_2p$ is $0.680$. Below the bulk the actual primes are slightly rarer than the model's. A small $k(p)$ forces $p$ to divide one of a few fixed integers $N_S$ (Theorem 4.1), while the model draws independent residues at every prime. The chi-square value is a diagnostic for these finite samples, not a test of a stated hypothesis. The unrestricted minimum $k^*(p)$ equals $k(p)$ for 10,575 of the 17,959 primes with $100<p\le2\times10^5$, with largest difference $k(p)-k^*(p)=10$. For $100<p\le10^6$ these figures are 45,842 of 78,473 and 11.
 
 **Global groups.** For each prime $5\le p\le20000$ the script reconstructs a minimal set $S$, builds the group of Theorem 2.2, and verifies exactly that its sum is dyadic. It also checks that the group's largest index is $p\,k(p)$, that its multiples of $p$ are exactly $pS$, and that the remaining indices lie below $k(p)^2$. The example at $p=7$ is
 
@@ -249,6 +249,8 @@ with sum $399245531709/2^{43}$, the value the review also recorded.
 - J. B. Rosser and L. Schoenfeld, *Approximate formulas for some functions of prime numbers*, Illinois J. Math. 6 (1962), 64–94. The bounds $\psi(x)<1.03883x$ and $\pi(x)<1.25506x/\log x$.
 - F. G. Dorais and D. Klyve, *A Wieferich prime search up to $6.7\times10^{15}$*, J. Integer Seq. 14 (2011), 11.9.2. [Article](https://cs.uwaterloo.ca/journals/JIS/VOL14/Klyve/klyve3.html)
 - P. L. Montgomery, *New solutions of $a^{p-1}\equiv1\pmod{p^2}$*, Math. Comp. 61 (1993), 361–363. [Article](https://www.ams.org/mcom/1993-61-203/S0025-5718-1993-1182246-5/)
+- M. D. Rogers, *An extension of Boyd's $p$-adic algorithm for the harmonic series*, arXiv:0708.2439 (2007). Zero sets $J_p(y)$ of $\sum_{j\le n}y^j/j$ modulo $p$, with the Wieferich criterion at $n=p-1$. [arXiv](https://arxiv.org/abs/0708.2439)
+- C. Sanna, *On the $p$-adic valuation of harmonic numbers*, J. Number Theory 166 (2016), 41–46. Lemma 2.2 gives the lag-polynomial bound for zeros in short intervals. [DOI](https://doi.org/10.1016/j.jnt.2016.02.020)
 
 ## Reproduction
 
