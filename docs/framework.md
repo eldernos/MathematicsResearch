@@ -32,6 +32,10 @@ The theorems in this repository concern different numbers, but their proofs shar
 
 A solid line is a **mathematical dependency**: the theorem's proof uses the technique, and the generator checks that the Lean module of the theorem imports the module of the technique. A dashed line is a **historical relationship**: one result suggested or preceded another, but the later proof does not rely on it. The figure caption lists the historical links shown. A dotted line marks a published theorem used on paper and not formalized.
 
+## Synthetic expansions
+
+The [Phase 18 dependency map](../notes/phase18/dependencies.md) follows the arithmetic from exact prefix denominators and positive rational state corrections through finite period estimates to full-prefix conclusions. It records which implications use a written proof or an external theorem. The infinite-prime example uses a surviving grid modulo the whole denominator.
+
 ## Strength of a conclusion
 
 The [result index](results.md) states which of the following each result establishes. Confusing them is the most common way to overstate a result in this area.

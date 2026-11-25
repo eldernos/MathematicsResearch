@@ -128,3 +128,7 @@ public import NormalityChecker.Phase16StonehamBounds
 public import NormalityChecker.AdaptiveLogarithmBounds
 public import NormalityChecker.Phase17DiscrepancyBounds
 public import NormalityChecker.ComputableNormalityUndecidability
+public import NormalityChecker.SharpTranslation
+public import NormalityChecker.Phase18Synthetic
+public import NormalityChecker.PositiveSummation
+public import NormalityChecker.RetirementDenominator

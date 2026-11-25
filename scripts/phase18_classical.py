@@ -281,23 +281,30 @@ def verify_f3_f4() -> None:
             assert mismatches == 0
             print(f"  N={N:>3}: log(q_odd(2^N B_P(N)))/N = {math.log(q_odd)/N:.5f}, Frobenius mismatches = {mismatches}")
 
-    # Verify horizontal decomposition ln 2 = sum_{d odd} (1/d) * F_d to 30 digits
-    getcontext().prec = 50
-    ln2_exact = Decimal(2).ln()
-    tot = Decimal(0)
-    for d in range(1, 140, 2):
-        fd = Decimal(0)
+    # Include the same dyadic-exponent cutoff as the construction. Missing
+    # terms through m=140 are exact; the remaining Taylor tail is geometric.
+    total = Fraction()
+    for d in range(1, 141, 2):
         j = 0
-        while True:
-            exp = d * (1 << j) + j
-            if exp > 140:
-                break
-            fd += Decimal(1) / Decimal(1 << exp)
+        while (exponent := d * (1 << j) + j) <= 140:
+            total += Fraction(1, d * (1 << exponent))
             j += 1
-        tot += fd / Decimal(d)
-    err = abs(tot - ln2_exact)
-    assert err < Decimal("1e-38")
-    print(f"Horizontal dyadic-ray sum sum_{{d odd}} L_d agrees with ln 2 to {float(err):.2e}.")
+    taylor = sum(Fraction(1, m * 2**m) for m in range(1, 141))
+    error_upper = taylor - total + Fraction(1, 141 * 2**140)
+    assert 0 <= taylor-total and error_upper < Fraction(1, 10**38)
+    print("Horizontal dyadic-ray truncation has certified error below 10^-38.")
+
+
+def atan_inverse_bounds(a, terms):
+    """Bracket arctan(1/a) between consecutive alternating rational sums."""
+    value = sum(Fraction((-1)**j, (2*j+1) * a**(2*j+1)) for j in range(terms))
+    adjacent = value + Fraction((-1)**terms, (2*terms+1) * a**(2*terms+1))
+    return min(value, adjacent), max(value, adjacent)
+
+
+def ceil_log2_rational(x):
+    exponent = x.numerator.bit_length() - x.denominator.bit_length()
+    return exponent + (Fraction(2)**exponent < x)
 
 
 def chebyshev_even_poly(two_d: int) -> list[int]:
@@ -349,25 +356,19 @@ def verify_f5() -> None:
         q_odd = odd_part(q_full)
         print(f"  M={M:>3} (N={N:>3}): log(q_N)/N = {math.log(q_full)/N:.5f}, log(q_odd)/N = {math.log(q_odd)/N:.5f} (theory: 1.50000)")
 
-    # Verify BBP two-slot non-cancellation for all odd primes 3 <= p <= 500
-    bbp_cancels = []
+    # Enumerate the four literal BBP terms before reducing any denominator.
+    # The second occurrence has k=(p-1)/2, the largest possible k.
     for p in primes_up_to(500):
         if p == 2:
             continue
-        r = p % 8
-        if r == 1:
-            t1 = Fraction(4, p * (1 << ((p - 1) // 2)))
-            t2 = Fraction(-1, 2 * p * (1 << (2 * (p - 1))))
-        elif r == 5:
-            t1 = Fraction(-1, p * (1 << ((p - 5) // 2)))
-            t2 = Fraction(-1, 2 * p * (1 << (2 * (p - 1))))
-        else:
-            t1 = Fraction(-1, 2 * p * (1 << (p - 2)))
-            t2 = Fraction(-1, 2 * p * (1 << (2 * (p - 1))))
-        if (t1 + t2).denominator % p != 0:
-            bbp_cancels.append(p)
-    assert bbp_cancels == [3], f"unexpected BBP cancellation: {bbp_cancels}"
-    print("  Verified BBP two-slot prime combination cancels ONLY at p=3 among all odd primes <= 500.")
+        terms = [Fraction(weight, (8*k + a) * 16**k)
+                 for k in range((p-1)//2 + 1)
+                 for a, weight in ((1, 4), (4, -2), (5, -1), (6, -1))
+                 if odd_part(8*k + a) == p]
+        assert len(terms) == 2 and sum(terms).denominator % p == 0, (p, terms)
+        if p == 3:
+            assert sum(terms) == Fraction(-17, 96)
+    print("Both original BBP slots retain each odd prime through 500.")
 
     print("1b. Bellard formula for pi (shifted by 2^{10M}, N=10M binary bits):")
     for M in [12, 24, 48]:
@@ -391,29 +392,13 @@ def verify_f5() -> None:
         q_odd = odd_part(q_full)
         print(f"  M={M:>2} (N={N:>3}): log(q_N)/N = {math.log(q_full)/N:.5f}, log(q_odd)/N = {math.log(q_odd)/N:.5f}")
 
-    # 1c. NEW: pi-free rounded Chebyshev-pole integrals!
-    # pi = sum_i c_i * a_i * int_0^1 dx / (x^2 + a_i^2)
-    # Using even T_{2D}(x): T_{2D}(x) - T_{2D}(i a_i) = (x^2 + a_i^2) P_i(x^2)
-    # => sum c_i a_i int_0^1 T_{2D}(x) / (T_{2D}(i a_i) (x^2 + a_i^2)) dx = pi + int_0^1 R_tot(x) dx
-    # where R_tot(x) = sum_i (c_i a_i / T_{2D}(i a_i)) P_i(x^2)  (EVEN polynomial!)
-    getcontext().prec = 500
-    # High-precision pi via Machin's formula in Decimal
-    def dec_atan_inv(a: int) -> Decimal:
-        x = Decimal(1) / Decimal(a)
-        x2 = x * x
-        s = x
-        term = x
-        k = 1
-        while True:
-            term = -term * x2
-            add = term / Decimal(2 * k + 1)
-            if abs(add) < Decimal("1e-480"):
-                break
-            s += add
-            k += 1
-        return s
-
-    pi_dec = 16 * dec_atan_inv(5) - 4 * dec_atan_inv(239)
+    # Exact reference enclosure from Machin's identity. The separate
+    # rational approximants below are constructed without this reference.
+    five_low, five_high = atan_inverse_bounds(5, 260)
+    large_low, large_high = atan_inverse_bounds(239, 100)
+    pi_low = 16*five_low - 4*large_high
+    pi_high = 16*five_high - 4*large_low
+    getcontext().prec = 500  # Only for the later illustrative decimal comparisons.
     print("1c. pi-free rounded Chebyshev-pole integrals (even T_{2D}(x), odd denominators only):")
     pi_families = [
         ("Single pole 4*atan(1)", [(4, 1)], math.log(2) / math.log(1 + math.sqrt(2))),
@@ -446,7 +431,10 @@ def verify_f5() -> None:
                 q_k = (2 * num + den) // (2 * den) if num >= 0 else -((-2 * num + den) // (2 * den))
                 Q_int.append(q_k)
             # w = ceil(log2(D * (ln(D) + 1))) + 2
-            w = math.ceil(math.log2(D * (math.log(D) + 1.0))) + 2
+            # Integral comparison gives H_D - 1 <= log D <= H_(D-1).
+            harmonic = sum(Fraction(1, j) for j in range(1, D+1))
+            w = ceil_log2_rational(D*harmonic) + 2
+            assert w == ceil_log2_rational(D*(harmonic + 1) - 1) + 2
             N = e - w
             # Y_N = -2^{-w} * sum_{k=0}^{D-1} Q_int[k] / (2k + 1)
             Y_N = -Fraction(1, 1 << w) * sum(Fraction(Q_int[k], 2 * k + 1) for k in range(D))
@@ -455,11 +443,9 @@ def verify_f5() -> None:
             assert (Y_N * (1 << w) * lcm_odd).denominator == 1
             q_N = Y_N.denominator
             q_odd = odd_part(q_N)
-            # Exact error against pi_dec
-            y_dec = Decimal(Y_N.numerator) / Decimal(Y_N.denominator)
-            err = abs(Decimal(1 << N) * pi_dec - y_dec)
-            log2_err = math.log2(float(err)) if err > 0 else -999.0
-            assert err < Decimal(1) / Decimal(N), f"error bound exceeded: {err}"
+            error_upper = max(abs((1 << N)*pi_low-Y_N), abs((1 << N)*pi_high-Y_N))
+            assert error_upper < Fraction(1, N)
+            log2_err = math.log2(float(error_upper))  # Display only.
             print(f"    D={D:>3}, N={N:>4}, w={w:>2}: log(q_N)/N={math.log(q_N)/N:.5f}, odd={math.log(q_odd)/N:.5f}, log2|err|={log2_err:.2f}")
 
     # 2. e: Theorem F5.3 (impossibility of finite positive dyadic factorial groups) + rates

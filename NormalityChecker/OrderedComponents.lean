@@ -9,42 +9,50 @@ open Finset Nat
 
 namespace NormalityChecker
 
-/-- The pair `(m,j)` labels the positive term numbered `m * 3^j`.
+/-- The pair `(m,j)` labels the positive term numbered `m * p^j`.
 The target uses zero-based indices for the logarithm series. -/
-private def componentIndices : ({m : ℕ // ¬ 3 ∣ m} × ℕ) ≃ ℕ where
-  toFun v := 3 ^ v.2 * v.1.1 - 1
-  invFun n := (⟨ordCompl[3] (n+1), not_dvd_ordCompl prime_three (by omega)⟩, (n+1).factorization 3)
+private def componentIndices {p : ℕ} (hp : p.Prime) : ({m : ℕ // ¬ p ∣ m} × ℕ) ≃ ℕ where
+  toFun v := p ^ v.2 * v.1.1 - 1
+  invFun n := (⟨ordCompl[p] (n+1), not_dvd_ordCompl hp (by omega)⟩, (n+1).factorization p)
   left_inv := by
     rintro ⟨⟨m, hm⟩, j⟩
     have hm0 : m ≠ 0 := by rintro rfl; exact hm (dvd_zero _)
-    have h : 0 < 3^j*m := by positivity
+    have hp0 := hp.pos
+    have h : 0 < p^j*m := by positivity
     simp only [Nat.sub_add_cancel h, Prod.mk.injEq, Subtype.mk.injEq]
-    exact ⟨ordCompl_pow_mul_of_not_dvd j prime_three hm, by
+    exact ⟨ordCompl_pow_mul_of_not_dvd j hp hm, by
       rw [factorization_mul (by positivity) hm0, Finsupp.add_apply,
-        factorization_pow_self prime_three, factorization_eq_zero_of_not_dvd hm, add_zero]⟩
+        factorization_pow_self hp, factorization_eq_zero_of_not_dvd hm, add_zero]⟩
   right_inv := by
     intro n
-    change ordProj[3] (n+1) * ordCompl[3] (n+1) - 1 = n
+    change ordProj[p] (n+1) * ordCompl[p] (n+1) - 1 = n
     rw [ordProj_mul_ordCompl_eq_self]; omega
 
-/-- Grouping positive indices by the power of three dividing them recovers exactly log 2. -/
-theorem hasSum_components_logTwo :
-    HasSum (fun m : {m : ℕ // ¬ 3 ∣ m} => component m.1) (Real.log 2) := by
-  let F (v : {m : ℕ // ¬ 3 ∣ m} × ℕ) :=
-    (1/2 : ℝ)^(v.1.1 * 3^v.2) / ((v.1.1 : ℝ)*3^v.2)
+/-- Grouping the Taylor terms by their prime-free part sums to log 2 for every prime. -/
+theorem hasSum_prime_rays_logTwo {p : ℕ} (hp : p.Prime) :
+    HasSum (fun m : {m : ℕ // ¬ p ∣ m} =>
+      ∑' j : ℕ, (1/2 : ℝ)^(m.1 * p^j) / ((m.1 : ℝ)*(p:ℝ)^j)) (Real.log 2) := by
+  let F (v : {m : ℕ // ¬ p ∣ m} × ℕ) :=
+    (1/2 : ℝ)^(v.1.1 * p^v.2) / ((v.1.1 : ℝ)*(p:ℝ)^v.2)
   have H : HasSum F (Real.log 2) := by
-    have H' := componentIndices.hasSum_iff.mpr hasSum_logTwo
+    have H' := (componentIndices hp).hasSum_iff.mpr hasSum_logTwo
     convert H' using 1
     symm
     funext v
     rcases v with ⟨⟨m,hm⟩,j⟩
     have hm0 : m ≠ 0 := by rintro rfl; exact hm (dvd_zero _)
-    have h : 0 < 3^j*m := by positivity
-    change (1/2:ℝ)^((3^j*m-1)+1) / ((↑(3^j*m-1):ℝ)+1) = _
-    have e : (↑(3^j*m-1):ℝ)+1 = ((3^j*m : ℕ):ℝ) := by exact_mod_cast Nat.sub_add_cancel h
-    rw [e, Nat.sub_add_cancel h, mul_comm (3^j) m]
+    have hp0 := hp.pos
+    have h : 0 < p^j*m := by positivity
+    change (1/2:ℝ)^((p^j*m-1)+1) / ((↑(p^j*m-1):ℝ)+1) = _
+    have e : (↑(p^j*m-1):ℝ)+1 = ((p^j*m : ℕ):ℝ) := by exact_mod_cast Nat.sub_add_cancel h
+    rw [e, Nat.sub_add_cancel h, mul_comm (p^j) m]
     simp [F]
   exact H.prod_fiberwise fun m => (H.summable.prod_factor m).hasSum
+
+/-- Grouping positive indices by the power of three dividing them recovers exactly log 2. -/
+theorem hasSum_components_logTwo :
+    HasSum (fun m : {m : ℕ // ¬ 3 ∣ m} => component m.1) (Real.log 2) := by
+  simpa [component] using hasSum_prime_rays_logTwo prime_three
 
 /-- The arithmetic nonvanishing part of the proposed classification of ordered finite
 Stoneham sums. Any choice of odd signed numerators works, including the signed powers

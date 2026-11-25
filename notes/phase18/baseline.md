@@ -1,0 +1,3 @@
+# Phase 18 provenance
+
+Work began on 25 November 2026 at commit `dd8545ba8a7c8f764c07a72be974418f7befe157`. At that instant the Phase 17 branch pointed to this Phase 16 commit and its Phase 17 results were in the working tree. The separate branch `research/phase-18-synthesis` starts at that exact commit. The five archived manuscripts belong to their existing release tags. The branch was then fast-forwarded to the published Phase 17 commit `17e57702e4cbd6b66a9157636b30ab3802116a4b`, whose parent is the exact starting commit above. The [Phase 17 review](../phase17/review.md) records its independent acceptance checks. The [Phase 18 report](README.md) records verification against the integrated tree.

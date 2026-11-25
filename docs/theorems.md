@@ -2,15 +2,15 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1150 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1230 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 138 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 217 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
-- [Cyclotomic resonance and finite combinations](#cyclotomic-resonance-and-finite-combinations) · 54 declarations
+- [Cyclotomic resonance and finite combinations](#cyclotomic-resonance-and-finite-combinations) · 55 declarations
 - [Signed expansions, exact discrepancy and symbolic spectra](#signed-expansions-exact-discrepancy-and-symbolic-spectra) · 39 declarations
 - [Rational-orbit certificates](#rational-orbit-certificates) · 44 declarations
 - [Complementary coverage, rigidity and limitations of models](#complementary-coverage-rigidity-and-limitations-of-models) · 17 declarations
@@ -253,6 +253,70 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Phase17DiscrepancyBounds.descent31Check_true`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L563) [ST-33](results.md#st-33) | Kernel-checked verification of the 57-vector `(3, 31)` minimized cyclic-descent orbit. |
 | [`Phase17DiscrepancyBounds.descent31_all_words_nonzero`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L579) [ST-33](results.md#st-33) | For every finite binary word `w`, running the minimized `(3, 31)` cyclic-descent automaton from any orbit state stays inside `descent31Orbit` and ends with… |
 
+### Phase18Synthetic
+
+[`NormalityChecker/Phase18Synthetic.lean`](../NormalityChecker/Phase18Synthetic.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase18Synthetic.repunit_mul_sub_one`](../NormalityChecker/Phase18Synthetic.lean#L54) |  |
+| [`Phase18Synthetic.repunit_succ`](../NormalityChecker/Phase18Synthetic.lean#L58) |  |
+| [`Phase18Synthetic.geometric_retirement`](../NormalityChecker/Phase18Synthetic.lean#L65) | A complete group of `h` consecutive powers after position `m`, in any field. |
+| [`Phase18Synthetic.geometric_retirement_weight`](../NormalityChecker/Phase18Synthetic.lean#L76) [SY-11](results.md#sy-11) | **Geometric retirement identity.** `(b-1)/(b^h-1) · ∑_{r=1}^h b^-(m+r) = b^-(m+h)`. |
+| [`Phase18Synthetic.block_retirement`](../NormalityChecker/Phase18Synthetic.lean#L88) | One complete block `(s, s+h]` with constant raw coefficient `c·(b-1)/(b^h-1)` retires to the single term `c·b^-(s+h)`. |
+| [`Phase18Synthetic.grouped_retirement`](../NormalityChecker/Phase18Synthetic.lean#L104) | **Grouped retirement, finite form.** Along a strictly increasing schedule `n`, any raw coefficient sequence that equals `c_k (b-1)/(b^(n_(k+1)-n_k)-1)` on the… |
+| [`Phase18Synthetic.retirement_weight_mem`](../NormalityChecker/Phase18Synthetic.lean#L123) | The retirement weight of a nonempty group lies in `(0, 1]` for a real radix `b > 1`. |
+| [`Phase18Synthetic.grouped_retirement_hasSum`](../NormalityChecker/Phase18Synthetic.lean#L146) [SY-11](results.md#sy-11) | **Grouped retirement, infinite form.** For a real radix `b > 1`, a schedule starting at zero and bounded real multipliers, the dense raw series converges… |
+| [`Phase18Synthetic.retirement_weight_eq_inv_repunit`](../NormalityChecker/Phase18Synthetic.lean#L203) | The retirement weight is the reciprocal of the repunit. |
+| [`Phase18Synthetic.repunit_coprime`](../NormalityChecker/Phase18Synthetic.lean#L212) |  |
+| [`Phase18Synthetic.repunit_ge_two`](../NormalityChecker/Phase18Synthetic.lean#L218) |  |
+| [`Phase18Synthetic.raw_term_den`](../NormalityChecker/Phase18Synthetic.lean#L225) | Each raw summand `1/(R_h b^m)` has reduced denominator exactly `R_h b^m`. |
+| [`Phase18Synthetic.raw_term_not_radix`](../NormalityChecker/Phase18Synthetic.lean#L236) | A raw summand of a group of length at least two is never a `b`-adic rational: no radix shift of it is an integer. |
+| [`Phase18Synthetic.repunit_dvd_of_dvd`](../NormalityChecker/Phase18Synthetic.lean#L255) | Repunits divide repunits of multiple length. |
+| [`Phase18Synthetic.prime_dvd_repunit`](../NormalityChecker/Phase18Synthetic.lean#L267) | Every prime `r ∤ b` divides the repunit of length `r(r-1)`. |
+| [`Phase18Synthetic.raw_prime_support_infinite`](../NormalityChecker/Phase18Synthetic.lean#L290) | **Infinite raw prime support.** If for every `M > 0` some gap of the schedule is divisible by `M`, every prime not dividing `b` divides some raw denominator,… |
+| [`Phase18Synthetic.factorial_gaps`](../NormalityChecker/Phase18Synthetic.lean#L307) | Factorial schedules `t·k!` have a gap divisible by every positive integer. |
+| [`Phase18Synthetic.den_of_unit_numerator`](../NormalityChecker/Phase18Synthetic.lean#L318) | A fraction over `p^e` whose numerator is prime to `p` has reduced denominator `p^e`. |
+| [`Phase18Synthetic.retained_term_den`](../NormalityChecker/Phase18Synthetic.lean#L330) | After enough shifts a grouped term with a retained off-radix prime power keeps exactly that denominator: `b^N/(p^e b^n)` has denominator `p^e` for `N ≥ n`. |
+| [`Phase18Synthetic.programCoeff_mem`](../NormalityChecker/Phase18Synthetic.lean#L364) |  |
+| [`Phase18Synthetic.programCoeff_sub`](../NormalityChecker/Phase18Synthetic.lean#L372) | The coefficient differs from `u - b^g R` by an integer. |
+| [`Phase18Synthetic.programState_fract`](../NormalityChecker/Phase18Synthetic.lean#L383) | **Exact state programming.** Every completed state has fractional part equal to its target. |
+| [`Phase18Synthetic.programCoeff_den_dvd`](../NormalityChecker/Phase18Synthetic.lean#L396) | **Coefficient denominators.** If the previous state has fractional part `u_k`, the next coefficient has denominator dividing `den u_(k+1) · den u_k`. |
+| [`Phase18Synthetic.programCoeffs_den_dvd`](../NormalityChecker/Phase18Synthetic.lean#L416) | With `u_0 = 0` and every target in `[0,1)`, all coefficient denominators obey the bound. |
+| [`Phase18Synthetic.programCoeffs_prime_power`](../NormalityChecker/Phase18Synthetic.lean#L426) | **Off-radix programming.** If every target denominator is a power of a prime `p`, so is every coefficient denominator. |
+| [`Phase18Synthetic.programState_eq_prefix`](../NormalityChecker/Phase18Synthetic.lean#L438) | **The state is the shifted prefix.** With gaps `g_(k+1) = n_(k+1) - n_k` of a monotone schedule with `n_0 = 0`, the state `R_L` equals `b^(n_L) ∑_{k<L}… |
+| [`Phase18Synthetic.programmed_prefix_fract`](../NormalityChecker/Phase18Synthetic.lean#L459) [SY-11](results.md#sy-11) | **Programmed orbit states.** The radix shift of the `L`-th prefix by its own last insertion exponent has fractional part `u_L`. |
+| [`Phase18Synthetic.programState_den`](../NormalityChecker/Phase18Synthetic.lean#L469) | **Retained denominator.** A completed state has the same reduced denominator as its target; on an active interval with `u_k = 1/p^(e_k)` the state keeps… |
+| [`Phase18Synthetic.programState_retired`](../NormalityChecker/Phase18Synthetic.lean#L483) | **Retired states.** A zero target makes the completed state an integer, so the programmed prefix contributes nothing modulo one at that insertion. |
+| [`Phase18Synthetic.programmed_dense_hasSum`](../NormalityChecker/Phase18Synthetic.lean#L494) [SY-11](results.md#sy-11) | **Programmed dense series.** Replacing each programmed term `c_(k+1) b^-n_(k+1)` by its complete geometric group gives a dense, absolutely convergent series… |
+| [`Phase18Synthetic.radixDiscrepancy_mem`](../NormalityChecker/Phase18Synthetic.lean#L518) |  |
+| [`Phase18Synthetic.discrepancy_deficit_le`](../NormalityChecker/Phase18Synthetic.lean#L524) | Concentration near integers bounds the discrepancy deficit. |
+| [`Phase18Synthetic.discrepancy_add_le`](../NormalityChecker/Phase18Synthetic.lean#L563) | One-sided finite comparison obtained from the sharp translation law. |
+| [`Phase18Synthetic.near_neg`](../NormalityChecker/Phase18Synthetic.lean#L569) |  |
+| [`Phase18Synthetic.farCount_neg`](../NormalityChecker/Phase18Synthetic.lean#L573) |  |
+| [`Phase18Synthetic.discrepancy_transfer`](../NormalityChecker/Phase18Synthetic.lean#L583) [SY-12](results.md#sy-12) | **Discrepancy transfer theorem.** For every real `x`, `z`, every `ε ≥ 0` and `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 2ε + E_N(ε)/N`, with `D_N` the extreme interval… |
+| [`Phase18Synthetic.discrepancy_transfer_tendsto`](../NormalityChecker/Phase18Synthetic.lean#L590) | **Asymptotic transfer.** If `E_N(ε)/N → 0` for every `ε > 0`, the discrepancies of `x+z` and `x` differ by `o(1)`; in particular their upper and lower limits… |
+| [`Phase18Synthetic.shift_add_int`](../NormalityChecker/Phase18Synthetic.lean#L605) | Integer translation leaves every radix shift unchanged. |
+| [`Phase18Synthetic.shift_add_radix_rat`](../NormalityChecker/Phase18Synthetic.lean#L611) | A `b`-adic rational `A/b^K` leaves every shift from position `K` onward unchanged. |
+| [`Phase18Synthetic.farCount_le_of_eventually_int`](../NormalityChecker/Phase18Synthetic.lean#L624) | `E_N(0) ≤ K` whenever every shift `b^n z` with `n ≥ K` is an integer. |
+| [`Phase18Synthetic.discrepancy_eventually_int`](../NormalityChecker/Phase18Synthetic.lean#L642) | **Eventually integral transfer.** If `b^n z ∈ ℤ` for all `n ≥ K`, then `\|D_N(x+z) - D_N(x)\| ≤ min(1, K/N)`. |
+| [`Phase18Synthetic.farCount_radix_rat_le`](../NormalityChecker/Phase18Synthetic.lean#L657) | `E_N(0) ≤ K` for the `b`-adic rational `A/b^K`. |
+| [`Phase18Synthetic.discrepancy_radix_rat`](../NormalityChecker/Phase18Synthetic.lean#L668) [SY-12](results.md#sy-12) | **Finite `b`-adic transfer.** `\|D_N(x + A/b^K) - D_N(x)\| ≤ min(1, K/N)`. |
+| [`Phase18Synthetic.discrepancy_add_int`](../NormalityChecker/Phase18Synthetic.lean#L681) | Integer translations preserve the discrepancy at every cutoff. |
+| [`Phase18Synthetic.sparse_near`](../NormalityChecker/Phase18Synthetic.lean#L695) | **Integer head, small tail.** If the insertions with index below `K` lie at or before `n` and the next lies at `m_K > n`, then `b^n ∑ A_k b^-m_k` is within… |
+| [`Phase18Synthetic.sparse_farCount_le`](../NormalityChecker/Phase18Synthetic.lean#L768) | **Counting far positions.** If `2B b^-w ≤ ε`, every position at which a sparse perturbation is farther than `ε` from an integer lies in one of the windows of… |
+| [`Phase18Synthetic.sparse_discrepancy_transfer`](../NormalityChecker/Phase18Synthetic.lean#L811) | **Sparse discrepancy transfer.** For a sparse integer perturbation with `\|A_k\| ≤ B` and any `w` with `2B b^-w ≤ ε`, `\|D_N(x+z) - D_N(x)\| ≤ 2ε + w · #{k : m_k… |
+| [`Phase18Synthetic.quadratic_insertions_le`](../NormalityChecker/Phase18Synthetic.lean#L825) | Quadratic insertion positions `(k+1)(k+2)` below `M` number at most `⌊√M⌋`. |
+| [`Phase18Synthetic.quadratic_sparse_transfer`](../NormalityChecker/Phase18Synthetic.lean#L837) [SY-12](results.md#sy-12) | **The flagship sparse perturbation** `Z = ∑_{k≥1} 2^-(k(k+1))`. |
+
+### PositiveSummation
+
+[`NormalityChecker/PositiveSummation.lean`](../NormalityChecker/PositiveSummation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`hasSum_positive_rational_multiples`](../NormalityChecker/PositiveSummation.lean#L15) [SY-07](results.md#sy-07) | Positive rational multiples of any prescribed positive generators can sum to any prescribed positive real. |
+
 ### RadixTelescoping
 
 [`NormalityChecker/RadixTelescoping.lean`](../NormalityChecker/RadixTelescoping.lean)
@@ -282,6 +346,28 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`JointUniform.normalIn`](../NormalityChecker/RectangleFrequency.lean#L24) | Taking a digit cylinder in one coordinate and the whole interval in the others recovers normality of that coordinate. |
 
+### RetirementDenominator
+
+[`NormalityChecker/RetirementDenominator.lean`](../NormalityChecker/RetirementDenominator.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`RetirementDenominator.shiftedPrefix_eq_div`](../NormalityChecker/RetirementDenominator.lean#L51) |  |
+| [`RetirementDenominator.maximalLayer_card`](../NormalityChecker/RetirementDenominator.lean#L67) [SY-01](results.md#sy-01) | The valuation layer of maximal depth consists of the multiples of `p^(Nat.log p K)` among the first `K` positive indices. |
+| [`RetirementDenominator.maximalLayer_count_bounds`](../NormalityChecker/RetirementDenominator.lean#L78) |  |
+| [`RetirementDenominator.scaledNumerator_mod`](../NormalityChecker/RetirementDenominator.lean#L88) | Each deepest term contributes `b^n` modulo `p`; all shallower terms vanish when `s > 0`. |
+| [`RetirementDenominator.shiftedPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L110) | Exact reduced denominator for every truncation and every shift at or beyond its last insertion. |
+| [`RetirementDenominator.lastInsertion_eq_iff`](../NormalityChecker/RetirementDenominator.lean#L142) | At the left endpoint the new insertion is included. |
+| [`RetirementDenominator.fullPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L157) [SY-01](results.md#sy-01) | The reduced denominator of the full rational prefix at every shift. |
+| [`RetirementDenominator.polynomialPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L165) [SY-01](results.md#sy-01) | For the principal polynomial schedule, the formula holds after the `K`-th insertion even if the fixed truncation is shifted farther. |
+| [`RetirementDenominator.cleanBlock_error`](../NormalityChecker/RetirementDenominator.lean#L178) | Even a coefficient of size one costs at most two in total shifted real error on a whole interval ending by the next insertion. |
+| [`RetirementDenominator.fullPrefix_den_tendsto`](../NormalityChecker/RetirementDenominator.lean#L281) | Every sufficiently late full prefix has arbitrarily large reduced denominator when the valuation weight exponent is positive. |
+| [`RetirementDenominator.normal_of_positive`](../NormalityChecker/RetirementDenominator.lean#L297) | All-prefix normality for `s > 0` whenever insertion positions are strictly increasing multiples of the order and grow at least quadratically. |
+| [`RetirementDenominator.discrepancy_of_zero`](../NormalityChecker/RetirementDenominator.lean#L396) | Unit coefficients give discrepancy tending to one through every cutoff. |
+| [`RetirementDenominator.discrepancy_switch`](../NormalityChecker/RetirementDenominator.lean#L436) [SY-02](results.md#sy-02) | The full discrepancy switch for the grouped series on any strictly increasing schedule of order multiples satisfying the quadratic lower bound. |
+| [`RetirementDenominator.normal_iff_pos`](../NormalityChecker/RetirementDenominator.lean#L444) [SY-02](results.md#sy-02) |  |
+| [`RetirementDenominator.polynomial_discrepancy_switch`](../NormalityChecker/RetirementDenominator.lean#L456) [SY-02](results.md#sy-02) | In particular the principal family at `a k = ord_p(b) * k^d` realizes the discrepancy switch in every degree `d ≥ 2`, for all off-radix primes. |
+
 ### ScaleTransfer
 
 [`NormalityChecker/ScaleTransfer.lean`](../NormalityChecker/ScaleTransfer.lean)
@@ -302,6 +388,27 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`sharp_finite_discrepancy`](../NormalityChecker/SharpDiscrepancy.lean#L68) | A sharp universal constant in the asymptotic bound, with explicit finite-prefix boundary allowance. |
 | [`sharp_asymptotic_discrepancy`](../NormalityChecker/SharpDiscrepancy.lean#L137) [CC-04](results.md#cc-04) |  |
 | [`third_discrepancy_sharp`](../NormalityChecker/SharpDiscrepancy.lean#L157) [DS-03](results.md#ds-03) [CC-04](results.md#cc-04) | The period-two orbit attains the universal plateau in the bound. |
+
+### SharpTranslation
+
+[`NormalityChecker/SharpTranslation.lean`](../NormalityChecker/SharpTranslation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`SharpTranslation.radixDiscrepancy_eq_sampleDisc`](../NormalityChecker/SharpTranslation.lean#L31) |  |
+| [`SharpTranslation.interval_le_sampleDisc`](../NormalityChecker/SharpTranslation.lean#L41) |  |
+| [`SharpTranslation.sampleDisc_le_of`](../NormalityChecker/SharpTranslation.lean#L45) |  |
+| [`SharpTranslation.sampleDisc_nonneg`](../NormalityChecker/SharpTranslation.lean#L52) |  |
+| [`SharpTranslation.sampleDisc_le_one`](../NormalityChecker/SharpTranslation.lean#L55) |  |
+| [`SharpTranslation.interval_le_sampleDisc'`](../NormalityChecker/SharpTranslation.lean#L61) | A possibly degenerate interval. |
+| [`SharpTranslation.arc_le`](../NormalityChecker/SharpTranslation.lean#L123) | **Arc bound.** Every arc of length `l ∈ [0,1]` has centered count at most the extreme interval discrepancy. |
+| [`SharpTranslation.interval_eq_arc_excess`](../NormalityChecker/SharpTranslation.lean#L167) | **Complementation.** Every centered interval count is the positive excess of an arc. |
+| [`SharpTranslation.paired_arc_le`](../NormalityChecker/SharpTranslation.lean#L235) | **Finite arc comparison for paired samples.** If `q_n ≡ p_n + s r_n (mod 1)` with `s = ±1`, then for every arc `[α, α+l)` of length `l ≥ 0`, `D(q) ≤ D(p) + 1… |
+| [`SharpTranslation.sampleDisc_paired`](../NormalityChecker/SharpTranslation.lean#L326) | **Paired samples.** If `q_n ≡ p_n ± r_n (mod 1)` for samples in `[0,1)`, then `D_N(q) ≤ D_N(p) + 1 - D_N(r)`. |
+| [`SharpTranslation.sharp_translation`](../NormalityChecker/SharpTranslation.lean#L343) [SY-04](results.md#sy-04) | **The exact worst-case change.** For every real `x`, `z` and every `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 1 - D_N(z)`. |
+| [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
+| [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
+| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
 
 ## Stoneham polynomial images and products
 
@@ -1933,8 +2040,9 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`hasSum_components_logTwo`](../NormalityChecker/OrderedComponents.lean#L31) [CR-07](results.md#cr-07) | Grouping positive indices by the power of three dividing them recovers exactly log 2. |
-| [`ordered_phase_ne_zero`](../NormalityChecker/OrderedComponents.lean#L52) [CR-07](results.md#cr-07) | The arithmetic nonvanishing part of the proposed classification of ordered finite Stoneham sums. |
+| [`hasSum_prime_rays_logTwo`](../NormalityChecker/OrderedComponents.lean#L32) [SY-09](results.md#sy-09) | Grouping the Taylor terms by their prime-free part sums to log 2 for every prime. |
+| [`hasSum_components_logTwo`](../NormalityChecker/OrderedComponents.lean#L53) [CR-07](results.md#cr-07) | Grouping positive indices by the power of three dividing them recovers exactly log 2. |
+| [`ordered_phase_ne_zero`](../NormalityChecker/OrderedComponents.lean#L60) [CR-07](results.md#cr-07) | The arithmetic nonvanishing part of the proposed classification of ordered finite Stoneham sums. |
 
 ### Resonance
 

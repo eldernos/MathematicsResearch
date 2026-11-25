@@ -45,6 +45,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-33](#st-33) | Least orbit order, p-adic cyclic descent, degree 128 and sixteen infinite parameter-two families | Lean + written deduction | I |
 | [ST-34](#st-34) | Exact plateau-cycle spectra and unconditional sub-quarter bounds for parameter-two quadratics | Written proof | I |
 | [ST-35](#st-35) | Empirical-mixture cycle discrepancy, zero-slack 4/11 reduction and infinite family of mixed-prime products | Lean + written deduction | I |
+| [SY-17](#sy-17) | Polynomial and linear images of synthetic series | Written proof |  |
 | [LS-01](#ls-01) ★ | Unsigned finite-support dichotomy | Lean | II |
 | [LS-02](#ls-02) ★ | Exact discrepancy from persistent cancellation at every order | Lean | II |
 | [LS-03](#ls-03) ★ | Persistent failed regions are null | Lean | II |
@@ -78,11 +79,23 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [DS-08](#ds-08) | Rational translations give arbitrarily small positive discrepancy | Lean | III |
 | [DS-09](#ds-09) | Changing the shell schedule: equal zero patterns with discrepancies 9/13 and 12/13 | Lean | III |
 | [DS-11](#ds-11) | Hausdorff dimension of the discrepancy spectrum | Written proof | III |
+| [SY-02](#sy-02) ★ | All-prefix normality switch for valuation-scheduled series | Lean |  |
+| [SY-03](#sy-03) ★ | Cubic positive expansions prescribing limiting discrepancy | Written proof |  |
+| [SY-04](#sy-04) ★ | Worst change of finite discrepancy under translation | Lean |  |
+| [SY-05](#sy-05) | Liouville numbers with prescribed limiting discrepancy | Written proof |  |
+| [SY-12](#sy-12) | A finite circle bound for sparse translations | Lean |  |
+| [SY-13](#sy-13) | Prescribing limits of orbit measures with rational insertions | Written proof |  |
+| [SY-16](#sy-16) ★ | Quantitative convergence on polynomial schedules | Written proof |  |
 | [AC-01](#ac-01) ★ | Normality from rational orbit models on most blocks | Lean | IV |
 | [AC-04](#ac-04) | Cancellation in short radix orbits with smooth denominators | Lean | IV |
 | [AC-05](#ac-05) | Exact rational discrepancy certificates for prime-restricted logarithmic series | Lean | IV |
 | [AC-06](#ac-06) | Charging only simultaneous failures of several prime tests | Lean | IV |
 | [AC-08](#ac-08) | Square-root bound for incomplete orbits of 2 modulo powers of 3 | Lean | IV |
+| [SY-01](#sy-01) ★ | Denominators of shifted valuation-scheduled prefixes | Lean |  |
+| [SY-06](#sy-06) ★ | A positive sum on infinitely many denominator primes | Written proof |  |
+| [SY-11](#sy-11) | Geometric grouping and positive programmed states | Lean |  |
+| [SY-18](#sy-18) | A positive product with a surviving prime at every cutoff | Written proof |  |
+| [SY-19](#sy-19) | A normal Liouville family on factorial schedules | Written proof |  |
 | [AC-02](#ac-02) ★ | Partial coverage bounds the discrepancy | Lean | IV |
 | [AC-03](#ac-03) ★ | Rigidity of overlapping smooth rational models | Lean | IV |
 | [AC-07](#ac-07) | Discrepancy bounds from certified paths between prefix endpoints | Lean | IV |
@@ -133,6 +146,10 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-47](#cc-47) | Two-source local Euler factors and mesoscopic Poisson correlations for Erdős–Borwein | Written proof | V |
 | [CC-48](#cc-48) | Moving-window word counts, exact discrepancy gap and transcendence for multiplicative Lambert series | Lean + written deduction | V |
 | [CC-49](#cc-49) | Sharp 16-column statistic, parity Bonferroni threshold and trigonometric degree barrier for Erdős–Borwein | Lean + written deduction | V |
+| [SY-08](#sy-08) | Jointly normal components of logarithms, pi and rational targets | Written proof |  |
+| [SY-09](#sy-09) | Taylor rays of a fixed prime sum to the logarithm of two | Lean |  |
+| [SY-10](#sy-10) | Completion delay for positive dyadic Taylor groups | Written proof |  |
+| [SY-15](#sy-15) | Finite positive dyadic groups for the logarithm and factorial series | Written proof |  |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -144,6 +161,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-32](#cc-32) | A moving product parameter can miss maximal discrepancy | Written proof | V |
 | [CC-36](#cc-36) | Multiplier height and escape from a sparse binary orbit | Written proof | V |
 | [CC-50](#cc-50) | Legendre–Bezout linear windows, nearest-grid identification and the window–denominator barrier for ln 2 | Written proof | V |
+| [SY-07](#sy-07) | Positive rational multiples with prescribed total | Lean |  |
+| [SY-14](#sy-14) | A limit on finite functional constructions from lacunary rays | Written proof |  |
 
 ★ marks the principal results presented in the [README](../README.md).
 
@@ -880,6 +899,20 @@ For every pair of distinct odd primes *p* < *q*, infinitely many radices *B* ≥
 - **Computation:** [phase17_mixed_product_orbits.py](../scripts/phase17_mixed_product_orbits.py)
 - **Related:** [ST-14](#st-14) · [ST-27](#st-27) · [ST-29](#st-29) · [ST-32](#st-32)
 
+<a id="sy-17"></a>
+
+### SY-17 · Polynomial and linear images of synthetic series
+
+**Evidence:** Written proof
+
+For factorial schedules and positive valuation order, every nonconstant rational polynomial of the principal series is normal. For polynomial schedules of degree d, every rational polynomial image of degree r with 1 ≤ r < d and r ≤ s is normal. Distinct retained primes and distinct positive orders on the common schedule also give jointly uniform families under the stated growth hypotheses.
+
+**Scope.** The power-series proof controls the pole after tuple insertions coincide. The finite residual certificates for smaller orders give discrepancy bounds rather than a general normality theorem.
+
+- **Proof:** [algebra.md](../notes/phase18/algebra.md)
+- **Computation:** [phase18_principal.py](../scripts/phase18_principal.py) · [phase18_review_algebra.py](../scripts/phase18_review_algebra.py)
+- **Related:** [AC-04](#ac-04) · [SY-01](#sy-01)
+
 ## Localized logarithms and polylogarithms
 
 <a id="ls-01"></a>
@@ -1437,7 +1470,7 @@ and for every *K* ≥ 1 the finite partial sum of *T*ₘ over 1 ≤ *m* ≤ *K* 
 
 **Scope.** The identity regroups the series ln 2 = Σ 1/(*n* 2ⁿ) by the power of 3 dividing *n*. Normality of each partial sum follows from CR-06: after clearing powers of 3 every cell coefficient is a sum of odd numerators over the indices, and the unique largest power of 2 among the indices prevents cancellation. Convergence of the partial sums to ln 2 gives no control of digit frequencies, and nothing here proves or disproves binary normality of ln 2. The scaled error (*K* + 1) 2ᴷ (ln 2 − *F*ᴷ) and the resulting open uniformity problem are discussed in notes/ordered-tail.md.
 
-- **Lean:** [`ordered_sum_binary_normal`](../NormalityChecker/FiniteClassification.lean#L147) · [`hasSum_components_logTwo`](../NormalityChecker/OrderedComponents.lean#L31) · [`ordered_phase_ne_zero`](../NormalityChecker/OrderedComponents.lean#L52)
+- **Lean:** [`ordered_sum_binary_normal`](../NormalityChecker/FiniteClassification.lean#L147) · [`hasSum_components_logTwo`](../NormalityChecker/OrderedComponents.lean#L53) · [`ordered_phase_ne_zero`](../NormalityChecker/OrderedComponents.lean#L60)
 - **Checkpoint 11:** [`ordered_sum_binary_normal`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/FiniteClassification.lean#L147) · [`hasSum_components_logTwo`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/OrderedComponents.lean#L31) · [`ordered_phase_ne_zero`](https://github.com/eldernos/MathematicsResearch/blob/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035/NormalityChecker/OrderedComponents.lean#L52)
 - **Fully qualified:** `NormalityChecker.ordered_sum_binary_normal`, `NormalityChecker.hasSum_components_logTwo`, `NormalityChecker.ordered_phase_ne_zero`
 - **Proof:** [finite-sums.md § consequences and scope](../notes/finite-sums.md#consequences-and-scope) · [results.md § which digit questions the proofs settle](../notes/results.md#which-digit-questions-the-proofs-settle)
@@ -1661,6 +1694,104 @@ For every integer *p* ≥ 2 the set *S*ₚ of DS-05 has Hausdorff dimension log 
 - **Proof:** [attainable-shell-histories.md § hausdorff dimension and measure paper proof](../notes/attainable-shell-histories.md#hausdorff-dimension-and-measure-paper-proof) · [attainable-shell-histories.md § rational translations paper deductions](../notes/attainable-shell-histories.md#rational-translations-paper-deductions)
 - **Related:** [DS-04](#ds-04) · [DS-05](#ds-05)
 
+<a id="sy-02"></a>
+
+### SY-02 · All-prefix normality switch for valuation-scheduled series
+
+**Evidence:** Lean
+
+At the kth insertion use the reciprocal of p raised to s times the valuation of k. Let p be a prime coprime to the radix. On any strictly increasing schedule of multiples of the order of the radix modulo p, with the kth position at least k², the discrepancy tends to one at s = 0 and to zero at each positive integer order.
+
+**Scope.** The theorem applies to every prefix and has no upper bound on the growth of the schedule. Uniform normality in varying primes and explicit convergence rates are separate questions.
+
+- **Lean:** [`discrepancy_switch`](../NormalityChecker/RetirementDenominator.lean#L436) · [`polynomial_discrepancy_switch`](../NormalityChecker/RetirementDenominator.lean#L456) · [`normal_iff_pos`](../NormalityChecker/RetirementDenominator.lean#L444)
+- **Fully qualified:** `NormalityChecker.RetirementDenominator.discrepancy_switch`, `NormalityChecker.RetirementDenominator.polynomial_discrepancy_switch`, `NormalityChecker.RetirementDenominator.normal_iff_pos`
+- **Proof:** [principal.md](../notes/phase18/principal.md)
+- **Related:** [SY-01](#sy-01) · [SY-16](#sy-16) · [AC-04](#ac-04)
+
+<a id="sy-03"></a>
+
+### SY-03 · Cubic positive expansions prescribing limiting discrepancy
+
+**Evidence:** Written proof
+
+Every real δ in [0,1] is the ordinary limiting extreme discrepancy of a positive rational-coefficient cubic expansion. For the balanced retired-state choice the error is O(1/∛N) on all prefixes.
+
+**Scope.** The rational state after each insertion is chosen by a positive modular correction. A complete cycle estimate treats active plateaus, including incomplete final cycles. The weighted share of retired positions fixes the limit.
+
+- **Proof:** [programming.md](../notes/phase18/programming.md)
+- **Related:** [DS-01](#ds-01) · [DS-04](#ds-04)
+
+<a id="sy-04"></a>
+
+### SY-04 · Worst change of finite discrepancy under translation
+
+**Evidence:** Lean
+
+For every real z, integer radix b ≥ 2 and positive N, the maximum over all x of the absolute change from the discrepancy of x to that of x + z equals one minus the discrepancy of z. Equality holds at x = 0.
+
+**Scope.** For extreme discrepancy on half-open intervals. Circular complementation and rotation allow both signs of displacement and atoms at zero. Consequently the translations that preserve both limiting discrepancies for every x are exactly those whose own discrepancy tends to one.
+
+- **Lean:** [`sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) · [`sharp_translation`](../NormalityChecker/SharpTranslation.lean#L343)
+- **Fully qualified:** `NormalityChecker.SharpTranslation.sharp_translation_isGreatest`, `NormalityChecker.SharpTranslation.sharp_translation`
+- **Proof:** [translations.md § the exact worst case change](../notes/phase18/translations.md#the-exact-worst-case-change)
+- **Computation:** [test_phase18_summation.py](../scripts/test_phase18_summation.py)
+
+<a id="sy-05"></a>
+
+### SY-05 · Liouville numbers with prescribed limiting discrepancy
+
+**Evidence:** Written proof
+
+For every radix b ≥ 2 and every δ in [0,1], positive programmable coefficients yield a Liouville number with full discrepancy limit δ. A computable δ gives a computable Liouville number.
+
+**Scope.** A periodic rational target approximating the desired mixture is already in place throughout each long gap. The rational denominator bound involves only the current target and insertion position.
+
+- **Proof:** [liouville-realization.md](../notes/phase18/liouville-realization.md)
+- **Related:** [SY-03](#sy-03)
+
+<a id="sy-12"></a>
+
+### SY-12 · A finite circle bound for sparse translations
+
+**Evidence:** Lean
+
+For every positive sample length, the discrepancy change under addition is at most twice the displacement tolerance plus the fraction of shifts farther than that tolerance from an integer. For binary insertions at k(k+1) the exception count is bounded using the integer square root.
+
+**Scope.** The finite square-root bound is kernel-checked for every auxiliary width. Choosing a logarithmic width gives the paper rate O(log(2N)/√N), uniformly in the translated number.
+
+- **Lean:** [`discrepancy_transfer`](../NormalityChecker/Phase18Synthetic.lean#L583) · [`discrepancy_radix_rat`](../NormalityChecker/Phase18Synthetic.lean#L668) · [`quadratic_sparse_transfer`](../NormalityChecker/Phase18Synthetic.lean#L837)
+- **Fully qualified:** `NormalityChecker.Phase18Synthetic.discrepancy_transfer`, `NormalityChecker.Phase18Synthetic.discrepancy_radix_rat`, `NormalityChecker.Phase18Synthetic.quadratic_sparse_transfer`
+- **Proof:** [translations.md](../notes/phase18/translations.md)
+- **Related:** [SY-04](#sy-04)
+
+<a id="sy-13"></a>
+
+### SY-13 · Prescribing limits of orbit measures with rational insertions
+
+**Evidence:** Written proof
+
+On the circle, precisely the nonempty compact connected sets of radix-invariant probability measures occur as sets of subsequential orbit-measure limits. These sets can be realized using positive rational coefficients on a fixed cubic schedule. Every ordered pair of lower and upper discrepancies in [0,1] can be prescribed.
+
+**Scope.** The invariant-measure realization has classical symbolic predecessors. The arithmetic conclusion programs positive coefficients and gives direct unfinished-period estimates.
+
+- **Proof:** [programming.md](../notes/phase18/programming.md)
+- **Related:** [SY-03](#sy-03)
+
+<a id="sy-16"></a>
+
+### SY-16 · Quantitative convergence on polynomial schedules
+
+**Evidence:** Written proof
+
+For fixed odd p and positive s, the complete-period proof gives exponents s/d and (d−s−1)/d in the error at degree d > s+1, with an additional logarithmic insertion-neighborhood error. In the binary cubic example with p = 3 and s = 1 this gives O(1/∛N).
+
+**Scope.** The complete-period calculation uses the lifting exponent of the radix modulo p. It permits proper multiplicative subgroups and arbitrary final cutoffs.
+
+- **Proof:** [principal.md](../notes/phase18/principal.md)
+- **Computation:** [phase18_principal.py](../scripts/phase18_principal.py)
+- **Related:** [SY-01](#sy-01) · [SY-02](#sy-02)
+
 ## Rational-orbit certificates
 
 <a id="ac-01"></a>
@@ -1778,6 +1909,73 @@ Let *k* ≥ 2, let *A* be an integer not divisible by 3, and let *u*, *N* ≥ 0.
 - **Fully qualified:** `NormalityChecker.incomplete_orbit_interval`, `NormalityChecker.incomplete_orbit_bound`
 - **Proof:** [finite-sums.md § cells with nonzero coefficients](../notes/finite-sums.md#cells-with-nonzero-coefficients) · [results.md § finite sums and incomplete orbits](../notes/results.md#finite-sums-and-incomplete-orbits)
 - **Related:** [AC-04](#ac-04) · [CR-06](#cr-06)
+
+<a id="sy-01"></a>
+
+### SY-01 · Denominators of shifted valuation-scheduled prefixes
+
+**Evidence:** Lean
+
+For an off-radix prime p, every shifted prefix on an increasing schedule of multiples of the order of b modulo p has reduced denominator p raised to s times the integer base-p logarithm of its last inserted index K. The coefficient at k is the reciprocal of p raised to s times the p-adic valuation of k.
+
+**Scope.** The empty prefix has denominator one. The polynomial specialization includes the insertion itself and the last shift before the next insertion.
+
+- **Lean:** [`fullPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L157) · [`polynomialPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L165) · [`maximalLayer_card`](../NormalityChecker/RetirementDenominator.lean#L67)
+- **Fully qualified:** `NormalityChecker.RetirementDenominator.fullPrefix_den`, `NormalityChecker.RetirementDenominator.polynomialPrefix_den`, `NormalityChecker.RetirementDenominator.maximalLayer_card`
+- **Proof:** [principal.md](../notes/phase18/principal.md)
+
+<a id="sy-06"></a>
+
+### SY-06 · A positive sum on infinitely many denominator primes
+
+**Evidence:** Written proof
+
+In the binary sum indexed by odd prime powers m from the prime 3 and the primes congruent to 2 modulo 3, put coefficient 1/m at position 2 raised to m squared. The infinite sum has discrepancy O(1/√log N). Every nonzero finite rational combination of its prime components is binary normal.
+
+**Scope.** An increasing ternary grid survives modulo the entire reduced denominator. Complete-period lengths and the cost of each unfinished interval are bounded uniformly as the number of axes grows.
+
+- **Proof:** [summation.md § a normal positive sum on infinitely many denominator primes](../notes/phase18/summation.md#a-normal-positive-sum-on-infinitely-many-denominator-primes)
+- **Computation:** [test_phase18_summation.py](../scripts/test_phase18_summation.py)
+
+<a id="sy-11"></a>
+
+### SY-11 · Geometric grouping and positive programmed states
+
+**Evidence:** Lean
+
+A weighted finite geometric group equals its designated final inverse radix power. For bounded real multipliers, grouping preserves the infinite sum. Positive rational state corrections realize every specified rational fractional prefix.
+
+**Scope.** The rational-state recurrence and the dense representation are formalized. The sharper gcd formula for a coefficient's reduced denominator is proved in the programming note.
+
+- **Lean:** [`geometric_retirement_weight`](../NormalityChecker/Phase18Synthetic.lean#L76) · [`grouped_retirement_hasSum`](../NormalityChecker/Phase18Synthetic.lean#L146) · [`programmed_prefix_fract`](../NormalityChecker/Phase18Synthetic.lean#L459) · [`programmed_dense_hasSum`](../NormalityChecker/Phase18Synthetic.lean#L494)
+- **Fully qualified:** `NormalityChecker.Phase18Synthetic.geometric_retirement_weight`, `NormalityChecker.Phase18Synthetic.grouped_retirement_hasSum`, `NormalityChecker.Phase18Synthetic.programmed_prefix_fract`, `NormalityChecker.Phase18Synthetic.programmed_dense_hasSum`
+- **Proof:** [principal.md](../notes/phase18/principal.md) · [programming.md](../notes/phase18/programming.md)
+
+<a id="sy-18"></a>
+
+### SY-18 · A positive product with a surviving prime at every cutoff
+
+**Evidence:** Written proof
+
+For distinct retained primes, a rational affine correction on the second axis makes every nonempty row prefix a fixed unit modulo the first prime. The product keeps the predicted first-prime pole at every insertion cutoff and is normal if the product of the two insertion counts has a power saving in N.
+
+**Scope.** For the polynomial schedules of degrees d and e this includes 1/d + 1/e < 1. The conclusion concerns the specified correction of the second factor.
+
+- **Proof:** [algebra.md](../notes/phase18/algebra.md)
+- **Related:** [SY-17](#sy-17) · [AC-04](#ac-04)
+
+<a id="sy-19"></a>
+
+### SY-19 · A normal Liouville family on factorial schedules
+
+**Evidence:** Written proof
+
+On the schedule t times k factorial, every strictly positive valuation order in the principal family gives a base-b normal Liouville number. Positive partial-sum errors and the exact prefix denominator give irrationality and Liouville approximation separately.
+
+**Scope.** The general normality switch is verified in Lean. The full Liouville and transcendence assertions are written deductions.
+
+- **Proof:** [principal.md](../notes/phase18/principal.md)
+- **Related:** [SY-01](#sy-01) · [SY-02](#sy-02) · [SY-17](#sy-17)
 
 ## Complementary coverage and rigidity
 
@@ -2787,6 +2985,62 @@ Exact product perturbations matching all joint laws of every *k*-column subset (
 - **Computation:** [phase17_erdos_borwein_bias.py](../scripts/phase17_erdos_borwein_bias.py)
 - **Related:** [CC-20](#cc-20) · [CC-28](#cc-28) · [CC-29](#cc-29) · [CC-30](#cc-30) · [CC-47](#cc-47)
 
+<a id="sy-08"></a>
+
+### SY-08 · Jointly normal components of logarithms, pi and rational targets
+
+**Evidence:** Written proof
+
+There are explicit exact decompositions of ln 2 in binary and π in hexadecimal into geometric rays such that every finite collection of components is jointly uniform. There are also positive jointly normal components whose sum is any prescribed positive rational.
+
+**Scope.** The BBP rays preserve the four signed denominator classes. Normality refers to finite collections and their nontrivial rational linear forms. An absolute-tail transfer to the full classical constant requires a separate uniform estimate.
+
+- **Proof:** [summation.md](../notes/phase18/summation.md)
+- **External inputs:** Bailey, Borwein and Plouffe, Mathematics of Computation 66 (1997), formula (1.2).
+- **Computation:** [test_phase18_summation.py](../scripts/test_phase18_summation.py)
+- **Related:** [SY-07](#sy-07) · [SY-09](#sy-09) · [AC-04](#ac-04)
+
+<a id="sy-09"></a>
+
+### SY-09 · Taylor rays of a fixed prime sum to the logarithm of two
+
+**Evidence:** Lean
+
+For every prime p, the binary Taylor series of ln 2 sums exactly when grouped over the p-free part of the index. Within the row for r the term of index j has value 1 divided by r times p to the power j times 2 to the power r pʲ.
+
+**Scope.** The identity also holds for p = 2. The binary normality assertion for individual rows uses odd p.
+
+- **Lean:** [`hasSum_prime_rays_logTwo`](../NormalityChecker/OrderedComponents.lean#L32)
+- **Fully qualified:** `NormalityChecker.hasSum_prime_rays_logTwo`
+- **Proof:** [summation.md § partitioning the logarithm](../notes/phase18/summation.md#partitioning-the-logarithm)
+
+<a id="sy-10"></a>
+
+### SY-10 · Completion delay for positive dyadic Taylor groups
+
+**Evidence:** Written proof
+
+The greatest original index M in any positive dyadic group containing the prime-index Taylor term of ln 2 satisfies lim inf M/(p log p) ≥ 1/(1 + log 2) as p ranges over the odd primes. At cutoff N at least a constant times N log log N / log N original indices belong to unfinished groups.
+
+**Scope.** This is a bound on original indices. For general groups the reduced dyadic denominator length can differ from the greatest original exponent. At every original cutoff the unfinished aggregate retains exactly the odd denominator of the ordinary Taylor prefix.
+
+- **Proof:** [prime-delay.md](../notes/phase18/prime-delay.md)
+- **External inputs:** Prime number theorem for the logarithm of lcm(1,…,k).
+
+<a id="sy-15"></a>
+
+### SY-15 · Finite positive dyadic groups for the logarithm and factorial series
+
+**Evidence:** Written proof
+
+All binary Taylor terms of ln 2 can be partitioned into finite groups with dyadic rational sums. For the factorial series of e, every finite subset of terms containing an index at least three has a nondyadic sum.
+
+**Scope.** The logarithm construction uses common odd parts. Its largest dyadic exponent is exact for those groups. The factorial assertion uses distinct indices with their original unit coefficients.
+
+- **Proof:** [classical.md](../notes/phase18/classical.md)
+- **Computation:** [phase18_classical.py](../scripts/phase18_classical.py)
+- **Related:** [SY-10](#sy-10)
+
 ## Counterexamples and impossibility results
 
 <a id="ls-08"></a>
@@ -3011,6 +3265,32 @@ Consequently, no approximant family with positive denominator rate log *q*<sub>*
 - **External inputs:** R. Marcovecchio, The Rhin–Viola method for log 2, Acta Arith. 139 (2009), 147–184, Theorem 1.1 (μ(ln 2) ≤ 3.57455391) E. A. Rukhadze (1987) (μ(ln 2) ≤ 3.89139977)
 - **Computation:** [phase17_classical_approximants.py](../scripts/phase17_classical_approximants.py)
 - **Related:** [CC-01](#cc-01) · [CC-42](#cc-42) · [CC-43](#cc-43) · [CC-44](#cc-44)
+
+<a id="sy-07"></a>
+
+### SY-07 · Positive rational multiples with prescribed total
+
+**Evidence:** Lean
+
+Every positive real is the sum of positive rational multiples of any prescribed sequence of strictly positive real numbers.
+
+**Scope.** The Lean statement concerns convergence and positivity. Applying it to independent normal generators needs the finite compatibility proof, registered separately.
+
+- **Lean:** [`hasSum_positive_rational_multiples`](../NormalityChecker/PositiveSummation.lean#L15)
+- **Fully qualified:** `NormalityChecker.hasSum_positive_rational_multiples`
+- **Proof:** [summation.md § positive controls and counterexamples](../notes/phase18/summation.md#positive-controls-and-counterexamples)
+
+<a id="sy-14"></a>
+
+### SY-14 · A limit on finite functional constructions from lacunary rays
+
+**Evidence:** Written proof
+
+The generating functions for positive-order polylogarithms, the standard four-term BBP formula, the exponential, nonintegral binomials and the alternating Apéry series lie outside the differential algebra over rational functions of any finite list of series having polylogarithmic support counts.
+
+**Scope.** This concerns functional identities and uses ordinary derivatives and polynomial combinations after clearing rational-function denominators. It imposes no obstruction on an identity valid only at a single argument.
+
+- **Proof:** [functional-obstruction.md](../notes/phase18/functional-obstruction.md)
 
 ## Manuscripts
 

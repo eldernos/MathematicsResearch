@@ -12,7 +12,7 @@ All finite assertions, exact rational sums, period checks, prime-delay counts, c
 | **F2** | Universal prime delay ($m' \ge 2p$) for any positive grouping; superlinear worst-case single-ray retirement $R(G(p)) > p(\log_2(3p/2) - \log_2\log_2(3p/2))$, typical-prime delay $> p^{3/2}/\log p$, $1 - O(1/\log N)$ of all primes $\le N$ and $\ge \log 2 \approx 69.3\%$ of all odd rays $\le N$ open at cutoff $N$; cross-ray $2$-adic drop witness $G = \{5, 8, 10\}$ ($E_{\max} = 11$, $e_{\mathrm{red}} = 10$); Strategy A/B1/B2 persistence of the exponential obstruction. | Paper proofs (Theorems F2.1–F2.4, Proposition F2.3) + exact counts to $N = 5000$. | Whether non-positive (signed) non-Taylor groupings outside the balanced trace alphabet can keep both $q_N$ polynomial and shift persistence. |
 | **F3** | Evaluation of 9 transformation classes (telescoping, geometric cancellation, logarithmic functional equations, Lambert series, polylogarithms, algebraic traces, Chebyshev poles, Padé/Hermite–Padé, Stoneham-ray sums); horizontal dyadic-ray sum $\ln 2 = \sum_{d\text{ odd}} L_d$ decomposes $\ln 2$ into Rauzy-deterministic summands. | Paper proofs (Theorem F3.1) + synthesis of Phases 10–16 + cross-reference to [`summation.md`](summation.md). | Any transformation of $\ln 2$ yielding a surviving fixed-support prime axis with controlled remainder. |
 | **F4** | Complement denominator persistence: for any finite prime set $P$, $B_P = \ln 2 - A_P$ retains identical Frobenius residues at every $p > \max P$ ($p^2 > N$) and exact odd-denominator rate $1$. Uniqueness of deterministic remainders across any family with normal pairwise differences. | Paper proofs (Theorems F4.1–F4.2) + 0 Frobenius mismatches for $P = \{2,3\}, \{2,3,5\}$ through $N = 256$. | Any non-circular decomposition $\ln 2 = A + B$ with $A$ normal and $B$ provably normality-preserving. |
-| **F5** | Exact shifted binary denominator rates and grouping obstructions for $\pi$ (BBP $3/2$, Bellard $1$, Gaussian Machin $2/3$, new $\pi$-free Chebyshev poles $\le 0.29975, 0.24965, \to 0$; two-slot BBP cancels only at $p=3$), $e$ (complete impossibility of positive dyadic factorial groups with $\max G \ge 3$; Taylor rate $\ln 2$, Padé rate $(\ln 2)/2$), $\mathrm{Li}_s(1/b)$ (exact rate $s$), $\zeta(3)$ (Apéry series / convergents $\le 0.64149$, Broadhurst BBP), Erdős–Borwein $E$ (benchmark status), and algebraic irrationals (Catalan dyadic series with odd denominator $1$ vs. Pell optimal odd rate $(\ln 2)/2$). | Paper proofs (Theorems F5.1–F5.3) + exact checks in `phase18_classical.py`. | Normality or $D_\infty < 1$ for $\pi, e, \mathrm{Li}_s(1/b), \zeta(3), \sqrt{2}, \varphi$; limiting word law for $E$. |
+| **F5** | Exact shifted binary denominator rates and grouping obstructions for $\pi$ (BBP $3/2$, Bellard $1$, Gaussian Machin $2/3$, new $\pi$-free Chebyshev poles $\le 0.29975, 0.24965, \to 0$; the two original BBP slots with odd denominator part $p$ retain $p$), $e$ (complete impossibility of positive dyadic factorial groups with $\max G \ge 3$; Taylor rate $\ln 2$, Padé rate $(\ln 2)/2$), $\mathrm{Li}_s(1/b)$ (exact rate $s$), $\zeta(3)$ (Apéry series / convergents $\le 0.64149$, Broadhurst BBP), Erdős–Borwein $E$ (benchmark status), and algebraic irrationals (Catalan dyadic series with odd denominator $1$ vs. Pell optimal odd rate $(\ln 2)/2$). | Paper proofs (Theorems F5.1–F5.3) + exact checks in `phase18_classical.py`. | Normality or $D_\infty < 1$ for $\pi, e, \mathrm{Li}_s(1/b), \zeta(3), \sqrt{2}, \varphi$; limiting word law for $E$. |
 
 ---
 
@@ -114,7 +114,7 @@ Existence of a dyadic partition (Theorem F1.2) does not yield efficiency. The th
 
 *Let $\mathcal{P}$ be **any** partition of $\mathbb{N}_{\ge 1}$ into finite nonempty sets $G_\alpha$ (allowing arbitrary cross-ray combinations) such that $S(G_\alpha) = \sum_{m \in G_\alpha} \frac{1}{m 2^m} \in \mathbb{Z}[1/2]$ for every $\alpha$. For every odd prime $p$, let $G(p) \in \mathcal{P}$ be the unique group containing $m = p$. Then:*
 1. *$G(p)$ must contain at least one integer multiple $m' \ge 2p$ of $p$.*
-2. *At every Taylor cutoff $N \ge 2$, every prime $p \in (N/2, N]$ belongs to an **open (unfinished)** group $G(p)$ satisfying $\min G(p) \le p \le N < 2p \le \max G(p)$.*
+2. *At every Taylor cutoff $N \ge 2$, every odd prime $p \in (N/2, N]$ belongs to an **open (unfinished)** group $G(p)$ satisfying $\min G(p) \le p \le N < 2p \le \max G(p)$.*
 
 **Proof.** In $\mathbb{Q}_p$, $v_p(1/(p 2^p)) = -1$, while $v_p(1/(m 2^m)) = 0$ for every $m$ with $p \nmid m$. Since $S(G(p)) \in \mathbb{Z}[1/2] \subset \mathbb{Z}_p$ satisfies $v_p(S(G(p))) \ge 0$, the ultrametric triangle inequality forces a second term $m' \in G(p)$ with $p \mid m'$, hence $m' \ge 2p$. Item 2 follows immediately from $p \le N < 2p$. $\square$
 
@@ -171,15 +171,15 @@ S(\{5, 8, 10\}) = \frac{1}{5 \cdot 2^5} + \frac{1}{8 \cdot 2^8} + \frac{1}{10 \c
 3. *(Archimedean separation floor.) Even under arbitrary cross-ray $2$-adic cancellation, put $R = e_{\mathrm{red}}(G)$ and $G_{> R} = \{m \in G : m > R\}$. If $G_{> R} \neq \emptyset$ and $m^* = \min G_{> R}$, then*
 
 ```math
-R \ge \frac{\log 2}{1 + \log 2} m^* - O(\log m^*) \approx 0.40938\, m^*.
+R \ge \frac{\log 2}{1 + \log 2} m^* - o(m^*) \approx 0.40938\, m^*.
 ```
 
-**Proof.** Item 1 follows from the ultrametric triangle inequality in $\mathbb{Q}_2$. Item 2 is verified directly by exact rational addition. For item 3, $2^R S(G) = 2^R S(G_{\le R}) + 2^R S(G_{> R}) \in \mathbb{Z}$, while $0 < 2^R S(G_{> R}) < 2^{R - m^* + 1}/m^* < 1$. Hence $2^R S(G_{\le R}) \notin \mathbb{Z}$, and its reduced denominator divides $2^{\lfloor \log_2 R \rfloor} \mathrm{lcm}(1, \dots, R)$, forcing $\|2^R S(G_{\le R})\| \ge (R \cdot \mathrm{lcm}(1, \dots, R))^{-1}$. Matching $2^{R - m^* + 1}/m^* \ge (R \cdot e^{\psi(R)})^{-1}$ and using $\psi(R) = R + o(R)$ yields $(m^* - R)\log 2 \le R + O(\log m^*)$, i.e., $R \ge \frac{\log 2}{1 + \log 2} m^* - O(\log m^*)$. $\square$
+**Proof.** Item 1 follows from the ultrametric triangle inequality in $\mathbb{Q}_2$. Item 2 is verified directly by exact rational addition. For item 3, $2^R S(G) = 2^R S(G_{\le R}) + 2^R S(G_{> R}) \in \mathbb{Z}$, while $0 < 2^R S(G_{> R}) < 2^{R - m^* + 1}/m^* < 1$. Hence $2^R S(G_{\le R}) \notin \mathbb{Z}$, and its reduced denominator divides $L_R=\mathrm{lcm}(1,\ldots,R)$ because $2^{R-m}$ is an integer for $m\le R$. Hence the positive tail is at least $1/L_R$. Taking logarithms gives $(m^*-R)\log 2\le\log L_R+\log 2-\log m^*$. Since $\log L_R=R+o(R)$ and $R<m^*$, the asserted leading coefficient follows. $\square$
 
 ### Theorem F2.4 (Persistence of the exponential denominator-growth obstruction)
 
-*Let $\mathcal{P}$ be any partition of $\mathbb{N}_{\ge 1}$ into finite positive dyadic-valued groups, and at cutoff $N \ge 2$ write $R_N = 2^N \sum_{m=1}^N \frac{1}{m 2^m}$, $C_N = \sum_{\max G \le N} S(G) \in \mathbb{Z}[1/2]$ (completed groups), $U_N^{\le N} = \sum_{\min G \le N < \max G} \sum_{m \in G,\, m \le N} \frac{1}{m 2^m}$ (prefix terms of open groups), and $W_N = \sum_{\min G \le N} S(G) \in \mathbb{Z}[1/2]$ (closing every group meeting $[1, N]$). Then every strategy for approximating $2^N \ln 2$ from $\mathcal{P}$ meets an obstruction:*
-1. *(Strategy A: completed groups only.) By Theorem F2.1, every prime $p \in (N/2, N]$ is omitted from $C_N$, so by positivity and the prime number theorem,*
+*Let $\mathcal{P}$ be any partition of $\mathbb{N}_{\ge 1}$ into finite positive dyadic-valued groups, and at cutoff $N \ge 2$ write $R_N = 2^N \sum_{m=1}^N \frac{1}{m 2^m}$, $C_N = \sum_{\max G \le N} S(G) \in \mathbb{Z}[1/2]$ (completed groups), $U_N^{\le N} = \sum_{\min G \le N < \max G} \sum_{m \in G,\, m \le N} \frac{1}{m 2^m}$ (prefix terms of open groups), and $W_N = \sum_{\min G \le N} S(G) \in \mathbb{Z}[1/2]$ (closing every group meeting $[1, N]$). Then the following three ways of using the partition have the stated limitations:*
+1. *(Strategy A: completed groups only.) By Theorem F2.1, every odd prime $p \in (N/2, N]$ is omitted from $C_N$, so by positivity and the prime number theorem,*
 
 ```math
 2^N(\ln 2 - C_N) \ge \sum_{N/2 < p \le N} \frac{2^{N - p}}{p} \ge 2^{(1/2 - o(1)) N}.
@@ -261,7 +261,7 @@ We evaluate the six named targets in F5, comparing exact shifted binary denomina
 
 | Target | Representation | Shifted binary rate $(\log q_N)/N$ | Grouping / retirement behavior | Honest digit-distribution status |
 | --- | --- | --- | --- | --- |
-| **$\pi$** | Standard BBP (1997) | **$3/2 = 1.50000$** (exact) | Two-slot prime pairing cancels only at $p = 3$; every $p > 3$ forces delay $\ge 3p$ | Open ($D_\infty^{(b)}(\pi) \le 1 - c_b (\log N)/N$ via $\mu(\pi) < 8$) |
+| **$\pi$** | Standard BBP (1997) | **$3/2 = 1.50000$** (exact) | For every odd prime the two slots retain its pole; cancellation needs a larger odd multiple | Open ($D_\infty^{(b)}(\pi) \le 1 - c_b (\log N)/N$ via $\mu(\pi) < 8$) |
 | **$\pi$** | Bellard (1997) | **$1 = 1.00000$** (exact) | All primes $p \equiv 1,3,7,9 \pmod{10}$ survive up to $N$ | Open |
 | **$\pi$** | Gaussian Machin $8\arctan(1/3)+4\arctan(1/7)$ | **$2/3 \approx 0.66667$** (Phase 11) | Fixed Gaussian prime bands, no cancellation | Open |
 | **$\pi$** | **New** $\pi$-free rounded Chebyshev poles (even $T_{2D}$) | **$\le 0.29975$** (Machin), **$\le 0.24965$** (Størmer), **$\to 0$** | Breaks $2/3$ without knowing $\pi$; rounding destroys shift persistence | Open |
@@ -276,14 +276,14 @@ We evaluate the six named targets in F5, comparing exact shifted binary denomina
 
 ### 1. $\pi$: BBP denominator rates, two-slot non-cancellation, and $\pi$-free Chebyshev poles
 
-**BBP and Bellard rates.** In the hexadecimal BBP formula $\pi = \sum_{k=0}^\infty 16^{-k}(4/(8k+1) - 2/(8k+4) - 1/(8k+5) - 1/(8k+6))$, shifting by $16^M = 2^{4M}$ ($N = 4M$ binary digits) places odd primes $p \equiv 1, 5 \pmod 8$ in $8k+1$ or $8k+5$ up to $p \le 8M + 5 \approx 2N$, and primes $p \equiv 3, 7 \pmod 8$ in $4k+3$ up to $p \le 4M + 3 \approx N$. By Dirichlet's theorem in arithmetic progressions ($\vartheta(x; 8, r) = x/4 + o(x)$), the top uncancelled bands contribute $\frac{1}{4}(2N + 2N + N + N) = \frac{3}{2} N + o(N)$, matching `scripts/phase18_classical.py` ($1.482, 1.463, 1.467, 1.503$ at $N = 64, 128, 256, 512$). In Bellard's formula (1997), shifting by $2^{10M}$ ($N = 10M$) puts all four coprime residue classes $p \equiv 1, 3, 7, 9 \pmod{10}$ up to $10M + 9 \approx N$, yielding rate $1$ ($1.001, 1.002, 1.008$ at $N = 120, 240, 480$).
+**BBP and Bellard rates.** In the hexadecimal BBP formula $\pi = \sum_{k=0}^\infty 16^{-k}(4/(8k+1) - 2/(8k+4) - 1/(8k+5) - 1/(8k+6))$, shifting by $16^M = 2^{4M}$ ($N = 4M$ binary digits) places odd primes $p \equiv 1, 5 \pmod 8$ in $8k+1$ or $8k+5$ up to $p \le 8M + 5 \approx 2N$, and primes $p \equiv 3, 7 \pmod 8$ in $4k+3$ up to $p \le 4M + 3 \approx N$. By the prime number theorem in arithmetic progressions ($\vartheta(x; 8, r) = x/4 + o(x)$), the top uncancelled bands contribute $\frac{1}{4}(2N + 2N + N + N) = \frac{3}{2} N + o(N)$, matching `scripts/phase18_classical.py` ($1.482, 1.463, 1.467, 1.503$ at $N = 64, 128, 256, 512$). In Bellard's formula (1997), shifting by $2^{10M}$ ($N = 10M$) puts all four coprime residue classes $p \equiv 1, 3, 7, 9 \pmod{10}$ up to $10M + 9 \approx N$, yielding rate $1$ ($1.001, 1.002, 1.008$ at $N = 120, 240, 480$).
 
-**Signed two-slot non-cancellation in BBP.** Every odd prime $p$ occurs twice in BBP with denominator $p$: once in $-1/(2(2k+1))$ at binary exponent $2p - 2$, and once in its mod-$8$ slot at exponent $(p-1)/2$ ($p \equiv 1 \pmod 8$, coefficient $+4$), $(p-5)/2$ ($p \equiv 5 \pmod 8$, coefficient $-1$), or $p - 2$ ($p \equiv 3, 7 \pmod 8$, coefficient $-1/2$). By Euler's criterion $2^{(p-1)/2} \equiv (\frac{2}{p}) \pmod p$:
+**Signed two-slot non-cancellation in BBP.** Every odd prime $p$ occurs twice in BBP with denominator $p$: once in $-1/(2(2k+1))$ at binary exponent $2p - 2$, and once in its mod-$8$ slot at exponent $(p-1)/2$ ($p \equiv 1 \pmod 8$, coefficient $+4$), $(p-5)/2$ ($p \equiv 5 \pmod 8$, coefficient $-1$), or $p - 3$ ($p \equiv 3, 7 \pmod 8$, coefficient $-1/2$). By Euler's criterion $2^{(p-1)/2} \equiv (\frac{2}{p}) \pmod p$:
 - for $p \equiv 1 \pmod 8$: numerator $\equiv 2^{3(p-1)/2 + 3} - 1 \equiv 7 \not\equiv 0 \pmod p$ (since $p \ge 17$);
 - for $p \equiv 5 \pmod 8$: numerator $\equiv -(2^{3(p-1)/2 + 3} + 1) \equiv 7 \not\equiv 0 \pmod p$ (since $p \neq 7$);
-- for $p \equiv 3, 7 \pmod 8$: numerator $\equiv -(2^p + 1) \equiv -3 \pmod p$, vanishing **only for $p = 3$**.
+- for $p \equiv 3, 7 \pmod 8$: numerator $\equiv -(2^{p+1} + 1) \equiv -5 \pmod p$, nonzero in these residue classes. Indeed $8k+6=2p$ here gives $4k=p-3$. At $p=3$ the two terms sum to $-17/96$.
 
-Thus combining both $p$-slots in BBP never retires any prime $p > 3$, forcing any positive or signed BBP grouping to wait at least until a higher multiple ($\ge 3p$). For geometric-ray decompositions of BBP series preserving residue classes mod $8$ and their joint normality, see [`notes/phase18/summation.md`](summation.md).
+Thus combining both $p$-slots in BBP retains every odd prime $p$, forcing any positive or signed BBP grouping to wait at least until a higher multiple ($\ge 3p$). For geometric-ray decompositions of BBP series preserving residue classes mod $8$ and their joint normality, see [`notes/phase18/summation.md`](summation.md).
 
 **Theorem F5.1 ($\pi$-free rounded Chebyshev-pole integrals breaking $2/3$).** *Let $\pi = \sum_{i=1}^m c_i \arctan(1/a_i) = \sum_{i=1}^m c_i a_i \int_0^1 \frac{dx}{x^2 + a_i^2}$ with $c_i \in \mathbb{Z}$ and $a_i \in \mathbb{Z}_{\ge 1}$, and put $a_{\min} = \min_i a_i$. For degree $2D$ ($D \ge 1$), let $T_{2D}(x) \in \mathbb{Z}[x^2]$ be the even Chebyshev polynomial of the first kind ($|T_{2D}(x)| \le 1$ on $[0, 1]$). Then $T_{2D}(x) - T_{2D}(i a_i) = (x^2 + a_i^2) P_i(x^2)$ with $P_i \in \mathbb{Z}[y]$ of degree $D - 1$, and*
 
@@ -308,7 +308,7 @@ Thus combining both $p$-slots in BBP never retires any prime $p > 3$, forcing an
 
 Dividing by $2^w$ gives $|2^N \pi - Y_N| = O(1/N)$. Since $\int_0^1 x^{2k}\,dx = 1/(2k+1)$, $q_N \mid 2^w \mathrm{lcm}(1, 3, \dots, 2D-1)$, whose logarithm is $(2 + o(1)) D$ by the prime number theorem. Dividing by $N$ yields the stated bound. $\square$
 
-Exact certified evaluations in `scripts/phase18_classical.py`:
+The script computes the denominators exactly and certifies the error against a rational alternating-series enclosure for π. The table shows decimal renderings of the logarithms, including the logarithm of the certified error upper bound:
 
 | $\pi$ Chebyshev-pole family | Limit rate | $D$ | $N$ | $w$ | $(\log q_N)/N$ | Odd rate | $\log_2|\text{err}|$ |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -364,7 +364,7 @@ Because $C_{k-1} \sim 4^{k-1}/(\sqrt{\pi} k^{3/2})$ while $v_2(C_{k-1}) = s_2(k)
 
 ### Priority conclusion across F1–F5
 
-Among the named classical targets, only the **Erdős–Borwein constant** (and its integer-coefficient Lambert siblings such as $L_{\chi_4}$) currently admits genuine asymptotic digit-distribution theorems (disjunctivity, positive word density, strict discrepancy). Among the non-Lambert classical constants ($\ln 2, \pi, e, \mathrm{Li}_s(1/b), \zeta(3)$, algebraic irrationals), synthetic grouping and retirement do not yet yield $D_\infty < 1$ or normality for any target; the strongest rigorous arithmetic advances remain the prime-band rate classifications, the factorial grouping impossibility theorem for $e$ (Theorem F5.2), and the $\ln 2$-free / $\pi$-free Chebyshev-pole denominator reductions (Phase 16 and Theorem F5.1), with shift persistence identified as the exact remaining barrier.
+The external word-density theorem gives the Erdős–Borwein constant a strict upper discrepancy below one. The character Lambert comparison family instead has discrepancy tending to one despite disjunctivity. Earlier work also supplies digit-count lower bounds for specific algebraic irrationals. Among the non-Lambert classical constants ($\ln 2, \pi, e, \mathrm{Li}_s(1/b), \zeta(3)$, algebraic irrationals), synthetic grouping and retirement do not yet yield $D_\infty < 1$ or normality for any target; the strongest rigorous arithmetic advances remain the prime-band rate classifications, the factorial grouping impossibility theorem for $e$ (Theorem F5.2), and the $\ln 2$-free / $\pi$-free Chebyshev-pole denominator reductions (Phase 16 and Theorem F5.1), with shift persistence and distribution of the resulting models still requiring estimates.
 
 ## Reproduction
 
@@ -372,4 +372,4 @@ Among the named classical targets, only the **Erdős–Borwein constant** (and i
 python3 -B scripts/phase18_classical.py
 ```
 
-The script uses only the Python standard library and runs in a few seconds, ending with `All Phase 18 classical synthesis checks passed.`
+The script uses only the Python standard library. It ends with `All Phase 18 classical synthesis checks passed.`

@@ -13,12 +13,13 @@ Identifiers are editorial and permanent. They stay attached to a mathematical st
 | DS | Exact discrepancy and symbolic spectra | [papers/03-signed-resonance](../../papers/03-signed-resonance) |
 | AC | Rational-orbit certificates, coverage and rigidity | [papers/04-arithmetic-certificates](../../papers/04-arithmetic-certificates) |
 | CC | Classical constant arithmetic | [papers/05-classical-denominators](../../papers/05-classical-denominators) |
+| SY | Synthetic expansions and translations | [Phase 18 research](../../notes/phase18/README.md) |
 
 ## Fields of a `[[result]]` table
 
 | Field | Required | Meaning |
 | --- | --- | --- |
-| `id` | yes | Identifier such as `ST-01`. The prefix fixes the family and manuscript. |
+| `id` | yes | Identifier such as `ST-01`. The prefix fixes the family. SY records research preceding a manuscript release. |
 | `title` | yes | A short name of the result, readable without notation. |
 | `topic` | yes | One of the topic keys listed below. |
 | `principal` | no | `true` for results featured in the README. |

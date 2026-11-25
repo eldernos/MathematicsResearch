@@ -1,6 +1,6 @@
 module
 
-public import NormalityChecker.BinaryDiscrepancy
+public import NormalityChecker.SharpTranslation
 
 /-! # Phase 18: radix retirement, programmed rational states and discrepancy transfer
 
@@ -35,14 +35,8 @@ Kernel-checked elementary cores of the Phase 18 synthesis programme.
    (`sparse_farCount_le`). For `Z = ∑_{k≥1} 2^-(k(k+1))` this gives
    `|D_N(x+Z;2) - D_N(x;2)| ≤ 4·2^-w + w⌊√(N+w)⌋/N` for every `x` and `w`
    (`quadratic_sparse_transfer`), hence `O(log N/√N)`.
-5. **Exact survival arithmetic.** A sum of prime-power fractions in which the terms of maximal
-   depth have numerators congruent to one common unit, and between one and `p-1` of them occur,
-   has reduced denominator exactly `p^(sJ)`. Specialized to the shifted prefix of
-   `∑ 1/(p^(s v_p(k)) b^(t k^d))` with `t = ord_p(b)` this is the Phase 18 formula
-   `q_n = p^(s ⌊log_p K⌋)` (`retirement_prefix_den`).
 
-The normality and discrepancy limit theorems built on these cores are paper deductions recorded
-in the Phase 18 notes; they are not claimed here.
+Exact shifted-prefix denominators are proved in NormalityChecker.RetirementDenominator.
 -/
 
 @[expose] public section
@@ -294,14 +288,14 @@ theorem prime_dvd_repunit {b r : ℕ} (hb : 2 ≤ b) (hr : r.Prime) (hrb : ¬ r 
 by `M`, every prime not dividing `b` divides some raw denominator, and the set of primes in raw
 denominators is infinite. -/
 theorem raw_prime_support_infinite {b : ℕ} (hb : 2 ≤ b) (n : ℕ → ℕ)
-    (gaps : ∀ M, 0 < M → ∃ k, M ∣ n (k + 1) - n k) :
-    (∀ r, r.Prime → ¬ r ∣ b → ∃ k, r ∣ repunit b (n (k + 1) - n k)) ∧
-      {r : ℕ | r.Prime ∧ ∃ k, r ∣ repunit b (n (k + 1) - n k)}.Infinite := by
-  have each : ∀ r, r.Prime → ¬ r ∣ b → ∃ k, r ∣ repunit b (n (k + 1) - n k) := by
+    (gaps : ∀ M, 0 < M → ∃ k, n k < n (k + 1) ∧ M ∣ n (k + 1) - n k) :
+    (∀ r, r.Prime → ¬ r ∣ b → ∃ k, n k < n (k + 1) ∧ r ∣ repunit b (n (k + 1) - n k)) ∧
+      {r : ℕ | r.Prime ∧ ∃ k, n k < n (k + 1) ∧ r ∣ repunit b (n (k + 1) - n k)}.Infinite := by
+  have each : ∀ r, r.Prime → ¬ r ∣ b → ∃ k, n k < n (k + 1) ∧ r ∣ repunit b (n (k + 1) - n k) := by
     intro r hr hrb
     have hpos : 0 < r * (r - 1) := Nat.mul_pos hr.pos (by have := hr.two_le; omega)
-    obtain ⟨k, hk⟩ := gaps _ hpos
-    exact ⟨k, (prime_dvd_repunit hb hr hrb).trans (repunit_dvd_of_dvd hb hk)⟩
+    obtain ⟨k, hgap, hk⟩ := gaps _ hpos
+    exact ⟨k, hgap, (prime_dvd_repunit hb hr hrb).trans (repunit_dvd_of_dvd hb hk)⟩
   refine ⟨each, Set.infinite_of_not_bddAbove ?_⟩
   rintro ⟨M, hM⟩
   obtain ⟨r, hr1, hr⟩ := Nat.exists_infinite_primes (M + b + 1)
@@ -310,9 +304,12 @@ theorem raw_prime_support_infinite {b : ℕ} (hb : 2 ≤ b) (n : ℕ → ℕ)
   omega
 
 /-- Factorial schedules `t·k!` have a gap divisible by every positive integer. -/
-theorem factorial_gaps (t : ℕ) : ∀ M, 0 < M → ∃ k, M ∣ t * (k + 1).factorial - t * k.factorial := by
+theorem factorial_gaps {t : ℕ} (ht : 0 < t) : ∀ M, 0 < M → ∃ k,
+    t * k.factorial < t * (k + 1).factorial ∧ M ∣ t * (k + 1).factorial - t * k.factorial := by
   intro M hM
-  refine ⟨M, Nat.dvd_sub ?_ ?_⟩
+  refine ⟨M, Nat.mul_lt_mul_of_pos_left ?_ ht, Nat.dvd_sub ?_ ?_⟩
+  · rw [Nat.factorial_succ]
+    simpa only [Nat.one_mul] using Nat.mul_lt_mul_of_pos_right (show 1 < M+1 by omega) (Nat.factorial_pos M)
   · exact Dvd.dvd.mul_left ((Nat.dvd_factorial hM le_rfl).trans
       (Nat.factorial_dvd_factorial (Nat.le_succ M))) t
   · exact Dvd.dvd.mul_left (Nat.dvd_factorial hM le_rfl) t
@@ -518,183 +515,56 @@ integer. -/
 noncomputable def farCount (b : ℕ) (z ε : ℝ) (N : ℕ) : ℕ :=
   ((range N).filter (fun n => ¬ Near ((b : ℝ) ^ n * z) ε)).card
 
-private lemma interval_le {b N : ℕ} (x : ℝ) {a c : ℝ} (ha : 0 ≤ a) (hlt : a < c) (hc : c ≤ 1) :
-    |frequency (shift b x) a c N - (c - a)| ≤ radixDiscrepancy b x N := by
-  apply le_csSup (s := {d | ∃ a c : ℝ, 0 ≤ a ∧ a < c ∧ c ≤ 1 ∧
-    d = |frequency (shift b x) a c N - (c - a)|})
-  · refine ⟨1, ?_⟩
-    rintro _ ⟨u, v, hu, lt, hv, rfl⟩
-    have f := frequency_bounds (shift b x) u v N
-    rw [abs_le]; constructor <;> linarith [f.1, f.2]
-  · exact ⟨a, c, ha, hlt, hc, rfl⟩
-
-private lemma radix_le {b N : ℕ} {x D : ℝ}
-    (H : ∀ a c : ℝ, 0 ≤ a → a < c → c ≤ 1 → |frequency (shift b x) a c N - (c - a)| ≤ D) :
-    radixDiscrepancy b x N ≤ D := by
-  unfold radixDiscrepancy
-  refine csSup_le ⟨_, 0, 1, le_rfl, zero_lt_one, le_rfl, rfl⟩ ?_
-  rintro _ ⟨a, c, ha, hac, hc, rfl⟩
-  exact H a c ha hac hc
-
 theorem radixDiscrepancy_mem (b : ℕ) (x : ℝ) (N : ℕ) :
-    0 ≤ radixDiscrepancy b x N ∧ radixDiscrepancy b x N ≤ 1 := by
-  refine ⟨(abs_nonneg _).trans (interval_le (b := b) (N := N) x le_rfl zero_lt_one le_rfl),
-    radix_le (fun a c ha hac hc => ?_)⟩
-  have f := frequency_bounds (shift b x) a c N
-  rw [abs_le]; constructor <;> linarith [f.1, f.2]
+    0 ≤ radixDiscrepancy b x N ∧ radixDiscrepancy b x N ≤ 1 :=
+  ⟨SharpTranslation.sampleDisc_nonneg _ _, SharpTranslation.sampleDisc_le_one _ _⟩
 
-/-- The shifted orbit of `x+z` differs from that of `x` by the signed distance of `b^n z`
-from a chosen integer, modulo one. -/
-private lemma shift_add (b : ℕ) (x z : ℝ) (n : ℕ) (j : ℤ) :
-    ∃ i : ℤ, shift b (x + z) n = shift b x n + ((b : ℝ) ^ n * z - j) + i := by
-  unfold shift
-  refine ⟨⌊(b : ℝ) ^ n * x⌋ + j - ⌊(b : ℝ) ^ n * (x + z)⌋, ?_⟩
-  rw [Int.fract, Int.fract]; push_cast; ring
+/-- Concentration near integers bounds the discrepancy deficit. The interior arc
+avoids all good points, including samples at either end of the closed neighborhood. -/
+theorem discrepancy_deficit_le (b : ℕ) (z : ℝ) {ε : ℝ} (hε : 0 ≤ ε) (N : ℕ) :
+    1 - radixDiscrepancy b z N ≤ 2 * ε + (farCount b z ε N : ℝ) / N := by
+  classical
+  let E := (farCount b z ε N : ℝ) / N
+  let D := radixDiscrepancy b z N
+  have hE : 0 ≤ E := by dsimp [E]; positivity
+  have hD : 0 ≤ D := (radixDiscrepancy_mem b z N).1
+  change 1 - D ≤ 2 * ε + E
+  by_contra! h
+  let η := (1 - D - 2 * ε - E) / 2
+  have hη : 0 < η := by dsimp [η]; linarith
+  have ordered : ε + η < 1 - ε := by dsimp [η]; linarith
+  have disc := SharpTranslation.interval_le_sampleDisc (shift b z) N
+    (add_nonneg hε hη.le) ordered (show 1 - ε ≤ 1 by linarith)
+  change |frequency (shift b z) (ε+η) (1-ε) N - ((1-ε)-(ε+η))| ≤ D at disc
+  have count : frequency (shift b z) (ε+η) (1-ε) N ≤ E := by
+    unfold frequency E farCount
+    apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg N)
+    apply Nat.cast_le.mpr
+    apply card_le_card
+    intro n hn
+    obtain ⟨hnN, hmem⟩ := mem_filter.mp hn
+    refine mem_filter.mpr ⟨hnN, ?_⟩
+    rintro ⟨j, hj⟩
+    let y := (b : ℝ)^n * z
+    change ε + η ≤ y - ↑⌊y⌋ ∧ y - ↑⌊y⌋ < 1 - ε at hmem
+    change |y - ↑j| ≤ ε at hj
+    rcases abs_le.mp hj with ⟨lo,hi⟩
+    by_cases hfloor : j ≤ ⌊y⌋
+    · have : (j : ℝ) ≤ (⌊y⌋ : ℤ) := by exact_mod_cast hfloor
+      linarith [hmem.1]
+    · have : (⌊y⌋ : ℝ) + 1 ≤ j := by exact_mod_cast (show ⌊y⌋+1 ≤ j by omega)
+      linarith [hmem.2]
+  have low := (abs_le.mp disc).1
+  dsimp [η] at low
+  change frequency (shift b z) (ε + (1-D-2*ε-E)/2) (1-ε) N ≤ E at count
+  linarith
 
-private lemma count_le (P Q bad : ℕ → Prop) [DecidablePred P] [DecidablePred Q]
-    [DecidablePred bad] (h : ∀ n, P n → ¬ bad n → Q n) (N : ℕ) :
-    ((range N).filter P).card ≤ ((range N).filter Q).card + ((range N).filter bad).card := by
-  refine (card_le_card ?_).trans (card_union_le _ _)
-  intro n hn
-  rw [mem_filter] at hn
-  rw [mem_union, mem_filter, mem_filter]
-  by_cases hb : bad n
-  · exact Or.inr ⟨hn.1, hb⟩
-  · exact Or.inl ⟨hn.1, h n hn.2 hb⟩
-
-private lemma int_eq_zero_of_abs_lt {t : ℝ} {i : ℤ} (h : t = i) (h1 : -1 < t) (h2 : t < 1) :
-    i = 0 := by
-  subst h
-  have a : (-1 : ℤ) < i := by exact_mod_cast h1
-  have b : i < 1 := by exact_mod_cast h2
-  omega
-
-private lemma not_int_between {t : ℝ} {i : ℤ} (m : ℤ) (h : t = i) (h1 : (m : ℝ) < t)
-    (h2 : t < m + 1) : False := by
-  subst h
-  have a : m < i := by exact_mod_cast h1
-  have b : i < m + 1 := by exact_mod_cast h2
-  omega
-
-open Classical in
-/-- **One-sided discrepancy transfer.** -/
+/-- One-sided finite comparison obtained from the sharp translation law. -/
 theorem discrepancy_add_le (b : ℕ) (x z : ℝ) {ε : ℝ} (hε : 0 ≤ ε) {N : ℕ} (hN : 0 < N) :
     radixDiscrepancy b (x + z) N ≤
       radixDiscrepancy b x N + 2 * ε + (farCount b z ε N : ℝ) / N := by
-  set D := radixDiscrepancy b x N
-  set E : ℝ := (farCount b z ε N : ℝ) / N with hEdef
-  have hNr : (0 : ℝ) < N := by exact_mod_cast hN
-  have hE : 0 ≤ E := by positivity
-  have hD : 0 ≤ D := (radixDiscrepancy_mem b x N).1
-  let u := shift b x
-  let v := shift b (x + z)
-  let bad : ℕ → Prop := fun n => ¬ Near ((b : ℝ) ^ n * z) ε
-  have hu : ∀ n, 0 ≤ u n ∧ u n < 1 := fun n => ⟨Int.fract_nonneg _, Int.fract_lt_one _⟩
-  have hv : ∀ n, 0 ≤ v n ∧ v n < 1 := fun n => ⟨Int.fract_nonneg _, Int.fract_lt_one _⟩
-  -- on a good position, `v n = u n + δ + i` with `|δ| ≤ ε`
-  have good : ∀ n, ¬ bad n → ∃ δ : ℝ, |δ| ≤ ε ∧ ∃ i : ℤ, v n = u n + δ + i := by
-    intro n hn
-    simp only [bad, not_not] at hn
-    obtain ⟨j, hj⟩ := hn
-    obtain ⟨i, hi⟩ := shift_add b x z n j
-    exact ⟨_, hj, i, hi⟩
-  have cardE : ((range N).filter bad).card = farCount b z ε N := rfl
-  have freqdef : ∀ (w : ℕ → ℝ) (a c : ℝ),
-      frequency w a c N = (((range N).filter (fun i => a ≤ w i ∧ w i < c)).card : ℝ) / N :=
-    fun _ _ _ => rfl
-  -- complement of an interval
-  have compl : ∀ α β : ℝ, ((range N).filter (fun i => ¬ (α ≤ u i ∧ u i < β))).card =
-      N - ((range N).filter (fun i => α ≤ u i ∧ u i < β)).card := by
-    intro α β
-    have := Finset.card_filter_add_card_filter_not (s := range N) (fun i => α ≤ u i ∧ u i < β)
-    rw [card_range] at this
-    omega
-  apply radix_le
-  intro a c ha hac hc
-  have hfreq := frequency_bounds v a c N
-  rw [abs_le]; constructor
-  · -- lower bound
-    by_cases hw : a + ε < c - ε
-    · have cnt := count_le (fun n => a + ε ≤ u n ∧ u n < c - ε)
-        (fun n => a ≤ v n ∧ v n < c) bad (by
-          intro n hn hg
-          obtain ⟨δ, hδ, i, hi⟩ := good n hg
-          have hδ' := abs_le.mp hδ
-          have hi0 : i = 0 := int_eq_zero_of_abs_lt (t := v n - (u n + δ))
-            (by rw [hi]; ring) (by linarith [hv n]) (by linarith [hv n])
-          rw [hi, hi0]; push_cast; constructor <;> linarith) N
-      have hint := interval_le (b := b) (N := N) x (by linarith) hw (by linarith)
-      have hcnt : frequency u (a + ε) (c - ε) N ≤ frequency v a c N + E := by
-        rw [freqdef, freqdef, hEdef, ← cardE, ← add_div]
-        exact div_le_div_of_nonneg_right (by exact_mod_cast cnt) hNr.le
-      rw [abs_le] at hint
-      linarith [hint.1]
-    · linarith [hfreq.1]
-  · -- upper bound
-    by_cases hw : 1 ≤ c - a + 2 * ε
-    · linarith [hfreq.2]
-    push Not at hw
-    -- an interval `[α,β) ⊂ [0,1]` whose complement contains every good position
-    have upper : ∀ α β : ℝ, 0 ≤ α → α < β → β ≤ 1 → β - α = 1 - (c - a + 2 * ε) →
-        (∀ n, ¬ bad n → a ≤ v n → v n < c → ¬ (α ≤ u n ∧ u n < β)) →
-        frequency v a c N - (c - a) ≤ D + 2 * ε + E := by
-      intro α β hα hαβ hβ hlen hgood
-      have cnt := count_le (fun n => a ≤ v n ∧ v n < c) (fun n => ¬ (α ≤ u n ∧ u n < β))
-        bad (fun n hn hg => hgood n hg hn.1 hn.2) N
-      rw [compl] at cnt
-      have hint := interval_le (b := b) (N := N) x hα hαβ hβ
-      have hle : ((range N).filter (fun i => α ≤ u i ∧ u i < β)).card ≤ N :=
-        (card_filter_le _ _).trans_eq (card_range N)
-      have hcast : (((range N).filter (fun n => a ≤ v n ∧ v n < c)).card : ℝ) ≤
-          (N : ℝ) - ((range N).filter (fun i => α ≤ u i ∧ u i < β)).card + farCount b z ε N := by
-        have := cnt; rw [cardE] at this
-        have h2 : ((N - ((range N).filter (fun i => α ≤ u i ∧ u i < β)).card : ℕ) : ℝ) =
-            (N : ℝ) - ((range N).filter (fun i => α ≤ u i ∧ u i < β)).card := by
-          rw [Nat.cast_sub hle]
-        rw [← h2]; exact_mod_cast this
-      have hf : frequency v a c N ≤ 1 - frequency u α β N + E := by
-        rw [freqdef, freqdef]
-        have : (1 : ℝ) - (((range N).filter (fun i => α ≤ u i ∧ u i < β)).card : ℝ) / N + E =
-            ((N : ℝ) - ((range N).filter (fun i => α ≤ u i ∧ u i < β)).card +
-              farCount b z ε N) / N := by
-          rw [hEdef]; field_simp
-        rw [this]; exact div_le_div_of_nonneg_right hcast hNr.le
-      rw [abs_le] at hint
-      linarith [hint.1]
-    by_cases hA : 0 ≤ a - ε ∧ c + ε ≤ 1
-    · -- the enlarged interval does not wrap
-      have cnt := count_le (fun n => a ≤ v n ∧ v n < c) (fun n => a - ε ≤ u n ∧ u n < c + ε)
-        bad (by
-          intro n hn hg
-          obtain ⟨δ, hδ, i, hi⟩ := good n hg
-          have hδ' := abs_le.mp hδ
-          have hi0 : i = 0 := int_eq_zero_of_abs_lt (t := v n - (u n + δ))
-            (by rw [hi]; ring) (by linarith [hu n, hn.1]) (by linarith [hu n, hn.2])
-          rw [hi0] at hi; push_cast at hi
-          constructor <;> linarith [hn.1, hn.2]) N
-      have hint := interval_le (b := b) (N := N) x hA.1 (by linarith) hA.2
-      have hcnt : frequency v a c N ≤ frequency u (a - ε) (c + ε) N + E := by
-        rw [freqdef, freqdef, hEdef, ← cardE, ← add_div]
-        exact div_le_div_of_nonneg_right (by exact_mod_cast cnt) hNr.le
-      rw [abs_le] at hint
-      linarith [hint.2]
-    · by_cases hB : a - ε < 0
-      · -- wraps below zero: the complement arc is `[c+ε, a+1-ε)`
-        refine upper (c + ε) (a + 1 - ε) (by linarith) (by linarith) (by linarith) (by ring) ?_
-        intro n hg hav hvc ⟨h1, h2⟩
-        obtain ⟨δ, hδ, i, hi⟩ := good n hg
-        have hδ' := abs_le.mp hδ
-        exact not_int_between (-1) (t := v n - (u n + δ)) (by rw [hi]; ring)
-          (by push_cast; linarith) (by push_cast; linarith)
-      · -- wraps above one: the complement arc is `[c+ε-1, a-ε)`
-        have hC : 1 < c + ε := by
-          by_contra hcon; push Not at hcon; exact hA ⟨by linarith, hcon⟩
-        refine upper (c + ε - 1) (a - ε) (by linarith) (by linarith) (by linarith) (by ring) ?_
-        intro n hg hav hvc ⟨h1, h2⟩
-        obtain ⟨δ, hδ, i, hi⟩ := good n hg
-        have hδ' := abs_le.mp hδ
-        exact not_int_between 0 (t := v n - (u n + δ)) (by rw [hi]; ring)
-          (by push_cast; linarith) (by push_cast; linarith)
+  have h := (abs_le.mp (SharpTranslation.sharp_translation b x z hN)).2
+  linarith [discrepancy_deficit_le b z hε N]
 
 theorem near_neg {y ε : ℝ} : Near (-y) ε ↔ Near y ε := by
   constructor <;> rintro ⟨j, hj⟩ <;> refine ⟨-j, ?_⟩ <;> push_cast <;>
@@ -713,10 +583,7 @@ half-open subintervals of `[0,1)` and `E_N(ε)` the number of positions `n < N` 
 theorem discrepancy_transfer (b : ℕ) (x z : ℝ) {ε : ℝ} (hε : 0 ≤ ε) {N : ℕ} (hN : 0 < N) :
     |radixDiscrepancy b (x + z) N - radixDiscrepancy b x N| ≤
       2 * ε + (farCount b z ε N : ℝ) / N := by
-  have h1 := discrepancy_add_le b x z hε hN
-  have h2 := discrepancy_add_le b (x + z) (-z) hε hN
-  rw [add_neg_cancel_right, farCount_neg] at h2
-  rw [abs_le]; constructor <;> linarith
+  exact (SharpTranslation.sharp_translation b x z hN).trans (discrepancy_deficit_le b z hε N)
 
 /-- **Asymptotic transfer.** If `E_N(ε)/N → 0` for every `ε > 0`, the discrepancies of `x+z`
 and `x` differ by `o(1)`; in particular their upper and lower limits coincide. -/
@@ -985,134 +852,5 @@ theorem quadratic_sparse_transfer (x : ℝ) {N : ℕ} (hN : 0 < N) (w : ℕ) :
     _ ≤ 4 * (2⁻¹ : ℝ) ^ w + ((w * Nat.sqrt (N + w) : ℕ) : ℝ) / N := by
         have := div_le_div_of_nonneg_right hc hNr.le
         linarith
-
-/-! ### 5. Exact survival arithmetic -/
-
-/-- **Survival of the deepest layer.** Let `p` be prime, `p ∤ b`, `s > 0` and `K > 0`. If all
-exponents `e_k` give the same residue `b^(e_k) ≡ b^(e_K) (mod p)`, then
-`∑_{k=1}^K b^(e_k) / p^(s·v_p(k))` has reduced denominator exactly `p^(s⌊log_p K⌋)`: the
-indices `j p^J` with `J = ⌊log_p K⌋` are the only ones of maximal depth, there are between
-one and `p-1` of them, and their numerators agree modulo `p`. -/
-theorem deepest_layer_den {b p s K : ℕ} (hp : p.Prime) (hpb : ¬ p ∣ b) (hs : 0 < s)
-    (hK : 0 < K) (e : ℕ → ℕ)
-    (he : ∀ k ∈ Icc 1 K, (b : ZMod p) ^ e k = (b : ZMod p) ^ e K) :
-    (∑ k ∈ Icc 1 K, (b : ℚ) ^ e k / (p : ℚ) ^ (s * multiplicity p k)).den =
-      p ^ (s * Nat.log p K) := by
-  classical
-  have := Fact.mk hp
-  set J := Nat.log p K
-  set E := s * J
-  have hp1 : 1 < p := hp.one_lt
-  have vle : ∀ k ∈ Icc 1 K, multiplicity p k ≤ J := by
-    intro k hk
-    rw [mem_Icc] at hk
-    have hdv : p ^ multiplicity p k ∣ k := pow_multiplicity_dvd p k
-    have hle : p ^ multiplicity p k ≤ K := (Nat.le_of_dvd (by omega) hdv).trans hk.2
-    exact Nat.le_log_of_pow_le hp1 hle
-  -- the common numerator over `p^E`
-  set M : ℤ := ∑ k ∈ Icc 1 K, (b : ℤ) ^ e k * (p : ℤ) ^ (E - s * multiplicity p k)
-  have hsum : ∑ k ∈ Icc 1 K, (b : ℚ) ^ e k / (p : ℚ) ^ (s * multiplicity p k) =
-      (M : ℚ) / ((p ^ E : ℕ) : ℚ) := by
-    simp only [M]; push_cast; rw [Finset.sum_div]
-    refine Finset.sum_congr rfl (fun k hk => ?_)
-    have hle : s * multiplicity p k ≤ E := Nat.mul_le_mul_left s (vle k hk)
-    have hpq : (p : ℚ) ≠ 0 := by exact_mod_cast hp.ne_zero
-    rw [show E = (E - s * multiplicity p k) + s * multiplicity p k by omega, pow_add]
-    field_simp
-    rw [Nat.sub_add_cancel hle]
-  rw [hsum]
-  apply den_of_unit_numerator hp
-  rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
-  -- reduce the numerator modulo `p`
-  have hterm : ∀ k ∈ Icc 1 K, ((b : ZMod p) ^ e k * (p : ZMod p) ^ (E - s * multiplicity p k)) =
-      if multiplicity p k = J then (b : ZMod p) ^ e K else 0 := by
-    intro k hk
-    split_ifs with hv
-    · rw [hv, Nat.sub_self, pow_zero, mul_one, he k hk]
-    · have hlt : multiplicity p k < J := lt_of_le_of_ne (vle k hk) hv
-      have hpos : 0 < E - s * multiplicity p k := by
-        have := Nat.mul_lt_mul_of_pos_left hlt hs; omega
-      rw [ZMod.natCast_self, zero_pow hpos.ne', mul_zero]
-  have hM : (M : ZMod p) =
-      (((Icc 1 K).filter (fun k => multiplicity p k = J)).card : ZMod p) * (b : ZMod p) ^ e K := by
-    simp only [M]; push_cast
-    rw [Finset.sum_congr rfl hterm, Finset.sum_ite, Finset.sum_const_zero, add_zero,
-      Finset.sum_const, nsmul_eq_mul]
-  rw [hM]
-  refine mul_ne_zero ?_ (pow_ne_zero _ (by rwa [Ne, ZMod.natCast_eq_zero_iff]))
-  -- between one and `p - 1` indices of maximal depth
-  set c := ((Icc 1 K).filter (fun k => multiplicity p k = J)).card
-  have c1 : 1 ≤ c := by
-    refine Finset.card_pos.mpr ⟨p ^ J, ?_⟩
-    rw [mem_filter, mem_Icc]
-    refine ⟨⟨Nat.one_le_pow _ _ hp.pos, Nat.pow_log_le_self p hK.ne'⟩, ?_⟩
-    exact Nat.multiplicity_prime_pow J
-  have c2 : c < p := by
-    have hsub : (Icc 1 K).filter (fun k => multiplicity p k = J) ⊆
-        (Ioc 0 K).filter (fun k => p ^ J ∣ k) := by
-      intro k hk
-      rw [mem_filter, mem_Icc] at hk
-      rw [mem_filter, mem_Ioc]
-      refine ⟨⟨by omega, hk.1.2⟩, ?_⟩
-      rw [← hk.2]; exact pow_multiplicity_dvd p k
-    have hcard := (card_le_card hsub).trans_eq (Nat.Ioc_filter_dvd_card_eq_div K (p ^ J))
-    have hlt : K < p ^ J * p := by
-      rw [← pow_succ]; exact Nat.lt_pow_succ_log_self hp1 K
-    have : K / p ^ J < p := Nat.div_lt_of_lt_mul hlt
-    omega
-  rw [Ne, ZMod.natCast_eq_zero_iff]
-  intro hd
-  have := Nat.le_of_dvd (by omega) hd
-  omega
-
-/-- The shifted rational prefix of `C(b,p,s,d) = ∑_k 1/(p^(s v_p(k)) b^(t k^d))` through
-index `K`, at shift `n`. -/
-noncomputable def retirementPrefix (b p s t d n K : ℕ) : ℚ :=
-  (b : ℚ) ^ n * ∑ k ∈ Icc 1 K, ((p : ℚ) ^ (s * multiplicity p k) * (b : ℚ) ^ (t * k ^ d))⁻¹
-
-/-- **Exact denominator formula.** With `t = ord_p(b)`, `s ≥ 1`, `K ≥ 1` and `n ≥ t K^d`, the
-shifted prefix through index `K` has reduced denominator `p^(s ⌊log_p K⌋)`. -/
-theorem retirement_prefix_den {b p s d n K : ℕ} (hp : p.Prime) (hpb : ¬ p ∣ b) (hs : 0 < s)
-    (hK : 0 < K) (hn : orderOf (b : ZMod p) * K ^ d ≤ n) :
-    (retirementPrefix b p s (orderOf (b : ZMod p)) d n K).den = p ^ (s * Nat.log p K) := by
-  set t := orderOf (b : ZMod p)
-  have hb : (b : ℚ) ≠ 0 := by
-    intro h; apply hpb; rw [Nat.cast_eq_zero.mp h]; exact dvd_zero p
-  have hkle : ∀ k ∈ Icc 1 K, t * k ^ d ≤ t * K ^ d := fun k hk =>
-    Nat.mul_le_mul_left t (Nat.pow_le_pow_left (mem_Icc.mp hk).2 d)
-  have eq : retirementPrefix b p s t d n K =
-      ∑ k ∈ Icc 1 K, (b : ℚ) ^ (n - t * k ^ d) / (p : ℚ) ^ (s * multiplicity p k) := by
-    unfold retirementPrefix
-    rw [Finset.mul_sum]
-    refine Finset.sum_congr rfl (fun k hk => ?_)
-    have hle : t * k ^ d ≤ n := (hkle k hk).trans hn
-    rw [show n = (n - t * k ^ d) + t * k ^ d by omega, pow_add, Nat.add_sub_cancel]
-    have hpq : (p : ℚ) ≠ 0 := by exact_mod_cast hp.ne_zero
-    field_simp
-  rw [eq]
-  apply deepest_layer_den hp hpb hs hK
-  intro k hk
-  have hle := hkle k hk
-  rw [show n - t * k ^ d = (n - t * K ^ d) + t * (K ^ d - k ^ d) by
-    have := Nat.mul_sub t (K ^ d) (k ^ d); omega, pow_add, pow_mul, pow_orderOf_eq_one,
-    one_pow, mul_one]
-
-/-- For `s = 0` every shifted prefix is an integer: nothing survives modulo one. -/
-theorem retirement_prefix_den_zero {b : ℕ} (hb : 0 < b) (p t d n K : ℕ)
-    (hn : t * K ^ d ≤ n) :
-    (retirementPrefix b p 0 t d n K).den = 1 := by
-  have hbq : (b : ℚ) ≠ 0 := by exact_mod_cast hb.ne'
-  have eq : retirementPrefix b p 0 t d n K =
-      ((∑ k ∈ Icc 1 K, b ^ (n - t * k ^ d) : ℕ) : ℚ) := by
-    unfold retirementPrefix
-    push_cast
-    rw [Finset.mul_sum]
-    refine Finset.sum_congr rfl (fun k hk => ?_)
-    have hle : t * k ^ d ≤ n :=
-      (Nat.mul_le_mul_left t (Nat.pow_le_pow_left (mem_Icc.mp hk).2 d)).trans hn
-    rw [show n = (n - t * k ^ d) + t * k ^ d by omega, pow_add, Nat.add_sub_cancel]
-    simp only [Nat.zero_mul, pow_zero, one_mul]
-    field_simp
-  rw [eq]; exact Rat.den_natCast _
 
 end NormalityChecker.Phase18Synthetic
