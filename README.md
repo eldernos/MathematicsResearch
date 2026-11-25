@@ -2,6 +2,14 @@
 
 [Research objectives](#research-objectives) · [Distribution terminology](#distribution-terminology) · [Principal theorems](#principal-theorems) · [Classical targets](#classical-targets-status) · [Manuscripts and PDFs](#research-papers) · [Proofs by topic](#results-by-topic) · [Reproduce and review](#reproduce-and-review)
 
+**The addition spectrum.** Fix an integer radix *b* ≥ 2. Let *D*<sub>*N*</sub>(*x*) be the largest absolute difference between a half-open interval’s length and its visit frequency among the first *N* fractional parts of *b*ᵏ*x*, starting at *k* = 0. Three numbers α, β, γ in [0, 1] occur as the respective limits for *x*, *y*, and *x* + *y* exactly when
+
+```math
+\max(0,\alpha+\beta-1)\le\gamma\le 1-|\alpha-\beta|.
+```
+
+Positive rational coefficients at cubic insertion positions realize every permitted triple. At each prefix the error in all three coordinates is at most a constant times 1/∛*N*, uniformly in the target triple for fixed radix and retained prime. [Lean statements](NormalityChecker/AdditionSpectrum.lean) · [Proof, quantitative realization and examples](notes/phase19/addition.md)
+
 **A binary example.** For each positive integer *k*, let *v* count how many times 3 divides *k*. At binary position 2*k*³ insert the rational coefficient 1/3ᵛ, and let *x* be the sum of these coefficients times the corresponding inverse powers of two. Among the first *N* fractional parts of 2ⁿ*x*, starting at *n* = 0, the fraction that falls in any half-open interval differs from its length by at most a constant times 1/∛*N*. In particular *x* is binary normal. Lean verifies normality and the denominator of every shifted rational prefix. A written complete-period argument gives the rate. [Lean denominator theorem](NormalityChecker/RetirementDenominator.lean) · [Proof and general family](notes/phase18/principal.md)
 
 ## Research objectives
@@ -141,6 +149,14 @@ On factorial insertion schedules the normal examples are Liouville numbers, and 
 One positive sum over infinitely many denominator primes is binary normal. Other positive sums can have any prescribed rational total even when every finite collection of their components is jointly uniform. Geometric partitions of the Taylor and BBP series give such finite joint uniformity for components of ln 2 and π. Their full orbit distributions remain open. [Infinite-sum proofs](notes/phase18/summation.md) · [Taylor grouping delay](notes/phase18/prime-delay.md) · [Phase 18 research and verification](notes/phase18/README.md)
 
 Phase 17’s rounding of an entire Legendre integral also works for π at every sufficiently large binary shift. At shift 600 the Machin construction gives a 257-bit odd denominator and at least 261 bits of absolute accuracy. The orbit of the resulting rational throughout that window still requires a distribution estimate. [All-shift theorem and exact checks](notes/phase18/phase17-transfer.md)
+
+### V. Arithmetic operations and all-prime support
+
+The binary cubic example above and its square are jointly normal. The proof isolates jumps in the limiting 3-adic numerator and shows that every level set has real measure zero. This replaces the earlier small upper discrepancy bound for the square. A separate construction keeps different denominator primes on different generators and makes every nonconstant rational polynomial in those generators normal. [Quadratic proof](notes/phase19/nonlinear.md) · [Independent-prime construction](notes/phase19/independent-axes.md)
+
+A positive binary series retaining every odd prime is normal and Liouville, with discrepancy of order at most 1/log *N*. One distinguished prime produces equally spaced residues even in the presence of all the others. For the actual Taylor prefixes of ln 2, the order of 2 modulo the surviving large primes grows faster than every polynomial in the cutoff. [All-prime theorem](notes/phase19/grids.md) · [Taylor-period obstruction](notes/phase19/taylor-periods.md)
+
+The finite translation deficit gives a pseudometric. Its zero differences at two or more shifts are exactly the radix fixed points. The rational scalars preserving its asymptotic kernel for every input are precisely those with denominator dividing a power of the radix. Among the individual deterministic Taylor rows of ln 2, odd part 3 has discrepancy limit 2/3, while odd part 5 has lower limit 1/5 and upper limit 8/15. [Lean geometry](NormalityChecker/DiscrepancyGeometry.lean) · [Operations and proofs](notes/phase19/geometry.md) · [Taylor rows](notes/phase19/logarithm-rays.md) · [Phase 19 results](notes/phase19/README.md)
 
 ## How the results fit together
 

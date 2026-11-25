@@ -5,7 +5,7 @@
 [foundations]
 title = "Normality, discrepancy and Fourier criteria"
 modules = [
-  "DiscrepancyGeometry", "SurvivingGrid",
+  "DiscrepancyGeometry", "SurvivingGrid", "PrimePowerGrid", "AdditionSpectrum",
   "SharpTranslation", "Phase18Synthetic", "PositiveSummation", "RetirementDenominator",
   "Phase17DiscrepancyBounds", "ComputableNormalityUndecidability",
   "JointWeyl", "RectangleFrequency",

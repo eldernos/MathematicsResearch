@@ -7,9 +7,9 @@ $$
 $$
 Here boxes are products of half-open intervals and the reference measure is $d$-dimensional Lebesgue measure. This estimate is for a full torus. It does not assert uniform convergence of box masses to an atomic subtorus mixture at moving endpoints.
 
-Let $\ell$ be a prime different from $p$ and put $F(X)=X^d+\ell X+\ell p$. Eisenstein at $\ell$ gives irreducibility; Hensel lifting the simple root $0\bmod p$ gives an effectively computable root $\theta\in\mathbb Z_p$. For each $k\ge1$ set $q_k=p^{1+\lfloor\log_p k\rfloor}$ and let $v_{j,k}$ represent $\theta^{j-1}\bmod q_k$ in $[0,q_k)$. At $n_k=t k^3$, $t=\operatorname{ord}_p(b)$, program state $v_{j,k}/q_k$ in coordinate $j$ by the positive recurrence of Phase 18. The sum in each coordinate is then determined by explicitly computable rationals of size at most one. [State recurrence](../phase18/programming.md#b1-the-exact-coefficient)
+Take $\ell=2$, different from the odd prime $p$, and put $F(X)=X^d+\ell X+\ell p$. Eisenstein at $\ell$ gives irreducibility; Hensel lifting the simple root $0\bmod p$ gives an effectively computable root $\theta\in\mathbb Z_p$. For each $k\ge1$ set $q_k=p^{1+\lfloor\log_p k\rfloor}$ and let $v_{j,k}$ represent $\theta^{j-1}\bmod q_k$ in $[0,q_k)$. At $n_k=t k^3$, $t=\operatorname{ord}_p(b)$, program state $v_{j,k}/q_k$ in coordinate $j$ by the positive recurrence of Phase 18. The sum in each coordinate is then determined by explicitly computable rationals of size at most one. [State recurrence](../phase18/programming.md#b1-the-exact-coefficient)
 
-For a nonzero integer frequency vector $h$ of height $\max_j|h_j|\le H$, put $P(X)=\sum_{j=1}^d h_jX^{j-1}$. The integer resultant $\mathrm{Res}(F,P)$ is nonzero, since $\deg P<d$. The product over the fixed complex roots bounds its magnitude by $C_{p,d}H^d$ (choose $\ell$ deterministically, for instance $\ell=2$). All the roots of $F$ in a splitting field over $\mathbb Q_p$ are integral. The same product there shows that the resultant is divisible by $p^{v_p(P(\theta))}$, whence
+For a nonzero integer frequency vector $h$ of height $\max_j|h_j|\le H$, put $P(X)=\sum_{j=1}^d h_jX^{j-1}$. The integer resultant $\mathrm{Res}(F,P)$ is nonzero, since $\deg P<d$. The product over the fixed complex roots bounds its magnitude by $C_{p,d}H^d$. All the roots of $F$ in a splitting field over $\mathbb Q_p$ are integral. The same product there shows that the resultant is divisible by $p^{v_p(P(\theta))}$, whence
 $$
  p^{v_p(P(\theta))}\le C_{p,d}H^d .
 $$
@@ -23,3 +23,5 @@ $$
      (H^{3d}/N+N^{-1/3}+H N^{-2/3}).
 $$
 Take $H=\max(1,\lfloor N^{1/(3d+1)}\rfloor)$. Inclusion–exclusion at the corners of a general box bounds its error by $2^dD_N^*$, proving the assertion. This is a multidimensional character argument independent of the scalar translation identity. The classical generic-point theorem gives qualitative realizations; the rate and explicit choice of arithmetic directions are the additional conclusions here. [Kuipers and Niederreiter, *Uniform Distribution of Sequences*, Chapter 2, §2](https://web.maths.unsw.edu.au/~josefdick/preprints/KuipersNied_book.pdf)
+
+The construction controls linear characters and boxes. Polynomial closure requires the independent leading-pole arguments in the [nonlinear proof](nonlinear.md). The exponent is the result of balancing this estimate; no optimality is asserted. [Finite Hensel and flow checks](../../scripts/test_phase19_forms.py)

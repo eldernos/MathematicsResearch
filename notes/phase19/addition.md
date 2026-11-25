@@ -23,6 +23,8 @@ $$
 
 The same constant works on the whole closed region. Both series are uniformly computable from Cauchy names for an admissible triple, and the witnesses can be chosen algebraically independent. The three projected orbit laws converge weakly to $\alpha\delta_0+(1-\alpha)\lambda$ and the corresponding laws with $\beta,\gamma$, where $\lambda$ is normalized length on the circle.
 
+Generic-point existence for invariant torus laws and the five vertex laws already give a short qualitative sufficiency proof. The constructive assertions here are the common cubic schedule, uniform all-prefix rate, computability and algebraic independence. The same facets occur in the point-entropy inequalities of Bergelson and Downarowicz; the entropy and discrepancy observables differ on general orbit laws. [Source comparison](literature.md)
+
 ## The five vertices
 
 At any cutoff write $a=D_N(x)$, $b'=D_N(y)$ and $c=D_N(x+y)$. The sharp translation theorem gives $|c-a|\le1-b'$ and, interchanging the summands, $|c-b'|\le1-a$. Thus $c\ge a+b'-1$, $c\le1+a-b'$ and $c\le1+b'-a$. This proves necessity even at each finite cutoff and along any common subsequence of convergent values. [Phase 18 proof](../phase18/translations.md) · [Lean theorem sharp_translation](../../NormalityChecker/SharpTranslation.lean)
@@ -189,3 +191,5 @@ $$
 $$
 
 The general sum check decomposes 1,153 feasible prescriptions for one through four summands. Additional checks certify five successive polynomial exclusions (one requires extending past the override), exercise 7,920 rational prefixes for the six-form inequality, and compare subtorus projections at seven prime-power depths. Four levels of stationary word flows include a wrapping projection and the all-ones representation of zero. These computations exercise finite instances of the paper results.
+
+For the exact three-coordinate spectrum there is also a cluster-set version. Every nonempty compact connected subset $F$ of the feasible polytope occurs as the cluster set of the three discrepancies. The five weight formulas depend continuously on the triple, so the map sending a point of $F$ to its five-vertex invariant mixture has a compact connected image. The specification theorem for the toral endomorphism realizes exactly this set of empirical limits. Continuity of the three projected scalar discrepancies then gives precisely $F$. Connectedness and compactness are necessary because consecutive empirical averages have vanishing distance. This qualitative corollary does not assert a rate when the target itself varies. For effective height-uniform control of joint boxes with full Haar target see the [algebraic direction construction](joint-rate.md).

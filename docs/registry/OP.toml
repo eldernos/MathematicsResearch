@@ -139,3 +139,59 @@ statement = "For a finite rational combination of the dyadic rows Z_d at positio
 scope = "Every such finite combination preserves normality. Individual rows have a finite rational algorithm for both discrepancy extrema. No digit-frequency assertion about their infinite sum is implied."
 proof = ["notes/phase19/logarithm-rays.md"]
 related = ["OP-06","SY-04","SY-15"]
+
+[[result]]
+id = "OP-14"
+title = "Normality of the flagship square and quadratic forms"
+topic = "stoneham"
+status = "paper"
+principal = true
+statement = "For a fixed odd off-radix prime and positions t kᵈ with d ≥ 3, every nonconstant rational polynomial of total degree at most two in distinct positive valuation orders is normal. In particular the binary cubic-schedule number and its square are jointly normal."
+scope = "The limiting p-adic mass has no positive-measure level set. A derivative estimate for competing jumps and a localized second-moment argument yield all-prefix normality; the proof gives no effective discrepancy rate. The analogous persistent zero set for higher powers remains open."
+proof = ["notes/phase19/nonlinear.md","notes/phase19/reviews/nonlinear.md"]
+related = ["SY-17","SY-20"]
+supersedes = ["SY-20"]
+inputs = ["Van der Corput second-derivative estimate, Erdős–Turán inequality and Lebesgue density theorem."]
+computation = ["scripts/phase19_nonlinear.py"]
+
+[[result]]
+id = "OP-15"
+title = "Every polynomial on rapidly varying power schedules"
+topic = "stoneham"
+status = "paper"
+statement = "If n_floor(ck)/n_k tends to zero for every fixed 0<c<1 and the radix powers freeze p-adically on deeply divisible indices, every nonconstant rational polynomial of the valuation-weighted series is normal. A concrete schedule has log n_k asymptotic to (log k)² and consecutive ratios tending to one."
+scope = "The retained order is positive, the insertion positions are positive increasing multiples of the order of the radix modulo p, and p is an odd off-radix prime. Polynomial normality implies transcendence; these dense schedules are not asserted to be Liouville."
+proof = ["notes/phase19/nonlinear.md"]
+related = ["SY-17","SY-19","AC-04"]
+
+[[result]]
+id = "OP-16"
+title = "Polynomial-normal algebras with separated pole depths"
+topic = "stoneham"
+status = "paper"
+statement = "A finite collection of series with rationally independent depth-growth weights on one prime can be chosen so every nonconstant rational polynomial in the series is normal and Liouville."
+scope = "This is a simultaneous construction for all polynomials in the chosen generators. The unique leading pole is justified outside explicitly bounded exceptional windows."
+proof = ["notes/phase19/nonlinear.md"]
+related = ["OP-15"]
+
+[[result]]
+id = "OP-17"
+title = "A polynomial-normal algebra on distinct retained primes"
+topic = "stoneham"
+status = "paper"
+statement = "For any finite list of distinct off-radix primes, positive series with one dedicated coefficient-denominator prime each can be synthesized so that every nonconstant rational polynomial in the generators is normal and Liouville. In particular the generators are algebraically independent."
+scope = "Off-axis prefix limits are programmed by congruences. They keep the leading coefficient of each fixed polynomial nonzero p-adically. Counts are over all prefixes; the local depth formula permits a density-zero set of cutoff windows."
+proof = ["notes/phase19/independent-axes.md"]
+related = ["SY-18","OP-16"]
+computation = ["scripts/phase19_independent_axes.py"]
+
+[[result]]
+id = "OP-18"
+title = "Quantitative joint box distribution from an algebraic direction"
+topic = "discrepancy"
+status = "paper"
+statement = "For every fixed dimension d ≥ 2 there are computable positive rational-coefficient series on a common cubic schedule with joint box discrepancy O(N raised to −1/(3d+1) times log(2N) to the power d)."
+scope = "The reference measure is full-dimensional Haar measure. The proof uses an algebraic p-adic direction of degree d, a height bound from its norm and the multidimensional Erdős–Turán–Koksma inequality."
+proof = ["notes/phase19/joint-rate.md"]
+related = ["OP-04","OP-08"]
+computation = ["scripts/test_phase19_forms.py"]
