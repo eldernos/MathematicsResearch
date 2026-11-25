@@ -21,6 +21,7 @@ Use these exact labels in manuscripts (theorem notes or a verification table), l
 | **Lean-supported paper proof** | A written proof in which named steps are Lean declarations. Say which steps. |
 | **Paper proof** | A written argument only, possibly citing published theorems. List the external inputs. |
 | **Finite certificate** | An exact computation proving a finite statement. Give the script, its parameters and its output. |
+| **Numerical evidence** | A floating-point computation with stated error radii but without interval arithmetic or exact rational verification. It supports a statement and does not prove it. Give the script and the precision used. |
 | **Conditional** | Depends on an unproved hypothesis. State it. |
 | **External input** | A published theorem used as a black box. Give the citation with theorem number and page. |
 
