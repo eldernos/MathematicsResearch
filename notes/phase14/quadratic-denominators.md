@@ -16,7 +16,7 @@ $$
 q(n)=q_k=2^{[k-a-s-v_2(k-\kappa)]_+}.
 $$
 
-Thus $q_k=1$ if $k=\kappa$. If $\kappa$ is algebraic over $\mathbb Q$, the upper denominators tend to infinity. For every fixed *h*, distinct indices $i<j$ with $q_i,q_j\le2^h$ and $i>a+s+h$ satisfy $2^{i-a-s-h}\mid j-i$. On the lower half the denominator is eventually $2^{2k-2-v_2(A)}$. The formula for every earlier cutoff, including a possible tie, is given below. Lean checks the exact upper formula for the displayed prefix, the eventual lower formula, algebraic upper growth and quantitative separation. [Prefix and denominators](../../NormalityChecker/ParameterTwoQuadratic.lean) · [Algebraic growth and separation](../../NormalityChecker/ParameterTwoQuadraticHeight.lean)
+Thus $q_k=1$ if $k=\kappa$. If $\kappa$ is algebraic over $\mathbb Q$, the upper denominators tend to infinity. For every nonnegative integer *h*, distinct indices $i<j$ with $q_i,q_j\le2^h$ and $i>a+s+h$ satisfy $2^{i-a-s-h}\mid j-i$. On the lower half the denominator is eventually $2^{2k-2-v_2(A)}$. The formula for every earlier cutoff, including a possible tie, is given below. Lean checks the exact upper formula for the displayed prefix, the exact lower and initial reductions, algebraic upper growth and quantitative separation. [Prefix and denominators](../../NormalityChecker/ParameterTwoQuadratic.lean) · [Algebraic growth and separation](../../NormalityChecker/ParameterTwoQuadraticHeight.lean)
 
 ## The limit, its intercept and the error
 
@@ -77,7 +77,7 @@ Fix $k\ge2$ and $2^k\le n<3\cdot2^{k-1}$. Write the shifted square and linear pr
 - If $e_A=e_B=e\le0$, both terms are integral and $q(n)=1$.
 - If $e_A=e_B=e>0$, write $A'=A/2^{v_2(A)}$ and $B'=B/2^{v_2(B)}$. Then $q(n)=2^{[e-v_2(A'U_n+B'V_n)]_+}$. This includes zero sum and allows dependence on the cutoff within the tied shell.
 
-The constant contributes an integer throughout. For $B\ne0$ the unique possible tie index is $k=2+v_2(A)-v_2(B)$, provided it is at least two. For all $k>2+v_2(A)$ the lower denominator is exactly $2^{2k-2-v_2(A)}$, uniformly in $B,C_0,n$. For instance at $b=3$, $A=B=1$, $k=2$, $n=4$, the prefixes are $1/4$ and $19/4$ and their sum is 5. For $A=1,B=-2$, $k=3$, $n=12$, the respective prefixes are $7315/4$ and $249399/8$, giving the integer $-60521$ before the constant term.
+Lean also verifies a single gcd formula for all three lower cases. With $N=A U_n+B V_n2^{k-2}$ it gives $q(n)=2^{2k-2}/\gcd(2^{2k-2},|N|)$, including $N=0$. The constant contributes an integer throughout. For $B\ne0$ the unique possible tie index is $k=2+v_2(A)-v_2(B)$, provided it is at least two. For all $k>2+v_2(A)$ the lower denominator is exactly $2^{2k-2-v_2(A)}$, uniformly in $B,C_0,n$. For instance at $b=3$, $A=B=1$, $k=2$, $n=4$, the prefixes are $1/4$ and $19/4$ and their sum is 5. For $A=1,B=-2$, $k=3$, $n=12$, the respective prefixes are $7315/4$ and $249399/8$, giving the integer $-60521$ before the constant term.
 
 ## Algebraic indices and separation
 
@@ -105,6 +105,59 @@ $$
 
 Indeed $\delta_j-\lambda=\sum_{r\ge2}2^{j(r-1)}\lambda^r/r!$. Since $v_2(r!)\le r-1$, each summand has valuation at least $(j-1)(r-1)+rs$. This lower bound tends to infinity off finite sets, allowing the two orders of summation. Summing first over *j* gives the displayed geometric factor. The coefficients of $\lambda^{r-1}$ are integral at two because $1-2^{r-1}$ is odd and $v_2(r!)\le r-1$. The coefficient of $\lambda$ is $+1$. Consequently $\kappa=-1+\lambda\pmod{2^{2s}}$ and $v_2(\kappa+1)=s$. For example $b=3$ gives $\lambda\equiv5900$, $C\equiv2044$, $\kappa\equiv15595\pmod{2^{16}}$. These residues follow by iterating the recurrence at extra precision before division by $\lambda$.
 
-The two-logarithm estimate of Bugeaud and Laurent bounds the valuation of nonzero differences of powers of fixed algebraic numbers under their independence and local-unit hypotheses. Its inputs carry algebraic heights. In this problem the quantity to bound is $k\lambda+C$. Exponentiation would require arithmetic control of $\exp(C)$ as well as the algebraic input for $\exp(\lambda)$. The formula above expresses $C$ by a convergent nonlinear series in $\lambda$ and gives no identification of $\exp(C)$ as an algebraic number or of $C$ as a fixed linear combination of logarithms of algebraic numbers. Applying a bound for $v_2(k\lambda)$ loses the summand that creates the cancellation. Truncating at a moving index introduces new arithmetic data at each precision. We obtain no bound from the cited logarithm estimate that forces $k-v_2(k-\kappa)\to\infty$ for this specific $\kappa$. Its algebraicity and that growth remain open here. [Y. Bugeaud and M. Laurent, “Minoration effective de la distance p-adique entre puissances de nombres algébriques,” Journal of Number Theory 61 (1996), 311–342](https://www.sciencedirect.com/journal/journal-of-number-theory/vol/61/issue/2)
+The two-logarithm estimate of Bugeaud and Laurent bounds the valuation of nonzero differences of powers of fixed algebraic numbers under their independence and local-unit hypotheses. Its inputs carry algebraic heights. In this problem the quantity to bound is $k\lambda+C$. Here $\exp(\lambda)$ is the unique one of $b^{-1},-b^{-1}$ congruent to one modulo four. The identity $v_2(\exp(t)-1)=v_2(t)$ for $t\in4\mathbb Z_2$ gives $v_2(k\lambda+C)=v_2(\exp(\lambda)^k-\exp(-C))$. A two-logarithm argument would therefore need arithmetic control of $\exp(-C)$. The formula above expresses $C$ by a convergent nonlinear series in $\lambda$ and gives no identification of $\exp(C)$ as an algebraic number or of $C$ as a fixed linear combination of logarithms of algebraic numbers. Applying a bound for $v_2(k\lambda)$ loses the summand that creates the cancellation. [Y. Bugeaud and M. Laurent, “Minoration effective de la distance p-adique entre puissances de nombres algébriques,” Journal of Number Theory 61 (1996), 311–342](https://www.sciencedirect.com/journal/journal-of-number-theory/vol/61/issue/2)
+
+Truncation gives a specific height obstruction. Set $C_m=\lambda+\sum_{j=1}^m(\delta_j-\lambda)$ for $m\ge1$. Then $v_2(C-C_m)=m+2s$, while $k\lambda+C_m=(k-m+1)\lambda+r_m$ with $r_m=\sum_{j=1}^m\delta_j\in\mathbb Q$. The reduced denominator of $r_m$ is exactly $b^{2^m}$. Each summand has odd denominator dividing this integer, and for any prime $p\mid b$ the last summand uniquely has the smallest valuation $-2^m v_p(b)$. Replacing $C$ by $C_m$ to precision $k-O(1)$ thus requires $m\ge k-O_b(1)$, with the logarithm of the height of $r_m$ already at least $2^m\log b$. An estimate treating $r_m$ as fixed would miss this growth. The cited logarithm estimate gives no bound here forcing $k-v_2(k-\kappa)\to\infty$ for $X^2-2X$. Algebraicity of this $\kappa$ and that growth both remain open in this analysis.
 
 An independent finite check started the two shifted prefixes at zero. Each step multiplied the preceding rational by *b* and added each newly inserted term $2^{-i}$ or $2^{-i-j}$ at its defining position. For all $0\le n<512$, $b\in\{3,5,7,9,15\}$ and $(A,B)\in\{(1,0),(1,-2),(1,1),(-2,4),(8,1),(6,-4),(16,0)\}$, the direct reduced denominator agreed with the piecewise formulas in all 17,920 cases. The upper prediction used the finite recurrence for $\delta_j$ with $\lambda,C$ computed modulo $2^{64}$, reducing $2A+B+2A(k\lambda+C)$ only as far as the cutoff required. The logarithm comparison and its series expansion above are paper deductions.
+
+<details>
+<summary>Reproduce the finite check with Python 3</summary>
+
+The integer in the upper prediction is known modulo $2^{64}$, which suffices because each tested shell index is at most eight. The lower prediction uses the gcd formula with the separately reduced linear and square numerators.
+
+```python
+from collections import defaultdict
+from fractions import Fraction
+from math import gcd
+
+mod = 2**64
+coefficients = [(1, 0), (1, -2), (1, 1), (-2, 4), (8, 1), (6, -4), (16, 0)]
+checks = 0
+for b in (3, 5, 7, 9, 15):
+    d = ((1 - b*b) // 2) * pow(b*b, -1, mod) % mod
+    deltas = []
+    for j in range(1, 66):
+        deltas.append(d)
+        d = (d + 2**(j-1) * d*d) % mod
+    slope = d
+    intercept = (slope + sum(u - slope for u in deltas)) % mod
+
+    single, pair = defaultdict(Fraction), defaultdict(Fraction)
+    for i in range(1, 9):
+        single[2**i] += Fraction(1, 2**i)
+        for j in range(1, 9):
+            pair[2**i + 2**j] += Fraction(1, 2**(i+j))
+    linear = square = Fraction(0)
+    for n in range(512):
+        linear = b*linear + single[n]
+        square = b*square + pair[n]
+        k = n.bit_length() - 1
+        for A, B in coefficients:
+            if n < 2:
+                q = 1
+            elif n < 4:
+                q = 2 // gcd(2, B)
+            elif n < 3 * 2**(k-1):
+                numerator = A*square.numerator + B*linear.numerator * 2**(k-2)
+                denominator = 2**(2*k-2)
+                q = denominator // gcd(denominator, numerator)
+            else:
+                pole = 2*A + B + 2*A*(k*slope + intercept)
+                q = 2**k // gcd(2**k, pole)
+            assert (A*square + B*linear + 7*b**n).denominator == q
+            checks += 1
+assert checks == 17920
+```
+
+</details>

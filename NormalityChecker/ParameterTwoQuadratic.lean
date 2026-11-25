@@ -175,6 +175,83 @@ theorem upper_denominator {b n j : ℕ} (hb : 3 ≤ b) (odd : Odd b)
   rw [shifted, norm_mul, norm_pow, radix_norm odd, one_pow, one_mul, same, norm_div, norm_pow,
     show ‖(2 : ℚ_[2])‖ = (2 : ℝ)⁻¹ from Padic.norm_p (p:=2), inv_pow, div_inv_eq_mul, mul_comm]
 
+private lemma max_zpow_two (z : ℤ) : max 1 ((2 : ℝ)^z) = 2^z.toNat := by
+  cases z with
+  | ofNat n => simp [max_eq_right (one_le_pow₀ (by norm_num : 1 ≤ (2 : ℝ)))]
+  | negSucc n =>
+    rw [max_eq_left (zpow_le_one_of_nonpos₀ (by norm_num) (by omega))]; simp
+
+open Classical in
+/-- Valuation version for the natural reduced denominator. The explicit
+zero branch implements the extended convention `v₂(0) = +∞`. -/
+theorem upper_denominator_valuation {b n j : ℕ} (hb : 3 ≤ b) (odd : Odd b)
+    (mid : 3*2^j ≤ n) (hi : n < 2^(j+2)) (A B C₀ : ℤ) (hA : A ≠ 0) :
+    («prefix» b n A B C₀).den =
+      if ((j+1 : ℕ) : ℚ_[2]) = kappa b A B then 1 else
+      2^(((j+1 : ℕ) : ℤ) - padicValInt 2 (2*A) - (slope b).valuation -
+        (((j+1 : ℕ) : ℚ_[2])-kappa b A B).valuation).toNat := by
+  apply Nat.cast_inj (R:=ℝ) |>.mp
+  rw [upper_denominator hb odd mid hi A B C₀ hA]
+  split_ifs with eqn
+  · simp [eqn]
+  · have nA : (2*A : ℤ) ≠ 0 := mul_ne_zero (by decide) hA
+    have hnSlope : slope b ≠ 0 := norm_ne_zero_iff.mp (by
+      rw [slope_norm hb odd]; exact norm_ne_zero_iff.mpr (delta_zero_ne hb))
+    rw [norm_mul, norm_mul, show 2*(A : ℚ_[2]) = ((2*A : ℤ) : ℚ_[2]) by push_cast; rfl,
+      Padic.norm_eq_zpow_neg_valuation (Int.cast_ne_zero.mpr nA), Padic.valuation_intCast,
+      Padic.norm_eq_zpow_neg_valuation hnSlope, Padic.norm_eq_zpow_neg_valuation (sub_ne_zero.mpr eqn)]
+    push_cast
+    rw [← zpow_natCast (2 : ℝ) (j+1)]
+    simp only [← zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0), max_zpow_two]
+    simp only [Nat.cast_add, Nat.cast_one, sub_eq_add_neg, add_assoc]
+
+/-- Combined integer numerator at the square's common denominator in the lower
+half, omitting the integral constant term. The shell index is `j+1`. -/
+def lowerNumerator (b n j : ℕ) (A B : ℤ) : ℤ :=
+  A * ((b : ℤ)^(n-2^(j+1)) * axisNumerator b j^2 + 2*armNumerator b n j) +
+  B * ((b : ℤ)^(n-2^(j+1)) * axisNumerator b (j+1)) * 2^(j-1)
+
+private theorem den_integer_over_two_pow (u : ℤ) (e : ℕ) :
+    ((u : ℚ)/2^e).den = 2^e / Nat.gcd (2^e) u.natAbs := by
+  have ne : (2 : ℤ)^e ≠ 0 := by positivity
+  simpa [Rat.divInt_eq_div, ne, Int.gcd, Int.natAbs_pow] using Rat.den_divInt u ((2 : ℤ)^e)
+
+/-- Exact lower-half reduction, including all ties and zero numerators. -/
+theorem lower_denominator_exact {b n j : ℕ} (hb : 3 ≤ b) (odd : Odd b) (hj : 1 ≤ j)
+    (lo : 2^(j+1) ≤ n) (early : n < 3*2^j) (A B C₀ : ℤ) :
+    («prefix» b n A B C₀).den = 2^(j+j) / Nat.gcd (2^(j+j)) (lowerNumerator b n j A B).natAbs := by
+  have hi : n < 2^(j+2) := by rw [pow_add]; have := Nat.two_pow_pos j; omega
+  obtain ⟨num,den⟩ := first_half_reduction (by omega : 0 < b) odd hj lo hi early
+  have hsq := (Rat.num_div_den (pre b n)).symm
+  rw [num, den] at hsq
+  have common : (2 : ℚ)^(j+j) = 2^(j+1) * 2^(j-1) := by rw [← pow_add]; congr 1; omega
+  have form : (A : ℚ)*pre b n + B*linearPrefix b n = (lowerNumerator b n j A B : ℚ)/2^(j+j) := by
+    rw [hsq, linear_form (by omega : 0 < b) lo hi, lowerNumerator]
+    push_cast
+    rw [common]
+    field_simp
+  rw [«prefix», form, show (C₀ : ℚ)*(b : ℚ)^n = ((C₀*(b : ℤ)^n : ℤ) : ℚ) by push_cast; rfl,
+    Rat.add_intCast_den, den_integer_over_two_pow]
+
+/-- All cutoffs preceding the first quadratic insertion. The odd radix
+factor in the second branch gives the same gcd as `B.natAbs`. -/
+theorem initial_denominator {b n : ℕ} (hb : 0 < b) (hn : n < 4) (A B C₀ : ℤ) :
+    («prefix» b n A B C₀).den =
+      if n < 2 then 1 else 2 / Nat.gcd 2 (B*(b : ℤ)^(n-2)).natAbs := by
+  have sqzero : pre b n = 0 := by
+    interval_cases n <;> norm_num [pre, boxSum, location, Nat.log]
+  rw [«prefix», sqzero, mul_zero, zero_add,
+    show (C₀ : ℚ)*(b : ℚ)^n = ((C₀*(b : ℤ)^n : ℤ) : ℚ) by push_cast; rfl, Rat.add_intCast_den]
+  split_ifs with h
+  · have lin : linearPrefix b n = 0 := by interval_cases n <;> norm_num [linearPrefix, Nat.log]
+    simp [lin]
+  · have lin := linear_form (n:=n) (k:=1) hb (by norm_num; omega) (by norm_num; omega)
+    have form : (B : ℚ)*linearPrefix b n = ((B*(b : ℤ)^(n-2) : ℤ) : ℚ)/2^1 := by
+      rw [lin]
+      simp [axisNumerator, mul_div_assoc]
+    rw [form, den_integer_over_two_pow]
+    norm_num
+
 theorem linear_norm {b n k : ℕ} (hb : 0 < b) (odd : Odd b) (hk : 1 ≤ k)
     (lo : 2^k ≤ n) (hi : n < 2^(k+1)) :
     ‖(linearPrefix b n : ℚ_[2])‖ = (2 : ℝ)^k := by
