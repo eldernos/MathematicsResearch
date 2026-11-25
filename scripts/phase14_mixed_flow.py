@@ -56,7 +56,7 @@ def peak(intervals, unit):
     return best, witness
 
 
-def flow_intervals(left, right, depth, *, outer):
+def flow_intervals(left, right, depth, *, outer, nonrectangular=False):
     """Return disjoint inner intervals at a point or outer intervals for a phase bracket."""
     assert 1 <= left <= right <= 25 and (outer or left == right)
     # The subdivision uses dyadic phases. Scale to integer endpoints, including
@@ -84,27 +84,37 @@ def flow_intervals(left, right, depth, *, outer):
             col_bad.append((qlo, min(5 * qhi, qhi + row[0])))
         for p in row[::4]:
             col_bad.append((qlo + p, min(5 * qhi, qhi + 3 * p)))
-    return intersect(merge(row_bad), merge(col_bad)), unit
+    failures = intersect(merge(row_bad), merge(col_bad))
+    if not nonrectangular:
+        return failures, unit
+
+    # On [max(P,Q), min(3P,5Q)) the missing corner is equivalent to x<P+Q.
+    # Enlarge each moving Q-box for an outer union and include unresolved starts.
+    corners = [(0, max(row[0], col_hi[0]))] if outer else []
+    for p in row:
+        for qlo, qhi in zip(col_lo, col_hi):
+            corners.append((max(p, qlo), min(3*p, 5*qhi, p+qhi)))
+    return intersect(list(failures), merge(corners)), unit
 
 
-def flow_bound(left, right, depth, *, outer):
-    return peak(*flow_intervals(left, right, depth, outer=outer))
+def flow_bound(left, right, depth, *, outer, nonrectangular=False):
+    return peak(*flow_intervals(left, right, depth, outer=outer, nonrectangular=nonrectangular))
 
 
-def certify(depth, tolerance):
+def certify(depth, tolerance, *, nonrectangular=False):
     """Bisect until every phase interval is bounded by the witness + tolerance."""
-    phase = Fraction(1250, 81)
-    lower, cutoff = flow_bound(phase, phase, depth, outer=False)
+    phase = Fraction(25, 2) if nonrectangular else Fraction(1250, 81)
+    lower, cutoff = flow_bound(phase, phase, depth, outer=False, nonrectangular=nonrectangular)
     upper = Fraction(0)
     pending = [(Fraction(1), Fraction(25))]
     boxes = 0
     while pending:
         left, right = pending.pop()
         mid = (left + right) / 2
-        value, arg = flow_bound(mid, mid, depth, outer=False)
+        value, arg = flow_bound(mid, mid, depth, outer=False, nonrectangular=nonrectangular)
         if value > lower:
             lower, phase, cutoff = value, mid, arg
-        cap, _ = flow_bound(left, right, depth, outer=True)
+        cap, _ = flow_bound(left, right, depth, outer=True, nonrectangular=nonrectangular)
         assert value <= cap
         if cap <= lower + tolerance:
             upper = max(upper, cap)
