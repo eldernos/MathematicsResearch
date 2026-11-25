@@ -27,7 +27,7 @@ id = "III"
 dir = "03-signed-resonance"
 version = "1.1"
 archived = true
-superseded_by = ""
+superseded_by = "03-signed-resonance-v1.2"
 reviews = ["gemini", "sonnet", "resolution"]
 
 [[paper]]
@@ -107,6 +107,14 @@ version = "2.0"
 batch = 2
 supersedes = "04-arithmetic-certificates"
 reviews = ["review-1", "resolution"]
+
+[[paper]]
+id = "III"
+dir = "03-signed-resonance-v1.2"
+version = "1.2"
+batch = 2
+supersedes = "03-signed-resonance"
+reviews = ["gemini", "sonnet", "resolution"]   # named-author edition; mathematics reviewed at v1.1
 
 [[paper]]
 id = "EB"

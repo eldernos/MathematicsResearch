@@ -1,0 +1,15 @@
+id = "III"
+title = "Resonance and Discrepancy in Signed Stoneham Expansions"
+authors = ["Christopher Anderson"]
+affiliation = "Independent Researcher"
+short_title = "Signed Stoneham Expansions"
+version = "1.2"
+status = "preprint draft"
+abstract = "Let p be a prime coprime to the radix b. For a sparse expansion with bounded integer phases c_j and insertions c_j - p c_{j-1} at p^j, we determine the interval discrepancy at every prefix up to an error tending to zero. Its main term is the proportion of positions in shells with c_j = 0. The spectrum is the image of the suffix-maximal binary words of Kaneko and Steiner under base-p evaluation with digits 0 and p - 1. For each such word we construct an expansion with phases in {0, 1} whose upper discrepancy is its value. Rational translation multiplies the main term by the discrepancy of a finite orbit. Cyclic de Bruijn words thereby give transcendental examples of arbitrarily small positive discrepancy. For finite rational combinations of dilated components with one odd prime parameter, resonance is equivalent to divisibility of an explicit cell polynomial by a cyclotomic polynomial. We also give, in each radix, two positive normal summands whose irrational sum has arbitrarily high upper frequencies of zero blocks."
+keywords = ["normal numbers", "discrepancy", "Stoneham numbers", "signed expansions", "cyclotomic polynomials", "suffix-maximal words", "de Bruijn words", "Lean 4"]
+msc_primary = "11K16"
+msc_secondary = ["11K38", "11A63", "68R15"]
+supersedes = "papers/03-signed-resonance"
+lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
+registry_ids = ["CR-01", "CR-03", "DS-01", "DS-02", "DS-03", "DS-04"]
+note = "Named-author edition. The mathematics, bibliography, figures and Lean links are identical to version 1.1. The paper's Lean links remain pinned at Checkpoint 11 (a09e011); every cited Lean file is byte-identical at e4809cf."
