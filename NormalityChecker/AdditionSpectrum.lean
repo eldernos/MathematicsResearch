@@ -1,6 +1,7 @@
 module
 
 public import NormalityChecker.SharpTranslation
+public import NormalityChecker.PrimePowerGrid
 
 /-! # The exact addition spectrum of radix discrepancy
 
@@ -21,6 +22,30 @@ and cluster points stay in `P` (`limit_necessity`, `clusterPt_necessity`).
 
 **Reduction.** A realization of the five-type mixtures gives every point of `P` as a limiting
 triple (`polytope_subset_addSpectrum_of_realizable`).
+
+**Sufficiency.** For every radix `b ≥ 2` the spectrum is exactly `P`
+(`addSpectrum_eq`, `exact_addition_spectrum`). This follows from a stronger realization theorem
+(`mixtureRealizable`): for integer type vectors `m i ∈ ℤ^d` and convex weights `w`, there are reals
+`x₁, …, x_d` such that **every** integer form `∑ cⱼ xⱼ` has limiting discrepancy
+`∑_{⟨c, m i⟩ = 0} w i`. The five types `(0,0), (1,0), (0,1), (1,-1), (1,1)` give the triple
+theorem.
+
+The construction fixes a prime `p > 2b`, `t = p - 1` and `v = v_p(b^t - 1)`. Block `k` has `r`
+segments of `t p^g (⌊w_i (k+1)⌋ + 1)` positions, with `g = ⌊log_p (k+1)⌋`. On type `i`,
+coordinate `j` is programmed to the state `m i j / p^(v+g)` modulo one (`coef`, `programmed`,
+`form_pairing`). The proof has four parts.
+1. `sampleDisc_compare` controls the real tails. It is Phase 18's `paired_arc_le` on an arc
+   around zero.
+2. `sampleDisc_mixture` puts the discrepancy of the model between the retired proportion and
+   that proportion plus the active counting error.
+3. `segment_count` bounds that error by complete prime-power periods. Its arithmetic input is
+   the interface `PeriodCount`, discharged by `PrimePowerGrid.primePower_period_count`
+   (`periodCount_holds`).
+4. `block_cesaro` makes the active error, the retired proportion and the tail windows `o(N)`
+   uniformly.
+
+No analytic axiom is assumed. The kernel theorem is qualitative: it proves limits, not the
+`O(N^{-1/3})` rate of the paper proof.
 -/
 
 @[expose] public section
@@ -1320,7 +1345,7 @@ theorem mixPoint_tendsto {b p t r d : ℕ} [NeZero r] (hb : 2 ≤ b) (hp : p.Pri
         intro j hj
         have hj' := mem_range.mp hj
         simp only [fE]
-        split_ifs with h1 h2 <;> try norm_num
+        split_ifs with h1 h2 <;> norm_num
         exfalso
         push Not at h2
         have hb := mixTail_bound hb hp ht m w cf (segStart (segLen p t r w) (r * k + i) + j)
@@ -1419,5 +1444,51 @@ theorem addSpectrum_eq_of_periodCount {b p t : ℕ} (hb : 2 ≤ b) (hp : p.Prime
     (polytope_subset_addSpectrum_of_realizable b (fun α β γ hv =>
       mixtureRealizable_of_periodCount hb hp hpb ht hgrid fiveTypes (fiveWeights α β γ)
         (fiveWeights_nonneg hv) (sum_fiveWeights α β γ)))
+
+/-! ## The unconditional theorems -/
+
+/-- The arithmetic interface holds: it is `PrimePowerGrid.primePower_period_count`. -/
+theorem periodCount_holds {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb : 2 ≤ b)
+    (hpb : ¬ p ∣ b) (ht : 0 < t) (hdvd : p ∣ b ^ t - 1) : PeriodCount b p t :=
+  fun a' ha' g _ _ ha hac hc =>
+    PrimePowerGrid.primePower_period_count hp hodd hb hpb ht hdvd a' ha' g ha hac hc
+
+/-- Every radix `b ≥ 2` has an odd prime `p ∤ b` with `p ∣ b^(p-1) - 1`. -/
+theorem exists_period_prime {b : ℕ} (hb : 2 ≤ b) :
+    ∃ p : ℕ, p.Prime ∧ Odd p ∧ ¬ p ∣ b ∧ p ∣ b ^ (p - 1) - 1 := by
+  obtain ⟨p, hp1, hp⟩ := Nat.exists_infinite_primes (2 * b + 1)
+  have hpb : ¬ p ∣ b := fun h => by have := Nat.le_of_dvd (by omega) h; omega
+  refine ⟨p, hp, hp.odd_of_ne_two (by omega), hpb, ?_⟩
+  have hcop : Nat.Coprime b p := Nat.coprime_comm.mp ((Nat.Prime.coprime_iff_not_dvd hp).mpr hpb)
+  have h := Nat.ModEq.pow_totient hcop
+  rw [Nat.totient_prime hp] at h
+  exact (Nat.modEq_iff_dvd' (Nat.one_le_pow _ _ (by omega))).mp h.symm
+
+/-- **Realization of rank-one rational mixtures.** In every radix `b ≥ 2`, for all integer type
+vectors `m i ∈ ℤ^d` and convex weights `w`, there are reals `x₁, …, x_d` such that **every**
+integer linear form `∑ cⱼ xⱼ` has limiting discrepancy `∑_{i : ⟨c, m i⟩ = 0} w i`. -/
+theorem mixtureRealizable {b : ℕ} (hb : 2 ≤ b) {d r : ℕ} (m : Fin r → Fin d → ℤ)
+    (w : Fin r → ℝ) (hw0 : ∀ i, 0 ≤ w i) (hw1 : ∑ i, w i = 1) : MixtureRealizable b m w := by
+  obtain ⟨p, hp, hodd, hpb, hdvd⟩ := exists_period_prime hb
+  have ht : 0 < p - 1 := by have := hp.two_le; omega
+  exact mixtureRealizable_of_periodCount hb hp hpb ht
+    (periodCount_holds hp hodd hb hpb ht hdvd) m w hw0 hw1
+
+/-- **The exact addition spectrum.** In every radix `b ≥ 2` the triples of limiting
+discrepancies of `x`, `y`, `x+y` form exactly the polytope
+`max(0, α+β-1) ≤ γ ≤ 1-|α-β|`, `α, β ∈ [0,1]`. -/
+theorem addSpectrum_eq {b : ℕ} (hb : 2 ≤ b) : addSpectrum b = polytope := by
+  obtain ⟨p, hp, hodd, hpb, hdvd⟩ := exists_period_prime hb
+  have ht : 0 < p - 1 := by have := hp.two_le; omega
+  exact addSpectrum_eq_of_periodCount hb hp hpb ht (periodCount_holds hp hodd hb hpb ht hdvd)
+
+/-- **The exact three-variable theorem**, in coordinates. -/
+theorem exact_addition_spectrum {b : ℕ} (hb : 2 ≤ b) (α β γ : ℝ) :
+    (∃ x y : ℝ, Tendsto (radixDiscrepancy b x) atTop (𝓝 α) ∧
+      Tendsto (radixDiscrepancy b y) atTop (𝓝 β) ∧
+      Tendsto (radixDiscrepancy b (x + y)) atTop (𝓝 γ)) ↔
+    0 ≤ α ∧ α ≤ 1 ∧ 0 ≤ β ∧ β ≤ 1 ∧ max 0 (α + β - 1) ≤ γ ∧ γ ≤ 1 - |α - β| := by
+  rw [← mem_polytope_iff, ← addSpectrum_eq hb]
+  rfl
 
 end NormalityChecker.AdditionSpectrum
