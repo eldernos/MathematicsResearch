@@ -172,33 +172,32 @@ theorem primePower_periodic {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb : 2 
   field_simp
   ring
 
-/-- **Prime-power period count.** Over one full period `n < t p^g`, the number of samples
-`fract (bⁿ a' / p^(e+g))` in `[a, c)` differs from `t p^g (c - a)` by at most `t`, when `a'`
-is a unit modulo `p` and `e` is the exact `p`-adic valuation of `b^t - 1`. -/
-theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb : 2 ≤ b)
-    (hpb : ¬ p ∣ b) (ht : 0 < t) (hdvd : p ∣ b ^ t - 1) (a' : ℤ) (ha' : ¬ (p : ℤ) ∣ a')
-    (g : ℕ) {a c : ℝ} (ha : 0 ≤ a) (hac : a < c) (hc : c ≤ 1) :
-    |((((Finset.range (t * p ^ g)).filter fun n : ℕ =>
-        a ≤ Int.fract ((b : ℝ) ^ n * a' / (p : ℝ) ^ (padicValNat p (b ^ t - 1) + g)) ∧
-        Int.fract ((b : ℝ) ^ n * a' / (p : ℝ) ^ (padicValNat p (b ^ t - 1) + g)) < c).card :
-          ℕ) : ℝ) - ((t * p ^ g : ℕ) : ℝ) * (c - a)| ≤ t := by
-  obtain ⟨hh1, he1, hD, hord, -⟩ := period_facts hp hodd hb ht hdvd g
-  set e := padicValNat p (b ^ t - 1)
+/-- **Generic stride grid count.** Let `q = d G` with `1 < d`, suppose `b^t ≡ 1 (mod d)` and
+`b^t` has order exactly `G` modulo `q`, and let `b` and the numerator `a'` be units modulo `G`.
+Over `n < t G`, the number of samples `fract (bⁿ a' / q)` in `[a, c)` differs from
+`t G (c - a)` by at most `t`. Each residue class `n ≡ r (mod t)` is a rotated `G`-point grid. -/
+theorem stride_grid_count {b t d G : ℕ} (hd : 1 < d) (hG : 0 < G)
+    (hfix : b ^ t ≡ 1 [MOD d]) (hord : orderOf ((b ^ t : ℕ) : ZMod (d * G)) = G)
+    (a' : ℤ) (hb : IsCoprime (b : ℤ) (G : ℤ)) (ha' : IsCoprime a' (G : ℤ))
+    {a c : ℝ} (ha : 0 ≤ a) (hac : a < c) (hc : c ≤ 1) :
+    |((((Finset.range (t * G)).filter fun n : ℕ =>
+        a ≤ Int.fract ((b : ℝ) ^ n * a' / ((d * G : ℕ) : ℝ)) ∧
+        Int.fract ((b : ℝ) ^ n * a' / ((d * G : ℕ) : ℝ)) < c).card : ℕ) : ℝ) -
+      ((t * G : ℕ) : ℝ) * (c - a)| ≤ t := by
+  generalize hX : ((d * G : ℕ) : ℝ) = X
   set h := b ^ t with hh
-  set D := p ^ e with hDdef
-  set P := p ^ g with hPdef
-  set M := p ^ (e + g) with hM
-  have hMDP : M = D * P := pow_add _ _ _
-  have hD1 : 1 < D := Nat.one_lt_pow (by omega) hp.one_lt
-  have hPpos : 0 < P := pow_pos hp.pos g
-  have hMpos : 0 < M := pow_pos hp.pos _
-  have hp0 : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne_zero
-  have hpZ : Prime (p : ℤ) := Nat.prime_iff_prime_int.mp hp
+  set D := d with hDdef
+  set P := G with hPdef
+  set M := d * G with hM
+  have hMDP : M = D * P := rfl
+  have hD1 : 1 < D := hd
+  have hPpos : 0 < P := hG
+  have hMpos : 0 < M := Nat.mul_pos (by omega) hG
   -- residues of the powers of `h`
   let i : ℕ → ℕ := fun k => h ^ k % M / D
   have hmodD (k : ℕ) : h ^ k % M % D = 1 := by
     rw [Nat.mod_mod_of_dvd _ (hMDP ▸ dvd_mul_right D P)]
-    have h1 : h ≡ 1 [MOD D] := ((Nat.modEq_iff_dvd' hh1.le).mpr hD).symm
+    have h1 : h ≡ 1 [MOD D] := hfix
     have := h1.pow k
     rw [one_pow] at this
     rw [this, Nat.mod_eq_of_lt hD1]
@@ -211,11 +210,7 @@ theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb 
     exact (Nat.div_lt_iff_lt_mul (by omega)).mpr (by rw [Nat.mul_comm]; exact this)
   -- numerators and the induced grid index
   let u : ℕ → ℤ := fun r => (b : ℤ) ^ r * a'
-  have hu (r : ℕ) : ¬ (p : ℤ) ∣ u r := by
-    intro hd
-    rcases hpZ.dvd_or_dvd hd with h1 | h1
-    · exact hpb (Int.natCast_dvd_natCast.mp (hpZ.dvd_of_dvd_pow h1))
-    · exact ha' h1
+  have hu (r : ℕ) : IsCoprime (u r) (P : ℤ) := hb.pow_left.mul_left ha'
   let j : ℕ → ℕ → ℤ := fun r k => u r * (i k : ℤ) % (P : ℤ)
   have hj0 (r k : ℕ) : 0 ≤ j r k := Int.emod_nonneg _ (by omega)
   have hjP (r k : ℕ) : j r k < P := Int.emod_lt_of_pos _ (by omega)
@@ -224,8 +219,8 @@ theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb 
   have hfP (r k : ℕ) : f r k < P := by have := hf r k; have := hjP r k; omega
   -- the sample along a residue class is a rotated grid point
   have hsample (r k : ℕ) :
-      Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) =
-        Int.fract ((u r : ℝ) / (p : ℝ) ^ (e + g) + ((f r k : ℕ) : ℝ) / ((P : ℕ) : ℝ)) := by
+      Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) =
+        Int.fract ((u r : ℝ) / X + ((f r k : ℕ) : ℝ) / ((P : ℕ) : ℝ)) := by
     obtain ⟨q1, hq1⟩ : ∃ q1 : ℕ, h ^ k = M * q1 + h ^ k % M :=
       ⟨_, (Nat.div_add_mod _ _).symm⟩
     obtain ⟨q2, hq2⟩ : ∃ q2 : ℤ, u r * (i k : ℤ) = (P : ℤ) * q2 + j r k := by
@@ -241,8 +236,8 @@ theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb 
     have E4 : ((f r k : ℕ) : ℝ) = (j r k : ℝ) := by exact_mod_cast hf r k
     refine Int.fract_eq_fract.mpr ⟨u r * (q1 : ℤ) + q2, ?_⟩
     have Ej : (j r k : ℝ) = (u r : ℝ) * (i k : ℝ) - (P : ℝ) * (q2 : ℝ) := by linarith
-    have hMr : ((p : ℝ) ^ (e + g)) = (D : ℝ) * (P : ℝ) := by
-      rw [hDdef, hPdef]; push_cast; ring
+    have hMr : X = (D : ℝ) * (P : ℝ) := by
+      rw [← hX]; exact_mod_cast hMDP
     rw [E4, Ej, pow_add, pow_mul, E1, E2, hMr]
     have hM' : (M : ℝ) = (D : ℝ) * (P : ℝ) := by exact_mod_cast hMDP
     rw [hM']
@@ -256,17 +251,14 @@ theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb 
   have hfinj (r : ℕ) : ∀ k₁ < P, ∀ k₂ < P, f r k₁ = f r k₂ → k₁ = k₂ := by
     intro k₁ hk₁ k₂ hk₂ heq
     have hjeq : j r k₁ = j r k₂ := by rw [← hf, ← hf, heq]
-    have hdvd' : (p : ℤ) ^ g ∣ u r * ((i k₂ : ℤ) - (i k₁ : ℤ)) := by
+    have hdvd' : (P : ℤ) ∣ u r * ((i k₂ : ℤ) - (i k₁ : ℤ)) := by
       have := (Int.ModEq.dvd (show u r * (i k₁ : ℤ) ≡ u r * (i k₂ : ℤ) [ZMOD (P : ℤ)] from hjeq))
-      rw [hPdef] at this
-      push_cast at this
       rw [mul_sub]; exact this
-    have hdi := hpZ.pow_dvd_of_dvd_mul_left g (hu r) hdvd'
+    have hdi := (hu r).symm.dvd_of_dvd_mul_left hdvd'
     have hi : i k₁ = i k₂ := by
       have h1 := hiP k₁
       have h2 := hiP k₂
-      have hlt : |(i k₂ : ℤ) - (i k₁ : ℤ)| < (p : ℤ) ^ g := by
-        have : ((P : ℕ) : ℤ) = (p : ℤ) ^ g := by rw [hPdef]; push_cast; rfl
+      have hlt : |(i k₂ : ℤ) - (i k₁ : ℤ)| < (P : ℤ) := by
         rw [abs_lt]; constructor <;> omega
       have := Int.eq_zero_of_abs_lt_dvd hdi hlt
       omega
@@ -279,39 +271,97 @@ theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb 
   -- assemble the residue classes
   have hclass (r : ℕ) :
       |((((range P).filter fun k : ℕ =>
-        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) ∧
-        Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) < c).card : ℕ) : ℝ) -
+        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) ∧
+        Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) < c).card : ℕ) : ℝ) -
         ((P : ℕ) : ℝ) * (c - a)| ≤ 1 := by
     have hcongr : ((range P).filter fun k : ℕ =>
-        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) ∧
-        Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) < c) =
+        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) ∧
+        Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) < c) =
         (range P).filter fun k : ℕ =>
-          (fun x : ℕ => a ≤ Int.fract ((u r : ℝ) / (p : ℝ) ^ (e + g) + (x : ℝ) / ((P : ℕ) : ℝ)) ∧
-            Int.fract ((u r : ℝ) / (p : ℝ) ^ (e + g) + (x : ℝ) / ((P : ℕ) : ℝ)) < c) (f r k) :=
+          (fun x : ℕ => a ≤ Int.fract ((u r : ℝ) / X + (x : ℝ) / ((P : ℕ) : ℝ)) ∧
+            Int.fract ((u r : ℝ) / X + (x : ℝ) / ((P : ℕ) : ℝ)) < c) (f r k) :=
       filter_congr fun k _ => by rw [hsample]
     rw [hcongr]
     have key := card_filter_comp (f r) (fun k _ => hfP r k) (hfinj r)
-      (fun x : ℕ => a ≤ Int.fract ((u r : ℝ) / (p : ℝ) ^ (e + g) + (x : ℝ) / ((P : ℕ) : ℝ)) ∧
-        Int.fract ((u r : ℝ) / (p : ℝ) ^ (e + g) + (x : ℝ) / ((P : ℕ) : ℝ)) < c)
-    have hg := grid_count ((u r : ℝ) / (p : ℝ) ^ (e + g)) hPpos ha hac hc
+      (fun x : ℕ => a ≤ Int.fract ((u r : ℝ) / X + (x : ℝ) / ((P : ℕ) : ℝ)) ∧
+        Int.fract ((u r : ℝ) / X + (x : ℝ) / ((P : ℕ) : ℝ)) < c)
+    have hg := grid_count ((u r : ℝ) / X) hPpos ha hac hc
     rw [← key] at hg
     exact hg
   rw [card_range_mul]
   push_cast
   calc |∑ r ∈ range t, ((((range P).filter fun k : ℕ =>
-        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) ∧
-        Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) < c).card : ℕ) : ℝ) -
+        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) ∧
+        Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) < c).card : ℕ) : ℝ) -
         (t : ℝ) * (P : ℝ) * (c - a)|
       = |∑ r ∈ range t, (((((range P).filter fun k : ℕ =>
-        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) ∧
-        Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) < c).card : ℕ) : ℝ) -
+        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) ∧
+        Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) < c).card : ℕ) : ℝ) -
         ((P : ℕ) : ℝ) * (c - a))| := by
         rw [sum_sub_distrib, sum_const, card_range, nsmul_eq_mul]; congr 1; ring
     _ ≤ ∑ r ∈ range t, |(((((range P).filter fun k : ℕ =>
-        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) ∧
-        Int.fract ((b : ℝ) ^ (r + t * k) * a' / (p : ℝ) ^ (e + g)) < c).card : ℕ) : ℝ) -
+        a ≤ Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) ∧
+        Int.fract ((b : ℝ) ^ (r + t * k) * a' / X) < c).card : ℕ) : ℝ) -
         ((P : ℕ) : ℝ) * (c - a))| := abs_sum_le_sum_abs _ _
     _ ≤ ∑ _r ∈ range t, (1 : ℝ) := sum_le_sum fun r _ => hclass r
     _ = t := by simp
+
+
+/-- **Prime-power period count.** Over one full period `n < t p^g`, the number of samples
+`fract (bⁿ a' / p^(e+g))` in `[a, c)` differs from `t p^g (c - a)` by at most `t`, when `a'`
+is a unit modulo `p` and `e` is the exact `p`-adic valuation of `b^t - 1`. -/
+theorem primePower_period_count {b p t : ℕ} (hp : p.Prime) (hodd : Odd p) (hb : 2 ≤ b)
+    (hpb : ¬ p ∣ b) (ht : 0 < t) (hdvd : p ∣ b ^ t - 1) (a' : ℤ) (ha' : ¬ (p : ℤ) ∣ a')
+    (g : ℕ) {a c : ℝ} (ha : 0 ≤ a) (hac : a < c) (hc : c ≤ 1) :
+    |((((Finset.range (t * p ^ g)).filter fun n : ℕ =>
+        a ≤ Int.fract ((b : ℝ) ^ n * a' / (p : ℝ) ^ (padicValNat p (b ^ t - 1) + g)) ∧
+        Int.fract ((b : ℝ) ^ n * a' / (p : ℝ) ^ (padicValNat p (b ^ t - 1) + g)) < c).card :
+          ℕ) : ℝ) - ((t * p ^ g : ℕ) : ℝ) * (c - a)| ≤ t := by
+  obtain ⟨hh1, he1, hD, hord, -⟩ := period_facts hp hodd hb ht hdvd g
+  set e := padicValNat p (b ^ t - 1)
+  have hpZ : Prime (p : ℤ) := Nat.prime_iff_prime_int.mp hp
+  have hcop {x : ℤ} (hx : ¬ (p : ℤ) ∣ x) : IsCoprime x ((p ^ g : ℕ) : ℤ) := by
+    rw [Nat.cast_pow]; exact (hpZ.coprime_iff_not_dvd.mpr hx).pow_left.symm
+  rw [pow_add] at hord
+  have H := stride_grid_count (Nat.one_lt_pow (by omega) hp.one_lt) (pow_pos hp.pos g)
+    ((Nat.modEq_iff_dvd' hh1.le).mpr hD).symm hord a'
+    (hcop fun h => hpb (Int.natCast_dvd_natCast.mp h)) (hcop ha') ha hac hc
+  have hden : ((p ^ e * p ^ g : ℕ) : ℝ) = (p : ℝ) ^ (e + g) := by push_cast; ring
+  rw [hden] at H
+  exact H
+
+/-- **CRT period count.** Let `q = p^(e+g) Q` with `Q` prime to `p` and `Q ∣ b^t - 1`, where `e`
+is the exact `p`-adic valuation of `b^t - 1`. Over `n < t p^g`, the number of samples
+`fract (bⁿ a' / q)` in `[a, c)` differs from `t p^g (c - a)` by at most `t`, for every numerator
+`a'` prime to `p`. The bound does not depend on `Q`, and `a'` need not be prime to `Q`. -/
+theorem crt_period_count {b p t Q : ℕ} (hp : p.Prime) (hodd : Odd p) (hb : 2 ≤ b)
+    (hpb : ¬ p ∣ b) (ht : 0 < t) (hdvd : p ∣ b ^ t - 1) (hpQ : p.Coprime Q)
+    (hQ : Q ∣ b ^ t - 1) (a' : ℤ) (ha' : ¬ (p : ℤ) ∣ a')
+    (g : ℕ) {a c : ℝ} (ha : 0 ≤ a) (hac : a < c) (hc : c ≤ 1) :
+    |((((Finset.range (t * p ^ g)).filter fun n : ℕ =>
+        a ≤ Int.fract ((b : ℝ) ^ n * a' / ((p : ℝ) ^ (padicValNat p (b ^ t - 1) + g) * Q)) ∧
+        Int.fract ((b : ℝ) ^ n * a' / ((p : ℝ) ^ (padicValNat p (b ^ t - 1) + g) * Q)) < c).card :
+          ℕ) : ℝ) - ((t * p ^ g : ℕ) : ℝ) * (c - a)| ≤ t := by
+  obtain ⟨hh1, he1, hD, -, -⟩ := period_facts hp hodd hb ht hdvd g
+  have hfac : (b ^ t - 1).factorization p = padicValNat p (b ^ t - 1) := by
+    rw [Nat.factorization_def _ hp, Nat.padicValNat_def]
+  have hord := NormalityChecker.SurvivingGrid.stride_order hp hodd hpQ hh1 hdvd hQ
+    (padicValNat p (b ^ t - 1) + g)
+  rw [hfac, Nat.add_sub_cancel_left] at hord
+  set e := padicValNat p (b ^ t - 1)
+  rw [show p ^ (e + g) * Q = p ^ e * Q * p ^ g by ring] at hord
+  have hQpos : 0 < Q := Nat.pos_of_dvd_of_pos hQ (by omega)
+  have hpe : 1 < p ^ e := Nat.one_lt_pow (by omega) hp.one_lt
+  have hd : 1 < p ^ e * Q := lt_of_lt_of_le hpe (Nat.le_mul_of_pos_right _ hQpos)
+  have hfix : b ^ t ≡ 1 [MOD p ^ e * Q] :=
+    ((Nat.modEq_iff_dvd' hh1.le).mpr ((Nat.Coprime.pow_left e hpQ).mul_dvd_of_dvd_of_dvd hD hQ)).symm
+  have hpZ : Prime (p : ℤ) := Nat.prime_iff_prime_int.mp hp
+  have hcop {x : ℤ} (hx : ¬ (p : ℤ) ∣ x) : IsCoprime x ((p ^ g : ℕ) : ℤ) := by
+    rw [Nat.cast_pow]; exact (hpZ.coprime_iff_not_dvd.mpr hx).pow_left.symm
+  have H := stride_grid_count hd (pow_pos hp.pos g) hfix hord a'
+    (hcop fun h => hpb (Int.natCast_dvd_natCast.mp h)) (hcop ha') ha hac hc
+  have hden : ((p ^ e * Q * p ^ g : ℕ) : ℝ) = (p : ℝ) ^ (e + g) * Q := by push_cast; ring
+  rw [hden] at H
+  exact H
 
 end NormalityChecker.PrimePowerGrid
