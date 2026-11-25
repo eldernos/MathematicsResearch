@@ -123,7 +123,7 @@ def check_files(require_reviews, verify_pins, require_all):
             problems.extend(check_metadata(entry, folder))
         if require_reviews:
             for reviewer in entry["reviews"]:
-                report = ROOT / "papers" / "reviews" / directory / f"{reviewer}.md"
+                report = ROOT / "papers" / "reviews" / entry.get("review_dir", directory) / f"{reviewer}.md"
                 if not report.is_file():
                     problems.append(f"Missing {report.relative_to(ROOT)}")
         pdf = folder / "paper.pdf"

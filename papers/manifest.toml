@@ -114,7 +114,8 @@ dir = "03-signed-resonance-v1.2"
 version = "1.2"
 batch = 2
 supersedes = "03-signed-resonance"
-reviews = ["gemini", "sonnet", "resolution"]   # named-author edition; mathematics reviewed at v1.1
+reviews = ["gemini", "sonnet", "resolution"]
+review_dir = "03-signed-resonance"   # named-author edition; the mathematics was reviewed at v1.1
 
 [[paper]]
 id = "EB"
