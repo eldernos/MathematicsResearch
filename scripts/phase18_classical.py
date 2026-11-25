@@ -382,6 +382,24 @@ def verify_legendre_windows():
             bound = Fraction(1, 2*grid) + sum(
                 Fraction(abs(c)*a, (2*a)**(2*degree)) for c, a in poles)
             assert error_upper <= bound, (poles, degree, n)
+            # Certify agreement with nearest-grid rounding by bracketing π
+            # on both sides. This is an observed property of these cutoffs.
+            assert round(grid*shift*pi_low) == grid*model == round(grid*shift*pi_high)
+            if n == 600:
+                q = model.denominator
+                primes = primes_up_to(2*degree)
+                # q divides the odd lcm. Every prime factor of phi(q) is <= 2D.
+                order = q
+                for p in primes:
+                    if q % p == 0:
+                        order = order // p * (p - 1)
+                for p in primes:
+                    while order % p == 0 and pow(2, order//p, q) == 1:
+                        order //= p
+                assert pow(2, order, q) == 1
+                assert all(pow(2, order//p, q) != 1 for p in primes if order % p == 0)
+                print(f"Legendre shift 600 with smallest pole {min(a for _, a in poles)}: "
+                      f"exact period {order}")
             if n in (256, 600, 800):
                 print(f"Legendre a_min={min(a for _, a in poles)}, shift={n}, "
                       f"D={degree}, denominator bits={model.denominator.bit_length()}, "
