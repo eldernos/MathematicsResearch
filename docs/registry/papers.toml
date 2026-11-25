@@ -51,7 +51,7 @@ Restrict the series for a polylogarithm of positive integer order to the integer
 number = "III"
 version = "1.1"
 release = "manuscripts-v1.1.0"
-# Retained unchanged in the candidate release manuscripts-v2.0.0.
+# Archived unchanged; superseded in manuscripts-v2.0.0 by the named-author edition 03-signed-resonance-v1.2.
 tags = ["manuscripts-v1.0.0", "manuscripts-v1.1.0", "manuscripts-v2.0.0"]
 # The archived directory has no metadata.toml and is never edited, so its classification is recorded here.
 keywords = ["normal numbers", "Stoneham numbers", "discrepancy", "cyclotomic resonance", "signed expansions"]
@@ -172,7 +172,8 @@ dir = "papers/07-synthetic-expansions"
 supersedes = ""
 title = "Synthetic Arithmetic Expansions and Prescribed Discrepancy"
 families = ["SY"]
-principal = ["SY-02", "SY-01", "SY-03", "SY-04"]
+results = ["OP-08", "OP-09", "OP-14"]
+principal = ["SY-02", "SY-01", "SY-03", "OP-14"]
 status = "draft"
 summary = "Valuation-weighted sparse series with an all-prefix normality switch, positive rational expansions with prescribed limiting discrepancy, and the sharp translation identity."
 
@@ -203,3 +204,30 @@ results = ["CC-49"]
 principal = ["CC-49"]
 status = "draft"
 summary = "Research note on what finite column, moment and Fourier tests can and cannot certify for the Erdős–Borwein constant; normality is not claimed."
+
+[[paper]]
+number = "X"
+version = "1.0"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/10-discrepancy-arithmetic"
+supersedes = ""
+title = "The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations"
+families = []
+results = ["SY-04", "SY-12", "OP-01", "OP-02", "OP-03", "OP-05", "OP-06", "OP-07", "OP-12"]
+principal = ["SY-04", "OP-01", "OP-05", "OP-06"]
+status = "draft"
+summary = "The sharp translation identity, the exact addition spectrum of discrepancy limits, discrepancy pseudometrics and rational operations."
+
+[[paper]]
+number = "III"
+version = "1.2"
+release = "manuscripts-v2.0.0"
+tags = ["manuscripts-v2.0.0"]
+dir = "papers/03-signed-resonance-v1.2"
+supersedes = "papers/03-signed-resonance"
+title = "Resonance and Discrepancy in Signed Stoneham Expansions"
+families = ["CR", "DS"]
+principal = ["CR-01", "DS-01", "DS-03", "DS-04"]
+status = "internally reviewed"
+summary = "Named-author edition of version 1.1 with unchanged mathematics."

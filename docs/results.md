@@ -85,19 +85,19 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [DS-11](#ds-11) | Hausdorff dimension of the discrepancy spectrum | Written proof | III |
 | [SY-02](#sy-02) ★ | All-prefix normality switch for valuation-scheduled series | Lean | VII |
 | [SY-03](#sy-03) ★ | Cubic positive expansions prescribing limiting discrepancy | Written proof | VII |
-| [SY-04](#sy-04) ★ | Worst change of finite discrepancy under translation | Lean | VII |
+| [SY-04](#sy-04) ★ | Worst change of finite discrepancy under translation | Lean | X |
 | [SY-05](#sy-05) | Liouville numbers with prescribed limiting discrepancy | Written proof | VII |
-| [SY-12](#sy-12) | A finite circle bound for sparse translations | Lean | VII |
+| [SY-12](#sy-12) | A finite circle bound for sparse translations | Lean | X |
 | [SY-13](#sy-13) | Prescribing limits of orbit measures with rational insertions | Written proof | VII |
 | [SY-16](#sy-16) ★ | Quantitative convergence on polynomial schedules | Written proof | VII |
 | [SY-24](#sy-24) | Sharp translation rates for the multiplicative Lambert families | Written proof | VI |
-| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean |  |
-| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof |  |
-| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof |  |
+| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean | X |
+| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof | X |
+| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof | X |
 | [OP-04](#op-04) | Finite rational forms and approximating their joint spectra | Written proof |  |
-| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean |  |
-| [OP-06](#op-06) | Rational scalar ring and fixed-point lifts | Written proof |  |
-| [OP-07](#op-07) | Boundary spectrum and inverse inequality for integer dilation | Written proof |  |
+| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean | X |
+| [OP-06](#op-06) | Rational scalar ring and fixed-point lifts | Written proof | X |
+| [OP-07](#op-07) | Boundary spectrum and inverse inequality for integer dilation | Written proof | X |
 | [OP-18](#op-18) | Quantitative joint box distribution from an algebraic direction | Written proof |  |
 | [AC-01](#ac-01) ★ | Normality from rational orbit models on most blocks | Lean | IV |
 | [AC-04](#ac-04) | Cancellation in short radix orbits with smooth denominators | Lean | IV |
@@ -189,7 +189,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-50](#cc-50) | Legendre–Bezout linear windows, nearest-grid identification and the window–denominator barrier for ln 2 | Written proof | V |
 | [SY-07](#sy-07) | Positive rational multiples with prescribed total | Lean | VII |
 | [SY-14](#sy-14) | A limit on finite functional constructions from lacunary rays | Written proof | VII |
-| [OP-12](#op-12) | Sparse numerical preservers with visible product and sharp rates | Written proof |  |
+| [OP-12](#op-12) | Sparse numerical preservers with visible product and sharp rates | Written proof | X |
 
 ★ marks the principal results presented in the [README](../README.md).
 
@@ -1425,7 +1425,7 @@ The number *X* is normal in base *b* exactly when *W*(*z*) ≠ 0 at every residu
 
 ### CR-01 · Cyclotomic classification of finite combinations of Stoneham-type components
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be an odd prime with *p* ∤ *b*, and let *d* be the multiplicative order of *b* modulo *p*. For each positive integer *m* put
 
@@ -1453,7 +1453,7 @@ Then *F* = Σ *a*ₘ *T*ₘ is normal in base *b* if and only if the *d*-th cycl
 
 ### CR-02 · Exactly two rational coefficients make a binary two-term sum nonnormal
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 For each positive integer *m* put
 
@@ -1475,7 +1475,7 @@ For every rational number *a*, the number *T*₁ + *a T*₂ is normal in base 2 
 
 ### CR-04 · Exact weak limits and two different limiting distributions for one resonant sum
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Keep the notation of CR-01. Let *R* be the number of integers *u* with *S* ≤ *u* < *pS* for which Φ<sub>*d*</sub> divides *P*ᵤ, put *w* = *R*/((*p* − 1)*S*), and let *L* be (*p* − 1) times the product over *m* ∈ *M* of the reduced denominators of *a*ₘ/*m*. For every continuous complex-valued function *f* on the circle ℝ/ℤ, put
 
@@ -1503,7 +1503,7 @@ For *b* = 2, *p* = 7 and *F* = *T*₁ + 2*T*₂ + 3*T*₃ one has *L* = 6, and *
 
 ### CR-05 · Positive combinations are normal when the base is 1 modulo the prime
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 In the setting of CR-01 suppose in addition that *b* ≡ 1 (mod *p*). Then for every nonempty finite set *M* of positive integers and every choice of positive rational coefficients *a*ₘ, the number *F* = Σ *a*ₘ *T*ₘ is normal in base *b*. In particular every such positive combination with *b* = 10 and *p* = 3 is normal in base 10.
 
@@ -1519,7 +1519,7 @@ In the setting of CR-01 suppose in addition that *b* ≡ 1 (mod *p*). Then for e
 
 ### CR-06 · A finite rational test for binary combinations with parameter 3
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *T*ₘ be as in CR-02, let *M* be a finite set of positive integers, let *a*ₘ be rational, and let *S* be a positive integer with *m* ≤ *S* for every *m* ∈ *M*. For *S* ≤ *u* < 3*S* let *j*ₘ(*u*) be the largest *j* ≥ 0 with *m* 3ʲ ≤ *u*, and put
 
@@ -1541,7 +1541,7 @@ Then *F* = Σ *a*ₘ *T*ₘ is normal in base 2 if and only if *H*ᵤ ≠ 0 for 
 
 ### CR-07 · Every ordered partial sum of a decomposition of ln 2 is binary normal
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *T*ₘ be as in CR-02. Summing over all positive integers *m* not divisible by 3,
 
@@ -1565,7 +1565,7 @@ and for every *K* ≥ 1 the finite partial sum of *T*ₘ over 1 ≤ *m* ≤ *K* 
 
 ### DS-01 · Exact discrepancy of signed Stoneham expansions
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *b* ≥ 2, let *p* be a prime with *p* ∤ *b*, and let *c*₀, *c*₁, … be a bounded sequence of integers. Put *a*₀ = *c*₀ and *a*ⱼ₊₁ = *c*ⱼ₊₁ − *p c*ⱼ, and
 
@@ -1593,7 +1593,7 @@ and consequently the limiting discrepancy *D*∞(*X*) = lim sup *D*<sub>*N*</sub
 
 ### DS-02 · Discrepancy of periodic phases and the values 27/40, 3/4 and 12/13
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 In the setting of DS-01 suppose that the phases have period *L* ≥ 1. For 0 ≤ *r* ≤ *L* let *M*ᵣ be the number of zero-shell positions below *pʳ*, namely the sum of *p*ⁱ⁺¹ − *pⁱ* over those *i* < *r* with *c*ᵢ = 0, and put *A* = *M*<sub>*L*</sub>/(*pᴸ* − 1). Then
 
@@ -1622,7 +1622,7 @@ respectively.
 
 ### DS-03 · Rational translation multiplies the discrepancy by that of the rational orbit
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 In the setting of DS-01 let *m* be a nonzero integer and *r* a rational number. Let *D*(*r*) be the limiting discrepancy of the orbit {*bⁿr*}, which equals the interval discrepancy of the uniform measure on one period of its eventual cycle. Then for all prefix lengths
 
@@ -1651,7 +1651,7 @@ for every nonzero integer *m*.
 
 ### DS-04 · The attainable discrepancies are the values of suffix-maximal binary words
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 For a one-sided binary word *s* = *s*₀*s*₁*s*₂… and an integer *p* ≥ 2 put
 
@@ -1675,7 +1675,7 @@ Fix *b* ≥ 2 and a prime *p* with *p* ∤ *b*. A real number δ equals *D*∞(*
 
 ### DS-05 · Compactness, a gap above zero and periodic approximation in the spectrum
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *p* ≥ 2 and let *S*ₚ be the set of values *V*ₚ(*s*) of suffix-maximal binary words (DS-04). Then
 
@@ -1697,7 +1697,7 @@ Moreover, let *p* be a prime with *p* ∤ *b*, let *s* be suffix-maximal and let
 
 ### DS-06 · A signed expansion is normal exactly when its phases are eventually nonzero
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 In the setting of DS-01, the number *X* is normal in base *b* if and only if *c*ⱼ ≠ 0 for all sufficiently large *j*.
 
@@ -1713,7 +1713,7 @@ In the setting of DS-01, the number *X* is normal in base *b* if and only if *c*
 
 ### DS-07 · Irrationality criterion and transcendence of signed expansions
 
-**Evidence:** Lean + written deduction · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean + written deduction · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 In the setting of DS-01, the number *X* is irrational if and only if *c*ⱼ ≠ 0 for infinitely many *j*. In that case *X* is transcendental.
 
@@ -1730,7 +1730,7 @@ In the setting of DS-01, the number *X* is irrational if and only if *c*ⱼ ≠ 
 
 ### DS-08 · Rational translations give arbitrarily small positive discrepancy
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *b* ≥ 2 and let *t* ≥ 2 be an integer coprime to *b*. The limiting discrepancies *D*(*t*⁻ᵏ) of the rational orbits {*bⁿ t*⁻ᵏ} are positive and tend to 0 as *k* → ∞. Consequently, in the setting of DS-01, if *D*∞(*X*) > 0 then for every ε > 0 and all sufficiently large *k*,
 
@@ -1752,7 +1752,7 @@ Also, if a cyclic base-*b* word of length *L* places exactly one of its *L* rota
 
 ### DS-09 · Changing the shell schedule: equal zero patterns with discrepancies 9/13 and 12/13
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *b* = 2 and *p* = 3. For the phases repeating 0, 1, 3 (starting at *c*₀) the jump at every index 3*k* + 2 vanishes, and for the phases repeating 0, 0, 1 the jump at every index 3*k* + 1 vanishes. Their limiting discrepancies are 9/13 and 12/13 respectively.
 
@@ -1768,7 +1768,7 @@ Let *b* = 2 and *p* = 3. For the phases repeating 0, 1, 3 (starting at *c*₀) t
 
 ### DS-11 · Hausdorff dimension of the discrepancy spectrum
 
-**Evidence:** Written proof · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Written proof · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 For every integer *p* ≥ 2 the set *S*ₚ of DS-05 has Hausdorff dimension log 2 / log *p*, and its Hausdorff measure in that dimension is zero. In particular *S*₂ has dimension 1 and Lebesgue measure zero, and every *S*ₚ is closed and nowhere dense. For fixed rational *r* the translated spectrum is *D*(*r*) · *S*ₚ. The union of the translated spectra over all rational *r* has dimension log 2 / log *p*, zero Hausdorff measure in that dimension, and closure [0, 1].
 
@@ -1809,7 +1809,7 @@ Every real δ in [0,1] is the ordinary limiting extreme discrepancy of a positiv
 
 ### SY-04 · Worst change of finite discrepancy under translation
 
-**Evidence:** Lean · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
+**Evidence:** Lean · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 For every real z, integer radix b ≥ 2 and positive N, the maximum over all x of the absolute change from the discrepancy of x to that of x + z equals one minus the discrepancy of z. Equality holds at x = 0.
 
@@ -1837,7 +1837,7 @@ For every radix b ≥ 2 and every δ in [0,1], positive programmable coefficient
 
 ### SY-12 · A finite circle bound for sparse translations
 
-**Evidence:** Lean · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
+**Evidence:** Lean · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 For every positive sample length, the discrepancy change under addition is at most twice the displacement tolerance plus the fraction of shifts farther than that tolerance from an integer. For binary insertions at k(k+1) the exception count is bounded using the integer square root.
 
@@ -1892,7 +1892,7 @@ For the Phase 17 binary multiplicative Lambert family of support parameter δ, t
 
 ### OP-01 · Exact limiting discrepancy spectrum for addition
 
-**Evidence:** Lean
+**Evidence:** Lean · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting extreme discrepancies of x, y and x+y exactly when max(0, α+β−1) ≤ γ ≤ 1−|α−β|.
 
@@ -1907,7 +1907,7 @@ In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting ex
 
 ### OP-02 · Uniform cubic realization with algebraically independent inputs
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 Every admissible addition triple is realized with simultaneous all-prefix error O(N raised to −1/3), uniformly over triples for fixed radix and retained odd off-radix prime. The inputs may be algebraically independent and computable from computable target weights.
 
@@ -1921,7 +1921,7 @@ Every admissible addition triple is realized with simultaneous all-prefix error 
 
 ### OP-03 · Spectrum of any finite family of summands and its sum
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 For d summands and their total, the d+1 limiting discrepancy deficits range over the unit cube subject to each deficit being at most the sum of the others.
 
@@ -1948,7 +1948,7 @@ For every fixed rational matrix the limiting discrepancy spectrum of its rows is
 
 ### OP-05 · Translation deficits form finite and asymptotic pseudometrics
 
-**Evidence:** Lean
+**Evidence:** Lean · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 One minus the extreme discrepancy of x−y is a translation-invariant pseudometric at every positive sample length. At length at least two its zero set consists exactly of differences fixed modulo one by radix multiplication. Its upper limit is again a pseudometric. Integer multiplication has Lipschitz bound equal to the absolute multiplier.
 
@@ -1963,7 +1963,7 @@ One minus the extreme discrepancy of x−y is a translation-invariant pseudometr
 
 ### OP-06 · Rational scalar ring and fixed-point lifts
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 A rational multiplier preserves the entire numerical-preserver kernel exactly when its reduced denominator divides a radix power. Membership for one scaled preserver is decided mathematically by concentration of its nearest-integer residues on a single class. For power-related radices the intersection kernel is that of the common gcd power.
 
@@ -1976,7 +1976,7 @@ A rational multiplier preserves the entire numerical-preserver kernel exactly wh
 
 ### OP-07 · Boundary spectrum and inverse inequality for integer dilation
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 When the discrepancy of mx tends to one, the attainable full discrepancy limits of x form the closed interval from 1/m₀ to 1, where m₀ is the largest divisor of |m| coprime to the radix. An explicit finite inverse bound also forces discrepancy of x to tend to zero when that of mx tends to zero.
 
@@ -3505,7 +3505,7 @@ satisfy *D*<sub>*N*</sub>(*x*₁) → 2/3 and *D*<sub>*N*</sub>(*x*₂) → 2/3.
 
 ### CR-03 · Two positive normal numbers with an irrational nonnormal sum, in every base
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 For integers *b* ≥ 2, *c* ≥ 2 and *m* ≥ 1 put
 
@@ -3542,7 +3542,7 @@ is irrational and not normal in base *b*, and for every *r* ≥ 0 the upper freq
 
 ### DS-10 · Division by an integer can change the discrepancy factor
 
-**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance) (internally reviewed)
+**Evidence:** Lean · **Paper:** [III. Resonance and Discrepancy in Signed Stoneham Expansions](../papers/03-signed-resonance-v1.2) (internally reviewed)
 
 Let *b* = 2, *p* = 3, let *Y* be the expansion of DS-01 with phases repeating 1, 0, and put *X* = 9*Y* + 3/8. Then *D*∞(*X*) = 3/4 and *D*∞(*X*/9) = 1/2.
 
@@ -3688,7 +3688,7 @@ The generating functions for positive-order polylogarithms, the standard four-te
 
 ### OP-12 · Sparse numerical preservers with visible product and sharp rates
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations](../papers/10-discrepancy-arithmetic) (draft)
 
 Two explicit irrational numerical preservers in every radix have product bʳ/(bʳ−1) outside the numerical-preserver kernel for r ≥ 2. For missing-digit insertion sets of dimension σ as specified in the note, the exact order of the worst discrepancy change is (log N / N) raised to 1−σ.
 
@@ -3713,17 +3713,17 @@ For coprime integers b ≥ 2 and c > 2, every nonconstant rational polynomial in
 
 Let M(S) be the set of positive integers whose prime factors lie in a finite set S of primes, b >= 2 a radix and J the set of primes of S not dividing b. For s >= 1 the series sum over m in M(S) of m^{-s} b^{-m} has base-b interval discrepancy tending to 0 if J is nonempty and to 1 otherwise. For nonzero rational P, the series with numerator P(m) over all of M(S) is normal exactly when P(X)/X^s has a pole at zero and J is nonempty. Work of Captain Sude, Mira and Mira Cult covers order one for supports prime to the radix, binary supports containing 3 and two generators, and all orders for supports prime to the radix; their arguments extend further. The remaining cases use a measure-zero statement on persistent cancellation. If J is nonempty, the shifts of the series at distinct positive orders on one support, with rational numerators nonzero at zero, are jointly equidistributed in the unit cube. For p in J, a polynomial with a pole at zero and a retained subset of M(S), the discrepancy is bounded by the missed density of retained windows [p^k, 2p^k); on S = {p} normality holds exactly when infinitely many p^k are retained. For p in J, finitely many orders and a tolerance, a depth with every finite certificate below the tolerance is computable. Lean verifies the classifications and the joint theorem; written proofs and priority statements are provisional, without expert review.
 
-### III. Resonance and Discrepancy in Signed Stoneham Expansions (version 1.1)
+### III. Resonance and Discrepancy in Signed Stoneham Expansions (version 1.2)
 
-**Status:** internally reviewed · **Results:** [CR-01](#cr-01) · [DS-01](#ds-01) · [DS-03](#ds-03) · [DS-04](#ds-04) · [Directory](../papers/03-signed-resonance)
+**Status:** internally reviewed · **Results:** [CR-01](#cr-01) · [DS-01](#ds-01) · [DS-03](#ds-03) · [DS-04](#ds-04) · [Directory](../papers/03-signed-resonance-v1.2)
 
-A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
+Let p be a prime coprime to the radix b. For a sparse expansion with bounded integer phases c_j and insertions c_j - p c_{j-1} at p^j, we determine the interval discrepancy at every prefix up to an error tending to zero. Its main term is the proportion of positions in shells with c_j = 0. The spectrum is the image of the suffix-maximal binary words of Kaneko and Steiner under base-p evaluation with digits 0 and p - 1. For each such word we construct an expansion with phases in {0, 1} whose upper discrepancy is its value. Rational translation multiplies the main term by the discrepancy of a finite orbit. Cyclic de Bruijn words thereby give transcendental examples of arbitrarily small positive discrepancy. For finite rational combinations of dilated components with one odd prime parameter, resonance is equivalent to divisibility of an explicit cell polynomial by a cyclotomic polynomial. We also give, in each radix, two positive normal summands whose irrational sum has arbitrarily high upper frequencies of zero blocks.
 
 ### IV. Arithmetic Certificates for Normality and Mathematical Limitations (version 2.0)
 
 **Status:** draft · **Results:** [AC-01](#ac-01) · [AC-02](#ac-02) · [AC-03](#ac-03) · [Directory](../papers/04-arithmetic-certificates-v2)
 
-A radix orbit is equidistributed if almost all blocks on a prescribed geometric schedule admit small mean-error rational models with growing reduced denominators on a fixed coprime prime support and a polynomial denominator cap. Partial coverage gives a quantitative discrepancy bound. Accurate models on long overlaps must agree after alignment, and a counting estimate shows that such polynomial-denominator approximations on prescribed schedules occur only finitely often for almost every real. Explicit pairs of binary streams separate odd-primary rational data and logarithmic word laws from ordinary normality, and eight obstructions isolate the information lost by specific normality-proof methods. Two uniform halting reductions show that neither normality nor nonnormality is computably enumerable on digit-program names, even when their values are transcendental and their binary discrepancy tends to zero or one; Lean checks the reductions under explicit endpoint hypotheses. A separate written Rosser argument establishes consistency-relative independence for the normality sentence of a theory-dependent digit program, with no implication for any named classical constant.
+A radix orbit in base b >= 2 is equidistributed if, for every positive tolerance and denominator floor, almost all blocks on a prescribed geometric schedule admit rational models with mean circle error below the tolerance, reduced denominators above the floor on a fixed prime support coprime to b, and denominators bounded by a fixed power of the block length. Partial coverage gives a quantitative discrepancy bound. Conversely, accurate fixed-support models on long overlaps must agree modulo one after alignment, and a counting estimate (Theorem 4.1) shows that polynomial-denominator rational models meeting the mean circle error threshold 1/(16 b^4) on an independently prescribed geometric schedule with polynomially many starts per scale occur only finitely often for almost every real. Explicit pairs of binary streams separate odd-primary rational data and logarithmic word laws from ordinary normality, and eight obstructions isolate the information lost by specific normality-proof methods. Two uniform halting reductions show that neither normality nor nonnormality is computably enumerable on digit-program names, even when their values are transcendental and their binary discrepancy tends to zero or one. Lean 4 verifies the fixed-support estimate, uniform overlap separation, the certificate transfer step, radix-orbit partial-coverage bounds, the finite weighted word inequality underlying the counting theorem, and—under explicit endpoint hypotheses—each individual finite-edit, halting-reduction, and nonrecognizability declaration. A separate written Rosser argument establishes consistency-relative independence for the normality sentence of a theory-dependent digit program, with no implication for any named classical constant.
 
 ### V. Denominator Growth and Rational Shadowing for Classical Constants (version 2.0)
 
@@ -3739,7 +3739,7 @@ Let c be a nonnegative integer-valued multiplicative function with c(p^e) <= e+1
 
 ### VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy (version 1.0)
 
-**Status:** draft · **Results:** [SY-02](#sy-02) · [SY-01](#sy-01) · [SY-03](#sy-03) · [SY-04](#sy-04) · [Directory](../papers/07-synthetic-expansions)
+**Status:** draft · **Results:** [SY-02](#sy-02) · [SY-01](#sy-01) · [SY-03](#sy-03) · [OP-14](#op-14) · [Directory](../papers/07-synthetic-expansions)
 
 Fix an integer base b >= 2, a prime p not dividing b, and let t be the order of b modulo p. Insert the coefficient p^(-s v_p(k)) at base-b position t k^d for every k >= 1. For s = 0 the extreme discrepancy tends to one, while for every integer s >= 1 the number is normal to base b; this switch holds on every strictly increasing schedule of multiples of t dominating k^2, and it has been checked by the Lean 4 kernel together with the exact reduced denominator of every shifted prefix. For odd p and d >= s+2 complete periods give an explicit power rate, and for xi = sum_k 3^(-v_3(k)) 2^(-2k^3) a short self-contained proof gives D_N <= 200 N^(-1/3). Choosing the rational state after each cubic insertion by a positive correction realizes every limiting discrepancy in [0,1] with error O(N^(-1/3)), every pair of lower and upper limits, and every nonempty compact connected set of invariant measures as a limit set. For odd p, s >= 1 and d >= 3, every nonconstant rational polynomial of total degree at most two in the numbers of this family with distinct orders s on a common schedule is normal; in particular xi^2 is normal and (xi, xi^2) is jointly normal. The proof shows that the limiting p-adic mass of the shifted prefixes has Lebesgue-null level sets, by counting isolated jumps with van der Corput's method and a second-moment argument. Finally a positive binary series using every odd prime as a denominator prime is normal and Liouville with D_N = O(1/log N), while positive rational multiples of its jointly normal components can sum to any positive rational.
 
@@ -3747,13 +3747,19 @@ Fix an integer base b >= 2, a prime p not dividing b, and let t be the order of 
 
 **Status:** draft · **Results:** [ST-32](#st-32) · [ST-35](#st-35) · [ST-29](#st-29) · [Directory](../papers/08-stoneham-product-orbits)
 
-For the product of two Stoneham numbers with distinct odd prime parameters, every subsequential distribution of the radix shifts is a mixture of Lebesgue measure and rational periodic orbits, and the scalar extreme interval discrepancy converges to that of the mixture. For the binary product α(2,3)α(2,5), the upper interval discrepancy is at most 4/11 + 2.85e-10, and the sharp bound 4/11 is equivalent to the upper density of integer shifted prefixes being at most 4/11; ordinary binary normality remains open. Under finite local simple-zero tests satisfied by infinitely many radices for every distinct odd prime pair, the product orbit is logarithmically equidistributed with lower discrepancy zero and at most O_ε(log* T) exceptional logarithmic scales up to T. We also consolidate the kernel-verified 43/45 bound for α(2,3)α(2,5), transcendence and strict upper discrepancy for general multiplicatively independent integer parameters, and the exact plateau-cycle discrepancy formulas and unconditional sub-quarter bounds for rational quadratics in a parameter-two Stoneham number.
+For the product of two Stoneham numbers with distinct odd prime parameters coprime to the radix B, every subsequential distribution of the radix shifts is a mixture of Lebesgue measure and rational periodic orbits, and the scalar extreme interval discrepancy converges to that of the mixture. For the binary product α(2,3)α(2,5), the upper interval discrepancy is at most 4/11 + 2.85e-10, and the threshold 4/11 is equivalent to the upper density of integer shifted prefixes being at most 4/11; ordinary binary normality remains open. Under finite local simple-zero tests satisfied by infinitely many radices for every distinct odd prime pair, the product orbit is logarithmically equidistributed with lower discrepancy zero and at most O_ε(log* T) exceptional logarithmic scales up to T. We also consolidate the kernel-verified 43/45 bound for α(2,3)α(2,5), transcendence and strict upper discrepancy for general multiplicatively independent integer parameters, and the kernel-verified plateau-cycle law and resonant-radix classification for rational quadratics in a parameter-two Stoneham number, together with Lean-supported unconditional sub-quarter discrepancy bounds for explicit families.
 
 ### IX. Finite-statistic thresholds and statistical obstructions for the binary digits of the Erdős–Borwein constant (version 1.0)
 
 **Status:** draft · **Results:** [CC-49](#cc-49) · [Directory](../papers/09-erdos-borwein-note)
 
 Let E = sum 1/(2^n - 1) be the Erdős–Borwein constant. Whether its binary digits are normal is open, and this note proves neither normality nor nonnormality. Writing tau(m) = 2^V(m) U(m) with U(m) odd, the digits of E are governed by the integers V(n+j) and U(n+j). We compare them with an explicit random model of independent Poisson columns whose first-digit frequency lies in [0.492450290, 0.492460864] (finite certificate). Using an unconditional estimate for the mean discarded tail, we determine which finite statistics of this model would force a digit frequency below 1/2: one bounded statistic of 16 columns suffices, while for every D <= 15 there are exact countermodels with the same D-column law and tail mean whose first-digit frequency is at least 1/2. Exact joint laws of every set of at most four columns do not decide the bias. Factorial-moment information of order at most 4 never decides it, order at most 8 fails on 16 columns, and an explicit order-92 witness suffices. The parity inequality behind these statements is verified in Lean. A Selberg–Vaaler majorant of degree 116 suffices, whereas no trigonometric certificate of degree at most 110 exists. We list the arithmetic correlation estimates that would settle these statistics, audit the bit counts in Crandall's 2012 paper against exact digits, credit related public work of Campbell, Captain Sude and Mira Cult, and propose three concrete collaborative computations and estimates.
+
+### X. The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations (version 1.0)
+
+**Status:** draft · **Results:** [SY-04](#sy-04) · [OP-01](#op-01) · [OP-05](#op-05) · [OP-06](#op-06) · [Directory](../papers/10-discrepancy-arithmetic)
+
+For an integer base b >= 2 let D_N(x) be the extreme discrepancy of x, bx, ..., b^(N-1) x modulo one. We prove the finite identity sup_x |D_N(x+z) - D_N(x)| = 1 - D_N(z), attained at x = 0, and classify the translations that preserve both limiting discrepancies of every real number: they are the numbers c + w with (b-1)c an integer and (1/N) sum_{n<N} ||b^n w|| -> 0. The limits of D_N(x), D_N(y) and D_N(x+y) are exactly the triples in [0,1]^3 with max(0, alpha+beta-1) <= gamma <= 1 - |alpha-beta|. Every such triple is realized by positive rational expansions on a cubic schedule with simultaneous error O(N^(-1/3)), uniformly in the triple, by computable and algebraically independent witnesses; the analogous deficit polytope for d summands is determined. The translation deficit 1 - D_N(x-y) is a pseudometric, an exact form of Levy's concentration function comparable to the Ky Fan distance to constants. The rational scalars preserving its asymptotic kernel are exactly Z[1/b], an individual rational scaling is decided by a residue-density test, and on the boundary D_N(mx) -> 1 the attainable limits of D_N(x) form [1/m_0, 1], where m_0 is the part of m prime to b. The finite identity, the pseudometric axioms and the qualitative addition spectrum are verified by the Lean 4 kernel.
 
 ### I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter (version 1.1, superseded by [01-stoneham-polynomials-v2](../papers/01-stoneham-polynomials-v2))
 
@@ -3766,6 +3772,12 @@ For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconst
 **Status:** internally reviewed · **Results:** [LS-01](#ls-01) · [MW-01](#mw-01) · [LS-02](#ls-02) · [LS-03](#ls-03) · [Directory](../papers/02-localized-normality)
 
 Restrict the series for a polylogarithm of positive integer order to the integers whose prime factors lie in a finite set. With numerator 1 on the full support, the resulting radix expansion is normal when some support prime does not divide the radix, and its discrepancy tends to one otherwise. For a nonzero rational polynomial weight *P*(*m*) on the full support, normality holds exactly when *P* vanishes at zero to order less than *s* and some support prime does not divide the radix. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region and shows that this region is null, using recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays.
+
+### III. Resonance and Discrepancy in Signed Stoneham Expansions (version 1.1, superseded by [03-signed-resonance-v1.2](../papers/03-signed-resonance-v1.2))
+
+**Status:** internally reviewed · **Results:** [CR-01](#cr-01) · [DS-01](#ds-01) · [DS-03](#ds-03) · [DS-04](#ds-04) · [Directory](../papers/03-signed-resonance)
+
+A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
 
 ### IV. Arithmetic Certificates for Normality and Their Limitations (version 1.1, superseded by [04-arithmetic-certificates-v2](../papers/04-arithmetic-certificates-v2))
 
