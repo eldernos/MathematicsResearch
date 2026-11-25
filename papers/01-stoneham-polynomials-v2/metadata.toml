@@ -1,0 +1,14 @@
+id = "01-stoneham-polynomials-v2"
+title = "Polynomial Images of Stoneham Numbers"
+authors = ["Christopher Anderson"]
+affiliation = "Independent Researcher"
+short_title = "Stoneham polynomial images"
+version = "2.0"
+status = "preprint draft"
+abstract = """For coprime integers b ≥ 2 and c > 2, every nonconstant rational polynomial in the Stoneham number α(b,c) = Σ (1/(c^j b^(c^j))), summed over j ≥ 1, is normal in base b. Mira Cult’s October 7, 2026 public notes state a broader theorem with independent parameters. We give a kernel-verified proof for the ordinary Stoneham series. Distinct positive powers are jointly uniformly distributed. A nonintegral periodic geometric sum bounds the cancellation in rational prefixes, and Vandehey’s exponential-sum estimate gives an effective discrepancy rate. At c = 2 we determine the square’s prefix denominators. Exact finite certificates and cyclic descent prove polynomial normality in degrees 3 through 120, degree 128 and sixteen infinite families. A counting argument determines the least 2-adic valuation among the contributions of permutation orbits in every degree. Normality of the resonant quadratic α(b,2)^2 − 2α(b,2) remains open for each specified odd radix."""
+keywords = ["Stoneham numbers", "normal numbers", "uniform distribution", "discrepancy", "p-adic valuation", "Lean 4"]
+msc_primary = "11K16"
+msc_secondary = ["11J81", "11A63"]
+supersedes = "papers/01-stoneham-polynomials"
+lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
+registry_ids = ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05", "ST-11", "ST-12", "ST-13", "ST-17", "ST-18", "ST-19", "ST-20", "ST-23", "ST-24", "ST-28", "ST-30", "ST-31", "ST-33"]
