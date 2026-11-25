@@ -600,3 +600,187 @@ This written estimate follows from multiplicative moments on ordinary short inte
 proof = ["notes/phase13/erdos-borwein.md#an-unconditional-localization-of-the-divisor-fourier-statistic"]
 inputs = ["P. Shiu, A Brun–Titchmarsh theorem for multiplicative functions, Theorem 1, with uniform dependence on majorants as in Henriot."]
 related = ["CC-20", "CC-21"]
+
+[[result]]
+id = "CC-23"
+title = "The two smallest rates for real parts of dyadic Gaussian logarithms"
+topic = "classical"
+status = "paper"
+statement = '''
+Represent ln 2 by a fixed finite rational combination of the real parts of the Taylor series for −log(1 − *z*), with *z* = ±2⁻ᵏ or *z* = (±1 ± *i*)/2ᵗ and integers *k*, *t* ≥ 1. At cutoff *N* retain each term of index *j* satisfying −*j* log₂|*z*| ≤ *N*, multiply the sum by 2ᴺ, and write *q*<sub>*N*</sub> for its reduced denominator. The model approximates 2ᴺ ln 2 with error *O*(1/(*N* + 1)). The limit of (log *q*<sub>*N*</sub>)/*N* exists for every such representation. Its least value is 5/12 and its second least value is 13/30. Each is attained by exactly one sequence of prefixes.
+'''
+scope = '''
+Uniqueness allows different identities yielding the same prefix at every cutoff. After pairing signs and conjugates, the representations of ln 2 form a four-parameter rational affine family. The classification, rate formula and optimality are paper results. Lean checks the real coefficients, cutoff rule, Frobenius congruence, small primitive factors and final linear system of valuations. Two exact computations verify the comparison of prime bands. CC-14 gives the minimizing prefix explicitly.
+'''
+lean = [
+  "NormalityChecker.GaussianLogarithmRelations.norm_valuation_system",
+  "NormalityChecker.GaussianLogarithmRelations.insertion_iff",
+  "NormalityChecker.GaussianLogarithmRelations.gaussian_re_frobenius",
+  "NormalityChecker.GaussianLogarithmRelations.small_primitive_factors",
+]
+proof = ["notes/phase14/gaussian-relations.md", "notes/phase14/reviews/gaussian-optimality.md"]
+inputs = ["Grechkoseeva, Theorem 2 on primitive primes in the Suzuki factors of 2²ⁿ + 1. Bang’s primitive-divisor theorem for 2ᵏ − 1. The prime number theorem."]
+computation = ["notes/phase14/gaussian_relations.py", "notes/phase14/reviews/check_gaussian_optimality.py"]
+related = ["CC-01", "CC-02", "CC-14"]
+
+[[result]]
+id = "CC-24"
+title = "Simultaneous cancellation of prime-primary logarithm characters"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+Let *Y*ₙ be the actual two-stride prefix of 2ⁿ ln 2 from CC-01. For a prime *p*, write *c*ₚ(*n*) for its component of *p*-power order in ℚ/ℤ. For large *X*, take the primes in [2*X*/5, 9*X*/20] at which the multiplicative order of 2 exceeds *X*<sup>1/3</sup>. Let *I* be any interval of at least *X*<sup>δ</sup> consecutive integers in [*X*, 11*X*/10], with 0 < δ < 1 fixed. For any fixed *r* ≥ 1, any set *S* of at most *r* such primes, and any integers *h*ₚ with at least one *p* ∤ *h*ₚ, put *e*(*t*) = exp(2π*i t*). For some γ > 0 depending only on *r*, δ,
+
+```math
+\left|\frac{1}{|I|}\sum_{n\in I} e\left(\sum_{p\in S}h_p c_p(n)\right)\right|
+\ll_{r,\delta} X^{-\gamma}.
+```
+'''
+scope = '''
+For *p* > 3 and 2*p* ≤ *n* < 3*p*, the true component is 2ⁿ⁻¹/*p* modulo one. Lean verifies the coprime remainder, the joint argument and the reduced conductor after dropping zero frequencies. The power saving is a paper application of Bourgain–Chang. The order test excludes at most *O*(*X*<sup>2/3</sup>/log *X*) primes in the band. At a fixed start one may also sample across the primes. The mean over *I* of the squared interval discrepancy of these samples decays by a power of *X*.
+'''
+lean = [
+  "NormalityChecker.LogarithmPrimaryCharacters.primary_correct",
+  "NormalityChecker.LogarithmPrimaryCharacters.joint_remainder",
+  "NormalityChecker.LogarithmPrimaryCharacters.primary_character_argument",
+  "NormalityChecker.LogarithmPrimaryCharacters.coefficient_coprime",
+]
+proof = ["notes/phase14/primary-components.md", "notes/phase14/reviews/primary-characters.md#the-component-and-the-conductor"]
+inputs = ["Bourgain–Chang, Theorem 2.5 on incomplete exponential sums modulo a product of a bounded number of primes. The prime number theorem and the Erdős–Turán inequality."]
+computation = ["scripts/check_phase14_cancellation.py"]
+related = ["CC-01", "CC-15", "CC-16", "CC-25"]
+
+[[result]]
+id = "CC-25"
+title = "Cancellation for most complements away from equal frequencies"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+Use the prime band, exponent δ and windows *I* of CC-24. For a set *S* of *r* selected primes put *P*<sub>*S*</sub>(*n*) equal to the sum of their primary components and *R*<sub>*S*</sub>(*n*) = *Y*ₙ − *P*<sub>*S*</sub>(*n*) modulo one. For some β > 0 depending on the fixed *r*, δ, the proportion of *r*-element sets satisfying the following bound tends to one as *X* → ∞. Simultaneously for every such window and all integers |*h*|, |*k*| ≤ *X*<sup>β</sup> with *h* ≠ *k*,
+
+```math
+\left|\frac{1}{|I|}\sum_{n\in I}e\big(hP_S(n)+kR_S(n)\big)\right|
+\ll_{r,\delta} X^{-\beta}.
+```
+'''
+scope = '''
+Lean checks the Gram inequality for nearly orthogonal vectors and alignment of their means. The exceptional-set bound and its uniformity over windows and frequencies follow on paper from CC-24. Setting *h* = 0 controls the complementary rational component and the orbit of the correspondingly shifted logarithm. At *h* = *k* the character is exactly *e*(*k Y*ₙ) for every choice of *S*. Cancellation on that diagonal for ln 2 remains open. A dyadic perturbation can preserve every odd-primary component while approximating any chosen real target.
+'''
+lean = [
+  "NormalityChecker.LogarithmPrimaryCharacters.aligned_means",
+  "NormalityChecker.LogarithmPrimaryCharacters.gram_bound",
+  "NormalityChecker.LogarithmPrimaryCharacters.dyadic_completion",
+]
+proof = ["notes/phase14/reviews/primary-characters.md#what-follows-for-the-complementary-factors", "notes/phase14/primary-components.md#the-uncontrolled-fourier-direction"]
+inputs = ["The Bourgain–Chang estimate in CC-24, applied to the primes in a symmetric difference."]
+related = ["CC-10", "CC-24"]
+
+[[result]]
+id = "CC-26"
+title = "Overlapping binary words and a transition criterion for ln 2"
+topic = "classical"
+status = "lean"
+statement = '''
+At shift *n* read *T* consecutive bits of ln 2, beginning with the first fractional bit of 2ⁿ ln 2. Count adjacent changes wholly inside those bits. For every sufficiently large integer *B* and every 2 ≤ *T* ≤ *B*, there are *T* − 1 consecutive starts in [*B*, 68*B*) whose words all contain a change.
+
+Fix 0 < δ ≤ 1 and η, ρ > 0. Suppose that at every sufficiently large power of two *N*, at least η*N* starts in [*N*, 2*N*) have at least ρ*T* internal changes for *T* = ⌊*N*<sup>δ</sup>⌋. Then the ordinary lower transition density is at least ηρ/6 and the upper limiting binary interval discrepancy is at most max(2/3, 1 − ηρ/6) < 1.
+'''
+scope = '''
+The first assertion guarantees one change unconditionally for the actual logarithm. The second accounts for overlaps, words extending beyond the shell and prefixes ending inside a shell. Establishing its proportional hypothesis at all sufficiently late dyadic scales remains open.
+'''
+lean = [
+  "NormalityChecker.TransitionWindows.logTwo_one_change_blocks",
+  "NormalityChecker.TransitionWindows.logTwo_of_many_rich_windows",
+  "NormalityChecker.TransitionWindows.density_discrepancy_of_dyadic_aggregate",
+]
+proof = ["notes/phase14/transition-windows.md", "notes/phase14/reviews/classical-frequencies.md"]
+related = ["CC-04", "CC-05", "CC-18", "CC-19", "CC-27"]
+
+[[result]]
+id = "CC-27"
+title = "Certified changes in overlapping words on seven shells of ln 2"
+topic = "classical"
+status = "computation"
+statement = '''
+At each of the seven shell starts *N* = 2⁸, 2⁹, …, 2¹⁴, every *N*-bit word of ln 2 starting at a shift *n* in [*N*, 2*N*) has at least *N*/4 internal changes. On each of those shells, for every 2 ≤ *T* ≤ *N*, at least *N*/128 overlapping starts have at least *T*/128 internal changes.
+'''
+scope = '''
+The computation splits the diagonal rational model of CC-11 into its upper-prime-band and complementary Chinese remainder components. A pair of four-bit cells certifies a true transition. The counts of marked offsets within the seven shells are 79, 164, 335, 657, 1287, 2519 and 5110, respectively. All exceed *N*/4. The all-length count follows by summing the incidences of these marked gaps. Independent rational enclosures check the actual bits. These finite data leave the all-large-shell hypothesis of CC-26 open.
+'''
+proof = ["notes/phase14/transition-windows.md#exact-finite-checks", "notes/phase14/transition-windows.md#a-joint-arithmetic-estimate-with-a-fixed-set-of-cells", "notes/phase14/reviews/classical-frequencies.md"]
+lean = ["NormalityChecker.TransitionWindows.logTwo_hit_of_crt_cells"]
+computation = ["scripts/phase14_transition_windows.py"]
+related = ["CC-11", "CC-17", "CC-18", "CC-26"]
+
+[[result]]
+id = "CC-28"
+title = "A local law for individual Erdős–Borwein divisor coefficients"
+topic = "classical"
+status = "paper"
+statement = '''
+Write the divisor count as τ(*m*) = 2<sup>*V*(*m*)</sup>*U*(*m*) with *U*(*m*) odd. In the series *E* = Σ τ(*m*)2⁻ᵐ of CC-20 the source *m* thus places *U*(*m*) at position *m* − *V*(*m*). For a uniformly chosen shift *n* in [*N*, 2*N*), the expected number of sources at position *n* + *d* tends to one for each *d* ≥ 1.
+
+Let *U*<sub>∗</sub> be the product, over primes *p*, of the odd parts of *B*ₚ + 1 for independent nonnegative integers with probabilities Pr(*B*ₚ = *a*) = (1 − 1/*p*)*p*<sup>−*a*</sup>. For fixed *r* ≥ 1, let *F* be a complex function on odd residues modulo 2ʳ. Write *M*<sub>*F*</sub>(*k*) for the average of *F*(*U*(*m*)) times the indicator of *V*(*m*) = *k* over *N* ≤ *m* < 2*N*. For *T* = log log *N* and *p*<sub>*T*</sub>(*k*) = exp(−*T*)*T*ᵏ/*k*!, set *p*<sub>*T*</sub>(−1) = 0. Put μ = 𝔼[*F*(*U*<sub>∗</sub>)] and ∆ₖ = *p*<sub>*T*</sub>(*k* − 1) − *p*<sub>*T*</sub>(*k*). There is an explicit γ<sub>*F*</sub> such that uniformly in *k* ≥ 0,
+
+```math
+M_F(k)=\mu p_T(k)+\gamma_F\Delta_k+O_{r,F}(T^{-3/2}).
+```
+'''
+scope = '''
+The mean count follows by reindexing sources. On windows of length at least *N*<sup>1/2+η</sup> up to *N*, for fixed 0 < η < 1/2, the mean count weighted by a fixed polynomially bounded function of the mark tends to its expectation under *U*<sub>∗</sub>. The pointwise local limit with its first correction is a paper application of Selberg’s theorem on [*N*, 2*N*). Lean proves the finite reindexing and phase identities. Correlations between distinct sources enter the binary digits of *E*.
+'''
+lean = [
+  "NormalityChecker.ErdosBorweinArrivals.arrival_sum",
+  "NormalityChecker.ErdosBorweinArrivals.source_phase",
+]
+proof = ["notes/phase14/erdos-borwein-frequencies.md#counting-each-source-at-its-remaining-denominator", "notes/phase14/erdos-borwein-frequencies.md#a-pointwise-signed-local-limit-on-dyadic-windows"]
+inputs = ["A. Selberg, Note on a paper by L. G. Sathe, Theorem 2."]
+related = ["CC-20", "CC-21", "CC-29", "CC-30"]
+
+[[result]]
+id = "CC-29"
+title = "A narrower divisor band for the Erdős–Borwein Fourier phase"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+Fix an integer *h* and 0 < δ ≤ 1. Write *T* = log log *N*, let 0 ≤ *B* ≤ *T*/4 and take the average over *N* ≤ *n* < *N* + *H*, where *N*<sup>δ</sup> ≤ *H* ≤ *N*. Let *S*<sub>*B*</sub>(*n*) be the sum of τ(*n* + *j*)/2ʲ over positive *j* with |*j* − *T*| ≤ *B*. For *e*(*t*) = exp(2π*i t*) and the Erdős–Borwein constant *E*, put *d*ₙ = |*e*(*h*2ⁿ*E*) − *e*(*h S*<sub>*B*</sub>(*n*))|. Then
+
+```math
+\frac{1}{H}\sum_{n=N}^{N+H-1}d_n \ll_{\delta,h} e^{-B^2/(3T)}.
+```
+
+In particular, a window of offsets of radius *A*(*N*)√*T* suffices for vanishing mean error for any *A*(*N*) tending to infinity.
+'''
+scope = '''
+Lean verifies the finite phase reduction and a tail bound in terms of the mass of displaced coefficients. The exponential estimate is a paper deduction from short-interval multiplicative moments. The estimate localizes the full Fourier phase. Cancellation of its average at the retained offsets remains open.
+'''
+lean = [
+  "NormalityChecker.ErdosBorweinArrivals.tail_phase_bound",
+  "NormalityChecker.ErdosBorweinArrivals.source_phase",
+]
+proof = ["notes/phase14/erdos-borwein-frequencies.md#a-narrower-raw-offset-band-on-every-power-window"]
+inputs = ["P. Shiu, A Brun–Titchmarsh theorem for multiplicative functions, Theorem 1, with uniform majorants as in Henriot."]
+supersedes = ["CC-22"]
+related = ["CC-20", "CC-28", "CC-30"]
+
+[[result]]
+id = "CC-30"
+title = "A 32-position obstruction to the independent Poisson model for Erdős–Borwein"
+topic = "classical"
+status = "lean+paper"
+statement = '''
+Let *C*(*t*) be the sum of the marks *U*(*m*) with *m* − *V*(*m*) = *t*, as in CC-28. Choose *n* uniformly from the integers in [*N*, 2*N*) and let *R*₃₂ be the least residue modulo 2³² of
+
+```math
+\sum_{d=1}^{32}2^{32-d}C(n+d).
+```
+
+Define a comparison law *Q*₃₂ for the same packed integer by using independent positions, each with a Poisson number of marks of mean one. The marks are independent with the one-source law of *U*<sub>∗</sub> in CC-28. If the binary frequency of ones in *E* tends to 1/2, then the lower limit, as *N* → ∞, of the total variation distance from the law of *R*₃₂ to *Q*₃₂ exceeds 0.006.
+'''
+scope = '''
+Extending the independent model to all positions gives a one-bit probability in [0.492230, 0.492685], certified by integer probability bounds and a tail estimate. This interval describes the comparison model. The actual limiting one-bit frequency is open. Lean checks the finite carry criterion. The deduction of the distance bound also uses the written estimate of the actual mean discarded tail. An independent finite count of the true words 00, 01, 10 and 11 on [2¹⁸, 2¹⁹) gives 67135, 63695, 63696 and 67618 starts, respectively.
+'''
+lean = ["NormalityChecker.ErdosBorweinArrivals.one_bit_carry"]
+proof = ["notes/phase14/erdos-borwein-frequencies.md#a-test-for-independence-and-a-conditional-word-law", "notes/phase14/reviews/classical-frequencies.md"]
+computation = ["scripts/erdos_borwein_poisson.py", "scripts/erdos_borwein_arrivals.py"]
+related = ["CC-20", "CC-21", "CC-28", "CC-29"]

@@ -463,3 +463,267 @@ lean = [
 proof = ["notes/phase13/quantitative-normality.md"]
 inputs = ["J. Vandehey, exponential sums over fixed-support denominators, Theorem 5.1 (arXiv:1606.07911), and the Erdős–Turán discrepancy inequality."]
 related = ["ST-01", "ST-04"]
+
+[[result]]
+id = "ST-19"
+title = "Exact prefix denominators of a parameter-two quadratic"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Let α be the positive-index Stoneham number α(*b*, 2) of ST-12, with odd radix *b* ≥ 3. Fix integers *A* ≠ 0, *B*, *C*₀. Let *R*ₙ be the shifted rational prefix of *A*α² + *B*α + *C*₀, obtained by keeping every term of radix exponent at most *n* in the ordered expansion and multiplying by *b*ⁿ. Write *v* for the 2-adic valuation, with *v*(0) = +∞. Put *a* = *v*(2*A*) and *s* = *v*(*b*² − 1) − 1. There is an explicit κ ∈ ℚ₂ depending on *b*, *A*, *B* such that, throughout 3 · 2ᵏ⁻¹ ≤ *n* < 2ᵏ⁺¹ for *k* ≥ 1, the reduced denominator of *R*ₙ is
+
+```math
+q_k=2^{\max(0,\,k-a-s-v(k-\kappa))}.
+```
+
+If κ is algebraic over ℚ then *q*ₖ → ∞. For integers *h* ≥ 0 and *a* + *s* + *h* < *i* < *j*, if *q*ᵢ and *q*ⱼ are at most 2ʰ then 2<sup>*i*−*a*−*s*−*h*</sup> divides *j* − *i*.
+'''
+scope = '''
+At *k* = κ the formula gives denominator one. On the lower half 2ᵏ ≤ *n* < 3 · 2ᵏ⁻¹ the denominator is exactly 2 raised to 2*k* − 2 − *v*(*A*) once *k* > 2 + *v*(*A*). The finite greatest-common-divisor formula in the proof covers earlier lower halves, including ties between the linear and quadratic terms. For *n* = 0, 1 the denominator is one, and for *n* = 2, 3 it is 2/gcd(2, *B*).
+'''
+lean = [
+  "NormalityChecker.ParameterTwoQuadratic.upper_denominator_valuation",
+  "NormalityChecker.ParameterTwoQuadratic.slope_valuation",
+  "NormalityChecker.ParameterTwoQuadratic.lower_denominator_exact",
+  "NormalityChecker.ParameterTwoQuadratic.initial_denominator",
+  "NormalityChecker.ParameterTwoQuadratic.eventually_lower_denominator",
+  "NormalityChecker.ParameterTwoQuadratic.algebraic_upper_growth",
+  "NormalityChecker.ParameterTwoQuadratic.bounded_upper_separation",
+]
+proof = ["notes/phase14/quadratic-denominators.md"]
+related = ["ST-12", "ST-20", "ST-22"]
+
+[[result]]
+id = "ST-20"
+title = "A normality criterion and discrepancy bounds for every rational quadratic"
+topic = "stoneham"
+status = "lean"
+statement = '''
+With *b*, α, *A*, *B*, *C*₀ and *q*ₖ as in ST-19, let *x* = (*A*α² + *B*α + *C*₀)/*D* for a positive integer *D*. Then *x* is normal in base *b* if and only if *q*ₖ → ∞. In particular, algebraicity of κ suffices. For every such *x*, the extreme interval discrepancy of the first *N* fractional parts {*b*ⁿ*x*}, starting at *n* = 0, satisfies
+
+```math
+\liminf_{N\to\infty} D_N(x)=0,
+\qquad
+\limsup_{N\to\infty} D_N(x)\le\frac14 .
+```
+
+For every half-open interval in [0, 1), the frequency weighted by 1/(*n* + 1) and divided by the sum of these weights tends to the interval length.
+'''
+scope = '''
+The denominators in the criterion belong to the integer polynomial before division by *D*. The ordinary discrepancy bounds and the logarithmically weighted equidistribution theorem hold for arbitrary rational coefficients of degree exactly two, including when *b* and *D* share factors. Whether the denominators tend to infinity for the polynomial *X*² − 2*X* at a given odd radix remains open.
+'''
+lean = [
+  "NormalityChecker.ParameterTwoQuadratic.normal_iff_upper_denominator",
+  "NormalityChecker.ParameterTwoQuadratic.quadratic_discrepancy_limits",
+  "NormalityChecker.ParameterTwoQuadratic.quadratic_log_equidistribution",
+  "NormalityChecker.ParameterTwoQuadratic.normal_of_algebraic_kappa",
+  "NormalityChecker.QuadraticOrbit.rational_good_halves",
+]
+proof = ["notes/phase14/quadratic-orbits.md"]
+related = ["ST-12", "ST-19", "ST-21", "ST-22"]
+
+[[result]]
+id = "ST-21"
+title = "The exact upper discrepancy in terms of rational cycles"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+For *x* and *R*ₙ as in ST-19 and ST-20, take *y*ₖ to be the rational point *R*ₙ/*D* modulo one at the midpoint *n* = 3 · 2ᵏ⁻¹. Write Δₖ for the extreme interval discrepancy of the uniform measure on the eventual cycle of *y*ₖ under multiplication by *b* modulo one. Then
+
+```math
+\limsup_{N\to\infty} D_N(x)=\frac14\limsup_{k\to\infty}\Delta_k .
+```
+
+Every positive value of the left side is rational. It equals 1/4 precisely when infinitely many of these cycles consist of a single point.
+'''
+scope = '''
+The cycle uses the divided prefix and omits its finite preperiod. Lean verifies the all-prefix comparison with the maximum weighted cycle discrepancy and the displayed upper-limit equality. The rationality of positive upper discrepancies and the singleton characterization are written deductions. Existence of a rational quadratic attaining 1/4 remains open.
+'''
+lean = ["NormalityChecker.QuadraticOrbit.quadratic_exact_limsup", "NormalityChecker.QuadraticOrbit.quadratic_all_prefix"]
+proof = ["notes/phase14/plateau-spectrum.md", "notes/phase14/reviews/quadratic-orbits.md#counting-the-real-orbit-at-every-cutoff", "notes/phase14/reviews/quadratic-orbits.md#when-the-factor-is-attained"]
+related = ["ST-19", "ST-20"]
+
+[[result]]
+id = "ST-22"
+title = "Two resonant radix classes for the shifted Stoneham square"
+topic = "stoneham"
+status = "lean"
+statement = '''
+Choose *A* = 1 and *B* = −2 in ST-19. Fix integers *k* ≥ 1, *s* ≥ 2 and *H* ≥ 0 with *t* = *k* − 1 − *s* − *H* > *s*. Among the odd integer radices *b* ≥ 3 satisfying *v*₂(*b*² − 1) = *s* + 1, the upper-half prefix denominator *q*ₖ(*b*) is at most 2ᴴ precisely on two opposite residue classes modulo 2ᵗ if *v*₂(*k* + 1) = *s*. If *v*₂(*k* + 1) ≠ *s*, there are no such radices.
+'''
+scope = '''
+For *k* = 11, *s* = 2 and *H* = 0 the two classes are 93 and 163 modulo 256. The theorem varies the radix at one shell. The proof identifies the normalized radix parameter with a bijective isometry on a 2-adic ball. The almost-everywhere statement for 2-adic radices in the note is a paper deduction.
+'''
+lean = [
+  "NormalityChecker.ResonantRadix.resonant_residue",
+  "NormalityChecker.ResonantRadix.target_valuation_of_hit",
+  "NormalityChecker.ResonantRadix.radix_isometry",
+  "NormalityChecker.ResonantRadix.phase_bijOn",
+]
+proof = ["notes/phase14/resonant-radices.md"]
+computation = ["scripts/test_resonant_radices.py"]
+related = ["ST-19", "ST-20"]
+
+[[result]]
+id = "ST-23"
+title = "Normality of all quartics at parameter two"
+topic = "stoneham"
+status = "lean"
+statement = '''
+For every odd radix *b* ≥ 3 and every rational polynomial *P* of degree exactly four, *P*(α(*b*, 2)) is normal in base *b*. In particular the fourth power of the positive-index Stoneham number is normal in its construction base.
+'''
+scope = '''
+Lean evaluates the finite grid of quartic masses, proves uniform retention of the leading denominator and deduces normality for arbitrary lower coefficients. The proof note also gives the exact quartic denominator exponents on the three portions of each shell starting at 2ᵏ with *k* ≥ 4. That explicit first-shell threshold follows from the separate arithmetic calculation.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.quartic_polynomial_normal",
+  "NormalityChecker.StonehamPolynomial.quartic_retains_denominator",
+  "NormalityChecker.DyadicMassCells.quartic_grid_profile",
+]
+proof = ["notes/phase14/higher-degrees.md#complete-quartic-calculation", "notes/phase14/higher-degrees.md#normality-scope-and-reproducibility"]
+related = ["ST-12", "ST-13", "ST-24"]
+
+[[result]]
+id = "ST-24"
+title = "Parameter-two polynomial normality in degrees three through fifteen"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+Let *b* ≥ 3 be odd and let α = α(*b*, 2). For every rational polynomial *P* of degree 3 through 15, *P*(α) is normal in base *b*. The powers with exponents 3 through 15 together with either α or α² have jointly uniformly distributed base-*b* shifts.
+'''
+scope = '''
+An exact integer computation checks nonzero masses on every cutoff interval in each degree. In degree 15 the reduced denominator exponent on shell *k* ≥ 23 is 15*k* minus a loss between 45 and 64. The maximum loss occurs, for example, at *n*/2ᵏ = 133/128. The deduction uses the finite certificate, its written transfer to the positive-index prefixes, and the retained-denominator normality criterion. ST-13 and ST-23 give end-to-end Lean proofs for odd prime-power degrees and quartics. The joint assertion follows by the multidimensional Weyl criterion.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.retention_of_binary_grid",
+  "NormalityChecker.StonehamPolynomial.binary_polynomial_normal_of_retention",
+]
+proof = ["notes/phase14/higher-degrees.md", "notes/phase14/reviews/higher-degrees.md"]
+computation = ["scripts/phase14_dyadic_power_cells.py"]
+related = ["ST-05", "ST-12", "ST-13", "ST-23"]
+
+[[result]]
+id = "ST-25"
+title = "A discrepancy bound of 143881/250000 for the two-prime product"
+topic = "stoneham"
+status = "lean"
+statement = '''
+For *x* = α(2, 3) α(2, 5), let *D*<sub>*N*</sub>(*x*) be the extreme interval discrepancy of its first *N* binary shifts. Let *F*(*N*) count *n* < *N* where both endpoint tests of ST-15 fail, counting an empty endpoint as zero in the tests. For every *N* ≥ 81⁵ one has 250000 *F*(*N*) ≤ 143881 *N*. For the actual shifts,
+
+```math
+\limsup_{N\to\infty} D_N(x)\le\frac{143881}{250000}=0.575524 .
+```
+'''
+scope = '''
+The finite bound includes prefixes ending inside either prime's shell. Lean verifies the covering intervals and the transfer from surviving denominators to the binary shifts. ST-26 refines the upper density of the failures.
+'''
+lean = [
+  "NormalityChecker.ProductThreeFive.Ordinary.mixed_product_discrepancy",
+  "NormalityChecker.ProductThreeFive.Ordinary.joint_cost_bound",
+]
+proof = ["notes/phase14/mixed-flow.md#kernel-bound-for-the-actual-product"]
+supersedes = ["NormalityChecker.ProductThreeFive.independent_product_discrepancy"]
+related = ["ST-06", "ST-14", "ST-15", "ST-26", "ST-27"]
+
+[[result]]
+id = "ST-26"
+title = "The ordinary upper density of simultaneous top-power failures"
+topic = "stoneham"
+status = "paper"
+statement = '''
+Let ρ be the upper limit of *F*(*N*)/*N* for the simultaneous ternary and quinary failures of ST-25. Then
+
+```math
+0.575523806608492<\rho<0.575523806608494 .
+```
+
+For *x* = α(2, 3) α(2, 5), the upper limiting binary interval discrepancy satisfies limsup *D*<sub>*N*</sub>(*x*) ≤ ρ.
+'''
+scope = '''
+The enclosure uses a written identification of the ordinary upper density with a maximum over two real parameters. Exact rational bounds for this maximum are computed over the full range of prefix cutoffs. The lower endpoint bounds the failure density alone. The harmonic density of the same failures is 1/8.
+'''
+proof = ["notes/phase14/mixed-flow.md", "notes/phase14/reviews/mixed-ordinary.md"]
+computation = ["scripts/phase14_mixed_flow.py", "notes/phase14/reviews/check_mixed_ordinary.py"]
+related = ["ST-14", "ST-15", "ST-25", "ST-27"]
+
+[[result]]
+id = "ST-27"
+title = "Joint denominator losses at arbitrary depths in the two-prime product"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+Use the shifted prefix *R*ₙ of *x* = α(2, 3) α(2, 5) from ST-15. Write *K* = ⌊log₃ *n*⌋, *L* = ⌊log₅ *n*⌋. For fixed *h*, *k* ≥ 1, count positions with *K* ≥ *h*, *L* ≥ *k* where the reduced denominator divides 3<sup>*K*−*h*</sup>5<sup>*L*−*k*</sup>. Their logarithmic density is
+
+```math
+\frac{1}{8\cdot 3^{h-1}5^{k-1}} .
+```
+
+Their ordinary upper density is at least 4/11 even on prefixes missing just the top corner of the rectangle of index pairs. For the actual binary shifts, the logarithmically weighted mean of the ordinary-prefix discrepancies tends to zero, with
+
+```math
+\lim_{X\to\infty}\frac{1}{\log X}\sum_{N=1}^{X}\frac{D_N(x)}{N}=0 .
+```
+
+In particular liminf *D*<sub>*N*</sub>(*x*) = 0.
+'''
+scope = '''
+Lean reduces each prime valuation at full precision to the two endpoint deficits and proves the first lift on every nonrectangular shape. The written deduction gives one failing congruence class per prime at every further depth, the same logarithmic density conditional on each fixed shape of positive logarithmic density, and the discrepancy conclusions. The ordinary lower bound 4/11 measures losses at fixed depths. The note characterizes convergence of discrepancy along any subsequence by vanishing proportions of positions with bounded reduced denominators. Binary normality remains open.
+'''
+lean = [
+  "NormalityChecker.ProductThreeFive.ternary_endpoint_num",
+  "NormalityChecker.ProductThreeFive.quinary_endpoint_num",
+  "NormalityChecker.ProductThreeFive.endpoint_num_shape",
+  "NormalityChecker.ProductThreeFive.ternary_corner_lift_two",
+  "NormalityChecker.ProductThreeFive.quinary_corner_lift_two",
+]
+proof = ["notes/phase14/mixed-interpolation.md", "notes/phase14/reviews/mixed-depth.md"]
+computation = ["scripts/test_mixed_interpolation.py"]
+related = ["ST-14", "ST-15", "ST-25", "ST-26"]
+
+[[result]]
+id = "ST-28"
+title = "Power-saving discrepancy for coprime Stoneham parameters"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+Let *b*, *c* ≥ 2 be coprime, let α = α(*b*, *c*) be the positive-index Stoneham number and let *P* be a rational polynomial of degree *d* ≥ 1. If *c* > 2, then for every *N* ≥ 2 the extreme interval discrepancy in base *b* satisfies
+
+```math
+D_N(P(\alpha);b)\le C(b,c,P)N^{-\delta_d},
+\qquad \delta_d=\frac{1}{2(2^{d+1}-2)} ,
+```
+
+with a computable constant independent of *N*. For *c* = 2 the bound holds in degree one, in every odd prime-power degree and for the quadratics specified below. In the covered degrees one, two and three, respectively, sharper bounds have the form *O*(*N*<sup>−η</sup>(1 + log *N*)<sup>ℓ</sup>) with (η, ℓ) = (1/2, 2), (1/6, 3/2) and (1/14, 5/4).
+'''
+scope = '''
+For parameter two, write the quadratic after clearing coefficients as *Az*² + *Bz* + *E* with *A* ≠ 0. The sufficient test is *v*₂(2*A* + *B*) < *v*₂(2*A*) + *v*₂(*b*² − 1) − 1, with *v*₂(0) = +∞. It includes *B* = 0. Lean proves denominator bounds, a finite estimate for insertion gaps, and the finite discrepancy transfer conditional on orbit-sum and Erdős–Turán estimates. The rates at every cutoff are paper deductions using those analytic inputs.
+'''
+lean = [
+  "NormalityChecker.QuantitativeStoneham.discrepancy_of_denominator_range",
+  "NormalityChecker.QuantitativeStoneham.polynomial_prefix_denominators",
+  "NormalityChecker.QuantitativeStoneham.square_shell_denominator",
+  "NormalityChecker.QuantitativeStoneham.clean_length_moment",
+]
+proof = ["notes/phase14/quantitative-composites.md", "notes/phase14/reviews/quantitative-composites.md"]
+inputs = ["J. Vandehey, Differencing methods for Korobov-type exponential sums, preprint Theorem 5.1, and the Erdős–Turán interval discrepancy inequality."]
+related = ["ST-11", "ST-12", "ST-13", "ST-18", "ST-20"]
+
+[[result]]
+id = "ST-29"
+title = "Removing full rectangles from the mixed-product discrepancy bound"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+For the binary product α(2,3)α(2,5), the upper extreme interval discrepancy is at most 0.37047223953703. Lean proves the explicit bound 4631/12500 = 0.37048. On each full rectangle the actual denominator retains a growing power of three, even when the top-power tests both fail.
+'''
+scope = '''
+Charge only nonrectangular positions with simultaneous first-precision failure. For every cutoff *N* ≥ 81⁵ Lean bounds this count by (4631/12500)*N*. The written deduction by exact rational bracketing on 1,117 phase intervals gives an ordinary upper failure density strictly between 0.37047223953692 and 0.37047223953703. Only the upper endpoint transfers to discrepancy. The full first-precision failure set in ST-26 has a different density. Ordinary binary normality remains open.
+'''
+lean = [
+  "NormalityChecker.ProductThreeFive.NonrectangularOrdinary.mixed_product_discrepancy",
+  "NormalityChecker.ProductThreeFive.NonrectangularOrdinary.nonrectangular_cost_bound",
+  "NormalityChecker.ProductThreeFive.nonrectangular_prefix_discrepancy",
+]
+proof = ["notes/phase14/nonrectangular-coverage.md", "notes/phase14/reviews/refined-cancellation.md"]
+computation = ["scripts/phase14_nonrectangular.py"]
+related = ["ST-14", "ST-25", "ST-26", "ST-27"]

@@ -14,6 +14,15 @@ modules = [
 [stoneham]
 title = "Stoneham polynomial images and products"
 modules = [
+  "PlateauEnvelope", "ProductThreeFiveNonrectangular", "ProductThreeFiveNonrectangularOrdinary",
+  "ProductThreeFiveRectangleValuation", "QuadraticPlateauCycle", "QuadraticPlateauSpectrum",
+  "DyadicMassCells", "DyadicMissingDiagonal", "DyadicQuartic",
+  "ParameterTwoQuadratic", "ParameterTwoQuadraticHeight", "ParameterTwoQuadraticLimit",
+  "ParameterTwoQuadraticOrbits", "ProductThreeFiveInterpolation", "ProductThreeFiveOrdinary",
+  "QuadraticOrbitLog", "QuadraticOrbitModel", "QuadraticOrbitShells",
+  "QuadraticOrbitTransfer", "QuantitativeCompositeDenominators", "QuantitativeStonehamGaps",
+  "QuantitativeStonehamSupport", "ResonantRadix", "ResonantRadixClasses",
+  "ResonantRadixSeries",
   "AlternateBaseCoverage", "AlternateBaseDilation", "AlternateBaseStoneham",
   "AlternateBaseWindows", "CompositePolynomial", "CompositePolynomialStatements",
   "ParameterTwoSquare", "ParameterTwoSquareArithmetic", "ParameterTwoSquareExpansion",
@@ -84,6 +93,8 @@ modules = [
 [classical]
 title = "Classical constant arithmetic"
 modules = [
+  "ErdosBorweinArrivals", "GaussianLogarithmRelations", "LogarithmPrimaryCharacters",
+  "TransitionWindows",
   "CorrectedNumeratorIncidence", "ErdosBorweinFourier", "GaussianLogarithmCharacters",
   "LogarithmTransitionBounds", "StrideResidueReturns",
   "LogTwo", "LogTwoLinearForms", "LogTwoTransitions", "PrimeCancellation", "DenominatorGrowth", "OrderedTail",

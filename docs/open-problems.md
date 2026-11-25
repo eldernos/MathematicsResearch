@@ -19,9 +19,9 @@ What is proved points at the obstacle rather than past it.
 
 ## Stoneham-type numbers
 
-**The mixed-prime product.** The binary product with parameters 3 and 5 has upper discrepancy at most 27/40. Both top layers can be lost together for arbitrarily many depths. A proof of normality would have to control the remaining denominator throughout almost all positions. [All-prefix upper bound and local tests](../notes/phase13/independent-axes.md)
+**The mixed-prime product.** The binary shifts of α(2,3)α(2,5) are logarithmically equidistributed and have ordinary lower discrepancy zero. A rational certificate gives ordinary upper discrepancy at most 0.37047223953703. Simultaneous near-total loss at exceptional nonrectangular shell indices is the remaining denominator obstruction to ordinary normality. [Ordinary bound](../notes/phase14/nonrectangular-coverage.md) · [Interpolation and exceptions](../notes/phase14/mixed-interpolation.md)
 
-**Parameter two.** In odd radices the square and every rational polynomial of odd prime-power degree are covered. On the upper half-shell of a quadratic, linear and quadratic denominators can have equal order. For the polynomial *X*² − 2*X*, the additional loss can be arbitrarily large. Whether its denominators still grow sufficiently remains open. [Exact obstruction](../notes/phase13/reviews/symmetric-degree.md)
+**Parameter two.** Every rational quadratic has log-weighted equidistribution, ordinary lower discrepancy zero and ordinary upper discrepancy at most 1/4. Normality of *X*² − 2*X* at a specified odd integer radix remains open. Its exact criterion involves the binary digits of a particular 2-adic number κ. Every rational polynomial of degree 3 through 15, and every odd prime-power degree, gives a normal value. A general classification beyond these cases is open. [Quadratic analysis](../notes/phase14/quadratic-denominators.md) · [Radix classes](../notes/phase14/resonant-radices.md) · [Higher degrees](../notes/phase14/higher-degrees.md)
 
 **Ternary normality of the binary Stoneham number.** Normality of α with *b* = 2 and *p* = 3 in base 3 is open. A paper proof gives superlinear growth of the number of distinct ternary words. [Ternary word complexity](../notes/ternary-stoneham-complexity.md)
 
