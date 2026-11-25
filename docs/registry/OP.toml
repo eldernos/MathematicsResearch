@@ -220,3 +220,26 @@ scope = "A polynomial bound on pairs of zero residues at a prescribed gap sharpe
 proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical.md"]
 related = ["SY-10","OP-11"]
 computation = ["scripts/phase19_classical.py"]
+
+[[result]]
+id = "OP-21"
+title = "Wieferich bands in the actual logarithm and dilogarithm prefixes"
+topic = "classical"
+status = "paper"
+statement = "For a prime p ≥ 5, a ≥ 1 and (p−1)pᵃ ≤ n < pᵃ⁺¹, the reduced shifted logarithm denominator retains pᵃ exactly when p is not a base-2 Wieferich prime. In the same band the dilogarithm denominator retains p to the power 2a under the same condition."
+scope = "The exponent for the dilogarithm is twice a. Loss of this full power may leave smaller powers in the denominator. These are modular classifications of the indicated prefixes, using finite logarithm congruences."
+proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical-final.md"]
+inputs = ["Glaisher’s congruence and its order-two analogue as specified in the proof. Rogers studied the associated weighted harmonic zero set."]
+related = ["OP-20"]
+computation = ["scripts/phase19_classical.py"]
+
+[[result]]
+id = "OP-22"
+title = "Moving-tail and period obstruction for a signed logarithm transform"
+topic = "classical"
+status = "paper"
+statement = "Euler’s dyadic product expresses log 2 as an alternating sum of sparse Mahler rows. After retaining the first K row indices, absolute shifted error tends to zero exactly when K+1+log₂(K+1)−N tends to positive infinity. At such moving cutoffs the chronological rational prefix still has a superpolynomial complementary period."
+scope = "Each fixed finite truncation is a deterministic number. For K ≥ 3 it fails numerical discrepancy preservation. The period obstruction concerns the rational prefix of the moving truncation on polynomial-length windows."
+proof = ["notes/phase19/taylor-periods.md#an-infinite-signed-mahler-transform-of-the-logarithm","notes/phase19/reviews/signed-transform.md"]
+related = ["OP-11","OP-13"]
+computation = ["scripts/test_phase19_geometry.py"]

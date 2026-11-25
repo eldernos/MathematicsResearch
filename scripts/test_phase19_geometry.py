@@ -94,6 +94,37 @@ class GeometryTests(unittest.TestCase):
                             product_of_primes *= p
                         self.assertEqual((base**d - 1) % product_of_primes, 0)
 
+    def test_signed_mahler_transform(self):
+        # A coefficient at m receives every k for which m/k is a power of two.
+        for m in range(1, 150):
+            k = m
+            total = Fraction()
+            while True:
+                total += Fraction((-1)**(k-1), k)
+                if k % 2:
+                    break
+                k //= 2
+            self.assertEqual(total, Fraction(1, m))
+        # Bound the logarithm by the Taylor prefix through 128. Each signed
+        # truncation has at most K omitted terms per exponent after 128.
+        cutoff = 128
+        log_low = sum(Fraction(1, n*2**n) for n in range(1, cutoff+1))
+        log_high = log_low + Fraction(1, (cutoff+1)*2**cutoff)
+        for kmax in range(1, 21):
+            model = Fraction()
+            for k in range(1, kmax+1):
+                n = k
+                while n <= cutoff:
+                    model += Fraction((-1)**(k-1), k*2**n)
+                    n *= 2
+            omitted = Fraction(kmax, 2**cutoff)
+            lo, hi = log_low-model-omitted, log_high-model+omitted
+            if kmax % 2:
+                lo, hi = -hi, -lo
+            first = Fraction(1, (kmax+1)*2**(kmax+1))
+            self.assertLessEqual(2*first/3, lo)
+            self.assertLessEqual(hi, first/(1-Fraction(1,2**(kmax+1))))
+
 
 if __name__ == "__main__":
     unittest.main()

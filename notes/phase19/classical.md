@@ -104,7 +104,7 @@ k(p)\le\left\lceil3\sqrt{4p-3}\right\rceil.
 
 The review independently reached the same scale with a Cauchy–Schwarz count of distinct residues. Reserving index 1 before applying the restricted-sumset theorem is essential. [Dias da Silva and Hamidoune, 1994](https://doi.org/10.1112/blms/26.2.140)
 
-**Theorem 3.4 (conditional logarithmic bound).** *Let $K\ge2$ and $0<c\le1$, and suppose that for every $h\not\equiv0\pmod p$*
+**Theorem 3.4 (conditional logarithmic bound).** *Let $2\le K<p$ and $0<c\le1$, and suppose that for every $h\not\equiv0\pmod p$*
 
 ```math
 \Bigl|\sum_{j=2}^{K}e\bigl(h\,x_j(p)/p\bigr)\Bigr|\le(1-c)(K-1),\qquad e(u)=e^{2\pi iu}.
@@ -182,7 +182,7 @@ The only known Wieferich primes are 1093 and 3511, and there are no others below
 
 **Corollary 5.4 (actual reduced denominators).** *Let $Q_n$ be the reduced denominator of the shifted prefix $R_n=2^n\sum_{m\le n}a_m$. Let $p\ge5$ be prime and $a\ge1$, with $(p-1)p^a\le n<p^{a+1}$. Then $p^a\mid Q_n$ exactly when $p$ is not a Wieferich prime. For $a=1$ a Wieferich prime disappears from $Q_n$ completely.*
 
-Under the same hypotheses $p\ge5$ and $a\ge1$, the shifted prefix of $\mathrm{Li}_2(1/2)$ keeps $p^{2a}$ exactly when $p$ is not a Wieferich prime. Losing the full power $p^{2a}$ does not remove every factor $p$. At $p=1093$, $a=1$ and both ends of the band $[1092\cdot1093,\,1093^2)$, the dilogarithm prefix has $v_p=1$. The restriction $p\ge5$ is needed: at $p=3$, $n=6$ the prefix $\sum_{m\le6}2^{6-m}/m^2=5587/150$ has $v_3=1$, although 3 is not a Wieferich prime. Let $b\ge2$, $p\ge5$, $a\ge1$ and $p\nmid b(b-1)$. Then the base-$b$ prefix $b^n\sum_{m\le n}1/(mb^m)$ of $\log(b/(b-1))$, with $(p-1)p^a\le n<p^{a+1}$, keeps $p^a$ exactly when $p$ is not a Wieferich prime to base $b^b/(b-1)^{b-1}$.
+Under the same hypotheses $p\ge5$ and $a\ge1$, the shifted prefix of $\mathrm{Li}_2(1/2)$ keeps $p^{2a}$ exactly when $p$ is not a Wieferich prime. Losing the full power $p^{2a}$ does not remove every factor $p$. At $p=1093$, $a=1$ and both ends of the band $[1092\cdot1093,\,1093^2)$, the reduced denominator of the dilogarithm prefix has valuation one. The restriction $p\ge5$ is needed: at $p=3$, $n=6$ the prefix $\sum_{m\le6}2^{6-m}/m^2=5587/150$ has denominator valuation $v_3=1$, although 3 is not a Wieferich prime. Let $b\ge2$, $p\ge5$, $a\ge1$ and $p\nmid b(b-1)$. Then the base-$b$ prefix $b^n\sum_{m\le n}1/(mb^m)$ of $\log(b/(b-1))$, with $(p-1)p^a\le n<p^{a+1}$, keeps $p^a$ exactly when $p$ is not a Wieferich prime to base $b^b/(b-1)^{b-1}$.
 
 *Proof.* The repository classification states that $p^{as}\mid Q_n$ exactly when $p$ does not divide the reduced numerator of $\sum_{j\le k}1/(j^sb^j)$, where $k=\lfloor n/p^a\rfloor$. Here $k=p-1$, so Theorem 5.2 applies. $\square$ [Prime survival in truncated polylogarithms](../denominators.md#which-prime-powers-survive)
 
@@ -212,12 +212,12 @@ The small primes contribute at most $2.5102\,X^{-1}\sum_{n\le X}\sqrt n\le1.70\s
 
 ## 7. Computations
 
-**Exact local minima.** A bitset dynamic program over $\mathbb Z/p$ computes $k(p)$ and $k^*(p)$ for every odd prime up to $10^6$. Running time is about 210 s with `--limit 1000000`; the default limit is $2\times10^5$. Results:
+**Exact local minima.** A bitset dynamic program over $\mathbb Z/p$ computes $k(p)$ and $k^*(p)$ for primes $5\le p\le10^6$, with a separate unrestricted convention for 3. Running time is about 210 s with `--limit 1000000`; the default limit is $2\times10^5$. Results:
 
 - $k(p)\le p-1$ for all $p\ge5$, as Theorem 3.1 requires.
 - The largest excess $k(p)-\log_2p$ is $5.19$, at $p=920393$ with $k=25$.
 - The smallest is $-9.74$, at $p=436967$ with $k=9$.
-- The sums of $k(p)$ over odd primes through 100, 1,000 and 10,000 are 151, 1,480 and 15,090, agreeing with the review's independent meet-in-the-middle computation.
+- The sums of $k(p)$ over primes from 5 through 100, 1,000 and 10,000 are 147, 1,476 and 15,086. The diagnostic that includes the extended value 4 at 3 gives 151, 1,480 and 15,090 respectively.
 
 For the 78,473 primes $100<p\le10^6$, the values of $k(p)-\lceil\log_2p\rceil$ are distributed as follows:
 
@@ -237,7 +237,7 @@ with sum $399245531709/2^{43}$, the value the review also recorded.
 
 ## 8. What remains open
 
-- A bound $k(p)=O(\log p)$, even for almost all $p$, would need equidistribution of the subset sums of an explicit sequence of length $O(\log p)$ modulo $p$. Theorem 3.4 isolates the required non-concentration.
+- A bound $k(p)=O(\log p)$, even for almost all $p$, would follow, for example, from the short-length non-concentration hypothesis in Theorem 3.4. Hitting one required target does not in itself require equidistribution of all subset sums.
 - Whether one positive dyadic partition can achieve $M(p)\le p^{O(1)}$ for every prime simultaneously.
 - Lowering the average-loss exponent below $3/7$, or the pointwise exponent below $2/3$.
 - The digit distribution of $\log2$. The completed groups have zero odd denominator, and the unfinished groups keep the full odd denominator of the prefix at every original cutoff. [Phase 18 invariant](../phase18/prime-delay.md#number-of-terms-still-in-incomplete-groups)

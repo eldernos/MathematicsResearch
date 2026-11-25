@@ -174,6 +174,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [OP-13](#op-13) | Numerical classification of horizontal logarithm rows | Written proof |  |
 | [OP-19](#op-19) ★ | Earliest positive dyadic group containing a prime-index logarithm term | Written proof |  |
 | [OP-20](#op-20) | Mean denominator loss in the shifted binary Taylor series | Written proof |  |
+| [OP-21](#op-21) | Wieferich bands in the actual logarithm and dilogarithm prefixes | Written proof |  |
+| [OP-22](#op-22) | Moving-tail and period obstruction for a signed logarithm transform | Written proof |  |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -3385,7 +3387,7 @@ For p ≥ 5 prime, the minimum largest original index in a positive dyadic Taylo
 
 - **Proof:** [classical.md](../notes/phase19/classical.md) · [classical.md](../notes/phase19/reviews/classical.md)
 - **External inputs:** Dias da Silva and Hamidoune, Cyclic spaces for Grassmann derivatives and additive theory (1994).
-- **Computation:** scripts/phase19_classical.py
+- **Computation:** [phase19_classical.py](../scripts/phase19_classical.py)
 - **Related:** [SY-10](#sy-10) · [SY-15](#sy-15)
 
 <a id="op-20"></a>
@@ -3399,8 +3401,37 @@ For n ≤ X let Qₙ be the reduced denominator of the ordinary shifted binary T
 **Scope.** A polynomial bound on pairs of zero residues at a prescribed gap sharpens the split into prime bands. This is an upper bound on average cancellation, with no inference about word frequencies.
 
 - **Proof:** [classical.md](../notes/phase19/classical.md) · [classical.md](../notes/phase19/reviews/classical.md)
-- **Computation:** scripts/phase19_classical.py
+- **Computation:** [phase19_classical.py](../scripts/phase19_classical.py)
 - **Related:** [SY-10](#sy-10) · [OP-11](#op-11)
+
+<a id="op-21"></a>
+
+### OP-21 · Wieferich bands in the actual logarithm and dilogarithm prefixes
+
+**Evidence:** Written proof
+
+For a prime p ≥ 5, a ≥ 1 and (p−1)pᵃ ≤ n < pᵃ⁺¹, the reduced shifted logarithm denominator retains pᵃ exactly when p is not a base-2 Wieferich prime. In the same band the dilogarithm denominator retains p to the power 2a under the same condition.
+
+**Scope.** The exponent for the dilogarithm is twice a. Loss of this full power may leave smaller powers in the denominator. These are modular classifications of the indicated prefixes, using finite logarithm congruences.
+
+- **Proof:** [classical.md](../notes/phase19/classical.md) · [classical-final.md](../notes/phase19/reviews/classical-final.md)
+- **External inputs:** Glaisher’s congruence and its order-two analogue as specified in the proof. Rogers studied the associated weighted harmonic zero set.
+- **Computation:** [phase19_classical.py](../scripts/phase19_classical.py)
+- **Related:** [OP-20](#op-20)
+
+<a id="op-22"></a>
+
+### OP-22 · Moving-tail and period obstruction for a signed logarithm transform
+
+**Evidence:** Written proof
+
+Euler’s dyadic product expresses log 2 as an alternating sum of sparse Mahler rows. After retaining the first K row indices, absolute shifted error tends to zero exactly when K+1+log₂(K+1)−N tends to positive infinity. At such moving cutoffs the chronological rational prefix still has a superpolynomial complementary period.
+
+**Scope.** Each fixed finite truncation is a deterministic number. For K ≥ 3 it fails numerical discrepancy preservation. The period obstruction concerns the rational prefix of the moving truncation on polynomial-length windows.
+
+- **Proof:** [taylor-periods.md § an infinite signed mahler transform of the logarithm](../notes/phase19/taylor-periods.md#an-infinite-signed-mahler-transform-of-the-logarithm) · [signed-transform.md](../notes/phase19/reviews/signed-transform.md)
+- **Computation:** [test_phase19_geometry.py](../scripts/test_phase19_geometry.py)
+- **Related:** [OP-11](#op-11) · [OP-13](#op-13)
 
 ## Counterexamples and impossibility results
 

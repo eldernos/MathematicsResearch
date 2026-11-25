@@ -509,7 +509,7 @@ def section_wieferich_denominators() -> None:
     li2 = sum(Fraction(2 ** (6 - m), m * m) for m in range(1, 7))
     assert li2 == Fraction(5587, 150) and v_p(li2.denominator, 3) == 1
     assert fermat_quotient(2, 3) != 0
-    print("  Li_2(1/2) prefix at p=3, n=6: 5587/150, v_3 = 1 < 2 (order-two statement needs p >= 5)")
+    print("  Li_2(1/2) prefix at p=3, n=6: 5587/150, v_3(denominator) = 1 < 2 (order-two statement needs p >= 5)")
     # Order two at the Wieferich prime 1093: the full p^2 is lost, one factor survives.
     p = 1093
     for n in (1092 * p, p * p - 1):
