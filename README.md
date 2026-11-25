@@ -1,340 +1,228 @@
 # Normality and Discrepancy of Arithmetic Expansions
 
-[Research objectives](#research-objectives) · [Distribution terminology](#distribution-terminology) · [Principal theorems](#principal-theorems) · [Classical targets](#classical-targets-status) · [Manuscripts and PDFs](#research-papers) · [Proofs by topic](#results-by-topic) · [Reproduce and review](#reproduce-and-review)
+[![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
-**The addition spectrum.** Fix an integer radix *b* ≥ 2. Let *D*<sub>*N*</sub>(*x*) be the supremum over half-open intervals of the absolute difference between interval length and visit frequency among the first *N* fractional parts of *b*ᵏ*x*, starting at *k* = 0. Three numbers α, β, γ in [0, 1] occur as the respective limits for *x*, *y*, and *x* + *y* exactly when
+AI-assisted mathematical research on normal numbers, digit discrepancy, Stoneham constants and arithmetic expansions, with Lean 4 proofs and reproducible preprints. The repository contains the manuscripts, the written proofs, a kernel-checked Lean 4 library, and exact-arithmetic scripts, tied together by a registry in which every major result has a permanent identifier, a precise scope and one evidence label.
 
-```math
-\max(0,\alpha+\beta-1)\le\gamma\le 1-|\alpha-\beta|.
-```
+[Principal theorems](#principal-theorems) · [Classical constants](#classical-targets-status) · [Manuscripts](#research-papers) · [Results by family](#results-by-topic) · [Reading paths](#reading-paths) · [How the research was done](#how-the-research-was-done) · [Corrections and collaboration](#corrections-prior-art-and-collaboration) · [Reproduce](#reproduce-and-review)
 
-Positive rational coefficients at cubic insertion positions realize every permitted triple. At each prefix the error in all three coordinates is at most a constant times 1/∛*N*, uniformly in the target triple for fixed radix and retained prime. [Exact spectrum in Lean](NormalityChecker/AdditionSpectrum.lean#L1486) · [Proof, quantitative realization and examples](notes/phase19/addition.md)
+**In brief.** Five of the principal results, with their evidence labels. The exact statements, scopes and proofs follow below.
 
-**A binary example.** For each positive integer *k*, let *v* count how many times 3 divides *k*. At binary position 2*k*³ insert the rational coefficient 1/3ᵛ, and let *x* be the sum of these coefficients times the corresponding inverse powers of two. Among the first *N* fractional parts of 2ⁿ*x*, starting at *n* = 0, the fraction that falls in any half-open interval differs from its length by at most a constant times 1/∛*N*. In particular *x* is binary normal. Lean verifies normality and the denominator of every shifted rational prefix. A written complete-period argument gives the rate. [Lean denominator theorem](NormalityChecker/RetirementDenominator.lean) · [Proof and general family](notes/phase18/principal.md)
+- **Polynomial images of Stoneham numbers.** For coprime *b* ≥ 2 and *c* > 2, every nonconstant rational polynomial in the Stoneham number α(*b*, *c*) is normal in base *b*. *Kernel-verified.* [Theorem I](#theorem-i-polynomial-images-of-stoneham-numbers)
+- **A normality switch.** For series with coefficients *p*<sup>−*s*·*v*(*k*)</sup> at sparse positions, the discrepancy tends to 1 at *s* = 0 and to 0 at every integer *s* ≥ 1; the binary cubic example has discrepancy *O*(*N*<sup>−1/3</sup>), and it and its square are jointly normal. *Kernel-verified switch; paper-proof rate and square.* [Theorem II](#theorem-ii-a-normality-switch-for-valuation-weighted-series)
+- **Disjunctive but nonnormal.** The binary multiplicative Lambert series Σ χ(*m*)/(2<sup>*m*</sup> − 1) contain every finite word, yet their discrepancy tends to 1, with gap 1 − *D*<sub>*N*</sub> of exact order (log log *N*)/(log *N*)<sup>1−δ</sup>. *Lean-supported paper proof.* [Theorem III](#theorem-iii-disjunctive-but-nonnormal-multiplicative-lambert-series)
+- **Zero or one.** For a localized polylogarithm on a finite prime support *P*, the discrepancy tends to 0 if some prime of *P* does not divide the radix, and to 1 otherwise. *Kernel-verified.* [Theorem IV](#theorem-iv-zero-or-one-on-a-finite-prime-support)
+- **Discrepancy under translation and addition.** The largest change of *D*<sub>*N*</sub> under translation by *z* is exactly 1 − *D*<sub>*N*</sub>(*z*), and the possible limits of the discrepancies of *x*, *y* and *x* + *y* are exactly the triples with max(0, α + β − 1) ≤ γ ≤ 1 − |α − β|. *Kernel-verified.* [Theorem V](#theorem-v-discrepancy-under-translation-and-addition)
 
 ## Research objectives
 
-This repository studies the radix-digit distribution of explicit arithmetic constants through two complementary lines of work:
+The repository has four standing objectives.
 
-1. **Positive normality and quantitative classification:** proving normality, joint uniformity, exact asymptotic discrepancy, logarithmic equidistribution, or sharp discrepancy gaps for explicit families—including polynomial images and mixed-prime products of Stoneham numbers, finite-support localized polylogarithms, signed Stoneham expansions, and multiplicative Lambert series.
-2. **Exact structural obstructions for classical constants:** determining precisely where rational-orbit certificates, denominator-rate bounds, local prime statistics, finite-column/moment/Fourier tests, and computable recognition algorithms stop for classical targets (ln 2, π, *e*, √2, φ, and the Erdős–Borwein constant *E*).
-
-Every major theorem is registered in the [curated result index](docs/results.md) with an explicit evidence tag separating kernel-verified Lean 4.36.0 theorems, Lean-supported paper deductions, pure paper proofs, exact finite computations, external analytic inputs, and open problems.
-
-## Distribution terminology
-
-For a real number *x* and integer radix *b* ≥ 2, write *D*<sub>*N*</sub>(*x*; *b*) for the extreme interval discrepancy of the first *N* fractional parts {*b*ⁿ*x*} (0 ≤ *n* < *N*): the supremum over half-open intervals [*u*, *v*) ⊆ [0, 1) of the absolute difference between the empirical visit frequency and *v* − *u*. Define the lower and upper asymptotic discrepancies
-
-```math
-D^-(x; b) = \liminf_{N \to \infty} D_N(x; b), \qquad D^+(x; b) = \limsup_{N \to \infty} D_N(x; b)
-```
-
-(written *D*∞(*x*) in earlier notes and registry statements). Distinct distribution notions are strictly separated throughout the repository:
-
-| Property | Definition / meaning | Relation to normality |
-| --- | --- | --- |
-| **Full normality** (base *b*) | *D*⁺(*x*; *b*) = 0; every *k*-digit word has limiting frequency 1/*b*ᵏ | Strongest property here |
-| **Simple normality** (base *b*) | Every single digit 0, …, *b* − 1 has limiting frequency 1/*b* | Necessary, not sufficient for full normality |
-| **Disjunctivity** | Every finite word occurs at least once (equivalently infinitely often) | Compatible with *D*⁺ = 1 and one-digit density 0 (e.g., *L*<sub>χ₄</sub>, [CC-48](docs/results.md#cc-48)) |
-| **Positive lower word density** | Every word *w* occurs at least *c*<sub>*w*</sub> *N* times along late prefixes/windows | Strictly weaker than normality; compatible with non-normality |
-| **Logarithmic equidistribution** | Frequencies weighted by 1/(*n* + 1) converge to Lebesgue measure | Implies *D*⁻ = 0, but compatible with *D*⁺ = 1 (Pair B, [AC-11](docs/results.md#ac-11)) or *D*⁺ > 0 |
-| **Positive uniform coverage** | A positive share *g* of positions is certified locally uniform | Implies *D*⁺ ≤ 1 − *g*(1 − *d*) ([AC-02](docs/results.md#ac-02)); finite initial segments do not count |
-| **Upper discrepancy bound** | *D*⁺(*x*; *b*) ≤ *c* < 1 for an explicit constant *c* | Rules out maximal discrepancy 1; **never** a "percentage of normality" |
+1. **Establish normality** of explicit arithmetic constants and families, with joint uniformity and effective rates where possible.
+2. **Establish nonnormality**, including constants whose digits contain every finite word and yet are not normal.
+3. **Quantify digit distribution**: exact asymptotic discrepancy, sharp discrepancy gaps, prescribed limits and explicit upper bounds.
+4. **Establish rigorous mathematical limitations**: where certificates, denominator rates, finite tests and computable recognition provably stop for classical constants such as ln 2, π, *e*, √2, φ and the Erdős–Borwein constant.
 
 ## Principal theorems
 
-### I. Polynomial images of Stoneham numbers
+**Notation.** For a real number *x* and an integer radix *b* ≥ 2, *D*<sub>*N*</sub>(*x*) is the extreme interval discrepancy of the first *N* fractional parts {*b*ⁿ*x*}, 0 ≤ *n* < *N*: the supremum, over half-open intervals [*u*, *v*) ⊆ [0, 1), of the absolute difference between the proportion of those points in [*u*, *v*) and *v* − *u*. Then *x* is normal in base *b* exactly when *D*<sub>*N*</sub>(*x*) → 0. The value *D*<sub>*N*</sub> → 1 is the opposite extreme. [Full terminology](docs/survey.md#distribution-terminology)
 
-**Theorem I.** Let *b* ≥ 2 and *c* > 2 be coprime integers. Define the Stoneham number
+Each result carries one evidence label. **Kernel-verified**: the complete stated theorem is a Lean declaration that passed the kernel replay and axiom audit. **Lean-supported paper proof**: a written proof in which named steps are Lean declarations. **Paper proof**: a written argument only. **Finite certificate**: an exact computation of a finite statement. **Conditional**: depends on an unproved hypothesis (none of the five below). **External input**: a published theorem used as a black box, always named in the result's entry. Priority is provisional: we have not located these exact statements in the sources examined, and a failed search does not prove novelty. [Literature comparisons](notes/reviewers.md#relation-to-prior-work)
 
-```math
-\alpha = \sum_{j=1}^{\infty} \frac{1}{c^j \, b^{c^j}}.
-```
+### Theorem I. Polynomial images of Stoneham numbers
 
-For every polynomial *P* with rational coefficients and positive degree, *P*(α) is normal in base *b*. This means that each word of *h* digits has limiting frequency 1/*b*ʰ. Moreover, if *r*₁, …, *r*ₖ are distinct positive integers, the points
+*Evidence: **Kernel-verified** (ST-11).* Let *b* ≥ 2 and *c* > 2 be coprime integers and put
 
 ```math
-\left( \{ b^n \alpha^{r_1} \}, \ \ldots, \ \{ b^n \alpha^{r_k} \} \right), \qquad n = 0, 1, 2, \ldots
+\alpha(b,c) = \sum_{j=1}^{\infty} \frac{1}{c^j \, b^{c^j}}.
 ```
 
-are uniformly distributed in the unit cube [0, 1)ᵏ.
+For every nonconstant polynomial *P* with rational coefficients, the number *P*(α(*b*, *c*)) is normal in base *b*. The radix orbits of any finite list of distinct positive powers of α(*b*, *c*) are jointly uniformly distributed.
 
-For *b* = 2 and *c* = 3, the classical Stoneham square is normal in every power-of-two base. In base 48 even its zero digit occurs too often for simple normality. For general *c* > 2, coincident insertions are controlled by reflecting the exponents and summing on the resulting upper set. The local units may cycle when *c* is composite. Nonvanishing of the weighted sum bounds cancellation in the reduced prefix denominator.
+*Scope.* Bailey and Crandall proved normality of the generators α(*b*, *c*) themselves, which is the case *P*(*x*) = *x*; priority for the nonlinear conclusion is not settled. For products of different generators the stronger hypotheses are stated in ST-11. [Lean: `coprime_polynomial_statement_checked`](NormalityChecker/PeriodicPolynomialNormal.lean#L166) · [Joint powers](NormalityChecker/PeriodicPolynomialNormal.lean#L170) · [Proof and hypotheses](notes/phase13/composite-polynomials.md) · [ST-11](docs/results.md#st-11) · Paper [I (v2.0)](papers/01-stoneham-polynomials-v2/paper.pdf), whose predecessor [v1.1](papers/01-stoneham-polynomials/paper.pdf) treats odd prime powers *c*
 
-[Lean polynomial theorem](NormalityChecker/PeriodicPolynomialNormal.lean#L145) · [Joint frequencies](NormalityChecker/PeriodicPolynomialNormal.lean#L170) · [Proof and hypotheses](notes/phase13/composite-polynomials.md) · [ST-11](docs/results.md#st-11) · [Base 48](notes/phase13/alternate-bases.md) · [Paper I, odd prime-power case](papers/01-stoneham-polynomials)
+### Theorem II. A normality switch for valuation-weighted series
 
-At parameter *c* = 2 and odd radix *b* ≥ 3, every rational quadratic has logarithmic equidistribution, *D*⁻ = 0 and *D*⁺ ≤ 1/4, with an explicit integer recurrence *Z*<sub>*k*</sub> in Lean governing *X*² − 2*X*, exact plateau-cycle formulas for *D* = 1 (*D*⁺ = 2<sup>−2−[*H*−*s*]<sub>+</sub></sup> when *b* ≡ 1 mod 4) and unconditional sub-quarter bounds such as *D*⁺((α² − 2α + *C*₀)/3) ≤ (1 − 1/(3 · 2<sup>*v*₂(*b*+1)</sup>))/4 for *b* ≡ 2 (mod 3), *C*₀ ≢ 1 (mod 3), and 5/72 for (*b*, *D*) = (5, 9). For higher degrees, the exact least orbit order *F*(*d*) = Σ<sub>*k*≤*d*</sub> ⌊log₂ *k*⌋ and nonvanishing of *M*<sub>*d*</sub> on *J*<sub>*d*</sub> are proved for all *d* ≥ 2; full polynomial normality is proved for degrees 3 through 120, degree 128, every odd prime power, and sixteen infinite cyclic-descent families *e p*ʳ (including five even families 4 · *p*ʳ and 5 · 524287ʳ), with echelon-degree joint normality and the 57-vector (3, 31) closed-orbit certificate kernel-checked in Lean. [Quadratic criterion](notes/phase14/quadratic-orbits.md) · [Phase 17 dyadic Stoneham classification](notes/phase17/dyadic-stoneham-classification.md) · [ST-30](docs/results.md#st-30) · [ST-33](docs/results.md#st-33) · [ST-34](docs/results.md#st-34) · [Phase 17 checkpoint](notes/phase17/README.md)
-
-<!-- BEGIN FIGURE stoneham-square-lattice -->
-<p align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/figures/stoneham-square-lattice-dark.svg">
-  <img src="assets/figures/stoneham-square-lattice-light.svg" alt="A 6 by 6 grid of cells indexed by i from 1 to 6 left to right and j from 1 to 6 bottom to top. Each cell shows the insertion position 3 to the i plus 3 to the j and the coefficient 3 to the minus (i + j); the grid is symmetric about the diagonal. Positions range from 6 in the corner (1, 1) to 1458 in the corner (6, 6). Twenty-two cells are shaded blue: all pairs with both indices at most 4, plus (5, 1), (5, 2), (5, 3) and their transposes, the pairs whose position is at most 270. Cells (4, 4), (5, 3) and (3, 5) on the anti-diagonal i + j = 8 have an orange outline. Below, a logarithmic number line from about 2 to 1600 shows the 6 insertion positions 3 to the j of alpha in one row and the 21 distinct positions of alpha squared in a second row, clustered just after each power of 3, with a vertical marker at n = 270; positions up to 270 are blue." width="640">
-</picture>
-</p>
-
-<sub>Figure 1. At digit 270 the retained pairs form a lower set in the displayed exponents (*i*, *j*). Reflecting the coordinates to (5 − *i*, 5 − *j*) gives the upper set used in ST-01, restricted to the displayed indices. [Caption, data and generator](docs/figures.md#stoneham-square-lattice)</sub>
-<!-- END FIGURE stoneham-square-lattice -->
-
-### II. Complete classification on finite prime supports
-
-For the first *N* fractional parts {*b*ⁿ*x*}, 0 ≤ *n* < *N*, write *D*<sub>*N*</sub>(*x*) for the supremum over half-open intervals in [0, 1) of the absolute difference between the observed frequency and the interval length. Write *D*∞(*x*) for its limit superior.
-
-**Theorem II.** Let *b* ≥ 2 and *s* ≥ 1 be integers and let *P* be a finite set of primes. Let *S* consist of 1 and all larger integers whose prime factors lie in *P*, and put
+*Evidence: **Kernel-verified** switch (SY-02) and shifted-prefix denominators (SY-01); **Paper proof** for the rate (SY-16).* Let *b* ≥ 2 be a radix, *p* an odd prime not dividing *b*, and *t* the multiplicative order of *b* modulo *p*. Let *n*₁ < *n*₂ < … be positions that are multiples of *t* with *n*ₖ ≥ *k*², let *v*(*k*) be the exponent of *p* in *k*, and for an integer *s* ≥ 0 put
 
 ```math
-X = \sum_{m \in S} \frac{1}{m^s \, b^m}.
+X_s = \sum_{k=1}^{\infty} \frac{1}{p^{s \, v(k)} \, b^{n_k}}.
 ```
 
-If some prime in *P* does not divide *b*, then *D*<sub>*N*</sub>(*X*) tends to 0 and *X* is normal in base *b*. If every prime in *P* divides *b*, then *D*<sub>*N*</sub>(*X*) tends to 1.
+Then *D*<sub>*N*</sub>(*X*<sub>0</sub>) → 1, while *D*<sub>*N*</sub>(*X*<sub>*s*</sub>) → 0 for every integer *s* ≥ 1. The limits hold along every sequence of prefix lengths, with no upper bound on the growth of the positions.
 
-For a nonzero polynomial *Q* with rational coefficients, replace the numerator 1 by *Q*(*m*). The resulting sum is normal in base *b* exactly when *Q* vanishes at 0 to order less than *s* and some prime of *P* does not divide *b*.
+*Binary cubic example.* Take *b* = 2, *p* = 3 and positions 2*k*³, so the coefficient of 2<sup>−2*k*³</sup> is 3<sup>−*v*(*k*)</sup>. The number *X*₁ is binary normal, and among its first *N* fractional parts the frequency in any half-open interval differs from its length by *O*(*N*<sup>−1/3</sup>). Lean verifies normality and the reduced denominator of every shifted rational prefix; the rate comes from a written complete-period argument. The same schedules give positive rational expansions whose limiting discrepancy is any prescribed number in [0, 1].
 
-These are restricted logarithms (*s* = 1) and polylogarithms (*s* ≥ 2). The zero-or-one discrepancy limit applies to the unsigned series on the full support, with numerator 1. Rational polynomial weights can give intermediate limits even on the full support. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region, then shows that region is null by recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays. Taking *P* to be all primes gives ln 2 when *b* = 2 and *s* = 1; these finite-support theorems say nothing about that case.
+*The square.* *Evidence: **Paper proof** (OP-14), audited by independent AI review only.* For a fixed odd prime *p* not dividing *b* and positions *t k*<sup>*d*</sup> with *d* ≥ 3, every nonconstant rational polynomial of total degree at most two in the numbers *X*<sub>*s*</sub> of distinct positive orders *s* is normal. In particular the binary cubic example and its square are jointly normal. The proof shows that the limiting *p*-adic mass has no level set of positive measure and gives no effective discrepancy rate; it replaces the earlier explicit upper bound for the square, and the analogous statement for higher powers is open. [OP-14](docs/results.md#op-14) · [Proof](notes/phase19/nonlinear.md) · [Independent AI review](notes/phase19/reviews/nonlinear.md)
 
-[LS-01](docs/results.md#ls-01) · [MW-01](docs/results.md#mw-01) · [Lean dichotomy](NormalityChecker/UnsignedNormality.lean#L194) · [Lean polynomial weights](NormalityChecker/FullPolynomialNormality.lean#L15) · [Proof](notes/unsigned-finite-support.md) · [Polynomial weights](notes/polynomial-masks.md) · Paper [II](papers/02-localized-normality) · Foundations: [exact persistent discrepancy](docs/results.md#ls-02), [nullity of persistent regions](docs/results.md#ls-03)
+[Lean: `discrepancy_switch`](NormalityChecker/RetirementDenominator.lean#L436) · [Denominators](NormalityChecker/RetirementDenominator.lean#L157) · [Proof](notes/phase18/principal.md) · [SY-02](docs/results.md#sy-02) · [SY-01](docs/results.md#sy-01) · [SY-16](docs/results.md#sy-16) · [SY-03](docs/results.md#sy-03) · Paper [VII](papers/07-synthetic-expansions/paper.pdf)
 
-<!-- BEGIN FIGURE finite-support-classification -->
-<p align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/figures/finite-support-classification-dark.svg">
-  <img src="assets/figures/finite-support-classification-light.svg" alt="Matrix with eight rows of prime supports (empty set, {2}, {3}, {5}, {2, 3}, {2, 5}, {3, 5}, {2, 3, 5}) and seven columns of radices (2, 3, 5, 6, 10, 15, 30). Cells labelled 0 are tinted aqua (normal); cells labelled 1 are tinted orange (maximal discrepancy). A 1 appears exactly when every prime of the support divides the radix: the whole empty-support row, the cells of {2} under radices 2, 6, 10 and 30, and the whole radix-30 column." width="640">
-</picture>
-</p>
+### Theorem III. Disjunctive but nonnormal multiplicative Lambert series
 
-<sub>Figure 3. Normal or maximally discrepant: the limit of the interval discrepancy for each prime support and radix, as given by LS-01 for every order *s*. [Caption, data and generator](docs/figures.md#finite-support-classification)</sub>
-<!-- END FIGURE finite-support-classification -->
-
-### III. Exact discrepancy and resonance
-
-**Theorem III.** Let *b* ≥ 2, let *p* be a prime not dividing *b*, and let *c*₀, *c*₁, … be a bounded sequence of integers. Put *a*₀ = *c*₀ and *a*ⱼ = *c*ⱼ − *p* *c*ⱼ₋₁ for *j* ≥ 1, and
+*Evidence: **Lean-supported paper proof** (CC-48).* Let χ be a nonprincipal real Dirichlet character and define *c*(*n*) as the sum of χ(*d*) over the divisors *d* of *n*. Put
 
 ```math
-X = \sum_{j=0}^{\infty} \frac{a_j}{p^j \, b^{p^j}}.
+L_\chi = \sum_{n=1}^{\infty} \frac{c(n)}{2^n} = \sum_{m=1}^{\infty} \frac{\chi(m)}{2^m - 1}.
 ```
 
-Call the positions *p*ʲ ≤ *n* < *p*ʲ⁺¹ shell *j*, and let *Z*(*N*) count the positions *n* < *N* in shells with *c*ⱼ = 0. Then
-
-1. *D*<sub>*N*</sub>(*X*) − *Z*(*N*)/*N* tends to 0, so *D*∞(*X*) is the upper density of positions in zero-phase shells.
-2. for every nonzero integer *m* and rational *r*, *D*∞(*mX* + *r*) = *D*∞(*X*) · *D*(*r*), where *D*(*r*) is the interval discrepancy of the eventual periodic orbit of *r*.
-3. the attainable values of *D*∞(*X*) are exactly the numbers
+Then *L*<sub>χ</sub> is irrational, every finite binary word occurs in its binary expansion, and yet *D*<sub>*N*</sub>(*L*<sub>χ</sub>) → 1, so it is not normal. The gap is sharp: with δ = 1/2,
 
 ```math
-V_p(s) = (p-1) \sum_{i=0}^{\infty} \frac{s_i}{p^{i+1}}
+1 - D_N(L_\chi) \asymp \frac{\log\log N}{(\log N)^{1-\delta}},
 ```
 
-for binary sequences *s* that are lexicographically at least each of their own suffixes. This set does not depend on *b*.
+where *f* ≍ *g* means that each is bounded by a constant multiple of the other. For each fixed binary word the number of occurrences in a window of length *H* near *N* has order *H*/(log *N*)<sup>1−δ</sup>. The paper proves the same for the general family of multiplicative functions supported on a set of primes of reciprocal-sum density δ in (0, 1), and *L*<sub>χ</sub> is transcendental when χ is odd.
 
-On late nonzero shells the shifted points approach uniform distribution. On late zero shells their distances to integers tend to zero. The theorem therefore computes discrepancy exactly instead of bounding it. In base 2 with *p* = 3, the periodic phase words 1110, 10 and 100 give 27/40, 3/4 and 12/13. Translating by 1/3 multiplies these by 2/3, giving 9/20, 1/2 and 8/13. A cyclotomic test, also verified, decides normality of every finite rational combination of Stoneham-type components with an odd prime parameter, and produces nonnormal sums of normal numbers in every radix.
+*Scope.* Lean verifies both directions of the finite binary discrepancy transfer and the arrival reindexing. The window counts and the transcendence are written deductions from published theorems (Shiu, Wirsing, Perelli–Pintz–Salerno, the Selberg sieve, Hamieh–Murty), listed in the registry entry. [CC-48](docs/results.md#cc-48) · [Proof](notes/phase17/multiplicative-lambert.md) · [Lean transfer](NormalityChecker/Phase17DiscrepancyBounds.lean#L98) · Paper [VI](papers/06-multiplicative-lambert/paper.pdf)
 
-[DS-01](docs/results.md#ds-01) · [DS-03](docs/results.md#ds-03) · [DS-04](docs/results.md#ds-04) · [CR-01](docs/results.md#cr-01) · [Lean shell theorem](NormalityChecker/SignedShellDiscrepancy.lean#L144) · [Lean translation](NormalityChecker/TranslatedShells.lean#L221) · [Lean spectrum](NormalityChecker/ShellHistories.lean#L388) · [Proof](notes/signed-shell-discrepancy.md) · [Translations](notes/translated-shells.md) · [Spectrum](notes/attainable-shell-histories.md) · Paper [III](papers/03-signed-resonance)
+### Theorem IV. Zero or one on a finite prime support
 
-<!-- BEGIN FIGURE translated-discrepancy -->
-<p align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/figures/translated-discrepancy-dark.svg">
-  <img src="assets/figures/translated-discrepancy-light.svg" alt="Dot plot on a horizontal discrepancy axis from 0 to 1. Three rows, one per phase word. In each row a filled orange dot marks the original discrepancy (27/40, 3/4, 12/13) and an open orange ring marks the translated discrepancy (9/20, 1/2, 8/13), joined by an arrow pointing left. A teal tick at zero marks normality." width="640">
-</picture>
-</p>
+*Evidence: **Kernel-verified** (LS-01).* Let *b* ≥ 2 and *s* ≥ 1 be integers, let *P* be a finite set of primes, and let *M*(*P*) be the set of positive integers all of whose prime factors lie in *P*, including 1. Put
 
-<sub>Figure 5. Translation by 1/3 multiplies each exact discrepancy by 2/3, the discrepancy of the orbit of 1/3 (DS-03). [Caption, data and generator](docs/figures.md#translated-discrepancy)</sub>
-<!-- END FIGURE translated-discrepancy -->
-
-### IV. Designing the distribution through rational insertions
-
-A positive rational expansion at cubic positions realizes every ordinary discrepancy limit between zero and one, with error of order 1/∛*N*. Changing the schedule gives Liouville numbers with any of the same limits. For translations, the worst possible change of finite discrepancy over all starting numbers equals one minus the discrepancy of the added number. [Programmable limits](notes/phase18/programming.md) · [Liouville realizations](notes/phase18/liouville-realization.md) · [Sharp translation theorem](notes/phase18/translations.md#the-exact-worst-case-change)
-
-On factorial insertion schedules the normal examples are Liouville numbers, and every nonconstant rational polynomial in one of them is normal in the same base. For insertions at *t k*ᵈ, let *p* be the retained odd prime, *t* the order of the radix modulo *p*, and *s* the positive power to which the *p*-part of *k* is raised in its coefficient denominator. The first min(*s*, *d* − 1) powers of this number are jointly normal. [Polynomial and product theorems](notes/phase18/algebra.md)
-
-One positive sum over infinitely many denominator primes is binary normal. Other positive sums can have any prescribed rational total even when every finite collection of their components is jointly uniform. Geometric partitions of the Taylor and BBP series give such finite joint uniformity for components of ln 2 and π. Their full orbit distributions remain open. [Infinite-sum proofs](notes/phase18/summation.md) · [Taylor grouping delay](notes/phase18/prime-delay.md) · [Phase 18 research and verification](notes/phase18/README.md)
-
-Phase 17’s rounding of an entire Legendre integral also works for π at every sufficiently large binary shift. At shift 600 the Machin construction gives a 257-bit odd denominator and at least 261 bits of absolute accuracy. The orbit of the resulting rational throughout that window still requires a distribution estimate. [All-shift theorem and exact checks](notes/phase18/phase17-transfer.md)
-
-### V. Arithmetic operations and all-prime support
-
-The binary cubic example above and its square are jointly normal. The proof isolates jumps in the limiting 3-adic numerator and shows that every level set has real measure zero. This replaces the earlier small upper discrepancy bound for the square. A separate construction keeps different denominator primes on different generators and makes every nonconstant rational polynomial in those generators normal. [Quadratic proof](notes/phase19/nonlinear.md) · [Independent-prime construction](notes/phase19/independent-axes.md)
-
-A positive binary series retaining every odd prime is normal and Liouville, with discrepancy of order at most 1/log *N*. One distinguished prime produces equally spaced residues even in the presence of all the others. For the actual Taylor prefixes of ln 2, the order of 2 modulo the surviving large primes grows faster than every polynomial in the cutoff. [All-prime theorem](notes/phase19/grids.md) · [Taylor-period obstruction](notes/phase19/taylor-periods.md)
-
-The finite translation deficit gives a pseudometric. Its zero differences at two or more shifts are exactly the radix fixed points. The rational scalars preserving its asymptotic kernel for every input are precisely those with denominator dividing a power of the radix. Among the individual deterministic Taylor rows of ln 2, odd part 3 has discrepancy limit 2/3, while odd part 5 has lower limit 1/5 and upper limit 8/15. [Lean geometry](NormalityChecker/DiscrepancyGeometry.lean) · [Operations and proofs](notes/phase19/geometry.md) · [Taylor rows](notes/phase19/logarithm-rays.md) · [Phase 19 results](notes/phase19/README.md)
-
-## How the results fit together
-
-A radix shift can have a rational approximation that follows it for many digit positions. On a long interval, a growing denominator supported on a fixed set of primes can force uniform digit frequencies. Persistent cancellation can concentrate the orbit on a finite set. The proofs below combine these local estimates into statements about every sufficiently long prefix.
-
-The arithmetic normality proofs use the sequence of steps shown here. The Phase 18 dependency map also covers rational-state programming, translations and infinite sums. [Phase 18 proof dependencies](notes/phase18/dependencies.md)
-
-```mermaid
-flowchart TD
-  A["Arithmetic expansion<br/>Stoneham numbers, localized logarithms,<br/>polynomial weights, signed series"] --> B["Rational radix-orbit model<br/>shifted prefix plus a small tail"]
-  B --> C{"Reduced denominator<br/>at each position"}
-  C -->|"a prime power survives"| D["Short-orbit cancellation<br/>locally uniform digits"]
-  C -->|"persistent cancellation"| E["Resonance<br/>concentration near rationals"]
-  D --> F["Global count over positions"]
-  E --> F
-  F --> G["Normality, exact discrepancy<br/>or an explicit bound"]
+```math
+X = \sum_{m \in M(P)} \frac{1}{m^s \, b^m}.
 ```
 
-The conclusions differ in strength, and the index labels each one.
+If some prime in *P* does not divide *b*, then *D*<sub>*N*</sub>(*X*) → 0 and *X* is normal in base *b*. If every prime in *P* divides *b*, then *D*<sub>*N*</sub>(*X*) → 1. Thus *s* = 1 gives restricted logarithms, and *s* ≥ 2 restricted polylogarithms, with no intermediate behaviour.
 
-| Conclusion | Meaning | Examples |
-| --- | --- | --- |
-| Normality | *D*∞ = 0; every block has its expected frequency | [ST-01](docs/results.md#st-01), [LS-01](docs/results.md#ls-01), [MW-01](docs/results.md#mw-01) |
-| Exact asymptotic discrepancy | *D*∞ is computed exactly, often as a rational number | [DS-01](docs/results.md#ds-01), [DS-03](docs/results.md#ds-03), the value 1 in [LS-01](docs/results.md#ls-01) |
-| Upper discrepancy bound | *D*∞ ≤ *c* for an explicit *c* < 1, with normality unknown | 4/11 + 2.85 × 10⁻¹⁰ < 0.363636364 for a product on two prime axes ([ST-32](docs/results.md#st-32); Lean bound 0.37048 in [ST-29](docs/results.md#st-29)), 1 − 1/(*p* − 1) for masked supports |
-| Positive uniform coverage | a positive share of positions is certified locally uniform | [AC-02](docs/results.md#ac-02); finite initial segments do not count |
-| Unresolved certificate region | positions where no available test certifies anything | ln 2, π, *e* and the golden ratio |
+*Scope.* The series has numerator 1 on the full support; rational polynomial weights are classified separately in MW-01 and can give intermediate limits. The limits hold along all cutoffs *N*, with no rate and no uniformity as *P* grows. The unrestricted series for ln 2, whose support is every prime, is not covered. [Lean: `unsigned_discrepancy_limit`](NormalityChecker/UnsignedNormality.lean#L198) · [Proof](notes/unsigned-finite-support.md) · [LS-01](docs/results.md#ls-01) · [MW-01](docs/results.md#mw-01) · Paper [II (v2.0)](papers/02-localized-normality-v2/paper.pdf)
 
-[Framework and proof-dependency map](docs/framework.md) · [All figures](docs/figures.md)
+### Theorem V. Discrepancy under translation and addition
+
+*Evidence: **Kernel-verified** (SY-04 for the translation identity, OP-01 for the addition spectrum); **Paper proof** for the quantitative realization (OP-02).* For every real *z*, every integer radix *b* ≥ 2 and every *N* ≥ 1,
+
+```math
+\max_{x} \left| D_N(x+z) - D_N(x) \right| = 1 - D_N(z),
+```
+
+where the maximum is over all real *x* and is attained at *x* = 0. Consequently the translations that preserve both limiting discrepancies for every *x* are exactly those *z* whose own discrepancy tends to 1.
+
+For addition, three numbers α, β, γ in [0, 1] are the limiting discrepancies of *x*, *y* and *x* + *y* in radix *b* exactly when
+
+```math
+\max(0, \alpha + \beta - 1) \le \gamma \le 1 - |\alpha - \beta|.
+```
+
+Lean proves both necessity and sufficiency in every radix. Positive rational coefficients at cubic insertion positions realize every permitted triple, with error *O*(*N*<sup>−1/3</sup>) in all three coordinates at every prefix, uniformly in the triple for a fixed radix and retained prime; this rate is a written proof.
+
+*Scope.* *D*<sub>*N*</sub> is the extreme discrepancy over half-open intervals. Complementation and rotation on the circle allow both signs of displacement and atoms at zero. The addition inequalities hold at every positive finite prefix, and the discrepancy is unanchored. [Lean: `sharp_translation`](NormalityChecker/SharpTranslation.lean#L343) · [Proof](notes/phase18/translations.md#the-exact-worst-case-change) · [SY-04](docs/results.md#sy-04) · [Lean: `exact_addition_spectrum`](NormalityChecker/AdditionSpectrum.lean#L1486) · [Proof and realization](notes/phase19/addition.md) · [OP-01](docs/results.md#op-01) · [OP-02](docs/results.md#op-02) · Paper [VII](papers/07-synthetic-expansions/paper.pdf)
+
+More results, with their figures: the [detailed survey](docs/survey.md#principal-theorems) (exact discrepancy of signed Stoneham expansions, resonance and the attainable spectrum) and the [curated result index](docs/results.md).
 
 ## Classical targets status
 
-None of the results in this repository proves normality or an asymptotic bound *D*⁺ < 1 for ln 2, π, *e*, √2, or φ, nor simple non-normality for the Erdős–Borwein constant *E*. This matrix summarizes what is proved, what is observed only finitely, and where each known method stops.
+None of the results in this repository, and none of the literature we know of, proves normality of ln 2, π, *e*, √2, φ or the Erdős–Borwein constant *E*. In the table, *μ* is the irrationality exponent and "transitions" are changes between adjacent binary digits.
 
-| Target | Proved digit / discrepancy results | Best proved denominator / approximation rate | Key structural obstruction identified here | Main open question |
-| --- | --- | --- | --- | --- |
-| **ln 2** | Transcendental, with at least a constant times log *N* binary transitions (via μ ≤ 3.575); 888/1024 finite initial coverage | Fixed balanced trace minimum **5/12** (adaptive up to *N*/528, [CC-42](docs/results.md#cc-42), [CC-43](docs/results.md#cc-43)); Legendre–Bezout window of at least log₂ *L*<sub>*D*</sub> − *O*(1) bits | The Legendre–Bezout numerator agrees with nearest-grid rounding away from the tie threshold; unconditional barrier *T*<sub>*N*</sub> ≤ (μ − 1)*N* + μ log₂ *q*<sub>*N*</sub> + *O*(1) excludes *T*<sub>*N*</sub> ≥ *q*<sub>*N*</sub><sup>δ</sup> at every positive rate ([CC-50](docs/results.md#cc-50)) | *D*⁺(ln 2; 2) < 1 (e.g., ≤ 0.9999) and normality |
-| **π** | Transcendental, with at least a constant times log *N* binary transitions (μ ≤ 7.1032, Zeilberger–Zudilin 2020) | Exact BBP and Bellard rates of 3/2 and 1 per binary shift. Legendre rounding gives odd-denominator rational models with linear windows at every large shift. [Signed denominator proofs](docs/results.md#sy-21) · [All-shift approximation](docs/results.md#sy-23) | BBP extraction is position-local rather than low-denominator; same window–denominator barrier applies ([CC-50](docs/results.md#cc-50)) | *D*⁺(π; *b*) < 1 and normality |
-| ***e*** | Irrational, transcendental; μ = 2 with sharp Davis constant 1/2 (run ≤ *N* + log₂ *N* − log₂ log *N* + *O*(1)) | Taylor shifted rate → ln 2; Euler convergents → ln 2/2 (generic Dirichlet, *T* ≈ 0) | Even μ = 2 with explicit CF only forces *O*(log *N*) transitions (sharp by Kempner) ([CC-50](docs/results.md#cc-50), [AC-11](docs/results.md#ac-11)) | *D*⁺(*e*; *b*) < 1 and normality |
-| **√2, φ** | Algebraic degree 2, μ = 2; ≫ √*N* ones (BBCP 2004), ≥ (1 − ε)√(*N*/2) changes for 1/√5 (Kaneko); *D*⁺(φ) < 1 ⇔ bounded least Zeckendorf index *k*(2ⁿ) on positive lower density ([GoldenOrbit.lean](NormalityChecker/GoldenOrbit.lean)) | Convergents ln 2/2 (bounded partial quotients) | √*N* counts give density 0 (*D*<sub>*N*</sub> ≤ 1 − *cN*<sup>−1/2</sup>); closing 1/2 to 1 requires bounding runs on a positive-density set ([CC-50](docs/results.md#cc-50)) | *D*⁺ < 1 (equivalently positive lower density of bounded *k*(2ⁿ) for φ) and normality |
-| **Erdős–Borwein *E*** | Irrational (Erdős 1948); base-2 disjunctive (Captain Sude); positive lower word density on windows *H* ≥ *N*<sup>7/12+ε</sup> (Mira Cult); unconditional tail mean μ ∈ [2.0762592, 2.0763285] | Exact arrival model gives comparison *p*<sub>∗</sub> ∈ [0.492450290, 0.492460864]; certified 2²⁴ prefix 0.494216 (finite only) | Sharp minimal column truncation is *D* = 16 (*Ψ*₁₆); *k* ≤ 4 columns, moment orders ≤ 4 globally (≤ 8 at *D* = 16; 92 suffices), and Fourier degrees ≤ 110 (116 suffices) provably cannot certify; needs lattice-scale *r*-point divisor correlations (*r* ≥ 9) ([CC-49](docs/results.md#cc-49)) | Simple non-normality (*f*(1) < 1/2) or non-normality |
-| **Multiplicative Lambert *L*<sub>χ</sub>** *(comparison class)* | **Solved:** transcendental (odd χ), base-2 disjunctive, non-normal, word counts Θ(*H*/(log *N*)<sup>1−δ</sup>), exact gap 1 − *D*<sub>*N*</sub> ≍ (log log *N*)/(log *N*)<sup>1−δ</sup> ([CC-48](docs/results.md#cc-48)) | Exact arrival reindexing + Shiu / Wirsing / Perelli–Pintz–Salerno / Selberg sieve | Shows disjunctivity and moving-window word counts are fully compatible with *D*<sub>*N*</sub> → 1 | General non-character multiplicative transcendence |
+| Constant | What is known | Where the methods stop | What is open |
+| --- | --- | --- | --- |
+| **ln 2** | Transcendental; the first *N* binary digits contain at least a constant times log *N* transitions. Shifted prefixes of the standard series have reduced denominators of exponential growth rate 1, and an exact two-stride identity lowers the rate to 1/2, which is optimal among finite dyadic logarithm identities. | Rational-orbit certificates need denominators of polynomial size. Every balanced algebraic trace source has denominator rate at least 5/12 ([CC-43](docs/results.md#cc-43)), and a window–denominator barrier excludes the incomplete-orbit hypothesis ([CC-50](docs/results.md#cc-50)). For the actual Taylor prefixes, the order of 2 modulo the surviving odd denominator grows faster than every polynomial in the cutoff ([OP-11](docs/results.md#op-11)). | Normality; any bound *D*⁺ < 1, such as ≤ 0.9999. |
+| **π** | Transcendental; at least a constant times log *N* binary transitions. BBP and Bellard shifts have exact denominator rates of 3/2 and 1. Legendre rounding gives odd-denominator rational models with linear windows at every large shift. | BBP extraction is position-local rather than low-denominator, and the same window–denominator barrier applies. | Normality; any bound *D*⁺ < 1. A distribution estimate for the orbits of the rational models. |
+| ***e*** | Irrational and transcendental, with *μ* = 2. | Even *μ* = 2 with an explicit continued fraction forces only *O*(log *N*) transitions, which is sharp by Kempner's examples. | Normality; any bound *D*⁺ < 1. |
+| **√2** | Algebraic of degree 2. At least order √*N* ones among the first *N* binary digits (Bailey–Borwein–Crandall–Pomerance, 2004), which is still density zero. | Closing the gap from density zero to positive density needs control of digit runs on a set of positive density. | Normality; any bound *D*⁺ < 1. |
+| **φ** | Algebraic of degree 2, with the same √*N* limitation. *D*⁺(φ) < 1 exactly when a positive lower density of powers of two have a bounded least Zeckendorf index. | Bounding that index on a positive-density set. | Normality; that bounded-index property. |
+| **Erdős–Borwein *E*** | Irrational (Erdős, 1948). Base-2 disjunctive (Captain Sude) and positive lower word density on windows *H* ≥ *N*<sup>7/12+ε</sup> (Mira Cult). | 16 columns is the sharp minimal column truncation; column subsets of size ≤ 4, moment orders ≤ 4 globally and Fourier degrees ≤ 110 provably cannot certify ([CC-49](docs/results.md#cc-49)). | Normality, or even simple non-normality; lattice-scale divisor correlations are the missing input. |
+
+The later results on individual Taylor rows of ln 2 ([OP-13](docs/results.md#op-13)) compute their discrepancies exactly but give no strict upper discrepancy bound for the whole orbit of ln 2. Finite computations cover initial segments only and are not asymptotic progress. The [complete matrix](docs/survey.md#classical-targets-status) and the [list of open problems](docs/open-problems.md) give the sources and exact scopes. Normality of a logarithm restricted to finitely many primes (Theorem IV) does not imply normality of the unrestricted logarithm.
 
 ## Research papers
 
-The five archived manuscripts develop the verified results from release `manuscripts-v1.1.0` for mathematical review; they are preserved unchanged. For the post-Phase 17 plan covering new standalone papers (disjunctive non-normal multiplicative Lambert series; mixed-prime Stoneham exceptional orbits) and manuscript expansions, see the **[Publication roadmap](docs/publication-roadmap.md)**. Historical priority remains under investigation. [Comparison with earlier work](notes/reviewers.md#relation-to-prior-work) · [Publication status and review reports](papers/README.md) · [Shared notation](papers/notation.md) · [Archiving and citation](papers/ARCHIVING.md)
+The manuscripts are preprint drafts. The release candidate `manuscripts-v2.0.0` contains revised Papers I, II, IV and V (version 2.0), Paper III unchanged (version 1.1), and four new manuscripts, VI to IX. None has been peer reviewed. Each v2 directory holds `VERIFICATION.md`, a theorem-by-theorem map to Lean declarations and external inputs, and `LEDGER.md`, a claim-to-source ledger for priority. The v1.0.0 and v1.1.0 files are unchanged at their release tags. [Publication status and review reports](papers/README.md) · [Shared notation](papers/notation.md) · [Archiving and citation](papers/ARCHIVING.md) · [Bibliography](papers/BIBLIOGRAPHY.bib) · [Research site](docs/site.md)
 
 <!-- BEGIN PAPERS -->
-| | Manuscript | Results | Status | Files |
+| | Manuscript | Version | Results | Status | Files |
+| --- | --- | --- | --- | --- | --- |
+| I | **Polynomial Images of Stoneham Numbers** | 2.0 | [ST-11](docs/results.md#st-11) [ST-01](docs/results.md#st-01) [ST-02](docs/results.md#st-02) [ST-03](docs/results.md#st-03) | Preprint draft | [PDF](papers/01-stoneham-polynomials-v2/paper.pdf) · [LaTeX](papers/01-stoneham-polynomials-v2/paper.tex) · [Verification map](papers/01-stoneham-polynomials-v2/VERIFICATION.md) · [Ledger](papers/01-stoneham-polynomials-v2/LEDGER.md) |
+| II | **Normality of localized logarithms and polylogarithms on finite prime supports** | 2.0 | [LS-01](docs/results.md#ls-01) [MW-01](docs/results.md#mw-01) [LS-02](docs/results.md#ls-02) [LS-03](docs/results.md#ls-03) | Preprint draft | [PDF](papers/02-localized-normality-v2/paper.pdf) · [LaTeX](papers/02-localized-normality-v2/paper.tex) · [Verification map](papers/02-localized-normality-v2/VERIFICATION.md) · [Ledger](papers/02-localized-normality-v2/LEDGER.md) |
+| III | **Resonance and Discrepancy in Signed Stoneham Expansions** | 1.1 (retained in `manuscripts-v2.0.0`) | [CR-01](docs/results.md#cr-01) [DS-01](docs/results.md#ds-01) [DS-03](docs/results.md#ds-03) [DS-04](docs/results.md#ds-04) | Internally reviewed | [PDF](papers/03-signed-resonance/paper.pdf) · [LaTeX](papers/03-signed-resonance/paper.tex) · [References](papers/03-signed-resonance/references.bib) · [Reviewer guide](papers/03-signed-resonance/REVIEW.md) |
+| IV | **Arithmetic Certificates for Normality and Mathematical Limitations** | 2.0 | [AC-01](docs/results.md#ac-01) [AC-02](docs/results.md#ac-02) [AC-03](docs/results.md#ac-03) | Preprint draft | [PDF](papers/04-arithmetic-certificates-v2/paper.pdf) · [LaTeX](papers/04-arithmetic-certificates-v2/paper.tex) · [Verification map](papers/04-arithmetic-certificates-v2/VERIFICATION.md) · [Ledger](papers/04-arithmetic-certificates-v2/LEDGER.md) |
+| V | **Denominator Growth and Rational Shadowing for Classical Constants** | 2.0 | [CC-01](docs/results.md#cc-01) [CC-02](docs/results.md#cc-02) | Preprint draft | [PDF](papers/05-classical-denominators-v2/paper.pdf) · [LaTeX](papers/05-classical-denominators-v2/paper.tex) · [Verification map](papers/05-classical-denominators-v2/VERIFICATION.md) · [Ledger](papers/05-classical-denominators-v2/LEDGER.md) |
+| VI | **Disjunctive but Nonnormal Multiplicative Lambert Series** | 1.0 | [CC-48](docs/results.md#cc-48) | Preprint draft | [PDF](papers/06-multiplicative-lambert/paper.pdf) · [LaTeX](papers/06-multiplicative-lambert/paper.tex) · [Verification map](papers/06-multiplicative-lambert/VERIFICATION.md) · [Ledger](papers/06-multiplicative-lambert/LEDGER.md) |
+| VII | **Synthetic Arithmetic Expansions and Prescribed Discrepancy** | 1.0 | [SY-02](docs/results.md#sy-02) [SY-01](docs/results.md#sy-01) [SY-03](docs/results.md#sy-03) [SY-04](docs/results.md#sy-04) | Preprint draft | [PDF](papers/07-synthetic-expansions/paper.pdf) · [LaTeX](papers/07-synthetic-expansions/paper.tex) · [Verification map](papers/07-synthetic-expansions/VERIFICATION.md) · [Ledger](papers/07-synthetic-expansions/LEDGER.md) |
+| VIII | **Exceptional Orbits and Discrepancy of Stoneham Products** | 1.0 | [ST-32](docs/results.md#st-32) [ST-35](docs/results.md#st-35) [ST-29](docs/results.md#st-29) | Preprint draft | [PDF](papers/08-stoneham-product-orbits/paper.pdf) · [LaTeX](papers/08-stoneham-product-orbits/paper.tex) · [Verification map](papers/08-stoneham-product-orbits/VERIFICATION.md) · [Ledger](papers/08-stoneham-product-orbits/LEDGER.md) |
+| IX | **Finite-statistic thresholds and statistical obstructions for the binary digits of the Erdős–Borwein constant** | 1.0 | [CC-49](docs/results.md#cc-49) | Research note, preprint draft | [PDF](papers/09-erdos-borwein-note/paper.pdf) · [LaTeX](papers/09-erdos-borwein-note/paper.tex) · [Verification map](papers/09-erdos-borwein-note/VERIFICATION.md) · [Ledger](papers/09-erdos-borwein-note/LEDGER.md) |
+
+Superseded versions stay unchanged at release tags [`manuscripts-v1.0.0`](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.0.0) and [`manuscripts-v1.1.0`](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.1.0).
+
+| | Superseded manuscript | Version | Replaced by | Files |
 | --- | --- | --- | --- | --- |
-| I | **Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter** | [ST-01](docs/results.md#st-01) [ST-05](docs/results.md#st-05) [ST-02](docs/results.md#st-02) [ST-03](docs/results.md#st-03) | Internally reviewed | [PDF](papers/01-stoneham-polynomials/paper.pdf) · [LaTeX](papers/01-stoneham-polynomials/paper.tex) · [References](papers/01-stoneham-polynomials/references.bib) · [Reviewer guide](papers/01-stoneham-polynomials/REVIEW.md) |
-| II | **Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports** | [LS-01](docs/results.md#ls-01) [MW-01](docs/results.md#mw-01) [LS-02](docs/results.md#ls-02) [LS-03](docs/results.md#ls-03) | Internally reviewed | [PDF](papers/02-localized-normality/paper.pdf) · [LaTeX](papers/02-localized-normality/paper.tex) · [References](papers/02-localized-normality/references.bib) · [Reviewer guide](papers/02-localized-normality/REVIEW.md) |
-| III | **Resonance and Discrepancy in Signed Stoneham Expansions** | [CR-01](docs/results.md#cr-01) [DS-01](docs/results.md#ds-01) [DS-03](docs/results.md#ds-03) [DS-04](docs/results.md#ds-04) | Internally reviewed | [PDF](papers/03-signed-resonance/paper.pdf) · [LaTeX](papers/03-signed-resonance/paper.tex) · [References](papers/03-signed-resonance/references.bib) · [Reviewer guide](papers/03-signed-resonance/REVIEW.md) |
-| IV | **Arithmetic Certificates for Normality and Their Limitations** | [AC-01](docs/results.md#ac-01) [AC-02](docs/results.md#ac-02) [AC-03](docs/results.md#ac-03) | Internally reviewed | [PDF](papers/04-arithmetic-certificates/paper.pdf) · [LaTeX](papers/04-arithmetic-certificates/paper.tex) · [References](papers/04-arithmetic-certificates/references.bib) · [Reviewer guide](papers/04-arithmetic-certificates/REVIEW.md) |
-| V | **Reduced Denominators of Binary Logarithm and Arctangent Series** | [CC-01](docs/results.md#cc-01) [CC-02](docs/results.md#cc-02) | Internally reviewed | [PDF](papers/05-classical-denominators/paper.pdf) · [LaTeX](papers/05-classical-denominators/paper.tex) · [References](papers/05-classical-denominators/references.bib) · [Reviewer guide](papers/05-classical-denominators/REVIEW.md) |
-
-<details>
-<summary>Abstracts</summary>
-
-**I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter.** For an odd prime *p* not dividing *b* and a positive integer *e*, every nonconstant rational polynomial in the Stoneham number with parameters *b* and *p*ᵉ is normal in base *b*, and distinct positive powers of that number have jointly uniformly distributed radix orbits. After reflection, the retained exponent vectors form an upward-closed set; the numerator of the resulting generating function is congruent to 1 modulo *p* − 1 at *z* = *p*, so a growing prime power survives at every sufficiently late shift. The paper also treats products along one prime axis, combinations with a unique leading monomial, the exact denominator profile of the binary Stoneham square, and strict upper discrepancy for products with multiplicatively independent parameters. The last result is a paper deduction, with a Lean bound of 43/45 for the binary product with parameters 3 and 5.
-
-**II. Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports.** Restrict the series for a polylogarithm of positive integer order to the integers whose prime factors lie in a finite set. With numerator 1 on the full support, the resulting radix expansion is normal when some support prime does not divide the radix, and its discrepancy tends to one otherwise. For a nonzero rational polynomial weight *P*(*m*) on the full support, normality holds exactly when *P* vanishes at zero to order less than *s* and some support prime does not divide the radix. The proof identifies the limiting discrepancy with the measure of a persistent cancellation region and shows that this region is null, using recurrence on a logarithmic circle, multiplicative finite differences and *p*-adic separation of finitely many geometric rays.
-
-**III. Resonance and Discrepancy in Signed Stoneham Expansions.** A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and produces nonnormal sums of normal numbers in every radix. For signed expansions with bounded phases, the asymptotic interval discrepancy equals the upper density of positions in zero-phase shells. Rational translation multiplies this discrepancy by the discrepancy of the rational orbit, and the attainable values are exactly the radix values of binary histories that dominate all of their suffixes in lexicographic order.
-
-**IV. Arithmetic Certificates for Normality and Their Limitations.** Normality follows when most blocks of a radix orbit are approximated in mean by rational orbits whose denominators grow, are polynomially bounded and have prime factors in a fixed finite set. Partial coverage gives explicit discrepancy bounds, and overlapping certificates combine through endpoint paths and joint failure accounting. Two accurate smooth rational models on a common block must coincide modulo one, and a counting argument limits what such models can explain.
-
-**V. Reduced Denominators of Binary Logarithm and Arctangent Series.** A finite dyadic identity for ln 2 has shifted binary prefixes whose reduced denominators grow at exponential rate one half, and this rate is optimal among finite dyadic logarithm identities, using Bang's primitive-divisor theorem. The paper studies corrected rational models, numerator residues, prime-power sieves, and analogous questions for π, *e* and rational arctangents. It does not establish normality, or an asymptotic discrepancy bound below one, for any of these constants.
-
-</details>
+| I | Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter | 1.1 | [01-stoneham-polynomials-v2](papers/01-stoneham-polynomials-v2) | [PDF](papers/01-stoneham-polynomials/paper.pdf) · [LaTeX](papers/01-stoneham-polynomials/paper.tex) · [References](papers/01-stoneham-polynomials/references.bib) · [Reviewer guide](papers/01-stoneham-polynomials/REVIEW.md) |
+| II | Normality of Localized Logarithms and Polylogarithms on Finite Prime Supports | 1.1 | [02-localized-normality-v2](papers/02-localized-normality-v2) | [PDF](papers/02-localized-normality/paper.pdf) · [LaTeX](papers/02-localized-normality/paper.tex) · [References](papers/02-localized-normality/references.bib) · [Reviewer guide](papers/02-localized-normality/REVIEW.md) |
+| IV | Arithmetic Certificates for Normality and Their Limitations | 1.1 | [04-arithmetic-certificates-v2](papers/04-arithmetic-certificates-v2) | [PDF](papers/04-arithmetic-certificates/paper.pdf) · [LaTeX](papers/04-arithmetic-certificates/paper.tex) · [References](papers/04-arithmetic-certificates/references.bib) · [Reviewer guide](papers/04-arithmetic-certificates/REVIEW.md) |
+| V | Reduced Denominators of Binary Logarithm and Arctangent Series | 1.1 | [05-classical-denominators-v2](papers/05-classical-denominators-v2) | [PDF](papers/05-classical-denominators/paper.pdf) · [LaTeX](papers/05-classical-denominators/paper.tex) · [References](papers/05-classical-denominators/references.bib) · [Reviewer guide](papers/05-classical-denominators/REVIEW.md) |
 <!-- END PAPERS -->
 
 ## Results by topic
 
-The [curated result index](docs/results.md) gives every major result with its statement, scope, Lean declaration, proof, paper and kind of evidence. This survey keeps each family in view.
+Every result family has a place in the [curated result index](docs/results.md), which gives each result's statement, exact scope, Lean declarations, proof, manuscript and evidence. The table counts the registered results of each family by evidence label; the survey links lead to the full proofs and notes.
 
-### Stoneham polynomial images and products
+<!-- BEGIN FAMILIES -->
+| Family | Registered results | Kernel-verified | Lean-supported paper proof | Paper proof | Finite certificate | Manuscripts | Survey |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| **Stoneham polynomial images and products** | [35](docs/results.md#st-01) (ST-01 to ST-35) | 20 | 11 | 4 | 0 | I, VIII | [survey](docs/survey.md#stoneham-polynomial-images-and-products) |
+| **Localized logarithms and polylogarithms** | [10](docs/results.md#ls-01) (LS-01 to LS-10) | 8 | 0 | 2 | 0 | II | [survey](docs/survey.md#localized-logarithms-and-polylogarithms) |
+| **Polynomial weights and masked supports** | [10](docs/results.md#mw-01) (MW-01 to MW-10) | 10 | 0 | 0 | 0 | II | [survey](docs/survey.md#polynomial-weights-and-masked-supports) |
+| **Cyclotomic resonance and finite combinations** | [7](docs/results.md#cr-01) (CR-01 to CR-07) | 7 | 0 | 0 | 0 | III | [survey](docs/survey.md#cyclotomic-resonance-and-signed-expansions) |
+| **Exact discrepancy and symbolic spectra** | [11](docs/results.md#ds-01) (DS-01 to DS-11) | 9 | 1 | 1 | 0 | III | [survey](docs/survey.md#exact-discrepancy-and-symbolic-spectra) |
+| **Rational-orbit certificates, coverage and rigidity** | [11](docs/results.md#ac-01) (AC-01 to AC-11) | 9 | 2 | 0 | 0 | IV | [survey](docs/survey.md#rational-orbit-certificates) |
+| **Classical constant arithmetic** | [50](docs/results.md#cc-01) (CC-01 to CC-50) | 17 | 15 | 16 | 2 | V, VI, IX | [survey](docs/survey.md#classical-constant-arithmetic) |
+| **Synthetic expansions and translations** | [24](docs/results.md#sy-01) (SY-01 to SY-24) | 7 | 0 | 17 | 0 | VI, VII | [survey](docs/survey.md#iv-designing-the-distribution-through-rational-insertions) |
+| **Arithmetic of discrepancy and unrestricted prime support** | [22](docs/results.md#op-01) (OP-01 to OP-22) | 2 | 1 | 19 | 0 | none yet | [survey](docs/survey.md#v-arithmetic-operations-and-all-prime-support) |
+<!-- END FAMILIES -->
 
-- **Polynomials, powers and products.** Every nonconstant rational polynomial in a Stoneham number with odd prime-power parameter is normal in the construction base. Products of Stoneham numbers along one odd prime axis, with arbitrary positive strides and radix dilations, are normal, and so is any rational combination with a unique monomial of top degree. [Proof for all degrees](notes/stoneham-powers-products.md) · [ST-01 to ST-05](docs/results.md#stoneham-polynomial-images-and-products)
-- **The square.** The reduced denominator of every shifted prefix of the binary Stoneham square has an exact formula, with an exception at small scales. [Square denominator profile](notes/stoneham-square.md) · [ST-03](docs/results.md#st-03)
-- **Products on different prime axes.** The upper binary discrepancy of α(2, 3) α(2, 5) is at most 0.37048 by a kernel proof ([ST-29](docs/results.md#st-29)) and at most 4/11 + 2.85 × 10⁻¹⁰ < 0.363636364 by multi-depth non-coincidence ([ST-32](docs/results.md#st-32)); Phase 17 proves the exact empirical-mixture cycle discrepancy law, Eisenstein non-integrality of every nonrectangular root ζ<sub>*p*,*a*,*d*</sub>, the exact zero-slack equivalence *D*⁺(α(2, 3) α(2, 5)) ≤ 4/11 ⇔ limsup #{*n* < *N* : *R*<sub>*n*</sub> ∈ ℤ}/*N* ≤ 4/11, and generalizes logarithmic equidistribution, *D*⁻ = 0, power-tower spacing, *O*<sub>ε</sub>(log* *T*) scale sparsity, and explicit upper bounds *M*<sub>*p*,*q*</sub> + ε (with Lean-verified *M*<sub>*p*,*q*</sub> = (*p* − 1)(*q* − 1)/(2*pq* − *p* − *q*)) to an infinite family of radices *B* for every distinct odd prime pair (*p*, *q*), certifying (2, 3, 7), (2, 3, 13) and (36, 5, 7) ([ST-35](docs/results.md#st-35)). Ordinary normality remains open. [Lean upper bound](NormalityChecker/ProductThreeFiveNonrectangularOrdinary.lean) · [Lean general single-shape max](NormalityChecker/Phase17DiscrepancyBounds.lean) · [Phase 17 exceptional orbits](notes/phase17/mixed-product-orbits.md) · [Multi-depth bound and sparsity](notes/phase16/mixed-product-precision.md)
-- **Quantitative normality.** For a fixed rational polynomial of degree *d* ≥ 1 and every coprime Stoneham parameter *c* > 2, interval discrepancy decays at an effective power rate in the defining radix. The proof uses denominator estimates together with Vandehey’s exponential-sum theorem and Erdős–Turán. [Exponents and dependence on the parameters](notes/phase14/quantitative-composites.md)
-- **Perturbations and other radices.** A Stoneham expansion tolerates perturbations at polynomial insertion times, including the dense linear identity. In radix three a separate paper proof gives superlinear growth of the number of distinct words in the binary Stoneham constant. [Perturbation theorem](NormalityChecker/PolynomialInsertions.lean) · [Ternary word complexity](notes/ternary-stoneham-complexity.md)
+The families in one sentence each:
 
-### Localized logarithms and polylogarithms
-
-- **Joint uniformity.** On one full finite support containing an off-radix prime, all distinct positive orders have jointly uniform radix orbits. Positive certificate tolerances admit a computable common depth across a finite list of orders. Exact finite termination at zero tolerance is a separate question. [Lean rectangle-frequency theorem](NormalityChecker/LocalizedJoint.lean) · [Proof and scope](notes/phase13/localized-joint.md)
-
-- **Unsigned full-support discrepancy dichotomy.** Theorem II above. Lean also proves the all-order, all-prefix formula for the exact discrepancy and identifies the maximum on the closure of the actual logarithmic phase flow. A base-36 counterexample shows why the deepest test alone can leave a prime in the denominator. [Lean all-prefix theorem](NormalityChecker/HigherOrderPrefix.lean) · [Lean phase maximum](NormalityChecker/HigherOrderPhase.lean) · [Proof for every order](notes/higher-order-joint.md) · [Order-two counterexample](notes/joint-persistent.md#higher-orders-and-the-lower-order-residues-paper-proof) · [Finite depth and a fixed masked counterexample](notes/fixed-depth-question.md)
-- **One off-base prime at order one.** When exactly one prime *p* in *P* does not divide *b* and *s* = 1, let *Z* be the set of normalized positions in [1, *p*) that fail the modular test at every precision, and let *L*(*t*) be the length of the part of *Z* between 1 and *t*. Then
-
-  ```math
-  D_\infty = \max_{1 \le t \le p} \frac{L(p)/(p-1) + L(t)}{t},
-  ```
-
-  so the expansion is normal exactly when *Z* has measure zero. [Formal theorem](NormalityChecker/PersistentRegion.lean) · [Proof of the exact formula](notes/persistent-discrepancy.md)
-- **Two generators and rates.** The logarithm restricted to products of powers of 2 and a fixed odd prime is binary normal with discrepancy of order 1/log log *N* under its radix hypotheses. Mixed generators extend normality to every positive order and to finite signed rational combinations on the same support. [Logarithms and discrepancy rate](notes/results.md#normality-of-two-generator-localized-logarithms) · [Composite generators](notes/composite-generators.md) · [Rational weights](NormalityChecker/RationalWeights.lean)
-
-### Polynomial weights and masked supports
-
-- **Masked supports.** Retain any subset of *S* containing all sufficiently late powers of a prime *p* that does not divide *b*. Then *D*∞ ≤ 1 − 1/(*p* − 1); retaining the powers of 2 gives normality in every odd radix. With an integer polynomial numerator vanishing at zero to order below *s*, retaining all late powers of 2 still gives normality in every odd radix. [Proof, bounded-gap masks and rational counterexamples](notes/polynomial-masks.md) · [Full rational classification](NormalityChecker/FullPolynomialNormality.lean) · [Lean valuation and tail bounds](NormalityChecker/PolynomialMasks.lean)
-- **Dense, periodic and rational weights.** Telescoping proves normality for dense polynomial weights when the order exceeds the degree. For rational periodic weights at order one, a finite cyclic test decides normality for every period. Two rational polynomial families have discrepancy exactly 2/3. [Polynomial and periodic certificates](notes/polynomial-certificates.md) · [Arbitrary-period classification](NormalityChecker/PeriodicClassification.lean) · [MW-01 and related results](docs/results.md#polynomial-weights-and-masked-supports)
-
-### Cyclotomic resonance and signed expansions
-
-- **Finite Stoneham sums.** A cyclotomic divisibility test decides normality for rational combinations in the construction base. For the original binary components, the two-term sum with coefficients 1 and *a* is normal exactly when *a* differs from 2 and 2/3. Every nonempty positive rational combination in the base-10, prime-3 family is decimal normal. [General classification](NormalityChecker/CyclotomicClassification.lean) · [Binary checker and examples](notes/results.md#the-original-binary-checker) · [Decimal examples](NormalityChecker/CyclotomicExamples.lean)
-- **Nonnormal sums of normal numbers.** In every radix some pairs of normal summands have an irrational nonnormal sum. For each threshold below one, some pair exceeds it in the upper limiting frequency of every all-zero word. A three-term binary example has two explicit subsequential distributions. [All-radix construction](notes/results.md#quantitative-nonnormality-in-every-radix) · [Distributions at resonant scales](NormalityChecker/CyclotomicDistribution.lean)
-
-### Exact discrepancy and symbolic spectra
-
-- **Signed shells, translations and the spectrum.** Theorem III above. De Bruijn translations give arbitrarily small positive discrepancy; the spectrum has an isolated zero, and its dimension and relation to symbolic dynamics have paper proofs. The irrational signed examples are transcendental by Roth or Ridout. [Translation, de Bruijn examples and rational division](notes/translated-shells.md) · [Spectrum, dimension and varying schedules](notes/attainable-shell-histories.md) · [Proof and transcendence](notes/signed-shell-discrepancy.md)
-
-### Rational-orbit certificates
-
-- **Certificates.** At each precision the checker partitions the digit positions into intervals. On a passing interval a prime power survives in the reduced denominator of a rational prefix, and cancellation in the resulting modular orbit controls the digit frequencies. Counting the remaining positions up to each endpoint gives a rational upper bound on *D*∞; only positions where every prime fails are charged. In the binary support {2, 5, 13}, the two first-precision tests give 0.234, and precision two proves normality. [Certificate theorem](NormalityChecker/DiscrepancyChecker.lean) · [Overlapping certificates](notes/overlapping-certificates.md) · [Joint bound](NormalityChecker/JointFiveThirteen.lean)
-- **Approximate orbits.** Short modular orbits with a fixed finite prime support cancel even when several primes divide the denominator. Mean approximation error on good blocks suffices for normality. [Orbit estimate](NormalityChecker/SmoothOrbit.lean) · [Approximate certificate](NormalityChecker/ArithmeticCertificate.lean) · [Incomplete orbits](notes/results.md#finite-sums-and-incomplete-orbits) · [Polylogarithmic denominators](notes/denominators.md)
-
-### Complementary coverage and rigidity
-
-- **Partial coverage and its limits.** A share *g* covered by disjoint pieces of discrepancy at most *d* gives *D*∞ ≤ 1 − *g*(1 − *d*). Uniform frequencies of all eight-bit words give 1/128. Endpoint paths combine interval estimates across overlaps and incomplete blocks. On a common block, two accurate smooth rational models with polynomially bounded denominators coincide modulo one, and a counting argument limits what such models can explain. [Fixed-quality proof](notes/intermittent-coverage.md) · [Uniform shares](NormalityChecker/PartialUniformity.lean) · [Endpoint estimates](NormalityChecker/IntervalCoverage.lean) · [Overlap rigidity](NormalityChecker/OrbitRigidity.lean) · [Counting limits of smooth models](notes/finite-support-discrepancy.md#how-far-polynomial-denominator-models-can-reach)
-
-- **Method obstructions, computability and proof theory.** Eight classes of existing normality-proof methods each admit explicit obstructions and paired witnesses separating *D* = 0 from *D* = 1. Kernel-checked forward and reverse halting reductions with s-m-n parameter specialization prove that recognizing binary normality of arbitrary digit-oracle program codes (`Nat.Partrec.Code`) is neither computable, nor c.e., nor co-c.e., even under the promise that the named real is transcendental over ℚ with limiting binary discrepancy in {0, 1}. A consistency-only Rosser proof switch yields a computable transcendental real whose normality is independent of PA or ZFC (giving no independence conclusion for ln 2, π or *e*). [AC-11](docs/results.md#ac-11) · [Lean undecidability](NormalityChecker/ComputableNormalityUndecidability.lean) · [Limitations and undecidability](notes/phase17/limitations-and-undecidability.md)
-
-### Classical constant arithmetic
-
-- **Gaussian logarithms, adaptive rates, Legendre–Bezout windows and the window–denominator barrier.** The minimum denominator rate is 5/12 throughout the finite rational alphabet of real and Gaussian dyadic logarithms, and universal balanced completeness extends this collapse to all balanced algebraic trace sources of arbitrary degree and rational binary exponent ([CC-43](docs/results.md#cc-43)), persisting adaptively up to exponential height *N*/528 with a 730-node Lean branch-and-bound certificate ([CC-42](docs/results.md#cc-42)). Outside balanced traces, correlated Bezout rounding removes the two-adic shift (*w* = 0): Chebyshev *T*<sub>*D*</sub> hits an analytic floor |*E*<sub>*D*</sub>| ≍ *D*⁻², whereas the Legendre kernel *P*<sub>*D*</sub> achieves linear windows *T*<sub>*N*</sub> = log₂ *L*<sub>*D*</sub> − *O*(1), but its numerator equals round(*L*<sub>*D*</sub> 2ⁿ ln 2) identically, and the unconditional barrier *T*<sub>*N*</sub> ≤ (μ' − 1)*N* + μ' log₂ *q*<sub>*N*</sub> + *O*(1) excludes *T*<sub>*N*</sub> ≥ *q*<sub>*N*</sub><sup>δ</sup> at every positive denominator rate ([CC-50](docs/results.md#cc-50)). [Adaptive proof](notes/phase16/adaptive-logarithms.md) · [Lean cell certificate](NormalityChecker/AdaptiveLogarithmBounds.lean) · [Correlated rounding and barrier](notes/phase17/classical-approximants.md) · [Lean Chebyshev bounds](NormalityChecker/ChebyshevPoleApproximation.lean)
-- **Erdős–Borwein and multiplicative Lambert series.** For multiplicative Lambert series *L*<sub>*f*</sub> of any prime-support density δ ∈ (0, 1) (including *L*<sub>χ₄</sub> at δ = 1/2 and *p* ≡ 1 mod 5 at δ = 1/4), Phase 17 proves moving-window two-sided word counts Θ<sub>*w*,*a*</sub>(*H*/(log *N*)<sup>1−δ</sup>), exact two-sided discrepancy gaps 1 − *D*<sub>*N*</sub>(*L*<sub>*f*</sub>) ≍ (log log *N*)/(log *N*)<sup>1−δ</sup> (with both discrepancy transfers kernel-verified in Lean), and transcendence for all odd Dirichlet characters ([CC-48](docs/results.md#cc-48)). For the Erdős–Borwein constant *E* itself, Phase 17 proves that 16 columns (*Ψ*₁₆) is the sharp minimal column truncation given Phase 14's tail mean, tightens *p*<sub>∗</sub> ∈ [0.492450290, 0.492460864], proves exact countermodels for *k* ≤ 4 column subsets and moment orders ≤ 4 globally (≤ 8 at *D* = 16; order 92 suffices; carry-knapsack and parity Bonferroni duals verified in Lean), certifies Selberg–Vaaler degree 116 while ruling out ≤ 110, and audits Crandall's 2012 table ([CC-49](docs/results.md#cc-49)). [Multiplicative Lambert classification](notes/phase17/multiplicative-lambert.md) · [Erdős–Borwein minimal statistics](notes/phase17/erdos-borwein-bias.md) · [Lean Phase 17 bounds](NormalityChecker/Phase17DiscrepancyBounds.lean) · [Phase 16 correlations](notes/phase16/erdos-borwein-correlations.md)
-
-None of the following establishes normality, or an asymptotic discrepancy bound below one, for ln 2, π, *e* or the golden ratio.
-
-- **Denominators of ln 2.** A short prefix detects exactly when an odd prime power cancels in a shifted logarithm prefix, and the reduced denominator has logarithm asymptotic to the digit position. The identity below halves the exponential growth rate, and Lean verifies the exact rate one half. The proof of optimality among finite dyadic logarithm identities uses Bang's primitive-divisor theorem.
-
-  ```math
-  \ln 2 = 2 \sum_{j=1}^{\infty} \frac{1}{j \, 4^j} + \sum_{j=1}^{\infty} \frac{(-1)^{j+1}}{j \, 8^j}
-  ```
-
-  [Exact cancellation and quantitative loss](notes/results.md#the-two-arithmetic-milestones) · [Series, prime residues and optimality](notes/strided-logarithm.md) · [Lean series](NormalityChecker/StridedLogarithm.lean) · [CC-01 and CC-02](docs/results.md#classical-constant-arithmetic)
-- **Models of ln 2.** Finite differences and beta corrections give longer rational models with explicit errors and denominator budgets. A binomial sum detects surviving primes in the diagonal model, whose small denominators occur on a set of upper Banach density zero. A prime-power sieve rules out low-transition words on finite windows. [Corrected models and prime survival](notes/log-shadow-primes.md) · [Corrected strides](notes/corrected-strides.md) · [Sieve and exact finite exclusions](notes/sublinear-residue-windows.md) · [Ordered normal approximations](notes/ordered-tail.md)
-- **Binary transitions and Fourier criteria.** Binary discrepancy is below one exactly when digit transitions have positive lower density. For ln 2 there is an unconditional logarithmic transition count. A mean first-frequency deficit of 0.0128 in each four sufficiently late shells would give *D*∞ ≤ 0.9999 for ln 2. [Sharp transition theorem](notes/transition-discrepancy.md) · [Moment and dyadic criteria](notes/classical-discrepancy.md) · [Intermittent shells](notes/intermittent-coverage.md#intermittent-dyadic-shells) · [Fixed and growing lags](notes/results.md#polylogarithms-and-separated-positions)
-- **Radial growth and arithmetic lifting.** The Fredholm series detects strict binary discrepancy with a uniform cutoff error of two. A paper counterexample shows that even subexponential product growth along any prescribed approach to the boundary can coexist with maximal discrepancy. For logarithm prefixes, pooling moving primes contributes a calculable variance even at a constant target. Integer affine combinations of nearby Taylor cutoffs retain the full odd-denominator rate. Strict asymptotic discrepancy for ln 2 remains open. [Lean criterion](NormalityChecker/FredholmOrbit.lean) · [Product counterexample](notes/phase15/fredholm-and-products.md) · [Prime variance](notes/phase15/pooled-prime-variance.md) · [Taylor obstruction](notes/phase15/nearby-taylor.md) · [Phase 15 proofs and experiments](notes/phase15/README.md)
-- **π, *e*, quadratic irrationals and other logarithms.** Rational polynomial models give exact integral errors for logarithmic and hexadecimal BBP shifts, and specified congruence classes of primes survive in the BBP denominator of π. Binary discrepancy of the golden ratio is below one exactly when a positive lower density of powers of two have a bounded least Zeckendorf index. The factorial Taylor numerators of *e* have periodic residues, and the logarithms of 2ᵏ/(2ᵏ − 1) have denominator rate 1/*k*. [Chebyshev bound](NormalityChecker/ChebyshevModels.lean) · [BBP prime survival](NormalityChecker/BBPDenominator.lean) · [Hexadecimal observations for π](notes/intermittent-coverage.md#hexadecimal-observations-for-π) · [Fibonacci criterion](NormalityChecker/GoldenOrbit.lean) · [Gaussian arctangent denominators](notes/gaussian-arctangent-denominators.md) · [Proofs for *e*, π and natural logarithms](notes/classical-approximants.md) · [Complementary models](notes/complementary-models.md)
-
-<!-- BEGIN FIGURE classical-denominator-growth -->
-<p align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/figures/classical-denominator-growth-dark.svg">
-  <img src="assets/figures/classical-denominator-growth-light.svg" alt="Line chart. Horizontal axis: position N on a logarithmic scale from 32 to 4096. Vertical axis: log of the reduced denominator divided by N, from 0 to 1.1. Thin dotted reference lines mark the theorem rates 1, 2/3, 1/2 and 1/3. A solid grey curve for the standard ln 2 series fluctuates between about 0.8 and 1 and settles near 0.99, near rate 1. A dash-dot curve for arctan(1/2), marked paper-only, settles near 2/3. A dashed curve for the half-rate ln 2 series and open circles for ln(4/3) nearly coincide and approach 1/2. A dotted curve for ln(8/7) approaches 1/3. A violet shaded region along the bottom, bounded by 3 log N / N, shrinks toward zero and marks the denominators allowed by the rational-prefix certificate." width="640">
-</picture>
-</p>
-
-<sub>Figure 9. Shifted denominators of classical series grow exponentially, outside the polynomial range the certificates require. This says nothing about the normality of ln 2. [Caption, data and generator](docs/figures.md#classical-denominator-growth)</sub>
-<!-- END FIGURE classical-denominator-growth -->
+- **Stoneham polynomial images and products.** Polynomials, powers and products of Stoneham numbers are normal under stated coprimality hypotheses; products on different prime axes have an upper discrepancy of at most 4/11 + 2.85 × 10⁻¹⁰, with ordinary normality open ([ST-32](docs/results.md#st-32), [ST-35](docs/results.md#st-35)). [Proofs and notes](docs/survey.md#stoneham-polynomial-images-and-products)
+- **Localized logarithms and polylogarithms.** Theorem IV, joint uniformity on a full support, and the exact discrepancy formula when one prime is off the radix ([LS-02](docs/results.md#ls-02), [LS-03](docs/results.md#ls-03)). [Proofs and notes](docs/survey.md#localized-logarithms-and-polylogarithms)
+- **Polynomial weights and masked supports.** A complete classification of rational polynomial weights on the full support, and bounds for masked supports ([MW-01](docs/results.md#mw-01)). [Proofs and notes](docs/survey.md#polynomial-weights-and-masked-supports)
+- **Cyclotomic resonance.** A cyclotomic test decides normality of finite rational combinations of Stoneham-type components and yields nonnormal sums of normal numbers in every radix ([CR-01](docs/results.md#cr-01)). [Proofs and notes](docs/survey.md#cyclotomic-resonance-and-signed-expansions)
+- **Exact discrepancy and spectra.** For signed Stoneham expansions the asymptotic discrepancy is the upper density of zero-phase shells; rational translation multiplies it by the discrepancy of the rational orbit; the attainable values are the radix values of suffix-maximal binary words ([DS-01](docs/results.md#ds-01), [DS-03](docs/results.md#ds-03), [DS-04](docs/results.md#ds-04)). [Proofs and notes](docs/survey.md#iii-exact-discrepancy-and-resonance)
+- **Rational-orbit certificates, coverage and rigidity.** Normality from rational orbit models on most blocks, discrepancy bounds from partial coverage, rigidity of overlapping smooth models, and undecidability of recognizing binary normality for digit-oracle programs ([AC-01](docs/results.md#ac-01), [AC-02](docs/results.md#ac-02), [AC-03](docs/results.md#ac-03), [AC-11](docs/results.md#ac-11)). [Proofs and notes](docs/survey.md#rational-orbit-certificates)
+- **Classical constant arithmetic.** Reduced denominators of shifted series for ln 2, π, *e* and arctangents, with no normality claim ([CC-01](docs/results.md#cc-01), [CC-02](docs/results.md#cc-02)); Theorem III and the Erdős–Borwein limits ([CC-48](docs/results.md#cc-48), [CC-49](docs/results.md#cc-49)). [Proofs and notes](docs/survey.md#classical-constant-arithmetic)
+- **Synthetic expansions and translations.** Theorems II and V, cubic expansions with prescribed limiting discrepancy, and Liouville numbers with any prescribed limit ([SY-03](docs/results.md#sy-03), [SY-05](docs/results.md#sy-05)). [Proofs and notes](docs/survey.md#iv-designing-the-distribution-through-rational-insertions)
+- **Arithmetic of discrepancy and unrestricted prime support.** The addition spectrum and the discrepancy pseudometric ([OP-01](docs/results.md#op-01), [OP-05](docs/results.md#op-05)); an exact prime-power grid in a complete rational orbit ([OP-08](docs/results.md#op-08)); a binary series retaining every odd prime that is normal and Liouville with *D*<sub>*N*</sub> = *O*(1/log *N*) ([OP-09](docs/results.md#op-09), paper proof); and normality of the cubic number and its square (Theorem II). [Proofs and notes](docs/survey.md#v-arithmetic-operations-and-all-prime-support)
 
 ## Open problems and limitations
 
 The following are **not** proved here. [Full list with partial results](docs/open-problems.md)
 
-- Normality of ln 2, π and *e* in any base.
-- Any asymptotic discrepancy bound strictly below one for these constants. In particular *D*∞ ≤ 0.9999 for the binary expansion of ln 2 remains open.
-- Full normality of the product of the binary Stoneham numbers with parameters 3 and 5; its upper discrepancy is at most 4/11 + 2.85 × 10⁻¹⁰ < 0.363636364 ([ST-32](docs/results.md#st-32)).
+- Normality of ln 2, π and *e* in any base, and any asymptotic discrepancy bound strictly below one for them.
+- Full normality of the product of the binary Stoneham numbers with parameters 3 and 5; its upper discrepancy is at most 4/11 + 2.85 × 10⁻¹⁰.
 - Ternary normality of the standard binary Stoneham constant; only superlinear word complexity is known.
 - Rational functions of Stoneham numbers, and polynomials in several independent Stoneham numbers beyond a unique leading monomial.
-- Finite termination of the modular certificate on every full support; it is proved for two-prime supports and its limit is zero in general.
-- Historical novelty of the results and independent expert review.
-
-Normality of a logarithm restricted to finitely many primes does not imply normality of the unrestricted logarithm.
+- Historical novelty of the results and independent expert review of every written proof.
 
 ## Reading paths
 
-- **New to the subject:** [a guided tour](docs/guide-newcomers.md) of normal numbers, Stoneham numbers and what the theorems add.
-- **Mathematicians:** [how to check a theorem](docs/guide-mathematicians.md), from its statement through the written proof, literature and manuscript.
-- **Lean reviewers:** [how to audit a formal statement](docs/guide-formal-review.md), its definitions, axioms and correspondence with the mathematics.
+- **New to normal numbers:** [a guided tour](docs/guide-newcomers.md) of normal numbers, Stoneham numbers and what the theorems add.
+- **Checking a theorem:** [how to check a theorem](docs/guide-mathematicians.md), from its statement through the written proof, literature and manuscript. Each v2 manuscript has a `VERIFICATION.md`, a `LEDGER.md` and a reviewer packet under `submission/`.
+- **Stoneham numbers and polynomial images:** Theorem I, Paper [I](papers/01-stoneham-polynomials-v2/paper.pdf), Paper [VIII](papers/08-stoneham-product-orbits/paper.pdf) on products, and the [ST survey](docs/survey.md#stoneham-polynomial-images-and-products).
+- **Localized logarithms and weights:** Theorem IV, Paper [II](papers/02-localized-normality-v2/paper.pdf) and the [LS and MW surveys](docs/survey.md#localized-logarithms-and-polylogarithms).
+- **Discrepancy, signed expansions and prescribed limits:** Paper [III](papers/03-signed-resonance/paper.pdf), Theorems II and V, Paper [VII](papers/07-synthetic-expansions/paper.pdf).
+- **Analytic number theory and Lambert series:** Theorem III and Paper [VI](papers/06-multiplicative-lambert/paper.pdf).
+- **Classical constants and limitations:** Papers [IV](papers/04-arithmetic-certificates-v2/paper.pdf), [V](papers/05-classical-denominators-v2/paper.pdf) and [IX](papers/09-erdos-borwein-note/paper.pdf), and [open problems](docs/open-problems.md).
+- **Lean reviewers:** [how to audit a formal statement](docs/guide-formal-review.md), its definitions, axioms and correspondence with the mathematics, and the [declaration directory](docs/theorems.md).
 
-[Documentation hub](docs/README.md) · [Curated result index](docs/results.md) · [Publication roadmap](docs/publication-roadmap.md) · [Complete declaration directory](docs/theorems.md) · [Research notes](notes/results.md) · [Phase 17 checkpoint](notes/phase17/README.md) · [Research history](docs/history.md)
+[Documentation hub](docs/README.md) · [Curated result index](docs/results.md) · [Detailed survey](docs/survey.md) · [Figures](docs/figures.md) · [Framework and proof dependencies](docs/framework.md) · [Research notes](notes/results.md) · [Research history](docs/history.md) · [Publication roadmap](docs/publication-roadmap.md)
+
+## How the research was done
+
+The research is AI-assisted to an extent that should be stated plainly. The repository owner directed the project, chose its questions and is responsible for what is released. Large language models from several providers did most of the work in these stages:
+
+- **Mathematical exploration:** proposing conjectures, counterexamples and proof strategies.
+- **Proof generation:** writing the human-readable proofs in the notes and manuscripts.
+- **Implementation:** exact-arithmetic scripts, whose parameters and outputs are recorded.
+- **Formalization:** the Lean 4 library, kernel-checked against Mathlib.
+- **Drafting:** the manuscripts, ledgers and this documentation.
+- **Literature search:** comparing every headline result with published and public work; the comparisons are in each manuscript's `LEDGER.md`.
+- **Cross-provider review:** drafts and proofs were reviewed by models from different providers than their authors, and the reviews led to corrections.
+
+**Cross-model review is not independent human peer review.** The Lean kernel checks the declarations listed in each verification map and nothing else: whether a Lean statement says what the prose claims, whether a written argument is complete, and whether a result is new have not been checked by an independent human expert. Human specialist review is outstanding, and a result should be read with its evidence label. [What Lean verification does and does not establish](docs/attribution.md) · [Review records](papers/reviews/README.md)
+
+## Corrections, prior art and collaboration
+
+Corrections, references to earlier statements of any result, and questions about a specific theorem are welcome as [GitHub issues](https://github.com/eldernos/MathematicsResearch/issues); quoting the result identifier, such as ST-11, helps. The issue tracker is the contact route. Priority statements are provisional, and we would like to credit antecedents precisely, including overlapping public work. A specialist who is willing to check a single theorem can start from its reviewer packet in `submission/` and its `LEDGER.md`; collaboration on the open problems above is welcome in the same way. [Contributing](CONTRIBUTING.md)
 
 ## Reproduce and review
-
-[![Lean verification](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml/badge.svg)](https://github.com/eldernos/MathematicsResearch/actions/workflows/lean.yml)
 
 The repository pins Lean and Mathlib to v4.36.0. With Elan installed, run these commands from the repository root.
 
@@ -344,13 +232,17 @@ lake exe cache get $(sed -nE 's/^(public )?import (Mathlib\.[A-Za-z0-9_.]+)$/\2/
 scripts/verify.sh
 ```
 
-Verification runs the exact-arithmetic tests, builds the library, audits the listed theorems for transitive axioms, checks the declaration directory and manifest against the compiled library, checks the documentation links, result identifiers and figures, and replays every project module through the Lean kernel. The audit permits `propext`, `Classical.choice` and `Quot.sound`. Checkpoint 11, the baseline of the manuscripts, is commit [`a09e011`](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035). [Verification guide](docs/verification.md) · [Axiom audit](Audit.lean) · [Workflow](.github/workflows/lean.yml) · [Checkpoint history](docs/history.md)
+Verification runs the exact-arithmetic tests, builds the library, audits the listed theorems for transitive axioms, checks the declaration directory and manifest against the compiled library, checks the documentation links, result identifiers and figures, and replays every project module through the Lean kernel. The audit permits `propext`, `Classical.choice` and `Quot.sound`. Research-checkpoint-18, commit [`e4809cf`](https://github.com/eldernos/MathematicsResearch/commit/e4809cf561573aef588e6ffc491a35cdb79fd9ec), is the Lean baseline of the v2 manuscripts, and Checkpoint 11, commit [`a09e011`](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035), was that of version 1.1. [Verification guide](docs/verification.md) · [Axiom audit](Audit.lean) · [Workflow](.github/workflows/lean.yml) · [Checkpoint history](docs/history.md)
 
 ## Attribution, citation and contributing
 
-The research and formalization are AI-assisted. Lean verification establishes that each formal statement follows from its definitions and the permitted axioms; whether a formal statement says what the prose claims, and whether a result is new, still needs human review. [How the work was done and what verification covers](docs/attribution.md) · [How to cite](docs/attribution.md#how-to-cite) · [Archiving and DOIs](papers/ARCHIVING.md)
+The author of the release candidate manuscripts is Christopher Anderson, Independent Researcher; the archived v1.1 manuscripts carry no author line. [How the work was done and what verification covers](docs/attribution.md) · [How to cite](docs/attribution.md#how-to-cite) · [CITATION.cff](CITATION.cff) · [Archiving and DOIs](papers/ARCHIVING.md) · [Licensing proposal](docs/licensing-proposal.md) · [Repository metadata proposal](docs/repository-metadata.md)
 
-Corrections, literature references and questions about a specific result are welcome as GitHub issues; quoting the result identifier helps. [Contributing](CONTRIBUTING.md) · Original contributions use the [MIT license](LICENSE); the port of Trevor Morris's Weyl criterion retains its [Apache-2.0 license](NormalityChecker/Analysis/Weyl.lean).
+Original contributions use the [MIT license](LICENSE); the port of Trevor Morris's Weyl criterion retains its [Apache-2.0 license](NormalityChecker/Analysis/Weyl.lean). A separate licence for the manuscripts is proposed and awaits the owner's approval.
+
+## Distribution terminology
+
+The precise definitions of full normality, simple normality, disjunctivity, positive lower word density, logarithmic equidistribution, positive uniform coverage and upper discrepancy bounds, and how they relate, are in the [detailed survey](docs/survey.md#distribution-terminology). They are strictly separated throughout: for example, an expansion can be disjunctive, as *L*<sub>χ</sub> is, while its discrepancy tends to one.
 
 ## Complete declaration directory
 

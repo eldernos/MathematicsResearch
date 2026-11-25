@@ -51,6 +51,6 @@ For fixed $N$, the endpoint logarithm weighs zeros close to $+1$ especially heav
 
 ## Finite controls
 
-The accompanying program constructs certified binary cylinders for ln 2, the base-two Stoneham number with parameter three, and the signed series of Theorem III with phase coefficients alternating 1, 0. The latter has upper discrepancy 3/4. Bailey and Crandall give the normal Stoneham control. [Signed-shell theorem](../../README.md#iii-exact-discrepancy-and-resonance) · [Bailey–Crandall](https://www.davidhbailey.com/dhbpapers/bcnormal-em.pdf)
+The accompanying program constructs certified binary cylinders for ln 2, the base-two Stoneham number with parameter three, and the signed series of Theorem III with phase coefficients alternating 1, 0. The latter has upper discrepancy 3/4. Bailey and Crandall give the normal Stoneham control. [Signed-shell theorem](../../docs/survey.md#iii-exact-discrepancy-and-resonance) · [Bailey–Crandall](https://www.davidhbailey.com/dhbpapers/bcnormal-em.pdf)
 
 For the moving-parameter construction with $a_N=1-1/N$, the normalized moving and endpoint log growths at $N=4096$ are about 0.0020054 and 0.0021270. The program also evaluates the sharp and radial means on each cylinder and on rational and sparse inputs. The printed transcendental evaluations are floating-point diagnostics. The proof above establishes the uniform error and the limiting counterexample independently of floating-point arithmetic. [Reproduction](../../scripts/phase15_fredholm.py)
