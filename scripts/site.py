@@ -329,7 +329,7 @@ def manuscript_page(p, by_dir, base, strict):
 
     parts = [f"<h1>{esc(p['title'])}</h1>", byline(p),
              f'<p><span class="pill">Version {esc(p["version"])}</span>'
-             f'<span class="pill">{esc(portal.PAPER_LABEL[p["status"]])}</span>'
+             f'<span class="pill">{esc(portal.paper_label(p))}</span>'
              f'<span class="pill">{esc(tag)}{" (candidate)" if tag == portal.CANDIDATE_TAG and not tag_exists(tag) else ""}</span></p>']
     if pending:
         parts.append('<p class="notice">This manuscript’s metadata file is not yet available; the text below is a '
@@ -429,7 +429,7 @@ def index_page(papers, base):
     for p in current:
         rows.append(f'<tr><th scope="row">{esc(p["number"])}</th>'
                     f'<td><a href="papers/{esc(slug(p))}/index.html">{esc(p["title"])}</a></td>'
-                    f'<td>{esc(p["version"])}</td><td>{esc(portal.PAPER_LABEL[p["status"]])}</td></tr>')
+                    f'<td>{esc(p["version"])}</td><td>{esc(portal.paper_label(p))}</td></tr>')
     parts = [f"<h1>{esc(SITE_TITLE)}</h1>",
              f'<p class="byline">{esc(AUTHOR_NAME)} · {esc(AFFILIATION)}</p>',
              f"<p>{esc(DESCRIPTION)}</p>",

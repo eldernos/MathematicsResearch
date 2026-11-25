@@ -91,7 +91,7 @@ RELEASED_TAG = "manuscripts-v1.1.0"   # release that carries the historical v1.1
 WAVE2_LEAN_COMMIT = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"  # research-checkpoint-18
 META_REQUIRED = ("id", "title", "authors", "affiliation", "short_title", "version", "status", "abstract", "keywords", "msc_primary",
                  "msc_secondary", "supersedes", "lean_commit", "registry_ids")
-META_STATUS = "preprint draft"
+META_STATUS = ("preprint draft", "research note")  # a research note is also a preprint draft
 META_AUTHORS = ["Christopher Anderson"]  # owner decision of 2026-11-25; no other author, ORCID or email
 META_AFFILIATION = "Independent Researcher"
 MSC_RE = re.compile(r"^\d{2}[A-Z](\d{2}|xx)$")
@@ -491,6 +491,14 @@ def build_figures(figures):
 # ---------------------------------------------------------------------------
 # README papers block
 
+def paper_label(p) -> str:
+    """Status shown to readers: the registry status, with a research note marked as such."""
+    label = PAPER_LABEL[p["status"]]
+    if (p.get("metadata") or {}).get("status") == "research note":
+        return f"Research note, {label[0].lower()}{label[1:]}"
+    return label
+
+
 def paper_files(p, frm="README.md"):
     d = rel(p["dir"], frm)
     if p["layout"] == "released":
@@ -511,7 +519,7 @@ def build_papers_block(papers):
         ids = " ".join(f"[{x}](docs/results.md#{anchor(x)})" for x in p["principal"])
         retained = f" (retained in `{CANDIDATE_TAG}`)" if p["layout"] == "released" else ""
         rows.append(f"| {p['number']} | **{p['title']}** | {p['version']}{retained} | {ids} | "
-                    f"{PAPER_LABEL[p['status']]} | {paper_files(p)} |")
+                    f"{paper_label(p)} | {paper_files(p)} |")
     out = ["\n".join(rows)]
     if old:
         hist = ["| | Superseded manuscript | Version | Replaced by | Files |", "| --- | --- | --- | --- | --- |"]
@@ -785,8 +793,8 @@ def validate_metadata(meta: dict, p: dict, ids) -> list:
     errs = [f"missing key {k}" for k in META_REQUIRED if k not in meta]
     if errs:
         return errs
-    if meta["status"] != META_STATUS:
-        errs.append(f"status must be {META_STATUS!r}, not {meta['status']!r}")
+    if meta["status"] not in META_STATUS:
+        errs.append(f"status must be one of {META_STATUS}, not {meta['status']!r}")
     if str(meta["version"]) != str(p["version"]):
         errs.append(f"version {meta['version']} differs from papers.toml ({p['version']})")
     if meta["lean_commit"] != WAVE2_LEAN_COMMIT:

@@ -148,6 +148,7 @@ class MetadataTests(unittest.TestCase):
     def test_detects_problems(self):
         self.assertTrue(any("MSC" in e for e in self.check(msc_primary="11K")))
         self.assertTrue(any("status" in e for e in self.check(status="draft")))
+        self.assertEqual(self.check(status="research note"), [])
         self.assertTrue(any("lean_commit" in e for e in self.check(lean_commit="abc")))
         self.assertTrue(any("unknown registry" in e for e in self.check(registry_ids=["ST-99"])))
         self.assertTrue(any("peer-reviewed" in e for e in self.check(abstract="This is peer-reviewed.")))
