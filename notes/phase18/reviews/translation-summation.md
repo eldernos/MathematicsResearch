@@ -60,7 +60,9 @@ The following were checked line by line on paper. Repository theorem hypotheses 
 
 ## Scope of the grid theorem (accurate, worth stating)
 
-The grid proof for $Y$ needs the prime $3$ and the fact that every other prime in $\mathcal P$ is $\equiv2\bmod3$. Neither note claims normality of $Y-Y_3$ or joint uniformity of $Y$ with any $Y_p$, and neither follows from the method. At $p=5$, the set $\mathcal P$ contains primes $\ell\equiv1\bmod5^k$ for every $k$ (by Dirichlet, combined with $\ell\equiv2\bmod3$). So $v_5(\operatorname{ord}_Q2)$ is unbounded as $L$ grows, and no grid survives. Stating this limit explicitly would help readers.
+The grid proof for $Y$ needs the prime $3$ and the fact that every other prime in $\mathcal P$ is $\equiv2\bmod3$. Neither note claims normality of $Y-Y_3$ or joint uniformity of $Y$ with any $Y_p$, and neither follows from the method. The method gives no conclusion at other primes, and stating this limit explicitly would help readers.
+
+> **Correction (publication wave 2, [issue #1](https://github.com/eldernos/MathematicsResearch/issues/1)).** An earlier version of this paragraph inferred from primes $\ell\equiv1\bmod5^k$ in $\mathcal P$ that $v_5(\operatorname{ord}_Q2)$ is unbounded, and concluded that no grid survives at $p=5$. That inference is unsupported. The order of $2$ modulo $\ell$ divides $\ell-1$, so a congruence $\ell\equiv1\bmod5^k$ does not make $5^k$ divide the order. For example, $431$ is prime, $431\equiv2\bmod3$ and $431\equiv1\bmod5$, while the order of $2$ modulo $431$ is $43$. Even an unbounded order valuation would need comparison with the growing pole depth before it could rule out increasingly fine grids. The inference and the conclusion are withdrawn. The normality theorem for $Y$ uses only the protected ternary grid, and its proof is unaffected. [Phase 19 handoff](../../phase19/publication-handoff.md) · [Grid analysis](../../phase19/grids.md)
 
 ## Untested
 
