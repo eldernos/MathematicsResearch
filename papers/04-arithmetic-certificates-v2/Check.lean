@@ -40,7 +40,7 @@ example {b c : ℕ} (hb : 1 < b) (hc : 1 < c) (cop : b.Coprime c) (d : ℕ) :
         ∑ i ∈ range T, turnDistance (f i-(b:ℝ)^i*z) :=
   smooth_overlap_separation hb hc cop d
 
--- Theorem 7.4 (AC-11): nonrecognizability on arbitrary digit-oracle codes.
+-- Conjunction of the three individually kernel-verified exclusions bundled in Theorem 7.4 (AC-11).
 example {a b : ℕ → Bool}
     (ha_comp : Computable a) (hb_comp : Computable b)
     (ha_tr : Transcendental ℚ (ComputableNormalityUndecidability.binarySeries a))
