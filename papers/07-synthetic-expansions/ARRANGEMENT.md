@@ -32,7 +32,7 @@ New in H (Phase 19, not previously in any manuscript): the asymptotic distance a
 
 **What C keeps or adds:**
 
-- Kept: the normality switch and exact denominators (Theorems A, 4.2, 4.5), the rates (Theorem B), prescribed discrepancy, pairs and limit sets (Theorem C), the all-odd-prime normal Liouville series and its companions (Theorem E = Theorems 8.2–8.4), the exact prime-power grid (Lemma 2.4).
+- Kept: the normality switch and exact denominators (Theorems A, 4.2, 4.5), the rates (Theorem B), prescribed discrepancy, pairs and limit sets (Theorem C), the all-odd-prime normal Liouville series and its companions (Theorem E = Theorems 8.2–8.4), and the prime-power grid count along a chosen admissible stride (Lemma 2.4), which is the count Theorem 8.2 needs.
 - Added: the all-prefix criterion as an explicit proposition (Proposition 4.4; previously only the written outline of the switch), the **quadratic-image theorem** (Theorem D = Theorem 7.1, Corollary 7.2), with its full proof (Section 7).
 - Quoted once, not reproved: the sharp translation identity, as Theorem 2.6, citing H by title, same release, Theorem 3.1, with the Lean links.
 - Proposition 8.5 (consecutive tails) now uses the quoted identity and holds in every base (previously stated in base 2 via the preserver classification).
@@ -58,7 +58,7 @@ Suggested BibTeX key `DiscrepancyArithmetic`, directory `papers/10-discrepancy-a
 | Pseudometric $1-D_N(x-y)$ (OP-05) | H, Propositions 4.1, 4.3 | Kernel-verified finite part. |
 | Rational scalar ring, residue test (OP-06) | H, Theorem 4.5, Proposition 4.6 | Rational operations. |
 | Integer-dilation boundary spectrum (OP-07) | H, Proposition 6.1, Theorem 6.2 | The inverse dilation estimate is not included. |
-| Exact prime-power grid (OP-08) | C, Lemma 2.4 | Needed for Section 8; Lean steps `stride_order` and `crt_period_count` cited. |
+| Exact prime-power grid (OP-08) | C, Lemma 2.4, **stride count only** | Lemma 2.4 counts along one chosen admissible stride $\tau$ (numerator prime to $p$), which is what Section 8 needs; Lean steps `stride_order` and `crt_period_count` cited. The full statement of the Phase 19 grid note, with $\tau=\mathrm{lcm}(\mathrm{ord}_p b,\mathrm{ord}_Q b)$, the case $e<c$, the exact period and the largest equally spaced subset of $p$-power size, is **not** included (referee report 1, finding 6). |
 | Normal Liouville series retaining every odd prime (OP-09) | C, Theorem 8.2 = Theorem E | Unchanged. |
 | Superpolynomial denominators, accelerated schedules (OP-10) | Not included | Not needed for the main line. |
 | Sparse preservers with visible product (OP-12) | H, Proposition 6.3 (product example only) | The sharp missing-digit rates are not claimed. |

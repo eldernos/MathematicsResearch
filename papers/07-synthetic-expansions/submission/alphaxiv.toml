@@ -22,7 +22,7 @@ contribution = "Conjectures, proofs, Lean 4 formalization and exact computations
 [[ai_disclosure.tools]]
 model = "Claude Opus 5.5"
 harness = "Claude Code (T3 Code)"
-contribution = "Drafted and restructured the manuscript and proofs"
+contribution = "Drafted and restructured the manuscript and proofs; revised it in response to the two referee reports"
 
 [[ai_disclosure.tools]]
 model = "GPT-6.2 Astra"

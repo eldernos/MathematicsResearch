@@ -25,7 +25,7 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 2. For $s=0$ every prefix is an integer and the tail is $O(b^{-W})$ away from insertions, so the orbit concentrates at $0$.
 3. For $s\ge1$, apply the all-prefix criterion (Proposition 4.4): on blocks of length $N^{\eta/2}$ free of insertions, a fixed-support estimate (Lemma 4.3, kernel-verified, the qualitative form of Vandehey's Corollary 1.2) controls Weyl sums whenever the denominator is large and polynomially bounded.
 
-**Review wanted.** Is the switch already a corollary of Kano (1993, Theorem 1), of Bailey–Crandall (2002, Theorem 4.8), or of Vandehey (Theorem 7.4) after regrouping?
+**Review wanted.** Is the switch a corollary of Kano (1993, Theorem 1, p. 911), of Bailey–Crandall (2002, Theorem 4.8), or of Vandehey (Theorem 7.4) under some representation of the series? The insertion denominators $p^{sv_p(k)}$ return to one; the prefix denominators form a chain; and on the cubic schedule contiguous regrouping gives unbounded normalized numerators (test in `LEDGER.md`), so only non-contiguous or unrelated representations remain open.
 
 ## 2. Worked rate (Theorem 3.1)
 
@@ -43,7 +43,9 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 
 ## 3. Every discrepancy limit (Theorem 5.3)
 
-**Statement.** For odd $p\nmid b$ and $\delta\in[0,1]$, the positive coefficients defined in Lemma 5.1 from the targets $u_k\in\{0,1/q_k\}$, where $q_k=p^{1+\lfloor\log_pk\rfloor}$, with retirement mask $a_k=\lfloor k\delta\rfloor-\lfloor(k-1)\delta\rfloor$, satisfy $|D_N(x_\delta)-\delta|\le C_{b,p}N^{-1/3}$, uniformly in $\delta$.
+**Statement.** For odd $p\nmid b$ and $\delta\in[0,1]$, the positive coefficients defined in Lemma 5.1 from the targets $u_k\in\{0,1/q_k\}$, where $q_k=p^{1+\lfloor\log_pk\rfloor}$, with retirement mask $a_k=\lfloor k\delta\rfloor-\lfloor(k-1)\delta\rfloor$, have denominators dividing $q_k\le pk$ and satisfy $|D_N(x_\delta)-\delta|\le C_{b,p}N^{-1/3}$, uniformly in $\delta$.
+
+**Scope.** Existence of positive expansions with any limiting discrepancy, any pair of lower and upper limits and any limit set is classical: every radix orbit is, after a finite shift, the orbit of $\sum c_kb^{-n_k}$ with $c_k\in(0,1)$ of $p$-power denominator on any schedule (Remark 6.5), and Colebrook–Sigmund realization applies. The content is the uniform rate, the denominator bound and the explicit schedule.
 
 **Evidence.** Lean-supported paper proof; the state recurrence is kernel-verified.
 
@@ -53,11 +55,11 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 2. Corollary 2.5 bounds the active error $H$ by $(7tp^v+p)K(K+1)/2$.
 3. Summation by parts gives $|Z-\delta N|\le t+3h_K$.
 
-**Review wanted.** The summation by parts in (2), and uniformity in $\delta$.
+**Review wanted.** The summation by parts in step 3 (inequality (2) of the paper), uniformity in $\delta$, and the encoding of Remark 6.5.
 
 ## 4. Quadratic images (Theorem 7.1, Corollary 7.2)
 
-**Statement.** Let $p\nmid b$ be an odd prime, $t=\operatorname{ord}_pb$, $d\ge3$, and $X_a=\sum_{i\ge1}p^{-av_p(i)}b^{-ti^d}$. For every finite set $S$ of positive integers and every nonconstant $P\in\mathbb Q[z_a:a\in S]$ of total degree at most two, $P((X_a))$ is normal to base $b$. In particular $\xi^2$ is normal and $(\xi,\xi^2)$ is jointly normal for $\xi=\sum_k3^{-v_3(k)}2^{-2k^3}$.
+**Statement.** Let $p\nmid b$ be an odd prime, $t=\operatorname{ord}_pb$, $d\ge3$ an integer, and $X_a=\sum_{i\ge1}p^{-av_p(i)}b^{-ti^d}$. For every finite set $S$ of positive integers and every nonconstant $P\in\mathbb Q[z_a:a\in S]$ of total degree at most two, $P((X_a))$ is normal to base $b$. In particular $\xi^2$ is normal and $(\xi,\xi^2)$ is jointly normal for $\xi=\sum_k3^{-v_3(k)}2^{-2k^3}$.
 
 **Evidence.** Paper proof (Section 7), not formalized. External inputs: Graham–Kolesnik, *Van der Corput's Method of Exponential Sums* (1991), Lemma 2.5 and Theorem 2.2; Kuipers–Niederreiter Ch. 2 Thm 2.5 (Erdős–Turán, p. 112); the Lebesgue density theorem. Internal inputs: Proposition 4.4 (all-prefix criterion, resting on the kernel-verified short-orbit estimate) and Theorem 4.2 (kernel-verified exact denominator).
 
@@ -69,11 +71,11 @@ Normality to base $b$ is equivalent to $D_N\to0$ (Kuipers–Niederreiter, Ch. 1 
 4. *Null level sets (Proposition 7.8).* With $G_H$ the union of radius-$\epsilon/(Hp^H)$ intervals about isolated centres, $|I\cap G_H|\gg\epsilon|I|/H$ and $|I\cap G_n\cap G_m|\ll|I|(\epsilon^2/(nm)+\epsilon p^{n-m}/m)$; since $\sum1/H=\infty$, Cauchy–Schwarz and the density theorem give a.e. point in infinitely many $G_H$; at such points one flank misses each level set.
 5. *Transfer.* Small denominators force $u(n)$ into $E_L=\{M\equiv0\bmod p^L\}$, of upper density $\le p^d|E_L|/(p^d-1)\to0$; Proposition 4.4 gives normality.
 
-**Review wanted.** The collision bound (3) in Lemma 7.7 (uniformity in $I$, the lattice count of the slab, the removal costs); the third-derivative regime $\lambda=lp^H\Lambda/p^{3v}$ with $2H/5\le v\le H$; the second-moment constants in Proposition 7.8; the freezing threshold. An independent AI audit (`notes/phase19/reviews/nonlinear.md`) found no error; human review is outstanding.
+**Review wanted.** The collision bound (3) in Lemma 7.7 (uniformity in $I$, the lattice count of the slab, the removal costs); the third-derivative regime $\lambda=lp^H\Lambda/p^{3v}$ with $2H/5\le v\le H$; the second-moment constants in Proposition 7.8; the freezing threshold. An independent AI audit (`notes/phase19/reviews/nonlinear.md`) and two AI referee reports found no gap; human review is outstanding. Prior art to weigh: the normal rings of Wagner (1995) and Kano–Shiokawa (1993, Theorem 5), whose nonzero polynomial expressions in the generators are normal, and Mira Cult's note S08 (gist revision `41b5a780`, 7 October 2026, Theorem 1.1) on polynomial images of $\sum_kq^{-k}b^{-c^k}$ on exponential schedules.
 
 ## 5. Infinite sums (Theorems 8.2–8.4)
 
-**Statement.** $Y=\sum_{\ell\ \mathrm{odd}}\sum_{j\ge1}\ell^{-s_\ell j}2^{-16^{\ell^j}}$, with $s_3=2$ and $s_\ell=1$ otherwise, is binary normal and Liouville with $D_N\ll1/\log N$. Finite rational combinations of the components are normal. Some positive rational multiples of the components sum to $1$.
+**Statement.** $Y=\sum_{\ell\ \mathrm{odd}}\sum_{j\ge1}\ell^{-s_\ell j}2^{-16^{\ell^j}}$, with $s_3=2$ and $s_\ell=1$ otherwise, is binary normal and Liouville with $D_N\ll1/\log N$. Finite rational combinations of the components, with a nonzero coefficient vector, are normal. Some positive rational multiples of the components sum to $1$.
 
 **Evidence.** Lean-supported paper proof; the grid order and count steps are Lean, at `c2c9da6`.
 
