@@ -27,5 +27,15 @@ contribution = "Drafted the manuscript and proofs"
 [[ai_disclosure.tools]]
 model = "Gemini 4 Argon"
 harness = "Antigravity (T3 Code)"
-contribution = "Independent referee report"
+contribution = "Independent referee report 1 (AI model review; not independent human peer review)"
+
+[[ai_disclosure.tools]]
+model = "Gemini 4 Neon"
+harness = "Antigravity (T3 Code)"
+contribution = "Independent referee report 2 (AI model review; not independent human peer review)"
+
+[[ai_disclosure.tools]]
+model = "Claude Sonnet 5.5"
+harness = "Claude Code (T3 Code)"
+contribution = "Revised the manuscript, verification map and ledger in response to the two referee reports"
 

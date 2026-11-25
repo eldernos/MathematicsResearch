@@ -33,7 +33,7 @@ A preprint draft of mine proves, for the extreme (Kuiper) discrepancy $D_N$ of t
 
 $$\sup_{x\in\mathbb R}\bigl|D_N(x+z)-D_N(x)\bigr|=1-D_N(z),$$
 
-attained at $x=0$. The proof uses only rotation invariance and a one-paragraph comparison of paired samples; it gives $D(q)\le D(p)+1-D(r)$ for any paired samples with $q_n\equiv p_n\pm r_n$. The paper rewrites $1-D(\mu)$ as $\inf_l(1-Q_\mu(l)+l)$ with Lévy's concentration function $Q_\mu$, and compares it within a factor $3$ with the Ky Fan distance to constants. Your work on [cite: the addressee's paper on discrepancy, concentration functions or probability metrics] is the closest source I found.
+attained at $x=0$. The proof uses only rotation invariance and a one-paragraph comparison of paired samples; it gives $D(q)\le D(p)+1-D(r)$ for any paired samples with $q_n\equiv p_n\pm r_n\pmod 1$. The paper rewrites $1-D(\mu)$ as $\inf_l(1-Q_\mu(l)+l)$ with Lévy's concentration function $Q_\mu$, and compares it within a factor $3$ with the Ky Fan distance to constants. Your work on [cite: the addressee's paper on discrepancy, concentration functions or probability metrics] is the closest source I found.
 
 **Question.** Is the paired-sample inequality $D(q)\le D(p)+1-D(r)$, or its sharp form above, recorded in the literature on Kuiper's statistic or on concentration functions, so that it can be cited rather than presented as a lemma?
 
