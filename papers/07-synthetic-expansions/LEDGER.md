@@ -27,6 +27,8 @@ MathSciNet was not accessible. zbMATH Open, arXiv, Crossref, Google-indexed web 
 - Kuipers–Niederreiter 1974: the publisher (John Wiley & Sons, 1974) and the theorem numbers and pages were checked against a text copy of the book.
 - Bergelson–Downarowicz: the arXiv record and the text of v1 were read, including Definitions 3.5 and 3.10 and Theorems 3.12, 8.1 and 8.2, and Corollary 8.14.
 
+**Public repositories:** the bibliography entries `SudeSum` (Captain Sude, `Stoneham-sum-normal` at commit `f4d3d1f0`) and `MiraJoint` (Mira Cult, `stoneham-joint-normality.md` at commit `357d26a2`) point to pinned commits. Both URLs returned HTTP 200 on 25 November 2026. They are cited in the introduction as related public work, not as inputs.
+
 **Companion manuscripts:** the companion entries (`PaperI`, `PaperIII`, `CompanionLambert`) are this project's own manuscripts. `CompanionLambert` is not yet released, and its title is provisional.
 
 **Unverified items:** Rauzy's internal theorem number. The primary text could not be accessed: the publisher's PDF returned HTTP 403, the EuDML certificate had expired, and the Numdam announcement is a scan without a text layer. The paper therefore cites Rauzy (1976) for the characterization without a theorem number, and gives Bergelson–Downarowicz Theorem 3.12 for the precise modern statement. Sigmund's and Colebrook's theorem numbers were not verified either: AMS returned 403 and Project Euclid returned an empty page. The paper cites both only as related work, not as inputs. `notes/phase19/literature.md` reports that Sigmund (1974, p. 285) credits Colebrook.
