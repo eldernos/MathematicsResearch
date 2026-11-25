@@ -2,6 +2,23 @@
 
 Version 2.0 supersedes `papers/02-localized-normality` (version 1.1, immutable archive, Lean pinned at `a09e011720bc`). This version pins Lean at `e4809cf561573aef588e6ffc491a35cdb79fd9ec`.
 
+## Revision after referee report 1 (25 November 2026)
+
+Response to `papers/reviews/02-localized-normality-v2/review-1.md` (AI model review; not independent human peer review); the item-by-item account is in `papers/reviews/02-localized-normality-v2/resolution.md`. The version number remains 2.0 (the manuscript has not been released). Changes to `paper.tex`:
+
+- **Abstract and public abstracts** (also `metadata.toml`, `submission/abstract.txt`, `alphaxiv.md`, `summary.md`, `announcement.md`): the hypotheses are restored (an off-radix prime for the joint statement and for the dichotomy, "over all of M(S)" for the polynomial classification, the pole and the retained-power windows for the window bound, a selected prime in J for the common depth), and the public work of Captain Sude, Mira and Mira Cult is credited with the scope of the extension.
+- **Section 1.1:** Theorem B is split into parts (i)-(iii) with the integral clause parenthesized and the quantifier over the restriction placed before the integer `L`; Theorem D carries the cancellation identity (displayed equation (2)); Theorem E and Theorem F state their exact Lean declarations; Theorem F is stated for the sum over the integers `q^a p^j`.
+- **Section 1.2 (related work):** rewritten to separate what the sources state from what follows from their proofs (least prime off the radix, binary with 3 at all orders, two generators at higher orders, singleton supports with polynomial numerators, periodic common masks on the axis, Kano and Vandehey on the axis); the "do not state" list is replaced by a list of the remaining contribution. Corrections of detail: Sude's Stoneham criterion for arbitrary `c`; the functional equation; the xi-family Theorem 2 and Lemma 4.
+- **Section 5:** the proof of the lower bound is split into the cases `r >= s` and `J` empty (in the latter the weight need not be integral, and old radix shifts clear the denominators), and gives `L = D_0` independently of the restriction.
+- **Section 6:** Remark 6.2 relabelled as a Lean-supported paper proof; evidence of Theorem D made precise.
+- **Section 7:** wording of the step from uniform distribution to box frequencies corrected.
+- **Section 9 (rate):** the outline now states the correct unique-maximum argument (the inserted term with the largest layer), the Dirichlet and integer-separation mesh with depth `M q^2 p^M`, the block structure on the `K^6` scale and the passage to `1/log log N`; the separate "Paper proof" label is removed.
+- **Section 10:** the unsupported reference to repository notes is removed (moved to `VERIFICATION.md`).
+- **Section 11 (new numbering):** the former Appendix A is now an ordinary section before the formal-verification and AI-use sections, so that those two end the paper. Theorem A.1 is now Theorem 11.1 and Example A.2 is now Example 11.2 (with the four kernel facts separated from the remaining arithmetic, now in `check_order_two.py`); the former Section 11 is Section 12. Pointers to the proofs in version 1.1 are explicit.
+- **Section 12:** the verification paragraph states exactly what `Statements.lean` and `Check.lean` restate, that these files are run from the release (the bare checkpoint omits them), and the new behaviour of `AuditDeclarations.lean`.
+- **Bibliography:** the pinned URLs of the public sources are printed (notes), and the Vandehey entry gives arXiv:1606.07911v1 for the numbering used.
+- **Other files:** `AuditDeclarations.lean` fails on a missing declaration or an unexpected axiom and now also audits `value_eq_series` and `series_normal`; `check_order_two.py` is new; `VERIFICATION.md`, `LEDGER.md` and the submission packet are updated to match.
+
 ## Mathematical content
 
 | Version 1.1 | Version 2.0 | Change |
