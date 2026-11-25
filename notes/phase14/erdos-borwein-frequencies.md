@@ -14,7 +14,7 @@ There is an explicit comparison law $`Q_{32}`$ on these integers. At each of the
 \liminf_{N\to\infty} d_{\rm TV}\bigl(\mathcal L(R_{32}(n)),Q_{32}\bigr)>0.006 .
 ```
 
-Here $`d_{\rm TV}`$ is the supremum of the absolute probability difference over events. Thus even **simple normality requires a detectable departure from this independence model in a fixed finite statistic**. The proof uses a certified enclosure $`[0.492230,0.492685]`$ for the one-frequency of the comparison law continued to infinitely many positions. This is a conditional candidate for the digits of $`E`$. The actual limiting one-frequency and the existence of all limiting word frequencies remain open. [Exact model computation](../../scripts/erdos_borwein_poisson.py) · [Finite Lean transfers](ErdosBorweinArrivals.lean)
+Here $`d_{\rm TV}`$ is the supremum of the absolute probability difference over events. Thus even **simple normality requires a detectable departure from this independence model in a fixed finite statistic**. The proof uses a certified enclosure $`[0.492230,0.492685]`$ for the one-frequency of the comparison law continued to infinitely many positions. This is a conditional candidate for the digits of $`E`$. The actual limiting one-frequency and the existence of all limiting word frequencies remain open. [Exact model computation](../../scripts/erdos_borwein_poisson.py) · [Finite Lean transfers](../../NormalityChecker/ErdosBorweinArrivals.lean)
 
 At each fixed remaining denominator $`2^d`$ the mean number of actual terms tends to **one**, and their marks have an explicit limiting distribution. The signed sum of individual phase changes has a limit at every harmonic, with a Gaussian profile in the original offsets. On dyadic windows a pointwise local limit separates each odd residue class at an exact valuation, including its first correction. A separate estimate reduces the full Fourier product to any band of width $`A(N)\sqrt{\log\log N}`$ about $`\log\log N`$, for arbitrarily slowly diverging $`A(N)`$, on all fixed-power windows. The correlations between arrivals govern the full product.
 
@@ -33,7 +33,7 @@ for every integer $`h`$. At fixed $`d`$ there is exactly one possible reading po
 =\sum_{t(m)-d\in I} F(U(m)).
 ```
 
-Taking $`F=1`$ counts sources including multiplicity. For $`1\le d\le N`$, the condition on the right differs from $`m\in I+d`$ only within $`O(\log N)`$ of its two endpoints. Indeed $`0\le V(m)\le\log_2 m`$, and $`t(m)\ge m/2`$ for $`m\ge4`$. In this range all relevant $`m`$ are $`O(N)`$. In particular the mean count on each such level is $`1+O((\log N)/H)`$. The same identity holds with source-dependent weights, including restrictions on $`V(m)`$. [Kernel-checked source phase and finite reindexing](ErdosBorweinArrivals.lean)
+Taking $`F=1`$ counts sources including multiplicity. For $`1\le d\le N`$, the condition on the right differs from $`m\in I+d`$ only within $`O(\log N)`$ of its two endpoints. Indeed $`0\le V(m)\le\log_2 m`$, and $`t(m)\ge m/2`$ for $`m\ge4`$. In this range all relevant $`m`$ are $`O(N)`$. In particular the mean count on each such level is $`1+O((\log N)/H)`$. The same identity holds with source-dependent weights, including restrictions on $`V(m)`$. [Kernel-checked source phase and finite reindexing](../../NormalityChecker/ErdosBorweinArrivals.lean)
 
 For a random model of **one ordinary integer**, take independent exponents $`B_p`$ with $`\Pr(B_p=a)=(1-1/p)p^{-a}`$ for each prime $`p`$ and $`a\ge0`$. Put $`U_* = \prod_p \mathrm{odd}(B_p+1)`$, where $`\mathrm{odd}`$ removes all factors of two. This product is almost surely finite since only exponents at least two can change it. Write $`\nu`$ for its law and $`\mu=\mathbb E U_*`$. In particular $`\nu(1)\ge\prod_p(1-p^{-2})>0`$. For every $`a\ge0`$, $`\mathrm{odd}(a+1)\le1+2\lfloor a/2\rfloor`$. Consequently
 
@@ -150,7 +150,7 @@ An odd-order alternating partial sum bounds $`b_0`$ below. Every remaining recur
 |f_I-p_*|\le \Delta_D+\epsilon_{D,s}+o(1).
 ```
 
-For $`D=32`$, $`s=4096`$ the total carry error is less than $`0.001`$ eventually. If prefix one-frequency tends to $`1/2`$, subtraction of consecutive prefix counts gives $`f_{[N,2N)}\to1/2`$. The certified bound on $`p_*`$ now gives the stated strict gap in total variation. [Kernel-checked finite carry criterion](ErdosBorweinArrivals.lean)
+For $`D=32`$, $`s=4096`$ the total carry error is less than $`0.001`$ eventually. If prefix one-frequency tends to $`1/2`$, subtraction of consecutive prefix counts gives $`f_{[N,2N)}\to1/2`$. The certified bound on $`p_*`$ now gives the stated strict gap in total variation. [Kernel-checked finite carry criterion](../../NormalityChecker/ErdosBorweinArrivals.lean)
 
 ## The missing arithmetic and a finite check
 
@@ -171,7 +171,7 @@ Checked on 24 November 2026. At Mira Cult's public repository head `357d26a`, th
 Captain Sude's September repositories still have heads `bd98789` (conditional Lean disjunctivity), `d51e93e` (unconditional disjunctivity and quantitative prefix count), and `fe33be2` (limiting frequencies and nonnormality for the **different** powers $`m^r`$, $`r\ge2`$). Campbell's arXiv record lists only v1, proving infinitely many occurrences of 11. None of these sources gives the joint displaced-column law used as the comparison here. The analytic estimates and the obstruction in this note are paper deductions. Lean checks the finite phase identity, source reindexing, column mass bound for phase errors, and the one-bit carry criterion. [First Lean release](https://github.com/CaptainSude/erdos-borwein-disjunctivity/tree/bd98789a177470cc4b3e33e6769e859f6144c906) · [Elementary archive](https://github.com/CaptainSude/erdos-borwein-disjunctivity-elementary/tree/d51e93e91ff43efef6918efdd4258bbd43bad7aa) · [Power theorem](https://github.com/CaptainSude/generalized-Lambert-disjunctivity-and-nonnormality/blob/fe33be210446c6c0b127ca7757fc8f1182c5b541/lean/PowerLambert/Results.lean) · [Campbell's version record](https://arxiv.org/abs/2605.24160)
 
 ```sh
-lake env lean notes/phase14/ErdosBorweinArrivals.lean
+lake env lean NormalityChecker/ErdosBorweinArrivals.lean
 python3 scripts/erdos_borwein_arrivals.py
 python3 scripts/erdos_borwein_poisson.py
 ```
