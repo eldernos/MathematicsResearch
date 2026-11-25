@@ -147,7 +147,7 @@ class PageTests(unittest.TestCase):
             for url in c.links:
                 if url.startswith("http"):
                     self.assertRegex(url, r"^https://(github\.com/eldernos|raw\.githubusercontent\.com/eldernos|"
-                                          r"zbmath\.org/classification|example\.org)")
+                                          r"zbmath\.org/classification|www\.alphaxiv\.org/@christopher-anderson|example\.org)")
             self.assertNotIn("fonts.googleapis", text)
         self.assertNotIn("@import", research_site.STYLE)
         self.assertNotIn("url(", research_site.STYLE)

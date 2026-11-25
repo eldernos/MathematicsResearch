@@ -39,6 +39,7 @@ DESCRIPTION = ("AI-assisted mathematical research on normal numbers, digit discr
 AUTHOR_GIVEN, AUTHOR_FAMILY, AFFILIATION = "Christopher", "Anderson", "Independent Researcher"
 AUTHOR_NAME = f"{AUTHOR_GIVEN} {AUTHOR_FAMILY}"
 AUTHOR_BIB = f"{AUTHOR_FAMILY}, {AUTHOR_GIVEN}"
+AUTHOR_PROFILE = "https://www.alphaxiv.org/@christopher-anderson"  # owner-supplied alphaXiv profile
 BIB_FILE = "papers/BIBLIOGRAPHY.bib"
 CANDIDATE_YEAR = "2026"
 REVIEW_STATEMENT = ("Not peer reviewed. The written proofs, literature comparisons and priority statements have "
@@ -254,7 +255,8 @@ def jsonld(p, url, date, keywords, abstract) -> str:
     if named_author(p):
         data["author"] = {"@type": "Person", "name": AUTHOR_NAME, "givenName": AUTHOR_GIVEN,
                           "familyName": AUTHOR_FAMILY,
-                          "affiliation": {"@type": "Organization", "name": AFFILIATION}}
+                          "affiliation": {"@type": "Organization", "name": AFFILIATION},
+                          "url": AUTHOR_PROFILE}
     return json.dumps(data, ensure_ascii=False, indent=2).replace("<", "\\u003c")
 
 
@@ -301,7 +303,8 @@ def page(title, body, *, depth, description, head_extra=(), canonical=None) -> s
 
 def byline(p) -> str:
     if named_author(p):
-        return f'<p class="byline">{esc(AUTHOR_NAME)} · {esc(AFFILIATION)}</p>'
+        return (f'<p class="byline"><a href="{esc(AUTHOR_PROFILE)}">{esc(AUTHOR_NAME)}</a>'
+                f' · {esc(AFFILIATION)}</p>')
     return (f'<p class="byline">{esc(AUTHOR_NAME)} · {esc(AFFILIATION)} (repository owner). '
             "The archived PDF of this version carries no author line.</p>")
 

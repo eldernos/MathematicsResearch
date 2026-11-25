@@ -20,7 +20,7 @@ ALLOWED_KEYS = {"abstract", "authors", "cff-version", "commit", "contact", "date
                 "keywords", "license", "license-url", "message", "preferred-citation", "references",
                 "repository", "repository-artifact", "repository-code", "title", "type", "url", "version"}
 REQUIRED = ("cff-version", "message", "title", "authors")
-AUTHOR_KEYS = {"family-names", "given-names", "affiliation"}  # ORCID, email and the like are not approved
+AUTHOR_KEYS = {"family-names", "given-names", "affiliation", "website"}  # website: owner-supplied alphaXiv profile (2026-11-25); ORCID and email are not approved
 APPROVED = {"family-names": "Anderson", "given-names": "Christopher", "affiliation": "Independent Researcher"}
 SPDX = {"MIT", "Apache-2.0", "CC-BY-4.0", "CC-BY-SA-4.0"}
 

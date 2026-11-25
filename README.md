@@ -236,7 +236,7 @@ Verification runs the exact-arithmetic tests, builds the library, audits the lis
 
 ## Attribution, citation and contributing
 
-The author of the release candidate manuscripts is Christopher Anderson, Independent Researcher; the archived v1.1 manuscripts carry no author line. [How the work was done and what verification covers](docs/attribution.md) · [How to cite](docs/attribution.md#how-to-cite) · [CITATION.cff](CITATION.cff) · [Archiving and DOIs](papers/ARCHIVING.md) · [Licensing proposal](docs/licensing-proposal.md) · [Repository metadata proposal](docs/repository-metadata.md)
+The author of the release candidate manuscripts is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)); the archived v1.1 manuscripts carry no author line, and Paper III v1.2 is its named-author edition. [How the work was done and what verification covers](docs/attribution.md) · [How to cite](docs/attribution.md#how-to-cite) · [CITATION.cff](CITATION.cff) · [Archiving and DOIs](papers/ARCHIVING.md) · [Licensing proposal](docs/licensing-proposal.md) · [Repository metadata proposal](docs/repository-metadata.md)
 
 Original contributions use the [MIT license](LICENSE); the port of Trevor Morris's Weyl criterion retains its [Apache-2.0 license](NormalityChecker/Analysis/Weyl.lean). A separate licence for the manuscripts is proposed and awaits the owner's approval.
 
