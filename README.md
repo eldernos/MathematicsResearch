@@ -166,7 +166,7 @@ Every result family has a place in the [curated result index](docs/results.md), 
 | **Rational-orbit certificates, coverage and rigidity** | [11](docs/results.md#ac-01) (AC-01 to AC-11) | 9 | 2 | 0 | 0 | IV | [survey](docs/survey.md#rational-orbit-certificates) |
 | **Classical constant arithmetic** | [50](docs/results.md#cc-01) (CC-01 to CC-50) | 17 | 15 | 16 | 2 | V, VI, IX | [survey](docs/survey.md#classical-constant-arithmetic) |
 | **Synthetic expansions and translations** | [24](docs/results.md#sy-01) (SY-01 to SY-24) | 7 | 0 | 17 | 0 | VI, VII | [survey](docs/survey.md#iv-designing-the-distribution-through-rational-insertions) |
-| **Arithmetic of discrepancy and unrestricted prime support** | [22](docs/results.md#op-01) (OP-01 to OP-22) | 2 | 1 | 19 | 0 | none yet | [survey](docs/survey.md#v-arithmetic-operations-and-all-prime-support) |
+| **Arithmetic of discrepancy and unrestricted prime support** | [22](docs/results.md#op-01) (OP-01 to OP-22) | 2 | 1 | 19 | 0 | VII | [survey](docs/survey.md#v-arithmetic-operations-and-all-prime-support) |
 <!-- END FAMILIES -->
 
 The families in one sentence each:

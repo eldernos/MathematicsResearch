@@ -91,11 +91,11 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-13](#sy-13) | Prescribing limits of orbit measures with rational insertions | Written proof | VII |
 | [SY-16](#sy-16) ★ | Quantitative convergence on polynomial schedules | Written proof | VII |
 | [SY-24](#sy-24) | Sharp translation rates for the multiplicative Lambert families | Written proof | VI |
-| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean |  |
-| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof |  |
-| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof |  |
+| [OP-01](#op-01) ★ | Exact limiting discrepancy spectrum for addition | Lean | VII |
+| [OP-02](#op-02) | Uniform cubic realization with algebraically independent inputs | Written proof | VII |
+| [OP-03](#op-03) | Spectrum of any finite family of summands and its sum | Written proof | VII |
 | [OP-04](#op-04) | Finite rational forms and approximating their joint spectra | Written proof |  |
-| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean |  |
+| [OP-05](#op-05) ★ | Translation deficits form finite and asymptotic pseudometrics | Lean | VII |
 | [OP-06](#op-06) | Rational scalar ring and fixed-point lifts | Written proof |  |
 | [OP-07](#op-07) | Boundary spectrum and inverse inequality for integer dilation | Written proof |  |
 | [OP-18](#op-18) | Quantitative joint box distribution from an algebraic direction | Written proof |  |
@@ -109,8 +109,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-11](#sy-11) | Geometric grouping and positive programmed states | Lean | VII |
 | [SY-18](#sy-18) | A positive product with a surviving prime at every cutoff | Written proof | VII |
 | [SY-19](#sy-19) | A normal Liouville family on factorial schedules | Written proof | VII |
-| [OP-08](#op-08) ★ | Exact prime-power grid inside a complete rational orbit | Lean + written deduction |  |
-| [OP-09](#op-09) ★ | Normal Liouville series retaining every odd prime | Written proof |  |
+| [OP-08](#op-08) ★ | Exact prime-power grid inside a complete rational orbit | Lean + written deduction | VII |
+| [OP-09](#op-09) ★ | Normal Liouville series retaining every odd prime | Written proof | VII |
 | [OP-10](#op-10) | Full-support series with superpolynomial denominators | Written proof |  |
 | [AC-02](#ac-02) ★ | Partial coverage bounds the discrepancy | Lean | IV |
 | [AC-03](#ac-03) ★ | Rigidity of overlapping smooth rational models | Lean | IV |
@@ -1892,7 +1892,7 @@ For the Phase 17 binary multiplicative Lambert family of support parameter δ, t
 
 ### OP-01 · Exact limiting discrepancy spectrum for addition
 
-**Evidence:** Lean
+**Evidence:** Lean · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting extreme discrepancies of x, y and x+y exactly when max(0, α+β−1) ≤ γ ≤ 1−|α−β|.
 
@@ -1907,7 +1907,7 @@ In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting ex
 
 ### OP-02 · Uniform cubic realization with algebraically independent inputs
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 Every admissible addition triple is realized with simultaneous all-prefix error O(N raised to −1/3), uniformly over triples for fixed radix and retained odd off-radix prime. The inputs may be algebraically independent and computable from computable target weights.
 
@@ -1921,7 +1921,7 @@ Every admissible addition triple is realized with simultaneous all-prefix error 
 
 ### OP-03 · Spectrum of any finite family of summands and its sum
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 For d summands and their total, the d+1 limiting discrepancy deficits range over the unit cube subject to each deficit being at most the sum of the others.
 
@@ -1948,7 +1948,7 @@ For every fixed rational matrix the limiting discrepancy spectrum of its rows is
 
 ### OP-05 · Translation deficits form finite and asymptotic pseudometrics
 
-**Evidence:** Lean
+**Evidence:** Lean · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 One minus the extreme discrepancy of x−y is a translation-invariant pseudometric at every positive sample length. At length at least two its zero set consists exactly of differences fixed modulo one by radix multiplication. Its upper limit is again a pseudometric. Integer multiplication has Lipschitz bound equal to the absolute multiplier.
 
@@ -2188,7 +2188,7 @@ On the schedule t times k factorial, every strictly positive valuation order in 
 
 ### OP-08 · Exact prime-power grid inside a complete rational orbit
 
-**Evidence:** Lean + written deduction
+**Evidence:** Lean + written deduction · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 For an odd prime p and coprime complement Q, the stride that fixes Q and the residue modulo p generates precisely a grid of size p to the positive part of e minus the valuation of b raised to the stride minus one, for modulus pᵉQ.
 
@@ -2203,7 +2203,7 @@ For an odd prime p and coprime complement Q, the stride that fixes Q and the res
 
 ### OP-09 · Normal Liouville series retaining every odd prime
 
-**Evidence:** Written proof
+**Evidence:** Written proof · **Paper:** [VII. Synthetic Arithmetic Expansions and Prescribed Discrepancy](../papers/07-synthetic-expansions) (draft)
 
 Insert a term at position 2 raised to 4m for each odd prime power m=pʲ. Use coefficient 1/m for p different from 3 and 1/m² for p=3. The binary series is normal and Liouville, with all-prefix discrepancy O(1/log N).
 
@@ -3741,7 +3741,7 @@ Let c be a nonnegative integer-valued multiplicative function with c(p^e) <= e+1
 
 **Status:** draft · **Results:** [SY-02](#sy-02) · [SY-01](#sy-01) · [SY-03](#sy-03) · [SY-04](#sy-04) · [Directory](../papers/07-synthetic-expansions)
 
-Valuation-weighted sparse series with an all-prefix normality switch, positive rational expansions with prescribed limiting discrepancy, and the sharp translation identity.
+Fix an integer base b >= 2, a prime p not dividing b, and let t be the order of b modulo p. Insert the coefficient p^(-s v_p(k)) at base-b position t k^d for every k >= 1. For s = 0 the extreme discrepancy tends to one, while for every integer s >= 1 the number is normal to base b; this switch holds on every strictly increasing schedule of multiples of t dominating k^2 and is kernel-verified in Lean 4 together with the exact reduced denominator of every shifted prefix. For odd p and d >= s+2 complete periods give an explicit power rate, and for sum_k 3^(-v_3(k)) 2^(-2k^3) a short proof gives D_N <= 200 N^(-1/3). Positive rational state corrections on a cubic schedule realize every limiting discrepancy in [0,1] with error O(N^(-1/3)), every pair of lower and upper limits, and every nonempty compact connected set of invariant measures as a limit set. We prove sup_x |D_N(x+z) - D_N(x)| = 1 - D_N(z), characterize the translations preserving discrepancy for every input, and determine the exact set of limit triples for x, y, x+y, realized at rate O(N^(-1/3)). A positive binary series using every odd prime as a denominator prime is normal and Liouville with D_N = O(1/log N), while positive rational multiples of its jointly normal components can sum to any positive rational.
 
 ### VIII. Exceptional Orbits and Discrepancy of Stoneham Products (version 1.0)
 
