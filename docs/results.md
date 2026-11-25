@@ -39,6 +39,9 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [ST-27](#st-27) | Joint denominator losses at arbitrary depths in the two-prime product | Lean + written deduction | I |
 | [ST-28](#st-28) | Power-saving discrepancy for coprime Stoneham parameters | Lean + written deduction | I |
 | [ST-29](#st-29) | Removing full rectangles from the mixed-product discrepancy bound | Lean + written deduction | I |
+| [ST-30](#st-30) | Functional equation, transcendence, isometry and integer recurrence for parameter-two quadratics | Lean + written deduction | I |
+| [ST-31](#st-31) | Parameter-two polynomial normality in degrees 3 through 120 and seven infinite cyclic-descent families | Lean + written deduction | I |
+| [ST-32](#st-32) | Discrepancy within 2.85 × 10⁻¹⁰ of 4/11 and iterated-logarithmic sparsity for α(2, 3) α(2, 5) | Lean + written deduction | I |
 | [LS-01](#ls-01) ★ | Unsigned finite-support dichotomy | Lean | II |
 | [LS-02](#ls-02) ★ | Exact discrepancy from persistent cancellation at every order | Lean | II |
 | [LS-03](#ls-03) ★ | Persistent failed regions are null | Lean | II |
@@ -119,6 +122,12 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [CC-39](#cc-39) | Rational ambiguity in eventual upper-band data | Written proof | V |
 | [CC-40](#cc-40) | Affine combinations of nearby Taylor cutoffs retain the odd-denominator rate | Written proof | V |
 | [CC-41](#cc-41) | Cyclotomic trace sources with half-integral binary exponents | Written proof | V |
+| [CC-42](#cc-42) | Adaptive 5/12 denominator obstruction, linear-height thresholds and sharpness | Lean + written deduction | V |
+| [CC-43](#cc-43) | Universal balanced completeness for algebraic logarithmic trace sources | Written proof | V |
+| [CC-44](#cc-44) | Explicit ln 2-free rounded Chebyshev-pole integrals below the 5/12 rate | Lean + written deduction | V |
+| [CC-45](#cc-45) | Weighted Lambert series for ln 2 and structural failure of local isolation | Lean + written deduction | V |
+| [CC-46](#cc-46) | Non-normality and exact disjunctive word order for character Lambert series | Lean + written deduction | V |
+| [CC-47](#cc-47) | Two-source local Euler factors and mesoscopic Poisson correlations for Erdős–Borwein | Written proof | V |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -744,6 +753,65 @@ For the binary product α(2,3)α(2,5), the upper extreme interval discrepancy is
 - **Proof:** [nonrectangular-coverage.md](../notes/phase14/nonrectangular-coverage.md) · [refined-cancellation.md](../notes/phase14/reviews/refined-cancellation.md)
 - **Computation:** [phase14_nonrectangular.py](../scripts/phase14_nonrectangular.py)
 - **Related:** [ST-14](#st-14) · [ST-25](#st-25) · [ST-26](#st-26) · [ST-27](#st-27)
+
+<a id="st-30"></a>
+
+### ST-30 · Functional equation, transcendence, isometry and integer recurrence for parameter-two quadratics
+
+**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+For the shifted parameter-two quadratic *X*² − 2*X* at odd radix *b* ≥ 3 with λ = −Log *b* ∈ 4ℤ₂ and *s* = *v*₂(*b*² − 1) − 1, the 2-adic intercept *C*(λ) and parameter κ₀(λ) = −*C*(λ)/λ satisfy the exact base-change functional equations *C*(2λ) − 2*C*(λ) = 2λ + 1 − *e*<sup>2λ</sup> and κ₀(2λ) − κ₀(λ) = (*e*<sup>2λ</sup> − 1 − 2λ)/(2λ). Both functions are transcendental over ℂ(λ, *e*<sup>λ/2ᵐ</sup> : *m* ≥ 0). The map λ ↦ κ₀(λ) is a bijective isometry of 4ℤ₂ onto −1 + 4ℤ₂ with derivative 1 + *O*(2<sup>*s*+2</sup>).
+
+Define integers by *Z*₁ = 2 − 2*b*² and *Z*<sub>*k*+1</sub> = 2 + 2*b*<sup>2ᵏ</sup>(*Z*<sub>*k*</sub> − 1). On every upper shell 3 · 2<sup>*k*−1</sup> ≤ *n* < 2<sup>*k*+1</sup>, the reduced denominator of the shifted prefix of α² − 2α is unconditionally *q*<sub>*k*</sub> = 2<sup>max(0, 2*k* − 1 − *v*₂(*Z*<sub>*k*</sub>))</sup>, so (α² − 2α)/*D* is normal in base *b* if and only if 2*k* − *v*₂(*Z*<sub>*k*</sub>) → ∞.
+
+**Scope.** Lean kernel-verifies the closed form of *Z*<sub>*k*</sub>, its exact 2-adic identity with Phase 14's cancellation series, and the unconditional upper-shell denominator formula `quadratic_upper_den_eq_quadZ`. Functional equations, function-field transcendence, bijective isometry, Haar-almost-everywhere and Baire-generic parameter results, and the diagnosis of where standard transcendence methods stop are written deductions. Normality of α² − 2α for any fixed integer radix *b* remains open.
+
+- **Lean:** [`quadratic_upper_den_eq_quadZ`](../NormalityChecker/Phase16StonehamBounds.lean#L126) · [`quadZ_closed_form`](../NormalityChecker/Phase16StonehamBounds.lean#L33) · [`quadZ_eq_cancellation`](../NormalityChecker/Phase16StonehamBounds.lean#L68)
+- **Fully qualified:** `NormalityChecker.Phase16StonehamBounds.quadratic_upper_den_eq_quadZ`, `NormalityChecker.Phase16StonehamBounds.quadZ_closed_form`, `NormalityChecker.Phase16StonehamBounds.quadZ_eq_cancellation`
+- **Proof:** [dyadic-stoneham.md](../notes/phase16/dyadic-stoneham.md)
+- **Computation:** [phase16_dyadic_stoneham.py](../scripts/phase16_dyadic_stoneham.py)
+- **Related:** [ST-12](#st-12) · [ST-19](#st-19) · [ST-20](#st-20) · [ST-22](#st-22)
+
+<a id="st-31"></a>
+
+### ST-31 · Parameter-two polynomial normality in degrees 3 through 120 and seven infinite cyclic-descent families
+
+**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+Let *b* ≥ 3 be odd and let α = α(*b*, 2). The leading upper-set mass *M*<sub>*d*</sub>(*t*) is an ordinary integer for every real *t*, depends on [1, 2) only on *t* truncated after its *d*-th binary one, and is computed by a *d*(*d* + 1)/2-state digit automaton. For every degree 3 ≤ *d* ≤ 120, *M*<sub>*d*</sub>(*t*) ≠ 0 on all of [1, 2), with exact minimal certification precision *L*<sub>*d*</sub> = 1 + max<sub>*t*</sub> *v*₂(*M*<sub>*d*</sub>(*t*)).
+
+For every odd prime *p* and integers *r*, *e* ≥ 1, cyclic descent gives *M*<sub>*p*ʳ*e*</sub>(*t*) ≡ 2<sup>*ej*</sup> *M*<sub>*e*</sub>(*y*) (mod *p*) where *y* = 2<sup>*j*</sup>*t*/*p*ʳ ∈ [1, 2). Exhaustive finite-automaton certificates over 𝔽<sub>*p*</sub> verify *M*<sub>*e*</sub>(*y*) ≢ 0 (mod *p*) on [1, 2) for (*e*, *p*) ∈ {(3, 31), (3, 127), (3, 257), (3, 337), (3, 1801), (3, 8191), (4, 8191)}. Consequently *P*(α) is normal in base *b* for every rational polynomial *P* of degree 3 through 120, and for every degree in the seven infinite families *e p*ʳ (*r* ≥ 0), including the even-degree family 4 · 8191ʳ.
+
+**Scope.** The automaton, truncation, cyclic descent and Kraft-point valuation formula are written deductions; the degree 3–120 and modulo-*p* nonvanishing tables are exact integer finite certificates. Transfer to base-*b* normality uses the Phase 14 retained-denominator Lean theorems. Nonvanishing of *M*<sub>*d*</sub> for all *d* ≥ 3 (in particular for powers of two *d* = 2ʳ with *r* ≥ 7 and general even degrees 2*p*ʳ > 120) remains open.
+
+- **Lean:** [`retention_of_binary_grid`](../NormalityChecker/DyadicQuartic.lean#L42) · [`binary_polynomial_normal_of_retention`](../NormalityChecker/DyadicQuartic.lean#L80)
+- **Fully qualified:** `NormalityChecker.StonehamPolynomial.retention_of_binary_grid`, `NormalityChecker.StonehamPolynomial.binary_polynomial_normal_of_retention`
+- **Proof:** [dyadic-stoneham.md](../notes/phase16/dyadic-stoneham.md)
+- **Computation:** [phase16_dyadic_stoneham.py](../scripts/phase16_dyadic_stoneham.py)
+- **Supersedes:** [ST-24](#st-24)
+- **Related:** [ST-12](#st-12) · [ST-13](#st-13) · [ST-23](#st-23) · [ST-24](#st-24)
+
+<a id="st-32"></a>
+
+### ST-32 · Discrepancy within 2.85 × 10⁻¹⁰ of 4/11 and iterated-logarithmic sparsity for α(2, 3) α(2, 5)
+
+**Evidence:** Lean + written deduction · **Paper:** [I. Polynomial Images of Stoneham Numbers with an Odd Prime-Power Parameter](../papers/01-stoneham-polynomials) (internally reviewed)
+
+For *x* = α(2, 3) α(2, 5), the binary extreme interval discrepancy satisfies
+
+```math
+\limsup_{N\to\infty} D_N(x) \le \frac{4}{11} + 2.85 \times 10^{-10} < 0.363636364 .
+```
+
+For each fixed nonrectangular shape (*a*, *b*), distinct active shells retaining at most *r*ᵢ ternary and *s*ᵢ quinary layers satisfy *L*₂ − *L*₁ ≥ 2 · 3<sup>min(*K*₁−*r*₁, *K*₂−*r*₂)−1</sup> and *K*₂ − *K*₁ ≥ 4 · 5<sup>min(*L*₁−*s*₁, *L*₂−*s*₂)−1</sup>, forcing power-tower spacing between successive bounded-denominator shell intervals. Consequently, for every ε > 0, the number of integer scales *m* ≤ *T* containing any cutoff *N* ∈ [*e*ᵐ, *e*ᵐ⁺¹) with *D*<sub>*N*</sub>(*x*) > ε is *O*<sub>ε</sub>(log* *T*), and Σ<sub>*D*<sub>*N*</sub>(*x*)>ε</sub> 1/(*N* log *N*) < ∞.
+
+**Scope.** Lean kernel-verifies the single-shape maximum 4/11 at (1, 1), the exact piecewise-linear boundary-strip bound and the simultaneous ultrametric shell-spacing inequality. The Mahler–Newton decay *v*<sub>*p*</sub>(Δᵏ *g*(0)) ≥ *k* + 1, the 5-case ≤ 2/13 bound for non-(1, 1) shapes, the power-tower sparsity deduction and the 315-shape zero-collision certificate at depths (*h*, *k*) = (9, 7) are paper proofs and exact integer computations. The bound is within 2.85 × 10⁻¹⁰ of the fixed-depth barrier 4/11; ordinary binary normality of *x* remains open.
+
+- **Lean:** [`single_shape_one_one_max`](../NormalityChecker/Phase16StonehamBounds.lean#L232) · [`boundary_strip_piecewise_le`](../NormalityChecker/Phase16StonehamBounds.lean#L248) · [`simultaneous_ultrametric_spacing`](../NormalityChecker/Phase16StonehamBounds.lean#L291)
+- **Fully qualified:** `NormalityChecker.Phase16StonehamBounds.single_shape_one_one_max`, `NormalityChecker.Phase16StonehamBounds.boundary_strip_piecewise_le`, `NormalityChecker.Phase16StonehamBounds.simultaneous_ultrametric_spacing`
+- **Proof:** [mixed-product-precision.md](../notes/phase16/mixed-product-precision.md)
+- **Computation:** [phase16_mixed_product.py](../scripts/phase16_mixed_product.py)
+- **Related:** [ST-14](#st-14) · [ST-25](#st-25) · [ST-26](#st-26) · [ST-27](#st-27) · [ST-29](#st-29)
 
 ## Localized logarithms and polylogarithms
 
@@ -2500,6 +2568,111 @@ Suppose every root of a monic integer polynomial, after a common dyadic scaling,
 - **External inputs:** Cyclotomic distribution and Möbius inversion Phase 14 classification in CC-23
 - **Computation:** [phase15_arithmetic.py](../scripts/phase15_arithmetic.py)
 - **Related:** [CC-23](#cc-23) · [CC-34](#cc-34)
+
+<a id="cc-42"></a>
+
+### CC-42 · Adaptive 5/12 denominator obstruction, linear-height thresholds and sharpness
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+At each cutoff *N*, choose any rational combination *S*<sup>(*N*)</sup> of the real and Gaussian dyadic logarithm sources (or flat trace sources of CC-41) with *S*<sup>(*N*)</sup>(∞) = ln 2, collapsing to a parameter vector θ<sub>*N*</sub> ∈ ℚ⁴ of height *H*<sub>*N*</sub>. Write *q*<sub>*N*</sub> for the reduced denominator of 2<sup>*N*</sup>*S*<sup>(*N*)</sup>(*N*) at homogeneous cutoffs. If log *H*<sub>*N*</sub> = *o*(*N*), then (log *q*<sub>*N*</sub>)/*N* − ρ(θ<sub>*N*</sub>) → 0, where ρ is the fixed-formula rate of CC-23. In particular liminf (log *q*<sub>*N*</sub>)/*N* ≥ 5/12, no limit point lies strictly between 5/12 and 13/30, and staying away from (0, 0, 0, −5) gives liminf ≥ 13/30.
+
+The same two lower bounds persist at linear height up to log *H*<sub>*N*</sub> ≤ *N*/528 and *N*/839 for integer θ<sub>*N*</sub> (and *N*/562 and *N*/862 for rational θ<sub>*N*</sub>). Conversely, integer sequences on the line θ<sub>*N*</sub> = (0, 0, 0, *c*<sub>*N*</sub>) with log |*c*<sub>*N*</sub>| = (ε + *o*(1))*N* beat 5/12 for every ε ∈ (1/12, 19/60) down to the exact integer-line floor 11/60, while unrestricted integer vectors with *u* = 0 achieve rate zero. On the integer *c*-line, every subexponential shifted error forces log |*c*<sub>*N*</sub>| = *o*(*N*) and hence rate at least 5/12.
+
+**Scope.** Lean kernel-verifies the 730-node branch-and-bound certificate over all of ℚ⁴ showing that the active cell mass on cells 1 through 71 is at least 13/30 except at (0, 0, 0, −5) (mass 7/18) and (0, 0, 0, −2) (mass 73/180). The asymptotic transfer, linear-height thresholds, Chinese remainder constructions and shifted-error analysis are written deductions. Over rational *c*<sub>*N*</sub> on the one-parameter line, choosing *c*<sub>*N*</sub> to round *Y*<sub>*N*</sub> to an integer breaks both the 11/60 floor and the error obstruction at height exp((2 + *o*(1))*N*).
+
+- **Lean:** [`global_cell_mass_bound`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1158) · [`minimizer_mass71`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1210) · [`runnerup_mass71`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1220)
+- **Fully qualified:** `NormalityChecker.AdaptiveLogarithmBounds.global_cell_mass_bound`, `NormalityChecker.AdaptiveLogarithmBounds.minimizer_mass71`, `NormalityChecker.AdaptiveLogarithmBounds.runnerup_mass71`
+- **Proof:** [adaptive-logarithms.md](../notes/phase16/adaptive-logarithms.md)
+- **External inputs:** Prime number theorem Phase 14 classification in CC-23 Phase 15 flat trace collapse in CC-41
+- **Computation:** [phase16_adaptive_log.py](../scripts/phase16_adaptive_log.py)
+- **Related:** [CC-23](#cc-23) · [CC-41](#cc-41) · [CC-43](#cc-43) · [CC-44](#cc-44)
+
+<a id="cc-43"></a>
+
+### CC-43 · Universal balanced completeness for algebraic logarithmic trace sources
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let *f* ∈ ℤ[*X*] be any monic balanced polynomial, so every root has the form 2<sup>*a*/*e*</sup>ζ with integers *a* ≥ 0, *e* ≥ 1, gcd(*a*, *e*) = 1 and ζ a root of unity. Put *r* = *e* if *e* is odd and *r* = *e*/2 if *e* is even. Then *f*(*X*) = *g*(*X*ʳ) for a monic flat balanced polynomial *g* ∈ ℤ[*Y*]. At every integer base *t* > *a*/*e* and every real cutoff *x* > 0, the homogeneous logarithmic trace prefix of (*f*, *t*) equals an explicit integer combination of the real and Gaussian dyadic logarithm prefixes of CC-23.
+
+**Scope.** Applies to every degree, every rational binary exponent *a*/*e* and reducible as well as irreducible balanced polynomials. Together with CC-42, no finite rational combination of balanced algebraic trace sources with subexponential height can lower the denominator rate below 5/12. For unbalanced squarefree monic sources (minimal 2-adic valuation μ strictly below the maximal complex log-modulus *A* < *t*), Lagrange interpolation forces a 2-adic denominator penalty of at least ((*A* − μ)/(*t* − *A*)) ln 2 in limsup on top of the odd-prime integral.
+
+- **Proof:** [nonflat-approximants.md](../notes/phase16/nonflat-approximants.md)
+- **External inputs:** Phase 15 Theorem A in CC-41
+- **Computation:** [phase16_nonflat.py](../scripts/phase16_nonflat.py)
+- **Supersedes:** [CC-41](#cc-41)
+- **Related:** [CC-23](#cc-23) · [CC-41](#cc-41) · [CC-42](#cc-42) · [CC-44](#cc-44)
+
+<a id="cc-44"></a>
+
+### CC-44 · Explicit ln 2-free rounded Chebyshev-pole integrals below the 5/12 rate
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Start from any integer pole decomposition ln 2 = Σ *c*ᵢ ∫₀¹ (*a*ᵢ − σᵢ *x*)⁻¹ *dx* with *a*ᵢ − σᵢ *x* > 0 on [0, 1]. Normalize the shifted Chebyshev polynomial *T*<sub>*D*</sub>(2*x* − 1) at each pole *x*ᵢ = σᵢ *a*ᵢ, scale the resulting quotient polynomial by 2ᵉ with *e* = ⌊log₂ minᵢ |*T*<sub>*D*</sub>(2*x*ᵢ − 1)|⌋, and round each coefficient to the nearest integer to form *Q*<sub>*D*</sub> ∈ ℤ[*x*]. With *w* = ⌈log₂(*D*(ln *D* + 1))⌉ + 2 and *N* = *e* − *w*, the explicit rational *Y*<sub>*N*</sub> = −2<sup>−*w*</sup> ∫₀¹ *Q*<sub>*D*</sub>(*x*) *dx* satisfies |2<sup>*N*</sup> ln 2 − *Y*<sub>*N*</sub>| = *O*(1/*N*) and has reduced denominator dividing 2<sup>*w*</sup> lcm(1, …, *D*).
+
+This achieves asymptotic denominator rate at most (ln 2)/(2 ln(1 + √2)) ≈ 0.393220 < 5/12 for the single pole 1/(1 + *x*), at most (ln 2)/(2 ln(2 + √3)) ≈ 0.263162 for the two-stride decomposition 2/(4 − *x*) + 1/(8 + *x*), and arbitrarily close to zero for the *M*-pole telescoping sum Σ<sub>*a*=*M*+1</sub><sup>2*M*</sup> 1/(*a* − *x*).
+
+**Scope.** Lean kernel-verifies the integral denominator divisibility by 2<sup>*w*</sup> lcm(1, …, *D*), the coefficient-rounding integral error bound, the single-pole master error inequality and ∫₀¹ (1 + *x*)⁻¹ *dx* = ln 2. The construction uses no knowledge of ln 2 and extends from the sequence *N*(*D*) to all large *N* via a 2<sup>*O*(1)</sup> adjustment. Rounding breaks homogeneous shift persistence across consecutive *N*, and forcing a linear shift window of *N*/2 bits restores linear 2-adic cost. Exact certified instances reach 0.40530 (single pole), 0.26329 (two-stride) and 0.19696 (*M* = 8).
+
+- **Lean:** [`shifted_poly_integral_den_dvd`](../NormalityChecker/ChebyshevPoleApproximation.lean#L73) · [`chebyshev_pole_master_error`](../NormalityChecker/ChebyshevPoleApproximation.lean#L115) · [`rounding_integral_error`](../NormalityChecker/ChebyshevPoleApproximation.lean#L94) · [`integral_inv_one_add_eq_log_two`](../NormalityChecker/ChebyshevPoleApproximation.lean#L137)
+- **Fully qualified:** `NormalityChecker.ChebyshevPoleApproximation.shifted_poly_integral_den_dvd`, `NormalityChecker.ChebyshevPoleApproximation.chebyshev_pole_master_error`, `NormalityChecker.ChebyshevPoleApproximation.rounding_integral_error`, `NormalityChecker.ChebyshevPoleApproximation.integral_inv_one_add_eq_log_two`
+- **Proof:** [nonflat-approximants.md](../notes/phase16/nonflat-approximants.md)
+- **External inputs:** Prime number theorem
+- **Computation:** [phase16_nonflat.py](../scripts/phase16_nonflat.py)
+- **Related:** [CC-23](#cc-23) · [CC-42](#cc-42) · [CC-43](#cc-43)
+
+<a id="cc-45"></a>
+
+### CC-45 · Weighted Lambert series for ln 2 and structural failure of local isolation
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Write ln 2 = Σ<sub>*m*≥1</sub> *a*<sub>*m*</sub>/(2<sup>*m*</sup> − 1) with *a*<sub>*m*</sub> = (1/*m*) ∏<sub>*p*|*m*</sub> (1 − *p*). For every *m* ≥ 2, the largest prime factor *P*⁺(*m*) divides the reduced denominator of *a*<sub>*m*</sub> to its exact power in *m*. Over odd *m* ≤ *x*, the 2-adic valuation *v*₂(*a*<sub>*m*</sub>) obeys an Erdős–Kac central limit theorem with mean 2 log log *x* + *C*₁ and variance 6 log log *x* + *C*₂ − Σ<sub>*p*>2</sub> *v*₂(*p* − 1)²/*p*² − 2π²/3 + *o*(1).
+
+In binary Lambert coordinates, the shifted head *H*<sub>*N*</sub><sup>Lam</sup> equals the Taylor prefix *R*<sub>*N*</sub> = Σ<sub>*n*≤*N*</sub> 2<sup>*N*−*n*</sup>/*n* identically, every prime *p* ∈ (*N*/2, *N*] satisfies *a*<sub>*p*</sub> 2<sup>*N*−*p*</sup> ≡ 2<sup>*N*−*p*</sup>/*p* (mod 1), and the Lambert tail is less than 1/(*N* + 1).
+
+**Scope.** Lean kernel-verifies the exact head identity, the prime-band congruence, non-cancellation at the largest prime factor and the local Bernoulli bound for the cleared numerator *m a*<sub>*m*</sub>. The Erdős–Kac law and the structural diagnosis explaining why Mira Cult's local isolation fails for ln 2 are paper proofs. Neither proves or disproves normality of ln 2.
+
+- **Lean:** [`lambert_head_eq_taylor`](../NormalityChecker/WeightedLambertIdentities.lean#L21) · [`lambert_prime_band_mod_one`](../NormalityChecker/WeightedLambertIdentities.lean#L100) · [`largest_prime_not_dvd_prod_sub_one`](../NormalityChecker/WeightedLambertIdentities.lean#L110) · [`cleared_local_abs_lt`](../NormalityChecker/WeightedLambertIdentities.lean#L129)
+- **Fully qualified:** `NormalityChecker.WeightedLambertIdentities.lambert_head_eq_taylor`, `NormalityChecker.WeightedLambertIdentities.lambert_prime_band_mod_one`, `NormalityChecker.WeightedLambertIdentities.largest_prime_not_dvd_prod_sub_one`, `NormalityChecker.WeightedLambertIdentities.cleared_local_abs_lt`
+- **Proof:** [weighted-lambert.md](../notes/phase16/weighted-lambert.md)
+- **External inputs:** Siegel–Walfisz theorem Brun–Titchmarsh inequality Billingsley–Kubilius moment method
+- **Computation:** [phase16_weighted_lambert.py](../scripts/phase16_weighted_lambert.py)
+- **Related:** [CC-01](#cc-01) · [CC-20](#cc-20) · [CC-46](#cc-46)
+
+<a id="cc-46"></a>
+
+### CC-46 · Non-normality and exact disjunctive word order for character Lambert series
+
+**Evidence:** Lean + written deduction · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+Let χ be a nonprincipal real Dirichlet character (such as χ₄, where (χ₄ ∗ 1)(*n*) = *r*₂(*n*)/4) and set *L*<sub>χ</sub> = Σ<sub>*m*≥1</sub> χ(*m*)/(2<sup>*m*</sup> − 1). The limiting frequency of ones in the binary expansion of *L*<sub>χ</sub> is zero, with at most *O*<sub>χ</sub>(*N*/√log *N*) ones in the first *N* bits; hence *L*<sub>χ</sub> is unconditionally not simply normal in base two. Conversely, for every fixed binary word *w* and every 7/12 < *a* ≤ 1, *w* occurs at least *c*<sub>*a*,*w*,χ</sub> *H*/√log *N* times in every sufficiently late window [*N*, *N* + *H*) with *N*<sup>*a*</sup> ≤ *H* ≤ *N*. In particular *L*<sub>χ</sub> is base-2 disjunctive, and every binary word containing a one occurs Θ<sub>*w*,χ</sub>(*N*/√log *N*) times in the first *N* bits.
+
+**Scope.** Lean checks the nonnegative arrival-sum one-bit bound and the Phase 14 arrival reindexing. The *O*(*N*/√log *N*) upper bound is a paper deduction via Markov's inequality. The matching lower bound uses planted split primes, Selberg's upper-bound sieve over inert primes and Perelli–Pintz–Salerno's short-interval Bombieri–Vinogradov theorem. The note also classifies rational, powerful-supported, linearly growing and signed full-density benchmarks.
+
+- **Lean:** [`nonneg_one_bit_count_le`](../NormalityChecker/WeightedLambertIdentities.lean#L166) · [`arrival_sum`](../NormalityChecker/ErdosBorweinArrivals.lean#L41)
+- **Fully qualified:** `NormalityChecker.WeightedLambertIdentities.nonneg_one_bit_count_le`, `NormalityChecker.ErdosBorweinArrivals.arrival_sum`
+- **Proof:** [weighted-lambert.md](../notes/phase16/weighted-lambert.md)
+- **External inputs:** Perelli–Pintz–Salerno (1985), short-interval Bombieri–Vinogradov theorem Huxley short-interval prime number theorem Selberg upper-bound sieve
+- **Computation:** [phase16_weighted_lambert.py](../scripts/phase16_weighted_lambert.py)
+- **Related:** [CC-20](#cc-20) · [CC-28](#cc-28) · [CC-35](#cc-35) · [CC-45](#cc-45) · [CC-47](#cc-47)
+
+<a id="cc-47"></a>
+
+### CC-47 · Two-source local Euler factors and mesoscopic Poisson correlations for Erdős–Borwein
+
+**Evidence:** Written proof · **Paper:** [V. Reduced Denominators of Binary Logarithm and Arctangent Series](../papers/05-classical-denominators) (internally reviewed)
+
+For the Erdős–Borwein source displacements *V*(*m*) = *v*₂(τ(*m*)), the exact *p*-adic joint law of (*v*<sub>*p*</sub>(*m*), *v*<sub>*p*</sub>(*m* + *k*)) makes every local Euler factor *R*<sub>*p*</sub>(θ₁, θ₂; *k*) average to exactly one over the Haar law of *k*, and tend to one pointwise in the pretentious range θ = *O*(1/√log log *N*). Assuming the two-form Kubilius comparison K2, the pair correlation of typical sources is asymptotically Poissonian on every mesoscopic scale *L*<sub>*N*</sub> with *L*<sub>*N*</sub> (log log *T*)/log *T* → ∞ (*T* = log log *N*).
+
+**Scope.** The exact spectral and decoupling identities, the *p*-adic joint law and Haar averaging, and non-pretentiousness of *e*(θ *V*(*m*)) (via Vinogradov–Korobov) are proved unconditionally on paper. Mesoscopic pair correlation is a paper deduction from K2. Lattice-scale pair correlation and a conditional disproof of simple normality (via CC-30's *p*<sub>∗</sub> ∈ [0.492230, 0.492685]) are stated explicitly under Hypotheses E and P. Exact counts on [2¹², 2²⁴) give prefix one-frequency 0.494216 at 2²⁴.
+
+- **Proof:** [erdos-borwein-correlations.md](../notes/phase16/erdos-borwein-correlations.md)
+- **External inputs:** Two-form Kubilius model K2 (two-dimensional fundamental lemma of the sieve) Vinogradov–Korobov zero-free region
+- **Computation:** [phase16_erdos_borwein.py](../scripts/phase16_erdos_borwein.py)
+- **Related:** [CC-20](#cc-20) · [CC-28](#cc-28) · [CC-29](#cc-29) · [CC-30](#cc-30) · [CC-35](#cc-35)
 
 ## Counterexamples and impossibility results
 

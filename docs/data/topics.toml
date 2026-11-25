@@ -14,6 +14,7 @@ modules = [
 [stoneham]
 title = "Stoneham polynomial images and products"
 modules = [
+  "Phase16StonehamBounds",
   "PlateauEnvelope", "ProductThreeFiveNonrectangular", "ProductThreeFiveNonrectangularOrdinary",
   "ProductThreeFiveRectangleValuation", "QuadraticPlateauCycle", "QuadraticPlateauSpectrum",
   "DyadicMassCells", "DyadicMissingDiagonal", "DyadicQuartic",
@@ -93,6 +94,7 @@ modules = [
 [classical]
 title = "Classical constant arithmetic"
 modules = [
+  "AdaptiveLogarithmBounds", "ChebyshevPoleApproximation", "WeightedLambertIdentities",
   "ErdosBorweinArrivals", "GaussianLogarithmRelations", "LogarithmPrimaryCharacters",
   "TransitionWindows", "FredholmOrbit", "AffineDenominator",
   "CorrectedNumeratorIncidence", "ErdosBorweinFourier", "GaussianLogarithmCharacters",

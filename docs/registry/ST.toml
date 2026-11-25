@@ -727,3 +727,73 @@ lean = [
 proof = ["notes/phase14/nonrectangular-coverage.md", "notes/phase14/reviews/refined-cancellation.md"]
 computation = ["scripts/phase14_nonrectangular.py"]
 related = ["ST-14", "ST-25", "ST-26", "ST-27"]
+
+[[result]]
+id = "ST-30"
+title = "Functional equation, transcendence, isometry and integer recurrence for parameter-two quadratics"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+For the shifted parameter-two quadratic *X*² − 2*X* at odd radix *b* ≥ 3 with λ = −Log *b* ∈ 4ℤ₂ and *s* = *v*₂(*b*² − 1) − 1, the 2-adic intercept *C*(λ) and parameter κ₀(λ) = −*C*(λ)/λ satisfy the exact base-change functional equations *C*(2λ) − 2*C*(λ) = 2λ + 1 − *e*<sup>2λ</sup> and κ₀(2λ) − κ₀(λ) = (*e*<sup>2λ</sup> − 1 − 2λ)/(2λ). Both functions are transcendental over ℂ(λ, *e*<sup>λ/2ᵐ</sup> : *m* ≥ 0). The map λ ↦ κ₀(λ) is a bijective isometry of 4ℤ₂ onto −1 + 4ℤ₂ with derivative 1 + *O*(2<sup>*s*+2</sup>).
+
+Define integers by *Z*₁ = 2 − 2*b*² and *Z*<sub>*k*+1</sub> = 2 + 2*b*<sup>2ᵏ</sup>(*Z*<sub>*k*</sub> − 1). On every upper shell 3 · 2<sup>*k*−1</sup> ≤ *n* < 2<sup>*k*+1</sup>, the reduced denominator of the shifted prefix of α² − 2α is unconditionally *q*<sub>*k*</sub> = 2<sup>max(0, 2*k* − 1 − *v*₂(*Z*<sub>*k*</sub>))</sup>, so (α² − 2α)/*D* is normal in base *b* if and only if 2*k* − *v*₂(*Z*<sub>*k*</sub>) → ∞.
+'''
+scope = '''
+Lean kernel-verifies the closed form of *Z*<sub>*k*</sub>, its exact 2-adic identity with Phase 14's cancellation series, and the unconditional upper-shell denominator formula `quadratic_upper_den_eq_quadZ`. Functional equations, function-field transcendence, bijective isometry, Haar-almost-everywhere and Baire-generic parameter results, and the diagnosis of where standard transcendence methods stop are written deductions. Normality of α² − 2α for any fixed integer radix *b* remains open.
+'''
+lean = [
+  "NormalityChecker.Phase16StonehamBounds.quadratic_upper_den_eq_quadZ",
+  "NormalityChecker.Phase16StonehamBounds.quadZ_closed_form",
+  "NormalityChecker.Phase16StonehamBounds.quadZ_eq_cancellation",
+]
+proof = ["notes/phase16/dyadic-stoneham.md"]
+computation = ["scripts/phase16_dyadic_stoneham.py"]
+related = ["ST-12", "ST-19", "ST-20", "ST-22"]
+
+[[result]]
+id = "ST-31"
+title = "Parameter-two polynomial normality in degrees 3 through 120 and seven infinite cyclic-descent families"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+Let *b* ≥ 3 be odd and let α = α(*b*, 2). The leading upper-set mass *M*<sub>*d*</sub>(*t*) is an ordinary integer for every real *t*, depends on [1, 2) only on *t* truncated after its *d*-th binary one, and is computed by a *d*(*d* + 1)/2-state digit automaton. For every degree 3 ≤ *d* ≤ 120, *M*<sub>*d*</sub>(*t*) ≠ 0 on all of [1, 2), with exact minimal certification precision *L*<sub>*d*</sub> = 1 + max<sub>*t*</sub> *v*₂(*M*<sub>*d*</sub>(*t*)).
+
+For every odd prime *p* and integers *r*, *e* ≥ 1, cyclic descent gives *M*<sub>*p*ʳ*e*</sub>(*t*) ≡ 2<sup>*ej*</sup> *M*<sub>*e*</sub>(*y*) (mod *p*) where *y* = 2<sup>*j*</sup>*t*/*p*ʳ ∈ [1, 2). Exhaustive finite-automaton certificates over 𝔽<sub>*p*</sub> verify *M*<sub>*e*</sub>(*y*) ≢ 0 (mod *p*) on [1, 2) for (*e*, *p*) ∈ {(3, 31), (3, 127), (3, 257), (3, 337), (3, 1801), (3, 8191), (4, 8191)}. Consequently *P*(α) is normal in base *b* for every rational polynomial *P* of degree 3 through 120, and for every degree in the seven infinite families *e p*ʳ (*r* ≥ 0), including the even-degree family 4 · 8191ʳ.
+'''
+scope = '''
+The automaton, truncation, cyclic descent and Kraft-point valuation formula are written deductions; the degree 3–120 and modulo-*p* nonvanishing tables are exact integer finite certificates. Transfer to base-*b* normality uses the Phase 14 retained-denominator Lean theorems. Nonvanishing of *M*<sub>*d*</sub> for all *d* ≥ 3 (in particular for powers of two *d* = 2ʳ with *r* ≥ 7 and general even degrees 2*p*ʳ > 120) remains open.
+'''
+lean = [
+  "NormalityChecker.StonehamPolynomial.retention_of_binary_grid",
+  "NormalityChecker.StonehamPolynomial.binary_polynomial_normal_of_retention",
+]
+proof = ["notes/phase16/dyadic-stoneham.md"]
+computation = ["scripts/phase16_dyadic_stoneham.py"]
+supersedes = ["ST-24"]
+related = ["ST-12", "ST-13", "ST-23", "ST-24"]
+
+[[result]]
+id = "ST-32"
+title = "Discrepancy within 2.85 × 10⁻¹⁰ of 4/11 and iterated-logarithmic sparsity for α(2, 3) α(2, 5)"
+topic = "stoneham"
+status = "lean+paper"
+statement = '''
+For *x* = α(2, 3) α(2, 5), the binary extreme interval discrepancy satisfies
+
+```math
+\limsup_{N\to\infty} D_N(x) \le \frac{4}{11} + 2.85 \times 10^{-10} < 0.363636364 .
+```
+
+For each fixed nonrectangular shape (*a*, *b*), distinct active shells retaining at most *r*ᵢ ternary and *s*ᵢ quinary layers satisfy *L*₂ − *L*₁ ≥ 2 · 3<sup>min(*K*₁−*r*₁, *K*₂−*r*₂)−1</sup> and *K*₂ − *K*₁ ≥ 4 · 5<sup>min(*L*₁−*s*₁, *L*₂−*s*₂)−1</sup>, forcing power-tower spacing between successive bounded-denominator shell intervals. Consequently, for every ε > 0, the number of integer scales *m* ≤ *T* containing any cutoff *N* ∈ [*e*ᵐ, *e*ᵐ⁺¹) with *D*<sub>*N*</sub>(*x*) > ε is *O*<sub>ε</sub>(log* *T*), and Σ<sub>*D*<sub>*N*</sub>(*x*)>ε</sub> 1/(*N* log *N*) < ∞.
+'''
+scope = '''
+Lean kernel-verifies the single-shape maximum 4/11 at (1, 1), the exact piecewise-linear boundary-strip bound and the simultaneous ultrametric shell-spacing inequality. The Mahler–Newton decay *v*<sub>*p*</sub>(Δᵏ *g*(0)) ≥ *k* + 1, the 5-case ≤ 2/13 bound for non-(1, 1) shapes, the power-tower sparsity deduction and the 315-shape zero-collision certificate at depths (*h*, *k*) = (9, 7) are paper proofs and exact integer computations. The bound is within 2.85 × 10⁻¹⁰ of the fixed-depth barrier 4/11; ordinary binary normality of *x* remains open.
+'''
+lean = [
+  "NormalityChecker.Phase16StonehamBounds.single_shape_one_one_max",
+  "NormalityChecker.Phase16StonehamBounds.boundary_strip_piecewise_le",
+  "NormalityChecker.Phase16StonehamBounds.simultaneous_ultrametric_spacing",
+]
+proof = ["notes/phase16/mixed-product-precision.md"]
+computation = ["scripts/phase16_mixed_product.py"]
+related = ["ST-14", "ST-25", "ST-26", "ST-27", "ST-29"]

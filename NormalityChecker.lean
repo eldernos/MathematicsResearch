@@ -122,3 +122,7 @@ public import NormalityChecker.ProductThreeFiveNonrectangularOrdinary
 public import NormalityChecker.QuadraticPlateauSpectrum
 public import NormalityChecker.FredholmOrbit
 public import NormalityChecker.AffineDenominator
+public import NormalityChecker.WeightedLambertIdentities
+public import NormalityChecker.ChebyshevPoleApproximation
+public import NormalityChecker.Phase16StonehamBounds
+public import NormalityChecker.AdaptiveLogarithmBounds

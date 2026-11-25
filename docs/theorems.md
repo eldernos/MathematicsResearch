@@ -2,19 +2,19 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1096 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1120 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
 - [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 108 declarations
-- [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 304 declarations
+- [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
 - [Cyclotomic resonance and finite combinations](#cyclotomic-resonance-and-finite-combinations) · 54 declarations
 - [Signed expansions, exact discrepancy and symbolic spectra](#signed-expansions-exact-discrepancy-and-symbolic-spectra) · 39 declarations
 - [Rational-orbit certificates](#rational-orbit-certificates) · 44 declarations
 - [Complementary coverage, rigidity and limitations of models](#complementary-coverage-rigidity-and-limitations-of-models) · 17 declarations
-- [Classical constant arithmetic](#classical-constant-arithmetic) · 234 declarations
+- [Classical constant arithmetic](#classical-constant-arithmetic) · 251 declarations
 
 ## Normality, discrepancy and Fourier criteria
 
@@ -364,8 +364,8 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`StonehamPolynomial.retention_of_binary_grid`](../NormalityChecker/DyadicQuartic.lean#L42) [ST-24](results.md#st-24) | The finite grid covers a whole late shell, including the insertion at its left endpoint. |
-| [`StonehamPolynomial.binary_polynomial_normal_of_retention`](../NormalityChecker/DyadicQuartic.lean#L80) [ST-24](results.md#st-24) | A retained dyadic degree permits arbitrary rational lower coefficients. |
+| [`StonehamPolynomial.retention_of_binary_grid`](../NormalityChecker/DyadicQuartic.lean#L42) [ST-24](results.md#st-24) [ST-31](results.md#st-31) | The finite grid covers a whole late shell, including the insertion at its left endpoint. |
+| [`StonehamPolynomial.binary_polynomial_normal_of_retention`](../NormalityChecker/DyadicQuartic.lean#L80) [ST-24](results.md#st-24) [ST-31](results.md#st-31) | A retained dyadic degree permits arbitrary rational lower coefficients. |
 | [`StonehamPolynomial.quartic_retains_denominator`](../NormalityChecker/DyadicQuartic.lean#L100) [ST-23](results.md#st-23) |  |
 | [`StonehamPolynomial.quartic_polynomial_normal`](../NormalityChecker/DyadicQuartic.lean#L109) [ST-23](results.md#st-23) | Every rational polynomial of degree four evaluated at the standard positive-index Stoneham number of parameter two is normal in its odd radix. |
 | [`StonehamPolynomial.fourth_power_normal`](../NormalityChecker/DyadicQuartic.lean#L116) |  |
@@ -516,6 +516,20 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`StonehamPolynomial.uniform_padic_box_precision`](../NormalityChecker/PeriodicPolynomialPrecision.lean#L40) | Nonzero limits for individual upper sets give a single precision valid for all upper sets through the anchor, at every larger box size and precision. |
 | [`StonehamPolynomial.exists_reflected_cycles`](../NormalityChecker/PeriodicPolynomialPrecision.lean#L129) | The reflected inverse radix agrees at precision `p^L` with one of finitely many periodic cycles. |
+
+### Phase16StonehamBounds
+
+[`NormalityChecker/Phase16StonehamBounds.lean`](../NormalityChecker/Phase16StonehamBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase16StonehamBounds.quadZ_closed_form`](../NormalityChecker/Phase16StonehamBounds.lean#L33) [ST-30](results.md#st-30) | Closed-form sum formula for `quadZ b j`: `Z_{j+1} = 1 - 2^(j+1) * b^(2^(j+1)) + ∑_{i=0}^j 2^(j - i) * b^(2^(j+1) - 2^(i+1))`. |
+| [`Phase16StonehamBounds.quadZ_eq_cancellation`](../NormalityChecker/Phase16StonehamBounds.lean#L68) [ST-30](results.md#st-30) | Exact 2-adic link between `quadZ b j` and Phase 14's `cancellation b j` (= `T_{j+1}`): in `ℚ_[2]`, `quadZ b j = 2^(j+1) * b^(2^(j+1)) * cancellation b j`! |
+| [`Phase16StonehamBounds.quadratic_upper_den_eq_quadZ`](../NormalityChecker/Phase16StonehamBounds.lean#L126) [ST-30](results.md#st-30) | Exact upper-shell denominator formula for `X^2 - 2X` in terms of `quadZ`: on `3 * 2^j ≤ n < 2^(j+2)`, `den(prefix b n 1 (-2) C₀) = max 1 (2^(2*j+1) * ‖quadZ b… |
+| [`Phase16StonehamBounds.single_shape_one_one_max`](../NormalityChecker/Phase16StonehamBounds.lean#L232) [ST-32](results.md#st-32) | Exact single-shape maximum relative length for the primary corner `(1, 1)` of `α_{2,3} α_{2,5}`: for every positive ratio `r = Q/P > 0`, `min(4r/5, 2/3) / (1… |
+| [`Phase16StonehamBounds.single_shape_one_one_attained`](../NormalityChecker/Phase16StonehamBounds.lean#L241) |  |
+| [`Phase16StonehamBounds.boundary_strip_piecewise_le`](../NormalityChecker/Phase16StonehamBounds.lean#L248) [ST-32](results.md#st-32) | Exact piecewise-linear boundary-strip upper bound for base `p > 1`, `0 < η < 1`, `p * η ≤ p - 1` (e.g. |
+| [`Phase16StonehamBounds.simultaneous_ultrametric_spacing`](../NormalityChecker/Phase16StonehamBounds.lean#L291) [ST-32](results.md#st-32) | Simultaneous ultrametric separation for active shells of the same nonrectangular shape: if two distinct shells `(K₁, L₁)` and `(K₂, L₂)` with `L₁ < L₂` and… |
 
 ### PlateauEnvelope
 
@@ -2170,6 +2184,16 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 ## Classical constant arithmetic
 
+### AdaptiveLogarithmBounds
+
+[`NormalityChecker/AdaptiveLogarithmBounds.lean`](../NormalityChecker/AdaptiveLogarithmBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AdaptiveLogarithmBounds.global_cell_mass_bound`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1158) [CC-42](results.md#cc-42) | Global optimality and uniform finite-cell bound over all of `ℚ⁴`: every `(a, u, b, c) ∈ ℚ⁴` either has active prime-band mass at least `13/30` already on… |
+| [`AdaptiveLogarithmBounds.minimizer_mass71`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1210) [CC-42](results.md#cc-42) | Exact active mass on `1 ≤ v ≤ 71` for the `5/12` minimizer `(0, 0, 0, -5)` is `7/18`. |
+| [`AdaptiveLogarithmBounds.runnerup_mass71`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1220) [CC-42](results.md#cc-42) | Exact active mass on `1 ≤ v ≤ 71` for the `13/30` runner-up `(0, 0, 0, -2)` is `73/180`. |
+
 ### AdjacentShadow
 
 [`NormalityChecker/AdjacentShadow.lean`](../NormalityChecker/AdjacentShadow.lean)
@@ -2239,6 +2263,20 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`normalizedChebyshev_eval`](../NormalityChecker/ChebyshevModels.lean#L31) |  |
 | [`normalizedChebyshev_bound`](../NormalityChecker/ChebyshevModels.lean#L35) |  |
 | [`full_degree_log_error`](../NormalityChecker/ChebyshevModels.lean#L48) | Uniform error for the actual logarithm, using one polynomial of exact degree d. |
+
+### ChebyshevPoleApproximation
+
+[`NormalityChecker/ChebyshevPoleApproximation.lean`](../NormalityChecker/ChebyshevPoleApproximation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ChebyshevPoleApproximation.lcmRange_pos`](../NormalityChecker/ChebyshevPoleApproximation.lean#L26) |  |
+| [`ChebyshevPoleApproximation.succ_dvd_lcmRange`](../NormalityChecker/ChebyshevPoleApproximation.lean#L42) | Every `k + 1` with `k < D` divides `lcmRange D`. |
+| [`ChebyshevPoleApproximation.poly_integral_den_dvd_lcmRange`](../NormalityChecker/ChebyshevPoleApproximation.lean#L47) | The integral `∑_{k < D} Q k / (k + 1)` of an integer polynomial of degree `< D` has reduced denominator dividing `lcmRange D`. |
+| [`ChebyshevPoleApproximation.shifted_poly_integral_den_dvd`](../NormalityChecker/ChebyshevPoleApproximation.lean#L73) [CC-44](results.md#cc-44) | After dividing by `2^w`, the shifted rational `Y_N = -2^{-w} ∫_0^1 Q_D(x) dx` has reduced denominator dividing `2^w * lcmRange D`. |
+| [`ChebyshevPoleApproximation.rounding_integral_error`](../NormalityChecker/ChebyshevPoleApproximation.lean#L94) [CC-44](results.md#cc-44) | Rounding error bound on `[0, 1]`: if `\|Q k - R k\| ≤ 1/2` for all `k < D`, then `\|∑_{k < D} Q k / (k + 1) - ∑_{k < D} R k / (k + 1)\| ≤ (1/2) ∑_{k < D} 1 / (k +… |
+| [`ChebyshevPoleApproximation.chebyshev_pole_master_error`](../NormalityChecker/ChebyshevPoleApproximation.lean#L115) [CC-44](results.md#cc-44) | Master error bound for the single-pole (`1/(1+x)`) rounded Chebyshev-pole approximant: given the exact pole identity `2^e ln 2 + ∫_0^1 R_D = (2^e / T(-1))… |
+| [`ChebyshevPoleApproximation.integral_inv_one_add_eq_log_two`](../NormalityChecker/ChebyshevPoleApproximation.lean#L137) [CC-44](results.md#cc-44) | Exact integral of `1/(1+x)` over `[0, 1]` equals `Real.log 2`. |
 
 ### CorrectedNumeratorIncidence
 
@@ -2340,7 +2378,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`ErdosBorweinArrivals.source_phase`](../NormalityChecker/ErdosBorweinArrivals.lean#L16) [CC-28](results.md#cc-28) [CC-29](results.md#cc-29) | A coefficient with valuation at least its raw offset contributes an integral turn. |
-| [`ErdosBorweinArrivals.arrival_sum`](../NormalityChecker/ErdosBorweinArrivals.lean#L41) [CC-28](results.md#cc-28) | Averaging one denominator level counts each source exactly once when its displaced position belongs to the translated window. |
+| [`ErdosBorweinArrivals.arrival_sum`](../NormalityChecker/ErdosBorweinArrivals.lean#L41) [CC-28](results.md#cc-28) [CC-46](results.md#cc-46) | Averaging one denominator level counts each source exactly once when its displaced position belongs to the translated window. |
 | [`ErdosBorweinArrivals.tail_phase_bound`](../NormalityChecker/ErdosBorweinArrivals.lean#L56) [CC-29](results.md#cc-29) | Mean error after restoring discarded denominator levels. |
 | [`ErdosBorweinArrivals.one_bit_carry`](../NormalityChecker/ErdosBorweinArrivals.lean#L86) [CC-30](results.md#cc-30) | On a grid of size `2*q`, adding a carry below `s` can create a one only in the last `s` cells of the lower half. |
 
@@ -2744,6 +2782,20 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`ShadowCancellations.diagonal_small_denominators_density_zero`](../NormalityChecker/TypicalShadow.lean#L157) [CC-11](results.md#cc-11) | For each `ε>0`, the fully corrected denominators exceed `exp((1-ε)n)` outside a set of indices of natural density zero. |
 | [`ShadowCancellations.missing_fraction_price`](../NormalityChecker/TypicalShadow.lean#L161) |  |
 | [`ShadowCancellations.missing_prime_fraction_density_zero`](../NormalityChecker/TypicalShadow.lean#L186) [CC-11](results.md#cc-11) | For each fixed positive fraction, the indices losing that fraction of the primes in `(n,2n]` have natural density zero. |
+
+### WeightedLambertIdentities
+
+[`NormalityChecker/WeightedLambertIdentities.lean`](../NormalityChecker/WeightedLambertIdentities.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`WeightedLambertIdentities.lambert_head_eq_taylor`](../NormalityChecker/WeightedLambertIdentities.lean#L21) [CC-45](results.md#cc-45) | Finite Lambert-to-Taylor head reindexing: for any rational weight sequence `a`, summing `a m * ∑_{r=1}^{⌊N/m⌋} 2^{N - m*r}` over `1 ≤ m ≤ N` equals the… |
+| [`WeightedLambertIdentities.lambert_prime_band_mod_one`](../NormalityChecker/WeightedLambertIdentities.lean#L100) [CC-45](results.md#cc-45) | Exact prime-band identity in the Lambert head: for every prime `p` with `N/2 < p ≤ N`, the single Lambert term `a_p * 2^{N - p}` differs from the Taylor term… |
+| [`WeightedLambertIdentities.largest_prime_not_dvd_prod_sub_one`](../NormalityChecker/WeightedLambertIdentities.lean#L110) [CC-45](results.md#cc-45) | Non-cancellation at the largest prime factor: if `p` is prime and every prime `q ∈ S` satisfies `q ≤ p`, then `p` does not divide `∏ q ∈ S, (q - 1)`. |
+| [`WeightedLambertIdentities.cleared_local_abs_lt`](../NormalityChecker/WeightedLambertIdentities.lean#L129) [CC-45](results.md#cc-45) | Local Bernoulli bound for the integer-cleared numerator `g(m) = m a_m = ∏_{p\|m}(1-p)`: for every prime `p` and exponent `e ≥ 1`, `\|1 + e * (1 - p)\| < p^e`. |
+| [`WeightedLambertIdentities.cleared_local_odd`](../NormalityChecker/WeightedLambertIdentities.lean#L149) | Parity of the local factor of `(m a_m) * 1`: for every odd prime `p` and `e ≥ 1`, `1 + e * (1 - p)` is odd (so odd primes contribute zero 2-adic valuation). |
+| [`WeightedLambertIdentities.cleared_local_two_eq_zero_iff`](../NormalityChecker/WeightedLambertIdentities.lean#L159) | At `p = 2`, the local factor `1 + e * (1 - 2) = 1 - e` vanishes iff `e = 1`, explaining the exact zero locus `n ≡ 2 (mod 4)` of `(m a_m) * 1`. |
+| [`WeightedLambertIdentities.nonneg_one_bit_count_le`](../NormalityChecker/WeightedLambertIdentities.lean#L166) [CC-46](results.md#cc-46) | Markov 1-bit upper bound for nonnegative integer Lambert series (such as `L_{chi_4}`): if each position `n ∈ window` has nonnegative unwrapped sum `S n ≥ 0`… |
 
 ### WindowShadow
 
