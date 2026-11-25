@@ -351,13 +351,17 @@ def compute():
     for source, target, result, name in [
         ("SmoothOrbit", "RetirementDenominator", "SY-02", "fixed_support_orbit_estimate"),
         ("SharpTranslation", "Phase18Synthetic", "SY-12", "sharp_translation"),
+        ("SharpTranslation", "AdditionSpectrum", "OP-01", "sharp_translation"),
+        ("SharpTranslation", "DiscrepancyGeometry", "OP-05", "sharp_translation"),
+        ("SurvivingGrid", "PrimePowerGrid", "OP-08", "stride_order"),
     ]:
         assert source in clo[target] and any(n == name for _, n in decls[source])
         assert word(re.escape(name)).search(text[target]) or f"{source}.{name}" in text[target]
         synthetic.append({"result": result, "declaration_used": name, "used_in": target,
                           "import_path": shortest_path(graph, target, source)})
     return {"verified": verified, "foundation": foundation, "historical": historical,
-            "synthetic": synthetic,
+            "synthetic": [edge for edge in synthetic if edge["result"].startswith("SY-")],
+            "operations": [edge for edge in synthetic if edge["result"].startswith("OP-")],
             "paper": paper, "modules": len(graph),
             "joint_public_declarations_unused": joint_names}
 
@@ -377,6 +381,8 @@ def data_files(data):
            "paper_inputs": data["paper"],
            "synthetic_extension": {"proof_map": "notes/phase18/dependencies.md",
                                    "checked_imports": data["synthetic"]},
+           "operations_extension": {"proof_map": "notes/phase19/README.md",
+                                    "checked_imports": data["operations"]},
            "joint_persistent_public_declarations_unused": data["joint_public_declarations_unused"]}
     return {"proof-dependency-map.json": json.dumps(out, indent=1, ensure_ascii=False) + "\n"}
 

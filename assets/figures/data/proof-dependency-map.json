@@ -1,6 +1,6 @@
 {
  "description": "Proof-dependency map. Solid edges are checked against the import graph of NormalityChecker/**/*.lean: each source module is transitively imported by a target module (shortest path recorded) and a public declaration of the source is referenced on such a path. Dashed edges are historical; dotted edges are paper-only inputs.",
- "modules_parsed": 248,
+ "modules_parsed": 252,
  "foundation_modules": [
   "Basic",
   "Analysis.Weyl",
@@ -1201,6 +1201,38 @@
     "import_path": [
      "Phase18Synthetic",
      "SharpTranslation"
+    ]
+   }
+  ]
+ },
+ "operations_extension": {
+  "proof_map": "notes/phase19/README.md",
+  "checked_imports": [
+   {
+    "result": "OP-01",
+    "declaration_used": "sharp_translation",
+    "used_in": "AdditionSpectrum",
+    "import_path": [
+     "AdditionSpectrum",
+     "SharpTranslation"
+    ]
+   },
+   {
+    "result": "OP-05",
+    "declaration_used": "sharp_translation",
+    "used_in": "DiscrepancyGeometry",
+    "import_path": [
+     "DiscrepancyGeometry",
+     "SharpTranslation"
+    ]
+   },
+   {
+    "result": "OP-08",
+    "declaration_used": "stride_order",
+    "used_in": "PrimePowerGrid",
+    "import_path": [
+     "PrimePowerGrid",
+     "SurvivingGrid"
     ]
    }
   ]
