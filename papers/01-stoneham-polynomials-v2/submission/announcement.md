@@ -1,7 +1,7 @@
 ## X
 
-Every nonconstant rational polynomial in a Stoneham number is normal in its defining radix for coprime parameter c > 2. This draft gives a Lean proof of Mira Cult’s ordinary-parameter case and exact dyadic certificates for degrees 3–120 and 128.
+Lean 4 formalization of Mira Cult’s S08 for ordinary Stoneham numbers (Thm. 1.1, Cors. 1.2–1.3). We make its effective saving explicit. At parameter two, exact certificates cover degrees 3–120 and 128. AI-assisted; not peer reviewed.
 
 ## Mathematics forum
 
-What happens to the digit distribution of a Stoneham number when it is squared? For coprime b ≥ 2 and c > 2, every rational polynomial of positive degree preserves base-b normality at α(b,c). We give a Lean proof of the ordinary Stoneham case of Mira Cult’s October theorem and derive explicit scalar discrepancy exponents. At c = 2 a leading denominator can cancel on an entire half-shell. The square is still normal, and exact mass certificates cover degrees 3 through 120 and 128. We welcome specialist scrutiny of the transfer from the finite digit automaton to all real cuts and of the open quadratic α² − 2α.
+Mira Cult’s S08, Theorem 1.1 and Corollaries 1.2–1.3, gives polynomial normality and joint distributions for the ordinary Stoneham series at coprime parameters c > 2. This AI-assisted manuscript gives a complete Lean 4 proof of the ordinary case and an explicit scalar exponent for the effective saving already in S08. At c = 2 the square loses its leading denominator on half a shell yet remains normal. A written transfer from finite certificates gives further degrees. We welcome specialist review of that transfer and of the unresolved quadratic α² − 2α. The draft has not received independent human peer review.
