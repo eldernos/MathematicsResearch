@@ -71,6 +71,13 @@ batch = 1
 reviews = ["review-1", "review-2", "resolution"]
 
 [[paper]]
+id = "H"
+dir = "10-discrepancy-arithmetic"
+version = "1.0"
+batch = 1
+reviews = ["review-1", "review-2", "resolution"]
+
+[[paper]]
 id = "D"
 dir = "08-stoneham-product-orbits"
 version = "1.0"

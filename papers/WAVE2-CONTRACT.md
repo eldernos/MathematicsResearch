@@ -31,6 +31,7 @@ Use these exact labels in manuscripts (theorem notes or a verification table), l
 | A | `papers/06-multiplicative-lambert/` | 1.0 | new |
 | B | `papers/01-stoneham-polynomials-v2/` | 2.0 (revises Paper I v1.1) | `papers/01-stoneham-polynomials/` |
 | C | `papers/07-synthetic-expansions/` | 1.0 | new |
+| H | `papers/10-discrepancy-arithmetic/` | 1.0 | new (split from C on 2026-11-25; first batch, since A and C cite it) |
 | D | `papers/08-stoneham-product-orbits/` | 1.0 | new |
 | E | `papers/02-localized-normality-v2/` | 2.0 (revises Paper II v1.1) | `papers/02-localized-normality/` |
 | F | `papers/05-classical-denominators-v2/` | 2.0 (revises Paper V v1.1) | `papers/05-classical-denominators/` |
