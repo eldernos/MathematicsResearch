@@ -1,36 +1,38 @@
 # alphaXiv AI Track submission settings for this manuscript, read by scripts/alphaxiv_publish.py.
 # Title, abstract and authors come from ../metadata.toml. Licence and subject category are chosen in the
-# alphaXiv web form (they are not API fields); proposed: math.NT, licence per docs/licensing-proposal.md.
+# alphaXiv web form (they are not API fields): proposed math.NT, licence CC BY 4.0 (papers/LICENSE.md).
 #
-# OWNER ACTION: review every rating and tool record below against what actually happened, then set
-# owner_confirmed = true. Ratings are "ai", "mixed" or "human" (alphaXiv requires all five stages).
+# OWNER ACTION: check every rating and tool record below against the development record (the writer,
+# reviewer and reviser of each report are named in papers/reviews/01-stoneham-polynomials-v2/), then change the next line to
+# owner_confirmed = true. A dry run works without confirmation; an actual submission is refused until then.
+# Ratings are "ai", "mixed" or "human"; alphaXiv requires all five stages.
 owner_confirmed = false
 url_slug = "polynomial-images-of-stoneham-numbers"
 
 [ai_disclosure.stages]
-idea = "mixed"         # proposed: the owner chose the questions and directions; models proposed the conjectures
-literature = "ai"
-experiments = "ai"     # exact computations and Lean formalization
-analysis = "ai"
-writing = "ai"
+idea = "mixed"         # the owner chose the questions and directions; models proposed the conjectures
+literature = "ai"      # literature search and comparison by models
+experiments = "ai"     # exact computations and Lean 4 formalization by models
+analysis = "ai"        # proofs and their checking by models
+writing = "ai"         # manuscript drafting and revision by models
 
 [[ai_disclosure.tools]]
 model = "Claude, GPT and Gemini models (several versions)"
 harness = "Claude Code, OpenAI Codex and Antigravity agents orchestrated in T3 Code"
-contribution = "Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases"
+contribution = "Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases (Phases 1-19)"
 
 [[ai_disclosure.tools]]
 model = "GPT-6.2 Astra"
 harness = "OpenAI Codex (T3 Code)"
-contribution = "Drafted and revised the manuscript and proofs"
+contribution = "Drafted the version 2.0 manuscript and began the revision in response to both reviews"
 
 [[ai_disclosure.tools]]
 model = "Claude Opus 5.5"
 harness = "Claude Code (T3 Code)"
-contribution = "Independent referee report"
+contribution = "Independent referee report; after the GPT revision was interrupted, completed the revision and resolution record"
 
 [[ai_disclosure.tools]]
 model = "Gemini 4 Argon"
 harness = "Antigravity (T3 Code)"
-contribution = "Independent referee report (sources and Lean correspondence)"
+contribution = "Independent referee report (primary sources and Lean correspondence)"
 

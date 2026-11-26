@@ -1,8 +1,10 @@
 # alphaXiv records of published manuscripts, read by scripts/alphaxiv_publish.py.
-# After alphaXiv accepts a submission, add its URL here so that later versions are posted with
-# `new_version_of` instead of creating a duplicate record. One entry per manuscript directory.
+# Records are keyed by the manuscript's permanent identifier (`id` in its metadata.toml), not by its directory,
+# so a revision in a new directory (for example a future 06-multiplicative-lambert-v2) is posted with
+# `new_version_of` and keeps the same alphaXiv URL. Add an entry after alphaXiv accepts a submission, and
+# append to `versions` for each later version. The script refuses to resubmit a recorded version.
 #
 # [[record]]
-# dir = "06-multiplicative-lambert"
+# id = "VI"
 # alphaxiv = "https://www.alphaxiv.org/abs/<id>"
-# versions = [{ version = "1.0", release = "manuscripts-v2.0.0", published = "YYYY-MM-DD" }]
+# versions = [{ version = "1.0", release = "manuscripts-v2.0.0", dir = "06-multiplicative-lambert", published = "YYYY-MM-DD" }]

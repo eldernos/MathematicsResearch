@@ -1,12 +1,13 @@
 name: Publish to alphaXiv
-# Manual only. Publishing is public and screened by alphaXiv; it is never triggered by a push.
-# Before the first run, the owner creates the GitHub environment `alphaxiv` with themselves as a required
-# reviewer and stores the alphaXiv API key (Settings > MCP/API on alphaxiv.org) as its secret ALPHAXIV_API_KEY.
+# Manual only; never triggered by a push. A dry run validates and prints the request (including unconfirmed
+# disclosure metadata). A real submission runs only from an approved release tag, in the protected `alphaxiv`
+# environment, whose required reviewer is the owner and whose secret ALPHAXIV_API_KEY holds the alphaXiv API key.
+# Inputs reach the shell only through environment variables, are validated, and are never interpolated.
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: Release tag or commit to publish from (must contain the recorded PDF)
+      release:
+        description: Approved release tag (for example manuscripts-v2.0.0)
         required: true
         default: manuscripts-v2.0.0
       paper:
@@ -25,7 +26,7 @@ on:
           - 03-signed-resonance-v1.2
           - 09-erdos-borwein-note
       publish:
-        description: Actually submit (unchecked = dry run that only validates and prints the request)
+        description: Actually submit (unchecked = dry run)
         type: boolean
         default: false
 permissions:
@@ -38,46 +39,51 @@ jobs:
     if: ${{ !inputs.publish }}
     runs-on: ubuntu-latest
     steps:
+      - name: Validate inputs
+        env:
+          RELEASE: ${{ inputs.release }}
+          PAPER: ${{ inputs.paper }}
+        run: |
+          [[ "$RELEASE" =~ ^manuscripts-v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "invalid release tag"; exit 1; }
+          [[ "$PAPER" =~ ^[0-9]{2}-[a-z0-9.-]+$ ]] || { echo "invalid paper directory"; exit 1; }
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
-          ref: ${{ inputs.ref }}
-      - name: Check the archived PDFs and their review records
-        run: python3 -B papers/check_release.py --require-reviews
-      - name: Prepare or publish
+          ref: refs/tags/${{ inputs.release }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Dry run
         env:
-          ALPHAXIV_API_KEY: ${{ secrets.ALPHAXIV_API_KEY }}
+          PAPER: ${{ inputs.paper }}
         run: |
-          set -o pipefail
-          flag=""
-          if [ "${{ inputs.publish }}" = "true" ]; then flag="--publish"; fi
-          python3 -B scripts/alphaxiv_publish.py "papers/${{ inputs.paper }}" $flag --result "$RUNNER_TEMP/alphaxiv.json" | tee "$RUNNER_TEMP/request.txt"
-          {
-            echo "### alphaXiv: ${{ inputs.paper }} at ${{ inputs.ref }}"
-            echo '```json'; cat "$RUNNER_TEMP/request.txt"; echo '```'
-            if [ -f "$RUNNER_TEMP/alphaxiv.json" ]; then echo '```json'; cat "$RUNNER_TEMP/alphaxiv.json"; echo '```'; fi
-            echo "Record the returned URL in papers/alphaxiv-records.toml so later versions use new_version_of."
-          } >> "$GITHUB_STEP_SUMMARY"
+          set -euo pipefail
+          python3 -B papers/check_release.py --require-reviews --verify-history
+          python3 -B scripts/alphaxiv_publish.py "papers/$PAPER" | tee "$RUNNER_TEMP/request.json"
+          { echo "### alphaXiv dry run: $PAPER"; echo '```json'; cat "$RUNNER_TEMP/request.json"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
   publish:
     if: ${{ inputs.publish }}
     runs-on: ubuntu-latest
     environment: alphaxiv
     steps:
+      - name: Validate inputs
+        env:
+          RELEASE: ${{ inputs.release }}
+          PAPER: ${{ inputs.paper }}
+        run: |
+          [[ "$RELEASE" =~ ^manuscripts-v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "invalid release tag"; exit 1; }
+          [[ "$PAPER" =~ ^[0-9]{2}-[a-z0-9.-]+$ ]] || { echo "invalid paper directory"; exit 1; }
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
-          ref: ${{ inputs.ref }}
-      - name: Check the archived PDFs and their review records
-        run: python3 -B papers/check_release.py --require-reviews
-      - name: Prepare or publish
+          ref: refs/tags/${{ inputs.release }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Publish from the approved release commit
         env:
+          RELEASE: ${{ inputs.release }}
+          PAPER: ${{ inputs.paper }}
           ALPHAXIV_API_KEY: ${{ secrets.ALPHAXIV_API_KEY }}
         run: |
-          set -o pipefail
-          flag=""
-          if [ "${{ inputs.publish }}" = "true" ]; then flag="--publish"; fi
-          python3 -B scripts/alphaxiv_publish.py "papers/${{ inputs.paper }}" $flag --result "$RUNNER_TEMP/alphaxiv.json" | tee "$RUNNER_TEMP/request.txt"
-          {
-            echo "### alphaXiv: ${{ inputs.paper }} at ${{ inputs.ref }}"
-            echo '```json'; cat "$RUNNER_TEMP/request.txt"; echo '```'
-            if [ -f "$RUNNER_TEMP/alphaxiv.json" ]; then echo '```json'; cat "$RUNNER_TEMP/alphaxiv.json"; echo '```'; fi
-            echo "Record the returned URL in papers/alphaxiv-records.toml so later versions use new_version_of."
-          } >> "$GITHUB_STEP_SUMMARY"
+          set -euo pipefail
+          python3 -B papers/check_release.py --require-reviews --verify-history
+          python3 -B scripts/alphaxiv_publish.py "papers/$PAPER" --publish --release "$RELEASE" --result "$RUNNER_TEMP/alphaxiv.json"
+          { echo "### alphaXiv submission: $PAPER at $RELEASE"; echo '```json'; cat "$RUNNER_TEMP/alphaxiv.json"; echo '```';
+            echo "Record the returned URL under its manuscript id in papers/alphaxiv-records.toml."; } >> "$GITHUB_STEP_SUMMARY"
