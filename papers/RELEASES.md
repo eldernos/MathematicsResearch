@@ -2,7 +2,7 @@
 
 Every manuscript release is a Git tag. A tag is never moved and earlier files are never replaced:
 a revision appears in a new directory with a new version number. The table lists the release
-candidate manuscripts-v2.0.0. Its Lean links point to the immutable commit
+manuscripts-v2.0.0. Its Lean links point to the immutable commit
 [`e4809cf56157`](https://github.com/eldernos/MathematicsResearch/tree/e4809cf561573aef588e6ffc491a35cdb79fd9ec) (research-checkpoint-18).
 The SHA-256 digests identify the PDFs committed at the source commit of this record.
 

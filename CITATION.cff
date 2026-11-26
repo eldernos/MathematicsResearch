@@ -16,9 +16,8 @@ authors:
     website: "https://www.alphaxiv.org/@christopher-anderson"
 repository-code: "https://github.com/eldernos/MathematicsResearch"
 url: "https://github.com/eldernos/MathematicsResearch"
-# CANDIDATE: the tag manuscripts-v2.0.0 does not exist until the owner approves the release.
-# Until then the latest published manuscript release is manuscripts-v1.1.0.
 version: "manuscripts-v2.0.0"
+date-released: "2026-11-26"
 license: MIT
 keywords:
   - "normal numbers"

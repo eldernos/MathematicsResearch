@@ -17,7 +17,7 @@
 #               abstract and keywords are read from that file instead and `summary` is ignored.
 #   keywords, msc_primary, msc_secondary   Classification of a released manuscript that has no metadata.toml.
 #   summary     One-sentence description used only until the manuscript's metadata.toml exists.
-# Entries for papers/*-v2 and the new papers 06 to 09 are candidates for release manuscripts-v2.0.0.
+# Entries for papers/*-v2, the new papers 06 to 10 and III v1.2 are released in manuscripts-v2.0.0 (26 November 2026).
 
 [[paper]]
 number = "I"
@@ -95,7 +95,7 @@ A finite dyadic identity for ln 2 has shifted binary prefixes whose reduced deno
 '''
 
 # ---------------------------------------------------------------------------
-# Candidate release manuscripts-v2.0.0. Paper III is retained at version 1.1.
+# Release manuscripts-v2.0.0.
 
 [[paper]]
 number = "I"

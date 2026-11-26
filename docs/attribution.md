@@ -6,7 +6,7 @@ The research is AI-assisted. The repository owner directed the project, chose it
 
 Models from several providers also reviewed drafts and proofs against one another. That cross-model review found errors that were corrected, but it is not independent human peer review, and human specialist review is outstanding. [Research process](../README.md#how-the-research-was-done)
 
-The author of the release candidate manuscripts is Christopher Anderson, Independent Researcher. The project has no institutional affiliation and no external endorsement. The only contact route is the [issue tracker](https://github.com/eldernos/MathematicsResearch/issues); no email address, ORCID or other affiliation is published. The manuscripts in [papers/](../papers/README.md) are drafts; none has been peer reviewed or accepted.
+The author of the manuscripts-v2.0.0 manuscripts is Christopher Anderson, Independent Researcher. The project has no institutional affiliation and no external endorsement. The only contact route is the [issue tracker](https://github.com/eldernos/MathematicsResearch/issues); no email address, ORCID or other affiliation is published. The manuscripts in [papers/](../papers/README.md) are drafts; none has been peer reviewed or accepted.
 
 ## What Lean verification establishes
 
@@ -21,7 +21,7 @@ Verification does **not** establish:
 
 ## How to cite
 
-### Release candidate `manuscripts-v2.0.0`
+### Release `manuscripts-v2.0.0`
 
 Cite a manuscript by author, title, version and release tag. The author of the v2 manuscripts is Christopher Anderson, Independent Researcher. The release is a **candidate** until the owner publishes the tag, and no DOI has been issued. A BibTeX entry for every current manuscript is in [papers/BIBLIOGRAPHY.bib](../papers/BIBLIOGRAPHY.bib), and the repository itself is described by [CITATION.cff](../CITATION.cff), which GitHub shows under "Cite this repository". Paper III is retained at version 1.1 in this release. The manuscripts are preprint drafts and have not been peer reviewed.
 
@@ -30,7 +30,7 @@ Cite a manuscript by author, title, version and release tag. The author of the v
   author = {Anderson, Christopher},
   title  = {Polynomial Images of Stoneham Numbers},
   year   = {2026},
-  note   = {Version 2.0, preprint draft in release candidate manuscripts-v2.0.0. Not peer reviewed.},
+  note   = {Version 2.0, preprint draft in release manuscripts-v2.0.0. Not peer reviewed.},
   url    = {https://github.com/eldernos/MathematicsResearch/tree/main/papers/01-stoneham-polynomials-v2}
 }
 ```

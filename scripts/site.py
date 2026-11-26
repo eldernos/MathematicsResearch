@@ -21,6 +21,7 @@ import argparse
 import datetime
 import html
 import json
+import tomllib
 import pathlib
 import re
 import subprocess
@@ -169,7 +170,7 @@ def bib_note(p) -> str:
     if p["layout"] == "released":
         return (f"Version {p['version']}, release {portal.RELEASED_TAG}. Preprint draft; not peer reviewed. "
                 "The archived PDF carries no author line.")
-    return (f"Version {p['version']}, preprint draft in release candidate {portal.CANDIDATE_TAG}. "
+    return (f"Version {p['version']}, preprint draft in release {portal.CANDIDATE_TAG}. "
             "Not peer reviewed. AI-assisted research; see the AI-use statement in the manuscript.")
 
 
@@ -201,7 +202,7 @@ def build_bibliography(papers) -> str:
            "% These are preprint drafts. None has been peer reviewed. The v1.0.0 and v1.1.0 archives carry no",
            "% author line; the author field records the repository owner who is responsible for the release.",
            ""]
-    out.append("% Release candidate manuscripts-v2.0.0: current manuscripts")
+    out.append("% Release manuscripts-v2.0.0: current manuscripts")
     for p in sorted((q for q in papers if q["current"]), key=portal.paper_key):
         out += [bibtex(p), ""]
     out.append("% Historical releases (kept unchanged at their tags)")
@@ -315,6 +316,19 @@ def link(url, text) -> str:
     return f'<a href="{esc(url)}">{esc(text)}</a>'
 
 
+def alphaxiv_record(meta):
+    """The alphaXiv URL recorded for this manuscript's permanent id, if any (papers/alphaxiv-records.toml)."""
+    path = ROOT / "papers" / "alphaxiv-records.toml"
+    if not meta or not path.is_file():
+        return None
+    manuscript = str(meta.get("id", "")).strip()
+    for record in tomllib.loads(path.read_text(encoding="utf-8")).get("record", []):
+        url = str(record.get("alphaxiv", ""))
+        if record.get("id") == manuscript and url.startswith("https://www.alphaxiv.org/"):
+            return url
+    return None
+
+
 def manuscript_page(p, by_dir, base, strict):
     meta = p["metadata"]
     if meta is None and strict and p["layout"] == "wave2":
@@ -339,6 +353,10 @@ def manuscript_page(p, by_dir, base, strict):
     if pending:
         parts.append('<p class="notice">This manuscript’s metadata file is not yet available; the text below is a '
                      "provisional registry summary, not the manuscript’s abstract.</p>")
+    record = alphaxiv_record(meta)
+    if record:
+        parts.append(f'<p>Published on alphaXiv: <a href="{esc(record)}">{esc(record)}</a> '
+                     "(alphaXiv screens submissions; screening is not peer review).</p>")
     parts.append(f'<p class="notice">{esc(REVIEW_STATEMENT)}</p>')
     parts.append("<h2>Abstract</h2>")
     parts += [f"<p>{inline(x)}</p>" for x in paragraphs(abstract)]
@@ -453,7 +471,7 @@ def index_page(papers, base):
              f'<p>Exact statements, scope and proofs: <a href="{REPO}#principal-theorems">repository README</a> · '
              f'<a href="{REPO}/blob/{DEFAULT_BRANCH}/docs/results.md">result index</a>.</p>',
              '<h2 id="manuscripts">Manuscripts</h2>',
-             f"<p>Release candidate <code>{esc(portal.CANDIDATE_TAG)}</code>. Version 1.0 and 1.1 PDFs remain "
+             f"<p>Release <code>{esc(portal.CANDIDATE_TAG)}</code>. Version 1.0 and 1.1 PDFs remain "
              "unchanged at their release tags.</p>",
              '<div class="scroll"><table><thead><tr><th scope="col"></th><th scope="col">Manuscript</th>'
              '<th scope="col">Version</th><th scope="col">Status</th></tr></thead><tbody>' + "".join(rows) +

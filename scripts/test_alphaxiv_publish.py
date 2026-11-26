@@ -61,6 +61,12 @@ class TrustedHostTests(unittest.TestCase):
 class BuildRequestAndDisclosureTests(unittest.TestCase):
     PAPER = ap.ROOT / "papers" / "06-multiplicative-lambert"
 
+    def setUp(self) -> None:
+        # Isolate from the live papers/alphaxiv-records.toml (VI is published there).
+        patcher = mock.patch.object(ap, "find_record", return_value=None)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def inputs(self):
         return ap.load_inputs(self.PAPER, None)
 
@@ -118,6 +124,16 @@ class BuildRequestAndDisclosureTests(unittest.TestCase):
             meta, sub = ap.load_inputs(self.PAPER, "refs/remotes/origin/main")
         self.assertIs(sub["owner_confirmed"], True)
         self.assertEqual(meta["id"], "VI")  # metadata still comes from the checked-out release tree
+
+
+class LiveRecordTests(unittest.TestCase):
+    def test_published_manuscripts_post_new_versions(self) -> None:
+        for d, num in (("06-multiplicative-lambert", "VI"), ("01-stoneham-polynomials-v2", "I"),
+                       ("07-synthetic-expansions", "VII"), ("10-discrepancy-arithmetic", "X")):
+            meta, sub = ap.load_inputs(ap.ROOT / "papers" / d, None)
+            request, _ = ap.build_request(meta, sub, None)
+            self.assertTrue(request["new_version_of"].startswith("https://www.alphaxiv.org/abs/2611."), d)
+            self.assertNotIn("url_slug", request)
 
 
 class ReleaseAndPdfGuardTests(unittest.TestCase):

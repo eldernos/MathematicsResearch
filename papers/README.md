@@ -1,19 +1,19 @@
 # Manuscripts
 
-**Release candidate `manuscripts-v2.0.0`.** The tag does not exist until the owner approves the release. The author of every manuscript in it is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)). The v1.0.0 and v1.1.0 files carry no author line and are unchanged. All are preprint drafts. Each has been checked by independent AI reviewers from a different provider than its writer, which is not independent human peer review.
+**Release [`manuscripts-v2.0.0`](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v2.0.0)**, published 26 November 2026. The author of every manuscript in it is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)). The v1.0.0 and v1.1.0 files carry no author line and are unchanged. All are preprint drafts. Each has been checked by independent AI reviewers from a different provider than its writer, which is not independent human peer review.
 
-| | Manuscript | Version | Directory | First alphaXiv batch |
+| | Manuscript | Version | Directory | alphaXiv |
 | --- | --- | --- | --- | --- |
-| VI | Disjunctive but Nonnormal Multiplicative Lambert Series | 1.0 | [06-multiplicative-lambert](06-multiplicative-lambert) | yes |
-| I | Polynomial Images of Stoneham Numbers | 2.0 | [01-stoneham-polynomials-v2](01-stoneham-polynomials-v2) | yes |
-| VII | Synthetic Arithmetic Expansions and Prescribed Discrepancy | 1.0 | [07-synthetic-expansions](07-synthetic-expansions) | yes |
-| X | The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations | 1.0 | [10-discrepancy-arithmetic](10-discrepancy-arithmetic) | yes (cited by VI and VII) |
-| VIII | Exceptional Orbits and Discrepancy of Stoneham Products | 1.0 | [08-stoneham-product-orbits](08-stoneham-product-orbits) | second |
-| II | Normality of Localized Logarithms and Polylogarithms | 2.0 | [02-localized-normality-v2](02-localized-normality-v2) | second |
-| V | Denominator Growth and Rational Shadowing for Classical Constants | 2.0 | [05-classical-denominators-v2](05-classical-denominators-v2) | second |
-| IV | Arithmetic Certificates for Normality and Mathematical Limitations | 2.0 | [04-arithmetic-certificates-v2](04-arithmetic-certificates-v2) | second |
-| III | Resonance and Discrepancy in Signed Stoneham Expansions (named-author edition) | 1.2 | [03-signed-resonance-v1.2](03-signed-resonance-v1.2) | second |
-| IX | Finite-statistic thresholds for the binary digits of the Erdős–Borwein constant (research note) | 1.0 | [09-erdos-borwein-note](09-erdos-borwein-note) | second |
+| VI | Disjunctive but Nonnormal Multiplicative Lambert Series | 1.0 | [06-multiplicative-lambert](06-multiplicative-lambert) | [published](https://www.alphaxiv.org/abs/2611.disjunctive-nonnormal-multiplicative-lambert-series) |
+| I | Polynomial Images of Stoneham Numbers | 2.0 | [01-stoneham-polynomials-v2](01-stoneham-polynomials-v2) | [published](https://www.alphaxiv.org/abs/2611.polynomial-images-of-stoneham-numbers) |
+| VII | Synthetic Arithmetic Expansions and Prescribed Discrepancy | 1.0 | [07-synthetic-expansions](07-synthetic-expansions) | [published](https://www.alphaxiv.org/abs/2611.synthetic-arithmetic-expansions-prescribed-discrepancy) |
+| X | The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations | 1.0 | [10-discrepancy-arithmetic](10-discrepancy-arithmetic) | [published](https://www.alphaxiv.org/abs/2611.arithmetic-of-extreme-discrepancy) |
+| VIII | Exceptional Orbits and Discrepancy of Stoneham Products | 1.0 | [08-stoneham-product-orbits](08-stoneham-product-orbits) | second batch |
+| II | Normality of Localized Logarithms and Polylogarithms | 2.0 | [02-localized-normality-v2](02-localized-normality-v2) | second batch |
+| V | Denominator Growth and Rational Shadowing for Classical Constants | 2.0 | [05-classical-denominators-v2](05-classical-denominators-v2) | second batch |
+| IV | Arithmetic Certificates for Normality and Mathematical Limitations | 2.0 | [04-arithmetic-certificates-v2](04-arithmetic-certificates-v2) | second batch |
+| III | Resonance and Discrepancy in Signed Stoneham Expansions (named-author edition) | 1.2 | [03-signed-resonance-v1.2](03-signed-resonance-v1.2) | second batch |
+| IX | Finite-statistic thresholds for the binary digits of the Erdős–Borwein constant (research note) | 1.0 | [09-erdos-borwein-note](09-erdos-borwein-note) | second batch |
 
 Each directory holds `paper.tex`, `paper.pdf`, `references.bib`, `metadata.toml`, a theorem verification map (`VERIFICATION.md`), a claim-to-source novelty ledger (`LEDGER.md`), `CHANGES.md` for revisions, and a `submission/` folder. That folder holds the alphaXiv metadata and structured AI disclosure, an announcement draft, a one-paragraph summary, reviewer inquiries and a reviewer packet. The review reports and their resolutions are in [reviews/](reviews/README.md). Related files: the [working contract](WAVE2-CONTRACT.md) (evidence labels and format), the [release record](RELEASES.md) with checksums, [BIBLIOGRAPHY.bib](BIBLIOGRAPHY.bib), [submission policies](submission/POLICIES.md), the [publishing pipeline](../docs/publishing-pipeline.md) and [ARCHIVING.md](ARCHIVING.md).
 
