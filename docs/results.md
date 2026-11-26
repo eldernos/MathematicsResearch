@@ -52,6 +52,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [OP-17](#op-17) | A polynomial-normal algebra on distinct retained primes | Written proof |  |
 | [GF-11](#gf-11) ★ | Higher-degree polynomial normality on power schedules below the schedule degree | Written proof |  |
 | [GF-14](#gf-14) ★ | Effective nonlinear discrepancy rates, multivariate distinct-order normality, and the d = r boundary | Lean + written deduction |  |
+| [GF-24](#gf-24) | Nonlinear equality-boundary retirement filtration, Hooley run barrier and cubic obstructions at d = r | Lean + written deduction |  |
 | [LS-01](#ls-01) ★ | Unsigned finite-support dichotomy | Lean | II |
 | [LS-02](#ls-02) ★ | Exact discrepancy from persistent cancellation at every order | Lean | II |
 | [LS-03](#ls-03) ★ | Persistent failed regions are null | Lean | II |
@@ -103,6 +104,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [OP-18](#op-18) | Quantitative joint box distribution from an algebraic direction | Written proof |  |
 | [GF-01](#gf-01) ★ | Finite sparse linear-mass coefficient transfer and composite-radix factorization | Lean |  |
 | [GF-02](#gf-02) | Sharp linear-mass rate, displaced-source width transfer and isolated-source constants | Written proof |  |
+| [GF-19](#gf-19) ★ | Universal simple-nonnormality dichotomy in K_b and signed coefficient digit-frequency transfer | Lean + written deduction |  |
+| [GF-23](#gf-23) ★ | Complete radix-power kernel tower K_{b^k}/K_b and simple-normality characterization | Lean + written deduction |  |
 | [AC-01](#ac-01) ★ | Normality from rational orbit models on most blocks | Lean | IV |
 | [AC-04](#ac-04) | Cancellation in short radix orbits with smooth denominators | Lean | IV |
 | [AC-05](#ac-05) | Exact rational discrepancy certificates for prime-restricted logarithmic series | Lean | IV |
@@ -118,6 +121,7 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [OP-10](#op-10) | Full-support series with superpolynomial denominators | Written proof |  |
 | [GF-10](#gf-10) ★ | Universal all-prime polynomial normality and protected-pole algebras | Lean + written deduction |  |
 | [GF-15](#gf-15) ★ | Denser all-prime polynomial normality on polynomial and quasi-polynomial schedules | Written proof |  |
+| [GF-25](#gf-25) ★ | Uniform short-orbit cancellation for all d ≥ r + 1 and non-Liouville all-prime polynomial normality with exact irrationality exponents | Written proof |  |
 | [AC-02](#ac-02) ★ | Partial coverage bounds the discrepancy | Lean | IV |
 | [AC-03](#ac-03) ★ | Rigidity of overlapping smooth rational models | Lean | IV |
 | [AC-07](#ac-07) | Discrepancy bounds from certified paths between prefix endpoints | Lean | IV |
@@ -192,6 +196,11 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [GF-13](#gf-13) ★ | Polynomial-mass and logarithmic-mass transfers, even-order character Lambert series and q-digamma reflections in K_b | Lean + written deduction |  |
 | [GF-16](#gf-16) ★ | Exact rational-scaling discrepancy limits for Euler powers and base-b normal reciprocals of K_b elements | Lean + written deduction |  |
 | [GF-17](#gf-17) ★ | Partition carry-window obstructions, iterated derivatives in K_b, and the weight-2 width-density wall | Lean + written deduction |  |
+| [GF-20](#gf-20) ★ | Flagship digit laws, q-digamma sign bias, Euler-square non-congruence sign rule and rational-scaling binary simple normality | Lean + written deduction |  |
+| [GF-21](#gf-21) ★ | Even-composite radix threshold jumps, general fundamental class-group constants and unconditional proof of (V_q) | Written proof |  |
+| [GF-22](#gf-22) ★ | Universal character-Lambert disjunctivity in every radix and odd-order character support laws | Written proof |  |
+| [GF-26](#gf-26) ★ | Exact reciprocal periods, balanced-multiplier normality rates, and complete sign and cyclotomic classification on K_b reciprocals | Lean + written deduction |  |
+| [GF-28](#gf-28) | Certified Erdős–Borwein correlation-order lower bound, plus Erdős–Borwein E_+, badly-approximable K_2 barrier and five-constant reconnaissance | Lean + written deduction |  |
 | [LS-08](#ls-08) | Order two: a deeply failed cell need not clear the prime | Lean | II |
 | [MW-06](#mw-06) | Nonzero periodic weights with a vanishing phase | Lean | II |
 | [MW-07](#mw-07) | Rational weights with discrepancy exactly two thirds | Lean | II |
@@ -207,7 +216,8 @@ Each result has a permanent identifier. Its entry gives the statement, the exact
 | [SY-14](#sy-14) | A limit on finite functional constructions from lacunary rays | Written proof | VII |
 | [OP-12](#op-12) | Sparse numerical preservers with visible product and sharp rates | Written proof | X |
 | [GF-08](#gf-08) | Carry-window transfer, partition congruence wash-out, and multiplication/inversion obstructions in K_b | Written proof |  |
-| [GF-18](#gf-18) | Classical transfer barriers, radix-power kernel invariance, and complementary-coverage obstructions | Lean + written deduction |  |
+| [GF-18](#gf-18) | Classical transfer barriers, strict radix-power kernel inclusion, and complementary-coverage obstructions | Lean + written deduction |  |
+| [GF-27](#gf-27) | Complete uniform Selberg sieve for (a/d)E_b^2, intermediate partition products and signed-digit NAF width wall | Written proof |  |
 
 ★ marks the principal results presented in the [README](../README.md).
 
@@ -1045,6 +1055,23 @@ For C = C(b, p, s, d) = Σ_{i ≥ 1} p^{−s v_p(i)} b^{−t i^d} (odd prime p �
 - **External inputs:** Titchmarsh, Theorem 5.13; Erdős–Turán inequality; divisor bound; Lebesgue density and Lebesgue differentiation theorems; Landau's two-squares theorem and Wooley's three-cubes lower bound (context in §7 only).
 - **Computation:** [phase21_nonlinear.py](../scripts/phase21_nonlinear.py)
 - **Related:** [OP-14](#op-14) · [GF-11](#gf-11) · [GF-15](#gf-15)
+
+<a id="gf-24"></a>
+
+### GF-24 · Nonlinear equality-boundary retirement filtration, Hooley run barrier and cubic obstructions at d = r
+
+**Evidence:** Lean + written deduction
+
+At the equality boundary d = r for valuation-weighted power schedules C = C(b, p, s, d): (1) total-depth retirement splits p^{sH} C^r = X_H + Z_H for every fixed H ≥ 1, and at d = 2 the low-depth piece X_H lies in K_b with uniform discrepancy deficit ≪ (log log N + H)/√(log N), reducing D^+(C^2; b) < 1 and normality to the high-depth tail Z_H modulo K_b; (2) for p ≡ 3 (mod 4) the fractional-part orbit of Z_H makes ≍ N/√(log N) jumps up to N (Proposition B″), yet controlling run lengths in the support of Z_H encounters the Hooley gap-moment barrier for sums of two squares; (3) no uniform short-orbit cancellation holds on runs shorter than log_b(ε q); (4) at d = 3, the support of X_H is governed by sums of three cubes (where the Dickson–Hardy–Littlewood heuristic density is positive, ≈ 0.0999), obstructing K_b-absorption of X_H.
+
+**Scope.** Lean (Phase22Cores.lean) verifies the exact integer-multiplier discrepancy deficit inequality (one_sub_radixDiscrepancy_natMul_le, one_sub_radixDiscrepancy_intMul_le), the fixed-depth K_b transfer bound (fixed_depth_transfer_deficit_le), and the finite total-depth retirement split identity (total_depth_split_sum, total_depth_split_sum_zpow). The d = 2 K_b absorption rate, Hooley gap-moment barrier, Proposition B″, short-orbit impossibility below log_b(ε q), and d = 3 three-cubes obstruction are written proofs checked by exact scripts and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Normality and D^+ < 1 at d = r (including C(2, 3, 1, 3)^3 and C(b, p, s, 2)^2) remain open.
+
+- **Lean:** [`one_sub_radixDiscrepancy_natMul_le`](../NormalityChecker/Phase22Cores.lean#L888) · [`one_sub_radixDiscrepancy_intMul_le`](../NormalityChecker/Phase22Cores.lean#L894) · [`fixed_depth_transfer_deficit_le`](../NormalityChecker/Phase22Cores.lean#L902) · [`total_depth_split_sum_zpow`](../NormalityChecker/Phase22Cores.lean#L970)
+- **Fully qualified:** `NormalityChecker.Phase22Cores.one_sub_radixDiscrepancy_natMul_le`, `NormalityChecker.Phase22Cores.one_sub_radixDiscrepancy_intMul_le`, `NormalityChecker.Phase22Cores.fixed_depth_transfer_deficit_le`, `NormalityChecker.Phase22Cores.total_depth_split_sum_zpow`
+- **Proof:** [nonlinear-equality-boundary.md](../notes/phase22/nonlinear-equality-boundary.md)
+- **External inputs:** Landau's two-squares theorem; Hooley's gap-moment barrier; Wooley's three-cubes lower bound and Dickson–Hardy–Littlewood heuristic context for d = 3.
+- **Computation:** [phase22_nonlinear_boundary.py](../scripts/phase22_nonlinear_boundary.py)
+- **Related:** [GF-11](#gf-11) · [GF-14](#gf-14) · [GF-25](#gf-25)
 
 ## Localized logarithms and polylogarithms
 
@@ -2080,6 +2107,40 @@ Under A(X) ≤ C X, for every N ≥ 1 and ρ_N = (1 + S(N − 1))/N, 1 − D_N(F
 - **Computation:** [phase20_transfer.py](../scripts/phase20_transfer.py)
 - **Related:** [GF-01](#gf-01) · [GF-05](#gf-05)
 
+<a id="gf-19"></a>
+
+### GF-19 · Universal simple-nonnormality dichotomy in K_b and signed coefficient digit-frequency transfer
+
+**Evidence:** Lean + written deduction
+
+For every integer radix b ≥ 2, whenever 1 − D_N(x; b) < 1/(2b − 1) (N ≥ 4), every base-b orbit point outside an O(b^L √(1 − D_N)) exceptional set lies in a fixed-point cylinder, yielding a finite digit dichotomy: either some interior repunit word m^L (1 ≤ m ≤ b − 2) absorbs 1 − O(b^L √(1 − D_N)) of all positions, or the boundary words 0^L and (b − 1)^L jointly absorb 1 − O(b^L √(1 − D_N)). Consequently, no element of K_b is simply normal in any base b ≥ 3 (for every x ∈ K_b there is a digit of asymptotic frequency 0), and no element of K_2 is 2-normal (binary digit transitions have density 0), whereas K_2 does contain base-2 simply normal numbers (such as E_2 and E_2^3). For signed sparse integer series F_b(a) with A(X) = O(X) and S(X) = o(X), exact oriented-tail transfer equates the limiting frequencies of 0^L and (b − 1)^L with the asymptotic densities of positive and negative shifted tails; in particular every nonnegative sparse series has f_{0^L} → 1 and is never simply normal in any base b ≥ 2, while alternating-sign constructions realize every prescribed digit-0 limit α ∈ [0, 1] and closed interval [α, β] ⊆ [0, 1] inside K_2.
+
+**Scope.** Lean (SimpleNormalityKernel.lean, 48 public theorems) verifies the finite localization lemma (exists_fixed_center_of_deficit_le), finite digit dichotomy (finite_digit_dichotomy), non-simple-normality of K_b for b ≥ 3 (not_simply_normal_of_mem_kernel), binary transition-vanishing and non-2-normality of K_2 (binary_transitions_tendsto_zero_of_mem_kernel, not_two_normal_of_mem_binary_kernel), exact oriented-tail transfer (wordCount_zeros_sub_posTail_le, wordCount_maxDigit_sub_negTail_le, asymptotic_oriented_tail_transfer), nonnegative sparse simple nonnormality (nonneg_sparse_zeros_tendsto_one, not_simply_normal_of_nonneg_sparse), and the Beatty odd-weight identity (beatty_odd_weight). Dominance and gap identities, alternating-sign two-digit laws, and prescribed digit-0 limit and interval realizations are written proofs checked by 3,344,335 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review).
+
+- **Lean:** [`exists_fixed_center_of_deficit_le`](../NormalityChecker/SimpleNormalityKernel.lean#L640) · [`finite_digit_dichotomy`](../NormalityChecker/SimpleNormalityKernel.lean#L841) · [`not_simply_normal_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1049) · [`binary_transitions_tendsto_zero_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1089) · [`not_two_normal_of_mem_binary_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1122) · [`not_normalIn_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1169) · [`wordCount_zeros_sub_posTail_le`](../NormalityChecker/SimpleNormalityKernel.lean#L1729) · [`wordCount_maxDigit_sub_negTail_le`](../NormalityChecker/SimpleNormalityKernel.lean#L1797) · [`asymptotic_oriented_tail_transfer`](../NormalityChecker/SimpleNormalityKernel.lean#L2260) · [`nonneg_sparse_zeros_tendsto_one`](../NormalityChecker/SimpleNormalityKernel.lean#L2334) · [`not_simply_normal_of_nonneg_sparse`](../NormalityChecker/SimpleNormalityKernel.lean#L2386) · [`beatty_odd_weight`](../NormalityChecker/SimpleNormalityKernel.lean#L2404)
+- **Fully qualified:** `NormalityChecker.SimpleNormalityKernel.exists_fixed_center_of_deficit_le`, `NormalityChecker.SimpleNormalityKernel.finite_digit_dichotomy`, `NormalityChecker.SimpleNormalityKernel.not_simply_normal_of_mem_kernel`, `NormalityChecker.SimpleNormalityKernel.binary_transitions_tendsto_zero_of_mem_kernel`, `NormalityChecker.SimpleNormalityKernel.not_two_normal_of_mem_binary_kernel`, `NormalityChecker.SimpleNormalityKernel.not_normalIn_of_mem_kernel`, `NormalityChecker.SimpleNormalityKernel.wordCount_zeros_sub_posTail_le`, `NormalityChecker.SimpleNormalityKernel.wordCount_maxDigit_sub_negTail_le`, `NormalityChecker.SimpleNormalityKernel.asymptotic_oriented_tail_transfer`, `NormalityChecker.SimpleNormalityKernel.nonneg_sparse_zeros_tendsto_one`, `NormalityChecker.SimpleNormalityKernel.not_simply_normal_of_nonneg_sparse`, `NormalityChecker.SimpleNormalityKernel.beatty_odd_weight`
+- **Proof:** [simple-normality-and-signed-transfer.md](../notes/phase22/simple-normality-and-signed-transfer.md)
+- **External inputs:** None; all written and formal proofs are self-contained.
+- **Computation:** [phase22_simple_normality.py](../scripts/phase22_simple_normality.py)
+- **Related:** [GF-01](#gf-01) · [GF-03](#gf-03) · [GF-04](#gf-04) · [GF-20](#gf-20) · [GF-23](#gf-23)
+
+<a id="gf-23"></a>
+
+### GF-23 · Complete radix-power kernel tower K_{b^k}/K_b and simple-normality characterization
+
+**Evidence:** Lean + written deduction
+
+For every integer radix b ≥ 2 and integer k ≥ 1: (1) the strict inclusion K_b ⊊ K_{b^k} (for k ≥ 2) is kernel-verified via x = 1/(b^k − 1); (2) the zero-orbit subgroup M_b = {x : (1/N) Σ_{n < N} ‖b^n x‖ → 0} is invariant under radix powers, M_b = M_{b^k}, with sharp constant (b^k − 1)/(k(b − 1)); (3) the quotient group is exactly K_{b^k}/K_b ≅ ℤ/((b^k − 1)/(b − 1))ℤ, generated by 1/(b^k − 1) (with K_b = M_b + Fix_b and M_b ∩ Fix_{b^k} = ℤ); (4) every coset representative r/(b^k − 1) has exact base-b periodic discrepancy 1/d + max z_i − min z_i where d is its orbit length; (5) the difference K_{b^k} \ K_b contains a base-b simply normal number if and only if b ∣ k.
+
+**Scope.** Lean (RadixPowerTower.lean, 38 public theorems) verifies the strict kernel inclusion K_b ⊊ K_{b^k} (strict_kernel_inclusion, inv_pow_sub_one_mem_pow_kernel, inv_pow_sub_one_not_mem_kernel), the exact invariance of the zero-orbit subgroup M_b = M_{b^k} with sharp constant (zeroOrbitSubgroup_pow_eq, circMean_le_circMean_pow_general), the fixed-point quotient isomorphism Fix_{b^k}/Fix_b ≅ ZMod ((b^k − 1)/(b − 1)) (fixedPoint_quotient_equiv_gen, fixedPoint_quotient_card), and the trivial intersection Fix_{b^k} ∩ M_b = ℤ (fixedPointSubgroup_inter_zeroOrbitSubgroup). The full kernel decomposition K_b = M_b + Fix_b (combining GF-19 localization with circular-mean convergence), exact periodic discrepancy formula, and the b ∣ k simple-normality characterization are written proofs checked by 273,017 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review).
+
+- **Lean:** [`strict_kernel_inclusion`](../NormalityChecker/RadixPowerTower.lean#L347) · [`inv_pow_sub_one_mem_pow_kernel`](../NormalityChecker/RadixPowerTower.lean#L106) · [`inv_pow_sub_one_not_mem_kernel`](../NormalityChecker/RadixPowerTower.lean#L307) · [`zeroOrbitSubgroup_pow_eq`](../NormalityChecker/RadixPowerTower.lean#L694) · [`fixedPoint_quotient_equiv_gen`](../NormalityChecker/RadixPowerTower.lean#L828) · [`fixedPoint_quotient_card`](../NormalityChecker/RadixPowerTower.lean#L846) · [`fixedPointSubgroup_inter_zeroOrbitSubgroup`](../NormalityChecker/RadixPowerTower.lean#L896)
+- **Fully qualified:** `NormalityChecker.RadixPowerTower.strict_kernel_inclusion`, `NormalityChecker.RadixPowerTower.inv_pow_sub_one_mem_pow_kernel`, `NormalityChecker.RadixPowerTower.inv_pow_sub_one_not_mem_kernel`, `NormalityChecker.RadixPowerTower.zeroOrbitSubgroup_pow_eq`, `NormalityChecker.RadixPowerTower.fixedPoint_quotient_equiv_gen`, `NormalityChecker.RadixPowerTower.fixedPoint_quotient_card`, `NormalityChecker.RadixPowerTower.fixedPointSubgroup_inter_zeroOrbitSubgroup`
+- **Proof:** [odd-characters-and-kernel-quotient.md](../notes/phase22/odd-characters-and-kernel-quotient.md)
+- **External inputs:** None; all written and formal proofs are self-contained.
+- **Computation:** [phase22_characters_quotient.py](../scripts/phase22_characters_quotient.py)
+- **Related:** [GF-18](#gf-18) · [GF-19](#gf-19)
+
 ## Rational-orbit certificates
 
 <a id="ac-01"></a>
@@ -2331,14 +2392,29 @@ For any integer radix b ≥ 2, odd prime p not dividing b, and increasing list �
 
 **Evidence:** Written proof
 
-All-prime polynomial normality extends far below the doubly-exponential schedule 2^{k^3} of GF-10: (1) using the period bound Λ_k^{r−1} A(ℓ_k) in the protected-pole construction gives normal Liouville all-prime W at n_k = ⌈exp(k (log log(k + 16))^2)⌉, degree ≤ r polynomial normality at n_k = ⌈exp((r − 1 + ε) k log k)⌉, and all-degree polynomial normality whenever log n_k / (k log k) → ∞ and n_{k+1}/n_k → ∞; (2) on the polynomial schedule n_k = t k^d with d > r(s + 1), placing auxiliary primes ℓ_j at sparse indices k_j prime to p with log Λ_K = o(log K) yields W = Σ p^{−s v_p(k)} μ_k^{−1} b^{−t k^d} whose shifted prefix denominators are exactly p^{s ⌊log_p K⌋} Λ_K and every polynomial P(W) of degree 1 ≤ deg P ≤ r is normal with rate O_P((log log N)^{−d/(d − 1)}) (and O_{P,η}(N^{−η}) for deg P = 1); (3) on the quasi-polynomial schedule n_i = t i ⌈exp((log(i + 1))^2)⌉ with auxiliary primes at strictly increasing indices p ∤ k_j and log Λ_K = o((log K)^2), every nonconstant P(W) of arbitrary degree is normal and non-Liouville.
+All-prime polynomial normality extends far below the doubly-exponential schedule 2^{k^3} of GF-10: (1) using the period bound Λ_k^{r−1} A(ℓ_k) in the protected-pole construction gives normal Liouville all-prime W at n_k = ⌈exp(k (log log(k + 16))^2)⌉, degree ≤ r polynomial normality at n_k = ⌈exp((r − 1 + ε) k log k)⌉, and all-degree polynomial normality whenever log n_k / (k log k) → ∞ and n_{k+1}/n_k → ∞; (2) on the polynomial schedule n_k = t k^d with d > r(s + 1), placing auxiliary primes ℓ_j at sparse indices k_j prime to p with log Λ_K = o(log K) yields W = Σ p^{−s v_p(k)} μ_k^{−1} b^{−t k^d} whose shifted prefix denominators are exactly p^{s ⌊log_p K⌋} Λ_K and every polynomial P(W) of degree 1 ≤ deg P ≤ r is normal with rate O_P((log log N)^{−d/(d − 1)}) (and O_{P,η}(N^{−η}) for deg P = 1); (3) on the quasi-polynomial schedule n_i = t i ⌈exp((log(i + 1))^2)⌉ (with consecutive ratios n_{i+1}/n_i → 1) and auxiliary primes at strictly increasing indices p ∤ k_j with log Λ_K = o((log K)^2), every nonconstant P(W) of arbitrary degree is normal.
 
-**Scope.** Written proofs verified by exact scripts (exact denominators, p-adic residue preservation for p ∤ k_j versus pollution at k = p^J, primorial vs A(ℓ_k) tables, and quasi-polynomial budgets) and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). In complete-period constructions of degree ≥ 2 the j-th auxiliary prime still appears at position log n ≫ j log j; earlier prime introduction and the short-orbit range r + 1 ≤ d ≤ r(s + 1) remain open.
+**Scope.** Written proofs verified by exact scripts (exact denominators, p-adic residue preservation for p ∤ k_j versus pollution at k = p^J, primorial vs A(ℓ_k) tables, and quasi-polynomial budgets) and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Because n_{i+1}/n_i → 1 in (3), the consecutive-gap Liouville proof no longer applies, but non-Liouville status and finite irrationality exponent are not proved by consecutive ratios alone and remain open here. In complete-period constructions of degree ≥ 2 the j-th auxiliary prime still appears at position log n ≫ j log j; earlier prime introduction and the short-orbit range r + 1 ≤ d ≤ r(s + 1) remain open.
 
 - **Proof:** [multivariate-and-dense-allprime.md](../notes/phase21/multivariate-and-dense-allprime.md)
 - **External inputs:** Ford–Luca–Pomerance bound for lcm_{ℓ ≤ L}(ℓ − 1) (via Phase 19 grids); Chebyshev prime bounds; Phase 19 universal quasi-polynomial plateau estimate; Phase 21 Theorem Q (GF-14).
 - **Computation:** [phase21_nonlinear.py](../scripts/phase21_nonlinear.py)
 - **Related:** [OP-09](#op-09) · [GF-10](#gf-10) · [GF-14](#gf-14)
+
+<a id="gf-25"></a>
+
+### GF-25 · Uniform short-orbit cancellation for all d ≥ r + 1 and non-Liouville all-prime polynomial normality with exact irrationality exponents
+
+**Evidence:** Written proof
+
+(1) A self-contained uniform short-orbit lemma (explicit constant 9 independent of the auxiliary modulus G, with δ = 2^{−⌈2/θ⌉ − 3}) and an exact primorial-order bound A(G) = O((log N)/log log N) close the entire effective-rate gap r + 1 ≤ d ≤ r(s + 1) left by GF-14 and GF-15: for every odd prime p ∤ b, s ≥ 1, r ≥ 1, and d ≥ r + 1, both P(C(b, p, s, d)) (Theorem E) and the all-prime polynomial hybrid P(W_H) (Theorem H′) satisfy D_N ≪_P (log log N)^{−d/(d − 1)} (in particular D_N(C(2, 3, 1, 3)^2; 2) ≪ (log log N)^{−3/2}). (2) Non-Liouville all-prime polynomial normality with exact finite irrationality exponents: Theorem G constructs W with every coprime prime persisting, every polynomial P(W) of degree ≤ r base-b normal at power-saving rate O(N^{−η}), exact irrationality exponent μ(W) = λ > 2 (transcendental by Roth's theorem); Theorem S uses a Stoneham-type schedule with auxiliary primes carried by units ≡ 1 (mod p^j) to make every nonconstant rational polynomial P(W) of arbitrary degree base-b normal while achieving exact irrationality exponent μ(W) = p.
+
+**Scope.** Written proofs checked by exact scripts and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Resolves the short-orbit rate gap of GF-14/GF-15 and constructs explicit non-Liouville all-prime polynomial normal numbers with exact finite irrationality exponents (priority provisional; independent literature search pending); finiteness of μ(W_H) on polynomial schedules and μ for Theorem U (GF-15) remain open.
+
+- **Proof:** [short-orbits-and-irrationality.md](../notes/phase22/short-orbits-and-irrationality.md)
+- **External inputs:** Erdős–Turán inequality; Roth's theorem (1955) for transcendence of W in Theorem G; Titchmarsh Theorem 5.13 and Phase 21 averaged isolation (GF-14); Ford–Luca–Pomerance primorial order bound.
+- **Computation:** [phase22_short_orbits.py](../scripts/phase22_short_orbits.py)
+- **Related:** [GF-10](#gf-10) · [GF-11](#gf-11) · [GF-14](#gf-14) · [GF-15](#gf-15) · [GF-24](#gf-24)
 
 ## Complementary coverage and rigidity
 
@@ -3653,14 +3729,14 @@ Writing F(q) = −log ∏_{k ≥ 1} (1 − q^k) = Σ σ_{−1}(n) q^n gives ln 2
 
 For every integer radix b ≥ 2 and every real nonprincipal Dirichlet character χ, 1 − D_N(L_χ(b); b) ∼ [C_χ / (2 log b)] (log log N)/√(log N) when b = 2^k, and ∼ [C_χ (1 + log 2)/(2 log b)] (log log N)/√(log N) otherwise, proving a sharp radix-2^k discontinuity. More generally, a sub-threshold width law gives exact leading constants for multiplicative functions supported on a prime set of density δ ∈ (0, 1) below the critical threshold δ* (where typical b-adic width overtakes the isolation logarithm). For Euler's square E_b^2 (via η(12τ)^2, C_η = 2.41852914…), 1 − D_N(E_b^2; b) ∼ [3 C_η/(4 log b)] (log log N)/(log N)^{3/4} for b = 2^k and ∼ [C_η (3 + log 2)/(4 log b)] (log log N)/(log N)^{3/4} otherwise. For every positive definite integral binary quadratic form Q of discriminant Δ, 1 − D_N(Θ_Q(1/b); b) satisfies a matching lower bound of order (log log N)/√(log N) in every radix, with exact leading constants for h_0 = 1 (one class per genus, e.g. idoneal discriminants) in all radices and for class group ℤ/3 (e.g. Δ = −23) in radices b = 2^k via the explicit factor 1 + (2/3)(1 − π_J) log 2 = 1.36211738….
 
-**Scope.** Lean (RadixWidthLaw.lean) verifies the finite radix-gap bounds (dist0_div_pow_ge, dist0_div_pow_eq, card_far_in_gap_ge), right-isolation Markov tail control (card_large_tail_le), the exact multiplicative first-moment decomposition (sum_log_eq_sum_primePow), and the finite sub-threshold width upper bound (width_law_upper). The sub-threshold width law (Theorem 1), Theorems A1–A4, and Proposition 4.1 are written proofs checked by exact scripts and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Exact constants for δ > δ* (under (R_b)) and for general class groups with h_0 > 1 outside radices 2^k (under (V_q)) are conditional; exact radix-2^k constants for general class groups beyond h_0 = 1 and ℤ/3 remain open.
+**Scope.** Lean (RadixWidthLaw.lean) verifies the finite radix-gap bounds (dist0_div_pow_ge, dist0_div_pow_eq, card_far_in_gap_ge), right-isolation Markov tail control (card_large_tail_le), the exact multiplicative first-moment decomposition (sum_log_eq_sum_primePow), and the finite sub-threshold width upper bound (width_law_upper). The sub-threshold width law (Theorem 1), Theorems A1–A4, and Proposition 4.1 are written proofs checked by exact scripts and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). In Phase 22, GF-21 resolves both class-group gaps unconditionally: exact radix-2^k constants for every fundamental discriminant Δ < 0, and unconditional proof of (V_q) outside radices 2^k, together with the even-composite threshold jump δ*_b; exact constants above δ*_b under (R_b) remain conditional.
 
 - **Lean:** [`dist0_div_pow_ge`](../NormalityChecker/RadixWidthLaw.lean#L69) · [`dist0_div_pow_eq`](../NormalityChecker/RadixWidthLaw.lean#L102) · [`card_far_in_gap_ge`](../NormalityChecker/RadixWidthLaw.lean#L139) · [`card_large_tail_le`](../NormalityChecker/RadixWidthLaw.lean#L225) · [`sum_log_eq_sum_primePow`](../NormalityChecker/RadixWidthLaw.lean#L327) · [`width_law_upper`](../NormalityChecker/RadixWidthLaw.lean#L466)
 - **Fully qualified:** `NormalityChecker.RadixWidthLaw.dist0_div_pow_ge`, `NormalityChecker.RadixWidthLaw.dist0_div_pow_eq`, `NormalityChecker.RadixWidthLaw.card_far_in_gap_ge`, `NormalityChecker.RadixWidthLaw.card_large_tail_le`, `NormalityChecker.RadixWidthLaw.sum_log_eq_sum_primePow`, `NormalityChecker.RadixWidthLaw.width_law_upper`
 - **Proof:** [radix-lambert.md](../notes/phase21/radix-lambert.md) · [euler-square-and-forms.md](../notes/phase21/euler-square-and-forms.md)
 - **External inputs:** Landau, Wirsing and Selberg–Delange support theorems; Shiu (1980); Halberstam–Richert / Brun upper-bound sieve; Mertens in progressions; Hardy–Ramanujan Chebyshev induction; Hecke eigenform identification of η(12τ)^2 (Serre 1981, 1985); genus theory and Chebotarev density for binary quadratic forms.
 - **Computation:** [phase21_radix.py](../scripts/phase21_radix.py)
-- **Related:** [GF-04](#gf-04) · [GF-05](#gf-05) · [GF-06](#gf-06)
+- **Related:** [GF-04](#gf-04) · [GF-05](#gf-05) · [GF-06](#gf-06) · [GF-21](#gf-21)
 
 <a id="gf-13"></a>
 
@@ -3712,6 +3788,87 @@ For the partition constant P_b = 1/E_b: explicit all-N elementary and η-refined
 - **External inputs:** Apostol Theorem 14.5 & Dedekind η-transformation; Hardy–Ramanujan partition asymptotic; Weyl (1916) metric equidistribution; Hecke (1920) angle equidistribution; Serre (1981, 1985) lacunary modular forms & Chebotarev density; Martin (1996) multiplicative η-quotients; Deligne's bound.
 - **Computation:** [phase21_partitions_modular.py](../scripts/phase21_partitions_modular.py)
 - **Related:** [GF-03](#gf-03) · [GF-04](#gf-04) · [GF-06](#gf-06) · [GF-08](#gf-08) · [GF-13](#gf-13)
+
+<a id="gf-20"></a>
+
+### GF-20 · Flagship digit laws, q-digamma sign bias, Euler-square non-congruence sign rule and rational-scaling binary simple normality
+
+**Evidence:** Lean + written deduction
+
+For every base b ≥ 2: (1) every binary quadratic-form theta value Θ_Q(1/b), Θ_3(1/b), every iterated derivative D^j Θ_3(1/b), and every real nonprincipal character Lambert value L_χ(b) has nonnegative coefficients and sparse support, hence f_{0^L} → 1 and is never simply normal in any base; (2) every iterate D^j E_b, D^j E_b^3 (j ≥ 0) and E_b^2 · DE_b satisfies f_{0^L} = f_{(b − 1)^L} = 1/2 (simply normal in base 2, not simply normal for b ≥ 3), and is base-b disjunctive for every j ≥ 1 (and for j = 0 on E_b^3); (3) for normalized q-digamma reflections A_{1,M}(b) − A_{M−1,M}(b), the divisor difference τ_{1,M} − τ_{M−1,M} is nonnegative everywhere iff M ∣ 24 (giving f_{0^L} → 1 for M ∣ 24); (4) for Euler's square E_b^2, the sign of c(n) on primes 12n + 1 is determined by representation by x^2 + 36y^2 versus 4x^2 + 9y^2 (not a congruence condition by Bauer's theorem), and both 0^L and (b − 1)^L have strictly positive lower asymptotic frequency in every base; (5) for rational scalings (a/d) E_b and (a/d) E_b^3 with gcd(a, d) = gcd(b, d) = 1 and d ≥ 2, signed residue automata give exact rational frequencies for every word of length L (with error O_L((log N)/√N)), proving (a/d) E_b is never disjunctive, and odd-order complement symmetry proves (a/d) E_2 and (a/d) E_2^3 are base-2 simply normal whenever ord_d(2) is odd (including d = 7, 23, 31, 47, 49, …).
+
+**Scope.** Lean verifies real-character divisor-sum nonnegativity (Phase22Cores.dirichletOneConv_nonneg_of_realMul), the χ_12 square-difference sign law (Phase22Cores.chi12_sq_sub_sq, chi12_int_sq_sub_sq), pentagonal gap cancellation (Phase22Cores.abs_sum_alt_pent_gaps_le), nonzero-atom cylinder stability and interiority (RadixPowerTower.coprime_rat_cylinder_margin, coprime_rat_cylinder_stable, Phase22Cores.atom_ne_grid), and odd-order Euler automaton complement symmetry (Phase22Cores.eulerAutomaton_snd_add_order, cubeHeadSum_add_period). The flagship word-frequency laws, M ∣ 24 classification, Bauer non-congruence deduction, positive lower frequencies of 0^L and (b − 1)^L for E_b^2 (using the completed uniform Selberg sieve GF-27), and exact rational-scaling word laws are written proofs checked by 5,817,206 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Simple normality and disjunctivity of E_b^2 remain open.
+
+- **Lean:** [`dirichletOneConv_nonneg_of_realMul`](../NormalityChecker/Phase22Cores.lean#L228) · [`chi12_sq_sub_sq`](../NormalityChecker/Phase22Cores.lean#L288) · [`chi12_int_sq_sub_sq`](../NormalityChecker/Phase22Cores.lean#L297) · [`abs_sum_alt_pent_gaps_le`](../NormalityChecker/Phase22Cores.lean#L379) · [`atom_ne_grid`](../NormalityChecker/Phase22Cores.lean#L397) · [`eulerAutomaton_snd_add_order`](../NormalityChecker/Phase22Cores.lean#L720) · [`cubeHeadSum_add_period`](../NormalityChecker/Phase22Cores.lean#L758) · [`coprime_rat_cylinder_margin`](../NormalityChecker/RadixPowerTower.lean#L928) · [`coprime_rat_cylinder_stable`](../NormalityChecker/RadixPowerTower.lean#L1012)
+- **Fully qualified:** `NormalityChecker.Phase22Cores.dirichletOneConv_nonneg_of_realMul`, `NormalityChecker.Phase22Cores.chi12_sq_sub_sq`, `NormalityChecker.Phase22Cores.chi12_int_sq_sub_sq`, `NormalityChecker.Phase22Cores.abs_sum_alt_pent_gaps_le`, `NormalityChecker.Phase22Cores.atom_ne_grid`, `NormalityChecker.Phase22Cores.eulerAutomaton_snd_add_order`, `NormalityChecker.Phase22Cores.cubeHeadSum_add_period`, `NormalityChecker.RadixPowerTower.coprime_rat_cylinder_margin`, `NormalityChecker.RadixPowerTower.coprime_rat_cylinder_stable`
+- **Proof:** [flagship-digit-laws.md](../notes/phase22/flagship-digit-laws.md)
+- **External inputs:** Bauer's theorem (Cox, Primes of the Form x^2 + ny^2) for non-congruence of x^2 + 36y^2; Serre (1985) η(12τ)^2 identification; Phase 22 uniform Selberg sieve (GF-27).
+- **Computation:** [phase22_flagship_digits.py](../scripts/phase22_flagship_digits.py)
+- **Related:** [GF-03](#gf-03) · [GF-04](#gf-04) · [GF-13](#gf-13) · [GF-16](#gf-16) · [GF-17](#gf-17) · [GF-19](#gf-19) · [GF-27](#gf-27)
+
+<a id="gf-21"></a>
+
+### GF-21 · Even-composite radix threshold jumps, general fundamental class-group constants and unconditional proof of (V_q)
+
+**Evidence:** Written proof
+
+For multiplicative series supported on a prime set of density δ ∈ (0, 1): (1) the critical width-law threshold δ*_b = β_b / (β_b + log 2) exhibits an explicit even-composite jump whenever b is even and not a power of 2 (β_b = (1 − 1/v_2(b)) log b + log 2 vs odd-radix β_b = log b, giving δ*_6 = 0.7018…, δ*_10 = 0.6736…, δ*_12 = 0.7654… versus δ*_odd = 0.5906…); (2) via an exact order-4 annihilation identity and a p-adic Strassmann vanishing engine on genus-coset sums, every positive definite binary quadratic form Q of fundamental discriminant Δ < 0 satisfies an unconditional exact leading discrepancy constant in radices b = 2^k, namely 1 − D_N(Θ_Q(1/b); b) ∼ [C_Δ (1 + log 2 · E[1 − 1/d]) / (2 log b)] (log log N)/√(log N) where the expectation averages 1 − 1/d over the odd-order cyclic factors of the class group (giving factor 1 whenever Cl(Δ) is a 2-group, e.g. Δ = −39, −95, −260, and exact factors 1.362117… for −23, 1.382286… for −87, 1.531999… for −47, 1.588879… for −71); (3) Phase 21's hypothesis (V_q) is proved unconditionally for every prime q ∣ b (b ≠ 2^k), yielding the exact constant C_Δ (1 + log 2)/(2 log b) for every fundamental Δ < 0 and every radix b ≠ 2^k.
+
+**Scope.** Written proofs checked by 3,141,166 exact checks (including explicit Strassmann verification on Δ = −23, −39, −47, −71, −87, −95, −260, −327) and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Closes the general fundamental class-group and (V_q) open problems left by GF-12; non-fundamental discriminants and exact constants above δ*_b without (R_b) remain open.
+
+- **Proof:** [radix-thresholds-and-class-groups.md](../notes/phase22/radix-thresholds-and-class-groups.md)
+- **External inputs:** Genus theory and Chebotarev density for imaginary quadratic class groups; Strassmann's theorem on p-adic power series; Landau, Wirsing, Selberg–Delange, Shiu (1980), and Brun/Selberg upper-bound sieve as in GF-12.
+- **Computation:** [phase22_radix_classgroups.py](../scripts/phase22_radix_classgroups.py)
+- **Related:** [GF-05](#gf-05) · [GF-06](#gf-06) · [GF-12](#gf-12)
+
+<a id="gf-22"></a>
+
+### GF-22 · Universal character-Lambert disjunctivity in every radix and odd-order character support laws
+
+**Evidence:** Written proof
+
+For every nonprincipal Dirichlet character χ modulo q, every nonzero integer-valued function Φ on the range of 1 ∗ χ with Φ(0) = 0 (including the real and imaginary parts of odd-order character Lambert series such as L_±(b) for the cubic character modulo 7), and every integer radix b ≥ 2, the value F_b(Φ ∘ (1 ∗ χ)) = Σ_{n ≥ 1} Φ((1 ∗ χ)(n)) b^{−n} is base-b disjunctive — and in particular irrational — with every fixed base-b word occurring at least X exp(−C log log X · log log log X) times among the first X digits. The proof handles possible Siegel zeros unconditionally via Landau–Page with two disjoint auxiliary prime families. For the cubic character χ modulo 7, the support of 1 ∗ χ has positive density δ = 0.750328… with exact real/imaginary support densities δ and 2δ/3 and proved O(X^{−1/2}) split convergence.
+
+**Scope.** Written proof checked by 273,017 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Establishes irrationality and base-b disjunctivity for odd-order character Lambert series (including L_+(2) and L_−(2) modulo 7), while K_b-membership, simple normality, and D^+ < 1 for L_±(b) remain open.
+
+- **Proof:** [odd-characters-and-kernel-quotient.md](../notes/phase22/odd-characters-and-kernel-quotient.md)
+- **External inputs:** Landau–Page theorem on exceptional real zeros; Siegel–Walfisz / prime number theorem in arithmetic progressions; Wirsing / Halász mean-value estimates for multiplicative functions.
+- **Computation:** [phase22_characters_quotient.py](../scripts/phase22_characters_quotient.py)
+- **Related:** [CC-48](#cc-48) · [GF-13](#gf-13) · [GF-18](#gf-18)
+
+<a id="gf-26"></a>
+
+### GF-26 · Exact reciprocal periods, balanced-multiplier normality rates, and complete sign and cyclotomic classification on K_b reciprocals
+
+**Evidence:** Lean + written deduction
+
+For infinite product reciprocals y = 1/x with x = ∏_{k ≥ 1} (1 + ε_k b^{−m_k}) ∈ K_b (ε_k ∈ {−1, +1}): (1) exact period identities give ord_{D(b^m − 1)}(b) = m D whenever D ∣ b^m − 1 (and exact Hull–Dobell lifting via rad*(D)), and ord_{D(b^m + 1)}(b) = 2 m D whenever 2 D ∣ b^m + 1 or D ∣ b^m − 1; (2) partial-band Erdős–Turán bounds improve the discrepancy rate for normal reciprocals (ε_k = −1) to a balanced-multiplier rate at ω_k = D_{k−1} (one iterated logarithm above the Koksma lower barrier); (3) for every sign sequence (ε_k) with admissible exponents, limsup D_N(y; b) is completely classified: y is normal iff ε_k = −1 eventually, while infinitely many +1 signs force limsup D_N ≥ 1/2 (and explicit exact discrepancy limits for periodic sign patterns); (4) replacing 1 ± q by explicit cyclotomic factors P_k(q) realizes every prescribed upper discrepancy D^+(1/x; b) = α ∈ [0, 1] with exact limit set [0, α] and weak* limit set {(1 − γ)λ + γ δ_0 : 0 ≤ γ ≤ α} while keeping x ∈ K_b and y base-2 simply normal along all N.
+
+**Scope.** Lean (RadixPowerTower.lean) verifies the exact multiplicative-order period identities for both signs (mul_pow_sub_one_dvd_pow_sub_one_iff, orderOf_mul_pow_sub_one, orderOf_mul_pow_sub_one_of_orderOf, orderOf_mul_pow_add_one, orderOf_mul_pow_add_one_of_orderOf). The Hull–Dobell rad*(D) lifting, partial-band Weyl bounds, balanced-multiplier rate, complete sign classification, and four-step cyclotomic realization of every α ∈ [0, 1] with base-2 simple normality are written proofs checked by 21,443 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Closing the one-iterated-logarithm gap to the Koksma lower bound and relaxing D_{k−1} ∣ b^{m_k} − 1 remain open.
+
+- **Lean:** [`mul_pow_sub_one_dvd_pow_sub_one_iff`](../NormalityChecker/RadixPowerTower.lean#L1209) · [`orderOf_mul_pow_sub_one`](../NormalityChecker/RadixPowerTower.lean#L1247) · [`orderOf_mul_pow_sub_one_of_orderOf`](../NormalityChecker/RadixPowerTower.lean#L1264) · [`orderOf_mul_pow_add_one`](../NormalityChecker/RadixPowerTower.lean#L1272) · [`orderOf_mul_pow_add_one_of_orderOf`](../NormalityChecker/RadixPowerTower.lean#L1330)
+- **Fully qualified:** `NormalityChecker.RadixPowerTower.mul_pow_sub_one_dvd_pow_sub_one_iff`, `NormalityChecker.RadixPowerTower.orderOf_mul_pow_sub_one`, `NormalityChecker.RadixPowerTower.orderOf_mul_pow_sub_one_of_orderOf`, `NormalityChecker.RadixPowerTower.orderOf_mul_pow_add_one`, `NormalityChecker.RadixPowerTower.orderOf_mul_pow_add_one_of_orderOf`
+- **Proof:** [normal-reciprocals-and-signs.md](../notes/phase22/normal-reciprocals-and-signs.md)
+- **External inputs:** Erdős–Turán inequality; Koksma's inequality for the lower barrier; Phase 21 band identities (GF-16).
+- **Computation:** [phase22_reciprocals.py](../scripts/phase22_reciprocals.py)
+- **Related:** [GF-08](#gf-08) · [GF-16](#gf-16) · [GF-19](#gf-19) · [GF-23](#gf-23)
+
+<a id="gf-28"></a>
+
+### GF-28 · Certified Erdős–Borwein correlation-order lower bound, plus Erdős–Borwein E_+, badly-approximable K_2 barrier and five-constant reconnaissance
+
+**Evidence:** Lean + written deduction
+
+(1) For the Erdős–Borwein constant E = Σ 1/(2^n − 1), a scale-2^{64} outward-rounded integer interval certificate proves f(1) ≥ 0.518826 > 1/2 at order 6, establishing the universal minimal correlation-order lower bound 7 ≤ r_min(D) ≤ 92 for every column truncation D ≥ 16 (refining CC-49's lower bound from 5 to 7). (2) The plus Erdős–Borwein constant E_+(b) = Σ 1/(b^n + 1) satisfies the exact kernel-verified identity E_+(b) = E(b) − 2 E(b^2) with exact integer coefficients c_+(n) = (1 − 2 v_2(n)) τ_odd(n) (zero iff n ≡ 2 mod 4, odd iff n is a square), bounded mean ln 2, and a 14-column two-sided comparison model. (3) The Kempner–Shallit badly-approximable number in K_2 (μ = 2, 1 − D_N ≤ (log_2 N + 2)^2/N) proves a sharp barrier showing that finite irrationality exponent μ = 2 and bounded partial quotients cannot exclude K_2-membership for ln 2 or e. (4) Structural reconnaissance maps the specific arithmetic obstructions for five classical constants: Cahen's constant (alternating Sylvester growth L ≈ 1.5202), the reciprocal Fibonacci constant (irrational-base φ^2 misalignment), Catalan quadratic irrationals, Apéry's ζ(3) (p^3 ∥ den barrier), and the Bessel continued-fraction constant I_1(2)/I_0(2) (μ = 2 barrier).
+
+**Scope.** Lean (Phase22Cores.lean) verifies the exact arithmetic coefficient and series identities for E_+(b) (erdosBorweinPlusCoeff_eq, erdosBorweinPlusCoeff_eq_altDivisorSum, erdosBorweinPlusCoeff_pos_iff, erdosBorweinPlusCoeff_eq_zero_iff, erdosBorweinPlusCoeff_neg_iff, erdosBorweinPlusCoeff_odd_iff, erdosBorweinPlus_eq_sub). The outward-rounded order-6 certificate (7 ≤ r_min(D) ≤ 92), two-sided E_+ comparison model, badly-approximable K_2 barrier, and five-constant reconnaissance are written proofs and finite certificates checked by 301,593 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). No new unconditional distributional property is claimed for E, E_+, ln 2, ζ(3), ψ, Cahen's constant, or I_1(2)/I_0(2).
+
+- **Lean:** [`erdosBorweinPlusCoeff_eq`](../NormalityChecker/Phase22Cores.lean#L1052) · [`erdosBorweinPlusCoeff_eq_altDivisorSum`](../NormalityChecker/Phase22Cores.lean#L1083) · [`erdosBorweinPlusCoeff_pos_iff`](../NormalityChecker/Phase22Cores.lean#L1156) · [`erdosBorweinPlusCoeff_eq_zero_iff`](../NormalityChecker/Phase22Cores.lean#L1177) · [`erdosBorweinPlusCoeff_neg_iff`](../NormalityChecker/Phase22Cores.lean#L1202) · [`erdosBorweinPlusCoeff_odd_iff`](../NormalityChecker/Phase22Cores.lean#L1310) · [`erdosBorweinPlus_eq_sub`](../NormalityChecker/Phase22Cores.lean#L1345)
+- **Fully qualified:** `NormalityChecker.Phase22Cores.erdosBorweinPlusCoeff_eq`, `NormalityChecker.Phase22Cores.erdosBorweinPlusCoeff_eq_altDivisorSum`, `NormalityChecker.Phase22Cores.erdosBorweinPlusCoeff_pos_iff`, `NormalityChecker.Phase22Cores.erdosBorweinPlusCoeff_eq_zero_iff`, `NormalityChecker.Phase22Cores.erdosBorweinPlusCoeff_neg_iff`, `NormalityChecker.Phase22Cores.erdosBorweinPlusCoeff_odd_iff`, `NormalityChecker.Phase22Cores.erdosBorweinPlus_eq_sub`
+- **Proof:** [classical-targets-and-recon.md](../notes/phase22/classical-targets-and-recon.md)
+- **External inputs:** CC-49 Erdős–Borwein column truncation D = 16; Shallit (1979) bounded partial quotients of Kempner's number; Davison–Shallit (1991) for Cahen's constant; Apéry (1978); Siegel (1929) for I_1(2)/I_0(2).
+- **Computation:** [phase22_classical.py](../scripts/phase22_classical.py)
+- **Related:** [CC-49](#cc-49) · [CC-50](#cc-50) · [GF-09](#gf-09) · [GF-18](#gf-18)
 
 ## Counterexamples and impossibility results
 
@@ -3993,20 +4150,35 @@ For any dense integer series F_b(a), carry-window transfer reduces D_N(F_b(a)) t
 
 <a id="gf-18"></a>
 
-### GF-18 · Classical transfer barriers, radix-power kernel invariance, and complementary-coverage obstructions
+### GF-18 · Classical transfer barriers, strict radix-power kernel inclusion, and complementary-coverage obstructions
 
 **Evidence:** Lean + written deduction
 
-For every radix b ≥ 2 and k ≥ 1, the discrepancy deficit satisfies the sharp inequality 1 − D_N(x; b^k) ≤ k (1 − D_{kN}(x; b)), which is strict for x = 1/(b^k − 1) (k ≥ 2), while the numerical translation kernel is invariant under radix powers: K_b = K_{b^k}. On divisor sums of periodic weights, complementary congruence coverage forces support density at least 1/(2k) whenever a combination has nonzero weight on a full complementary cover, structurally blocking additive K_b-cancellation routes to the Erdős–Borwein constant E, E_odd, and odd-order character sums. Combining these with Phase 20–21 results maps exact transfer barriers for E, ln 2, π, e, √2, φ and L(1, χ): no new distributional property is established for any of these classical constants.
+For every radix b ≥ 2 and k ≥ 1, the discrepancy deficit satisfies the sharp inequality 1 − D_N(x; b^k) ≤ k (1 − D_{kN}(x; b)), which implies the kernel inclusion K_b ⊆ K_{b^k}. For every k ≥ 2 this inclusion is strict, K_b ⊊ K_{b^k}: x = 1/(b^k − 1) satisfies D_N(x; b^k) = 1 (hence x ∈ K_{b^k}) while its base-b orbit cycles over k distinct points (hence x ∉ K_b). On divisor sums of periodic weights, complementary congruence coverage forces support density at least 1/(2k) whenever a combination has nonzero weight on a full complementary cover, structurally blocking additive K_b-cancellation routes to the Erdős–Borwein constant E, E_odd, and odd-order character sums. Combining these with Phase 20–21 results maps exact transfer barriers for E, ln 2, π, e, √2, φ and L(1, χ): no new unconditional distributional property is established here for any of these classical constants (for E, Mira Cult's pinned external positive-word-density deduction at commit 1498319 would imply D^+(E; 2) < 1 if its analytic inputs are independently verified; no independent proof is claimed here).
 
-**Scope.** Lean (ClassicalBarriers.lean) verifies the complementary-cover support lower bound (complementary_cover, supportCount_complementary_sum_ge), the sharp radix-power deficit inequality and K_b = K_{b^k} invariance (one_sub_radixDiscrepancy_pow_le, tendsto_radixDiscrepancy_pow_one), and the anti-multiplicative / multi-stratum divisor identities (sum_pow_eq_zero_of_eq_neg_one, dirichletOneConv_eq_zero_of_antiMul, dirichletOneConv_strata). The strictness witness, exact D_{2m}(1/(b+1); b) evaluation, and classical barrier synthesis are written proofs verified by exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review).
+**Scope.** Lean (ClassicalBarriers.lean) verifies the complementary-cover support lower bound (complementary_cover, supportCount_complementary_sum_ge), the sharp radix-power deficit inequality and forward kernel inclusion K_b ⊆ K_{b^k} (one_sub_radixDiscrepancy_pow_le, tendsto_radixDiscrepancy_pow_one), and the anti-multiplicative / multi-stratum divisor identities (sum_pow_eq_zero_of_eq_neg_one, dirichletOneConv_eq_zero_of_antiMul, dirichletOneConv_strata). The strictness witness 1/(b^k − 1) ∈ K_{b^k} \ K_b, exact D_{2m}(1/(b+1); b) evaluation, and classical barrier synthesis are written proofs verified by exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review; an earlier Phase 21 consolidation error misstated K_b = K_{b^k} in summary prose and has been corrected to K_b ⊊ K_{b^k}).
 
 - **Lean:** [`complementary_cover`](../NormalityChecker/ClassicalBarriers.lean#L58) · [`supportCount_complementary_sum_ge`](../NormalityChecker/ClassicalBarriers.lean#L72) · [`one_sub_radixDiscrepancy_pow_le`](../NormalityChecker/ClassicalBarriers.lean#L141) · [`tendsto_radixDiscrepancy_pow_one`](../NormalityChecker/ClassicalBarriers.lean#L256) · [`dirichletOneConv_eq_zero_of_antiMul`](../NormalityChecker/ClassicalBarriers.lean#L318) · [`dirichletOneConv_strata`](../NormalityChecker/ClassicalBarriers.lean#L400)
 - **Fully qualified:** `NormalityChecker.ClassicalBarriers.complementary_cover`, `NormalityChecker.ClassicalBarriers.supportCount_complementary_sum_ge`, `NormalityChecker.ClassicalBarriers.one_sub_radixDiscrepancy_pow_le`, `NormalityChecker.ClassicalBarriers.tendsto_radixDiscrepancy_pow_one`, `NormalityChecker.ClassicalBarriers.dirichletOneConv_eq_zero_of_antiMul`, `NormalityChecker.ClassicalBarriers.dirichletOneConv_strata`
 - **Proof:** [classical-barriers.md](../notes/phase21/classical-barriers.md)
 - **External inputs:** Existing classical constant bounds (CC-42 through CC-50, GF-08, GF-09) summarized for the barrier synthesis; the Lean theorems are self-contained.
 - **Computation:** [phase21_characters_classical.py](../scripts/phase21_characters_classical.py)
-- **Related:** [CC-48](#cc-48) · [CC-49](#cc-49) · [CC-50](#cc-50) · [GF-07](#gf-07) · [GF-09](#gf-09) · [GF-13](#gf-13)
+- **Related:** [CC-48](#cc-48) · [CC-49](#cc-49) · [CC-50](#cc-50) · [GF-07](#gf-07) · [GF-09](#gf-09) · [GF-13](#gf-13) · [GF-23](#gf-23) · [GF-28](#gf-28)
+
+<a id="gf-27"></a>
+
+### GF-27 · Complete uniform Selberg sieve for (a/d)E_b^2, intermediate partition products and signed-digit NAF width wall
+
+**Evidence:** Written proof
+
+(1) Theorem S proves from scratch a uniform Selberg upper-bound sieve across all shifts H ≤ N for coefficients of η(12τ)^2, completing Phase 21's proof of (a/d) E_b^2 ∉ K_b for odd prime denominators (GF-16) and supplying the lower frequency bound in GF-20. (2) For intermediate partition products P_b(M) = ∏_{m ∈ M} (1 − b^{−m})^{−1}, exact period formulas (including odd-chain lifts) and tetration-jump constructions show liminf D_N(P_b(M); b) = 0 even for sets M of upper asymptotic density 1, while Mahler's binary partition series satisfies an exact functional equation with an O((log N)^2) carry window. (3) Inside K_2, net signed-digit completeness characterizes x ∈ K_2 by o(N) binary digit changes, quadratic-width witnesses lie in K_b, and an entropy–multiplicity signed-digit (NAF) wall blocks all signed-digit sparse/width transfer methods for D(Θ_3^2), D(E_b^2), and E_b^4, E_b^6, E_b^8.
+
+**Scope.** Written proofs checked by 1,256,966 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Closes the sketched Lemma S gap from Phase 21 (GF-16); distributional behavior of P_b, E_b^4, E_b^6, E_b^8, D(E_b^2) and D(Θ_3^2) remains open.
+
+- **Proof:** [partitions-carry-and-lemma-s.md](../notes/phase22/partitions-carry-and-lemma-s.md)
+- **External inputs:** Hecke eigenform identification of η(12τ)^2 (Serre 1985); Wirsing's theorem; Mahler (1940) binary partition asymptotics.
+- **Computation:** [phase22_partitions_carry.py](../scripts/phase22_partitions_carry.py)
+- **Related:** [GF-08](#gf-08) · [GF-16](#gf-16) · [GF-17](#gf-17) · [GF-20](#gf-20)
 
 ## Manuscripts
 

@@ -1,0 +1,2765 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\hypersetup{pdftitle={Synthetic Arithmetic Expansions and Prescribed Discrepancy}}
+\newcommand{\dist}[1]{\lVert #1\rVert}
+\newcommand{\fr}[1]{\{#1\}}
+\newcommand{\Prob}{\mathcal P}
+\newcommand{\Minv}{\mathcal M_T}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\lcm}{lcm}
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\leanP}[3]{\leanat{\phaseXIXcommit}{#1}{#2}{#3}}
+% Lean modules ProtectedPole and PowerSumPeeling, pinned at the later commit below.
+\newcommand{\phaseXXIcommit}{347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8}
+\newcommand{\leanR}[3]{\leanat{\phaseXXIcommit}{#1}{#2}{#3}}
+\renewcommand{\ReleaseLabel}{candidate draft, not yet released}
+\setlength{\emergencystretch}{3em}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Synthetic Arithmetic Expansions\\[3pt] and Prescribed Discrepancy\par}
+\vspace{10pt}
+\makebyline{2.0 (preprint draft)}{26 November 2026}
+\end{center}
+
+\begin{abstract}
+Fix an integer base $b\ge2$, a prime $p\nmid b$, and let $t$ be the order of $b$ modulo $p$.
+For an integer $d\ge2$, insert the coefficient $p^{-s v_p(k)}$ at base-$b$ position $tk^d$ for every
+$k\ge1$, and call the resulting number $C(b,p,s,d)$. For $s=0$ the extreme discrepancy tends to one,
+while for every $s\ge1$ the number is normal to base $b$; this switch holds on every schedule of
+multiples of $t$ dominating $k^2$ and has been checked by the Lean~4 kernel. For odd $p$ we prove
+that every nonconstant rational polynomial of total degree $r<d$ in numbers $C(b,p,s_a,d)$ with
+distinct orders $s_a$ is normal, and that for a single order and $r\ge2$ the discrepancy is
+$O((\log\log N)^{-d/(d-1)})$ for every $d\ge r+1$; for $r=1$ it is a negative power of $N$. In
+particular $\xi=\sum_k3^{-v_3(k)}2^{-2k^3}$ satisfies $D_N(\xi)\le200N^{-1/3}$ and
+$D_N(\xi^2)\ll(\log\log N)^{-3/2}$. The rate rests on a small-ball estimate for the limiting $p$-adic
+mass of the shifted prefixes and on a short-orbit bound on prime-power moduli that is uniform in the
+base. Choosing the rational state after each cubic insertion realizes every limiting discrepancy with
+error $O(N^{-1/3})$ uniformly in the limit, and every admissible pair of extreme limits and set of
+invariant measures. A positive binary series with every odd prime as a denominator prime is normal
+and Liouville with $D_N=O(1/\log N)$. We construct explicit series whose shifted prefix denominators eventually contain
+every prime not dividing $b$ and whose nonconstant rational polynomial images are normal: a Liouville
+example (all degrees), examples on polynomial schedules $tk^d$ (degree less than $d$), and examples
+with finite irrationality exponent $\lambda$ (degree $r<\lambda$, for primes $p>(r+1)!$) or $p$ (all
+degrees). At the boundary $d=r$ the $p$-adic depth
+of the prefix denominators is tight in density, but we prove that denominator data alone cannot
+determine the digits on the runs that occur; normality of $\xi^3$ and of $C(b,p,s,2)^2$ remains open.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Throughout, $b\ge2$ is an integer, $\T=\R/\Z$, $T(y)=by\bmod 1$, $\fr{y}$ is the fractional part
+and $\dist{y}$ the distance to the nearest integer. For real $x$ and $N\ge1$ the \emph{extreme
+discrepancy} of the first $N$ points of the radix orbit is
+\[
+D_N(x)=D_N(x;b)=\sup_{0\le a<c\le 1}\left|\frac{\#\{0\le n<N:\fr{b^nx}\in[a,c)\}}{N}-(c-a)\right|.
+\]
+A real number is normal to base $b$ if and only if $D_N(x)\to0$ \cite[Chapter~1, Theorem~8.1,
+p.~70 and Chapter~2, Theorem~1.1, p.~89]{KN}. For a prime $p$ we write $v_p$ for the $p$-adic
+valuation and $\ord_m(b)$ for the multiplicative order of $b$ modulo $m$.
+
+The numbers studied here are \emph{synthetic expansions}: sums $\sum_k c_kb^{-n_k}$ with
+positive rational coefficients placed at a sparse arithmetic schedule $n_k$, where the coefficients
+are chosen so that the rational part $b^n\sum_{n_k\le n}c_kb^{-n_k}$ seen after each shift has a
+prescribed reduced denominator or a prescribed residue. The first family is defined by a single
+valuation weight.
+
+\begin{maintheorem}[Normality switch]\label{thm:A}
+Let $p\nmid b$ be prime, $t=\ord_p(b)$, $s\ge0$ an integer, and let $(n_k)_{k\ge1}$ be strictly
+increasing positive multiples of $t$ with $n_k\ge k^2$. Put
+\[
+X_s=\sum_{k\ge1}\frac{1}{p^{s v_p(k)}\,b^{n_k}}.
+\]
+Then $D_N(X_0)\to1$, and $D_N(X_s)\to0$ for every $s\ge1$, as $N\to\infty$ through all integers.
+\end{maintheorem}
+
+\Cref{thm:A} is kernel-verified (\Cref{thm:switch}); so is the exact reduced denominator of every
+shifted prefix (\Cref{thm:den}), which is the arithmetic mechanism: a positive order $s$ keeps a
+pole of exact order $s\lfloor\log_pK\rfloor$ after the $K$th insertion, while $s=0$ retires all
+denominators. We give a written proof of the following rate.
+
+\begin{maintheorem}[Complete-period rate]\label{thm:B}
+Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$, and $s\ge1$, $d\ge s+2$ integers. For
+$X=\sum_{k\ge1}p^{-sv_p(k)}b^{-tk^d}$ and $N\ge2$,
+\[
+D_N(X)\ll_{b,p,s,d} N^{-s/d}+N^{-(d-s-1)/d}+N^{-(d-1)/d}\log N .
+\]
+For the binary number $\xi=\sum_{k\ge1}3^{-v_3(k)}2^{-2k^3}$ one has $D_N(\xi)\le 200N^{-1/3}$
+for every $N\ge1$.
+\end{maintheorem}
+
+The second half is proved first, in \Cref{sec:example}, by an argument that uses only the fact
+that $2$ is a primitive root modulo every power of $3$. The general estimate is \Cref{thm:rate}.
+
+Changing the coefficient after each insertion lets one prescribe the rational state, and hence the
+orbit, on each gap. Retiring a prescribed weighted proportion of gaps gives every discrepancy limit
+with an explicit error.
+
+\begin{maintheorem}[Prescribed discrepancy]\label{thm:C}
+Let $p\nmid b$ be an odd prime and $t=\ord_p(b)$. For every $\delta\in[0,1]$ there are rationals
+$c_k\in(0,1]$ whose reduced denominators divide $p^{1+\lfloor\log_pk\rfloor}\le pk$ such that
+$x_\delta=\sum_{k\ge1}c_kb^{-tk^3}$ satisfies
+\[
+|D_N(x_\delta)-\delta|\le C_{b,p}N^{-1/3}\qquad(N\ge1),
+\]
+with $C_{b,p}$ independent of $\delta$. On the same schedule $tk^3$ and with the same denominator bound,
+every pair $0\le\alpha\le\beta\le1$ occurs as $(\liminf D_N,\limsup D_N)$, with
+$D_N=\Lambda_N/N+O(N^{-1/3})$ for an explicit weighted count $\Lambda_N$. Every nonempty compact
+connected set of $T$-invariant Borel probability measures on $\T$ occurs, again on the schedule $tk^3$,
+as the set of weak limit points of the orbit measures of an expansion whose state after the $k$th
+insertion is a purely periodic rational of period at most $k$.
+\end{maintheorem}
+
+Qualitatively, \Cref{thm:C} adds nothing to classical realization. Every radix orbit is, after
+finitely many shifts, the orbit of a sum $\sum_kc_kb^{-n_k}$ with rationals $c_k\in(0,1)$ whose
+denominators are powers of $p$, on any prescribed increasing schedule (\Cref{rem:qualitative}). The
+realization of invariant-measure limit sets by digit sequences \cite{Colebrook,Sigmund74,DGS}, combined
+with weak continuity of $D$ (\Cref{lem:Dcont}), therefore already yields every limit $\delta$, every pair
+$(\alpha,\beta)$ and every limit set by such expansions. What \Cref{thm:C} adds, in the sources we
+examined, is quantitative and arithmetic: an error $O(N^{-1/3})$ at every prefix, uniform in $\delta$;
+coefficient denominators bounded by $pk$, with the target state chosen from two explicit values; and an
+explicit arithmetic schedule of targets, given by the Beatty-type mask
+$\lfloor k\delta\rfloor-\lfloor(k-1)\delta\rfloor$. The proofs are in \Cref{sec:program,sec:limitsets}.
+
+The linear switch of \Cref{thm:A} rests on a single surviving pole. For squares that pole can
+vanish: in the shifted prefixes of $\xi^2$ the top power of $3$ cancels on a set of shifts of positive
+lower density, so the method of \Cref{thm:A} alone does not decide normality. A finer analytic argument
+does, in every degree below the degree of the schedule. Write
+\[
+C(b,p,s,d)=\sum_{i\ge1}p^{-sv_p(i)}b^{-ti^d},
+\]
+so that $X_s=C(b,p,s,d)$ in \Cref{thm:B} and $\xi=C(2,3,1,3)$.
+
+\begin{maintheorem}[Polynomial images below the schedule degree]\label{thm:D}
+Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$, $d\ge2$ an integer, and for integers $a\ge1$ put
+$X_a=C(b,p,a,d)$. For every finite set $S$ of positive integers and every nonconstant polynomial
+$P\in\Q[z_a:a\in S]$ of total degree $r\le d-1$, the number $P((X_a)_{a\in S})$ is normal to base $b$.
+If $S=\{s\}$ consists of one order, then
+\[
+D_N(P(X_s))\ll_P(\log\log N)^{-d/(d-1)}\quad(r\ge2),\qquad D_N(P(X_s))\ll_PN^{-\eta}\quad(r=1),
+\]
+with $\eta=\eta(p,s,d)>0$. Consequently no $X_s$ is algebraic of degree less than $d$; the distinct
+nonconstant monomials of total degree less than $d$ in the $X_a$ are jointly normal; $\xi^2$ is normal
+to base $2$ with $D_N(\xi^2)\ll(\log\log N)^{-3/2}$, and the binary shifts of $(\xi,\xi^2)$ are
+uniformly distributed in $\T^2$; and $C(2,3,1,4)$, its square and its cube are jointly normal to base $2$.
+\end{maintheorem}
+
+The case of total degree at most two and $d\ge3$ is \Cref{thm:quadratic}, whose proof without a rate
+is kept in \Cref{sec:quadratic} as the model case. The general qualitative statement combines
+\Cref{thm:higher} (one order) and \Cref{thm:several} (several orders); the rates are
+\Cref{thm:effective}. The arithmetic input is the exact all-prefix criterion of \Cref{prop:criterion},
+which reduces normality to showing that small reduced denominators occur on a set of shifts of density
+zero. After normalization the relevant quantity converges $p$-adically to a function $M_r(u)$ of the
+real position $u$ of the shift in its $p$-adic shell, with values in $\Z_p$, whose reduction modulo
+each power of $p$ is a finite step function. We show that every level set of $M_r$ is Lebesgue-null.
+In degree two, primitive jumps on the grids $p^{-H}\Z$ are isolated with positive proportion by the
+third-derivative test of van der Corput, and a second-moment argument places almost every point in
+infinitely many isolated neighbourhoods. In degree $r\ge3$ a single family of centres covers too little
+measure, and we isolate instead a positive proportion of centres built on dominant anchors, using the
+$q$-th derivative test with $q\le r+1$ and a divisor bound for exact coincidences of sums of $d$-th
+powers. Uniform isolation at a fixed small scale is false (\Cref{prop:nouniform}); averaging over unions
+of intervals gives the small-ball bound $|\{u:M_r(u)\equiv w\bmod p^L\}|\ll(\log L)^{-d/(d-1)}$
+(\Cref{thm:smallball}), which is the source of the rate. The remaining analytic input is a short-orbit
+estimate on prime-power moduli that is uniform in the base (\Cref{lem:uniformorbit}).
+
+Finally we test synthesis with infinitely many denominator primes.
+
+\begin{maintheorem}[Infinite sums]\label{thm:E}
+For an odd prime $\ell$ let $s_3=2$, $s_\ell=1$ for $\ell\ge5$, and
+$Y_\ell=\sum_{j\ge1}\ell^{-s_\ell j}2^{-16^{\ell^j}}$. Then $Y=\sum_\ell Y_\ell$, summed over all odd
+primes, is normal to base $2$ and a Liouville number, and $D_N(Y)=O(1/\log N)$. Every finite
+subfamily of the $Y_\ell$ is jointly normal, and there are positive rationals $c_\ell$ with
+$\sum_\ell c_\ell Y_\ell=1$.
+\end{maintheorem}
+
+Thus finite joint normality of positive terms does not survive infinite summation, while a
+uniform arithmetic grid (\Cref{lem:grid}) at the prime $3$ survives the introduction of every other
+odd prime (\Cref{sec:sums}).
+
+The series $Y$ retains every odd prime but is only shown to be normal itself. Protecting one pole
+while auxiliary primes accumulate gives polynomial normality as well. Call a series \emph{all-prime}
+if every prime not dividing $b$ divides the reduced denominators of its shifted prefixes $R_n$ for all
+large $n$, and let $\mu(x)$ denote the irrationality exponent of a real number $x$.
+
+\begin{maintheorem}[All-prime polynomial normality]\label{thm:F}
+Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$, and let $\ell_1<\ell_2<\cdots$ be the primes not
+dividing $pb$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item The series $W=\sum_{k\ge1}p^{-k^2}\ell_k^{-1}b^{-2^{k^3}}$ is all-prime: for
+$2^{k^3}\le n<2^{(k+1)^3}$ the reduced denominator of $R_n$ is exactly $p^{k^2}\ell_1\cdots\ell_k$. For
+every nonconstant $P\in\Q[x]$ the number $P(W)$ is normal to base $b$ and a Liouville number, and
+$D_N(P(W))\ll_{P,c}\exp(-c(\log N)^{2/3})$ for every $c<\min\bigl(3(\log2)^{1/3},\,
+(\deg P)(\log p)(\log 2)^{-2/3}\bigr)$.
+\item For integers $s,r\ge1$ and $d\ge r+1$ there are integers $\mu_k\ge1$, equal to $1$ except at a
+sparse set of indices prime to $p$, such that $W_H=\sum_kp^{-sv_p(k)}\mu_k^{-1}b^{-tk^d}$ is all-prime and
+$P(W_H)$ is normal to base $b$ for every $P\in\Q[x]$ with $1\le\deg P\le r$, with the rates of
+\Cref{thm:D}.
+\item For every $r\ge1$ with $p>(r+1)!$ and every integer $\lambda\ge\max(3,r+1)$ there is an all-prime
+series $W_G=\sum_ku_kp^{-k}\mu_k^{-1}b^{-t\lambda^k}$, with positive integers $u_k,\mu_k$, with $P(W_G)$ normal to base $b$ and $D_N(P(W_G))\ll_PN^{-\eta_P}$ for every
+nonconstant $P\in\Q[x]$ of degree at most $r$, and $\mu(W_G)=\lambda$.
+\item There is an all-prime series $W_S$ on the Stoneham schedule $p^k$ with $P(W_S)$ normal to base $b$
+and $D_N(P(W_S))\ll_PN^{-\eta_P}$ for every nonconstant $P\in\Q[x]$, and $\mu(W_S)=p$.
+\end{enumerate}
+\end{maintheorem}
+
+Part (i) is \Cref{thm:allprime}. Three finite statements behind it are kernel-verified: the exact
+$p$-adic depth of the prefixes of $W$, the divisibility of their denominators by the newest auxiliary
+prime, and a lower bound for the pole of a truncated Taylor expansion; the persistence of the older
+primes, the analytic estimates, the rate and the Liouville property are written proofs. Parts (ii)--(iv) are \Cref{thm:hybrid,thm:geometric,thm:stoneham}.
+In (ii) the consecutive positions have ratio tending to one, and we can only show
+$|W_H-A/Q|\ge Q^{-\psi(Q)}$ with $\psi(Q)\to\infty$ (\Cref{prop:ratioone}); whether $\mu(W_H)$ is finite,
+and whether $W_H$ is a Liouville number, is open. Parts (iii) and (iv) answer the corresponding
+question for constructions of this kind: all-prime polynomial normality is compatible with a finite
+irrationality exponent.
+
+At the boundary $d=r$ the insertions are no longer sparse, and the method stops. We locate where.
+
+\begin{maintheorem}[The boundary $d=r$]\label{thm:G}
+Let $p\nmid b$ be an odd prime, $s\ge1$, $d\ge2$, $C=C(b,p,s,d)$, and let $q_n$ be the reduced
+denominator of the shifted prefix of $C^d$ at the shift $n=tp^{dJ(n)}u$, $1\le u<p^d$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every $L\ge3$ the shifts with $v_p(q_n)<dsJ(n)-L$ have upper density at most
+$C_{p,s,d}(\log L)^{-d/(d-1)}$.
+\item If $q=p^e$ and $b^T\le q/2$, every word of $T$ base-$b$ digits is the leading word of $a/q$ for
+some $a$ prime to $p$; and for $b^T\le\epsilon q$ no bound for
+$\sup_{p\nmid a}|\sum_{j<T}e(hab^j/q)|$ improves on $T$ by more than $2\pi|h|\epsilon/(b-1)$.
+\item For $d=2$ and every $H\ge0$ one has $p^{sH}C^2=X_H+Z_H$, where $X_H$ has integer coefficients and
+$1-D_N(X_H)\ll(\log\log N+H)/\sqrt{\log N}$ uniformly in $H$; $C^2$ is normal if and only if $Z_H$ is;
+and for fixed $H$ and every $\epsilon>0$ the shifts $n<N$ lying in runs of length at least
+$\epsilon\log N$ between consecutive insertions of $Z_H$ form a proportion tending to $0$, so that
+almost every shift lies in a run below the threshold of \textup{(ii)}.
+\item For $d=3$ the same decomposition holds, but the sparse-series transfer used for $d=2$ shows
+$D_N(X_H)\to1$ only if the sums of three positive cubes have density zero, which is open.
+\end{enumerate}
+\end{maintheorem}
+
+This is \Cref{sec:boundary}. Item (i) says that the $p$-adic half of the method survives at $d=r$,
+and items (ii)--(iii) that the real half does not: any proof must use the numerators of the shifted
+prefixes at resolution $b^{-T}$, which is the distribution of the orbit itself. Normality of $\xi^3$
+and of $C(b,p,s,2)^2$, and even $\limsup_ND_N<1$, remain open (\Cref{sec:questions}).
+
+\paragraph{Companion manuscript.} The perturbation estimates used here are finite comparisons
+(\Cref{lem:compare}). Their sharp form, the identity $\sup_x|D_N(x+z)-D_N(x)|=1-D_N(z)$, together with
+the classification of translations preserving discrepancy, the exact addition spectrum of $D_N$ and
+the behaviour of $D_N$ under rational scalars, is the subject of the companion manuscript
+\cite{CompanionH} in the same release. We quote the identity once (\Cref{thm:sharpcited}) and use it
+only in \Cref{prop:tails}.
+
+\paragraph{Relation to earlier work.} Arithmetic constructions of normal numbers by sparse series
+go back to Stoneham \cite{Stoneham73} and Korobov \cite{Korobov72}; Kano \cite[Theorem~1]{Kano93} gives
+a general criterion for series $\sum A_j/(a^{\lambda_j}b^{\mu_j})$, with strictly increasing exponents
+and size conditions on the numerators, and records in its introduction Stoneham's constructions with
+prescribed numerators. Bailey and Crandall \cite[Theorem~4.8]{BC02} prove normality for such series
+with numerator one under growth conditions on the two exponent sequences, and Vandehey
+\cite[Corollary~1.2 and Theorem~7.4]{Vandehey19} gives power-saving estimates for incomplete Korobov
+sums on moduli with fixed prime support, together with a normality criterion for series
+$\sum 1/(c_kb^{m_k})$ with numerator one in which $c_k\mid c_{k+1}$ strictly. Two denominator sequences
+should be distinguished in \Cref{thm:A}. The insertion denominators $p^{sv_p(k)}$ return to $1$ whenever
+$p\nmid k$, so the series is not term by term an instance of these criteria; the reduced denominators
+$p^{s\lfloor\log_pK\rfloor}$ of the shifted prefixes do form a divisibility chain. Grouping consecutive
+insertions into single terms does not help either: on the cubic schedule a group of two or more terms,
+written over its last radix position, has size times that radix power tending to infinity, which is
+incompatible with the bounded normalized numerators of these criteria (the test is recorded in the
+ledger, \Cref{sec:formal}). We therefore do not apply a published series criterion. The positive side
+of \Cref{thm:A} combines the exact prefix denominators (\Cref{thm:den}) with a fixed-support short-orbit
+estimate (\Cref{lem:short}), the qualitative consequence of Vandehey's Corollary~1.2; the side $s=0$
+is elementary, and the switch holds on every schedule dominating $k^2$. Rings of numbers normal to one
+base and not to another were constructed by Wagner \cite{Wagner95}, an uncountable ring all of whose
+nonzero elements are normal to base $b$ and not normal to base $ab$ for a prime $a\nmid b$ (as described
+in \cite[\S1]{Kano93} and in the introduction of \cite{KS93}), and by Kano and Shiokawa
+\cite[Theorem~5]{KS93} for $a$ not necessarily prime. Since nonzero polynomial expressions in the
+generators lie in the ring, these are direct precedents for the normality of polynomial images of
+suitable generators. Polynomial images of the standard Stoneham numbers are treated in \cite{PaperI},
+and Mira Cult's public note \cite[Theorem~1.1]{MiraPoly} proves the normality of every nonconstant
+rational polynomial in $\sum_kq^{-k}b^{-c^k}$ when $q>2$ and some prime divides $c$ and $q$ but not $b$
+(see the comparison after \Cref{cor:flagship}); the same statement for $c>2$ coprime to $b$ is
+kernel-verified in \cite[Theorem~A]{PaperIv2}. Without auxiliary primes the series $W_S$ of
+\Cref{thm:F}(iv) is the Stoneham number $\alpha_{b,p}$, and its polynomial normality is that theorem;
+what (iv) adds is the growing auxiliary support and the irrationality exponent. The ring generators use rapidly separated exponents,
+and \cite{MiraPoly} uses the exponential schedule $c^k$. \Cref{thm:D} concerns specific generators on a polynomial
+schedule, whose consecutive positions have ratio tending to one and whose weight exponents $sv_p(k)$
+return to zero infinitely often; we have not verified that the generator hypotheses of the ring
+constructions hold for them. Its conclusion is limited to total degree below $d$, and it does not
+produce a ring. Manai \cite{Manai25} constructs explicit numbers $x$ such that $P(x)$ is normal, indeed
+absolutely normal, for every nonconstant integer-valued polynomial $P$ (we rely on the abstract of that
+preprint). \Cref{thm:F} is of a different kind: it concerns one fixed base, every rational polynomial,
+explicit series whose prefix denominators acquire every prime not dividing $b$, explicit rates, and a
+prescribed Liouville or finite irrationality exponent. As far as we can tell neither result contains
+the other; the comparison in the ledger records what was read.
+Normal Liouville numbers are known explicitly \cite{KS93,BC02}, absolutely normal Liouville numbers
+exist \cite{Bugeaud02}, and a computable one was constructed in \cite{BHS15}; \Cref{cor:liouville} is a
+further explicit example inside the switch family, and \Cref{thm:F}(i) one whose polynomial images are
+all normal and Liouville. We make no priority claim for normal numbers with a prescribed finite
+irrationality exponent as such; parts (iii) and (iv) of \Cref{thm:F} combine such an exponent with
+polynomial normality and all-prime denominators for explicit series. The irrationality exponent of the
+lacunary series in \Cref{thm:F}(iii)--(iv) is computed by the classical truncation argument
+(\Cref{lem:truncation}). For a family of signed Stoneham expansions the
+attainable upper discrepancies form an explicit proper subset of $[0,1]$ with a gap above zero
+\cite{PaperIII}, whereas \Cref{thm:C} shows that positive coefficients on a cubic schedule reach every
+value with a uniform rate. Recent public work proves the normality of sums of two Stoneham numbers \cite{SudeSum} and the
+joint normality of Stoneham series on finitely many distinct primes and orders \cite{MiraJoint};
+\Cref{thm:combos} is a result of the same kind for the different series of \Cref{thm:E}. Normal numbers
+with very small discrepancy are constructed in \cite{Levin99,ABSS17}; the rates of \Cref{thm:B,thm:C}
+are much weaker and are included because they are elementary and hold for the specific arithmetic
+families; the same applies to the rates of \Cref{thm:D}. The analytic inputs of \Cref{sec:quadratic}
+are van der Corput's method in the forms of Graham--Kolesnik \cite{GK91} and Titchmarsh's $q$-th
+derivative test \cite[Theorem~5.13]{Titchmarsh86}, and the Erd\H{o}s--Tur\'an inequality \cite{KN}. The
+short-orbit bound of \Cref{lem:uniformorbit} is an elementary stride-differencing estimate in the
+spirit of Korobov \cite{Korobov72} and Vandehey \cite{Vandehey19}; its point is uniformity in the base.
+In \Cref{sec:boundary} we use Landau's theorem on sums of two squares \cite{Landau08}, Hooley's moment
+bound for their gaps \cite{Hooley71}, the Bambah--Chowla gap bound \cite{BambahChowla47} and the
+Selberg--Delange method \cite{Tenenbaum15}, and for the cubic boundary Wooley's lower bound for sums of
+three cubes \cite{Wooley15} and the probabilistic model of Deshouillers, Hennecart and Landreau
+\cite{DHL06}. We have not located \Cref{thm:A,thm:D,thm:E,thm:F} in the sources examined; a detailed
+comparison, including recent public repositories, is kept in the ledger accompanying the source files
+(\Cref{sec:formal}).
+
+\paragraph{Evidence labels.} Each numbered statement carries one label:
+\emph{Kernel-verified} (the complete statement is a Lean declaration checked by the kernel, linked
+at a pinned commit), \emph{Lean-supported paper proof} (named steps are Lean declarations),
+\emph{Paper proof}, or \emph{External input}. A statement whose proof includes an exact computation
+over a stated finite range carries in addition the label \emph{finite certificate}. Kernel-verified statements also receive written proofs or proof outlines here.
+A Lean-supported label means only that the named finite step is formal; the analytic estimates,
+the measure theory and every rate are written proofs. Finite computations quoted as illustrations
+are measurements, not evidence for asymptotic statements.
+
+\section{Discrepancy on the circle and orbits of rationals}\label{sec:prelim}
+
+For a finite sample $u=(u_0,\ldots,u_{N-1})$ in $\T$, identified with $[0,1)$, let $\mu_u$ be its
+empirical probability measure and $D(u)=\sup_{0\le a<c\le1}|\mu_u([a,c))-(c-a)|$. A
+\emph{half-open arc} is the image in $\T$ of $[\alpha,\alpha+l)$ with $0\le l\le1$; its length is
+$|I|=l$, and its \emph{excess} is $\mu_u(I)-|I|$.
+
+\begin{lemma}[Arcs]\label{lem:arcs}\evidence{Paper proof}
+For every half-open arc $I$, $|\mu_u(I)-|I||\le D(u)$, and $D(u)=\sup_I(\mu_u(I)-|I|)$, the supremum
+of the excess over half-open arcs. Consequently $D(u)$ is unchanged if every $u_n$ is rotated by
+the same $\theta\in\T$.
+\end{lemma}
+
+\begin{proof}
+A non-wrapping arc is an interval $[a,c)$. A wrapping arc is the complement of an interval
+$[c,a)$, and its excess is the negative of the excess of that interval; the full circle has
+excess zero. This proves the first claim and that the supremum of excesses is at most $D(u)$.
+Conversely an interval with negative excess $-e$ has a complementary arc with excess $e$.
+Rotation permutes half-open arcs and preserves length.
+\end{proof}
+
+\begin{lemma}[Finite comparison]\label{lem:compare}\evidence{Paper proof}
+Let $u,v$ be samples of length $N$, let $\epsilon\ge0$ and $E=\#\{n<N:\dist{u_n-v_n}>\epsilon\}$.
+Then $|D(u)-D(v)|\le E/N+2\epsilon$.
+\end{lemma}
+
+\begin{proof}
+Let $I=[\alpha,\alpha+l)$. If $l>1-2\epsilon$, then $\mu_u(I)-l<2\epsilon$. Otherwise each $n$
+with $u_n\in I$ and $\dist{u_n-v_n}\le\epsilon$ has $v_n$ in the half-open arc
+$I'=[\alpha-\epsilon,\alpha+l+\epsilon)$ of length $l+2\epsilon$. Hence
+$\mu_u(I)\le\mu_v(I')+E/N\le l+2\epsilon+D(v)+E/N$ by \Cref{lem:arcs}. Taking the supremum
+over $I$ gives $D(u)\le D(v)+E/N+2\epsilon$; exchange $u$ and $v$.
+\end{proof}
+
+When $v_n=\fr{b^n(x+z)}$ and $u_n=\fr{b^nx}$, the exceptional set depends only on $z$; this case
+is the kernel-verified declaration
+\lean{Phase18Synthetic}{583}{\ttt{discrepancy\_transfer}}. We shall often use the following
+form, in which part of the orbit is left uncovered.
+
+\begin{lemma}[Block certificate]\label{lem:blocks}\evidence{Paper proof}
+Let $x\in\R$, $N\ge1$, and let $B_1,\ldots,B_m\subset[0,N)$ be disjoint sets of integers with
+$U=N-\sum_i|B_i|$. Suppose that $y_n\in\T$ is given for $n\in\bigcup B_i$ and that for every $i$
+and every half-open arc $I$,
+$|\#\{n\in B_i:y_n\in I\}-|B_i||I||\le H_i$. If $\dist{b^nx-y_n}\le\epsilon$ for all covered $n$
+except $E$ of them, then
+\[
+D_N(x)\le\frac{U+E+\sum_iH_i}{N}+2\epsilon .
+\]
+\end{lemma}
+
+\begin{proof}
+Put $y_n=\fr{b^nx}$ at uncovered $n$. For every half-open arc the count of $(y_n)_{n<N}$ differs
+from $N|I|$ by at most $\sum_iH_i+U$, so $D(y)\le(U+\sum_iH_i)/N$ by \Cref{lem:arcs}. Apply
+\Cref{lem:compare}.
+\end{proof}
+
+The rational models will be orbits of rationals with denominator prime to $b$. We use the
+standard lifting of exponents: if $\ell$ is an odd prime and $\ell\mid y-1$, then
+$v_\ell(y^m-1)=v_\ell(y-1)+v_\ell(m)$ for all $m\ge1$. (For $\ell\nmid m$ the quotient
+$(y^m-1)/(y-1)\equiv m\pmod\ell$; and if $y=1+\ell^ju$ with $j\ge1$, then
+$y^\ell=1+\ell^{j+1}u+\binom{\ell}{2}\ell^{2j}u^2+\cdots\equiv1+\ell^{j+1}u\pmod{\ell^{j+2}}$.)
+
+\begin{lemma}[Grids]\label{lem:grid}\evidence{Lean-supported paper proof}
+Let $p$ be an odd prime, $q=p^eQ$ with $\gcd(Q,pb)=1$ and $p\nmid b$. Let $\tau\ge1$ satisfy
+$b^\tau\equiv1\pmod{pQ}$, and put $c=v_p(b^\tau-1)$. If $e\ge c$, then for every integer $a$ prime to
+$p$ (not necessarily prime to $Q$) and every $j_0\ge0$, the $S=\tau p^{e-c}$ points $\fr{ab^j/q}$, $j_0\le j<j_0+S$, form $\tau$
+arithmetic progressions in $\T$, each of $p^{e-c}$ points with common difference $p^{c-e}$.
+Consequently, for every $L\ge1$, every $L$ consecutive points $\fr{ab^j/q}$, and every half-open arc
+$I$,
+\[
+\bigl|\#\{j:\fr{ab^j/q}\in I\}-L|I|\bigr|\le Lp^{c-e}+\tau p^{e-c}.
+\]
+\end{lemma}
+
+\begin{proof}
+Put $y=b^\tau$. By lifting the exponent, $y^m\equiv1\pmod{p^e}$ if and only if
+$p^{e-c}\mid m$, so $y$ generates a subgroup of order $p^{e-c}$ of the units modulo $p^e$, contained
+in the set of residues congruent to $1$ modulo $p^c$; that set has $p^{e-c}$ elements, so the two
+coincide. Since $a$ is a unit modulo $p^e$, the residues $ay^m$ modulo $p^e$ are exactly those
+congruent to $a$ modulo $p^c$; since $y\equiv1\pmod Q$, $ay^m\equiv a\pmod Q$ for every integer $a$.
+The Chinese remainder theorem therefore gives
+$\{ay^m\bmod q\}=\{r\bmod q:r\equiv a\pmod{p^cQ}\}$, and these residues divided by $q$ form a
+progression of $p^{e-c}$ points with difference $p^cQ/q$. Writing $j=j_0+r+\tau m$ with $0\le r<\tau$
+splits $S$ consecutive points into $\tau$ such cosets. A progression of $M$ points with difference
+$1/M$ meets every half-open arc $I$ in $M|I|+\theta$ points with $|\theta|\le1$. For general $L$
+write $L=fS+g$ with $0\le g<S$; the error is at most $f\tau+g\le L\tau/S+S$. The order computation
+and the count over one stretch of length $S$ starting at $j_0=0$ (equivalently, at any numerator)
+are the Lean declarations \leanP{SurvivingGrid}{43}{\ttt{stride\_order}} and
+\leanP{PrimePowerGrid}{337}{\ttt{crt\_period\_count}}, the latter also for numerators prime to $p$
+only; the passage to arbitrary $L$ is written.
+\end{proof}
+
+The lemma counts along one chosen admissible stride $\tau$, which is all that \Cref{thm:Y} needs. For
+an arbitrary admissible $\tau$ the $\tau$ progressions need not be distinct, and $p^{e-c}$ need not be
+the largest size of an equally spaced subset of the orbit; we do not use the exact period or the
+maximal grid.
+
+\begin{corollary}[Prime-power orbits]\label{cor:period}\evidence{Paper proof}
+Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$ and $v=v_p(b^t-1)$. For $e\ge0$, $a$ prime to $p$,
+$L\ge1$ and every half-open arc $I$, any $L$ consecutive points $\fr{ab^j/p^e}$ satisfy
+\[
+\bigl|\#\{j:\fr{ab^j/p^e}\in I\}-L|I|\bigr|\le p^vL/p^e+p^e .
+\]
+\end{corollary}
+
+\begin{proof}
+If $e\ge v$ apply \Cref{lem:grid} with $Q=1$, $\tau=t$, $c=v$, noting $tp^{e-v}<p^e$. If $e<v$ the
+left side is at most $L\le p^vL/p^e$.
+\end{proof}
+
+The sharp form of \Cref{lem:compare} for translations is proved in the companion manuscript. We quote
+it here and use it only in \Cref{prop:tails}.
+
+\begin{theorem}[Sharp translation identity {\cite[Theorem~3.1]{CompanionH}}]\label{thm:sharpcited}\evidence{Kernel-verified}
+For all real $x,z$ and every $N\ge1$, $|D_N(x+z)-D_N(x)|\le1-D_N(z)$, with equality at $x=0$.
+\end{theorem}
+
+This is Theorem~3.1 of \emph{The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and
+Rational Operations} \cite{CompanionH}, in the same release, where it is proved; it is the Lean
+declaration \lean{SharpTranslation}{343}{\ttt{sharp\_translation}}, with the equality case
+\lean{SharpTranslation}{386}{\ttt{sharp\_translation\_isGreatest}}. We do not reprove it. Taking $x=-z$
+gives $D_N(-z)=D_N(z)$.
+
+\subsection{Short orbits uniform in the base}\label{sec:uniformorbit}
+
+The fixed-support estimate \Cref{lem:short} below is qualitative, and its support is fixed. The rates
+of \Cref{thm:D,thm:F} need an explicit estimate for orbits of a principal unit on a prime-power
+modulus, uniform in the unit. For an integer $G\equiv1\pmod p$ with $G\ne1$ put $A(G)=v_p(G-1)$, and
+write $e(\theta)=\exp(2\pi i\theta)$.
+
+\begin{lemma}[Uniform short orbits]\label{lem:uniformorbit}\evidence{Paper proof}
+Let $p$ be an odd prime and $\theta\in(0,1]$. Put $n_\theta=\lceil2/\theta\rceil+1$,
+$\delta=2^{-2-n_\theta}$ and $M_*=p^{n_\theta+8}$. Let $M_0\ge M_*$, let $G\equiv1\pmod p$ be an integer
+with $G\ne1$ and $A=A(G)\le\frac3{16}\log_pM_0-1$, and let $e,c$ be integers with
+$A<e\le\theta^{-1}\log_pM_0$ and $p\nmid c$. Then for every integer $0\le M\le M_0$,
+\[
+\Bigl|S(G,e,c;M)\Bigr|\le9M_0^{1-\delta},\qquad S(G,e,c;M)=\sum_{0\le m<M}e\Bigl(\frac{cG^m}{p^e}\Bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+Three facts are used. (i) By lifting the exponent (\Cref{sec:prelim}), $v_p(G^n-1)=A+v_p(n)$ for $n\ge1$.
+(ii) Hence $G$ has order $p^{e-A}$ modulo $p^e$ and generates the subgroup $1+p^A\Z/p^e\Z$, which has
+the same order. For $X=e-A\ge1$ a complete period therefore gives
+$\sum_{z\bmod p^X}e(c(1+p^Az)/p^e)=e(c/p^e)\sum_{z\bmod p^X}e(cz/p^X)=0$, so $|S|<p^X$ for every length
+$M$. (iii) For integers $H,w\ge1$, extending the summands by zero and applying the Cauchy--Schwarz
+inequality to $H\cdot S=\sum_n\sum_{i<H}a_{n+iw}$ gives
+\[
+|S|^2\le\frac{M+(H-1)w}{H}\Bigl(M+2\sum_{h=1}^{H-1}|C_h|\Bigr),\qquad
+C_h=\sum_{0\le m<\max(0,M-hw)}e\Bigl(\frac{c(G^{m+hw}-G^m)}{p^e}\Bigr).
+\]
+By (i), $c(G^{hw}-1)=c_hp^{A+v_p(hw)}$ with $p\nmid c_h$, so $C_h=S(G,e_h,c_h;\max(0,M-hw))$ with the
+\emph{same base} $G$ and $e_h=e-A-v_p(hw)$.
+
+Put $L_0=\log_pM_0\ge n_\theta+8\ge11$, $W=\lfloor\frac34L_0\rfloor$, $\kappa=\lfloor\frac12L_0\rfloor$ and
+$H=\lfloor M_0^{1/4}\rfloor$. Let $\mathcal F$ be the set of triples $(G,e,c)$ with $A(G)\le W/4$,
+$e-A(G)\ge1$ and $p\nmid c$. We prove by induction on $n\ge0$: \emph{if $(G,e,c)\in\mathcal F$ and
+$X=e-A\le W+n\kappa$, then $|S(G,e,c;M)|\le C_nM_0^{1-\delta_n}$ for $0\le M\le M_0$}, where $C_0=1$,
+$C_{n+1}=(4+8C_n)^{1/2}$ and $\delta_n=2^{-2-n}$. Since $4+2\sqrt5<9$ is the fixed point of
+$x\mapsto(4+8x)^{1/2}$, every $C_n<9$.
+
+If $X\le W$, (ii) gives $|S|<p^W\le M_0^{3/4}$. Let $W+n\kappa<X\le W+(n+1)\kappa$. Choose $k\in[0,\kappa]$
+as follows: $k=0$ if $X-A\le W$; $k=X-A-W$ if $W<X-A\le W+\kappa$; $k=\kappa$ if $X-A>W+\kappa$. Then
+$X_1=X-A-k$ satisfies $\frac34W\le X_1\le W+n\kappa$ (the first case uses $A\le W/4$, the last uses
+$X\le W+(n+1)\kappa$ and $A\ge1$). Take $w=p^k\le M_0^{1/2}$. For $1\le h<H$ put $j=v_p(h)\le\frac14L_0$;
+the differenced triple has $X_h=e_h-A=X_1-j$ with
+$1\le\frac5{16}L_0-\frac34\le\frac34W-\frac14L_0\le X_h\le W+n\kappa$, so every $C_h$ falls under the case
+$n$. Since $M+(H-1)w\le2M_0$ and $H\ge\frac12M_0^{1/4}$,
+\[
+|S|^2\le4M_0^{3/4}\bigl(M_0+2HC_nM_0^{1-\delta_n}\bigr)\le(4+8C_n)M_0^{2-\min(1/4,\delta_n)},
+\]
+which is the case $n+1$ with $\delta_{n+1}=\delta_n/2$. Finally the hypotheses give $A\le W/4$, so
+$(G,e,c)\in\mathcal F$, and $e-A<e\le L_0/\theta\le W+n_\theta\kappa$, because
+$W+n_\theta\kappa\ge\frac34L_0-1+(\frac2\theta+1)(\frac{L_0}2-1)\ge\frac{L_0}\theta+\frac54L_0-n_\theta-1$
+and $L_0\ge n_\theta+8$. Apply the case $n=n_\theta$.
+\end{proof}
+
+Some bound on $A(G)$ of order $\log_pM_0$ is necessary: for $G=1+p^a$, $e=2a$, $c=1$ one has
+$G^m\equiv1+mp^a\pmod{p^{2a}}$, so $|S|=|\sin(\pi M/p^a)/\sin(\pi/p^a)|$, which exceeds $0.98M$ for
+$M=\lfloor p^a/10\rfloor$ whenever $p^a\ge10$, although then $M\ge p^{e/2-3}$.
+
+\begin{corollary}[Splitting off a coprime modulus]\label{cor:split}\evidence{Paper proof}
+Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$, $a_0=v_p(b^t-1)$, and let $y=a/(p^eQ)$ with
+$\gcd(a,pQ)=1$ and $\gcd(Q,pb)=1$. Put $T_Q=\ord_Q(b)$, $\tau=\lcm(t,T_Q)$ and $G=b^\tau$. Then
+$A(G)=a_0+v_p(T_Q)$, and for $T\ge1$ and $M_0=\lceil T/\tau\rceil$,
+\[
+\Bigl|\sum_{j<T}e(b^jy)\Bigr|\le\tau\max_{p\nmid c,\ M\le M_0}|S(G,e,c;M)|.
+\]
+If \Cref{lem:uniformorbit} applies to $(M_0,G,e)$ and $\tau\le T$, the sum is at most $18T(\tau/T)^\delta$.
+Moreover, if $Q$ divides $\Lambda^rM'$ with $\Lambda$ a product of primes not dividing $pb$ and
+$\gcd(M',pb)=1$, then $A(G)\le a_0+v_p(\ord_{M'}b)+\max_{\ell\mid\Lambda}\log_p\ell$, an empty maximum being $0$.
+\end{corollary}
+
+\begin{proof}
+By lifting the exponent, $v_p(b^{tm}-1)=a_0+v_p(m)$, and $\tau/t$ has the $p$-adic valuation of $T_Q$
+because $p\nmid t$. By the Chinese remainder theorem $y\equiv a_1/p^e+a_2/Q\pmod1$ with $p\nmid a_1$.
+For $j=\tau m+j_0$ with $0\le j_0<\tau$ we have $b^{\tau m}\equiv1\pmod Q$, so
+$e(b^jy)=e(b^{j_0}a_2/Q)\,e(b^{j_0}a_1G^m/p^e)$ with $p\nmid b^{j_0}a_1$. Summing over the at most $M_0$
+admissible $m$ gives the first bound, and the second is $9\tau M_0^{1-\delta}\le18T^{1-\delta}\tau^\delta$.
+For the last claim, the kernel of $(\Z/\ell^k)^\times\to(\Z/\ell)^\times$ is an $\ell$-group, so
+$v_p(\ord_{\ell^k}b)=v_p(\ord_\ell b)\le v_p(\ell-1)$.
+\end{proof}
+
+When the auxiliary support is so large that only $\ord_\Lambda b$ is controlled, the largest prime
+in $\Lambda$ is bounded as follows.
+
+\begin{lemma}[Largest auxiliary prime]\label{lem:largestprime}\evidence{Paper proof}
+For $x\ge2$ let $A_b(x)=\lcm\{\ord_\ell b:\ \ell\le x\text{ prime},\ \ell\nmid pb\}$. Then
+$\log x\ll_b\log A_b(x)/\log\log A_b(x)$ for $x\ge x_0(b)$. Consequently, if $\Lambda$ is the product of
+all primes $\ell\le\ell_{\max}$ with $\ell\nmid pb$, then in \Cref{cor:split}
+$A(G)\le a_0+v_p(\ord_{M'}b)+O_b\bigl(\log(\ord_\Lambda b+3)/\log\log(\ord_\Lambda b+3)\bigr)$.
+\end{lemma}
+
+\begin{proof}
+Put $M=A_b(x)$. A prime $\ell$ with $\ord_\ell b=m$ divides $b^m-1$, which has at most $m\log_2b$ prime
+factors, so at most $x^{2/3}\log_2b$ primes $\ell\le x$ have order at most $x^{1/3}$. Every other prime
+$\ell\le x$ with $\ell\nmid pb$ has order $m>x^{1/3}$ with $m\mid M$ and $\ell\equiv1\pmod m$, and each such
+$m$ admits fewer than $x/m<x^{2/3}$ such primes. Hence $\pi(x)-\omega(pb)-x^{2/3}\log_2b\le d(M)x^{2/3}$, where $\omega(pb)\le1+\log_2b$, so
+$d(M)\ge x^{1/3}/(2\log x)$ for large $x$, and the divisor bound
+$\log d(M)\le(\log2+o(1))\log M/\log\log M$ \cite[Theorem~317]{HW08} gives the claim. The bound on $A(G)$
+follows from \Cref{cor:split}, since $\ord_\Lambda b=A_b(\ell_{\max})$.
+\end{proof}
+
+\section{A worked example: the binary cubic number}\label{sec:example}
+
+Let
+\[
+\xi=\sum_{k\ge1}\frac{1}{3^{v_3(k)}\,2^{2k^3}}
+=\frac1{2^{2}}+\frac1{2^{16}}+\frac1{3\cdot2^{54}}+\frac1{2^{128}}+\cdots .
+\]
+Thus the coefficient $1/3^{v_3(k)}$ is inserted at binary position $2k^3$. The companion number
+with all coefficients equal to one is $\xi_0=\sum_k2^{-2k^3}$, whose binary expansion consists of
+isolated ones.
+
+\begin{theorem}\label{thm:example}\evidence{Paper proof}
+For every $N\ge1$, $D_N(\xi;2)\le200N^{-1/3}$. In particular $\xi$ is normal to base $2$. On the
+other hand $D_N(\xi_0;2)\to1$.
+\end{theorem}
+
+\begin{proof}
+Write $n_k=2k^3$ and, for $n_k\le n<n_{k+1}$, let
+\[
+R_n=2^n\sum_{j\le k}\frac{1}{3^{v_3(j)}2^{n_j}}
+\]
+be the rational number seen after $n$ shifts. Let $J=\lfloor\log_3k\rfloor$.
+
+\emph{Step 1: the reduced denominator of $R_n$ is exactly $3^J$.} Every $j\le k$ has
+$v_3(j)\le J$, so $3^JR_n=\sum_{j\le k}3^{J-v_3(j)}2^{n-n_j}$ is an integer. Modulo $3$ only the
+indices with $v_3(j)=J$ survive, that is $j=3^Jm$ with $3\nmid m$ and $m\le k/3^J<3$; there are one
+or two of them. Since $2^2\equiv1\pmod3$ and $n_j$ is even, each contributes $2^{n-n_j}\equiv2^n$.
+Hence $3^JR_n\equiv(1\text{ or }2)\cdot2^n\not\equiv0\pmod3$.
+
+\emph{Step 2: orbits of the models.} On $[n_k,n_{k+1})$ we have $R_{n+1}=2R_n$, so the points
+$y_n=\fr{R_n}$ are consecutive points $\fr{a2^j/3^J}$ with $3\nmid a$. Here $t=\ord_3(2)=2$ and
+$v_3(2^2-1)=1$. By \Cref{cor:period} the $\ell$ points of any piece of this block meet every
+half-open arc in $\ell|I|+\theta$ points with $|\theta|\le3\ell/3^J+3^J$.
+
+\emph{Step 3: the real orbit.} Positivity and distinctness of the positions give
+$0\le2^n\xi-R_n\le\sum_{m\ge n_{k+1}}2^{n-m}=2^{1-(n_{k+1}-n)}$.
+
+\emph{Step 4: counting.} Let $N\ge2$ and choose $K\ge1$ with $2K^3\le N<2(K+1)^3$. Apply
+\Cref{lem:blocks} with blocks $B_k=[n_k,\min(n_{k+1},N))$, $1\le k\le K$, and $U=n_1=2$. The
+block $B_k$ has length at most $h_k=n_{k+1}-n_k=2(3k^2+3k+1)$, and $k/3<3^{J}\le k$, so Step~2 gives
+$H_k\le9h_k/k+k\le127k$ and $\sum_{k\le K}H_k\le127K^2$. Take
+$W=\lceil\log_2(K+1)\rceil+2$ and $\epsilon=1/(2(K+1))$. By Step~3 the positions with
+$n_{k+1}-n\ge W$ have $\dist{2^n\xi-y_n}\le2^{1-W}\le\epsilon$; at most $W$ positions in each
+block fail this, so $E\le KW$. \Cref{lem:blocks} gives
+\[
+D_N(\xi)\le\frac{2+KW+127K^2}{N}+\frac1{K+1}.
+\]
+Using $N\ge2K^3$ and $W\le\log_2(K+1)+3\le4K$, the right side is at most
+$(1+2+63.5+1)/K=67.5/K$. Since $N<2(K+1)^3\le16K^3$, $1/K<16^{1/3}N^{-1/3}<2.52N^{-1/3}$, and the
+bound follows. For $N=1$ it is trivial.
+
+For $\xi_0$ every $R_n$ is an integer and $0<\fr{2^n\xi_0}\le2^{1-(n_{k+1}-n)}$. Fix $W\ge1$. At
+most $W(K+1)=O(N^{1/3})$ indices $n<N$ have $n_{k+1}-n<W$, so the interval $[2^{1-W},1)$ contains
+$o(N)$ of the first $N$ points while having length $1-2^{1-W}$. Hence
+$\liminf D_N(\xi_0)\ge1-2^{1-W}$ for every $W$.
+\end{proof}
+
+The constant $200$ is not optimized. For $N=2^{10},2^{11},\ldots,2^{18}$, enclosures of $D_N(\xi)$
+to within $2^{-62}$ (computed exactly from the binary expansion and transferred by \Cref{lem:compare};
+the script is listed in \Cref{sec:formal}) give values of $N^{1/3}D_N(\xi)$ between $3.477$, at
+$N=2^{12}$, and $7.024$, at $N=2^{15}$. The proof uses only the denominator identity of Step~1 and complete periods. \Cref{sec:switch} shows
+that Step~1 is an instance of a general identity, and that normality persists when the
+complete-period count no longer gives a rate.
+
+\section{Valuation-weighted expansions}\label{sec:switch}
+
+Fix a prime $p\nmid b$, $t=\ord_p(b)$, an integer $s\ge0$, and strictly increasing positive integers
+$(n_k)_{k\ge1}$ with $t\mid n_k$. Put $n_0=0$, $w(k)=p^{-sv_p(k)}$,
+\[
+X=X_s=\sum_{k\ge1}w(k)b^{-n_k},\qquad U_K=\sum_{k\le K}w(k)b^{-n_k},
+\]
+and for $n\ge0$ let $K(n)=\#\{k\ge1:n_k\le n\}$ and $R_n=b^nU_{K(n)}$.
+
+\subsection{Grouped and raw forms}
+
+A sparse expansion $\sum_kc_kb^{-n_k}$ also has a dense representation, in which the coefficient
+$c_k$ is spread over the whole gap $(n_{k-1},n_k]$. When the multipliers have numerator one and the
+gaps are divisible by every positive integer, the reduced denominators of the dense coefficients
+involve infinitely many primes, which disappear in the sparse form.
+
+\begin{proposition}[Geometric grouping]\label{prop:group}\evidence{Kernel-verified}
+For integers $m\ge0$, $h\ge1$ and every field element $b$ with $b\ne0$ and $b^h\ne1$,
+\[
+\frac{b-1}{b^h-1}\sum_{r=1}^{h}b^{-(m+r)}=b^{-(m+h)} .
+\]
+Consequently, for real $b>1$, every strictly increasing $(n_k)$ with $n_0=0$ and bounded real
+multipliers $c_k$, the series whose coefficient at $b^{-m}$, $n_{k-1}<m\le n_k$, equals
+$c_k(b-1)/(b^{n_k-n_{k-1}}-1)$ converges absolutely to $\sum_kc_kb^{-n_k}$. Write
+$\rho_h=(b^h-1)/(b-1)$ for the repunit of length $h$. If $b\ge2$ is an integer and for every $M\ge1$
+some gap $n_k-n_{k-1}$ is divisible by $M$ (for example $n_k=t\,k!$), then every prime not dividing $b$
+divides $\rho_{n_k-n_{k-1}}$ for some $k$, and in particular infinitely many primes divide the gap
+repunits $\rho_{n_k-n_{k-1}}$.
+\end{proposition}
+
+\begin{proof}
+The first identity is the finite geometric sum
+$\sum_{r=1}^hb^{-(m+r)}=b^{-(m+h)}(b^h-1)/(b-1)$. Absolute convergence follows because every raw
+coefficient is bounded by $\sup|c_k|$, and grouping an absolutely convergent series preserves its
+sum. Let $r\nmid b$ be prime. If $r\nmid b-1$, then $r\mid\rho_{r-1}$ by Fermat's theorem; if
+$r\mid b-1$, then $\rho_r\equiv r\equiv0\pmod r$. In either case $r\mid\rho_{r(r-1)}$, and
+$\rho_a\mid\rho_h$ whenever $a\mid h$. Lean declarations:
+\lean{Phase18Synthetic}{76}{\ttt{geometric\_retirement\_weight}},
+\lean{Phase18Synthetic}{146}{\ttt{grouped\_retirement\_hasSum}},
+\lean{Phase18Synthetic}{290}{\ttt{raw\_prime\_support\_infinite}}.
+\end{proof}
+
+The Lean statement concerns the repunits, not the reduced raw coefficients, and the passage between
+the two needs the form of the multipliers. If $c_k=1/m_k$ with a positive integer $m_k$, as for the
+weights $p^{-sv_p(k)}$, then $b-1\mid b^h-1$ gives the raw coefficient $1/(m_k\rho_h)$, $h=n_k-n_{k-1}$,
+whose reduced denominator $m_k\rho_h$ is divisible by $\rho_h$; so under the gap hypothesis every prime
+not dividing $b$ occurs in some reduced raw denominator (a written step, not formalized). For general
+multipliers this fails: with $c_k=\rho_h b^{-h}\in(0,1]$ every raw coefficient on the gap equals
+$b^{-h}$, and only primes dividing $b$ occur. The gap hypothesis is also needed: a schedule with
+finitely many distinct gaps involves only finitely many repunits.
+
+\subsection{Exact denominators and the switch}
+
+\begin{theorem}[Exact reduced denominators]\label{thm:den}\evidence{Kernel-verified}
+For every $K\ge0$ and every $n\ge n_K$, the reduced denominator of $b^nU_K$ is
+$p^{s\lfloor\log_pK\rfloor}$, where $\lfloor\log_p0\rfloor=0$. In particular the reduced denominator
+of $R_n$ is $p^{s\lfloor\log_pK(n)\rfloor}$ for every $n\ge0$.
+\end{theorem}
+
+\begin{proof}
+Let $J=\lfloor\log_pK\rfloor$ and $K\ge1$, $s\ge1$ (otherwise the value is an integer). Every
+$k\le K$ has $v_p(k)\le J$, so $p^{sJ}b^nU_K=\sum_{k\le K}p^{s(J-v_p(k))}b^{n-n_k}$ is an integer.
+Modulo $p$ only the indices $k=p^Jm$ with $p\nmid m$ survive, and $m\le K/p^J<p$, so there are
+between $1$ and $p-1$ of them. Since $t\mid n_k$, each contributes $b^{n-n_k}\equiv b^n\not\equiv0$.
+The count is a unit modulo $p$, so the numerator is prime to $p$. Lean declarations:
+\lean{RetirementDenominator}{110}{\ttt{shiftedPrefix\_den}},
+\lean{RetirementDenominator}{157}{\ttt{fullPrefix\_den}},
+\lean{RetirementDenominator}{67}{\ttt{maximalLayer\_card}}.
+\end{proof}
+
+The qualitative analytic input is a fixed-support estimate for short orbits.
+
+\begin{lemma}[Short orbits]\label{lem:short}\evidence{Kernel-verified}
+Let $b,c\ge2$ be coprime integers. For every integer $d_0\ge0$ and every $\eta>0$ there is $M$ such
+that for every rational $y$ whose reduced denominator $q$ divides a power of $c$ and satisfies
+$M\le q\le T^{d_0}$,
+\[
+\Bigl|\sum_{j=0}^{T-1}e(b^jy)\Bigr|\le\eta T,\qquad e(\theta)=\exp(2\pi i\theta).
+\]
+\end{lemma}
+
+This is \lean{SmoothOrbit}{207}{\ttt{fixed\_support\_orbit\_estimate}} (definition at
+\lean{SmoothOrbit}{16}{\ttt{SmoothOrbitEstimate}}), proved there by elementary differencing. It is
+also a qualitative consequence of Vandehey's quantitative bound \cite[Corollary~1.2]{Vandehey19}:
+for a finite prime set $P$, $m$ supported on $P$, $\gcd(m,b)=\gcd(a,m)=1$, $\epsilon>0$ and
+$T\ge m^\epsilon$, one has $|\sum_{j=1}^{T}e(ab^j/m)|\le C\,m^{-\delta}T(1+\log m)$ with
+$\delta=\delta(\epsilon)>0$ and $C=C(\epsilon,b,P)$.
+
+
+The short-orbit estimate gives normality from denominator information alone, at every prefix.
+
+\begin{proposition}[All-prefix criterion]\label{prop:criterion}\evidence{Lean-supported paper proof}
+Let $x=\sum_{m\ge0}a_mb^{-m}$ with rational $a_m$ satisfying $|a_m|\le C_0(m+1)^A$ for constants
+$C_0,A\ge0$, put $R_n=\sum_{m\le n}a_mb^{n-m}$, and let $q_n$ be the reduced denominator of $R_n$.
+Suppose that for some $\eta\in(0,1]$, some integer $c\ge2$ prime to $b$ and some $D_0>0$:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $\#\{m\le N:a_m\ne0\}=O(N^{1-\eta})$;
+\item every $q_n$ divides a power of $c$, and $q_n\le C_0(n+1)^{D_0}$;
+\item for every fixed $M$, $\#\{n<N:q_n<M\}=o(N)$.
+\end{enumerate}
+Then $x$ is normal to base $b$.
+\end{proposition}
+
+\begin{proof}
+The Lean-supported step is \Cref{lem:short}. Fix an integer $h\ne0$ and $\eta_0>0$. For large $N$ put
+$T=\lfloor N^{\eta/2}\rfloor$ and $W=\lceil(A+3)\log_b(2N)\rceil\le T$, and split $[0,N)$ into consecutive
+blocks $[a,a+T)$, the last possibly shorter. Call a block \emph{clean} if no $m$ with $a_m\ne0$ lies in
+$(a,a+T+W]$. Each such $m$ makes at most two blocks unclean, so by (i) the unclean blocks and the last
+block cover $O(TN^{1-\eta})+T=o(N)$ indices.
+
+On a clean block and for $0\le j<T$ we have $R_{a+j}=b^jR_a$, and the omitted terms of $b^{a+j}x$ have
+positions $m>a+j+W$, so
+\[
+|b^{a+j}x-R_{a+j}|\le C_0\sum_{i>W}(2N+i)^Ab^{-i}\ll_{A,b,C_0}N^AW^Ab^{-W}=o(1).
+\]
+Since $\gcd(b,c)=1$, all $q_{a+j}$ equal $q_a$, and the reduced denominator $q'$ of $hR_a$ divides a power
+of $c$ and satisfies $q_a/|h|\le q'\le q_a$. Choose an integer $d_0>2D_0/\eta+1$, so that
+$q_a\le C_0(N+1)^{D_0}\le T^{d_0}$ for large $N$, and let $M_0$ be given by \Cref{lem:short} for $b$, $c$,
+$d_0$ and $\eta_0$. On clean blocks with $q'\ge M_0$, $|\sum_{j<T}e(b^jhR_a)|\le\eta_0T$. Clean blocks with
+$q'<M_0$ have $q_n<|h|M_0$ at each of their indices, so by (iii) they cover $o(N)$ indices. Hence
+\[
+\Bigl|\sum_{n<N}e(hb^nx)\Bigr|\le o(N)+\eta_0N+2\pi|h|N\cdot o(1),
+\]
+and $\limsup_N|N^{-1}\sum_{n<N}e(hb^nx)|\le\eta_0$ for every $\eta_0>0$. Weyl's criterion
+\cite[Chapter~1, Theorem~2.1, p.~7]{KN} and \cite[Chapter~1, Theorem~8.1, p.~70]{KN} give normality.
+\end{proof}
+
+\begin{theorem}[Normality switch]\label{thm:switch}\evidence{Kernel-verified}
+Assume in addition that $n_k\ge k^2$ for all $k$. Then $D_N(X_0)\to1$, and for every $s\ge1$,
+$D_N(X_s)\to0$; equivalently $X_s$ is normal to base $b$ if and only if $s\ge1$. In particular this
+holds for $n_k=tk^d$ with any integer $d\ge2$.
+\end{theorem}
+
+\begin{proof}
+The statement is a Lean theorem (declarations listed at the end of this proof), with the definitions
+of discrepancy and normality of \Cref{sec:intro}. We outline the argument.
+
+Since $n_k\ge k^2$, $K(M)\le\sqrt M$. Positivity gives
+$0\le b^nX-R_n\le\frac{b}{b-1}b^{-(n_{K(n)+1}-n)}$, and for fixed $W$ at most
+$W(K(N+W)+1)=o(N)$ indices $n<N$ have an insertion in $(n,n+W]$. If $s=0$, every $R_n$ is an integer,
+so all but $o(N)$ of the points $\fr{b^nX_0}$ lie in $[0,\frac{b}{b-1}b^{-W})$; as in the proof of
+\Cref{thm:example}, $\liminf D_N(X_0)\ge1-\frac b{b-1}b^{-W}$ for every $W$. If $s\ge1$, apply
+\Cref{prop:criterion} with $c=p$ and $\eta=1/2$: the coefficients are at most one, there are at most
+$\sqrt N$ insertions below $N$, and by \Cref{thm:den} the reduced denominator of $R_n$ is
+$p^{s\lfloor\log_pK(n)\rfloor}\le(n+1)^s$, which tends to infinity with $n$. For $n_k=tk^d$ the hypotheses
+hold because $t\ge1$ and $d\ge2$. Lean declarations:
+\lean{RetirementDenominator}{436}{\ttt{discrepancy\_switch}},
+\lean{RetirementDenominator}{444}{\ttt{normal\_iff\_pos}} and, for $n_k=tk^d$,
+\lean{RetirementDenominator}{456}{\ttt{polynomial\_discrepancy\_switch}}.
+\end{proof}
+
+\begin{corollary}[A normal Liouville family]\label{cor:liouville}\evidence{Lean-supported paper proof}
+For every $s\ge1$, the number $L=\sum_{k\ge1}p^{-sv_p(k)}b^{-t(k+1)!}$ is normal to base $b$ and is a
+Liouville number; in particular it is transcendental.
+\end{corollary}
+
+\begin{proof}
+The schedule $n_k=t(k+1)!$ consists of strictly increasing multiples of $t$ with $n_k\ge k^2$, so
+normality is the kernel-verified \Cref{thm:switch} (the verification of these two elementary
+hypotheses is not formalized). The partial sum $U_k$ has reduced denominator
+$Q_k=b^{n_k}p^{s\lfloor\log_pk\rfloor}\le b^{n_k}k^s$: indeed the newest term is the only one not
+divisible by $b$ after clearing $b^{n_k}$, and \Cref{thm:den} gives the $p$-part. Moreover
+$0<L-U_k\le\frac{b}{b-1}b^{-n_{k+1}}=\frac b{b-1}b^{-(k+2)n_k}$. For each fixed $\mu>0$ this is
+smaller than $Q_k^{-\mu}$ for all large $k$, and the $U_k$ are distinct. Hence $L$ is a Liouville
+number, and transcendental by Liouville's theorem.
+\end{proof}
+
+\subsection{The complete-period rate}
+
+\begin{theorem}[Complete-period rate]\label{thm:rate}\evidence{Lean-supported paper proof}
+Let $p\nmid b$ be an odd prime, $v=v_p(b^t-1)$, $s\ge1$, $d\ge s+2$, and $n_k=tk^d$. There is
+$C=C(b,p,s,d)$ such that for all $N\ge2$,
+\[
+D_N(X_s)\le C\bigl(N^{-s/d}+N^{-(d-s-1)/d}+N^{-(d-1)/d}\log N\bigr).
+\]
+The exponent $\min(s,d-1-s)/d$ equals $1/3$ for $(s,d)=(1,3)$ and tends to $1/2$ along
+$(s,d)=(s,2s+1)$.
+\end{theorem}
+
+\begin{proof}
+The Lean-supported step is the denominator identity, \Cref{thm:den}; the rest follows the proof of
+\Cref{thm:example}. Let $tK^d\le N<t(K+1)^d$ with $K\ge1$ (smaller $N$ are absorbed in $C$). On the
+block $B_k=[n_k,\min(n_{k+1},N))$ the model $y_n=\fr{R_n}$ runs through consecutive points of
+the orbit of a rational with reduced denominator $q_k=p^{s\lfloor\log_pk\rfloor}\in((k/p)^s,k^s]$.
+The block has length at most $h_k=n_{k+1}-n_k\le t\,d\,2^{d-1}k^{d-1}$. By
+\Cref{cor:period},
+\[
+\sum_{k\le K}H_k\le\sum_{k\le K}\Bigl(\frac{p^vh_k}{q_k}+q_k\Bigr)
+\ll\sum_{k\le K}\bigl(k^{d-1-s}+k^s\bigr)\ll K^{d-s}+K^{s+1},
+\]
+using $d-1-s\ge1$. Take $W=\lceil2\log_b(2N)\rceil$ and $\epsilon=\frac b{b-1}b^{-W}\le2N^{-2}$; the
+exceptional count is $E\le KW$, and $U=n_1=t$. \Cref{lem:blocks} and $N\asymp K^d$ give
+$D_N\ll K^{-s}+K^{-(d-s-1)}+K^{1-d}\log N+N^{-2}$, which is the claim.
+\end{proof}
+
+\begin{remark}\label{rem:ratebeyond}
+Complete periods give a rate only for $d\ge s+2$. For every $s\ge1$ and $d\ge2$ the short-orbit bound
+of \Cref{lem:uniformorbit} gives $D_N(X_s)\ll N^{-\eta}$ with some $\eta=\eta(p,s,d)>0$; this is the case
+$r=1$ of \Cref{thm:effective}. The exponent obtained there is very small (of order $2^{-2/\theta}$ with
+$\theta\asymp1/s$), so \Cref{thm:rate} remains the better estimate when $d\ge s+2$. Bounding the final
+incomplete period on each block by Gauss sums instead of trivially would improve the range of
+\Cref{thm:rate}; we have not written that argument out.
+\end{remark}
+
+\section{Prescribing the discrepancy limit}\label{sec:program}
+
+\begin{lemma}[Positive state programming]\label{lem:program}\evidence{Kernel-verified}
+Let $0=n_0<n_1<\cdots$ be integers and $u_0=0,u_1,u_2,\ldots$ rationals in $[0,1)$. Define $R_0=0$,
+$c_k\in(0,1]$ as the representative of $u_k-b^{n_k-n_{k-1}}R_{k-1}$ modulo $1$, and
+$R_k=b^{n_k-n_{k-1}}R_{k-1}+c_k$. Then $R_k=b^{n_k}\sum_{i\le k}c_ib^{-n_i}$ and $\fr{R_k}=u_k$ for
+every $k$. If every $u_k$ has reduced denominator a power of a prime $p$, so has every $c_k$.
+\end{lemma}
+
+\begin{proof}
+By induction $R_k-u_k=b^{n_k-n_{k-1}}(R_{k-1}-u_{k-1})+(b^{n_k-n_{k-1}}u_{k-1}+c_k-u_k)\in\Z$. The
+coefficient $c_k$ differs by an integer from $u_k-b^{n_k-n_{k-1}}u_{k-1}$, whose denominator divides
+$\den(u_k)\den(u_{k-1})$. Lean declarations:
+\lean{Phase18Synthetic}{383}{\ttt{programState\_fract}},
+\lean{Phase18Synthetic}{438}{\ttt{programState\_eq\_prefix}},
+\lean{Phase18Synthetic}{459}{\ttt{programmed\_prefix\_fract}},
+\lean{Phase18Synthetic}{364}{\ttt{programCoeff\_mem}},
+\lean{Phase18Synthetic}{426}{\ttt{programCoeffs\_prime\_power}}.
+\end{proof}
+
+For $x=\sum_kc_kb^{-n_k}$ as in \Cref{lem:program} and $n_k\le n<n_{k+1}$, the rational part after
+$n$ shifts is $b^{n-n_k}R_k$, whose fractional part is $y_n=\fr{b^{n-n_k}u_k}$. Since
+$0<c_i\le1$ and the positions are distinct,
+\begin{equation}\label{eq:tail}
+0<b^nx-b^{n-n_k}R_k\le\frac b{b-1}b^{-(n_{k+1}-n)} .
+\end{equation}
+Call block $k$ (the integers in $[n_k,n_{k+1})$) \emph{retired} if $u_k=0$ and \emph{active}
+otherwise; block $0$ is retired.
+
+\begin{proposition}[Modelled discrepancy]\label{prop:model}\evidence{Paper proof}
+Let $n_K\le N<n_{K+1}$, let $Z$ be the number of indices $n<N$ in retired blocks, and suppose that
+for every half-open arc $I$ the active indices $n<N$ satisfy
+$|\#\{n:y_n\in I\}-(N-Z)|I||\le H$. Then for every integer $W\ge0$,
+\[
+\Bigl|D_N(x)-\frac ZN\Bigr|\le\frac{H+(K+1)W}{N}+\frac{2b}{b-1}b^{-W}.
+\]
+\end{proposition}
+
+\begin{proof}
+Retired models are $0$. For every half-open arc,
+$\#\{n<N:y_n\in I\}-N|I|=(\text{active error})+Z(\mathbf 1_{0\in I}-|I|)$, which has modulus at most
+$H+Z$, and equals at least $Z(1-|I|)-H$ for $I=[0,|I|)$. Letting $|I|\to0$ and using
+\Cref{lem:arcs}, $|D(y)-Z/N|\le H/N$. By \eqref{eq:tail} at most $W$ indices of each block
+$k\le K$ have $\dist{b^nx-y_n}>\frac b{b-1}b^{-W}$, and \Cref{lem:compare} completes the proof.
+\end{proof}
+
+\begin{theorem}[Every discrepancy limit]\label{thm:program}\evidence{Lean-supported paper proof}
+Let $p\nmid b$ be an odd prime, $t=\ord_p(b)$ and $v=v_p(b^t-1)$. For $\delta\in[0,1]$ put $n_k=tk^3$,
+$a_k=\lfloor k\delta\rfloor-\lfloor(k-1)\delta\rfloor\in\{0,1\}$, $q_k=p^{1+\lfloor\log_pk\rfloor}$, and
+$u_k=0$ if $a_k=1$, $u_k=1/q_k$ if $a_k=0$. Let $x_\delta=\sum c_kb^{-n_k}$ be given by
+\Cref{lem:program}. Then every $c_k\in(0,1]$ has reduced denominator dividing $q_k$, so a power of $p$
+at most $pk$, and for all $N\ge1$,
+\[
+|D_N(x_\delta)-\delta|\le C_{b,p}N^{-1/3}
+\]
+with $C_{b,p}$ independent of $\delta$. Moreover the orbit measures
+$N^{-1}\sum_{n<N}\delta_{\fr{b^nx_\delta}}$ converge weakly to $(1-\delta)\lambda+\delta\,\delta_0$, where
+$\lambda$ is Lebesgue measure, and $x_\delta$ is irrational.
+\end{theorem}
+
+\begin{proof}
+The Lean-supported step is \Cref{lem:program}. Since $q_{k-1}\mid q_k$, the coefficient $c_k$, which
+differs by an integer from $u_k-b^{n_k-n_{k-1}}u_{k-1}$, has denominator dividing $q_k\le pk$. Let
+$N\ge t$ and $tK^3\le N<t(K+1)^3$. On an active
+block $k$ the models are consecutive points $\fr{b^j/q_k}$, with $k<q_k\le pk$, and
+$h_k=n_{k+1}-n_k=t(3k^2+3k+1)\le7tk^2$. \Cref{cor:period} gives
+$H\le\sum_{k\le K}(p^vh_k/q_k+q_k)\le(7tp^v+p)K(K+1)/2$, independently of the mask $(a_k)$.
+
+The retired count is $Z=t+\sum_{1\le k<K}a_kh_k+a_K(N-n_K)$, and $N=t+\sum_{1\le k<K}h_k+(N-n_K)$. Put
+$S_j=\sum_{i\le j}(a_i-\delta)$, so $|S_j|\le1$. Summation by parts with the increasing weights $h_k$
+gives $|\sum_{1\le k<K}(a_k-\delta)h_k|\le2h_{K-1}$, and therefore
+\begin{equation}\label{eq:Z}
+|Z-\delta N|\le t+3h_K .
+\end{equation}
+\Cref{prop:model} with $W=\lceil\log_b(\frac b{b-1}(K+1))\rceil$ yields
+\[
+|D_N(x_\delta)-\delta|\le\frac{(7tp^v+p)K(K+1)/2+(K+1)W+t+3h_K}{N}+\frac2{K+1},
+\]
+which is $O_{b,p}(K^{-1})=O_{b,p}(N^{-1/3})$, uniformly in $\delta$. For $N<t$ use $D_N\le1$.
+
+For weak convergence let $f$ be continuous on $\T$ and approximate it uniformly by step functions
+on a fixed finite partition into arcs. The active indices have counts $(N-Z)|I|+O(H)$ on each arc,
+the retired real points lie within $\frac b{b-1}b^{-W}$ of $0$ off $(K+1)W$ indices, and
+$Z/N\to\delta$ by \eqref{eq:Z}. If $\delta<1$ the limit has a nonzero absolutely continuous part,
+whereas the orbit measures of a rational number converge to the uniform measure on a finite cycle;
+so $x_\delta$ is irrational. If $\delta=1$ every $u_k$ is $0$, every $c_k=1$, and the base-$b$ expansion
+of $x_1$ has isolated digits $1$ separated by unbounded gaps, which is not eventually periodic.
+\end{proof}
+
+For example, with $b=2$, $p=3$ and $\delta=2/5$, the first five insertions are at
+$2,16,54,128,250$, the targets are $1/3,1/3,0,1/9,0$, and the coefficients are
+$1/3,1,2/3,1/9,5/9$.
+
+\begin{remark}
+The canonical numbers $x_\delta$ are irrational, but we do not know their algebraic nature. Altering
+the mask at the sparse indices $k=2^j$ does not change the rate and produces continuum many
+distinct realizations of each $\delta$; all but countably many are transcendental.
+\end{remark}
+
+\section{Lower and upper discrepancies and invariant measures}\label{sec:limitsets}
+
+\begin{theorem}[All pairs of extreme limits]\label{thm:pairs}\evidence{Lean-supported paper proof}
+Let $p,t,n_k,q_k$ be as in \Cref{thm:program} and $0\le\alpha\le\beta\le1$. There are rationals
+$c_k\in(0,1]$ with reduced denominators dividing $q_k\le pk$, given by \Cref{lem:program} from targets
+$u_k\in\{0,1/q_k\}$ and an explicit mask, such that $x=\sum_kc_kb^{-n_k}$ satisfies
+$\liminf_ND_N(x)=\alpha$ and $\limsup_ND_N(x)=\beta$. More precisely $D_N(x)=\Lambda_N/N+O(N^{-1/3})$,
+with $\Lambda_N$ defined in the proof.
+\end{theorem}
+
+\begin{proof}
+Let $K_1=2$, $K_{j+1}=K_j^2$, and for $K_j\le k<K_{j+1}$ let $\theta_k=\alpha$ for odd $j$ and
+$\theta_k=\beta$ for even $j$; put $\theta_1=\alpha$. Use the mask
+$a_k=\lfloor\Theta_k\rfloor-\lfloor\Theta_{k-1}\rfloor$ with $\Theta_k=\sum_{i\le k}\theta_i$, and the
+targets of \Cref{thm:program}. Then $|\sum_{i\le j}(a_i-\theta_i)|\le1$, and the argument for
+\eqref{eq:Z} gives $|Z-\Lambda_N|\le t+3h_K$, where $\Lambda_N=\sum_{k\le K}\theta_k\ell_k$ and $\ell_k$
+is the length of the part of block $k$ below $N$. Since the active-block bound is independent of
+the mask, \Cref{prop:model} gives $D_N(x)=\Lambda_N/N+O(N^{-1/3})$. Each $\Lambda_N/N$ is a weighted
+average of the $\theta_k$ up to $O(t/N)$, so lies in $[\alpha,\beta]+o(1)$. At $N=tK_{j+1}^3$ the
+blocks before stage $j$ have total length at most $tK_j^3=o(N)$, so $\Lambda_N/N$ tends to $\alpha$ along
+odd $j$ and to $\beta$ along even $j$.
+\end{proof}
+
+Let $\Prob$ be the space of Borel probability measures on $\T$ with the weak topology and $\Minv$
+the closed subset of $T$-invariant measures. Fix nonzero trigonometric polynomials $f_1,f_2,\ldots$
+with rational coefficients, dense in $C(\T)$, and put
+$d(\mu,\nu)=\sum_i2^{-i}|\int f_id\mu-\int f_id\nu|/\|f_i\|_\infty$. Uniform approximation shows that
+$d(\mu_n,\mu)\to0$ if and only if $\mu_n\to\mu$ weakly, and $\Prob$ is sequentially compact by a
+diagonal argument and the Riesz representation theorem. Since each summand of $d$ is a convex
+function of $\mu$, $d(\sum_r\gamma_r\mu_r,\nu)\le\max_rd(\mu_r,\nu)$ for convex weights $\gamma_r$. For $x\in\R$ let
+$\mu_N^x=N^{-1}\sum_{n<N}\delta_{\fr{b^nx}}$ and $V(x)$ its set of weak limit points.
+
+\begin{lemma}\label{lem:necessity}\evidence{Paper proof}
+For every $x$, $V(x)$ is a nonempty compact connected subset of $\Minv$.
+\end{lemma}
+
+\begin{proof}
+Compactness of $\Prob$ gives nonemptiness, and $V(x)$ is closed. For continuous $f$,
+$\int f\circ T\,d\mu_N^x-\int fd\mu_N^x=(f(T^Nx)-f(x))/N\to0$, so limits are invariant. Since
+$d(\mu_N^x,\mu_{N+1}^x)\le2/(N+1)$, connectedness follows from the general fact that the cluster set
+of a sequence $z_N$ in a compact metric space with $d(z_N,z_{N+1})\to0$ is connected: if it were
+the union of disjoint nonempty closed sets $A,B$ at distance $3r>0$, the sequence would eventually
+avoid the set of points at distance at least $r$ from $A\cup B$ (a compact set containing no
+cluster point), yet would pass infinitely often from the $r$-neighbourhood of $A$ to that of $B$ in
+steps smaller than $r$, which is impossible.
+\end{proof}
+
+For $\mu\in\Prob$ let $D(\mu)=\sup_I|\mu(I)-|I||$ over half-open arcs; for an empirical measure this
+is the discrepancy of \Cref{sec:prelim}.
+
+\begin{lemma}\label{lem:Dcont}\evidence{Paper proof}
+If $\mu_i\to\mu$ weakly in $\Prob$, then $D(\mu_i)\to D(\mu)$, even when $\mu$ has atoms.
+\end{lemma}
+
+\begin{proof}
+As in \Cref{lem:arcs}, $D(\nu)$ is the supremum of the excess $\nu(I)-|I|$ over half-open arcs. Given
+$\eta>0$, choose a rotated grid of $M\ge1/\eta$ equally spaced points that avoids the countably many
+atoms of $\mu$. Every half-open arc is contained in an arc whose endpoints are grid points (or in the
+whole circle), at a cost of at most $2\eta$ in length, so for every $\nu$ the maximum excess over the
+finitely many grid arcs lies in $[D(\nu)-2\eta,D(\nu)]$. The masses of grid arcs converge, because
+their endpoints are not atoms of $\mu$. Hence $\limsup|D(\mu_i)-D(\mu)|\le4\eta$.
+\end{proof}
+
+\begin{theorem}[Invariant-measure limit sets]\label{thm:limitsets}\evidence{Lean-supported paper proof}
+A set $F\subset\Prob$ equals $V(x)$ for some real $x$ if and only if $F$ is a nonempty compact
+connected subset of $\Minv$. For every integer $t\ge1$, every such $F$ is $V(x)$ for some
+$x=\sum_{k\ge1}c_kb^{-tk^3}$ with rational $c_k\in(0,1]$ given by \Cref{lem:program}, whose state $u_k$
+after the $k$th insertion is $0$ or a purely periodic rational with period at most $k$.
+\end{theorem}
+
+\begin{proof}
+Necessity is \Cref{lem:necessity}. The Lean-supported step of the sufficiency proof is
+\Cref{lem:program}, which programs the states.
+
+\emph{Periodic approximation.} Let $\mu\in\Minv$, $\eta>0$, and let $g_1,\ldots,g_r$ be
+Lipschitz functions with constant at most $\Lambda$ and $\|g_i\|_\infty\le1$. We find a rational $y$
+with purely periodic base-$b$ expansion whose cycle measure $\pi$ satisfies
+$|\int g_id\pi-\int g_id\mu|<\eta$. Fix integers $m$ and $L$ with $\Lambda b^{-m}+2m/L<\eta/3$, and let
+$A_Lg(z)=L^{-1}\sum_{j<L}g(T^jz)$. By invariance $\int g_id\mu=\int A_Lg_i\,d\mu$. Partition the
+range of $(A_Lg_1,\ldots,A_Lg_r)$ into Borel boxes of diameter $<\eta/3$, choose a point $z_\iota$ in
+each preimage of positive measure, and replace the weights by rationals $M_\iota/M$ summing to one,
+so that $|\sum_\iota(M_\iota/M)A_Lg_i(z_\iota)-\int g_id\mu|<2\eta/3$. Let $y$ be the purely periodic
+number whose period is the concatenation, over $\iota$, of $M_\iota$ copies of the first $L$
+base-$b$ digits of $z_\iota$. If a copy of the word of $z_\iota$ starts at offset $o$ of the period
+and $0\le j\le L-m$, then $T^{o+j}y$ and $T^jz_\iota$ share their first $m$ digits, so
+$\dist{T^{o+j}y-T^jz_\iota}\le b^{-m}$. The remaining $m$ offsets of each copy change $g_i$ by at
+most $2$. Averaging over the period gives the claim; an
+all-$(b-1)$ period represents $0\in\T$ and the same estimate holds on $\T$.
+
+\emph{Chains.} Since $F$ is compact and connected, for every $\eta>0$ any two points of $F$ are
+joined by a finite chain in $F$ with steps less than $\eta$ (the set of points reachable from a
+given point is open and closed in $F$). Concatenating, for $r=1,2,\ldots$, chains with steps
+$<1/r$ that start and end at a fixed point and visit a $1/r$-net of $F$, we obtain $\mu_j\in F$
+with $d(\mu_j,\mu_{j+1})\to0$ whose cluster set is $F$.
+
+\emph{Construction.} By the first step, applied to $g_i=f_i/\|f_i\|_\infty$ for $i\le j$, choose
+periodic rationals $y_j\in[0,1)$ with cycle measures $\pi_j$, periods $P_j$, and
+$d(\pi_j,\mu_j)<1/j+2^{1-j}$. Choose $K_1\ge\max(2,P_1)$ and $K_{j+1}\ge\max(K_j^2,P_{j+1})$. Let
+$n_k=tk^3$, $u_k=0$ for $k<K_1$ and $u_k=y_j$ for $K_j\le k<K_{j+1}$, and let $x$ be given by
+\Cref{lem:program}; then $u_k$ has period $P_j\le K_j\le k$. On block $k$ in stage $j$ the models are
+consecutive points of the cycle of $y_j$; for a Lipschitz $g$ with $\|g\|_\infty\le1$, a piece of length
+$\ell_k$ satisfies $|\sum g(y_n)-\ell_k\int gd\pi_j|\le2P_j\le2k$. Summing over $k\le K$, where
+$tK^3\le N<t(K+1)^3$, gives $O(K^2)=O_t(N^{2/3})$. By
+\eqref{eq:tail}, the real points are within $\frac b{b-1}b^{-W}$ of the models off $(K+1)W$ indices.
+Hence $d(\mu_N^x,\nu_N)\to0$, where $\nu_N=N^{-1}\sum_k\ell_k\pi_{j(k)}$ (with $\pi=\delta_0$ before
+stage $1$).
+
+\emph{Limits.} Let $N_j=tK_{j+1}^3$ be the end of stage $j$. Stages before $j$ occupy the indices
+below $tK_j^3$ and so have weight at most $(K_j/K_{j+1})^3\le K_j^{-3}$ in $\nu_{N_j}$, whence
+$d(\nu_{N_j},\mu_j)\to0$. For $N_{j-1}<N\le N_j$,
+$\nu_N$ is a convex combination of $\nu_{N_{j-1}}$ and $\pi_j$, both within $o(1)$ of $\mu_j$ because
+$d(\mu_{j-1},\mu_j)\to0$; by convexity of balls $d(\nu_N,\mu_j)\to0$. Therefore every limit point of
+$\mu_N^x$ lies in $F$, and every point of $F$, being a limit of a subsequence of $(\mu_j)$, is a limit
+of the corresponding $\mu_{N_j}^x$.
+\end{proof}
+
+The symbolic realization of every nonempty compact connected set of invariant measures goes back to
+Colebrook \cite{Colebrook} for base-$b$ expansions and to Sigmund \cite[Theorem~4]{Sigmund74} for systems
+with the specification property; see also \cite{DGS}. The density of periodic orbit measures used in
+the first step goes back to Parthasarathy \cite{Parthasarathy61}. The next remark shows that the
+restriction to positive rational coefficients on a fixed schedule is, by itself, no restriction.
+
+\begin{remark}[Qualitative content]\label{rem:qualitative}
+Let $p$ be a prime and $0<n_1<n_2<\cdots$ any integers. For every $y\in[0,1)$ there are $m\ge0$ and
+rationals $c_k\in(0,1)$ whose denominators are powers of $p$ such that
+$x=\sum_kc_kb^{-n_k}$ satisfies $b^mx\equiv y\pmod1$. Indeed choose $m$ with
+$x=(1+y)b^{-m}<b^{-n_1}$. If $0<r<b^{-n_k}$ is the residual before step $k$ (initially $r=x$), the
+open interval of $c$ with $0<r-cb^{-n_k}<b^{-n_{k+1}}$ and $0<c<b^{n_k}r$ is nonempty and contains a
+rational with $p$-power denominator; take it as $c_k$. Then $c_k<1$, the new residual lies in
+$(0,b^{-n_{k+1}})$, and the residuals tend to $0$, so $x=\sum_kc_kb^{-n_k}$. The orbit of $x$ agrees
+with that of $y$ after $m$ shifts, so $D_N(x)-D_N(y)=O(m/N)$ and $V(x)=V(y)$. Consequently, by the
+classical realization above and \Cref{lem:Dcont}, every nonempty compact connected $F\subset\Minv$ is
+$V(x)$ for such an $x$ on any schedule, even with a single denominator prime; taking
+$F=\{(1-\theta)\lambda+\theta\delta_0:\alpha\le\theta\le\beta\}$, on which $D$ takes the values
+$[\alpha,\beta]$, gives every pair of lower and upper limits, and $\alpha=\beta=\delta$ gives every limit.
+\Cref{thm:program,thm:pairs,thm:limitsets} are therefore not new as existence statements. Their content
+is the rate $O(N^{-1/3})$, uniform in $\delta$; the denominator bound $q_k\le pk$ with two explicit
+targets in \Cref{thm:program,thm:pairs}; the bound $k$ on the period of the state in
+\Cref{thm:limitsets}; and the explicit arithmetic schedule of targets.
+\end{remark}
+
+\section{Polynomial images below the schedule degree}\label{sec:quadratic}
+
+Throughout this section $p\nmid b$ is an odd prime, $t=\ord_p(b)$, $v_0=v_p(b^t-1)\ge1$ and $d\ge2$ is an
+integer; in \Cref{sec:quad-first,sec:quad-iso,sec:quad-null,sec:quad-proof}, which treat total degree two
+as a model case, $d\ge3$.
+For an integer $a\ge1$ put $w_a(i)=p^{-av_p(i)}$ and
+\[
+X_a=\sum_{i\ge1}w_a(i)\,b^{-ti^d},
+\]
+the number $X_a$ of \Cref{sec:switch} with $n_k=tk^d$. All the $X_a$ share the schedule $n_i=ti^d$. We
+use the lifting of exponents in the form $v_p(b^{tm}-1)=v_0+v_p(m)$ for $m\ge1$ (\Cref{sec:prelim}).
+
+\begin{theorem}[Quadratic images]\label{thm:quadratic}\evidence{Paper proof}
+Let $S$ be a finite set of positive integers and let $P\in\Q[z_a:a\in S]$ be nonconstant of total
+degree at most two. Then $P((X_a)_{a\in S})$ is normal to base $b$. Consequently:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item every rational polynomial of degree one or two in $X_s$, $s\ge1$, is normal to base $b$;
+\item the distinct nonconstant monomials of degree at most two in $(X_a)_{a\in S}$ are jointly normal:
+the points $(\fr{b^nm_1},\ldots,\fr{b^nm_r})$, $n\ge0$, are uniformly distributed in $\T^r$ for the
+values $m_1,\ldots,m_r$ of these monomials;
+\item an algebraic $X_s$ would have degree at least three.
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}\label{cor:flagship}\evidence{Paper proof}
+The number $\xi^2$, with $\xi=\sum_{k\ge1}3^{-v_3(k)}2^{-2k^3}$, is normal to base $2$, and the binary
+shifts of $(\xi,\xi^2)$ are uniformly distributed in $\T^2$.
+\end{corollary}
+
+\begin{proof}
+Here $b=2$, $p=3$, $t=2$, $d=3$ and $\xi=X_1$; apply \Cref{thm:quadratic}(i) and (ii).
+\end{proof}
+
+\paragraph{Comparison with exponential schedules.} Mira Cult's note \cite[Theorem~1.1]{MiraPoly}
+(a conventional proof, not refereed or formally verified) proves that every nonconstant rational
+polynomial in $x=\sum_{k\ge1}q^{-k}b^{-c^k}$ is normal to base $b$ when $q>2$ and some prime divides $c$
+and $q$ but not $b$; this includes the Stoneham numbers $\alpha_{b,c}$ with $c\ge3$, $\gcd(b,c)=1$.
+There the schedule $c^k$ is exponential and the weight exponents increase with $k$, and the leading
+$p$-adic part of a truncated power of $x$ is controlled by a nonintegral algebraic tail, which does not
+vanish. On the polynomial schedule $ti^d$ with valuation weights the analogous leading residue of
+$R_n(\xi^2)$ vanishes on a set of shifts of positive lower density (\Cref{sec:intro}), so no single
+surviving pole is available; the proof below replaces it by the measure-theoretic statement that the
+limiting mass has null level sets (\Cref{prop:nulllevel}). Neither result contains the other.
+
+\begin{remark}[An earlier bound]\label{rem:history}
+Before the proof of \Cref{thm:quadratic} was found, an exact enumeration of the cells of $u$ on which
+the normalized prefix of $\xi^2$ (see \Cref{lem:freeze} below) vanishes modulo $3^{21}$ gave the bound
+$\limsup_ND_N(\xi^2;2)<2.94\cdot10^{-10}$. \Cref{cor:flagship} supersedes that
+bound. The theorem gives no rate.
+\end{remark}
+
+The proof occupies the rest of this section. Products of two series are expanded into ordered pairs of
+indices, and we write $R_n(Z)$ for the shifted prefix of a series $Z=\sum_ma_mb^{-m}$, as in
+\Cref{prop:criterion}. For a product the coefficient at $b^{-m}$ is the sum of the products of
+coefficients over the ordered pairs $(i,j)$ with $n_i+n_j=m$.
+
+\subsection{Normalization and the limiting mass}\label{sec:quad-first}
+
+For $n\ge t$ let
+\[
+K(n)=\lfloor(n/t)^{1/d}\rfloor,\qquad J=J(n)=\lfloor\log_pK(n)\rfloor,\qquad u=u(n)=\frac{n}{tp^{dJ}} .
+\]
+Then $p^J\le K(n)<p^{J+1}$, so $u\in[1,p^d)$. Let $\Gamma$ be the set of positive rationals $a/p^h$ with
+$h\ge0$ and $p\nmid a$, and call $\lambda(a/p^h)=h$ the \emph{loss}. For integers $a,c,D\ge1$ define, for
+$u\in[1,p^d)$,
+\[
+M_{a,c}(u)=\sum_{\substack{(z,y)\in\Gamma^2\\ z^d+y^d\le u}}p^{a\lambda(z)+c\lambda(y)},\qquad
+M^{\mathrm{lin}}_D(u)=\sum_{\substack{z\in\Gamma\\ z^d\le u}}p^{D\lambda(z)} .
+\]
+The conditions force $z,y<p$, so for each $L$ only finitely many terms are nonzero modulo $p^L$. The
+sums therefore converge in $\Z_p$, and each reduction modulo $p^L$ is a right-continuous step function
+of $u$ with finitely many jumps.
+
+\begin{lemma}[Freezing]\label{lem:freeze}\evidence{Paper proof}
+Let $a,c,D,L\ge1$ and let $n$ satisfy $J(n)\ge L+L/d$. Then
+\[
+p^{(a+c)J}b^{-n}R_n(X_aX_c)\equiv M_{a,c}(u)\pmod{p^L},\qquad
+p^{DJ}b^{-n}R_n(X_D)\equiv M^{\mathrm{lin}}_D(u)\pmod{p^L}.
+\]
+Moreover $R_n(X_a)$ and $R_n(X_aX_c)$ are integral at every prime other than $p$, and
+$v_p(R_n(X_a))\ge-aJ$, $v_p(R_n(X_aX_c))\ge-(a+c)J$.
+\end{lemma}
+
+\begin{proof}
+By definition $b^{-n}R_n(X_aX_c)=\sum w_a(i)w_c(j)b^{-ti^d-tj^d}$ over the pairs with $t(i^d+j^d)\le n$.
+Such indices satisfy $i,j\le K(n)<p^{J+1}$, so $\lambda_i=J-v_p(i)\ge0$ and
+$p^{(a+c)J}w_a(i)w_c(j)=p^{a\lambda_i+c\lambda_j}$. This proves the integrality and the valuation bounds,
+since $b^{n-n_i-n_j}$ is an integer. Write $z=i/p^J$, $y=j/p^J$; then $z,y\in\Gamma$ with losses
+$\lambda_i,\lambda_j$, and $t(i^d+j^d)\le n$ if and only if $z^d+y^d\le u$. A term is nonzero modulo $p^L$
+only if $a\lambda_i+c\lambda_j<L$, so $\lambda_i,\lambda_j<L\le J$; conversely every pair in $\Gamma^2$ with
+losses less than $L$ arises from integers $i=p^Jz$, $j=p^Jy$. For such terms
+$v_p(b^{ti^d}-1)=v_0+d(J-\lambda_i)\ge dL/d=L$, so $b^{-ti^d}\equiv1\pmod{p^L}$, and likewise for $j$.
+The linear case is the same with one index.
+\end{proof}
+
+\subsection{Isolated jumps}\label{sec:quad-iso}
+
+Fix an integer $D\ge2$ and integers $A_a$, $1\le a\le D/2$, not all zero, and $A_{\mathrm{lin}}$. Let
+\[
+M(u)=\sum_{1\le a\le D/2}A_aM_{a,D-a}(u)+A_{\mathrm{lin}}M^{\mathrm{lin}}_D(u).
+\]
+Let $a_*$ be the least $a$ with $A_a\ne0$ and $g=v_p(A_{a_*})$. It is convenient to use the variable
+$x=(u-1)^{1/d}\in(0,X_{\max})$, $X_{\max}=(p^d-1)^{1/d}<p$; we write $M(x)$ for $M(1+x^d)$. A pair
+$(z,y)\in\Gamma^2$ with $z^d+y^d>1$ contributes to $M(x)$ exactly for $x\ge x_{z,y}=(z^d+y^d-1)^{1/d}$, the
+\emph{endpoint} of the pair; pairs with $z^d+y^d\le1$ contribute for all $x$. Similarly a linear term
+$z>1$ contributes for $x\ge(z^d-1)^{1/d}$. A pair with $z=1$ has endpoint $y$.
+
+For $H\ge1$ put $P_H=a_*H+g+1$. A \emph{primitive centre of level $H$} is a point $x_0=c/p^H\in(0,X_{\max})$
+with $p\nmid c$.
+
+\begin{lemma}[Primitive jumps]\label{lem:primjump}\evidence{Paper proof}
+Let $H>g$. Modulo $p^{P_H}$, every jump of $M$ comes from one of the following: \textup{($\alpha$)} a pair
+with a coordinate equal to $1$, whose other coordinate has loss at most $H$; \textup{($\beta$)} a pair
+$(z,y)$ with $z\ne1\ne y$ and $\lambda(z)+\lambda(y)\le H$; \textup{($\gamma$)} a linear term with
+$\lambda(z)\le H/2+g/D$. At a primitive centre $x_0$ of level $H$ the jumps of type $(\alpha)$ add up to
+$A_{a_*}(p^{a_*H}+p^{(D-a_*)H})$, which is nonzero modulo $p^{P_H}$, and every other jump of type
+$(\alpha)$ lies at distance at least $p^{-H}$ from $x_0$.
+\end{lemma}
+
+\begin{proof}
+For the monomial of first order $a$, a pair of losses $(h,k)$ contributes $A_ap^{ah+(D-a)k}$. If $a=a_*$
+this is nonzero modulo $p^{P_H}$ only if $a_*h+(D-a_*)k\le a_*H$, which forces $h+k\le H$ since
+$D-a_*\ge a_*$. If $a>a_*$ and $A_a\ne0$, it is nonzero only if $ah+(D-a)k\le a_*H+g-v_p(A_a)$, which
+forces $h+k\le(a_*H+g)/a<H$ for $H>g$. A linear term contributes $A_{\mathrm{lin}}p^{D\lambda(z)}$, nonzero
+only if $D\lambda(z)\le a_*H+g$, and $a_*\le D/2$. Endpoints of pairs with a coordinate $1$ are the other
+coordinates $y$, which lie in $p^{-H}\Z$ when $\lambda(y)\le H$; every point of $p^{-H}\Z$ other than
+$x_0$ is at distance at least $p^{-H}$ from $x_0$, and the pair $(1,1)$ has endpoint $1\ne x_0$. At $x_0$
+itself the pairs $(1,x_0)$ and $(x_0,1)$ are distinct; for the monomial $a_*$ they contribute
+$A_{a_*}(p^{(D-a_*)H}+p^{a_*H})$, of valuation exactly $g+a_*H$ (if $a_*=D-a_*$ this is
+$2A_{a_*}p^{a_*H}$, and $p$ is odd), and for $a>a_*$ their contributions have valuation at least
+$v_p(A_a)+aH>a_*H+g$.
+\end{proof}
+
+Fix $\epsilon\in(0,1/4)$ and put $\delta_H=\epsilon/(Hp^H)$. A primitive centre $x_0$ of level $H$ is
+\emph{isolated} if no endpoint of type $(\beta)$ or $(\gamma)$ lies within distance $\delta_H$ of $x_0$.
+By \Cref{lem:primjump}, at an isolated centre $M\bmod p^{P_H}$ is constant on $(x_0-\delta_H,x_0)$ and on
+$[x_0,x_0+\delta_H)$, and the two constants differ.
+
+The equidistribution estimate behind the counting uses the third-derivative test.
+
+\begin{lemma}[Third derivatives]\label{lem:third}\evidence{Paper proof}
+There is an absolute constant $C_1$ with the following property. Let $\mathcal I$ be a set of at most $M$
+consecutive integers, $M\ge1$, and let $g$ be real with three continuous derivatives on its convex hull,
+$\lambda\le|g'''|\le2\lambda$ there for some $\lambda>0$. Then
+$|\sum_{m\in\mathcal I}e(g(m))|\le C_1(M\lambda^{1/6}+M^{1/2}\lambda^{-1/6})$.
+\end{lemma}
+
+\begin{proof}
+If $\lambda\ge1$ or $M\le\lambda^{-1/3}$ the bound is trivial, since then $M\le M\lambda^{1/6}$ or
+$M\le M^{1/2}\lambda^{-1/6}$. Otherwise put $Q=\lfloor\lambda^{-1/3}\rfloor$, so $1\le Q\le M$. The
+Weyl--van der Corput inequality \cite[Lemma~2.5 and (2.3.2), p.~10]{GK91} bounds $|\sum e(g(m))|^2$ by
+$\frac{2M}{Q}\sum_{|q|<Q}|\sum_me(g(m+q)-g(m))|$, the inner sum over $m,m+q\in\mathcal I$. For $q\ne0$ the
+function $g(m+q)-g(m)$ has second derivative $\int_m^{m+q}g'''$ of constant sign and modulus between
+$|q|\lambda$ and $2|q|\lambda$, so the second-derivative test \cite[Theorem~2.2, p.~8]{GK91} bounds the inner sum
+by $C(M(|q|\lambda)^{1/2}+(|q|\lambda)^{-1/2})$. Summing over $q$ gives
+$|\sum e(g(m))|^2\ll M^2/Q+M^2(Q\lambda)^{1/2}+M(Q\lambda)^{-1/2}\ll M^2\lambda^{1/3}+M\lambda^{-1/3}$.
+\end{proof}
+
+\begin{lemma}[Isolated centres]\label{lem:isolated}\evidence{Paper proof}
+Let $\mathcal K\subset(0,X_{\max})$ be a compact interval. There are $\epsilon\in(0,1/4)$ and $c_0>0$,
+depending on $p,d,\mathcal K$, such that for every interval $I\subseteq\mathcal K$ of positive length and
+every $H\ge H_0(I,M)$, at least $c_0|I|p^H$ isolated primitive centres of level $H$ lie in $I$.
+\end{lemma}
+
+\begin{proof}
+There are at least $(1-1/p)|I|p^H-2$ primitive centres of level $H$ in $I$. Since $\delta_H<p^{-H}/2$,
+each endpoint is within $\delta_H$ of at most one point of $p^{-H}\Z$, so it spoils at most one centre.
+Endpoints of type $(\gamma)$ number $O(p^{H/2+g/D+1})=o(p^H)$. Let $I^+$ be the
+$\delta_H$-neighbourhood of $I$, and fix a compact interval $\mathcal K'\subset(0,X_{\max})$ whose
+interior contains $\mathcal K$, so that $I^+\subseteq\mathcal K'$ for large $H$. Let $B_H(I)$ be the number of pairs $(z,y)$ of type $(\beta)$
+whose endpoint lies in $I^+$ and satisfies $\dist{p^Hx_{z,y}}\le\epsilon/H$, that is, lies within
+$\delta_H$ of $p^{-H}\Z$. We show
+\begin{equation}\label{eq:collision}
+B_H(I)\le C_2\,\epsilon|I|p^H+o(p^H),
+\end{equation}
+with $C_2$ depending on $p,d,\mathcal K$ and the $o(p^H)$ uniform in $I\subseteq\mathcal K$. Choosing
+$\epsilon=\min(1/8,(1-1/p)/(2C_2))$ then leaves at least $\frac12(1-1/p)|I|p^H-o(p^H)$ isolated centres,
+which proves the lemma with $c_0=(1-1/p)/4$.
+
+Write each pair as $(z,y)$ with $v=\lambda(z)\ge k=\lambda(y)$, counting both orders, so that $y$ is the
+coarser coordinate; we let $z$ range over all of $p^{-v}\Z\cap(0,p)$, which only enlarges the count. For
+fixed $y$ the endpoint is $f_y(z)=(z^d+B)^{1/d}$ with $B=y^d-1$; we call the set of $z$ for fixed $y$ a
+\emph{row}. The rows of loss $k$ number at most $p^{k+1}$, and a row of loss $v$ has at most $p^{v+1}$
+points. We use
+\[
+\sum_{\substack{k\le v\\v+k\le H}}p^{v+k}\ll_pHp^H,\qquad
+\sum_{\substack{k\le v\\v+k\le H}}p^{v}\ll_pp^H,\qquad
+\sum_{\substack{k\le v\\v+k\le H}}p^{k}\ll_pH^2p^{H/2}.
+\]
+
+\emph{Removals.} Charge every removed point as a collision. The rows with $v<2H/5$ contain
+$O(H^2p^{4H/5})$ points in all. Put $\eta=H^{-6}$. Since $|y^d-1|\ge|y-1|$ for $y>0$, rows with
+$|B|\le\eta$ have $0<|a-p^k|\le\eta p^k$ for $y=a/p^k$, hence there are at most $2\eta p^k$ of them for
+each $k$, and they contain $O(\eta Hp^H)$ points. In each remaining row remove the points with
+$z\le\eta$ or $|(d-2)B-(d+1)z^d|\le\eta^d$. Since $w^d-z^d\ge(w-z)^d$ for $w\ge z\ge0$, these conditions
+define at most two intervals of total length $O_d(\eta)$, which contain $O(\eta p^v+1)$ grid points. The
+total removal is $O(H^2p^{4H/5}+\eta Hp^H+H^2p^{H/2})=o(p^H)$.
+
+\emph{Derivatives.} For $z>0$ with $f_y(z)>0$,
+\[
+f_y'=z^{d-1}f_y^{1-d},\qquad f_y''=(d-1)Bz^{d-2}f_y^{1-2d},\qquad
+f_y'''=(d-1)Bz^{d-3}f_y^{1-3d}\bigl((d-2)B-(d+1)z^d\bigr).
+\]
+On the retained points with $f_y(z)\in\mathcal K'$ we have $z<p$, $|B|\le p^d$ and $f_y$ bounded above
+and below, so $c_{\mathcal K}\eta^{2d-2}\le|f_y'''|\le C_{\mathcal K}$, using $d\ge3$. Moreover
+$f_y''''=(d-1)Bz^{d-4}f_y^{1-4d}\,\Pi(z)$ with $\Pi$ a polynomial of degree $2d$ whose leading coefficient
+is $(d+1)(d+2)\ne0$. Since $f_y$ is increasing, $\{z:f_y(z)\in I^+\}$ is an interval, and the retained
+part of it splits into $O_d(1)$ intervals on which $f_y'''$ has constant sign and is monotone, hence into
+$O(\log H)$ \emph{pieces} on which $\Lambda\le|f_y'''|\le2\Lambda$ for some $\Lambda\ge c_{\mathcal K}\eta^{2d-2}$.
+
+\emph{Equidistribution in a piece.} Put $T=p^v$ and, for an integer $1\le l\le H^4$,
+$g_l(m)=lp^Hf_y(m/T)$ on the integers $m$ of a piece, at most $pT$ of them. Then $\lambda_l\le|g_l'''|\le
+2\lambda_l$ with $\lambda_l=lp^H\Lambda/T^3$. By \Cref{lem:third},
+\begin{gather*}
+\Bigl|\sum_me(g_l(m))\Bigr|\ll_pT\bigl(\lambda_l^{1/6}+T^{-1/2}\lambda_l^{-1/6}\bigr),\\
+\lambda_l^{1/6}\ll H^{O(1)}p^{H/6-v/2}\le H^{O(1)}p^{-H/30},\qquad
+T^{-1/2}\lambda_l^{-1/6}=(lp^H\Lambda)^{-1/6}\le H^{O(1)}p^{-H/6},
+\end{gather*}
+using $v\ge2H/5$, $l\le H^4$ and $\Lambda\ge H^{-O(1)}$. The Erdős--Turán inequality
+\cite[Chapter~2, Theorem~2.5, p.~112]{KN} with $H^4$ frequencies bounds the number of $m$ in the piece
+with $\dist{p^Hf_y(m/T)}\le\epsilon/H$ by
+\[
+\frac{2\epsilon}H\#\{m\}+O\Bigl(\frac{T}{H^4}+\sum_{l\le H^4}\frac1l\Bigl|\sum_me(g_l(m))\Bigr|\Bigr)
+=\frac{2\epsilon}H\#\{m\}+O(TH^{-4}),
+\]
+since the arc $\{\theta\in\T:\dist\theta\le\epsilon/H\}$ has length $2\epsilon/H$. Summed over the
+$O(\log H)$ pieces of a row, the error is $O(TH^{-3})$, and summed over the rows it is
+$O(H^{-3}\sum p^{k+v+1})=O(p^H/H^2)$.
+
+\emph{Main term.} For fixed losses $(v,k)$ the number of all grid points
+$(z,y)\in(p^{-v}\Z\times p^{-k}\Z)\cap(0,p)^2$ with endpoint in $I^+=[x_1,x_2]$ is the number of lattice
+points with $1+x_1^d<z^d+y^d\le1+x_2^d$, up to the endpoint convention. The area of
+$\{z,y>0:z^d+y^d\le r^d\}$ is a constant times $r^2$, so the region has area
+$O((1+x_2^d)^{2/d}-(1+x_1^d)^{2/d})=O_{\mathcal K}(|I^+|)$. Each sublevel set lies under a decreasing
+graph, so counting by columns and comparing monotone sums with integrals gives
+$p^{v+k}\cdot\mathrm{area}+O(p^{v+1}+p^{k+1})$ for its lattice count. Hence the main terms sum to at most
+\[
+\frac{4\epsilon}H\sum_{\substack{k\le v\\v+k\le H}}\Bigl(C|I^+|p^{v+k}+O(p^v+p^k)\Bigr)
+\le C_2\epsilon|I|p^H+O(\epsilon p^H/H)+O(\delta_Hp^H).
+\]
+Together with the removals and the error terms this proves \eqref{eq:collision}.
+\end{proof}
+
+\subsection{Null level sets}\label{sec:quad-null}
+
+\begin{proposition}[Null level sets]\label{prop:nulllevel}\evidence{Paper proof}
+For every $w\in\Z_p$ the set $\{u\in[1,p^d):M(u)=w\}$ has Lebesgue measure zero.
+\end{proposition}
+
+\begin{proof}
+Fix a compact interval $\mathcal K\subset(0,X_{\max})$, let $\epsilon$ and $c_0$ be as in
+\Cref{lem:isolated}, and let $G_H$ be the union of the intervals $(x_0-\delta_H,x_0+\delta_H)$ over the
+isolated primitive centres $x_0\in\mathcal K$ of level $H$.
+
+\emph{Almost every point of $\mathcal K$ lies in infinitely many $G_H$.} Let $I\subseteq\mathcal K$ be an
+interval. The intervals about isolated centres in the middle half of $I$ are disjoint and contained in
+$I$ for large $H$, so by \Cref{lem:isolated}
+\[
+|I\cap G_H|\ge\tfrac12c_0|I|p^H\cdot2\delta_H=c_0\epsilon|I|/H\qquad(H\ge H_1(I)).
+\]
+Let $N_H$ be the $\delta_H$-neighbourhood of all of $p^{-H}\Z$. For $n<m$ with $|I|p^n\ge1$, at most
+$|I|p^n+2\le3|I|p^n$ intervals of $N_n$ meet $I$, and each meets at most $2\delta_np^m+2$ intervals of
+$N_m$, of length $2\delta_m$; hence
+\[
+|I\cap G_n\cap G_m|\le|I\cap N_n\cap N_m|\le3|I|p^n(2\delta_np^m+2)2\delta_m
+\le12|I|\Bigl(\frac{\epsilon^2}{nm}+\frac{\epsilon p^{n-m}}m\Bigr),
+\]
+and $|I\cap G_n|\le6\epsilon|I|/n$. For $L\le H\le U$ with $L\ge H_1(I)$ put $S=\sum_{H=L}^U\mathbf1_{G_H}$
+and $A=\sum_{H=L}^U1/H$. Then $\int_IS\ge c_0\epsilon|I|A$ and, using $\sum_{n<m}p^{n-m}/m\le A/(p-1)$,
+$\int_IS^2\le|I|(12\epsilon^2A^2+C\epsilon A)$. By the Cauchy--Schwarz inequality
+$|I\cap\{S>0\}|\ge(\int_IS)^2/\int_IS^2$, and letting $U\to\infty$, so that $A\to\infty$,
+\[
+\Bigl|I\cap\bigcup_{H\ge L}G_H\Bigr|\ge\frac{c_0^2}{12}|I| .
+\]
+The left side decreases in $L$, so this holds for every $L$, with a constant independent of $I$ and $L$.
+Hence the set $\mathcal K\setminus\bigcup_{H\ge L}G_H$ has density at most $1-c_0^2/12$ in every interval
+of $\mathcal K$, so it has no density point in the interior of $\mathcal K$, and by the Lebesgue density
+theorem it is null. Taking the union over $L$ proves the claim.
+
+\emph{Level sets.} The set $\Lambda_w=\{x\in\mathcal K:M(x)=w\}$ is the intersection over $L$ of the
+finite unions of intervals $\{M\equiv w\bmod p^L\}$, hence Borel. Let $x\in\Lambda_w$ lie in $G_H$, within
+$\delta_H$ of an isolated centre $x_0$ with $H>g$. The interval of radius $2\delta_H$ about $x$ contains
+$(x_0-\delta_H,x_0+\delta_H)$. On the two halves of this interval $M\bmod p^{P_H}$ takes two different
+constant values, so one whole half, of length $\delta_H$, misses $\Lambda_w$, and $\Lambda_w$ has relative
+measure at most $3/4$ in the interval of radius $2\delta_H$ about $x$. If $x$ lies in infinitely many
+$G_H$, it is therefore not a density point of $\Lambda_w$. Since almost every point of $\Lambda_w$ is a
+density point and almost every point of $\mathcal K$ lies in infinitely many $G_H$, $\Lambda_w$ is null.
+Exhausting $(0,X_{\max})$ by countably many compact intervals and returning to $u=1+x^d$, a $C^1$
+diffeomorphism onto $(1,p^d)$, proves the proposition.
+\end{proof}
+
+\subsection{Proof of the quadratic theorem}\label{sec:quad-proof}
+
+\begin{proof}[Proof of \Cref{thm:quadratic}]
+\emph{Reduction.} Let $P$ have rational coefficients with common denominator $Q_0$, and write
+$Q_0=Q_bQ_1$ with $\gcd(Q_1,b)=1$ and $Q_b\mid b^e$ for some $e$. Then $b^eP=Y/Q_1$ with $Y$ an integral
+polynomial in the $X_a$, and $b^eP$ is normal if and only if $P$ is, since multiplying by $b^e$ shifts the
+orbit by $e$ steps. If $r=\alpha/q$ in lowest terms, then $r/Q_1$ has reduced denominator between $q$ and
+$qQ_1$, dividing $qQ_1$. Hence it suffices to verify the hypotheses of \Cref{prop:criterion} for the
+series of $Y$, with $c=p$, and then for $Y/Q_1$ with $c=pQ_1$. We therefore assume that $P$ has integer
+coefficients and verify (i)--(iii) for $Y=P((X_a))$.
+
+\emph{Hypotheses (i) and (ii).} The positions of nonzero coefficients of $Y$ through $N$ lie in
+$\{0\}\cup\{ti^d\le N\}\cup\{t(i^d+j^d)\le N\}$, which has $O(N^{2/d})$ elements; since $d\ge3$, (i) holds
+with $\eta=1-2/d$. A coefficient at $b^{-m}$ is bounded by the sum of $|P|$'s coefficients times
+$1+\#\{(i,j):t(i^d+j^d)=m\}\le1+m$. By \Cref{lem:freeze}, $q_n$ divides $p^{DJ}$, where $D$ is the largest
+weight defined below, and $p^{DJ}\le K(n)^D\le(n+1)^D$.
+
+\emph{Weights.} Give $X_a$ weight $a$ and $X_aX_c$ weight $a+c$, and let $D$ be the largest weight of a
+monomial with nonzero coefficient in $P$. By \Cref{lem:freeze} every monomial of weight at most $D-1$
+contributes to $p^{DJ}b^{-n}R_n(Y)$ a term of valuation at least $J$.
+
+\emph{Case 1: the only monomial of weight $D$ is linear,} $A_{\mathrm{lin}}X_D$. By \Cref{thm:den}, $R_n(X_D)$
+has $p$-adic valuation exactly $-DJ$, so $v_p(R_n(Y))=v_p(A_{\mathrm{lin}})-DJ$ for all large $n$. Hence
+$q_n\to\infty$ and (iii) holds.
+
+\emph{Case 2: some monomial $X_aX_{D-a}$ has a nonzero coefficient $A_a$} ($1\le a\le D/2$). Let $M$ be
+the mass of the preceding subsection built from these coefficients and the coefficient
+$A_{\mathrm{lin}}$ of $X_D$ (zero if absent). Fix $M_1\ge1$ and $L\ge1$. For $n$ with $J\ge L(1+1/d)$,
+\Cref{lem:freeze} and the preceding remark give
+\[
+p^{DJ}b^{-n}R_n(Y)\equiv M(u(n))\pmod{p^{L}} .
+\]
+If $M(u(n))\not\equiv0\pmod{p^{L}}$, the left side has valuation at most $L-1$, so
+$q_n\ge p^{DJ-L+1}$, which exceeds $M_1$ once $J$ is large. Therefore, for all large $n$, $q_n<M_1$ implies
+$u(n)\in E_L=\{u:M(u)\equiv0\pmod{p^L}\}$. The set $E_L$ is a finite union of, say, $\kappa_L$ intervals.
+The integers $n$ with $J(n)=j$ form the interval $[tp^{dj},tp^{d(j+1)})$, and those among them with
+$u(n)\in E_L$ number at most $tp^{dj}|E_L|+\kappa_L$. If $tp^{dJ_0}\le N<tp^{d(J_0+1)}$, summing over
+$j\le J_0$ gives
+\[
+\#\{n<N:q_n<M_1\}\le O_{L,M_1}(1)+\frac{tp^{d(J_0+1)}}{p^d-1}|E_L|+\kappa_L(J_0+1)
+\le\Bigl(\frac{p^d}{p^d-1}|E_L|+o(1)\Bigr)N .
+\]
+The sets $E_L$ decrease to $\{M=0\}$, which is null by \Cref{prop:nulllevel}, so $|E_L|\to0$, and (iii)
+follows. \Cref{prop:criterion} proves normality.
+
+\emph{Consequences.} For (ii), every nonzero integer combination of distinct nonconstant monomials of
+degree at most two is a nonconstant polynomial of total degree at most two, hence normal; uniform
+distribution of the vector of shifts follows from Weyl's criterion in several dimensions \cite[Chapter~1,
+Theorem~6.2, p.~49]{KN}. For (iii), if $X_s$ were algebraic of degree at most two, a rational polynomial
+of degree at most two would vanish at $X_s$, and $0$ is not normal.
+\end{proof}
+
+\begin{remark}[Scope of the quadratic argument]\label{rem:quadscope}
+The argument above gives no rate. For an $r$-fold product the number of grid tuples of total loss at
+most $H$ is of order $H^{r-1}p^H$, and a single primitive family isolated at radius $1/(H^{r-1}p^H)$
+covers measure of order $H^{1-r}$, which is summable when $r\ge3$; neither the second-moment step nor a
+Borel--Cantelli argument then reaches full measure, and when $p\mid r$ the basic jump $rp^{sH}$ also
+loses a factor $p$. The following subsections replace the single family by families built on dominant
+anchors and prove normality in every degree $r<d$ together with an explicit rate. Normality of $\xi^3$
+lies on the boundary $d=r$ (\Cref{sec:boundary}).
+\end{remark}
+
+\subsection{The \texorpdfstring{$r$}{r}-fold mass}\label{sec:rfold}
+
+Fix integers $s\ge1$ and $r\ge1$ and write $C=X_s$. For an ordered tuple $z=(z_1,\ldots,z_r)\in\Gamma^r$ put
+$S(z)=z_1^d+\cdots+z_r^d$ and $\lambda(z)=\lambda(z_1)+\cdots+\lambda(z_r)$, the \emph{level} of $z$. For
+$u\in[1,p^d)$ let
+\[
+M_r(u)=\sum_{z\in\Gamma^r,\ S(z)\le u}p^{s\lambda(z)} .
+\]
+As for $M_{a,c}$, every coordinate is below $p$, only tuples of level at most $\lfloor(L-1)/s\rfloor$
+matter modulo $p^L$, the sum converges in $\Z_p$, and each reduction modulo $p^L$ is a right-continuous
+step function with finitely many jumps. The defining sum converges in $\Z_p$ for every real $u$ (for
+each level only finitely many tuples have $S(z)\le u$), and we use it on all of $\R$, so that intervals
+near $1$ or $p^d$ cause no boundary effects. Since the integers have loss $0$, $M_1(u)\equiv\lfloor
+u^{1/d}\rfloor\not\equiv0\pmod p$ for $u\in[1,p^d)$.
+
+\begin{lemma}[Freezing in degree $r$]\label{lem:freezer}\evidence{Paper proof}
+Let $L\ge1$, let $P_0\in\Z[x]$ have degree $r$ and leading coefficient $A$, and let $n$ satisfy
+$J(n)\ge J_0(L)=\lceil L/s+L/d\rceil$. Then $R_n(P_0(C))$ is integral at every prime other than $p$,
+$v_p(R_n(P_0(C)))\ge-rsJ$, and
+\[
+p^{rsJ}b^{-n}R_n(P_0(C))\equiv A\,M_r(u)\pmod{p^L}.
+\]
+\end{lemma}
+
+\begin{proof}
+As in \Cref{lem:freeze}, $b^{-n}R_n(C^j)$ is the sum of $\prod_cp^{-sv_p(i_c)}b^{-ti_c^d}$ over ordered
+$j$-tuples of indices with $t(i_1^d+\cdots+i_j^d)\le n$. These indices satisfy $i_c\le K(n)<p^{J+1}$, so
+$p^{jsJ}\prod_cp^{-sv_p(i_c)}$ is an integer; this gives the integrality and $v_p(R_n(C^j))\ge-jsJ$. For
+$j<r$ the term $p^{rsJ}b^{-n}R_n(C^j)$ therefore has valuation at least $sJ\ge L$. For $j=r$ write
+$z_c=i_c/p^J\in\Gamma$, of loss $J-v_p(i_c)$; then $t\sum i_c^d\le n$ if and only if $S(z)\le u$. A term
+is nonzero modulo $p^L$ only if $s\lambda(z)<L$, so every loss is below $L/s\le J$, and conversely every
+tuple of level below $L/s$ arises from integers $i_c=p^Jz_c$. For these,
+$v_p(b^{ti_c^d}-1)=v_0+d(J-\lambda(z_c))\ge d(J-L/s)\ge L$.
+\end{proof}
+
+\begin{lemma}[Reduction to the mass]\label{lem:reductionr}\evidence{Lean-supported paper proof}
+Let $r\ge1$, $d\ge r+1$ and let $P\in\Q[x]$ have degree $r$. If $\{u\in[1,p^d):M_r(u)=0\}$ is
+Lebesgue-null, then $P(C)$ is normal to base $b$.
+\end{lemma}
+
+\begin{proof}
+Reduce to integer coefficients as in the proof of \Cref{thm:quadratic} and verify the hypotheses of
+\Cref{prop:criterion} for $Y=P_0(C)$ with $c=p$. The insertions of $Y$ up to $N$ lie in the sets
+$\{t(i_1^d+\cdots+i_j^d)\le N\}$, $j\le r$, which have $O(N^{r/d})=O(N^{1-1/d})$ elements; a coefficient at
+$b^{-m}$ is at most a constant times $(m+1)^r$; and by \Cref{lem:freezer} the reduced denominator $q_n$
+divides $p^{rsJ}\le(n+1)^{rs}$. Fix $M_1$ and $L$. For $J\ge J_0(L+v_p(A))$, if
+$M_r(u(n))\not\equiv0\pmod{p^L}$ then $v_p(p^{rsJ}b^{-n}R_n(Y))\le L+v_p(A)-1$, so $q_n\ge p^{rsJ-L-v_p(A)+1}$,
+which exceeds $M_1$ for large $J$. Hence, apart from finitely many $n$, $q_n<M_1$ forces
+$u(n)\in E_L=\{M_r\equiv0\bmod p^L\}$, and the count in the proof of \Cref{thm:quadratic} bounds the upper
+density of such $n$ by $p^d|E_L|/(p^d-1)$. The sets $E_L$ decrease to $\{M_r=0\}$. The Lean-supported
+step is \Cref{lem:short}, through \Cref{prop:criterion}.
+\end{proof}
+
+\subsection{Anchors, centres and isolation}\label{sec:anchors}
+
+In this and the next two subsections $r\ge2$ and $d\ge2$ are arbitrary. Put $\theta=(2r)^{-1/d}$,
+$h_{\min}=\lceil\log_p(6/\theta)\rceil$ and $e_r=v_p(r!)$, and fix parameters $\kappa\in(0,1/(2r)]$ and
+$\lambda=\kappa6^{-r}$, chosen in \Cref{lem:avgiso} in terms of $p,r,d,s$ only.
+
+Let $H$ be large. For $r\ge3$ call a vector $(h_1,\ldots,h_{r-1})$ of positive integers \emph{dominant} if
+\[
+h_1\ge h_{\min},\qquad h_2\ge\max(2h_1+1,\lambda H),\qquad h_j\ge2(h_1+\cdots+h_{j-1})+1\ (3\le j\le r-1),
+\]
+and $k=h_1+\cdots+h_{r-1}\le\kappa H$; for $r=2$ a dominant vector is a single $h_1$ with
+$h_{\min}\le h_1\le\kappa H$. The box $h_j\in[\beta_j,2\beta_j]$ with $\beta_j=\kappa H6^{j-r}/4$ consists of dominant
+vectors for large $H$, so there are $\gg_r(\kappa H)^{r-1}$ of them. An \emph{anchor} is a tuple
+$y=(y_1,\ldots,y_{r-1})$ with $y_j=a_j/p^{h_j}$, $p\nmid a_j$, $0<y_j\le\theta$, for a dominant vector. A
+\emph{centre of level $H$} is a tuple $(y,z)$ with $y$ an anchor, $z=m/p^v$, $p\nmid m$, $v=H-k$, and value
+$\xi=S(y,z)\in[1,p^d)$. Since $B_y=\sum y_j^d\le(r-1)\theta^d<1/2$, we have $z^d>1/2$ and $z<p$. The
+losses $h_1<\cdots<h_{r-1}<v$ of a centre are distinct, so its $r!$ permutations are distinct ordered
+tuples of level $H$.
+
+Put $\pi_H=sH+e_r+1$. A tuple of level $\ell$ contributes $p^{s\ell}\equiv0\pmod{p^{\pi_H}}$ unless
+$\ell\le H+\lfloor e_r/s\rfloor$; call the tuples with $\ell\le H+\lfloor e_r/s\rfloor$ \emph{relevant}. Put $\delta_H=\epsilon/(H^{r-1}p^H)$
+with $\epsilon\in(0,1]$. A centre is \emph{isolated} if every relevant tuple $z'$ with
+$|S(z')-\xi|<\delta_H$ is a permutation of the centre.
+
+\begin{lemma}[Jumps at isolated centres]\label{lem:rjump}\evidence{Lean-supported paper proof}
+If $\xi$ is the value of an isolated centre, then $M_r\bmod p^{\pi_H}$ is constant on $(\xi-\delta_H,\xi)$
+and on $[\xi,\xi+\delta_H)$, and the two constants differ by $r!\,p^{sH}\not\equiv0\pmod{p^{\pi_H}}$. The
+values of distinct isolated centres are at least $\delta_H$ apart.
+\end{lemma}
+
+\begin{proof}
+Modulo $p^{\pi_H}$ only relevant tuples count, and by isolation the only ones with value in
+$(\xi-\delta_H,\xi+\delta_H)$ are the $r!$ permutations of the centre, each of weight $p^{sH}$; and
+$v_p(r!p^{sH})=sH+e_r<\pi_H$. A distinct centre is a relevant tuple that is not a permutation. The exact
+jump of the truncated mass at a centre with distinct coordinates is the Lean declaration
+\leanR{PowerSumPeeling}{483}{\ttt{truncMass\_jump\_of\_isolated}}, with
+\leanR{PowerSumPeeling}{446}{\ttt{truncMass\_sub}}.
+\end{proof}
+
+\begin{lemma}[$q$-th derivative test {\cite[Theorem~5.13]{Titchmarsh86}}]\label{lem:qtest}\evidence{External input}
+Let $q\ge2$, $K=2^{q-1}$, and let $g$ be real with $q$ continuous derivatives on an interval $I$ of length
+at least $1$, with $\Lambda\le|g^{(q)}|\le2\Lambda$ on $I$. Then
+$\sum_{m\in I\cap\Z}e(g(m))\ll_q|I|\Lambda^{1/(2K-2)}+|I|^{1-2/K}\Lambda^{-1/(2K-2)}$.
+\end{lemma}
+
+\begin{lemma}[Derivatives of the endpoint]\label{lem:fB}\evidence{Lean-supported paper proof}
+For real $B$ and $x>0$ with $x^d+B>0$ let $f_B(x)=(x^d+B)^{1/d}$. For $q\ge2$,
+\[
+f_B^{(q)}(x)=(d-1)B\,x^{d-q}(x^d+B)^{1/d-q}\,\Phi_q(x^d,B),
+\]
+where $\Phi_2=1$ and $\Phi_{q+1}=[(d-q)(X+B)+(1-qd)X]\Phi_q+dX(X+B)\partial_X\Phi_q$. The polynomial
+$\Phi_q$ is homogeneous of degree $q-2$ in $(X,B)$, and as a polynomial in $X$ it has degree $q-2$ and
+leading coefficient $(-1)^q(d+1)(d+2)\cdots(d+q-2)\ne0$.
+\end{lemma}
+
+\begin{proof}
+For $q=2$, $f_B''=(d-1)x^{d-2}(x^d+B)^{1/d-2}((x^d+B)-x^d)$. Differentiating the formula for $q$ and
+factoring out $(d-1)Bx^{d-q-1}(x^d+B)^{1/d-q-1}$ leaves
+$(d-q)(x^d+B)\Phi_q+(1-qd)x^d\Phi_q+dx^d(x^d+B)\partial_X\Phi_q$ at $X=x^d$, which is the recurrence;
+homogeneity follows by induction. The degree and the leading coefficient are the Lean declarations
+\leanR{PowerSumPeeling}{232}{\ttt{phiPoly\_natDegree}},
+\leanR{PowerSumPeeling}{242}{\ttt{phiPoly\_leadingCoeff}} and
+\leanR{PowerSumPeeling}{222}{\ttt{phiPoly\_ne\_zero}}, in $(\Z[B])[X]$.
+\end{proof}
+
+\begin{lemma}[Exponent margins]\label{lem:margins}\evidence{Paper proof}
+For $q\ge3$ put $K_q=2^{q-1}$ and, for $0\le\alpha,\beta\le1$,
+\[
+e_1(q)=\beta+\frac{1-q\alpha}{2K_q-2},\qquad
+e_2(q)=\beta+\alpha\Bigl(\frac{q}{2K_q-2}-\frac2{K_q}\Bigr)-\frac1{2K_q-2}.
+\]
+Let $\sigma_2=1/12$ and $\sigma_r=1/(r(2^{r+1}-2))$ for $r\ge3$. For every $(\alpha,\beta)$ with
+$\beta/r\le\alpha\le\beta\le1$ there is $q\in\{3,\ldots,r+1\}$, with $q=3$ if $r=2$ and $q\ge4$ if $r\ge3$,
+such that $\max(e_1(q),e_2(q))\le1-\sigma_r$.
+\end{lemma}
+
+\begin{proof}
+For $r=2$ and $q=3$, $\alpha\ge\beta/2$ gives $e_1\le\frac16+\frac34\beta\le\frac{11}{12}$ and
+$e_2=\beta-\frac16$. Let $r\ge3$. For $q\ge4$, $e_1$ decreases and $e_2$ increases in $\alpha$, since
+$q2^q>4(2^q-2)$, and both increase with slope one in $\beta$; so for $\alpha\ge1/r$ it suffices to take
+$\beta=1$. On $[1/3,1]$ take $q=4$: $1-e_1=1/42$ at $\alpha=1/3$ and $1-e_2=1/28$ at $\alpha=1$. For
+$5\le q\le r+1$, on $[1/(q-1),1/(q-2)]$ take order $q$: $1-e_1=1/((q-1)(2K_q-2))$ at $\alpha=1/(q-1)$ and
+$1-e_2=(2-4/K_q)/((q-2)(2K_q-2))$ at $\alpha=1/(q-2)$, both at least $\sigma_r$. These intervals cover
+$[1/r,1]$. If $\alpha<1/r$, then $\beta\le r\alpha$; take $q=r+1$, so that
+\[
+e_1\le\frac1{2K_{r+1}-2}+\alpha\Bigl(r-\frac{r+1}{2K_{r+1}-2}\Bigr),\qquad
+e_2\le\alpha\Bigl(r+\frac{r-3+4/K_{r+1}}{2K_{r+1}-2}\Bigr)-\frac1{2K_{r+1}-2}.
+\]
+Both coefficients of $\alpha$ are positive, and at $\alpha=1/r$ the margins are $\sigma_r$ and
+$(3-4/K_{r+1})/(r(2^{r+1}-2))>\sigma_r$.
+\end{proof}
+
+\begin{lemma}[Averaged isolation]\label{lem:avgiso}\evidence{Lean-supported paper proof}
+Let $r,d\ge2$. There are $\kappa\in(0,1/(2r)]$, $A\ge1$, $\mu\in(0,1/d)$ and $H_*$, depending only on
+$p,r,d,s$, with the following property. Let $H\ge H_*$, $p^{-\mu H/8}\le\epsilon\le1$ and $0<\tau\le1$,
+and let $X\subset[1,p^d)$ be a union of $N\ge1$ disjoint intervals. Then at least
+$A^{-1}|X|H^{r-1}p^H-ANH^Ap^{\kappa H}$ centres of level $H$ have value in $X$, and at most
+\[
+A\epsilon\bigl(\tau^{1-d}|X|+\tau\bigr)H^{r-1}p^H+ANH^Ap^{(1-\mu)H}
+\]
+of them are not isolated.
+\end{lemma}
+
+\begin{proof}
+Fix $c=\sigma_r/2$, then $\kappa\le\min(1/(2r),c/(2d))$ so small that the perturbations below keep every
+exponent at most $(1-\sigma_r/2)H+O(1)$, and
+$\mu=\frac12\min(\sigma_r/4,\lambda/3,c/d-\kappa,\kappa,1/(2r),1/d)$. Constants implied by $\ll$ and $O$
+depend only on $p,r,d,s$.
+
+\emph{Centres.} For an anchor $y$ and a component $I_i$ of $X$, the $z$ with $B_y+z^d\in I_i$ form an
+interval of length at least $|I_i|/(dp^{d-1})$, which contains at least $(1-1/p)p^v|I_i|/(dp^{d-1})-2$
+admissible $z$. Each coordinate of loss $h\ge h_{\min}$ has at least $(1-1/p)\theta p^h-2\ge(\theta/3)p^h$
+admissible numerators, so each dominant vector carries at least $(\theta/3)^{r-1}p^k$ anchors; there are
+$\gg(\kappa H)^{r-1}$ dominant vectors and at most $(\kappa H)^{r-1}p^{\kappa H+r}$ anchors in all. This
+gives the first bound.
+
+\emph{Rows.} A non-isolated centre has a relevant competitor $z'$ within $\delta_H$, not a permutation.
+Write $z'=(w,x)$ with $x=m'/p^{v'}$ a coordinate of largest loss and $w$ the others; its level is
+$H'\le H+\lfloor e_r/s\rfloor$, so $v'\ge H'/r$. Put $B=\sum w_i^d-B_y$ and $f_B$ as in \Cref{lem:fB}.
+Then $x^d+B\in[1/4,p^d+1]$, $|B|\le rp^d$ and $|f_B(x)-z|\le\delta'=C_d\delta_H$. A \emph{row} is a pair
+$(y,w)$; for fixed losses of $y$ and $w$ there are at most $p^{k+H'-v'+2r}$ rows, and summing over all
+loss data multiplies counts by $H^{O(r)}$. In a row each $x$ meets at most one admissible $z$, and a
+collision forces $\dist{p^vf_B(x)}\le\eta_0=p^v\delta'=C_d\epsilon p^{-k}H^{1-r}$.
+
+\emph{Rows with $B=0$.} Here $|x-z|\le\delta'<p^{-H-\lfloor e_r/s\rfloor}\le p^{-\max(v,v')}$ for large
+$H$, so $x=z$, hence $v'=v$ and the coarse loss of $w$ is $k'=k+(H'-H)\le k+\lfloor e_r/s\rfloor$, and
+$\sum w_i^d=\sum y_i^d$. If $w=y$ as multisets the competitor is a permutation of the centre. For $r=2$,
+$w_1^d=y_1^d$ forces $w=y$. For $r\ge3$ peel coordinates from $j=r-1$ down to $2$. Suppose those above $j$
+have been matched; the remaining anchor sum $\sum_{i\le j}y_i^d$ has the unique top loss $h_j$, and the
+remaining competitor coordinates have total loss $k'_j\le k_j+\lfloor e_r/s\rfloor$ with
+$k_j=h_1+\cdots+h_j\le\frac32h_j-\frac12$, so $k'_j<2h_j$ for large $H$, because $h_j\ge\lambda H$. By the
+peeling lemma \leanR{PowerSumPeeling}{372}{\ttt{dominant\_loss\_unique\_top\_coord}} the competitor has a
+unique remaining coordinate $c'/p^{h_j}$ of loss $h_j$, all others being of smaller loss. If $c'=a_j$,
+remove it and descend. Otherwise $a_j^d-c'^d=M\ne0$, where $M=p^{dh_j}(\sum'w_i^d-\sum_{i<j}y_i^d)$ is
+fixed by the lower coordinates, $|M|\le rp^{d(h_j+1)}$, and by
+\leanR{PowerSumPeeling}{79}{\ttt{card\_pow\_diff\_eq\_le\_divisors}} there are at most
+$2\tau(|M|)\ll p^{h_j/6}$ pairs $(a_j,c')$. The matched coordinates contribute at most $p^{k-k_j+O(1)}$
+choices, the lower ones $O(k^rp^{2k_{j-1}})$, and the fine coordinate $p^{v+1}$; the total is
+$p^{H-h_j+k_{j-1}+h_j/6+O(1)}k^r\le p^{H-h_j/3+O(1)}k^r\le p^{(1-\lambda/3)H}H^{O(1)}$. If every step matches,
+the last remaining coordinates satisfy $w_1^d=y_1^d$ and $w=y$. Summing over loss data, rows with
+$B=0$ contribute $O(H^{O(r)}p^{(1-\lambda/3)H})$.
+
+\emph{Rows with $0<|B|<p^{-cH}$.} The denominator of $B$ divides $p^{dg}$ with $g$ the largest coarse
+loss, so $g>cH/d>\kappa H\ge k$, and $g$ is attained in $w$. With the other coordinates fixed, that
+coordinate lies in a set of diameter at most $(2p^{-cH})^{1/d}$, which contains fewer than $3p^{g-cH/d}$
+grid points. Charging every fine point gives $O(H^{O(r)}p^{k+H'-cH/d})=O(H^{O(r)}p^{(1-c/d+\kappa)H})$.
+
+\emph{Removed points.} In rows with $|B|\ge p^{-cH}$ put $\eta=p^{-2\kappa H}$ and $\rho=\eta^{d(q-2)}$, with
+$q$ chosen below, and remove the $x$ with $x\le\eta$ or $|\Phi_q(x^d,B)|\le\rho$. By \Cref{lem:fB} the
+second set lies within $(\rho/|{\rm lead}|)^{1/(q-2)}=O(\eta^d)$ of the at most $q-2$ roots of
+$X\mapsto\Phi_q(X,B)$, hence, since $|x^d-x'^d|\ge|x-x'|^d$, in at most $q-2$ intervals of length
+$O(\eta)$. Since $k+H'-v'\le(\kappa+1-1/r)H+O(1)\le(1-\kappa)H+O(1)$, the removed points number
+$O(H^{O(r)}(\eta p^{k+H'}+p^{k+H'-v'}))=O(H^{O(r)}p^{(1-\kappa)H})$.
+
+\emph{Exponential sums.} On the retained points, $|f_B^{(q)}|\gg p^{-\gamma H}$ with
+$\gamma=c+2\kappa(d(q-1)-q)$ if $q\le d$ and $\gamma=c+2\kappa d(q-2)$ if $q>d$, and $|f_B^{(q)}|\ll1$ if
+$q\le d$ and $\ll p^{2\kappa(q-d)H}$ if $q>d$. Drop the condition $p\nmid m'$, so that $m'$ runs over
+consecutive integers; this only enlarges the set counted, so it gives an upper bound for the collisions. Since $S(w,x)$ increases in $x$, the
+$x$ of a row with $S(w,x)$ in the $\delta_H$-neighbourhood $X^+$ of $X$ form at most $N$ intervals; cutting
+also where $f_B^{(q)}$ changes sign, where $|f_B^{(q)}|$ changes monotonicity or dyadic range, gives at most $N+O(qH)$ pieces on
+which $|f_B^{(q)}|$ has constant sign and ratio at most $2$ (the equation $|f_B^{(q)}|=D$ becomes, after
+raising to a power, a nonzero polynomial equation in $x$ of bounded degree). Choose $q$ for the class of
+the competitor by \Cref{lem:margins}, with $\alpha=\min(1,v'/H)$ and $\beta=\min(1,H'/H)$; then $\beta/r\le\alpha\le\beta\le1$, and
+$0\le v'-\alpha H\le\lfloor e_r/s\rfloor$ changes the exponents below by $O(1)$. Apply the
+Erd\H{o}s--Tur\'an inequality \cite[Chapter~2, Theorem~2.5]{KN} with $L_{\rm ET}=\lceil p^kH^{r+1}/\epsilon\rceil$
+frequencies to the points $p^vf_B(m'/p^{v'})$ of each piece, and \Cref{lem:qtest} to the phases
+$lp^vf_B(m'/p^{v'})$, whose $q$-th derivative has size $lp^v|f_B^{(q)}|/p^{qv'}$. Summing $1/l$ over
+$l\le L_{\rm ET}$, then over pieces (the first term of \Cref{lem:qtest} is linear in the piece length, and
+the second grows by at most $(N+O(qH))^{2/K_q}\le NH^{O(1)}$ by concavity) and over rows, the error terms
+total
+\begin{gather*}
+NH^{O(r)}\epsilon^{-1/(2K_q-2)}\bigl(p^{E_1}+p^{E_2}\bigr),\\
+E_1=k+H'+\frac{H-qv'}{2K_q-2}+\frac{2\kappa(q-d)^+H}{2K_q-2},\qquad
+E_2=k+H'-\frac{2v'}{K_q}+\frac{qv'-H+k+\gamma H}{2K_q-2},
+\end{gather*}
+together with at most $2(N+O(qH))$ points per row from pieces with fewer than two points. By
+\Cref{lem:margins} and the choice of $c,\kappa$, $E_1,E_2\le(1-\sigma_r/2)H+O(1)$; since
+$\epsilon^{-1}\le p^{\mu H/8}$ and $\mu\le\sigma_r/8$, these errors are $O(NH^{O(r)}p^{(1-\mu)H})$.
+
+\emph{Main term.} The remaining contribution is
+$\sum_y(2\eta_0+6/L_{\rm ET})\,\mathrm{Comp}(X^+)$, where $\mathrm{Comp}(X^+)$ counts relevant competitor
+tuples with value in $X^+$ (with $p\nmid m'$ dropped); it does not depend on $y$. Since there are at most
+$p^{k+r}$ anchors per dominant vector and at most $H^{r-1}$ vectors,
+$\sum_y2\eta_0\le2C_dp^r\epsilon$ and $\sum_y6/L_{\rm ET}\le6p^r\epsilon H^{-2}$. Put
+$\tilde\tau=\max(\tau,p^{-\mu H})$ and $\mu_0=1/(2r)$, and call a competitor \emph{regular} if some
+coordinate $x_m\ge\tilde\tau$ has loss $g\ge\mu_0H$. Fixing the other coordinates (at most $p^{H'-g+r}$
+choices) and using $\partial S/\partial x_m\ge d\tilde\tau^{d-1}$, at most $p^g|X^+|/(d\tilde\tau^{d-1})+N$
+values of $x_m$ give $S\in X^+$; summing over loss vectors, regular competitors number
+$O(\tilde\tau^{1-d}|X^+|H^{r-1}p^H)+O(NH^{r-1}p^{(1-\mu_0)H})$. Here $|X^+|\le|X|+2N\delta_H$ and
+$\epsilon\cdot2N\delta_H\tilde\tau^{1-d}H^{r-1}p^H\le2Np^{(d-1)\mu H}\le2Np^{(1-\mu)H}$, because $\mu<1/d$. If an
+irregular competitor has $H'\ge H/2$, some coordinate has loss at least $\mu_0H$, and all such
+coordinates lie below $\tilde\tau$; so each loss vector carries at most $2\tilde\tau p^{H'+r}$ irregular
+tuples, $O(\tilde\tau H^{r-1}p^H)$ in all, while loss vectors with $H'<H/2$ carry $O(H^rp^{H/2})$ tuples.
+Since $\tilde\tau\le\tau+p^{-\mu H}$ and $\tilde\tau^{1-d}\le\tau^{1-d}$, the main term is at most
+$A\epsilon(\tau^{1-d}|X|+\tau)H^{r-1}p^H+ANH^Ap^{(1-\mu)H}$ for a suitable $A$.
+\end{proof}
+
+The irregular competitors are bounded without any localization; their total mass is a fraction
+$\tilde\tau$ of all competitors wherever $X$ lies. Localizing them is impossible at a fixed scale.
+
+\begin{proposition}[Uniform isolation fails]\label{prop:nouniform}\evidence{Paper proof; finite certificate}
+Let $p=3$, $d=4$, $r=3$, $\epsilon=\frac14$ and $\delta_H=\epsilon/(H^23^H)$. Put
+$R_H=\lceil(8(32H^2)^4)^{1/3}\rceil+1$ and $\rho_H=1/R_H\asymp H^{-8/3}$. For every $H\ge6$, every point of
+$(2+\rho_H,2+2\rho_H]$ lies within $\delta_H$ of the value $1+1+(a/3^H)^4$ of a relevant tuple with
+$3\nmid a$, so no centre of level $H$ with value in the nonempty interval
+$(2+\rho_H+\delta_H,2+2\rho_H-\delta_H)$ is isolated. For $H=4000$ one has $\rho_H>3^{-\sigma_3H/3}$.
+\end{proposition}
+
+\begin{proof}
+Consecutive admissible numerators differ by at most $2$, and the gaps between the points $(a/3^H)^4$
+increase with $a$. So all gaps up to the first point above $2\rho_H$ are at most
+$(a_{\rm hi}^4-(a_{\rm hi}-2)^4)/3^{4H}<8a_{\rm hi}^3/3^{4H}$, where $a_{\rm hi}\le(2\rho_H)^{1/4}3^H+3$. The choice
+of $R_H$ makes $8a_{\rm hi}^3\le2\delta_H3^{4H}$ for $H\ge5$. Since $\rho_H^{1/4}3^H\ge1$, the net starts below
+$2+\rho_H$, and $\rho_H>2\delta_H$ for $H\ge6$, so the interval in the statement is nonempty (for $H=4,5$ the net
+property still holds, but that interval is empty). A centre has three distinct positive losses,
+so it is never one of the tuples $(1,1,a/3^H)$, which have level $H$. Finally $R_{4000}^{126}<3^{4000}$ is
+checked exactly, and $\sigma_3/3=1/126$. The finite certificate (\Cref{sec:formal}) checks the net exactly for
+$H\in\{6,10,100,1000,4000\}$, as an independent confirmation of the analytic step.
+\end{proof}
+
+The same mechanism works in general: next to a sum $W$ of $r-1$ coordinates of coarse loss $g$,
+competitors with a small last coordinate accumulate with density of order $p^{H-g}\rho^{1/d-1}$ at
+distance $\rho$, so isolation fails on intervals of length of order $(p^{-g}H^{1-r})^{d/(d-1)}$ just
+above $W$. This is why the following estimate carries the exponent $d/(d-1)$.
+
+\subsection{An effective small-ball estimate}\label{sec:smallball}
+
+\begin{theorem}[Small balls]\label{thm:smallball}\evidence{Lean-supported paper proof}
+Let $r,d\ge2$. There is $C_*$, depending on $p,r,d,s$, such that for every $w\in\Z_p$ and every $L\ge3$,
+\[
+\bigl|\{u\in[1,p^d):\ M_r(u)\equiv w\pmod{p^L}\}\bigr|\le C_*(\log L)^{-d/(d-1)}.
+\]
+In particular every level set of $M_r$ is Lebesgue-null.
+\end{theorem}
+
+\begin{proof}
+Let $E=\{M_r\equiv w\bmod p^L\}$, take $\kappa,A,\mu,H_*$ from \Cref{lem:avgiso}, enlarge $A$ to
+$A\ge\max(p^d,r-1)$, and put $\Gamma_0=\lceil4/\mu\rceil+1$. Choose levels
+$H_0=H_*+\lceil C'\log\log L\rceil$ with $C'\ge24/(\mu\log p)$, and $H_{j+1}=\Gamma_0H_j$. We construct unions of
+intervals $[1,p^d)=X_0\supset X_1\supset\cdots\supset E$ with $N_j\le AH_j^Ap^{H_j}(j+1)$ components, using
+only levels with $\pi_{H_j}\le L$; this allows $m(L)\gg\log L$ steps.
+
+Let $x=|X_j|$ and $H=H_{j+1}$. If $x\le(\log L)^{-d/(d-1)}$, stop. Otherwise apply \Cref{lem:avgiso} with
+$\tau=(x/p^d)^{1/d}$ and $\epsilon=x^{(d-1)/d}/(8p^dA^2)$; for large $L$ both $\epsilon$ and $x$ exceed
+$p^{-\mu H/8}$, because $H\ge\Gamma_0C'\log\log L$. Since $\tau^{1-d}x+\tau\le2p^{d-1}x^{1/d}$, the main
+collision term is at most $xH^{r-1}p^H/(4A)$, and since $N_j\le AH_j^Ap^{H_j}(j+1)$ with $H_j\le\mu H/4$, every
+error term is at most $p^{(1-\mu/2)H}\le xH^{r-1}p^H/(8A)$, since $x\ge p^{-\mu H/8}$ and $H$ is large. There are two
+error terms, one in each bound of \Cref{lem:avgiso}, so at least $(1-\frac18-\frac14-\frac18)A^{-1}xH^{r-1}p^H=
+xH^{r-1}p^H/(2A)$ centres with value in $X_j$ are isolated. By \Cref{lem:rjump} each has two flanks $(\xi-\delta_H/2,\xi)$ and
+$(\xi,\xi+\delta_H/2)$ on which $M_r\bmod p^{\pi_H}$ takes different constant values, so one flank misses
+$\{M_r\equiv w\bmod p^{\pi_H}\}\supset E$. These flanks are disjoint, and at most $2N_j$ centres lie within
+$\delta_H/2$ of the boundary of $X_j$. Removing the missed flanks of the others gives $X_{j+1}\supset E$ with
+$N_{j+1}\le N_j+pH^{r-1}p^H$ components and
+\[
+|X_{j+1}|\le x-\Bigl(\frac{xH^{r-1}p^H}{2A}-2N_j\Bigr)\frac{\delta_H}2\le x\bigl(1-c_1x^{(d-1)/d}\bigr),\qquad
+c_1=\frac1{40p^dA^3}.
+\]
+Put $a=(d-1)/d$ and $y_j=x_j^{-a}$, where $x_j=|X_j|$. The Lean-supported steps are those of
+\Cref{lem:rjump,lem:avgiso}. Bernoulli's inequality gives
+$y_{j+1}\ge y_j(1+ac_1x_j^a)=y_j+ac_1$, so $x_j\le(ac_1j)^{-d/(d-1)}$ while the process runs. Taking
+$j=m(L)\gg\log L$ proves the bound.
+\end{proof}
+
+The kill fraction per level is of order $|X_j|^{(d-1)/d}$ rather than a constant; this is where the
+exponent $d/(d-1)$, rather than a power of $L$, comes from.
+
+\subsection{Normality in every degree below \texorpdfstring{$d$}{d}}\label{sec:higherdegree}
+
+\begin{theorem}[One order]\label{thm:higher}\evidence{Lean-supported paper proof}
+Let $s,r\ge1$, $d\ge r+1$ and $C=C(b,p,s,d)$. Then $P(C)$ is normal to base $b$ for every nonconstant
+$P\in\Q[x]$ of degree at most $r$. Consequently $C$ is not algebraic of degree less than $d$, and the
+radix shifts of $(C,C^2,\ldots,C^{d-1})$ are uniformly distributed in $\T^{d-1}$.
+\end{theorem}
+
+\begin{proof}
+For $\deg P=1$ apply \Cref{lem:reductionr}: $M_1\not\equiv0\pmod p$, so $\{M_1=0\}$ is empty. For $2\le\deg P\le r$, \Cref{thm:smallball} gives
+$|\{M_{\deg P}=0\}|=0$, and \Cref{lem:reductionr} applies since $d\ge\deg P+1$. An algebraic $C$ of degree
+less than $d$ would be a zero of a nonconstant rational polynomial of degree at most $d-1$, and $0$ is
+not normal. Joint distribution follows from Weyl's criterion \cite[Chapter~1, Theorem~6.2]{KN}, since every
+nonzero integer combination of $C,\ldots,C^{d-1}$ is a nonconstant polynomial of degree at most $d-1$.
+The Lean-supported steps are those of \Cref{lem:rjump,lem:fB,lem:avgiso} and \Cref{lem:short}.
+\end{proof}
+
+For several orders the top-depth mass is a combination of masses with different weights, and the
+centre must be chosen from the smallest order.
+
+\begin{theorem}[Several orders]\label{thm:several}\evidence{Lean-supported paper proof}
+Let $1\le s_1<\cdots<s_m$ be integers, $X_a=C(b,p,s_a,d)$, and let $P\in\Q[X_1,\ldots,X_m]$ be nonconstant of
+total degree $r\le d-1$. Then $P(X_1,\ldots,X_m)$ is normal to base $b$. In particular the $X_a$ satisfy no
+nonzero rational polynomial relation of total degree less than $d$, and distinct nonconstant monomials
+of total degree less than $d$ have jointly uniformly distributed radix shifts.
+\end{theorem}
+
+\begin{proof}
+\emph{Reduction.} Clear denominators, so that $P=\sum_\nu A_\nu X^\nu$ with integer $A_\nu$. A monomial
+$X^\nu$ expands over \emph{slot tuples}: for each $a$ an ordered $\nu_a$-tuple of coordinates, and a slot
+carrying variable $a$ and a coordinate of loss $h$ has weight $p^{s_ah}$. Put
+$S^*=\max\{s\cdot\nu:A_\nu\ne0,\ \nu\ne0\}$ and $T=\{\nu:A_\nu\ne0,\ s\cdot\nu=S^*\}$. As in
+\Cref{lem:freezer}, for $J\ge\max(L,\lceil L/s_1+L/d\rceil)$,
+\[
+p^{S^*J}b^{-n}R_n(P)\equiv M_P(u)=\sum_{\nu\in T}A_\nu M_\nu(u)\pmod{p^L},
+\]
+where $M_\nu(u)$ sums the slot weights over slot tuples with $S\le u$, and monomials outside $T$ carry a
+factor $p^{(S^*-s\cdot\nu)J}$ with $S^*-s\cdot\nu\ge1$, which vanishes modulo $p^L$ because $J\ge L$. The insertions number $O(N^{r/d})$, so as in \Cref{lem:reductionr} it suffices that
+$\{M_P=0\}$ be null. Only slot tuples of weighted level below $L$ matter modulo $p^L$.
+
+\emph{The target monomial.} For $\nu\in T$ list its slot orders in nondecreasing order as
+$\mathbf o(\nu)$; distinct $\nu$ give distinct lists, none a proper prefix of another (their entries sum
+to $S^*$). Let $\nu^*$ have the lexicographically least list, $s_*=s_{a_*}$ its first entry,
+$n_*=\nu^*_{a_*}$, $r_*=\deg\nu^*$, $m_*=r_*-n_*$, and $u_1\le\cdots\le u_{m_*}$ its remaining orders, all
+larger than $s_*$. Lexicographic minimality minimizes $s_*$ and maximizes $\nu_{a_*}$ over $T$. If
+$r_*=1$ then $T=\{X_{a_*}\}$ and $M_P\equiv A_{\nu^*}\lfloor u^{1/d}\rfloor\not\equiv0\pmod{p^{v_p(A_{\nu^*})+1}}$, so
+$\{M_P=0\}$ is empty. Assume $r_*\ge2$.
+
+\emph{The centre.} Fix $G_0>\max_{\nu\in T}v_p(A_\nu\prod_a\nu_a!)+2$ and put
+$e_{\rm prec}=v_p(A_{\nu^*}\prod_a\nu^*_a!)+1$. A centre consists of a \emph{bounded part}
+$y_j=a_j/p^{g_j}\le\theta$, $1\le j\le m_*$, a \emph{free part} $b_j/p^{h_j}\le\theta$, $1\le j<n_*$, and a last
+coordinate $z=m/p^v$, all numerators prime to $p$. The bounded part does not depend on $H$; it is chosen
+sequentially: with $B_{j-1}=\frac{s_m}{s_*}\sum_{i<j}g_i+e_{\rm prec}$, take $g_j$ larger than $2B_{j-1}$,
+than $s_m\sum_{i<j}g_i+G_0$ and than $h_{\min}$, and so large that the number of tuples $(w_l)$ of total loss at
+most $B_{j-1}$, times $2\max_{0<|M|\le rp^{d(g_j+1)}}\tau(|M|)$, is less than the number of admissible
+$a_j\le\theta p^{g_j}$; then choose $a_j$ outside all solutions of $c^d-a_j^d=M\ne0$ with
+$M=p^{dg_j}(\sum_{i<j}y_i^d-\sum_lw_l^d)$. Put $M_s=\max(2,s_m)$, choose $\kappa<\min(1/(2r),1/(M_s+1))$ and
+$\lambda\le\kappa/(3M_s)^{n_*-1}$, and require $h_1\ge\max(\lambda H,M_s\sum g_i+G_0)$,
+$h_{j+1}\ge M_s(\sum g_i+h_1+\cdots+h_j)+G_0$, $k=\sum g_i+\sum h_j\le\kappa H$ and $v=H-k$. All losses are
+distinct, and $v-s_mk\ge G_0$ for large $H$.
+
+\emph{The jump.} By the rearrangement inequality the least weight of an assignment of the centre
+coordinates to the slots of $\nu^*$ puts the ascending orders on the descending losses:
+$w^*=s_*(v+h_1+\cdots+h_{n_*-1})+\sum_iu_ig_{m_*+1-i}$, attained by exactly $\prod_a\nu^*_a!$ slot tuples;
+every other assignment has weight at least $w^*+G_0$ by the growth conditions on the losses. At precision
+$\pi=w^*+e_{\rm prec}$ the jump at an isolated centre is $A_{\nu^*}\prod_a\nu^*_a!\,p^{w^*}\not\equiv0$.
+
+\emph{Competitors.} A slot tuple of $\nu'\in T$ of weighted level below $\pi$ has unweighted level
+$H'<H+C_g$ with $C_g=O(1)$. Such tuples number $o(p^H)$ if $\nu'_{a_*}=0$, $O(H^{\nu'_{a_*}-1}p^H)$ if
+$\nu'_{a_*}\ge1$, and $o(H^{n_*-1}p^H)$ unless $\nu'_{a_*}=n_*$; centres in an interval $I$ number
+$\asymp(\kappa H)^{n_*-1}p^{H-\sum g_i}|I|$. Put $\delta_H=\epsilon/(H^{n_*-1}p^H)$ with
+$\epsilon\le\epsilon_0=(2C_d)^{-1}p^{-C_g}$.
+
+\emph{Exact coincidences.} As in \Cref{lem:avgiso}, $\epsilon\le\epsilon_0$ forces $x=z$ and $v'=v$; the
+coordinate $x$ sits in an order-$s_*$ slot, since otherwise its weight alone exceeds $\pi$. Cancelling $s_*v$,
+the remaining weights obey a budget $(*)$: total weight at most
+$s_*(h_1+\cdots+h_{n_*-1})+\sum_iu_ig_{m_*+1-i}+e_{\rm prec}$. Peel the free coordinates downwards: at
+$h_j\ge\lambda H$ the budget bounds the remaining unweighted loss by less than $2h_j$, so by the peeling lemma
+there is a unique competitor coordinate of loss $h_j$; if it differs from the anchor coordinate the divisor
+bound saves $p^{-h_j/3}$, and if it matches it must occupy an order-$s_*$ slot. After the free part, $\nu'$
+has used $n_*$ order-$s_*$ slots, so $\nu'_{a_*}=n_*$, and its remaining orders satisfy
+$\sum_lu_l(\nu')e_l\le\sum_iu_ig_{m_*+1-i}+e_{\rm prec}$. Now peel the bounded coordinates for
+$j=m_*,\ldots,1$: inductively the lower orders agree, lexicographic minimality gives
+$u_{m_*+1-j}(\nu')\ge u_{m_*+1-j}$, the budget forces a unique competitor coordinate $c/p^{g_j}$ in a slot of
+order exactly $u_{m_*+1-j}$, the remaining coordinates have total loss at most $B_{j-1}$, and the choice of
+$a_j$ forces $c=a_j$. At the end $\nu'=\nu^*$ and the competitor is one of the slot tuples of the jump.
+
+\emph{Other collisions.} Degree-one competitors $\nu'\in T$ have order above $s_*$ and number
+$O(p^{s_*H/o_1})=o(p^H)$; they are discarded. Competitors of degree $2\le j\le r$ satisfy $\alpha\ge\beta/r$,
+and rows with small $|B|$, removed points and exponential sums are treated exactly as in
+\Cref{lem:avgiso}, with $q\le r+1\le d$, $L_{\rm ET}=\lceil p^kH^{n_*+1}\rceil$ and an error
+$o(H^{n_*-1}p^H)$.
+
+\emph{Main term.} Fixed higher-slot coordinates $w_{\rm hi}$ with $u_0=S(w_{\rm hi})$ leave $n_*<d$
+order-$s_*$ slots and produce integrable singularities $(u-u_0)_+^{n_*/d-1}$ in the limiting competitor
+density, so isolation cannot hold uniformly in $I$. Discard competitors with $\nu'_{a_*}<n_*$, and split the
+others at a weighted higher-slot level $E_0(|I|)$: those above it number
+$O(H^{n_*-1}p^Hp^{-\eta_1E_0})$ by convergence of $\prod_j\sum_{e\ge0}p^{e(1-o_j/s_*)}$, with $\eta_1>0$; for
+the finitely many others, the lattice count
+$p^{H'}\mathrm{Vol}(R_u)-(p+1)^{n_*-1}\sum_jp^{H'-h'_j}\le\#(R_u\cap\Lambda)\le p^{H'}\mathrm{Vol}(R_u)$ for the grid
+$\Lambda=\prod_jp^{-h'_j}\Z_{>0}$ and $R_u=\{x\in(0,p)^{n_*}:\sum x_j^d\le u\}$ (pack interior-disjoint lower and
+upper boxes), applied on $I^+-S(w_{\rm hi})$, has error $o(H^{n_*-1}p^H)$. Hence for every interval $I$,
+\[
+\limsup_{H\to\infty}\frac{\mathrm{Comp}(I^+)}{H^{n_*-1}p^H}\le C_P\int_If,\qquad
+f(u)=1+\sum_{\nu',w_{\rm hi}}p^{-\frac1{s_*}\sum_jo_je_j}\,\frac{d}{du}\mathrm{Vol}_{n_*}\Bigl(\sum_{i\le n_*}x_i^d\le
+(u-S(w_{\rm hi}))_+\Bigr),
+\]
+and $f\in L^1$ because $n_*/d>0$. For $M\ge1$ take $\epsilon_M=\min(\epsilon_0,c_1/M)$ with $c_1$ small; on
+every interval with $|I|^{-1}\int_If\le M$, isolation of half the centres holds for $H\ge H_0(I,M)$, and the
+reverse Fatou lemma gives $|I\cap\limsup_HG_H(\epsilon_M)|\ge c_2\epsilon_M|I|$, where $G_H$ is the union of the
+intervals of radius $\delta_H/2$ about isolated centres. As in the proof of \Cref{prop:nulllevel}, no point of
+$\limsup_HG_H$ is a density point of a level set $E=\{M_P=w\}$, so $|I\cap E|\le(1-c_2\epsilon_M)|I|$ on such
+intervals. If $|E|>0$, a point of $E$ that is both a density point of $E$ and a Lebesgue point of $f$, with
+$M=\lceil f(x_0)\rceil+1$, gives a contradiction. So every level set of $M_P$ is null.
+
+The consequences follow as in \Cref{thm:higher}, with Weyl's criterion in several dimensions. The
+Lean-supported steps are the peeling lemma, the divisor bound and \Cref{lem:fB}.
+\end{proof}
+
+\subsection{Rates}\label{sec:rates}
+
+\begin{theorem}[Effective rates]\label{thm:effective}\evidence{Paper proof}
+Let $s,r\ge1$, $d\ge r+1$, $C=C(b,p,s,d)$, and let $P\in\Q[x]$ have degree $r$. Then
+\[
+D_N(P(C))\ll_P(\log\log N)^{-d/(d-1)}\quad(r\ge2),\qquad D_N(P(C))\ll_PN^{-\eta}\quad(r=1),
+\]
+with $\eta=\eta(p,s,d)>0$.
+\end{theorem}
+
+\begin{proof}
+Clear denominators: by the shift used in the proof of \Cref{thm:quadratic}, $b^eP(C)=P_0(C)/Q_1$ with
+$P_0\in\Z[x]$ of leading coefficient $A$ and $\gcd(Q_1,b)=1$, and $D_N(P(C))\le D_{N-e}(b^eP(C))+e/N$. The
+shifted prefixes then have reduced denominators $q_n\mid p^{rsJ+O_P(1)}M'$ with $M'$ fixed and prime to $pb$.
+Take $L=\lfloor c_0\log N\rfloor$ with $c_0\log p\le rs/(8d)$, $(c_0\log p)/s<r/d$ and
+$c_0(1+d/s)\log p<1/2$; the last condition puts every shift of the shells $J<J_0(L)$ below $\sqrt N$. Fix
+$\epsilon_1=1/(6d)$ and $\eta_0=\min(\frac12,\frac{rs}{8d})$.
+
+\emph{Runs.} Cut $[1,N]$ at the insertion positions, at the shell boundaries $tp^{dJ}$ and at the
+$O(\log N\cdot L^{r-1}p^{L/s})=O(N^{r/d})$ cell boundaries of $M_r\bmod p^L$; this gives $O(N^{r/d})$ runs. On a
+run $[n_0,n_0+T)$, $R_{n_0+j}\equiv b^jR_{n_0}\pmod1$, so $q_n$ and the residue of $M_r(u)$ are constant.
+Discard: the runs on which $M_r(u)\equiv0\pmod{p^{L-v_p(A)}}$ ($O(N(\log L)^{-d/(d-1)})$ shifts, by
+\Cref{thm:smallball}, the sampling of shells and the cell count); the runs shorter than $N^{1-r/d-\epsilon_1}$ ($O(N^{1-\epsilon_1})$
+shifts); the shifts $n<\sqrt N$; and a final buffer of length $\lceil2\log_bN\rceil$ of each run
+($O(N^{r/d}\log N)$ shifts). The coefficients of $P_0(C)$ at $b^{-m}$ are $O(m^{(r-1)/d})$, so off the buffers
+$|b^nb^eP(C)-R_n|\le N^{-1}$.
+
+\emph{A retained run.} By \Cref{lem:freezer}, $v_p(q_{n_0})\ge rsJ-L+1-O(1)$ with
+$rsJ\ge\frac{rs}{2d}\log_pN-O(1)$. Apply the Erd\H{o}s--Tur\'an inequality with $H_{\rm ET}=\lceil N^{\eta_0}\rceil$
+frequencies to the model points $\fr{b^jR_{n_0}}$, $j<T$. For $h\le H_{\rm ET}$ the reduced form of $hR_{n_0}$
+is $a/(p^eQ')$ with $Q'\mid M'$ and $e=v_p(q_{n_0})-v_p(h)\ge\frac{rs}{4d}\log_pN-O(1)$, which exceeds
+$A(G)\le a_0+v_p(\ord_{M'}b)$ for $G=b^\tau$, $\tau=\lcm(t,\ord_{Q'}b)=O(1)$. Also
+$e\le\frac{rs}d\log_pN+O(1)$ and $M_0\ge T/\tau\gg N^{1-r/d-\epsilon_1}$, so $p^{\theta e}\le M_0$ with
+\[
+\theta=\min\Bigl(1,\frac{d-r-1/2}{rs}\Bigr)\ge\frac1{2rs};
+\]
+this is where $d\ge r+1$ enters. \Cref{cor:split,lem:uniformorbit} give
+$|\sum_{j<T}e(hb^jR_{n_0})|\ll T^{1-\delta}$ uniformly in $h\le H_{\rm ET}$, so the run has discrepancy
+$\ll N^{-\eta_0}+N^{-\delta/(2d)}\log N$, using $T\ge N^{1/(2d)}$.
+
+\emph{Summation.} \Cref{lem:blocks} with the retained runs as blocks, the discarded shifts as uncovered,
+and $\epsilon=N^{-1}$ gives the bound for $r\ge2$, the discarded failed runs dominating. For $r=1$ the frozen
+residue is $A\lfloor u^{1/d}\rfloor\not\equiv0\pmod{p^{v_p(A)+1}}$, so no run fails, and every term is a
+negative power of $N$.
+\end{proof}
+
+The exponents of the power savings are poor: $\delta=2^{-\lceil2/\theta\rceil-3}$, for example
+$2^{-19}$ for $(r,s,d)=(2,2,3)$. They affect only the terms other than the failed runs. The rate for
+$r\ge2$ comes from \Cref{thm:smallball} alone; a power of $\log N$ would follow from a local form of the
+competitor count in \Cref{lem:avgiso} near sums of fewer coordinates, which we have not proved.
+
+\begin{corollary}\label{cor:flagship2}\evidence{Paper proof}
+$D_N(\xi^2;2)\ll(\log\log N)^{-3/2}$. The numbers $C(2,3,1,4)$, $C(2,3,1,4)^2$ and $C(2,3,1,4)^3$ are jointly
+normal to base $2$, and $D_N(C(2,3,1,4)^3;2)\ll(\log\log N)^{-4/3}$.
+\end{corollary}
+
+\begin{proof}
+Apply \Cref{thm:effective} with $(b,p,s,d,r)=(2,3,1,3,2)$ and $(2,3,1,4,3)$, and \Cref{thm:higher}.
+\end{proof}
+
+With \Cref{thm:higher,thm:several,thm:effective} the proof of \Cref{thm:D} is complete.
+
+\section{Infinite sums}\label{sec:sums}
+
+Let $s_3=2$ and $s_\ell=1$ for primes $\ell\ge5$, and for every odd prime $\ell$ put
+\[
+Y_\ell=\sum_{j\ge1}\frac{1}{\ell^{s_\ell j}\,2^{16^{\ell^j}}},\qquad
+Y=\sum_{\ell\ \text{odd prime}}Y_\ell .
+\]
+The insertions are indexed by the odd prime powers $m=\ell^j$ (the \emph{labels}); the label $m$ sits
+at position $16^m$, the positions are distinct, and every coefficient is at most $1/5$. For $n\ge1$ let
+$L=L(n)=\lfloor\log_{16}n\rfloor$, so that the terms inserted by shift $n$ are those with label at most
+$L$, and for $\ell\le L$ let $J_\ell=\lfloor\log_\ell L\rfloor$.
+
+\begin{lemma}\label{lem:Yden}\evidence{Paper proof}
+Let $r_\ell$ $(\ell$ odd prime$)$ be finitely supported rationals with odd denominators, and let $R_n$ be
+$2^n$ times the sum of the terms of $\sum_\ell r_\ell Y_\ell$ with label at most $L(n)$. For every $\ell$
+with $r_\ell\ne0$, $v_\ell(R_n)=v_\ell(r_\ell)-s_\ell J_\ell$ for all sufficiently large $n$, and $R_n$ is
+integral at $2$ and at every prime outside the support of $(r_\ell)$ and the denominators of the
+$r_\ell$. With $r_\ell=1$ for all $\ell$, the reduced denominator of $R_n$ is exactly
+$q(n)=3^{2J_3}\prod_{5\le\ell\le L}\ell^{J_\ell}$ for every $n$ with $L(n)\ge3$.
+\end{lemma}
+
+\begin{proof}
+The terms $r_\ell\ell^{-s_\ell j}2^{n-16^{\ell^j}}$ with $\ell^j\le L$ are $2$-integral. At a prime $\ell$,
+the terms from other axes have valuation at least $\min_{\ell'}v_\ell(r_{\ell'})$, a constant; on the axis
+$\ell$ the term with $j=J_\ell$ has valuation $v_\ell(r_\ell)-s_\ell J_\ell$ and the others have strictly
+larger valuation. Since $J_\ell\to\infty$, the top term has the unique least valuation for large $n$.
+When all $r_\ell=1$ the other axes are $\ell$-integral and the conclusion holds as soon as $\ell\le L$.
+\end{proof}
+
+We use the elementary bound $\prod_{\ell\le x}\ell<4^x$ over primes: the primes in $(m+1,2m+1]$ divide
+$\binom{2m+1}{m}\le4^m$, and induction on $x$ completes the proof. It gives
+$q(n)\le3^{J_3}\prod_{\ell\le L}\ell^{J_\ell}\le L^{\sqrt L+1}4^L$, since only primes $\ell\le\sqrt L$
+have $J_\ell\ge2$.
+
+\begin{theorem}[All odd primes]\label{thm:Y}\evidence{Lean-supported paper proof}
+The number $Y$ is normal to base $2$ and $D_N(Y;2)\ll1/\log(2N)$ for all $N\ge1$. Moreover $Y$ is a
+Liouville number.
+\end{theorem}
+
+\begin{proof}
+Let $L(n)\ge3$, write $q=q(n)=3^eQ$ with $e=2J_3$ and $Q$ odd and prime to $3$, and let
+$\tau=\lcm(2,\ord_Q(2))$, with the conventions $\ord_1(2)=1$ and that an empty maximum is zero (both
+apply when $L\le4$, where $Q=1$). Then $2^\tau\equiv1\pmod{3Q}$ and, lifting the exponent from $v_3(4-1)=1$,
+\[
+c=v_3(2^\tau-1)=1+v_3(\ord_Q(2))\le1+\max_{5\le\ell\le L}v_3(\ell-1)\le1+J_3,
+\]
+because the order of $2$ modulo $\ell^f$ divides $\ell^{f-1}(\ell-1)$ and $3^{v_3(\ell-1)}\le\ell-1<L$.
+Hence $e-c\ge J_3-1\ge0$, and \Cref{lem:grid} shows that any $L'$ consecutive points $\fr{a2^j/q}$
+with $3\nmid a$ (in particular with $a$ prime to $q$, as for the reduced prefixes) have count error at most $L'3^{1-J_3}+\tau3^{e-c}\le9L'/L+q$ on every half-open arc, using
+$3^{J_3+1}>L$ and $\tau\le2Q$. The doubled order at $3$ is what makes the grid grow: the loss $c$ can be
+as large as $J_3$, but $e=2J_3$. The Lean-supported steps are the order and count statements cited in
+\Cref{lem:grid}.
+
+Let $N$ be large, $N_0=\lceil\sqrt N\rceil$, and apply \Cref{lem:blocks}: leave $[0,N_0)$ uncovered and
+split $[N_0,N)$ at the insertion positions. Fewer than $\log_{16}(2N)$ labels have position below $2N$,
+so there are $O(\log N)$ blocks; on each, $R_{n+1}=2R_n$ and the models are consecutive points
+$\fr{a2^j/q}$ with $q$ constant, and $L(n)\ge\frac12\log_{16}N-1$. With $w=\lceil\log_2N\rceil+1$, a
+shift $n<N$ with no insertion in $(n,n+w]$ satisfies $0\le2^nY-R_n<1/N$, and at most $w\log_{16}(2N)$
+shifts fail this. Since $L(N)\le\log_{16}N$, $q\le L^{\sqrt L+1}4^L\le N^{1/2+o(1)}$, so
+\[
+D_N(Y)\le\frac{N_0+w\log_{16}(2N)+O(N/\log N)+O(\log N)N^{1/2+o(1)}}{N}+\frac2N\ll\frac1{\log N}.
+\]
+Small $N$ are absorbed in the constant.
+
+For the Liouville property, given $h\ge1$ choose distinct primes $r_1,\ldots,r_{2h}$ and, by the Chinese
+remainder theorem, arbitrarily large $z$ with $r_{2i-1}r_{2i}\mid z+i$ for $1\le i\le h$. None of
+$z+1,\ldots,z+h$ is a prime power, so there are consecutive labels $u<v$ with $v-u>h$ and $u$
+arbitrarily large. The truncation $P$ through label $u$ has denominator at most $2^{16^u}q$ with
+$\log_2q=O(u)$, while $0<Y-P\le2^{1-16^v}\le2^{1-16^{h}\cdot16^u}$. As $h$ is arbitrary and $Y$ is
+irrational, $Y$ is a Liouville number.
+\end{proof}
+
+If only $3$ and the primes $\ell\equiv2\pmod3$ are used, $3\nmid\ord_Q(2)$, so $c=1$ and the weight
+$3^{-j}$ already gives a growing grid at $3$; with positions $2^{\ell^{2j}}$ this yields the rate
+$O((\log N)^{-1/2})$ by the same argument.
+
+\begin{theorem}[Finite combinations]\label{thm:combos}\evidence{Lean-supported paper proof}
+For every finite set $S$ of odd primes and rationals $r_\ell$ $(\ell\in S)$, not all zero, the number
+$\sum_{\ell\in S}r_\ell Y_\ell$ is normal to base $2$. Consequently $(Y_\ell)_{\ell\in S}$ is jointly
+normal: the points $(\fr{2^nY_\ell})_{\ell\in S}$ are uniformly distributed in $\T^S$.
+\end{theorem}
+
+\begin{proof}
+Multiplying a number by $2^a$ changes $D_N$ by at most $a/N$, so we may assume that all $r_\ell$ have odd
+denominators. Choose $\ell_0\in S$ with $r_{\ell_0}\ne0$, let $F$ be the finite set of odd primes dividing
+$\prod_{\ell\in S}\ell$ or a denominator of some $r_\ell$, and let
+$\beta=\max_{\ell\in F\setminus\{\ell_0\}}v_{\ell_0}(\ell-1)$ (zero if empty). By \Cref{lem:Yden}, for large
+$n$ the reduced denominator of $R_n$ is $q=\ell_0^eQ$ with $e=s_{\ell_0}J_{\ell_0}-v_{\ell_0}(r_{\ell_0})\to\infty$
+and $Q$ supported on $F\setminus\{\ell_0\}$. The order $\ord_Q(2)$ divides $\lcm_\ell\ell^{f_\ell-1}(\ell-1)$,
+so its $\ell_0$-valuation is at most $\beta$. With $t_0=\ord_{\ell_0}(2)$ and $\tau=\lcm(t_0,\ord_Q(2))$,
+lifting the exponent gives $c=v_{\ell_0}(2^\tau-1)=v_{\ell_0}(2^{t_0}-1)+v_{\ell_0}(\tau/t_0)\le
+v_{\ell_0}(2^{t_0}-1)+\beta=:c^*$, independent of $n$. \Cref{lem:grid} gives count error at most
+$L'\ell_0^{c^*-e}+\tau\ell_0^{e-c}\le L'\ell_0^{c^*-e}+q$, and $q\le(\log N)^{O(1)}$ for $n<N$. The block and tail
+argument of \Cref{thm:Y}, with $O(\log N)$ insertions and the tail multiplied by $\sum|r_\ell|$, gives
+$D_N\to0$. Joint normality follows by applying this to the integer combinations $\sum h_\ell Y_\ell$,
+$h\ne0$, together with Weyl's criterion and its multidimensional form
+\cite[Chapter~1, Theorems~2.1 and~6.2, pp.~7 and~49]{KN}.
+\end{proof}
+
+Only a fixed finite set of primes enters $Q$ here, so the loss $c$ is bounded. For the infinite sum
+$Y$ the loss can grow, and the doubled order at $3$ compensates for it.
+
+\begin{theorem}[Rational totals]\label{thm:rationaltotal}\evidence{Lean-supported paper proof}
+For every real $R>0$ there are rationals $c_\ell>0$, indexed by the odd primes, with
+$\sum_\ell c_\ell Y_\ell=R$. For rational $R$ the total is not normal, although every finite subfamily
+of the positive terms $c_\ell Y_\ell$ is jointly normal.
+\end{theorem}
+
+\begin{proof}
+For positive generators $g_i$ and $R>0$, choose inductively rationals with $e_{i-1}/2<c_ig_i<e_{i-1}$,
+where $e_0=R$ and $e_i=e_{i-1}-c_ig_i$; then $0<e_i<R2^{-i}$. This is the kernel-verified
+\lean{PositiveSummation}{15}{\ttt{hasSum\_positive\_rational\_multiples}}, applied to an enumeration of
+the $Y_\ell$. Joint normality of finite subfamilies is \Cref{thm:combos}, since nonzero rational scaling
+preserves its hypothesis. A rational number has an eventually periodic expansion and is not normal.
+\end{proof}
+
+The tails of a series of normal numbers cannot all be negligible. For real $z$ let
+$M_N(z)=N^{-1}\sum_{n<N}\dist{b^nz}$ and $\overline M(z)=\limsup_NM_N(z)$.
+
+\begin{proposition}[Consecutive tails]\label{prop:tails}\evidence{Lean-supported paper proof}
+Let $\sum_iS_i$ be a convergent series of numbers normal to base $b$, with tails $E_k=\sum_{i>k}S_i$.
+Then for every $k$,
+\[
+\overline M(E_k)+\overline M(E_{k+1})\ge\frac14\qquad\text{and}\qquad
+\limsup_N\bigl(D_N(E_k)+D_N(E_{k+1})\bigr)\le1 .
+\]
+In particular at most one of any two consecutive tails $z$ satisfies $D_N(z)\to1$, that is, by
+\Cref{thm:sharpcited}, $\sup_x|D_N(x+z)-D_N(x)|\to0$.
+\end{proposition}
+
+\begin{proof}
+Since $S_{k+1}=E_k-E_{k+1}$, $\dist{b^nS_{k+1}}\le\dist{b^nE_k}+\dist{b^nE_{k+1}}$. By uniform distribution
+\cite[Chapter~1, Corollary~1.1, p.~3]{KN} the averages of the left side tend to $\int_0^1\dist{y}\,dy=1/4$.
+For the second inequality apply \Cref{thm:sharpcited} with $x=E_k$ and $z=-E_{k+1}$: since
+$D_N(-E_{k+1})=D_N(E_{k+1})$, it gives $D_N(S_{k+1})\ge D_N(E_k)+D_N(E_{k+1})-1$, and $D_N(S_{k+1})\to0$.
+The Lean-supported step is \Cref{thm:sharpcited}.
+\end{proof}
+
+In \Cref{thm:Y} normality of the total therefore comes from the arithmetic grid at $3$, which survives
+every new prime, and not from smallness of the tails. The translations $z$ with $D_N(z)\to1$ are
+classified in \cite[Theorem~3.3]{CompanionH}; in base $2$ they are exactly the $z$ with $M_N(z)\to0$.
+
+\section{All-prime polynomial normality}\label{sec:allprime}
+
+Throughout this section $p\nmid b$ is an odd prime, $t=\ord_p(b)$, $a_0=v_p(b^t-1)$, and
+$\ell_1<\ell_2<\cdots$ are the primes not dividing $pb$. For a series $x=\sum_kc_kb^{-n_k}$ put
+$U_k=\sum_{j\le k}c_jb^{-n_j}$. For $P_1\in\Z[x]$ we write $R_n$ for the shifted prefix of $P_1(x)$, as in
+\Cref{prop:criterion}, and $q_n$ for its reduced denominator. The orbit of the rational $R_n$ is counted
+by \Cref{lem:grid}: if $q_n=p^eQ$ with $p\nmid Q$, $\tau=\lcm(t,\ord_Qb)$ and $c=v_p(b^\tau-1)=a_0+v_p(\ord_Qb)\le e$,
+then any $T$ consecutive points meet every half-open arc in $T|I|+\vartheta$ points with
+\begin{equation}\label{eq:gridcount}
+|\vartheta|\le Tp^{c-e}+\tau p^{e-c},\qquad \tau p^{e-c}\le t\,q_n .
+\end{equation}
+
+\subsection{Protected poles}
+
+\begin{lemma}[Pole dominance]\label{lem:poledom}\evidence{Lean-supported paper proof}
+Let $U,V\in\Q$ with $v_p(U)=-e'$ and $v_p(V)=-e$, where $0\le e'<e$. Let $P_1=\sum_{j\le r}a_jx^j\in\Z[x]$ have
+degree $r$ and leading coefficient $A$, let $1\le l\le r$, and put
+\[
+F_l(U,V)=\sum_{i=0}^{l}\frac{P_1^{(i)}(U)}{i!}V^i=\sum_{j\le r}a_j\sum_{i\le\min(j,l)}\binom jiU^{j-i}V^i .
+\]
+If $\min(e',e-e')>v_p(A\binom rl)$, then $v_p(F_l(U,V))=v_p(A\binom rl)-((r-l)e'+le)$.
+\end{lemma}
+
+\begin{proof}
+The term $U^{j-i}V^i$ has depth $D(j,i)=(j-i)e'+ie$. The term $(j,i)=(r,l)$ has valuation exactly
+$v_p(A\binom rl)-D(r,l)$, and every other term has an integer coefficient and valuation at least
+$-D(j,i)$, while $D(r,l)-D(j,i)=(r-j)e'+(l-i)(e-e')\ge\min(e',e-e')$ because $r-j\ge1$ or $l-i\ge1$. The
+ultrametric inequality gives the claim. The resulting divisibility
+$p^{le+(r-l)e'-g}\mid\den F_l(U,V)$, $g=v_p(A\binom rl)$, is the Lean declaration
+\leanR{ProtectedPole}{347}{\ttt{truncated\_poly\_pole\_dvd\_den}}; it is a lower bound for the depth, which is
+all that the grid count \eqref{eq:gridcount} needs.
+\end{proof}
+
+\subsection{A universal Liouville example}
+
+\begin{theorem}[Universal all-prime normality]\label{thm:allprime}\evidence{Lean-supported paper proof}
+Let $n_k=2^{k^3}$ and $W=\sum_{k\ge1}p^{-k^2}\ell_k^{-1}b^{-n_k}$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For $n_k\le n<n_{k+1}$ the reduced denominator of $b^nU_k$ is exactly $p^{k^2}\ell_1\cdots\ell_k$.
+\item For every nonconstant $P\in\Q[x]$ of degree $r$ the number $P(W)$ is normal to base $b$ and a
+Liouville number, and $D_N(P(W))\ll_{P,c}\exp(-c(\log N)^{2/3})$ for every
+$c<c_0=\min\bigl(3(\log2)^{1/3},\,r\log p/(\log2)^{2/3}\bigr)$.
+\item $W$ is transcendental, and for every $r$ the radix shifts of $(W,\ldots,W^r)$ are uniformly
+distributed in $\T^r$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) The number $p^{k^2}\ell_1\cdots\ell_k\,b^nU_k=\sum_{j\le k}p^{k^2-j^2}(\prod_{i\le k,i\ne j}\ell_i)b^{n-n_j}$ is an
+integer. Modulo $p$ only the term $j=k$ survives, and modulo $\ell_j$ only the term $j$ survives; both are
+units. The exact $p$-power and the divisibility by the newest prime $\ell_k$ are the Lean declarations
+\leanR{ProtectedPole}{245}{\ttt{shifted\_prefix\_protected\_prime\_pow\_dvd\_den}} and
+\leanR{ProtectedPole}{143}{\ttt{shifted\_prefix\_aux\_prime\_dvd\_den}}; the persistence of the earlier
+$\ell_j$ is the written step just given.
+
+(ii) Write $P=P_1/M$ with $P_1=\sum_ja_jx^j\in\Z[x]$ of leading coefficient $A$, and $V_k=p^{-k^2}\ell_k^{-1}b^{-n_k}$.
+Then $P_1(W)$ expands over ordered tuples $\tau=(k_1,\ldots,k_j)$ at positions $|\tau|=n_{k_1}+\cdots+n_{k_j}$.
+Fix a shell $n_k\le n<n_{k+1}$ with $rn_{k-1}<n_k$ and $(r+1)n_k\le n_{k+1}$, and discard the \emph{windows}
+$\mathcal W_{k,i}=[in_k,in_k+rn_{k-1}]$, $1\le i\le r$. A tuple with $i\ge1$ copies of $k$ (and none larger)
+has position in $\mathcal W_{k,i}$, and tuples on smaller indices have position at most $rn_{k-1}<n_k$.
+Outside the windows, therefore, $b^{-n}R_n=F_l(U_{k-1},V_k)$ with $l=\min(r,\lfloor n/n_k\rfloor)\ge1$, by
+Taylor's formula; the retained part of the shell consists of at most $r$ runs, on each of which
+$R_{n+1}=bR_n$.
+
+Since $v_p(U_{k-1})=-(k-1)^2$, $v_p(V_k)=-k^2$ and $\min((k-1)^2,2k-1)>v_p(A)+\log_pr$ for $k\ge k_1(P)$,
+\Cref{lem:poledom} gives at every retained shift
+\[
+v_p(q_n)=(r-l)(k-1)^2+lk^2-v_p\Bigl(A\binom rl\Bigr)\ge r(k-1)^2+2k-1-v_p(A)-\log_pr .
+\]
+Every present tuple has denominator dividing $p^{rk^2}\prod_{j\le k}\ell_j^r$, so $q_n$ divides this. By
+Chebyshev's bound $\ell_k\ll k\log k$, and $\prod_{\ell\le x}\ell<4^x$ (\Cref{sec:sums}) gives
+$\log q_n\le rk^2\log p+O_r(k\log k)=O_P(k^2)$. Writing $q_n=p^eQ_n$, the loss
+$c=a_0+v_p(\ord_{Q_n}b)\le a_0+\max_{j\le k}v_p(\ell_j-1)\le a_0+\log_p\ell_k=O(\log k)$, so \eqref{eq:gridcount}
+applies with $e-c\ge r(k-1)^2+2k-1-O_P(\log k)$. Rational coefficients are handled as in the proof of
+\Cref{thm:quadratic}: $b^{e_0}P(W)=(b^{e_0}/M_b)P_1(W)/M'$ with $M'$ prime to $b$, which changes $q_n$ by a
+divisor of $M'$, the $p$-depth by $v_p(M')$ and the loss by at most $\max_{\ell\mid M'}v_p(\ell-1)$.
+
+Put a buffer of length $H_b=\lceil2\log_b(N+2)\rceil$ before each window. Outside windows and buffers every
+absent tuple has position larger than $n+H_b$; at most $(\log_2m)^{j/3}$ ordered $j$-tuples sit at position
+$m$, and all coefficients are at most one, so $|b^nP_1(W)-R_n|\ll_P(\log N)^{r/3}b^{-H_b}\ll N^{-1}$. Let $K$ be
+the shell of $N$, so $K=\lfloor(\log_2N)^{1/3}\rfloor$. Apply \Cref{lem:blocks} with the retained runs as
+blocks: windows and buffers cost $O(n_{K-1}+K\log N)$ shifts, that is $O(2^{-3K^2+3K}+K\log N/N)$ after
+division by $N\ge n_K$; the at most $(r+1)(K+1)$ runs cost $t\,q_n=e^{O_P(K^2)}$ each, that is
+$e^{O_P(K^2)-K^3\log2}$; and the mesh term $Tp^{c-e}$ costs $O(n_{K-1}/N)+p^{-r(K-2)^2+O_P(\log K)}$. Since
+$K\ge(\log_2N)^{1/3}-1$ these are $\exp(-3(\log2)^{1/3}(\log N)^{2/3}+O((\log N)^{1/3}))$ and
+$\exp(-r\log p(\log2)^{-2/3}(\log N)^{2/3}+O((\log N)^{1/3}))$, which proves the rate.
+
+For the Liouville property put $D_k=b^{n_k}p^{k^2}\ell_1\cdots\ell_k$, so $\log D_k=n_k\log b+O(k^2)$. The
+rational $P(U_k)$ has denominator dividing $MD_k^r$, and $0<|P(W)-P(U_k)|\le2\max_{[0,1]}|P'|\,b^{-n_{k+1}}$,
+the difference being nonzero because $P(W)$ is normal, hence irrational. Since $n_{k+1}/n_k\to\infty$, for
+every $h$ this is eventually below $(MD_k^r)^{-h}$.
+
+(iii) A polynomial relation $P(W)=0$ contradicts normality, and every nonzero integer combination of
+$W,\ldots,W^r$ is a nonconstant integer polynomial in $W$; apply Weyl's criterion
+\cite[Chapter~1, Theorem~6.2]{KN}. The order computation inside \eqref{eq:gridcount} is
+\leanP{SurvivingGrid}{43}{\ttt{stride\_order}}.
+\end{proof}
+
+In $P(W)$ with $\deg P\ge2$ only $p$ and, when $l=r$, the newest prime $\ell_k$ are controlled; the older
+primes enter through sums that may cancel, and no persistence is claimed for them in $P(W)$.
+
+\subsection{General protected poles and denser schedules}
+
+\begin{theorem}[Protected poles]\label{thm:protected}\evidence{Lean-supported paper proof}
+Let $n_k$ be strictly increasing positive integers and $e_k\ge1$ integers, let $m_k\ge1$ be integers prime
+to $pb$, and let $u_k$ be integers with $p\nmid u_k$ and $0<|u_k|\le p^{e_k}m_k$. Put $c_k=u_k/(p^{e_k}m_k)$,
+$W=\sum_kc_kb^{-n_k}$, $\Lambda_k=\lcm(m_1,\ldots,m_k)$ and $\lambda_k=\max_{\ell\mid\Lambda_k}v_p(\ord_\ell b)$. Assume
+\[
+\text{(S) }\frac{n_{k+1}}{n_k}\to\infty;\quad \text{(D) }e_k-e_{k-1}\to\infty;\quad
+\text{(G) }e_k-\lambda_k\to\infty;\quad \text{(P$_r$) }k\,p^{re_k}\,\pi_k=o(n_k),
+\]
+where $\pi_k=\Lambda_k^r$ in general and $\pi_k=\Lambda_k^{r-1}A_b(\max_{\ell\mid\Lambda_k}\ell)$ if $\Lambda_k$ is
+squarefree. Then $P(W)$ is normal to base $b$ and a Liouville number for every $P\in\Q[x]$ with
+$1\le\deg P\le r$, and, with $K$ maximal such that $n_K\le N$,
+\[
+D_N(P(W))\ll_P\frac{n_{K-1}}{n_K}+p^{\lambda_{K-1}-e_{K-1}}+p^{\lambda_K-e_K}+\frac{Kp^{re_K}\pi_K}{n_K}+\frac{K\log(2N)}N .
+\]
+\end{theorem}
+
+\begin{proof}
+Repeat the proof of \Cref{thm:allprime} with $e_k$ in place of $k^2$. By (D) the deepest term of
+$U_{k-1}$ is eventually unique and the gap $\min(e_{k-1},e_k-e_{k-1})$ of \Cref{lem:poledom} tends to infinity,
+so $v_p(q_n)\ge(r-1)e_{k-1}+e_k-O_P(1)$; the loss is at most $a_0+\lambda_k+O_P(1)$, so by (G) the mesh term
+of \eqref{eq:gridcount} is $O(p^{\lambda_k-e_k})$. Under (S) there are $O(rK)$ runs with $K=O(\log N)$. The
+term $\tau p^{e-c}$ of \eqref{eq:gridcount} is at most $t\,p^{re_k}\ord_{Q}b\cdot O_P(1)$ with $Q\mid\Lambda_k^rM'$,
+and $\ord_{\ell^r}b\mid\ell^{r-1}\ord_\ell b$ gives $\ord_Qb\ll\pi_k$; (P$_r$) makes the residual cost $o(n_k)$.
+The tail is $O_P((\log N)^rb^{-H_b})$. The Liouville bound uses $\log(p^{e_k}\Lambda_k)=o(n_k)$, which follows
+from (P$_1$): if $\pi_k=\Lambda_k$ this is immediate, and in the squarefree case $\Lambda_k$ divides
+$b^{\ord_{\Lambda_k}b}-1$ with $\ord_{\Lambda_k}b\le\pi_k$, so $\log\Lambda_k<\pi_k\log b=o(n_k)$. (An empty maximum,
+when $\Lambda_k=1$, is $0$, and $A_b$ of it is $1$.)
+\end{proof}
+
+\begin{lemma}[Orders below $x$]\label{lem:Ax}\evidence{Paper proof}
+$\log\lcm_{\ell\le x}(\ell-1)\ll x\log\log x/\log x$, the lcm over primes $\ell$.
+\end{lemma}
+
+\begin{proof}
+Prime powers $q^a$ dividing the lcm with $q\le x/\log x$ contribute at most
+$\pi(\sqrt x)\log x+\vartheta(x/\log x)\ll x/\log x$. A prime $q>x/\log x$ divides it only if $mq+1$ is prime for
+some $m<\log x$, and the Selberg upper-bound sieve \cite{HR74} bounds the number of $q\le x/m$ with $q$ and
+$mq+1$ both prime by $\ll\frac{x}{m(\log x)^2}\frac m{\varphi(m)}$. These $q$ contribute
+$\ll\sum_{m<\log x}\frac{x}{\varphi(m)\log x}\ll\frac{x\log\log x}{\log x}$.
+\end{proof}
+
+\begin{corollary}[Denser all-prime schedules]\label{cor:dense}\evidence{Paper proof}
+Take $m_k=\ell_k$, $u_k=1$ and $e_k=k\lceil\log\log(k+16)\rceil$ in \Cref{thm:protected}; then $W$ is
+all-prime.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $n_k=\lceil\exp(k(\log\log(k+16))^2)\rceil$, then $W$ is normal and a Liouville number.
+\item If $r\ge2$ and $n_k=\lceil\exp((r-1+\epsilon)k\log k)\rceil$ with $\epsilon>0$, then $P(W)$ is normal and
+Liouville for every $P\in\Q[x]$ with $1\le\deg P\le r$.
+\item If $\log n_k/(k\log k)\to\infty$ and $n_{k+1}/n_k\to\infty$, then $P(W)$ is normal and Liouville for
+every nonconstant $P\in\Q[x]$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(D) and (G) hold, since $\lambda_k\le\log_p\ell_k=O(\log k)$. By the prime number theorem
+$\log\Lambda_k=\vartheta(\ell_k)\sim k\log k$, and $A_b(x)$ divides $\lcm_{\ell\le x}(\ell-1)$, so \Cref{lem:Ax}
+gives $\log A_b(\ell_k)\ll k\log\log k$. In (a) the exponent of (P$_1$) is
+$e_k\log p+\log A_b(\ell_k)=O(k\log\log k)=o(\log n_k)$; in (b) it is
+$(r-1)(1+o(1))k\log k+O(k\log\log k)<\log n_k$; in (c) it is $o(\log n_k)$ for every $r$. (S) holds in all three
+cases, and the all-prime property is the argument of \Cref{thm:allprime}(i).
+\end{proof}
+
+None of these schedules is shown to be optimal. In every complete-period construction of degree at least
+two the $j$-th prime appears at a position $n$ with $\log n\gg j\log j$, because a run must contain a
+period carrying the factor $\prod_{i\le j}\ell_i^{r-1}$.
+
+\begin{remark}[Several generators]\label{rem:algebras}
+The same argument gives polynomial algebras. If $\gamma_1,\ldots,\gamma_m>0$ are linearly independent over
+$\Q$, $f_k$ are reals with $f_k-f_{k-1}\to\infty$ and $f_k-f_{k-1}=o(f_k)$, and $X_a=\sum_kc_{a,k}b^{-n_k}$ with
+$c_{a,k}$ as in \Cref{thm:protected} and depths $e_{a,k}=\lfloor\gamma_af_k\rfloor$, then under (S),
+$\lambda_k=o(f_k)$ and $k(p^{\max_ae_{a,k}}\Lambda_k)^r=o(n_k)$ every nonconstant rational polynomial of total
+degree at most $r$ in $X_1,\ldots,X_m$ is normal and Liouville: the maximal depth $\gamma\cdot\nu$ over the
+monomials is attained uniquely, and within it the largest number of new occurrences wins by a multiple of
+$f_k-f_{k-1}$. If moreover $\log(p^{\max_ae_{a,k}}\Lambda_k)=o(\log n_k)$, the hypothesis holds for every $r$ and
+the $X_a$ are algebraically independent. A variant with distinct protected primes $p_1,\ldots,p_m$ and
+numerators fixed by the Chinese remainder theorem also works. We do not use these statements.
+\end{remark}
+
+\subsection{Polynomial schedules}
+
+On the schedule $tk^d$ the auxiliary primes can be inserted at sparse indices prime to $p$ without
+disturbing the $p$-adic mass.
+
+\begin{theorem}[All-prime polynomial schedules]\label{thm:hybrid}\evidence{Paper proof}
+Let $s,r\ge1$ and $d\ge r+1$. Let $k_1<k_2<\cdots$ be indices with $p\nmid k_j$, put $\mu_{k_j}=\ell_j$ and
+$\mu_k=1$ otherwise, $\Lambda_K=\prod_{k_j\le K}\ell_j$, and
+\[
+W_H=\sum_{k\ge1}\frac{b^{-tk^d}}{p^{sv_p(k)}\mu_k}.
+\]
+Assume $\limsup_{K\to\infty}\log\ord_{\Lambda_K^r}(b)/\log K<d-r$. Then:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item for $K\ge p$ and $tK^d\le n<t(K+1)^d$ the reduced denominator of $b^nU_K$ is
+$p^{s\lfloor\log_pK\rfloor}\Lambda_K$; in particular $W_H$ is all-prime;
+\item for every $P\in\Q[x]$ with $1\le\deg P\le r$, $P(W_H)$ is normal to base $b$, with
+$D_N(P(W_H))\ll_P(\log\log N)^{-d/(d-1)}$ if $\deg P\ge2$ and $D_N(P(W_H))\ll_PN^{-\eta}$ if $\deg P=1$.
+\end{enumerate}
+The hypothesis holds if $\log\Lambda_K=o(\log K)$, for example for $k_j=2^{2^{j-1}}$.
+\end{theorem}
+
+\begin{proof}
+(i) Let $J=\lfloor\log_pK\rfloor\ge1$. Multiply $b^nU_K$ by $p^{sJ}\Lambda_K$. Modulo $p$ only the indices
+$k=p^Ja$, $1\le a<p$, survive; they are not auxiliary because $p\nmid k_j$, and they contribute
+$\Lambda_Kb^{n-tk^d}\equiv\Lambda_Kb^n$ each, between $1$ and $p-1$ of them. Modulo $\ell_j$ only the index $k_j$
+survives, with an $\ell_j$-unit numerator.
+
+(ii) At scale $J$ an auxiliary index has loss $J$, so a tuple containing it carries a factor $p^{sJ}$
+after normalization and vanishes modulo $p^L$ once $J\ge L/s$; hence \Cref{lem:freezer} holds for $W_H$ with
+the same mass $M_r$. (The hypothesis $p\nmid k_j$ is essential: an auxiliary prime at an index of valuation
+$J$ would multiply loss-zero weights by $\ell^{-1}\not\equiv1$ and change the frozen residue.) Run the proof
+of \Cref{thm:effective} with $Q'\mid\Lambda_K^rM'$, $K=K(N)$. Choose $\epsilon_1>0$ with
+$\log\ord_{\Lambda_K^r}(b)\le(d-r-5d\epsilon_1)\log K$ for large $K$; since $N\ge tK^d$ the stride satisfies
+$\tau\le N^{1-r/d-4\epsilon_1}$, so $M_0\ge T/\tau\ge N^{\epsilon_1}$ on runs of length at least
+$N^{1-r/d-\epsilon_1}$. \Cref{lem:uniformorbit} applies to $G=b^\tau$: by \Cref{lem:largestprime},
+$A(G)=O(\log N/\log\log N)\le\frac3{16}\log_pM_0-1$, because $\ord_{\Lambda_K}b\le\ord_{\Lambda_K^r}b\le N$; also
+$p^{\theta e}\le M_0$ with $\theta=\min(1,d\epsilon_1/(2rs))$, since $e\le\frac{rs}d\log_pN+O(1)$; and
+$e\ge\frac{rs}{4d}\log_pN-O(1)>A(G)$. \Cref{cor:split} bounds each run sum by $18TN^{-\epsilon_1\delta}$, and the
+rest is as before. If $\log\Lambda_K=o(\log K)$ then $\ord_{\Lambda_K^r}b\le\Lambda_K^r=K^{o(1)}$.
+\end{proof}
+
+Since $\ord_{\Lambda^r}b\le\Lambda^{r-1}A_b(\ell_{\max})$ for squarefree $\Lambda$ and $\log\Lambda_{k_j}\sim j\log j$, the
+hypothesis holds when $\log k_j\ge(\frac{r-1}{d-r}+\epsilon)j\log j$ for $r\ge2$, and when
+$\log k_j\ge(\frac1{d-1}+\epsilon)\log A_b(\ell_j)$ for $r=1$. These thresholds are sufficient, not proved
+necessary.
+
+\subsection{Irrationality exponents}
+
+\begin{lemma}[Truncation separation]\label{lem:truncation}\evidence{Paper proof}
+Let $\xi=\sum_kc_kb^{-n_k}$ with rationals $0<c_k\le C$ and strictly increasing integers $n_k$, and suppose
+$\den U_k$ divides $D_kb^{n_k}$. If $8CQD_k\le b^{n_{k+1}-n_k}$, then either $A/Q=U_k$ or
+$|\xi-A/Q|\ge1/(2QD_kb^{n_k})$.
+\end{lemma}
+
+\begin{proof}
+$0<\xi-U_k\le2Cb^{-n_{k+1}}\le1/(4QD_kb^{n_k})$, while $A/Q\ne U_k$ gives $|A/Q-U_k|\ge1/(QD_kb^{n_k})$.
+\end{proof}
+
+Put $Y_k=b^{n_{k+1}-n_k}/(8CD_k)$ and $\rho_k=n_k/(n_k-n_{k-1})$. For large $Q$ let $k$ be minimal with
+$Q\le Y_k$; then $b^{n_k}<(8CD_{k-1}Q)^{\rho_k}$, so
+\begin{equation}\label{eq:separation}
+A/Q\ne U_k\ \Longrightarrow\ |\xi-A/Q|\ge\bigl(2D_k(8CD_{k-1})^{\rho_k}\bigr)^{-1}Q^{-1-\rho_k},
+\end{equation}
+while $A/Q=U_k$ forces $Q\ge\den U_k$ and $|\xi-U_k|\ge c_{k+1}b^{-n_{k+1}}$.
+
+\begin{proposition}[Consecutive ratios tending to one]\label{prop:ratioone}\evidence{Paper proof}
+For the series $W_H$ of \Cref{thm:hybrid} with $\log\Lambda_K=o(K)$ one has $|W_H-A/Q|\ge Q^{-\psi(Q)}$ for
+all large $Q$, with $\psi(Q)=(1+o(1))\frac1d\bigl(\frac{\log_bQ}{td}\bigr)^{1/(d-1)}$.
+\end{proposition}
+
+\begin{proof}
+Here $c_k\le1$, $D_k=p^{s\lfloor\log_pk\rfloor}\Lambda_k$, $\den U_k\ge b^{n_k}$, $\rho_k\sim k/d$ and
+$\log Y_{k-1}\sim tdk^{d-1}\log b$; substitute into \eqref{eq:separation}. The case $A/Q=U_k$ gives exponent
+$n_{k+1}/n_k+o(1)\to1$.
+\end{proof}
+
+Since $\psi(Q)\to\infty$, this does not exclude Liouville approximations, and it is the limit of the
+method: a separation argument of this kind needs a gap $n_{k+1}-n_k\gg\log Q$ starting at a position
+$\ll\log Q$, and when $n_{k+1}/n_k\to1$ the first gap of length $m$ starts at $m\rho(m)$ with $\rho\to\infty$.
+\emph{Whether $\mu(W_H)$ is finite, and whether $W_H$ is a Liouville number, is open.} On geometric schedules
+the method gives exact exponents.
+
+\begin{theorem}[Geometric schedules]\label{thm:geometric}\evidence{Paper proof}
+Let $r\ge1$, let $p\nmid b$ be a prime with $p>(r+1)!$, $t=\ord_p(b)$, let $\lambda\ge r+1$ be an integer and
+$n_k=t\lambda^k$. Place $\ell_j$ at strictly increasing indices $k_j\ge j$ with
+\[
+\limsup_{K\to\infty}\frac{\log\ord_{\Lambda_K^r}(b)}{K\log\lambda}<1,\qquad\Lambda_K=\prod_{k_j\le K}\ell_j .
+\]
+At $k=k_j$ let $\mu_k=\ell_j$ and let $u_k$ be the least positive integer with $u_k\equiv\ell_j\pmod p$ and
+$\gcd(u_k,b\ell_j)=1$; otherwise $\mu_k=u_k=1$. Put $W_G=\sum_ku_kp^{-k}\mu_k^{-1}b^{-n_k}$. Then:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item for $n_K\le n<n_{K+1}$ the reduced denominator of $b^nU_K$ is $p^K\Lambda_K$, and $W_G$ is all-prime;
+\item for every nonconstant $P\in\Q[x]$ of degree at most $r$, $P(W_G)$ is normal to base $b$ and
+$D_N(P(W_G))\ll_PN^{-\eta_P}$;
+\item $\lambda\le\mu(W_G)\le\max(\lambda,\frac{2\lambda-1}{\lambda-1})$; in particular $\mu(W_G)=\lambda$ when $\lambda\ge3$,
+and then $W_G$ is transcendental by Roth's theorem \cite{Roth55}.
+\end{enumerate}
+The indices $k_j=j+\lceil2(r-1)j\log(j+1)/\log\lambda\rceil$ for $r\ge2$, and $k_j=j\lceil(\log\log(j+16))^2\rceil$
+for $r=1$, satisfy the hypothesis.
+\end{theorem}
+
+\begin{proof}
+(i) The term at $K$ has $p$-adic valuation exactly $-K$, because $u_K\equiv\ell\not\equiv0$ or $u_K=1$, and
+earlier terms have larger valuation; $\ell_j$ occurs only at $k_j$, with numerator prime to $\ell_j$.
+
+(ii) \emph{Exact depth.} The hypotheses persist when $r$ is replaced by $\deg P$, so assume $\deg P=r$, and
+clear denominators: $b^{e_0}P(W_G)=Y(W_G)/D_0$ with $Y=\sum_aA_ax^a\in\Z[x]$, $A_r\ne0$, $\gcd(D_0,b)=1$. Write a
+degree-$a$ tuple as a sorted multiset $\mathsf M=(i_1\ge\cdots\ge i_a)$ with position $\sum n_{i_c}$ and weight
+$w(\mathsf M)=\sum i_c$. If $\mathsf M<\mathsf M'$ lexicographically, first differing at slot $c$, then the position
+of $\mathsf M$ is at most $\sum_{c'<c}n_{i'_{c'}}+(r-c+1)n_{i'_c-1}$, which is less than the position of
+$\mathsf M'$ because $r<\lambda$. So the multisets present at $n$ form a lexicographic initial segment
+$\{\mathsf M\le g\}$, and distinct multisets have distinct positions. If $\mathsf M<g$ first differs from $g$ at
+slot $c$, then $w(\mathsf M)\le w(g_1,\ldots,g_{c-1},(g_c-1)^{r-c+1})$, with equality only for that candidate;
+so the top weight $w^*(n)$ is attained by at most $r+1$ multisets, with between $1$ and $(r+1)!$ ordered tuples
+in all, and $r(K-1)\le w^*(n)\le rK$ on $[n_K,n_{K+1})$. Every unit is $\equiv1\pmod p$ ($u/\mu\equiv1$, and
+$b^{-n_i}\equiv1$ since $t\mid n_i$), so the top tuples contribute $p^{-w^*}b^n$ times a count prime to $p$,
+because $p>(r+1)!$, while other degree-$r$ tuples have valuation at least $-w^*+1$ and lower degrees have
+weights at most $aK\le w^*-((r-a)K-r)$. Hence $v_p(R_n)=-w^*(n)+v_p(A_r)-v_p(D_0)$ for all
+$n\ge n_{K_0(P)}$, with no exceptional shifts.
+
+\emph{Digits.} Let $K=K(N)\le\log_\lambda N$. There are $O((\log N)^r)$ insertion positions below $N$; the
+positions $n_k+(r-1)n_1$ are insertions of the top monomial with consecutive ratios at most $\lambda$, so the
+shifts before the first insertion after $N^{1-\epsilon}$ number $O(N^{1-\epsilon})$; runs shorter than
+$N^{1-\epsilon}$ cover $O(N^{1-\epsilon}(\log N)^r)$ shifts and the buffers $O((\log N)^{r+1})$. On a remaining
+run starting at $n_0$, $K_0=K(n_0)\ge(1-\epsilon)\log_\lambda N-O(1)$, and $q=p^vQ'$ with
+$v\in[r(K_0-1)-O(1),rK_0+O(1)]$ and $Q'\mid\Lambda_K^rD_0'$. By hypothesis
+$\ord_{\Lambda_K^r}b\le\lambda^{(1-4\epsilon)K}\le N^{1-4\epsilon}$ for small $\epsilon$, so $\tau\le N^{1-3\epsilon}$ and
+$M_0\ge N^\epsilon$; $p^{\theta v}\le M_0$ with $\theta=\epsilon\log\lambda/(2r\log p)$; by \Cref{lem:largestprime}
+$A(G)=O(\log N/\log\log N)\le\frac3{16}\log_pM_0-1$; and $e\ge v-\eta_0\log_pN>A(G)$ for small $\eta_0$. The
+Erd\H{o}s--Tur\'an inequality with $N^{\eta_0}$ frequencies, \Cref{cor:split} and \Cref{lem:uniformorbit} give
+discrepancy $\ll N^{-\epsilon\delta}\log N+N^{-\eta_0}$ on each long run, and \Cref{lem:blocks} completes the proof.
+
+(iii) $\den U_k=D_kb^{n_k}$ exactly with $D_k=p^k\Lambda_k$, since the numerator is $\equiv u_k\Lambda_k/\mu_k$ modulo
+$b^{n_k-n_{k-1}}$ and prime to $b$. The least admissible $u_{k_j}$ is at most $p\,\mathrm{rad}(b)\ell_j$, so
+$0<c_k\le C=\mathrm{rad}(b)$. Since $\Lambda_k\mid b^{\ord_{\Lambda_k}b}-1$, the hypothesis gives
+$\log\Lambda_k\le\lambda^{(1-\epsilon)k}\log b$, so $\log D_k=o(\lambda^k)$ and $\log(1/c_{k+1})=o(\lambda^k)$. Lower
+bound: $|W_G-U_k|\le2Cb^{-n_{k+1}}=\den(U_k)^{-\lambda+o(1)}$. Upper bound: in \eqref{eq:separation}
+$\rho_k=\lambda/(\lambda-1)$, so $A/Q\ne U_k$ gives exponent $\frac{2\lambda-1}{\lambda-1}+o(1)$; if $A/Q=U_k$, then
+$Q\ge D_kb^{n_k}$ and $|W_G-U_k|\ge c_{k+1}b^{-\lambda n_k}\ge Q^{-\lambda-o(1)}$. Finally
+$\lambda\ge\frac{2\lambda-1}{\lambda-1}$ exactly when $\lambda\ge\frac{3+\sqrt5}2$.
+\end{proof}
+
+The hypothesis $p>(r+1)!$ is used only to prevent cancellation at ties, which are unavoidable with linear
+weights: for $r=2$, $p=3$, $\lambda=3$ the top multisets $(7,7)$ and $(8,6)$ at $n=n_8+n_6$ carry $1+2=3$ orderings
+and the valuation drops by one. Since $\lambda>r$ is needed for the lexicographic structure, all degrees with a
+finite exponent require a different schedule.
+
+\begin{theorem}[The Stoneham schedule]\label{thm:stoneham}\evidence{Paper proof}
+Place the $\ell_j$ at strictly increasing indices $k_j\ge j$ with $\log\Lambda_K=o(K)$, for example
+$k_j=\lceil j(\log(j+2))^2\rceil$. At $k=k_j$ let $\mu_k=\ell_j$ and let $u_k$ be the least positive integer with
+$u_k\equiv\ell_j\pmod{p^j}$ and $\gcd(u_k,b\ell_j)=1$; otherwise $\mu_k=u_k=1$. Put
+\[
+W_S=\sum_{k\ge1}\frac{u_k}{p^k\mu_k}\,b^{-p^k}.
+\]
+Then $W_S$ is all-prime, $P(W_S)$ is normal to base $b$ with $D_N(P(W_S))\ll_PN^{-\eta_P}$ for every nonconstant
+$P\in\Q[x]$, and $\mu(W_S)=p$.
+\end{theorem}
+
+\begin{proof}
+The all-prime property is as in \Cref{thm:geometric}(i), and the exponent is \Cref{thm:geometric}(iii) with
+$\lambda=p\ge3$, $D_k=p^k\Lambda_k$ and $c_k\le p^{j-k_j}\mathrm{rad}(b)\le\mathrm{rad}(b)$; the bound $\log D_k=o(p^k)$
+follows from $\log\Lambda_K=o(K)$.
+
+\emph{Pole retention.} Without auxiliary primes $W_S$ is the Stoneham number $\alpha_{b,p}$. For each
+$Y\in\Z[x]$ of degree $d$ there is a precision $l$ such that $v_p(q_n)\ge dk-(l-1)-O_Y(1)$ on every late shell
+$p^k\le n<p^{k+1}$ of $\alpha_{b,p}$ \cite[Lemmas~2.2--2.4]{PaperIv2}; the residue of $p^{dk}R_d$ modulo $p^l$ that
+decides this involves only tuples whose reflected losses $k-j_i$ total at most $l-1$, since the others carry
+$p^l$. In $W_S$ such a tuple uses only indices $j_i\ge k-l+1$, and once $k\ge k_{l-1}+l$ every auxiliary index
+$k_J$ in that window has $J\ge l$, so its unit satisfies $u/\ell\equiv1\pmod{p^l}$. The residues modulo $p^l$
+of $p^{dk}R_d$ for $W_S$ and $\alpha_{b,p}$ therefore coincide on late shells, and the retention transfers. Lower
+degrees $a<d$ have $p^{ak}R_a$ integral at $p$, so in $p^{dk}R_Y$ they carry $p^{(d-a)k}$ and cannot cancel the
+top degree once $k>l-1+v_p(A_d)$.
+
+\emph{Digits.} Insertions number $O((\log N)^d)$, and at most $(\log_pm+1)^d$ tuples sit at position $m$,
+which a buffer of length $\lceil2\log_bN\rceil$ absorbs. Run the argument of \Cref{thm:geometric} with
+$v\in[dk-O(1),dk+O(1)]$, $Q'\mid\Lambda_k^dD_0'$ and $\log\ord_{\Lambda_k^d}b\le(d-1)\log\Lambda_k+\log A_b=o(k)$;
+here $\Lambda_k=N^{o(1)}$, so \Cref{cor:split} gives $A(G)=O(\log\log N)$ directly.
+\end{proof}
+
+\begin{remark}[A quasi-polynomial schedule]\label{rem:quasipoly}
+On the schedule $n_i=ti\lceil\exp((\log(i+1))^2)\rceil$, whose consecutive ratios tend to one, inserting the
+$\ell_j$ at indices prime to $p$ with $\log\Lambda_K=o((\log K)^2)$ into $\sum_ip^{-sv_p(i)}\mu_i^{-1}b^{-n_i}$ gives an
+all-prime series all of whose nonconstant rational polynomial images are normal. The proof combines a
+plateau estimate for the $p$-adic mass on that schedule with \eqref{eq:gridcount}; we do not reproduce it, and
+we use it nowhere. For that series \eqref{eq:separation} gives only $|W-A/Q|\ge Q^{-\psi(Q)}$ with
+$\psi(Q)=\exp((1+o(1))\sqrt{\log\log Q})$, and whether its irrationality exponent is finite, or whether it is
+a Liouville number, is open.
+\end{remark}
+
+\section{The boundary \texorpdfstring{$d=r$}{d = r}}\label{sec:boundary}
+
+Throughout this section $p\nmid b$ is an odd prime, $s\ge1$, $d\ge2$ and $C=C(b,p,s,d)$. For an ordered
+$r$-tuple $(i_1,\ldots,i_r)$ of positive integers the \emph{level} is $v_p(i_1)+\cdots+v_p(i_r)$ and the
+\emph{position} is $i_1^d+\cdots+i_r^d$, so that $C^r=\sum_mc(m)b^{-tm}$ with $c(m)$ the sum of $p^{-s\ell}$ over the
+tuples of level $\ell$ at position $m$. At $d=r$ the ordered tuples with position at most $X$ number
+$\sim V_{r,d}X$, with $V_{r,d}=\Gamma(1+1/d)^r/\Gamma(1+r/d)$, so the sparsity hypothesis (i) of
+\Cref{prop:criterion} fails.
+
+\subsection{What survives, and a barrier}
+
+\begin{proposition}[Depth is tight in density]\label{prop:depthtight}\evidence{Paper proof}
+Let $d\ge2$ and let $P\in\Q[x]$ have degree $r\ge2$; $d\le r$ is allowed. There is $C_P$ such that for every
+$L\ge3$ the shifts $n$ with $v_p(q_n)<rsJ(n)-L$ have upper density at most $C_P(\log L)^{-d/(d-1)}$.
+Consequently, for every function $\omega(n)\to\infty$, $v_p(q_n)\ge rsJ(n)-\omega(n)$ on a set of shifts of
+density one.
+\end{proposition}
+
+\begin{proof}
+\Cref{lem:freezer} uses no sparsity, and \Cref{thm:smallball} holds for every $d\ge2$. The finitely many
+$L$ with $3\le L\le v_p(A)+2$ are absorbed into $C_P$; for larger $L$ the integer sampling of the cells of
+$M_r\bmod p^{L-v_p(A)}$ is as in \Cref{lem:reductionr}. For the last claim, the exceptional
+set for $\omega$ is contained in $\{n:\omega(n)<L\}\cup\{n:v_p(q_n)<rsJ(n)-L\}$ for every fixed $L$.
+\end{proof}
+
+So the $p$-adic half of the method survives at $d=r$. The real half does not: the runs between insertions
+are too short for their denominators, and no estimate that sees only the denominator can help.
+
+\begin{lemma}[Denominators do not determine digits]\label{lem:barrier}\evidence{Paper proof}
+Let $q=p^e$ and let $T\ge1$ with $b^T\le q/2$. Then every word of $T$ base-$b$ digits is the leading word of
+$a/q$ for some $a$ prime to $p$.
+\end{lemma}
+
+\begin{proof}
+Consecutive integers prime to $p$ differ by at most $2$, so as $a$ runs through them from $1$ to $q-1$ the
+integer $\lfloor ab^T/q\rfloor$ advances by at most $1$ at each step and takes every value in $[0,b^T)$.
+\end{proof}
+
+\begin{lemma}[No uniform cancellation on short orbits]\label{lem:nocancel}\evidence{Paper proof}
+Let $q=p^e$, $0<\epsilon<1$ and $T\ge1$ with $b^T\le\epsilon q$. Then for every nonzero integer $h$,
+\[
+\Bigl|\sum_{j<T}e(hb^j/q)-T\Bigr|\le2\pi|h|\frac{b^T-1}{(b-1)q}<\frac{2\pi|h|\epsilon}{b-1}.
+\]
+\end{lemma}
+
+\begin{proof}
+$|e(\theta)-1|\le2\pi|\theta|$ and $\sum_{j<T}b^j=(b^T-1)/(b-1)$.
+\end{proof}
+
+Thus a bound for $\sup_{p\nmid a}|\sum_{j<T}e(hab^j/q)|$ uniform in the numerator cannot improve on the
+trivial bound by more than $O_h(1)$ when $T\le\log_b(\epsilon q)$, whatever method produces it. At $d=r$ the
+shifted prefixes have $\log q_n\asymp\log N$ on a set of density close to one (\Cref{prop:depthtight}), while
+the gaps between insertions are short: for $d=2$ the distinct positions are the sums of two positive
+squares, of which there are $\asymp X/\sqrt{\log X}$ up to $X$ by Landau's theorem \cite{Landau08}, and for
+$d=3$ they are the sums of three positive cubes, of which there are at least $X^{0.917}$ by Wooley's theorem
+\cite{Wooley15} and at most $(V_{3,3}/6+o(1))X$, conjecturally a positive proportion \cite{DHL06}.
+
+\subsection{Retirement of the integer part at \texorpdfstring{$d=2$}{d = 2}}
+
+\begin{proposition}[Level filtration]\label{prop:filtration}\evidence{Paper proof}
+For all $r\ge1$, $d\ge2$ and $H\ge0$,
+\[
+p^{sH}C^r=X_H+Z_H,\qquad X_H=\sum_ma_H(m)b^{-tm},\qquad Z_H=\sum_mz_H(m)b^{-tm},
+\]
+where $a_H(m)=\sum p^{s(H-\ell)}$ over the tuples at $m$ of level $\ell\le H$ is a nonnegative integer and
+$z_H(m)=\sum p^{-s(\ell-H)}$ over those of level $\ell>H$. Moreover $\sum_{m\le Y}a_H(m)\le p^{sH}V_{r,d}Y^{r/d}$
+for all $Y\ge0$, the shifted prefixes satisfy $\fr{R_n(Z_H)}=\fr{p^{sH}R_n(C^r)}$, and their reduced
+denominators satisfy $q_n(Z_H)=q_n(C^r)/p^{\min(sH,v_p(q_n(C^r)))}$.
+\end{proposition}
+
+\begin{proof}
+Split the absolutely convergent tuple expansion by level. Each lattice point $(i_1,\ldots,i_r)$ owns the unit
+cube $\prod_c[i_c-1,i_c]$, which lies in $\{x\ge0:\sum x_c^d\le Y\}$ when $\sum i_c^d\le Y$, so the tuples number at
+most $V_{r,d}Y^{r/d}$. The prefix of $X_H$ is an integer after every shift.
+\end{proof}
+
+For an integer series a self-contained transfer suffices.
+
+\begin{lemma}[Sparse integer series]\label{lem:sparseint}\evidence{Paper proof}
+Let $F=\sum_{m\ge1}a_mb^{-m}$ with integers $a_m\ge0$ satisfying $\sum_{m\le X}a_m\le C_FX$ for all $X\ge1$, and
+let $S(X)=\#\{m\le X:a_m\ne0\}$. For integers $1\le L\le N$ and every $\epsilon\in(0,1)$,
+\[
+1-D_N(F)\le\epsilon+\frac{L\,S(N+L)}N+\frac{6C_Fb^{-L}}{(b-1)\epsilon}.
+\]
+\end{lemma}
+
+\begin{proof}
+For $n<N$, $\fr{b^nF}$ is the fractional part of $T_n=\sum_{m>n}a_mb^{n-m}\ge0$. At most $LS(N+L)$ shifts have an
+insertion in $(n,n+L]$; at the others $T_n=\sum_{m>n+L}a_mb^{n-m}$. Summing over $n<N$, the terms with
+$m\le N+L$ contribute at most $C_F(N+L)b^{-L}/(b-1)\le2C_FNb^{-L}/(b-1)$, and by partial summation the terms
+with $m>N+L$ contribute at most $(b-1)^{-1}\sum_{j>L}a_{N+j}b^{-j}\le C_F(N+L+2)b^{-L}/(b-1)\le4C_FNb^{-L}/(b-1)$. By
+Markov's inequality at most $6C_FNb^{-L}/((b-1)\epsilon)$ of the remaining shifts have $T_n\ge\epsilon$. All other
+points lie in $[0,\epsilon)$, and \Cref{lem:arcs} gives the claim.
+\end{proof}
+
+\begin{theorem}[Absorption of the integer part]\label{thm:absorb}\evidence{Paper proof}
+Let $d=r=2$. Uniformly in $H\ge0$, $1-D_N(X_H)\ll_{b,p,t}(\log\log N+sH)/\sqrt{\log N}$ for $N\ge3$. In particular
+$D_N(X_H)\to1$ for every fixed $H$, and also for $H=H(N)=o(\sqrt{\log N})$.
+\end{theorem}
+
+\begin{proof}
+As a series in $b^{-n}$, $X_H$ has coefficient $a_H(n/t)$ at $t\mid n$ and $0$ otherwise. Its support up to $X$
+is contained in $t$ times the set of sums of two positive squares, which by Landau's theorem has
+$\ll X/\sqrt{\log X}$ elements up to $X$, and by \Cref{prop:filtration} its mass up to $X$ is at most
+$C_FX$ with $C_F=\pi p^{sH}/(4t)$. Put $\rho=(1+S(2N))/N\ll1/\sqrt{\log N}$, $\epsilon=\rho$ and
+$L=\max\bigl(1,\lceil\log_b(6C_F/((b-1)\rho^2))\rceil\bigr)$, so that $L\le2\log_b(1/\rho)+sH\log_bp+O_{b,t}(1)$. If
+$\rho\ge1$ (which happens only for bounded $N$) or $L>N$, then $\rho(L+2)>1\ge1-D_N(X_H)$. Otherwise
+$\epsilon\in(0,1)$ and $1\le L\le N$, and \Cref{lem:sparseint} gives $1-D_N(X_H)\le\rho(L+2)$ in every case.
+\end{proof}
+
+\begin{lemma}[Integer dilation]\label{lem:intmult}\evidence{Paper proof}
+For every finite sequence $(z_n)$ in $\T$ and every integer $M\ge1$, $D(Mz)\le M\,D(z)$ and
+$1-D(Mz)\le M(1-D(z))$, where $Mz=(Mz_n)$.
+\end{lemma}
+
+\begin{proof}
+The preimage of an arc $J$ under $z\mapsto Mz$ consists of $M$ arcs of length $|J|/M$, each with error at most
+$D(z)$. For the second inequality use $1-D=\inf_I(1-\mu(I)+|I|)$ (\Cref{lem:arcs}). If $|I|<1/M$, the image $MI$
+is an arc of length $M|I|$ with $\mu_{Mz}(MI)\ge\mu_z(I)$, so $1-D(Mz)\le1-\mu_z(I)+M|I|\le M(1-\mu_z(I)+|I|)$; if
+$|I|\ge1/M$, then $1-\mu_z(I)+|I|\ge1/M\ge(1-D(Mz))/M$.
+\end{proof}
+
+The converse of the second inequality fails: for $b=2$, $D_N(1/3)=2/3$ for $N\ge2$ while $D_N(1)=1$. For
+normality the converse holds (a case of Wall's theorem on rational multiples): if $Mx$ is normal, every
+weak limit $\nu$ of the orbit measures of $x$ is $T$-invariant (\Cref{lem:necessity}) and satisfies
+$\nu(I)\le\nu(M^{-1}(MI))=M|I|$ for closed arcs $I$ of length below $1/M$, so $\nu\le M\lambda$, and ergodicity of
+Lebesgue measure $\lambda$ under $T$ forces $\nu=\lambda$.
+
+\begin{corollary}[Fixed-depth retirement]\label{cor:retire}\evidence{Lean-supported paper proof}
+Let $d=r=2$ and fix $H\ge0$. Then $C^2$ is normal if and only if $Z_H$ is normal;
+$\limsup_ND_N(p^{sH}C^2)=\limsup_ND_N(Z_H)$; and $1-D_N(C^2)\ge p^{-sH}(1-D_N(Z_H)-\delta_N(H))$ with
+$\delta_N(H)=1-D_N(X_H)\to0$. For $H=0$, $|D_N(C^2)-D_N(Z_0)|\le\delta_N(0)$.
+\end{corollary}
+
+\begin{proof}
+\Cref{thm:sharpcited} with $x=Z_H$ and $z=X_H$ gives $|D_N(p^{sH}C^2)-D_N(Z_H)|\le\delta_N(H)$, and
+\Cref{thm:absorb} gives $\delta_N(H)\to0$. Normality of $p^{sH}C^2$ and of $C^2$ are equivalent by
+\Cref{lem:intmult} and the converse just proved, and the inequality for $1-D_N(C^2)$ is the second part of
+\Cref{lem:intmult} with $M=p^{sH}$. The Lean-supported step is \Cref{thm:sharpcited}.
+\end{proof}
+
+So the discrepancy problem for $C^2$ is exactly the problem for the pairs of level at least one. Only level
+zero is invisible to every frequency: a tuple of level $\ell$ contributes $p^{-s\ell}b^{n-tm}$, which lies in
+$h^{-1}\Z$ for all $n\ge tm$ if and only if $s\ell\le v_p(h)$. Letting $H$ grow controls $C^2$ only at the
+frequencies $p^{sH}h$, or through \Cref{lem:intmult} at the cost of the factor $p^{sH}$.
+
+\subsection{The runs after retirement}
+
+Let $d=r=2$, let $\mathcal S^+$ be the set of sums of two positive squares, and for $H\ge0$ let $\mathcal P_H$ be
+the set of positions of $Z_H$, namely the $m=i^2+j^2$ with $i,j\ge1$ and $v_p(i)+v_p(j)>H$. A \emph{run} of $Z_H$
+is a maximal shift interval $[tm,tm')$ between consecutive elements $m<m'$ of $\mathcal P_H$. Put
+$k_H=\lceil(H+1)/2\rceil$.
+
+\begin{theorem}[Runs after retirement]\label{thm:runs}\evidence{Paper proof}
+Let $d=r=2$ and $H\ge0$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $p^{2k_H}\mathcal S^+\subseteq\mathcal P_H\subseteq\mathcal S^+$, so $|\mathcal P_H\cap[1,Y]|\asymp_HY/\sqrt{\log Y}$ and the
+mean run length up to $N$ is $\asymp_H\sqrt{\log N}$.
+\item For $\gamma\in(1,5/3)$ and $\epsilon>0$ the proportion of shifts $n<N$ lying in runs of length at least
+$\epsilon\log N$ is $\ll_\gamma(tp^{2k_H}/\epsilon)^{\gamma-1}(\log N)^{-(\gamma-1)/2}$, uniformly for
+$p^{2k_H}\le N^{1/2}$.
+\item For $L\ge3$, outside a set of upper density at most $C(\log L)^{-2}$,
+$\log_bq_n(Z_H)\ge s\log_b(n/t)-(2s+L+sH)\log_bp$.
+\end{enumerate}
+Consequently, for $\epsilon<s/(2\ln b)$, almost every shift lies in a run of length $T<\log_b(q_n(Z_H)/2)$, on
+which \Cref{lem:barrier,lem:nocancel} apply.
+\end{theorem}
+
+\begin{proof}
+(i) If $m'=u^2+v^2$ with $u,v\ge1$, then $p^{2k_H}m'=(p^{k_H}u)^2+(p^{k_H}v)^2$ has a representation of level at
+least $2k_H>H$; the counts follow from Landau's theorem, since the sums of two squares that are not sums of
+two positive squares are perfect squares.
+
+(ii) A run of length at least $G$ lies in a gap of $Q\mathcal S^+$, $Q=p^{2k_H}$, of length at least $G/t$. After
+rescaling by $Q$ it suffices to bound the proportion of $[1,Y]$, $Y=N/(tQ)$, covered by gaps of $\mathcal S^+$ of
+length at least $g=G/(tQ)$, plus the final gap. Since $k^2<k^2+1<(k+1)^2$ with $k^2+1\in\mathcal S^+$, a gap of
+$\mathcal S^+$ contains at most one sum of two squares in its interior, so it is a gap of the set $\mathcal S$ of sums
+of two squares or the union of two adjacent ones; hence the total length of gaps of $\mathcal S^+$ of length at
+least $g$ is at most twice that of gaps of $\mathcal S$ of length at least $g/2$. Hooley's theorem
+\cite{Hooley71} gives $\sum_{s_{n+1}\le Y}(s_{n+1}-s_n)^\gamma\ll_\gamma Y(\log Y)^{(\gamma-1)/2}$ for $0<\gamma<5/3$, and
+Markov's inequality with $G=\epsilon\log N$ gives the bound. The final gap has length $O(tQY^{1/4})$ by the
+Bambah--Chowla theorem \cite{BambahChowla47}, a proportion $O(Y^{-3/4})$, which is dominated by the main
+term whenever it matters.
+
+(iii) By \Cref{prop:filtration}, $v_p(q_n(Z_H))\ge v_p(q_n(C^2))-sH$, and \Cref{prop:depthtight} with $P(x)=x^2$
+gives $v_p(q_n(C^2))\ge2sJ(n)-L$ off the stated set; also $2J>\log_p(n/t)-2$.
+
+For the last claim restrict to $n\ge\sqrt N$, where $\log_b(q_n/2)\ge\frac s2\log_bN-O_{H,L}(1)>\epsilon\log N$,
+intersect the sets of (ii) and (iii), and let $L\to\infty$.
+\end{proof}
+
+Integer jumps $z_H(m)\in\Z$ do not move the rational orbit, so the orbit of $\fr{R_n(Z_H)}$ restarts only at
+the positions $\mathcal P_H^{\rm frac}=\{m\in\mathcal P_H:z_H(m)\notin\Z\}$, and an argument using the rational orbit alone may
+merge runs across integer jumps. Such jumps occur: $16810=13^2+129^2=41^2+123^2=67^2+111^2$ has exactly six
+ordered representations, all of level one for $p=3$, so $z_0(16810)=2$. For the merged runs we can prove only
+the mean.
+
+\begin{proposition}[Fractional jumps]\label{prop:fractional}\evidence{Paper proof}
+Let $p\equiv3\pmod4$, $H\ge0$, and let $\mathcal F_p$ be the set of squarefree $n\in\mathcal S^+$ with $(n/p)=-1$. Then
+$p^{2k_H}\mathcal F_p\subseteq\mathcal P_H^{\rm frac}$; more precisely $z_H(p^{2k_H}n)=2^{\omega_1(n)}p^{-s(2k_H-H)}$ for
+$n\in\mathcal F_p$, where $\omega_1(n)$ is the number of prime factors $\equiv1\pmod4$ of $n$. Consequently
+$|\mathcal P_H^{\rm frac}\cap[1,Y]|\asymp_HY/\sqrt{\log Y}$, and the mean length of the runs between consecutive
+elements of $\mathcal P_H^{\rm frac}$ up to $N$ is $\asymp_H\sqrt{\log N}$.
+\end{proposition}
+
+\begin{proof}
+For $p\equiv3\pmod4$, $v_p(i^2+j^2)=2\min(v_p(i),v_p(j))$, so every representation of $m=p^{2k}n$, $k=k_H$,
+$p\nmid n$, has $i=p^ki'$, $j=p^kj'$ with $i'^2+j'^2=n$; and $p\mid i'$ would make $n$ a square modulo $p$. So every
+representation has level exactly $2k>H$. A squarefree $n>1$ in $\mathcal S$ has no prime factor $\equiv3\pmod4$ and
+is not a square, so its ordered positive representations number $r_2(n)/4=\sum_{e\mid n}\chi_{-4}(e)=2^{\omega_1(n)}$,
+prime to $p$. For the count, the multiplicative function $\mu^2\mathbf1_{\mathcal S}$ has partial sums
+$\sim c\,Y/\sqrt{\log Y}$, and its twist by $(\cdot/p)$ contributes $o(Y/\sqrt{\log Y})$, both by the
+Selberg--Delange method \cite[Chapter~II.5]{Tenenbaum15}; the upper bound is $\mathcal P_H^{\rm frac}\subseteq\mathcal S^+$.
+\end{proof}
+
+A density-one statement for these merged runs would follow from a Hooley-type moment bound for the gaps
+between squarefree sums of two squares in a residue class modulo $p$; we have not established one, nor
+anything for $p\equiv1\pmod4$. Letting $H$ grow does not help: runs of length at least $\epsilon\log N$ on a
+positive proportion of shifts force $p^{H(N)}\gg_\epsilon\sqrt{\log N}$ by \Cref{thm:runs}(ii), and then the
+factor in \Cref{cor:retire} is $\gg_{\epsilon,p,s}(\log N)^{s/2}$. Along the runs the arrival phases obey the affine
+recursion $y_{k+1}=\fr{b^{\ell_k}y_k+z_0(m_{k+1})}$, with $\ell_k$ the run lengths, and $C^2$ is normal if and only
+if the concatenated initial segments $(\fr{b^jy_k})_{j<\ell_k}$ are uniformly distributed. That is the missing
+input; it concerns numerators at resolution $b^{-\ell_k}$, which \Cref{lem:barrier} shows cannot be replaced by
+denominator information.
+
+\subsection{The cubic boundary}
+
+For $d=r=3$ the identity of \Cref{prop:filtration} holds, with $\sum_{m\le Y}a_H(m)\le3^HV_{3,3}Y$ for
+$C(2,3,1,3)^3=\xi^3$. \Cref{lem:sparseint} would give $D_N(X_H)\to1$ if the sums of three positive cubes had
+density zero. They number at least $Y^{0.91709477}$ up to $Y$ \cite{Wooley15} and at most $(V_{3,3}/6+o(1))Y\approx
+0.1187Y$, and the model of Deshouillers, Hennecart and Landreau \cite{DHL06} predicts density about $0.0999$. If
+that density is positive, the support of $X_H$ has positive lower density for large $H$, the transfer says
+nothing, and the mean run length of $Z_H$ is $O_H(1)$ while $\log_2q_n\asymp\log N$ on a set of density close to
+one (\Cref{prop:depthtight}). At $d=2$ the integer part is provably negligible and the obstruction is the
+length of the runs; at $d=3$ even the integer part is not known to be negligible.
+
+\begin{remark}[Finite measurements]\label{rem:finitedata}
+In the first $2^{16}$ binary digits of $C(2,3,1,2)^2$, $C(2,3,2,2)^2$ and $\xi^3=C(2,3,1,3)^3$, computed with
+certified interval arithmetic, every block of length at most four has frequency within $0.0021$ of its
+expected value, and $D_{2^{16}}\le0.0037$. These are finite measurements; they are consistent with normality and
+prove nothing asymptotic. The script is listed in \Cref{sec:formal}.
+\end{remark}
+
+\section{Questions}\label{sec:questions}
+
+\begin{question}\label{q:boundary}
+Is $\xi^3=C(2,3,1,3)^3$ normal to base $2$? Is $C(b,p,s,2)^2$ normal to base $b$? For either number, is
+$\limsup_ND_N<1$, or at least $D_N\not\to1$? (\Cref{thm:D} gives the rate $(\log\log N)^{-3/2}$ for $\xi^2$;
+\Cref{sec:boundary} explains why denominator information cannot settle these questions.)
+\end{question}
+
+\begin{question}
+Is $\xi$ transcendental? Is it a Liouville number? (Normality excludes rationality, and \Cref{thm:D}
+excludes algebraic degree at most two, that is, less than $d=3$.)
+\end{question}
+
+\begin{question}
+What is the true order of $D_N(P(C(b,p,s,d)))$ for $\deg P\ge2$? Is it a power of $N$? A local form of the
+competitor count of \Cref{lem:avgiso} near sums of fewer coordinates would give a power of $\log N$. Is the
+exponent $1/3$ in \Cref{thm:B,thm:C} optimal for these particular numbers?
+\end{question}
+
+\begin{question}
+Is the irrationality exponent of the series $W_H$ of \Cref{thm:hybrid}, or of the series of
+\Cref{rem:quasipoly}, finite? Is either a Liouville number?
+\end{question}
+
+\begin{question}
+How early can the auxiliary primes appear? In every construction of \Cref{sec:allprime} of degree at least
+two the $j$-th prime first appears at a position $n_j$ with $\log n_j\gg j\log j$. Does a version of
+\Cref{thm:geometric} with a new prime at every index exist? A short-orbit estimate uniform over growing
+auxiliary support would be the natural input.
+\end{question}
+
+\begin{question}
+Do the polynomials of \Cref{thm:several} in several orders satisfy an explicit discrepancy bound?
+\end{question}
+
+\section{Formal verification and data availability}\label{sec:formal}
+
+The Lean~4 \cite{Lean4} declarations cited above, built with Mathlib \cite{Mathlib}, are in the
+repository \url{https://github.com/eldernos/MathematicsResearch}. Links to the modules
+\ttt{RetirementDenominator}, \ttt{Phase18Synthetic}, \ttt{SharpTranslation}, \ttt{SmoothOrbit} and
+\ttt{PositiveSummation} are pinned to the commit
+\begin{center}\ttt{\leancommit},\end{center}
+links to \ttt{SurvivingGrid} and \ttt{PrimePowerGrid} to the later commit
+\begin{center}\ttt{\phaseXIXcommit},\end{center}
+and links to \ttt{ProtectedPole} and \ttt{PowerSumPeeling} to the commit
+\begin{center}\ttt{\phaseXXIcommit}.\end{center}
+At each commit the full build completed and the axiom audit accepted only \ttt{propext},
+\ttt{Classical.choice} and \ttt{Quot.sound}, and an independent kernel replay covered the modules used
+here. The theorem verification map, the novelty ledger, the list of changes from version~1.0 and the
+reproduction commands are in the files \ttt{VERIFICATION.md}, \ttt{LEDGER.md} and \ttt{CHANGES.md} next to
+the source of this paper (directory \ttt{papers/07-synthetic-expansions-v2} of the repository); version~1.0
+remains in \ttt{papers/07-synthetic-expansions}.
+
+The kernel-verified statements are
+\Cref{prop:group,thm:den,lem:short,thm:switch,lem:program,thm:sharpcited}; the last is quoted from
+\cite{CompanionH}. The Lean declarations used in
+\Cref{lem:rjump,lem:fB,lem:avgiso,lem:poledom,thm:allprime} are finite arithmetic and combinatorial cores:
+the exact jump of a truncated mass at an isolated centre, the degree and leading coefficient of $\Phi_q$, the
+dominant-loss peeling lemma, the divisor bound for differences of $d$-th powers, the exact $p$-adic depth of
+the prefixes of $W$, the divisibility of their denominators by the newest auxiliary prime, and the
+divisibility lower bound for a truncated Taylor expression. None of them states an exponential-sum estimate,
+a measure-theoretic statement, a normality conclusion, a rate or a Diophantine property. All rates
+(\Cref{thm:example,thm:rate,thm:program,thm:Y,thm:effective,thm:allprime,thm:protected,thm:hybrid,thm:geometric,thm:stoneham}),
+the limit-set theorems, \Cref{prop:criterion} beyond the short-orbit estimate, the passage from repunits to
+reduced raw coefficients after \Cref{prop:group}, and \Cref{sec:quadratic,sec:sums,sec:allprime,sec:boundary}
+beyond the named Lean steps have written proofs. In particular \Cref{thm:quadratic,thm:effective} and
+\Cref{cor:flagship,cor:flagship2} are paper proofs, and \Cref{thm:smallball,thm:higher,thm:several} are
+Lean-supported paper proofs whose Lean steps are only the finite cores named above; none of these statements,
+and none of their analytic or measure-theoretic steps, is formalized. Exact rational computations exercising these statements are
+\repo{scripts/phase18_principal.py}{\ttt{scripts/phase18\_principal.py}} and
+\repo{scripts/phase18_programming.py}{\ttt{scripts/phase18\_programming.py}} at the first commit, and
+\href{https://github.com/eldernos/MathematicsResearch/tree/\phaseXIXcommit/scripts/phase19_grids.py}{\ttt{scripts/phase19\_grids.py}}
+and
+\href{https://github.com/eldernos/MathematicsResearch/tree/\phaseXIXcommit/scripts/phase19_nonlinear.py}{\ttt{scripts/phase19\_nonlinear.py}}
+at the second, and
+\href{https://github.com/eldernos/MathematicsResearch/tree/\phaseXXIcommit/scripts/phase20_normality.py}{\ttt{scripts/phase20\_normality.py}}
+and
+\href{https://github.com/eldernos/MathematicsResearch/tree/\phaseXXIcommit/scripts/phase21_nonlinear.py}{\ttt{scripts/phase21\_nonlinear.py}}
+at the third. The scripts \ttt{scripts/phase22\_short\_orbits.py} (for
+\Cref{sec:uniformorbit,sec:allprime}) and \ttt{scripts/phase22\_nonlinear\_boundary.py} (for
+\Cref{sec:boundary} and \Cref{rem:finitedata}) accompany this version in the same repository. All of them
+are finite checks and illustrations, not proofs of the asymptotic statements; the exception is the finite
+certificate in \Cref{prop:nouniform}: \ttt{phase21\_nonlinear.py} certifies the net exactly for
+$H\in\{6,10,100,1000,4000\}$ together with $R_{4000}^{126}<3^{4000}$. The enclosures of $N^{1/3}D_N(\xi)$ quoted after \Cref{thm:example}
+are computed by \ttt{checks/xi\_discrepancy.py} in the directory of version~1.0 (standard library only).
+
+\section{Use of AI tools}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed
+conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations
+and Lean~4 formalizations, searched the literature and reviewed drafts across several model
+providers. The repository owner directed the project and is responsible for its release. The Lean
+kernel checked the declarations listed in the verification map. The written proofs, literature
+comparisons and priority statements have been checked only by AI models from different providers.
+They have not been checked by an independent human expert, and no human specialist has read the proofs
+new in version~2.0. Cross-model review is not independent human peer review.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+\end{document}

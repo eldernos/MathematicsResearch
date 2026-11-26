@@ -1,0 +1,2651 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+% This manuscript is a candidate draft and is not part of a release.
+\renewcommand{\ReleaseLabel}{candidate draft, not released}
+\usepackage[numbers,sort&compress]{natbib}
+\hypersetup{pdftitle={Digit distribution of arithmetic generating functions}}
+
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Cl}{Cl}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\rad}{rad}
+\newcommand{\dist}[1]{\lVert #1\rVert}
+\newcommand{\fr}[1]{\{#1\}}
+\newcommand{\Ahat}{\widehat A}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\cnt}{\#}
+\newcommand{\LL}{\log\log N}
+\newcommand{\decl}[1]{\nolinkurl{#1}}
+% Immutable commit at which every Lean declaration cited below was checked.
+\newcommand{\pincommit}{347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8}
+% \leanP{File}{line}{declaration}: link to NormalityChecker/File.lean#Lline at \pincommit.
+\newcommand{\leanP}[3]{\leanat{\pincommit}{#1}{#2}{\decl{#3}}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Digit Distribution of Arithmetic Generating Functions:\\[3pt]
+Euler Products, Theta Values and Sparse Coefficient Transfer\par}
+\vspace{10pt}
+\makebyline{1.0 (preprint draft)}{26 November 2026}
+\end{center}
+
+\begin{abstract}
+We study the base-$b$ digits of values at $q=1/b$ of arithmetic generating
+functions: Euler's product $E_b=\prod_{k\ge1}(1-b^{-k})$ and its square and
+cube, theta values of positive definite binary quadratic forms, weight-one
+modular forms with integer coefficients, and Lambert series of periodic weights.
+The common tool is a finite coefficient-to-discrepancy transfer inequality, valid
+in every integer radix, for integer coefficient sequences of controlled mass and
+density-zero support. It places all of these numbers in the numerical
+translation kernel $K_b=\{z:D_N(z;b)\to1\}$, where $D_N$ is the extreme
+discrepancy of $(\{b^nz\})_{n<N}$. For $E_b$ we determine the digits exactly,
+show that the words $0^L$ and $(b-1)^L$ each have frequency $1/2$, and prove
+$1-D_N(E_b;b)=\sqrt{2/3}\,(\log_bN)/\sqrt N+O_b(N^{-1/2})$; the cube $E_b^3$ is
+disjunctive, with constant $\sqrt2$. A sub-threshold width law gives exact
+leading constants for multiplicative Lambert series, for $E_b^2$ and for theta
+values of every primitive form of fundamental discriminant, in every radix, and
+exhibits a discontinuity between the radices $2^k$ and all other radices. We
+classify digit frequencies inside $K_b$: for $b\ge3$ no element of $K_b$ is
+simply normal in base $b$, while $E_2$, $E_2^3$ and their $q$-derivatives are
+simply normal in base $2$. A self-contained Selberg sieve shows that
+$(a/d)E_b^2\in K_b$ only when $a/d\in\Z[1/b]$, and an entropy--multiplicity count
+explains why sparse transfer cannot reach modular forms of weight at least two.
+Lean~4 verifies the finite transfer core; the arithmetic arguments are written
+proofs.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+\subsection{Setting}\label{subsec:setting}
+
+Fix an integer radix $b\ge2$. For a real number $z$ write $x_n=\fr{b^nz}$ for
+the fractional parts of its orbit under multiplication by $b$, and let
+\[
+D_N(z;b)=\sup_{0\le s<t\le1}\Bigl|\frac{\cnt\{0\le n<N:x_n\in[s,t)\}}{N}-(t-s)\Bigr|
+\]
+be the extreme discrepancy of $x_0,\dots,x_{N-1}$. A number is normal in base $b$
+exactly when $D_N(z;b)\to0$ \cite{KN}. At the other extreme, $D_N(z;b)\le1$
+always, and we call
+\[
+K_b=\{z\in\R:\ D_N(z;b)\to1\}
+\]
+the \emph{numerical translation kernel}. The deficit $1-D_N(z;b)$ has a
+translation meaning: for every $N\ge1$,
+\begin{equation}\label{eq:sharp}
+\sup_{x\in\R}\bigl|D_N(x+z;b)-D_N(x;b)\bigr|=1-D_N(z;b),
+\end{equation}
+with the supremum attained at $x=0$ (\cref{thm:sharp}). So $1-D_N(z;b)$ is the
+worst change that translation by $z$ can cause in the discrepancy of any input,
+and $K_b$ is the set of numbers whose addition asymptotically preserves the
+discrepancy of every real number. The kernel is a subgroup of $\R$ and equals
+$(b-1)^{-1}\Z+\{w:M_N(w)\to0\}$, where $M_N(w)=N^{-1}\sum_{n<N}\dist{b^nw}$ and
+$\dist{\cdot}$ is the distance to the nearest integer \cite{DiscrepancyCompanion}.
+Elements of $K_b$ are never normal, and the rationals in $K_b$ are exactly those
+whose reduced denominator divides $b^j(b-1)$ for some $j$.
+
+Throughout, for an integer sequence $a$ with $\sum_m|a(m)|b^{-m}<\infty$ we write
+\[
+F_b(a)=\sum_{m\ge0}a(m)b^{-m},\qquad S(X)=\cnt\{1\le m\le X:a(m)\ne0\},\qquad
+A(X)=\sum_{1\le m\le X}|a(m)|,
+\]
+for the value, the support count and the mass. Many classical constants have
+this form. With $E(q)=\prod_{k\ge1}(1-q^k)$ and $\Theta_3(q)=\sum_{j\in\Z}q^{j^2}$:
+\begin{itemize}[nosep]
+\item $E_b=E(1/b)$ has coefficients in $\{0,\pm1\}$ supported on the generalized
+pentagonal numbers (Euler);
+\item $E_b^3$ has coefficients $(-1)^k(2k+1)$ at the triangular numbers (Jacobi);
+\item $L_\chi(b)=\sum_{m\ge1}\chi(m)/(b^m-1)=\sum_n(1*\chi)(n)b^{-n}$ for a
+Dirichlet character $\chi$, and $\Theta_3(1/b)^2=1+4L_{\chi_{-4}}(b)$;
+\item $\Theta_Q(1/b)=\sum_{(m,n)\in\Z^2}b^{-Q(m,n)}$ for a positive definite
+integral binary quadratic form $Q$.
+\end{itemize}
+Here and below $\chi_{-4}$ is the nontrivial character modulo $4$, and $E_b^2$,
+$E_b^3$ denote powers of the number $E_b$.
+
+\emph{Series versus product.} Euler's pentagonal number theorem and Jacobi's
+identity identify $E_b$ and $E_b^3$ with explicit sparse series. The Lean
+declarations cited in this paper speak about these series, which they define
+coefficient by coefficient; the identities themselves are classical
+\cite{EulerE244,EulerE541,Jacobi1829,Bell2005} and are not formalized.
+\Cref{subsec:seriesproduct} states precisely which parts are formal.
+
+\subsection{Main results}\label{subsec:main}
+
+Let $\rho_N=(1+S(N-1))/N$ and $\log_b^+y=\max(0,\log_by)$. For $X\ge0$ let
+\[
+\Ahat(X)=\sum_{m\ge1}|a(m)|\min\bigl(1,b^{X-m}\bigr),
+\]
+a smoothed mass that
+equals $A(X)$ up to the far tail.
+
+\begin{maintheorem}[Sparse coefficient transfer]\label{thm:A}\evidence{Lean-supported paper proof}
+Let $b\ge2$ and let $a$ be an integer sequence with
+$\sum_m|a(m)|b^{-m}<\infty$; put $F=F_b(a)$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For all $N\ge1$, $L\ge0$ and $\varepsilon>0$,
+\[
+1-D_N(F;b)\le2\varepsilon+\frac{L\,(1+S(N-1))}{N}+\frac{\Ahat(N+L)}{(b-1)\,b^L\varepsilon N}.
+\]
+\item If $A(X)\le CX$ for every $X\ge1$, then for every $N\ge1$
+\[
+1-D_N(F;b)\le\rho_N\Bigl(2\log_b\frac1{\rho_N}+\log_b^+\frac{4C}{b-1}+3\Bigr),
+\]
+and the constant $2$ cannot be lowered.
+\item $F\in K_b$ in each of the cases: $A(X)=O(X)$ and $S(X)=o(X)$;
+$A(X)\le C(X+1)^k$ and $S(X)\log X=o(X)$; $A(X)\le CX(\log(X+2))^\gamma$ and
+$S(X)\log\log X=o(X)$. Density-zero support alone does not suffice.
+\item Removing from each coefficient its largest power of $b$ lowers the constant
+$2$ to $1$ when the remaining parts have bounded mean, and under an isolation
+hypothesis the bound becomes an asymptotic formula
+(\cref{thm:displacedwidth,thm:widthlaw}).
+\end{enumerate}
+\end{maintheorem}
+
+\begin{maintheorem}[Euler's product]\label{thm:B}\evidence{Lean-supported paper proof}
+For every $b\ge2$, the base-$b$ expansion of $E_b$ is
+$0.(b-2)(b-1)00B_1B_2B_3\cdots$ with
+$B_j=1\,0^{2j}(b-1)^{4j}(b-2)(b-1)^{2j+1}0^{4j+2}$. For every $L\ge1$ the words $0^L$
+and $(b-1)^L$ each have frequency $1/2$, with error $O(L\sqrt N+L^2)$ at every
+prefix $N$, and every other word occurs $O(L\sqrt N+L^2)$ times. Hence $E_2$ is
+simply normal in base $2$, $E_b$ is not simply normal in base $b$ for $b\ge3$, and
+$E_b$ is never disjunctive. Moreover
+\[
+1-D_N(E_b;b)=\sqrt{\tfrac23}\,\frac{\log_bN}{\sqrt N}+O_b\Bigl(\frac1{\sqrt N}\Bigr),
+\]
+so $E_b\in K_b$, and by \eqref{eq:sharp} translation by $E_b$ changes the
+discrepancy of any input by at most this amount.
+\end{maintheorem}
+
+\begin{maintheorem}[Cube, square and rational scalings]\label{thm:C}\evidence{Lean-supported paper proof}
+Let $b\ge2$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $E_b^3$ has explicit digits; the words $0^L$ and $(b-1)^L$ each have
+frequency $1/2$, all other words frequency $0$; $E_b^3$ is disjunctive; and
+$1-D_N(E_b^3;b)=\sqrt2\,(\log_bN)/\sqrt N+O_b(N^{-1/2})$.
+\item $E_b^2\in K_b$ with $1-D_N(E_b^2;b)\ll_b(\LL)/\sqrt{\log N}$. Granting the
+classical identification of $\eta(12\tau)^2$ as a Hecke eigenform with complex
+multiplication \cite{Serre1985}, the coefficient of $b^{-n}$ in $E_b^2$ is the
+coefficient $c(12n+1)$ of $\eta(12\tau)^2$; it is nonzero exactly when every prime
+$p\not\equiv1\pmod{12}$ divides $12n+1$ to an even power; and the number of
+nonzero coefficients up to $N$ is asymptotic to $C_\eta N/(\log N)^{3/4}$ with
+$C_\eta=2.418529\ldots$ given in \eqref{eq:Ceta}.
+\item If $P\in\Z[1/b][x]$ has degree at most $3$, then $P(E_b)\in K_b$. For
+$r\in\{1,2,3\}$ and a reduced fraction $a/d$, $(a/d)E_b^r\in K_b$ if and only if
+$a/d\in\Z[1/b]$; for $r=2$ and odd prime factors of $d$ this is proved granting the
+eigenform identification of \textup{(ii)}, and rests on a uniform pair sieve for the
+support of $E_b^2$ (\cref{thm:S}), proved here in full.
+\end{enumerate}
+\end{maintheorem}
+
+For the next theorem write $LL=\log\log N$, let $C_\chi$ be the constant in
+$\cnt\{n\le N:(1*\chi)(n)>0\}\sim C_\chi N/\sqrt{\log N}$, and for a radix
+$b=2^sb'$ with $b'$ odd put $\beta_b=\log b/\log b'\in[1,\infty]$.
+
+\begin{maintheorem}[Exact discrepancy constants in every radix]\label{thm:D}\evidence{Lean-supported paper proof}
+\leavevmode
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every real nonprincipal Dirichlet character $\chi$,
+\[
+1-D_N(L_\chi(b);b)\sim
+\begin{cases}
+\dfrac{C_\chi}{2\log b}\,\dfrac{LL}{\sqrt{\log N}}, & b=2^k,\\[2ex]
+\dfrac{C_\chi(1+\log2)}{2\log b}\,\dfrac{LL}{\sqrt{\log N}}, & b\text{ not a power of }2.
+\end{cases}
+\]
+For $b=2$ and $\chi=\chi_{-4}$ the constant is $K/(2\log2)$ with $K=0.76422365\ldots$
+the Landau--Ramanujan constant, and the same asymptotic holds for
+$\Theta_3(1/2)^2=1+4L_{\chi_{-4}}(2)$.
+\item Granting the eigenform identification of \cref{thm:C}(ii),
+$1-D_N(E_b^2;b)\sim\frac{3C_\eta}{4\log b}\frac{LL}{(\log N)^{3/4}}$ for $b=2^k$ and
+$\sim\frac{C_\eta(3+\log2)}{4\log b}\frac{LL}{(\log N)^{3/4}}$ otherwise.
+\item Let $Q$ be a positive definite integral binary quadratic form and
+$\Psi_N=C_QLL/(2\log b\sqrt{\log N})$, where
+$\cnt\{n\le N:r_Q(n)>0\}\sim C_QN/\sqrt{\log N}$. Then
+$\liminf_N(1-D_N(\Theta_Q(1/b);b))/\Psi_N\ge1$ for every $Q$ and $b$. If $Q$ is
+primitive of fundamental discriminant $\Delta<0$, then
+$1-D_N\sim(1+\log2)\Psi_N$ for every $b$ that is not a power of $2$, and
+$1-D_N\sim\bigl(1+\log2\cdot\mathbb E_\Delta[1-1/d]\bigr)\Psi_N$ for $b=2^k$, where
+$\mathbb E_\Delta[1-1/d]$ is an explicit Euler product depending only on the odd part
+of the class group (\cref{thm:classgroups}); it vanishes when $\Cl(\Delta)$ is a
+$2$-group.
+\item For multiplicative $c$ with $0\le c(p^e)\le e+1$ and $c(p)=2$ exactly on a set
+of primes of natural density $\delta\in(0,1)$ (\cref{subsec:primedensity}), the
+deficit of $\sum_nc(n)b^{-n}$ is asymptotic to $(1-\delta)\Phi_N$ for $b=2^k$ and
+to $(1-\delta+\delta\log2)\Phi_N$ for every other $b$ provided
+$\delta\le\beta_b/(\beta_b+\log2)$; here $\Phi_N$ is the normalized support density
+\eqref{eq:PhiN}. For larger $\delta$ explicit unconditional bounds hold.
+\end{enumerate}
+\end{maintheorem}
+
+\begin{maintheorem}[Theta values, weight one and periodic weights]\label{thm:E}\evidence{Lean-supported paper proof}
+Let $b\ge2$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every positive definite integral binary form $Q$,
+$\Theta_Q(1/b)\in K_b$ with $1-D_N\ll_{Q,b}LL/\sqrt{\log N}$; the same holds for
+integral shifted lattices, congruence subsums, bounded integer weights and
+polynomials of total degree at most $2$ in finitely many unary quadratic
+series.
+\item Every holomorphic modular form $f=\sum_{n\ge0}a(n)q^n$ of weight one on some
+$\Gamma_1(M)$ with all $a(n)\in\Z$ satisfies $f(1/b)\in K_b$ with
+$1-D_N\ll_{f,b}LL/(\log N)^{\alpha_f}$, where $\alpha_f>0$ is defined in
+\cref{thm:weightone}.
+\item Every integer-valued combination of dilated divisor sums $1*\chi$ of
+characters of even order lies in $K_b$; and for every odd $M$-periodic integer
+weight $w$, the Lambert series $\sum_mw(m)/(b^m-1)$ lies in $K_b$. In particular,
+for $q=b^{-M}$ and $1\le r<M$ the normalized $q$-digamma reflection
+$(\psi_q(r/M)-\psi_q(1-r/M))/\log q$ lies in $K_b$.
+\end{enumerate}
+\end{maintheorem}
+
+\begin{maintheorem}[Digit frequencies in the kernel]\label{thm:F}\evidence{Lean-supported paper proof}
+Let $b\ge2$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For $z\in K_b$, either some interior constant word $m^L$ ($1\le m\le b-2$) has
+frequency tending to $1$ for every $L$, or the limit points of the word
+distribution of length $L$ are exactly the measures
+$\alpha\delta_{0^L}+(1-\alpha)\delta_{(b-1)^L}$ with $\alpha$ in a closed interval.
+For $b\ge3$ no element of $K_b$ is simply normal in base $b$, and no element of
+$K_b$ is normal in base $b$.
+\item Every series $F_b(a)$ with integers $a\ge0$ that satisfies one of the three
+hypotheses of \cref{thm:A}(iii) has $f_{0^L}(N)\to1$ for every $L$; this applies to $\Theta_Q(1/b)$ and $L_\chi(b)$ for real
+nonprincipal $\chi$, which are therefore not simply normal in any base.
+\item With $D=q\,d/dq$, the numbers $D^jE_b$, $D^jE_b^3$ $(j\ge0)$ and $E_b^2DE_b$
+have $f_{0^L},f_{(b-1)^L}\to\frac12$ with error $O_{b,j}((L+\log N)/\sqrt N)$; they
+are simply normal in base $2$ and not simply normal in base $b\ge3$; and
+$D^jE_b$ $(j\ge1)$, $D^jE_b^3$ and $E_b^2DE_b$ are disjunctive.
+\item $E_b^2$ is not simply normal for $b\ge3$, and, granting the eigenform
+identification, both $0^L$ and $(b-1)^L$ have positive lower frequency in $E_b^2$.
+\item For $d\ge2$ prime to $b$ and $a\ne0$ with $\gcd(a,d)=1$, the words of
+$(a/d)E_b$ and $(a/d)E_b^3$ have exact rational limiting frequencies computed by a
+finite automaton. In base $2$ these numbers are simply normal whenever $\ord_d(2)$
+is odd; they are never normal.
+\end{enumerate}
+\end{maintheorem}
+
+\begin{maintheorem}[Limits of sparse and signed transfer]\label{thm:G}\evidence{Lean-supported paper proof}
+\leavevmode
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $z\in K_b$ if and only if $z-c-\sum_{t\ge1}A(t)b^{-t}\in\Z$ for some
+$c\in(b-1)^{-1}\Z$ and some integers $A(t)$ with $|A(t)|\le\lfloor b/2\rfloor$ and
+density-zero support. Hence signed-digit transfer with unrestricted
+cancellation between coefficients is equivalent to membership in $K_b$.
+\item For $E_b^4$, $E_b^6$, $E_b^8$ and $D(\Theta_3(1/b)^2)$ the minimal signed-digit
+width of the coefficients up to $N$ is of exact order $N\sqrt{\log N}$, and of
+exact order $N(\log N)^{1/4}$ for $D(E_b^2)$, in every radix (granting the classical
+CM descriptions of the forms involved, \cref{thm:etainput,thm:cminput}); every decomposition of
+the individual coefficients into boundedly many signed digits uses
+$\gg N\sqrt{\log N}$ digits for the first four. No distributional statement about
+these numbers follows.
+\item $K_b$ is not closed under squaring, and modulo $K_b$ one has
+$\Theta_3(1/b)^4\equiv16L_{\chi_{-4}}(b)^2$ and
+$\Theta_3(1/b)^3\equiv4\Theta_3(1/b)L_{\chi_{-4}}(b)$.
+\end{enumerate}
+\end{maintheorem}
+
+\subsection{Relation to earlier work}\label{subsec:literature}
+
+The identities used are classical: Euler's pentagonal number theorem, proved by
+Euler in a letter to Goldbach of 1750 and published in
+\cite{EulerE244,EulerE541} (see \cite{Bell2005} for the history), and Jacobi's
+cube identity \cite{Jacobi1829}. The counting functions of integers represented
+by binary forms are due to Landau \cite{Landau1908} and Bernays \cite{Bernays1912}
+(see \cite{BMO2011}); lacunarity of powers of $\eta$ and the Chebotarev
+description of weight-one forms are due to Serre \cite{Serre1981,Serre1985} and
+Deligne--Serre \cite{DeligneSerre1974}. Transcendence of $E_b$, of $\Theta_Q(1/b)$
+and of $f(1/b)$ in \cref{thm:E}(ii) follows from Nesterenko's theorem
+\cite{Nesterenko1996} through \cite{DNNS1996,Bertrand1997,HamiehMurty2016}; we
+claim nothing new about transcendence.
+
+For digits, the closest published result is due to Bailey, Borwein, Crandall and
+Pomerance \cite[\S9]{BBCP2004}: the number of ones among the first $M$ binary digits
+of $\Theta_3(1/2)^2$ is asymptotic to $C_0M/\sqrt{\log M}$ with $C_0\approx0.7996$,
+and they expect $\Theta_3(1/2)^3$ to be normal. Their isolated-coefficient argument
+is close to ours. They do not consider discrepancy, other radices, $E_b$ or its
+powers. A companion paper \cite{MultLambert} proved
+$1-D_N(L;2)\asymp(\LL)/(\log N)^{1-\delta}$ for the binary multiplicative Lambert
+series of \cref{thm:D}(iv), together with disjunctivity; \cref{thm:D} replaces
+the order by an exact constant and extends it to all radices. Rauzy
+\cite{Rauzy1976} characterized the numbers whose addition preserves normality, and
+Bergelson and Downarowicz \cite{BD2025} studied preservation of normality and
+determinism under arithmetic operations; multiplication by nonzero rationals
+preserves normality \cite{Wall1949}. Those results concern normal inputs, whereas
+$K_b$ is defined through the numerical discrepancy of every input
+\cite{DiscrepancyCompanion}, and its elements are far from normal. We located no
+source that states the digit distribution of $E_b$, $E_b^2$ or $E_b^3$, an exact
+discrepancy constant for any of the numbers above, or the radix dependence in
+\cref{thm:D}; this records a failed search, not a proof of novelty. Recent
+preprints on related constants include \cite{Campbell2026} (the word $11$ in the
+Erd\H{o}s--Borwein constant) and \cite{BecherLew2026} (numbers that are normal in
+odd bases and deterministic in base $2$).
+
+\subsection{What is not claimed}\label{subsec:notclaimed}
+
+No classical constant is proved normal or non-normal here beyond the numbers named
+in the theorems. Membership in $K_b$, normality and even $D^+<1$ remain open for
+the partition constant $P_b=1/E_b$, for $E_b^r$ with $r\ge4$, for
+$\Theta_3(1/b)^3$ and $\Theta_3(1/b)^4$, for the Eisenstein values
+$E_2(1/b),E_4(1/b),E_6(1/b)$ and for $\Delta(1/b)$. \Cref{thm:G}(ii) is a statement
+about the method, not about these numbers. The exact constants of
+\cref{thm:D}(iv) above the threshold $\beta_b/(\beta_b+\log2)$, and of
+\cref{thm:D}(iii) for non-fundamental or imprimitive forms beyond the lower bound,
+remain open, as do the simple normality of $E_2^2$ in base $2$ and the converse of
+\cref{thm:F}(v). All exact constants in \cref{thm:D} have relative error of order
+$(\log\log\log N)/\log\log N$ or worse, so finite computations, which reach
+$\log\log N<2.7$, do not test them.
+
+\subsection{Organization and evidence}\label{subsec:evidence}
+
+\Cref{sec:prelim} collects finite tools. \Cref{sec:transfer} proves the transfer
+theorems and the sub-threshold width law. \Cref{sec:euler} treats $E_b$, $E_b^2$,
+$E_b^3$ and polynomials in them. \Cref{sec:radix} proves the exact constants of
+\cref{thm:D}. \Cref{sec:theta} treats theta values, weight-one forms and periodic
+weights. \Cref{sec:digits} classifies digit frequencies inside $K_b$ and proves
+\cref{thm:F}. \Cref{sec:sieve} proves the uniform pair sieve for $E_b^2$ and the
+rational-scaling criterion. \Cref{sec:limits} proves \cref{thm:G}, and
+\cref{sec:open} lists open problems.
+
+Each numbered statement carries one evidence label.
+\evidence{Kernel-verified}: the complete statement is a Lean~4 declaration checked
+by the kernel, linked at the pinned commit
+\texttt{347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8}.
+\evidence{Lean-supported paper proof}: a written proof whose finite core is such a
+declaration. \evidence{Paper proof}: a written proof only.
+\evidence{External input}: a published theorem quoted without proof. Finite
+computations are reported only as illustrations; none is used in a proof. The
+written proofs have been checked by AI models from several providers, which is not
+independent human peer review (\cref{sec:ai}).
+
+\section{Finite tools}\label{sec:prelim}
+
+Write $\T=\R/\Z$ and $\dist t$ for the distance from $t$ to $\Z$. For $\varepsilon\ge0$
+let
+\[
+E_N(\varepsilon)=E_N(z,\varepsilon)=\cnt\{0\le n<N:\ \dist{b^nz}>\varepsilon\}.
+\]
+A half-open arc of $\T$ of length $\ell\in[0,1]$ is a set $J=\{t:\fr{t-\alpha}<\ell\}$,
+and $\mu_N(J)$ is the proportion of $n<N$ with $x_n\in J$. All logarithms are natural
+unless a base is shown.
+
+\begin{lemma}[Arcs and concentration]\label{lem:arcs}\evidence{Lean-supported paper proof}
+For every half-open arc $J$ of length $\ell$, $\mu_N(J)-\ell\le D_N(z;b)$.
+Conversely every interval deviation in the definition of $D_N$ equals
+$\mu_N(J)-\ell$ for some arc $J$. Hence
+\[
+1-D_N(z;b)=\inf_J\bigl(1-\mu_N(J)+\ell\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+The first claim is \leanP{SharpTranslation}{123}{arc_le}; the second is
+\leanP{SharpTranslation}{167}{interval_eq_arc_excess} (the complement of an interval with
+negative deviation is an arc with the same positive excess). The identity follows.
+\end{proof}
+
+\begin{lemma}[Deficit bound]\label{lem:deficit}\evidence{Kernel-verified}
+For every $\varepsilon\ge0$ and $N\ge1$, $1-D_N(z;b)\le2\varepsilon+E_N(\varepsilon)/N$.
+\end{lemma}
+
+\begin{proof}
+This is \leanP{Phase18Synthetic}{524}{discrepancy_deficit_le}; the arc of length
+$1-2\varepsilon$ avoiding the closed $\varepsilon$-neighbourhood of $0$ contains only far
+points.
+\end{proof}
+
+\begin{theorem}[Sharp translation identity {\cite{DiscrepancyCompanion}}]\label{thm:sharp}\evidence{Kernel-verified}
+For every real $z$ and $N\ge1$,
+$\sup_x|D_N(x+z;b)-D_N(x;b)|=1-D_N(z;b)$, attained at $x=0$.
+\end{theorem}
+
+\begin{proof}
+\leanP{SharpTranslation}{386}{sharp_translation_isGreatest}.
+\end{proof}
+
+By \cref{thm:sharp}, every upper bound for $1-D_N(z;b)$ proved below is also a bound for
+the worst translation error, and every lower bound shows that this error is attained.
+We do not repeat this remark.
+
+\begin{lemma}[Separation]\label{lem:separation}\evidence{Paper proof}
+For every $\varepsilon\ge0$ and $N\ge1$,
+\[
+1-D_N(z;b)\ge\min\Bigl\{1-\frac{E_N(\varepsilon)}N,\ \inf_{\ell\ge0}\Bigl(\ell+\frac{E_N(\ell+\varepsilon)}N\Bigr)\Bigr\}.
+\]
+\end{lemma}
+
+\begin{proof}
+Let $J$ be a half-open arc of length $\ell$. If $J$ misses the closed ball
+$\{\dist t\le\varepsilon\}$, every sample in $J$ is far, so $1-\mu_N(J)+\ell\ge1-E_N(\varepsilon)/N$.
+Otherwise $J$ contains a point $y$ with $\dist y\le\varepsilon$, and every $t\in J$ has
+$\dist t<\ell+\varepsilon$; samples with $\dist{x_n}>\ell+\varepsilon$ lie outside $J$, so
+$1-\mu_N(J)+\ell\ge\ell+E_N(\ell+\varepsilon)/N$. Take the infimum over $J$ and use
+\cref{lem:arcs}.
+\end{proof}
+
+\begin{lemma}[Circle separation]\label{lem:circle}\evidence{Kernel-verified}
+Let $0\le\zeta$ and $0\le\Delta\le\eta-\zeta$. If at least $\Delta N$ indices $n<N$ satisfy
+$\dist{x_n}\le\zeta$ and at least $\Delta N$ satisfy $\dist{x_n}>\eta$, then
+$1-D_N(z;b)\ge\Delta$.
+\end{lemma}
+
+\begin{proof}
+\leanP{CoefficientTransfer}{686}{one_sub_discrepancy_ge_of_bulk_and_far} states
+$\min\bigl(\eta-\zeta,\ \cnt\mathrm{far}/N,\ \cnt\mathrm{bulk}/N\bigr)\le1-D_N$ in every radix.
+\end{proof}
+
+\begin{lemma}[Linear transfer]\label{lem:linear}\evidence{Kernel-verified}
+If $b^kx-y=\sum_ic_iz_i$ is a finite combination with integers $c_i$, then for every
+$N\ge1$
+\[
+|D_N(x;b)-D_N(y;b)|\le\frac kN+\sum_i|c_i|\bigl(1-D_N(z_i;b)\bigr).
+\]
+Moreover $D_N(z+m;b)=D_N(z;b)$ for $m\in\Z$.
+\end{lemma}
+
+\begin{proof}
+\leanP{CharacterLambertTransfer}{175}{radix_pow_linear_transfer}; integer translation
+invariance is \leanP{Phase18Synthetic}{681}{discrepancy_add_int}.
+\end{proof}
+
+Letting $N\to\infty$ in \cref{lem:linear} shows that $K_b$ is a $\Z[1/b]$-module; this
+deduction is written, not formal.
+
+\section{Sparse coefficient transfer}\label{sec:transfer}
+
+Throughout this section $a$ is an integer sequence with $\sum|a(m)|b^{-m}<\infty$,
+$F=F_b(a)$, and $x_n=\fr{b^nF}$. The term $a(0)$ is an integer and plays no role.
+
+\subsection{The finite transfer inequality}\label{subsec:finite}
+
+\begin{lemma}[Integral terms drop out]\label{lem:integral}\evidence{Paper proof}
+Fix $n\ge0$ and let $I$ be a set of indices $m>n$ with $b^{m-n}\mid a(m)$. Then
+$\dist{b^nF}\le\sum_{m>n,\ m\notin I}|a(m)|b^{n-m}$. In particular, if
+$a(n+1)=\dots=a(n+L)=0$, then $\dist{b^nF}\le\tau_L(n):=\sum_{j>L}|a(n+j)|b^{-j}$.
+\end{lemma}
+
+\begin{proof}
+Every term with $m\le n$ or $m\in I$ contributes an integer to $b^nF$, and a summable
+family of integers has finitely many nonzero terms.
+\end{proof}
+
+\begin{lemma}[Shadows]\label{lem:shadow}\evidence{Paper proof}
+Let $W_L(N)$ be the number of $0\le n<N$ whose next occupied index lies in $(n,n+L]$.
+Then $W_L(N)\le L(1+S(N-1))$.
+\end{lemma}
+
+\begin{proof}
+The shifts whose next occupied index is $m$ form an interval of length at most $L$ ending
+at $m-1$. Occupied indices $m\ge N$ meet $[0,N)$ only through the first of them, which
+shadows at most $L$ shifts.
+\end{proof}
+
+\begin{lemma}[Mean tail]\label{lem:meantail}\evidence{Paper proof}
+For $N\ge1$ and $L\ge0$,
+$\sum_{n<N}\tau_L(n)\le\Ahat(N+L)/((b-1)b^L)$, where
+$\Ahat(X)=\sum_{m\ge1}|a(m)|\min(1,b^{X-m})$, and for integers $X\ge0$,
+$\Ahat(X)=(1-b^{-1})\sum_{i\ge0}b^{-i}A(X+i)$. If $A(X)\le CX$ for all $X\ge1$, then $\Ahat(X)\le C(X+1/(b-1))$.
+\end{lemma}
+
+\begin{proof}
+Exchanging the sums, $a(m)$ is paired with the shifts $0\le n\le\min(N-1,m-L-1)$, and the
+geometric sum of $b^{n-m}$ over them is at most $b^{-\max(L,m-N)}/(b-1)$. The second
+formula for $\Ahat$ is Abel summation, and the last bound follows from it.
+\end{proof}
+
+\begin{theorem}[Finite all-prefix transfer]\label{thm:finitetransfer}\evidence{Paper proof}
+For all $N\ge1$, integers $L\ge0$ and $\varepsilon>0$,
+\[
+E_N(\varepsilon)\le L(1+S(N-1))+\frac{\Ahat(N+L)}{(b-1)b^L\varepsilon},\qquad
+1-D_N(F;b)\le2\varepsilon+\frac{L(1+S(N-1))}N+\frac{\Ahat(N+L)}{(b-1)b^L\varepsilon N}.
+\]
+\end{theorem}
+
+\begin{proof}
+Shadowed shifts are counted by \cref{lem:shadow}; at every other shift
+$\dist{b^nF}\le\tau_L(n)$ by \cref{lem:integral}. Markov's inequality and
+\cref{lem:meantail} bound the number of $n<N$ with $\tau_L(n)>\varepsilon$. Finish with
+\cref{lem:deficit}.
+\end{proof}
+
+The Lean library contains a version with a slightly weaker shadow term.
+
+\begin{theorem}[Lean form of the transfer]\label{thm:leantransfer}\evidence{Kernel-verified}
+If $A(X)\le CX$ for all $X$, then for all $N\ge1$, $L\ge0$ and $\varepsilon>0$,
+\[
+1-D_N(F;b)\le2\varepsilon+\frac{L\,S(N+L)}N+\frac{C(N+L+2)}{N\varepsilon b^L},
+\]
+and the same bound holds for $|D_N(x+F;b)-D_N(x;b)|$ for every real $x$. Consequently
+$A(X)=O(X)$ and $S(X)=o(X)$ imply $F\in K_b$ and $D_N(x+F;b)-D_N(x;b)\to0$ for every
+$x$. If instead $A(X)\le C(X+1)^k$ with an integer $k\ge0$ and $S(X)\log X=o(X)$, or
+$A(X)\le CX(\log(X+2))^\gamma$ with an integer $\gamma\ge0$ and
+$S(X)\log\log(X+3)=o(X)$, then again $F\in K_b$.
+\end{theorem}
+
+\begin{proof}
+\leanP{CoefficientTransfer}{392}{finite_sparse_mass_transfer},
+\leanP{CoefficientTransfer}{423}{finite_sparse_mass_translation},
+\leanP{CoefficientTransfer}{434}{linear_mass_sparse_tendsto_one},
+\leanP{CoefficientTransfer}{512}{linear_mass_sparse_preserves_discrepancy},
+\leanP{GeneralMassTransfer}{253}{finite_poly_mass_transfer},
+\leanP{GeneralMassTransfer}{299}{poly_mass_sparse_tendsto_one},
+\leanP{GeneralMassTransfer}{657}{finite_log_mass_transfer} and
+\leanP{GeneralMassTransfer}{693}{log_mass_sparse_tendsto_one}. A real exponent $\gamma$ may
+be replaced by $\lceil\gamma\rceil$.
+\end{proof}
+
+\begin{theorem}[Linear mass: explicit rate]\label{thm:linearrate}\evidence{Paper proof}
+If $A(X)\le CX$ for every $X\ge1$, then for every $N\ge1$, with
+$\rho_N=(1+S(N-1))/N$,
+\[
+1-D_N(F;b)\le\rho_N\Bigl(2\log_b\frac1{\rho_N}+\log_b^+\frac{4C}{b-1}+3\Bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+Write $\rho=\rho_N\in(0,1]$. If $\rho=1$ the right side is at least $3$. Otherwise put
+$\varepsilon=\rho/2$ and $L=\max(0,\lceil\log_b(4C/((b-1)\rho^2))\rceil)$. If
+$L+1/(b-1)\le N$, then $\Ahat(N+L)\le2CN$ by \cref{lem:meantail}, so the last term of
+\cref{thm:finitetransfer} is at most $4Cb^{-L}/((b-1)\rho)\le\rho$ and
+$1-D_N\le(L+2)\rho$. Otherwise $L\ge N$, so $(L+2)\rho>1$ and the bound is trivial.
+Finally $L+2$ is at most the bracket.
+\end{proof}
+
+\begin{proposition}[The constant $2$ is sharp]\label{prop:sharp2}\evidence{Paper proof}
+Let $K\asymp q$ be the integer with base-$b$ digits $1,0,1,\dots,0,1$ and
+$z=K/(b^q-1)=\sum_{k\ge1}Kb^{-qk}$. Then $A(X)\le(K/q)X$, $\rho_q=1/q$, and
+$(1-D_q(z;b))\,q=2\log_bq+O_b(\log\log q)$.
+\end{proposition}
+
+\begin{proof}
+The orbit has period $q$. Let $w$ be the number of digits of $K$. For $1\le j<w$ the point
+$x_{q-j}$ is a digit suffix of $K$ times $b^{-j}$ up to $O(b^{-q})$, and since the digits
+alternate it lies at distance at least $c_b>0$ from $0$. For $j\ge w$ the point is
+$Kb^{-j}(1+O(b^{-q}))$, at distance at least $\eta$ from $0$ for
+$j\le w+\log_b(1/\eta)-O(1)$ and at most $\zeta$ for $j\ge w+\log_b(1/\zeta)+O(1)$. Take
+$\zeta=1/q$ and $\eta=6\log_bq/q$ in \cref{lem:circle}: this gives
+$1-D_q\ge(w+\log_b(1/\eta)-O(1))/q=(2\log_bq-O(\log\log q))/q$. \Cref{thm:linearrate} gives
+the upper bound.
+\end{proof}
+
+Concatenating such periodic blocks on rapidly growing ranges gives a single number with
+$\rho_N\to0$ for which the constant $2$ is attained along a subsequence.
+
+\begin{theorem}[Larger mass]\label{thm:largermass}\evidence{Paper proof}
+For every $N\ge1$, with $\rho=\rho_N$ and $\mu_N=\max(1,\Ahat(2N)/N)$,
+\[
+1-D_N(F;b)\le\rho\Bigl(2\log_b\frac1\rho+\log_b\mu_N+\log_b^+\frac2{b-1}+3\Bigr).
+\]
+If $S(X)\le C_1X(\log X)^{-\kappa}$ for $X\ge3$ with $\kappa>0$, and
+$A(X)\ll X(\log X)^{\beta}$ with $\beta\ge0$, then
+$1-D_N(F;b)\le(2\kappa+\beta+o(1))\,C_1\log_b\log N/(\log N)^\kappa$.
+\end{theorem}
+
+\begin{proof}
+As for \cref{thm:linearrate} with $L=\max(0,\lceil\log_b(2\mu_N/((b-1)\rho^2))\rceil)$ and
+$\Ahat(N+L)\le\Ahat(2N)\le\mu_NN$ when $L\le N$. Under the second hypothesis
+$\mu_N\ll(\log N)^\beta$, and $\rho\mapsto\rho\log(1/\rho)$ increases on $(0,1/e)$, so the
+upper bound for $\rho$ may be inserted.
+\end{proof}
+
+\begin{proposition}[Density zero is not enough]\label{prop:counterexamples}\evidence{Paper proof}
+Let $0=m_0<m_1<\cdots$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If all $m_k$ are even and $a(m_k)=(b^{m_k-m_{k-1}}-1)/(b^2-1)$, with $a=0$ elsewhere,
+then $F=1/(b^2-1)\notin K_b$, while $S(X)$ may grow as slowly as $\log_2X$.
+\item If $\xi=\sum_i\xi_ib^{-i}$ is normal in base $b$ and
+$a(m_k)=\sum_{m_{k-1}<i\le m_k}\xi_ib^{m_k-i}$, then $F=\xi$; for $0<\gamma\le1$ and
+$m_k-m_{k-1}=\max(1,\lfloor\gamma\log_b(m_{k-1}+1)\rfloor)$ one has $|a(m)|\le bm^{\gamma}$,
+$S(X)\sim X/(\gamma\log_bX)$ and $A(X)\ll X^{1+\gamma}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) $\sum_ka(m_k)b^{-m_k}=\sum_k\sum_{m_{k-1}<2i\le m_k}b^{-2i}=\sum_{i\ge1}b^{-2i}$, and the
+reduced denominator $b^2-1$ does not divide $b^j(b-1)$. (b) The blocks reproduce the digits
+of $\xi$; the bounds are immediate. Normal numbers satisfy $D_N\to0$.
+\end{proof}
+
+In both examples the digit widths of the coefficients fill the gaps between occupied
+indices. The width form below shows that this is the only obstruction.
+
+\subsection{Displaced sources}\label{subsec:displaced}
+
+For $a(m)\ne0$ write $a(m)=b^{V(m)}U(m)$ with $b\nmid U(m)$, let $u(m)$ be the number of
+base-$b$ digits of $|U(m)|$, and put $t(m)=m-V(m)$ (the \emph{arrival}) and
+$\tilde t(m)=t(m)-u(m)$. The radix may be composite; then $U(m)$ may still be divisible by
+a prime factor of $b$, but its last base-$b$ digit is nonzero.
+
+\begin{lemma}[Radix factorization]\label{lem:radixval}\evidence{Kernel-verified}
+In every radix $b\ge2$, every nonzero integer $a$ factors as $b^{V}U$ with
+$V=\mathtt{radixVal}(b,a)\ge0$ and $b\nmid U$, and $b^n(a/b^m)$ is an integer if $m\le n+V$ and equals $U/b^{m-V-n}$ if
+$n+V<m$.
+\end{lemma}
+
+\begin{proof}
+\leanP{CoefficientTransfer}{588}{radixVal_mul_radixUnit} with \decl{not_dvd_radixUnit},
+and \leanP{CoefficientTransfer}{617}{displaced_term_eq}.
+\end{proof}
+
+The factorization is unique, since $V$ must be the exact power of $b$ dividing $a$; this
+remark is not part of the Lean statement.
+
+\begin{theorem}[Displaced reindexing]\label{thm:reindex}\evidence{Lean-supported paper proof}
+Each fibre $\{m:t(m)=t\}$ is finite and only finitely many $m$ have $t(m)\le0$. With
+$C(t)=\sum_{t(m)=t}U(m)\in\Z$,
+\[
+F=\sum_{t\in\Z}C(t)b^{-t},\qquad x_n=\Bigl\{\sum_{d\ge1}C(n+d)b^{-d}\Bigr\}\quad(n\ge0).
+\]
+\end{theorem}
+
+\begin{proof}
+Since $|U|\ge1$, a term with $t(m)\le0$ has $|a(m)|b^{-m}\ge1$, so there are finitely many,
+and the size of a fibre times $b^{-t}$ is at most $\sum|a(m)|b^{-m}$. Absolute convergence
+permits the rearrangement, and at shift $n$ the terms with $t\le n$ are integers by
+\cref{lem:radixval}.
+\end{proof}
+
+\begin{theorem}[Displaced width inequality]\label{thm:displacedwidth}\evidence{Lean-supported paper proof}
+For $N\ge1$, $L\ge0$ and $\varepsilon>0$,
+\[
+E_N(\varepsilon)\le W_U(N)+L(1+P(N))+\Lambda_N+\frac{\widehat P(N+L)}{(b-1)b^L\varepsilon},
+\]
+where $P(N)=\cnt\{m:1\le t(m)\le N\}$, $W_U(N)=\sum_{1\le t(m)\le N}u(m)$,
+$\Lambda_N=\max_{t(m)>N}(u(m)-t(m)+N)^+$ and
+$\widehat P(X)=\sum_{a(m)\ne0}|U(m)|b^{-u(m)}\min(1,b^{X-\tilde t(m)})$.
+Suppose moreover that $P(N)\to\infty$, $\pi_N=P(N)/N\to0$,
+$\sum_{1\le t(m)\le X}|U(m)|\le K_0P(X)$ for all $X$, $\Lambda_N=o(P(N)\log_b(1/\pi_N))$, and
+that for some $\eta_N\to0$, with $L_N=\lceil(1+\eta_N)\log_b(1/\pi_N)\rceil$,
+$\widehat P(N+L_N)\le P(N)\pi_N^{-\eta_N}$. Then
+$1-D_N(F;b)\le(1+o(1))\pi_N\log_b(1/\pi_N)$.
+\end{theorem}
+
+\begin{proof}
+At shift $n$ a source with $t(m)\le n$ contributes an integer (\cref{lem:radixval}). If $n$
+lies in no interval $[\tilde t(m)-L,t(m)-1]$, every source with $t(m)>n$ has
+$\tilde t(m)>n+L$ and contributes $|U|b^{n-t}<b^{n-\tilde t}\le b^{-L-1}$. The union of the
+intervals inside $[0,N)$ has size at most $W_U(N)+L(1+P(N))+\Lambda_N$, since intervals of
+sources with $t(m)>N$ end at $N-1$. On the remaining shifts apply Markov's inequality to the
+truncated tail as in \cref{lem:meantail}.
+
+For the second claim, Jensen's inequality (concavity of the logarithm) gives
+$W_U(N)\le P(N)(1+\log_bK_0)=O(P(N))$. Take $\varepsilon=\pi_N$ and $L=L_N$. Since
+$b^{-L_N}\le\pi_N^{1+\eta_N}$, the Markov term is at most
+$P(N)\pi_N^{-\eta_N}\pi_N^{1+\eta_N}/((b-1)\pi_N)=P(N)/(b-1)$. Dividing by $N$ and using
+\cref{lem:deficit},
+\[
+1-D_N\le2\pi_N+O(\pi_N)+(1+\eta_N)\log_b\frac1{\pi_N}\cdot\pi_N\Bigl(1+\frac1{P(N)}\Bigr)
++O(\pi_N)+\frac{\Lambda_N}N,
+\]
+and each term other than the third is $o(\pi_N\log_b(1/\pi_N))$ because
+$\log(1/\pi_N)\to\infty$, $P(N)\to\infty$ and $\Lambda_N/N=o(\pi_N\log_b(1/\pi_N))$. The
+Lean declaration
+\leanP{RadixWidthLaw}{466}{width_law_upper} checks the final arithmetic step from the
+far-count bound.
+\end{proof}
+
+\subsection{The sub-threshold width law}\label{subsec:widthlaw}
+
+By \cref{thm:reindex} we may work with the merged sequence $C$. For a source $t$ (that is,
+$C(t)\ne0$) let $g_t$ be the gap to the previous source, $A(t)=\sum_{d\ge1}C(t+d)b^{-d}$
+its tail and $Y(t)=C(t)+A(t)$ its local value.
+
+\begin{lemma}[Source decomposition]\label{lem:source}\evidence{Paper proof}
+Assume that there are infinitely many sources $t\ge1$, and for the first of them, $t_1$,
+put $g_{t_1}=t_1$. The map $n\mapsto(t,j)$, with $t$ the first source after $n$ and $j=t-n$, is a bijection
+from $\N$ onto $\{(t,j):1\le j\le g_t\}$, and $x_n=\fr{b^{-j}Y(t)}$. If $(t,t+h]$ contains
+no source, then $A(t)=b^{-h}A(t+h)$.
+\end{lemma}
+
+\begin{proof}
+At shift $n=t-j$ all sources $\le n$ are integral; the others are $t$ and its successors.
+\end{proof}
+
+\begin{lemma}[One source]\label{lem:onesource}\evidence{Lean-supported paper proof}
+Suppose $|A(t)|\le\frac12$ and let $u$ be the number of digits of $|C(t)|$. If $b\nmid C(t)$,
+then $\dist{b^{-j}Y(t)}\ge b^{-j}/2$ for every $j\ge1$. If $j\ge u+1$, then
+$\dist{b^{-j}Y(t)}=b^{-j}|Y(t)|\ge b^{-j}(b^{u-1}-\frac12)$. Both statements hold for either
+sign of $C(t)$.
+\end{lemma}
+
+\begin{proof}
+If $b\nmid C(t)$ then $C(t)\not\equiv0\pmod{b^j}$, so $C(t)+A(t)$ is at distance at least
+$\frac12$ from $b^j\Z$. For $j\ge u+1$, $|Y(t)|\le b^u-\frac12<b^{j}/2$. The two statements
+are \leanP{RadixWidthLaw}{69}{dist0_div_pow_ge} and
+\leanP{RadixWidthLaw}{102}{dist0_div_pow_eq}; the resulting count of at least
+$\min(u,\lambda)+\lambda-1$ far positions $j\le u+\lambda-1$ when $2\eta b^\lambda\le1$ is
+\leanP{RadixWidthLaw}{139}{card_far_in_gap_ge}.
+\end{proof}
+
+Let $\mathcal A$ be the support of $a$, $S(N)=\cnt\mathcal A\cap[1,N]$, $\rho_N=S(N)/N$,
+$\lambda_N=\log_b(1/\rho_N)$, $\ell_N=\log_b\log N$ and $W(N)=\sum_{n\in\mathcal A,\,n\le N}u(n)$.
+
+\begin{theorem}[Sub-threshold width law]\label{thm:widthlaw}\evidence{Lean-supported paper proof}
+Suppose that for constants $B\ge0$, $0<\kappa<1$ and $\omega\ge0$:
+\begin{enumerate}[label=\textup{(W\arabic*)},start=0,nosep]
+\item $\rho_N=(\log N)^{-\kappa+o(1)}$;
+\item $A(X)\le X(\log X)^B$ for large $X$, and $|a(n)|\le n^{o(1)}$;
+\item with $H_V=\lceil(B+2)\ell_N\rceil$, $R_N=\lceil(2+\omega)\lambda_N+(B+2)\ell_N\rceil$ and
+$H_N=R_N+H_V$, all but $o(S(N))$ indices $n\in\mathcal A\cap[1,N]$ have no other element
+of $\mathcal A$ within distance $H_N$;
+\item $W(N)\le(\omega+o(1))S(N)\lambda_N$, and for each $\varepsilon>0$ only $o(S(N))$
+indices $n\in\mathcal A\cap[1,N]$ have $u(n)<(\omega-\varepsilon)\lambda_N$.
+\end{enumerate}
+Then
+\[
+\bigl(1+\min(\omega,1)-o(1)\bigr)\rho_N\lambda_N\le1-D_N(F;b)\le(1+\omega+o(1))\rho_N\lambda_N.
+\]
+In particular $1-D_N(F;b)\sim(1+\omega)\rho_N\lambda_N$ whenever $\omega\le1$.
+\end{theorem}
+
+\begin{proof}
+\emph{Upper bound.} Apply \cref{thm:displacedwidth} with $\varepsilon=\rho_N$ and
+$L=\lceil\lambda_N\rceil+2$. Since $b^{V(n)}\le|a(n)|=n^{o(1)}$, $t(n)\ge n/2$ for large $n$.
+Hence $P(N)\le S(N)+O(\log N)$, $W_U(N)\le W(N)+O(\log^2N)$ and $\Lambda_N=O(\log N)$.
+Since $|U|b^{-u}<1$,
+$\widehat P(N+L)\le S(N)+O(\log N)+b\sum_{i\ge1}|a(N+L+i)|b^{-i}=S(N)(1+o(1))$, and as
+$b^{-L}\le\rho_N/b^2$ the Markov term counts $O(S(N))$ shifts. So
+$1-D_N\le2\rho_N+(W(N)+S(N)\lambda_N+O(S(N)))/N$.
+
+\emph{Lower bound.} Fix $\varepsilon\in(0,1)$, write $R=R_N$, $H=H_N$, and call
+$n\in\mathcal A\cap(2H,N]$ \emph{good} if
+(G1) $V(n)\le H_V$; (G2) no $n'\in\mathcal A$ has $0<|n'-n|\le H$; (G3) no $n'\in\mathcal A$
+with $V(n')>H_V$ has $|t(n')-t(n)|\le R$; (G4) $|A(t(n))|\le\frac12$; (G5)
+$u(n)\ge(\omega-\varepsilon)\lambda_N$; (G6) $u(n)\le(\omega+\varepsilon)\lambda_N$.
+
+Since $b^V\le|a|$, Markov's inequality and (W1) give
+$\cnt\{n\le3N:V(n)>H_V\}\le b^{-H_V}A(3N)\ll N(\log N)^{-2}$, which is $o(S(N)/\ell_N)$
+because $\kappa<1$; this controls (G1). (G2) fails for $o(S(N))$ indices by (W2). Each
+exceptional $n'$ in (G3) has $n'\le3N$ and spoils at most $2R+H_V+1=O(\ell_N)$ indices, a total
+of $o(S(N))$. For $n$ satisfying (G1)--(G3), $t=t(n)$ is the only arrival in $[t-R,t+R]$
+and $C(t)=U(n)$, so $A(t)=b^{-R}A(t+R)$ by \cref{lem:source}; $n\mapsto t(n)+R$ is
+injective, and \cref{lem:meantail} with $L=0$ applied to $C$ gives
+$\sum_{s<M}|A(s)|\le(A(2M)+O(M^{o(1)}))/(b-1)$, the second term bounding the sources
+$n>2M$ (for which $t(n)>M$ and $|a(n)|b^{M-n}\le n^{o(1)}b^{-n/2}$). With $M=N+R+1$ and
+$b^{-R}\le\rho_N(\log N)^{-B-2}$, Markov's inequality
+(\leanP{RadixWidthLaw}{225}{card_large_tail_le}) shows that (G4) fails for
+$O(\rho_NN/(\log N)^2)=o(S(N))$ indices. (G5) fails for $o(S(N))$ indices by (W3), and
+together with the first-moment bound in (W3) this gives $u(n)/\lambda_N\to\omega$ in $L^1$
+on $\mathcal A\cap[1,N]$, so (G6) also fails for $o(S(N))$ indices. Thus the good set $G$
+has $|G|=(1-o(1))S(N)$.
+
+Put $\Delta^+=(1+\omega+\varepsilon)\rho_N\lambda_N$, $\zeta=\rho_N$, $\eta=2\rho_N+2\Delta^+$
+and $\lambda'=\lfloor\log_b(1/(2\eta))\rfloor=\lambda_N-\log_b\lambda_N-O(1)$. For $n\in G$
+with $t=t(n)$ and $u=u(n)$, \cref{lem:onesource} applies, since $b\nmid U(n)=C(t)$. It marks
+the positions $1\le j\le\lambda'$ and $u+1\le j\le u+\lambda'-1$, at which
+$\dist{x_{t-j}}\ge\eta$; there are at least $\min(u,\lambda')+\lambda'-1$ of them, and by
+(G6) all lie in the arrival-free interval $[t-R,t)$, because
+$u+\lambda'-1\le(1+\omega+\varepsilon)\lambda_N\le R$. So the marked sets of distinct good
+sources are disjoint, and by (G5) their proportion is at least
+$\Delta:=(1+\min(\omega,1)-2\varepsilon-o(1))\rho_N\lambda_N$. The upper-bound count shows that at
+least $N(1-\Delta^+)\ge\Delta N$ points satisfy $\dist{x_n}\le\zeta$. Put
+$\eta'=\frac32(\rho_N+\Delta^+)$; then every marked point satisfies
+$\dist{x_{t-j}}\ge\eta>\eta'$, and $\Delta\le\Delta^+$ gives $\zeta+\Delta<\eta'$.
+\Cref{lem:circle} with $\eta'$ in place of $\eta$ gives $1-D_N\ge\Delta$; let
+$\varepsilon\to0$.
+\end{proof}
+
+\begin{remark}[Signs, mixtures and the threshold]\label{rem:widthlaw}\evidence{Paper proof}
+Nothing in the proof uses $a\ge0$: \cref{lem:onesource,lem:circle} and the Markov bounds
+are sign-blind, and (G2) excludes cancellation in the fibre of a good source. If
+$u(n)/\lambda_N$ converges in distribution to a law $\mu$ on $[0,1)$ and
+$W(N)\le(\int x\,d\mu+o(1))S(N)\lambda_N$, replacing (G5)--(G6) by $u(n)\le\lambda_N$ gives
+$1-D_N\sim(1+\int x\,d\mu)\rho_N\lambda_N$ (\emph{mixture form}). When $\omega>1$ the
+upper value is attained if the internal positions $\lambda'<j\le u$ at which
+$\dist{b^{-j}Y(t)}<\eta$ contribute $o(S(N)\lambda_N)$ in total; such a position occurs
+exactly when the digits of $C(t)$ below position $j$ begin with a run of about
+$\lambda_N$ zeros or of about $\lambda_N$ digits $b-1$.
+\end{remark}
+
+For bounded coefficients ($\omega=0$) the law reads $1-D_N\sim\rho_N\log_b(1/\rho_N)$. Two
+classical examples follow.
+
+\begin{corollary}[Squares and primes]\label{cor:primes}\evidence{Paper proof}
+For every $b\ge2$, $1-D_N(\sum_{j\ge1}b^{-j^2};b)\sim\frac12(\log_bN)/\sqrt N$, and
+\[
+1-D_N\Bigl(\sum_pb^{-p};b\Bigr)\sim\frac{\log\log N}{\log b\cdot\log N}.
+\]
+\end{corollary}
+
+\begin{proof}
+For the squares, the sources are isolated at every radius $o(\sqrt N)$ and the power-law
+version of the argument above (with $\rho_N\sim N^{-1/2}$, $\lambda_N\sim\frac12\log_bN$)
+applies verbatim. For the primes take $\kappa=1$ in the form $\rho_N\sim1/\log N$,
+$\lambda_N\sim\log_b\log N$; the Selberg upper-bound sieve
+\cite[Ch.~3]{HalberstamRichert} gives
+$\cnt\{p\le x:p+h\text{ prime}\}\ll\mathfrak S(h)x/(\log x)^2$ uniformly in $h$, with
+$\sum_{h\le H}\mathfrak S(h)\ll H$, so for $H=O(\log\log x)$ all but
+$O(x\log\log x/(\log x)^2)=o(\pi(x))$ primes have no other prime within distance $H$. The coefficients equal $1$, so (G1), (G4)--(G6) are
+automatic, and the proof of \cref{thm:widthlaw} goes through with $\kappa=1$ because the
+only use of $\kappa<1$ was in (G1).
+\end{proof}
+
+\section{Euler's product and its powers}\label{sec:euler}
+
+Let $P_k^-=k(3k-1)/2$ and $P_k^+=k(3k+1)/2$ $(k\ge1)$ be the generalized pentagonal
+numbers, $T_k=k(k+1)/2$ the triangular numbers, and $P(M)=\cnt\{p<M\}$ the number of
+generalized pentagonal numbers $p\ge1$ below $M$. Since $k(3k\mp1)/2<M$ is equivalent to
+$k<(\pm1+\sqrt{24M+1})/6$,
+\begin{equation}\label{eq:pentcount}
+\tfrac13\sqrt{24M+1}-2\le P(M)\le\tfrac13\sqrt{24M+1}.
+\end{equation}
+
+\subsection{Series and products}\label{subsec:seriesproduct}
+
+\begin{theorem}[Euler, Jacobi]\label{thm:eulerjacobi}\evidence{External input}
+For $|q|<1$,
+\[
+\prod_{k\ge1}(1-q^k)=1+\sum_{k\ge1}(-1)^k\bigl(q^{P_k^-}+q^{P_k^+}\bigr),\qquad
+\prod_{k\ge1}(1-q^k)^3=\sum_{k\ge0}(-1)^k(2k+1)q^{T_k}.
+\]
+\end{theorem}
+
+The first identity is Euler's pentagonal number theorem
+\cite{EulerE244,EulerE541,Bell2005}, the second Jacobi's \cite{Jacobi1829}. In Lean the
+\emph{series} on the right are defined directly:
+\leanP{EulerPentagonal}{133}{eulerPentagonalSum} is
+$\sum_m\mathtt{pentCoeff}(m)b^{-m}$, where $\mathtt{pentCoeff}(0)=1$,
+$\mathtt{pentCoeff}(m)=(-1)^k$ for a chosen $k$ with $m\in\{P_k^-,P_k^+\}$, and $0$
+otherwise; and \leanP{EulerPentagonal}{355}{eulerCubeSum} is Jacobi's triangular series.
+Neither identity is formalized, and no Lean theorem below uses the signs of the
+coefficients: each holds for every coefficient sequence with the same support and the same
+absolute values. Every statement about the products $E_b$ and $E_b^3$ is obtained from the
+Lean statement about the series through \cref{thm:eulerjacobi}. Nothing about $E_b^2$ is
+formalized.
+
+\begin{proposition}[Lean statements for the series]\label{prop:leaneuler}\evidence{Kernel-verified}
+For every $b\ge2$: the pentagonal series has at most $2(\lfloor\sqrt{2M}\rfloor+1)$ nonzero
+coefficients up to $M$ and mass at most $M$; it lies in $K_b$ and
+$D_N(x+\cdot;b)-D_N(x;b)\to0$ for every real $x$; and for all $N\ge1$, $L\ge0$,
+$\varepsilon>0$,
+\[
+1-D_N\le2\varepsilon+\frac{2L(\lfloor\sqrt{2(N+L)}\rfloor+1)}N+\frac{N+L+2}{N\varepsilon b^L}.
+\]
+Jacobi's triangular series has at most $\lfloor\sqrt{2M}\rfloor$ nonzero coefficients up
+to $M$ and mass at most $4M$, and it lies in $K_b$ and preserves discrepancy under
+translation. For integer sequences $a,c$ the Cauchy convolution satisfies
+$\sum_{1\le m\le M}|(a*c)(m)|\le(|a(0)|+A(M))(|c(0)|+C(M))$ with $C$ the mass of $c$.
+\end{proposition}
+
+\begin{proof}
+\leanP{EulerPentagonal}{206}{pentagonal_supportCount_le},
+\leanP{EulerPentagonal}{184}{pentCoeff_absMass_le},
+\leanP{EulerPentagonal}{301}{eulerPentagonal_discrepancy_tendsto_one},
+\leanP{EulerPentagonal}{316}{eulerPentagonal_preserves_discrepancy},
+\leanP{EulerPentagonal}{283}{eulerPentagonal_finite_gap_upper},
+\leanP{EulerPentagonal}{372}{jacobiCube_supportCount_le},
+\leanP{EulerPentagonal}{409}{jacobiCube_absMass_le},
+\leanP{EulerPentagonal}{464}{eulerCube_discrepancy_tendsto_one},
+\leanP{EulerPentagonal}{476}{eulerCube_preserves_discrepancy} and
+\leanP{EulerPentagonal}{497}{cauchyConv_absMass_le}.
+\end{proof}
+
+With $L\approx\log_bN$ and $\varepsilon\approx N^{-1/2}$ the Lean bound has the correct order
+$(\log N)/\sqrt N$ but leading constant $2\sqrt2$, a factor $2\sqrt3$ above the sharp
+constant of \cref{thm:eulerdeficit}.
+
+\subsection{Digits and words of $E_b$}\label{subsec:eulerdigits}
+
+The two members of the pair $k$ share the sign $(-1)^k$, and
+$P_k^+-P_k^-=k$, $P_{k+1}^--P_k^+=2k+1$.
+
+\begin{theorem}[Digits]\label{thm:eulerdigits}\evidence{Paper proof}
+For $j\ge1$ put $a_j=P_{2j}^-=j(6j-1)$. Then
+\[
+E_b=0.(b-2)(b-1)\,0\,0\,B_1B_2B_3\cdots,\qquad B_j=1\,0^{2j}(b-1)^{4j}(b-2)(b-1)^{2j+1}0^{4j+2},
+\]
+where $B_j$ occupies the positions $a_j,\dots,a_{j+1}-1$ and has length $12j+5$.
+\end{theorem}
+
+\begin{proof}
+Group the positive pair $2j$ with the negative pair $2j+1$, and let $a=P_{2j}^-$,
+$c=P_{2j}^+$, $d=P_{2j+1}^-$, $e=P_{2j+1}^+$, so that $c-a=2j$, $d-c=4j+1$ and $e-d=2j+1$. For
+$1\le m<n$,
+\[
+1-b^{-m}-b^{-n}=\sum_{i=1}^{m-1}(b-1)b^{-i}+(b-2)b^{-m}+\sum_{i=m+1}^n(b-1)b^{-i}.
+\]
+Hence $b^{-a}+b^{-c}(1-b^{-(d-c)}-b^{-(e-c)})$ has digit $1$ at $a$, zeros on $(a,c]$,
+$b-1$ on $(c,d)$, $b-2$ at $d$, $b-1$ on $(d,e]$ and zeros elsewhere. The head
+$1-b^{-1}-b^{-2}$ is the case $c=0$, $m=1$, $n=2$. The digit supports are disjoint and all
+digits lie in $[0,b-1]$, so there are no carries, and the expansion does not end in
+$(b-1)^\infty$. Finally $a_{j+1}-a_j=12j+5$.
+\end{proof}
+
+\begin{corollary}[Missing words]\label{cor:missing}\evidence{Paper proof}
+Inside the blocks $B_j$ $(j\ge1)$ the maximal runs of zeros have lengths $2j$ and $4j+2$
+(plus the isolated zero at $P_{2j+1}^-$ when $b=2$), and the maximal runs of $b-1$ have
+lengths $4j$ and $2j+1$; the four-digit head $(b-2)(b-1)00$ contributes one further run of
+$b-1$ of length $1$ and one run $00$. In base
+$2$ the word $10^m1$ never occurs for odd $m\ge3$; for $b\ge3$ the word $11$ never occurs,
+and for $b\ge5$ the digits $2,\dots,b-3$ never occur. In particular $E_b$ is not
+disjunctive.
+\end{corollary}
+
+\begin{proof}
+Read off \cref{thm:eulerdigits}.
+\end{proof}
+
+Let $Z_w(N)$ be the number of $0\le n<N$ at which the base-$b$ word of length $L$ read
+from position $n+1$ equals $w$.
+
+\begin{theorem}[Word frequencies]\label{thm:eulerwords}\evidence{Paper proof}
+For $L,N\ge1$ and $w\in\{0^L,(b-1)^L\}$,
+\[
+\Bigl|Z_w(N)-\frac N2\Bigr|\le(2L+3)\sqrt{N/6}+3L^2+5L+7,
+\]
+and every other word of length $L$ occurs at most $(4L-2)\sqrt{N/6}+2L^2+12L+4$ times.
+\end{theorem}
+
+\begin{proof}
+For $0^L$, a valid start reads a window inside one zero run, and runs never merge across
+blocks because every block begins with $1$. Block $j$ contributes
+$g_j=(2j-L+1)^++(4j+3-L)^+$ valid starts (one more when $b=2$, $L=1$) among its $12j+5$
+starts. Put $\Delta(N)=Z(N)-N/2$. For $j\ge(L-1)/2$ the increment of $\Delta$ over block $j$
+is $\frac32-2L$ (or $\frac52-2L$), at most $2L$ in absolute value; each smaller block changes
+$\Delta$ by at most half its length, in total at most $\frac34L^2+\frac{11}4L$, and the first
+four digits contribute at most $2$. Inside block $J$ the function $\Delta$ drops by
+$\frac12$, rises over the first zero run to at most $J$, falls to $-2J-L-\frac12$, and
+rises again, so its excursion is at most $2J+L+\frac12$. If $N$ lies in block $J$ then
+$6J^2-J-1\le N$, so $J\le\sqrt{N/6}+\frac12$, and
+$|\Delta(N)|\le(2L+2)\sqrt{N/6}+0.75L^2+6.75L+5.5$. The word $(b-1)^L$ is handled in the
+same way, with block gain $(4j-L+1)^++(2j+2-L)^+$. Words other than $0^L$ and $(b-1)^L$
+start only at the
+$4L-2$ remaining starts of each block with $j\ge L/2$ and at the starts of smaller blocks.
+\end{proof}
+
+In base $2$ the word $(b-1)^1$ is the digit $1$, so $E_2$ is simply normal in base $2$;
+for $b\ge3$ the digits $1,\dots,b-2$ have frequency $O(N^{-1/2})$, so $E_b$ is not simply
+normal in base $b$.
+
+\subsection{The sharp deficit of $E_b$}\label{subsec:eulerdeficit}
+
+\begin{theorem}[Sharp deficit]\label{thm:eulerdeficit}\evidence{Lean-supported paper proof}
+For $b\ge2$ and $N\ge2$,
+\[
+1-D_N(E_b;b)=\sqrt{\tfrac23}\,\frac{\log_bN}{\sqrt N}+O_b\Bigl(\frac1{\sqrt N}\Bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+\emph{Upper bound.} $E_b-1$ is a sparse series with unit coefficients at the generalized
+pentagonal numbers. The kernel-verified counting lemma
+\leanP{Phase18Synthetic}{768}{sparse_farCount_le} (with $B=1$ and $\varepsilon=2b^{-w}$) and
+\cref{lem:deficit} give, for every $w\ge1$,
+\[
+1-D_N(E_b)\le4b^{-w}+\frac{w\,P(N+w)}N.
+\]
+This instantiation to the pentagonal positions is a written step. With
+$w=\lceil\log_b\sqrt N\rceil+1$ and \eqref{eq:pentcount}, the right side is
+$\sqrt{2/3}\log_bN/\sqrt N+O(N^{-1/2})$.
+
+\emph{Lower bound.} Fix $n$, let $p>n$ be the next generalized pentagonal number,
+$r=p-n$, $s=\pm1$ its sign and $g$ the gap after $p$. All later exponents are distinct and at
+least $r+g$, so $b^nE_b\equiv sb^{-r}+\theta\frac b{b-1}b^{-r-g}\pmod1$ with $|\theta|\le1$.
+If $r,g\ge2$ then $\dist{x_n}\ge b^{-r}(1-2b^{-g})\ge b^{-r}/2$. Fix $t\in(0,\frac18]$ and let
+$R$ be the largest integer with $b^{-R}/2>t$. All but at most $2R$ of the $P(N+1)$
+pentagonal numbers $p\le N$ have both neighbouring gaps at least $R$, and for them the shifts
+$p-r$, $2\le r\le R$, are distinct elements of $[0,N)$. Hence
+$E_N(t)\ge(P(N+1)-2R)(\log_b\frac1{2t}-2)$. Apply \cref{lem:separation} with
+$\varepsilon=1/N$. By the upper-bound count $E_N(1/N)=O(\sqrt N\log N)$, so the first branch
+is $1-o(1)$. In the second branch put $M=P(N+1)-2\log_bN=2\sqrt{2N/3}+O(\log N)$; then
+$\ell+E_N(\ell+1/N)/N\ge h(\ell)=\ell+\frac MN(\log_b\frac1{2(\ell+1/N)}-2)$, a convex
+function minimized at $\ell+1/N=M/(N\log b)$ with value at least
+$\frac MN(\log_b\frac{N\log b}{2M}-2)-\frac1N=\sqrt{2/3}\log_bN/\sqrt N-O_b(N^{-1/2})$. Arcs with
+$\ell+1/N>\frac18$ cost at least $\frac18-\frac1N$.
+\end{proof}
+
+\Cref{thm:B} follows from
+\cref{thm:eulerdigits,cor:missing,thm:eulerwords,thm:eulerdeficit,thm:sharp}.
+
+\paragraph{Numerical illustration.}
+Both signs matter: positive pairs place samples just above $0$ and negative pairs just
+below $1$. The second-order term $(1-D_N)N/P(N)-\frac12\log_bN$ oscillates because only
+integer distances $r$ occur. At $N=2^{20}$ the exact deficit is $0.016247$ in base $2$, a
+ratio $1.0188$ to the main term; this is a finite measurement.
+
+\subsection{The cube}\label{subsec:cube}
+
+\begin{theorem}[Cube]\label{thm:cube}\evidence{Paper proof}
+For every $b\ge2$:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item for $j\ge2$ the positions $(T_{2j-1},T_{2j+1}]$ of $E_b^3$ read the $2j$-digit
+zero-padded expansion of $4j$ followed by the $(2j+1)$-digit expansion of
+$b^{2j+1}-4j-3$;
+\item for $w\in\{0^L,(b-1)^L\}$, $Z_w(N)=N/2+O((L+\log N)\sqrt N)$, and every other word has
+frequency $0$;
+\item $E_b^3$ is disjunctive;
+\item $1-D_N(E_b^3;b)=\sqrt2\,\log_bN/\sqrt N+O_b(N^{-1/2})$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) By \cref{thm:eulerjacobi},
+$(4j+1)b^{-T_{2j}}-(4j+3)b^{-T_{2j+1}}=4jb^{-T_{2j}}+(b^{2j+1}-4j-3)b^{-T_{2j+1}}$, and the
+left side is less than $b^{-T_{2j-1}}$ because $4j+1<b^{2j}$ for $j\ge2$; the terms with
+$j\le1$ sum to a nonnegative multiple of $b^{-6}$.
+
+(b) Per block the zero run has length $2j-O(\log j)$, the $(b-1)$-run has length
+$2j+1-O(\log j)$, and $O(\log j)$ digits are spent on the expansions of $4j$ and of
+$4j+3$; the proof of \cref{thm:eulerwords} applies with an extra $O(\log j)$ per block.
+
+(c) Given a word $w$, let $W$ be the integer with digits $1w$. For $b^t\ge4$ the interval
+$[Wb^t,(W+1)b^t)$ contains a multiple $4j$ of $4$, whose expansion begins with $1w$, and (a)
+places it verbatim in the expansion; let $t\to\infty$.
+
+(d) \emph{Upper bound.} For $n\in[T_{k-1},T_k)$ let $r=T_k-n\in[1,k]$; then
+$|b^nE_b^3-(\text{integer})|\le2(2k+1)b^{-r}$, so
+$E_N(\varepsilon)\le\sum_{k:\,T_k-\min(R_k,k)<N}\min(R_k,k)$ with
+$R_k=\lceil\log_b(2(2k+1)/\varepsilon)\rceil$. With $\varepsilon=N^{-1/2}$ there are
+$\sqrt{2N}+O(\log N)$ such $k$, each with $R_k=\log_bN+O(1)$, and \cref{lem:deficit} gives
+$1-D_N\le\sqrt2\log_bN/\sqrt N+O(N^{-1/2})$.
+
+\emph{Lower bound.} Let $w_k$ be the number of digits of $2k+1$. For $w_k+2\le r\le k$,
+$\dist{x_{T_k-r}}\ge(2k+1)b^{-r}/2$. For $r\le w_k+1$ the sample lies within
+$\eta_k=4(2k+1)b^{-k-2}$ of $\pm(2k+1)b^{-r}\bmod1$, which is far from $0$ unless
+$(2k+1)\bmod b^r$ falls in a set of at most $2\tau b^r+2$ residues, $\tau=t+\eta_k$. As $k$
+runs over $K$ consecutive integers, each class modulo $b^r$ contains at most $2K/b^r+1$ of the
+odd numbers $2k+1$, so the exceptional pairs $(k,r)$ number $O(K(1+t\log K))$. With
+$K'=\max\{k:T_k\le N\}=\sqrt{2N}+O(1)$ and
+$\sum_{k\le K'}\log_b(2k+1)=K'\log_b(2K')-K'/\log b+O(\log K')$,
+\[
+E_N(t)\ge K'\Bigl(\log_b(2K')+\log_b\frac1t-C\Bigr)-O\bigl(K'(t\log K'+1)\bigr).
+\]
+\Cref{lem:separation} with $\varepsilon=1/N$ gives
+$1-D_N\ge\min_\ell\bigl(\ell/2+\frac{K'}N(\log_b(2K')+\log_b\frac1{\ell+1/N}-C)\bigr)-\frac1N$,
+the term $t\log K'$ being absorbed by $\ell/2$; the minimum, at $\ell\asymp K'/N$, is
+$\frac{K'}N(\log_bN-O(1))$.
+\end{proof}
+
+The constant $\sqrt2$ is the product of the insertion density $\sqrt{2N}/N$ and the
+$\log_bN$ shifts that each insertion spoils: $\frac12\log_bN$ for precision and
+$\frac12\log_bN$ for the digits of $2k+1$, which are spread around the circle.
+
+\subsection{The square}\label{subsec:square}
+
+Since $24P_k^\mp+1=(6k\mp1)^2$ and $(-1)^k=\chi_{12}(|6k\mp1|)$, where $\chi_{12}(m)=1$ for
+$m\equiv\pm1$ and $-1$ for $m\equiv\pm5\pmod{12}$,
+\[
+E(q)^2=\sum_{n\ge0}a_2(n)q^n,\qquad \eta(12\tau)^2=\sum_{n\ge0}a_2(n)q^{12n+1}=\sum_{m\ge1}c(m)q^m,
+\]
+where
+\[
+c(m)=\sum_{\substack{m_1,m_2\ge1\\ m_1^2+m_2^2=2m}}\chi_{12}(m_1)\chi_{12}(m_2).
+\]
+
+\begin{proposition}[Square, elementary bounds]\label{prop:squareelem}\evidence{Paper proof}
+If $a_2(n)\ne0$, then $12n+1$ is a sum of two squares. The mass satisfies
+$\sum_{n\le X}|a_2(n)|\le(P(X+1)+1)^2\le(2\sqrt{2X/3}+2)^2$, the support count is
+$\ll X/\sqrt{\log X}$, and $E_b^2\in K_b$ with $1-D_N(E_b^2;b)\ll_b\LL/\sqrt{\log N}$.
+\end{proposition}
+
+\begin{proof}
+$24n+2=m_1^2+m_2^2$ gives $12n+1=u^2+v^2$ with $u=(m_1+m_2)/2$, $v=(m_1-m_2)/2$. The mass bound
+counts pairs of pentagonal exponents. The integers that are sums of two squares have
+counting function $\ll x/\sqrt{\log x}$ by Landau's theorem (or by the Halberstam--Richert
+bound for multiplicative indicators), and $n\mapsto12n+1$ is affine. Apply
+\cref{thm:largermass} with $\kappa=\frac12$, $\beta=0$.
+\end{proof}
+
+\begin{theorem}[CM identification {\cite{Serre1985,Martin1996}}]\label{thm:etainput}\evidence{External input}
+$\eta(12\tau)^2$ is a normalized Hecke eigenform of weight one with complex multiplication
+by both $\Q(\sqrt{-1})$ and $\Q(\sqrt{-3})$; its projective Galois image is the Klein four
+group.
+\end{theorem}
+
+\begin{theorem}[Square]\label{thm:square}\evidence{Paper proof}
+Granting \cref{thm:etainput}:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item $c$ is multiplicative, $c(2^e)=c(3^e)=0$ for $e\ge1$, $c(p^e)=(e+1)\epsilon_p^e$ with
+$\epsilon_p=\pm1$ for $p\equiv1\pmod{12}$, and $c(p^{2e+1})=0$, $c(p^{2e})=(-\chi_{-4}(p))^e$
+for the other primes $p\ge5$. Hence $a_2(n)\ne0$ if and only if every prime
+$p\not\equiv1\pmod{12}$ divides $12n+1$ to an even power, and then
+$|a_2(n)|=\prod_{p\equiv1\,(12)}(v_p(12n+1)+1)$.
+\item The number $S_\eta(N)$ of $1\le n\le N$ with $a_2(n)\ne0$ satisfies
+$S_\eta(N)\sim C_\eta N/(\log N)^{3/4}$ with
+\begin{equation}\label{eq:Ceta}
+C_\eta=\frac{12}{\Gamma(1/4)}\Bigl(\frac{\pi^2\log(2+\sqrt3)}{54}
+\prod_{\substack{p\ge5\\p\not\equiv1\,(12)}}\Bigl(1-\frac1{p^2}\Bigr)^{-2}\Bigr)^{1/4}=2.418529\ldots,
+\end{equation}
+and $\sum_{n\le X}|a_2(n)|\asymp X/(\log X)^{1/2}$.
+\item For $p\equiv1\pmod{12}$ write $p=u^2+v^2$ with $u$ odd; then $c(p)=+2$ if $3\mid v$
+(that is, $p=x^2+36y^2$) and $c(p)=-2$ if $3\mid u$ ($p=4x^2+9y^2$). No congruence
+condition modulo a fixed integer determines $\epsilon_p$ for all large $p$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) A weight-one eigenform has $c(p)=\tr\rho(\mathrm{Frob}_p)$ for an odd representation
+$\rho$ with projective image $V_4$ \cite{DeligneSerre1974}. The three nontrivial elements of
+$V_4$ lift to trace-zero matrices, and Frobenius is central exactly when $p$ splits
+completely in $\Q(i,\sqrt3)$, that is, $p\equiv1\pmod{12}$, when $c(p)=\pm2$. The values at
+prime powers follow from $c(p^{e+1})=c(p)c(p^e)-\chi_{-4}(p)c(p^{e-1})$.
+
+(b) The support indicator is multiplicative, equal to $1$ at the primes $\equiv1\pmod{12}$
+and at all $p^2$ with $p\ge5$. Let $F(s)=\sum_{m\in\mathcal S}m^{-s}$ for the set
+$\mathcal S$ of such $m$. At a prime $p\ge5$, $p\not\equiv1\pmod{12}$, two of the four
+characters modulo $12$ take the value $1$ and two the value $-1$, so
+\[
+F(s)^4=L(s,\chi_0^{(12)})L(s,\chi_{-4}^{(12)})L(s,\chi_{-3}^{(12)})L(s,\chi_{12})
+\prod_{\substack{p\ge5\\p\not\equiv1\,(12)}}(1-p^{-2s})^{-2}.
+\]
+With $L(1,\chi_{-4})=\pi/4$, $L(1,\chi_{-3})=\pi/(3\sqrt3)$, $L(1,\chi_{12})=\log(2+\sqrt3)/\sqrt3$
+and the Euler factors of the imprimitive characters at $2$ and $3$,
+$\lim_{s\to1^+}(s-1)F(s)^4=\frac{\pi^2\log(2+\sqrt3)}{54}\prod(1-p^{-2})^{-2}$. The
+Selberg--Delange theorem \cite[II.5]{Tenenbaum} with $z=\frac14$ gives
+$\cnt\mathcal S\cap[1,x]\sim\lambda_0x(\log x)^{-3/4}$ with
+$\lambda_0=\lim(s-1)^{1/4}F(s)/\Gamma(1/4)$, and $S_\eta(N)=\cnt\mathcal S\cap[1,12N+1]-1$
+gives $C_\eta=12\lambda_0$. For $|c|$, $\sum_{p\le x}|c(p)|/p=\frac12\log\log x+O(1)$ and
+$|c(p^e)|\le e+1$, so Wirsing's theorem \cite{Wirsing1961} and Shiu's bound \cite{Shiu1980}
+give the order of the mass.
+
+(c) Exactly one of $u,v$ is divisible by $3$. The representations $2p=m_1^2+m_2^2$ with
+$m_i\ge1$ are $(u+v,|u-v|)$ and its swap, so $c(p)=2\chi_{12}(u^2-v^2)$, and
+$\chi_{12}=\chi_{-4}\chi_{-3}$ with $u^2-v^2\equiv1\pmod4$. Modulo $3$, $u^2-v^2\equiv1$ if
+$3\mid v$ and $\equiv-1$ if $3\mid u$. The reduced forms of discriminant $-144$ show
+$\Cl(-144)\cong\Z/4$, and $p=x^2+36y^2$ if and only if $p$ splits completely in the ring
+class field $H$ of $\Z[6i]$, whose Galois group over $\Q$ is dihedral of order $8$
+\cite[Thm.~9.4, Lemma~9.3]{Cox}. If $\epsilon_p$ depended only on $p\bmod Q$, then, up to
+finitely many primes, every prime splitting completely in $\Q(\zeta_{Q'})$,
+$Q'=\mathrm{lcm}(12,Q)$, would split completely in $H$, and Bauer's theorem
+\cite[VII.13.9]{Neukirch} would give $H\subseteq\Q(\zeta_{Q'})$, which is impossible because
+$\mathrm{Gal}(H/\Q)$ is nonabelian.
+\end{proof}
+
+At $N=10^6$ there are $307{,}819$ nonzero coefficients $a_2(n)$, $153{,}878$ of them negative;
+the ratio of $S_\eta(N)$ to the two-term Selberg--Delange approximation is $1.00576$. These are
+finite measurements.
+
+\subsection{Polynomials, rational scalings and unary quadratic series}\label{subsec:poly}
+
+\begin{theorem}[Polynomials and scalings]\label{thm:polyscal}\evidence{Lean-supported paper proof}
+\leavevmode
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $P=b^{-j}\sum_{i\le3}q_ix^i$ with $j\ge0$ and $q_i\in\Z$, then $P(E_b)\in K_b$ and
+$1-D_N(P(E_b))\le\sum_{i=1}^3|q_i|(1-D_N(E_b^i))+j/N$.
+\item For $r\in\{1,3\}$ and a reduced fraction $a/d$, $(a/d)E_b^r\in K_b$ if and only if
+$a/d\in\Z[1/b]$.
+\item If $b$ is odd and $a$ is odd, then $D_N(\frac a2E_b^2;b)\to\frac23$; in particular
+$\frac a2E_b^2\notin K_b$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) is \cref{lem:linear} with \cref{thm:eulerdeficit,thm:cube,prop:squareelem}.
+
+For (b) and (c) we use the residue-density test of \cite{DiscrepancyCompanion}: if $z\in K_b$
+concentrates at the fixed point $0$ and $k_n$ is an integer nearest to $b^nz$, then
+$(a/d)z\in K_b$ if and only if $z/d\in K_b$, if and only if some residue modulo $d$ carries
+density one among the $k_n$. Since division by powers of $b$ preserves $K_b$
+(\cref{lem:linear}) and $K_b$ is a group, it suffices to show $z/\ell\notin K_b$ for every
+prime $\ell\nmid b$. Let $I_n=\sum_{m\le n}a(m)b^{n-m}$ be the integral head of
+$z=F_b(a)$. By the transfer bounds, $k_n=I_n$ outside a set of density zero. Between
+consecutive support points $I_{n+1}=bI_n$, and at a support point $p$,
+$I_p=bI_{p-1}+a(p)$. Multiplication by $b$ permutes $\Z/\ell$, so on a run between support
+points the residue of $I_n$ either stays at a fixed residue $r_0$ with $br_0\equiv r_0$ or
+equals $r_0$ at most at every other position. Two adjacent runs both fixed at $r_0$ force
+$\ell\mid a(p)$ at the support point between them.
+
+For $E_b$, $a(p)=\pm1$, so no two adjacent runs are fixed at $r_0$; the runs alternate in
+length between $k$ and $2k+1$, so any family of pairwise nonadjacent runs has density at most
+$\frac23$, and no residue has density one. For $E_b^3$ the runs $[T_k,T_{k+1})$ have length
+$k+1$ and the support point $T_{k+1}$ carries $\pm(2k+3)$. Among $k\in[K,2K]$, at most
+$K/\ell+O(1)$ have $\ell\mid2k+3$; for each other $k$ one of the two runs meeting at
+$T_{k+1}$ is not fixed at $r_0$, and each run serves at most two values of $k$. These runs
+have lengths in $[K+1,2K+2]$ and lie in $[T_K,T_{2K+2})$, and each of them has at least
+half of its positions away from $r_0$, so a proportion $\ge(1-1/\ell)/16-o(1)>0$ of
+$[T_K,T_{2K+2})$ is not at $r_0$. This proves (b).
+
+(c) Coefficientwise $E(q)^2\equiv E(q^2)\pmod2$, so $a_2(n)$ is odd exactly when $n=2p$ with $p$
+a generalized pentagonal number or $p=0$. For odd $b$, $I_n\equiv I_{n-1}+a_2(n)\pmod2$, so
+$I_n\bmod 2$ is the parity of $\cnt\{p\ge1:2p\le n\}$. The runs between consecutive points
+$2p$ have lengths $2k$ and $2(2k+1)$ and carry alternating parities, with weights $\frac13$
+and $\frac23$. The orbit of $\frac a2E_b^2$ therefore concentrates at the two points $0$ and
+$\frac12$ with masses $\frac13$ and $\frac23$ (in some order), and $D_N\to\frac23$.
+\end{proof}
+
+The rational-scaling criterion for $E_b^2$ and odd primes $\ell$ is
+\cref{thm:squarescaling}. Explicit limits: $\{2^nE_2/3\}$ has limit law
+$\frac16\delta_0+\frac5{12}(\delta_{1/3}+\delta_{2/3})$, so $D_N(\frac13E_2;2)\to\frac12$,
+and $D_N(\frac12E_3;3)\to\frac23$; the complete word laws are in \cref{thm:automaton}.
+
+Call $F=\sum_{t\in T}\epsilon(t)b^{-f(t)}$ a \emph{unary quadratic series} if $T\subseteq\Z$,
+$|\epsilon(t)|\le B$ and $f(t)=(\alpha t^2+\beta t+\gamma)/\delta$ is a nonnegative integer
+for $t\in T$, with integers $\alpha>0$, $\delta\ge1$. Examples are $E_b-1$,
+$\Theta_3(1/b)$, $\sum_{t\ge0}b^{-t(t+1)}$ and Rogers' false theta series
+$\sum_{t\ge0}(-1)^tb^{-t(t+1)/2}$.
+
+\begin{theorem}[Quadratic polynomials in unary quadratic series]\label{thm:unary}\evidence{Lean-supported paper proof}
+For unary quadratic series $F_1,\dots,F_s$, every polynomial of total degree at most $2$
+in them with coefficients in $\Z[1/b]$ lies in $K_b$, with
+$1-D_N\ll\LL/\sqrt{\log N}$.
+\end{theorem}
+
+\begin{proof}
+Linear terms have $S(X)=O(\sqrt X)$ and bounded coefficients. For a product $F_iF_j$ the
+coefficient of $b^{-m}$ is $\sum_{f_i(t)+f_j(u)=m}\epsilon_i(t)\epsilon_j(u)$, and
+$\delta_i\delta_jm=g(t,u)$ is an integral binary quadratic polynomial with positive definite
+quadratic part. By the shifted-lattice reduction of \cref{prop:extensions}(a) its support
+has counting function $\ll X/\sqrt{\log X}$, and the mass is $O(X)$ by the area of an ellipse
+(\cref{prop:leaneuler} gives the convolution mass bound in Lean). Apply
+\cref{thm:largermass} and \cref{lem:linear}.
+\end{proof}
+
+Degree $3$ is out of reach: $\Theta_3(1/b)^3=\sum r_3(n)b^{-n}$ has support
+$\{n\ne4^a(8k+7)\}$ of density $\frac56$ by Legendre's theorem. $E_b^3$ is the exception
+because Jacobi's identity collapses the triple convolution onto the triangular numbers.
+
+\section{Exact constants in every radix}\label{sec:radix}
+
+In this section $LL=\log\log N$, $\ell_N=\log_b\log N$, and the external inputs are the
+following classical theorems.
+
+\begin{theorem}[Mean values of multiplicative functions]\label{thm:meanvalues}\evidence{External input}
+\leavevmode
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item \textup{(Shiu, Halberstam--Richert)} For multiplicative $g\ge0$ with $g(p^e)\le A^e$ and
+$g(n)\ll_\epsilon n^\epsilon$, $\sum_{n\le x}g(n)\ll\frac x{\log x}\exp\sum_{p\le x}g(p)/p$
+\cite[Thm.~1]{Shiu1980}, \cite{HalberstamRichert}.
+\item \textup{(Wirsing, Selberg--Delange)} If moreover $\sum_{p\le x}g(p)\log p\sim\tau x$ with
+$\tau>0$ and $g(p^\nu)\le AB^\nu$, $B<2$, then
+$\sum_{n\le x}g(n)\sim\frac{e^{-\gamma\tau}}{\Gamma(\tau)}\frac x{\log x}\prod_{p\le x}\sum_\nu g(p^\nu)p^{-\nu}$
+\cite{Wirsing1961}; for sets defined by congruence conditions or by Chebotarev conditions in a
+fixed field, the Selberg--Delange method gives the same with power-saving refinements and
+finitely many local conditions \cite[II.5]{Tenenbaum}.
+\item \textup{(Brun)} The upper-bound sieve \cite[Thm.~2.2]{HalberstamRichert}: let a set of
+$X$ consecutive integers be sifted, for each prime $p$ of a set $\mathcal P$ with
+$z_0<p\le z$, by $\omega(p)$ residue classes, where $0\le\omega(p)\le\min(A,p-1)$,
+$\sum_{w\le p<w',\,p\in\mathcal P}\omega(p)\log p/p\le\kappa_0\log(w'/w)+A$ for
+$2\le w\le w'$, and the remainders satisfy $|R_d|\le\omega(d)$. If $z_0<z\le X$, the
+number of survivors is $\ll_{\kappa_0,A}X\prod_{z_0<p\le z,\,p\in\mathcal P}(1-\omega(p)/p)$.
+\item \textup{(Landau, Bernays, Mertens)} $\cnt\{n\le x:r_Q(n)>0\}\sim C_Qx/\sqrt{\log x}$ for
+every positive definite primitive integral binary $Q$
+\cite{Landau1908,Bernays1912,BMO2011}; and Mertens' theorem holds in arithmetic progressions
+and in Chebotarev classes of a fixed Galois extension.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Multiplicative Lambert series of real characters}\label{subsec:lambertradix}
+
+Let $\chi$ be a real nonprincipal character modulo $q$, $c=1*\chi$ and
+$S(N)=\cnt\{n\le N:c(n)>0\}\sim C_\chi N/\sqrt{\log N}$, where
+\[
+C_\chi=\Bigl(\frac{L(1,\chi)}{\pi}\prod_{\chi(p)=-1}\Bigl(1-\frac1{p^2}\Bigr)^{-1}\prod_{p\mid q}\Bigl(1-\frac1p\Bigr)^{-1}\Bigr)^{1/2},
+\]
+as follows from $F(s)^2=\zeta(s)L(s,\chi)\prod_{\chi(p)=-1}(1-p^{-2s})^{-1}\prod_{p\mid q}(1-p^{-s})^{-1}$
+for $F(s)=\sum_{c(n)>0}n^{-s}$ and \cref{thm:meanvalues}(b). For $\chi=\chi_{-4}$,
+$C_\chi=K=2^{-1/2}\prod_{p\equiv3\,(4)}(1-p^{-2})^{-1/2}=0.76422365\ldots$ (Landau--Ramanujan).
+Locally $c(p^e)=1$ for $p\mid q$, $e+1$ if $\chi(p)=1$ (split), and $(1+(-1)^e)/2$ if
+$\chi(p)=-1$ (inert), so $c\ge0$.
+
+\begin{lemma}[First moment]\label{lem:firstmoment}\evidence{Lean-supported paper proof}
+$\sum_{n\le N,\,c(n)>0}\log c(n)=\bigl(\frac{\log2}2+o(1)\bigr)S(N)\,LL$.
+\end{lemma}
+
+\begin{proof}
+For a split prime $p$, $n=p^em$ with $p\nmid m$ is supported if and only if $m$ is, so
+\[
+\sum_{\substack{n\le N\\c(n)>0}}\log c(n)=\sum_{\chi(p)=1}\sum_{e\ge1}\log(e+1)\Bigl(S\bigl(\tfrac N{p^e}\bigr)-S\bigl(\tfrac N{p^{e+1}}\bigr)\Bigr);
+\]
+this exact identity for every multiplicative function is
+\leanP{RadixWidthLaw}{327}{sum_log_eq_sum_primePow}. Fix $\theta\in(0,\frac12)$. The terms
+$e=1$, $p\le N^{1-\theta}$ contribute
+$\log2\,(C_\chi+o(1))\frac N{\sqrt{\log N}}\sum_{\chi(p)=1,\,p\le N^{1-\theta}}\frac1{p\sqrt{1-\log p/\log N}}$,
+and partial summation with Mertens' theorem in progressions evaluates the sum as
+$\frac12\int_{\log3/\log N}^{1-\theta}\frac{du}{u\sqrt{1-u}}+O_\theta(1)=\frac12LL+O(1)$. The
+primes $N^{1-\theta}<p\le N$ contribute $\ll\sqrt\theta\,N/\sqrt{\log N}$, and the prime powers
+$e\ge2$ contribute $O(S(N))$. This gives the upper bound; the lower bound follows from
+\cref{lem:concentration}.
+\end{proof}
+
+\begin{lemma}[Concentration]\label{lem:concentration}\evidence{Paper proof}
+For each $\varepsilon>0$ there is $c(\varepsilon)>0$ with
+$\cnt\{n\le N:c(n)>0,\ |\log c(n)-\frac{\log2}2LL|>\varepsilon LL\}\ll S(N)(\log N)^{-c(\varepsilon)}$.
+\end{lemma}
+
+\begin{proof}
+For $|t|\le1$, the multiplicative function $\ind_{c>0}c^t$ has split-prime value $2^t$ on
+primes of density $\frac12$, so \cref{thm:meanvalues} gives
+$\mathbb E[c^t\mid c>0]\asymp(\log N)^{(2^t-1)/2}$. Chebyshev's inequality with small $t>0$
+bounds the upper tail, since $\frac12(2^t-1)-t(\frac{\log2}2+\varepsilon)<0$ for small $t$. For
+the lower tail use $c(n)\ge2^{\omega_{\rm split}(n)}$ and $z^{\omega_{\rm split}}$ with
+$0<z<1$: the count is $\ll S(N)(\log N)^{h(z)}$ with
+$h(z)=\frac{z-1}2-(\frac12-\varepsilon')\log z$, and $h(1)=0$, $h'(1)=\varepsilon'>0$.
+\end{proof}
+
+\begin{lemma}[Radix valuations]\label{lem:valuations}\evidence{Lean-supported paper proof}
+Let $V_b(n)=v_b(c(n))$, $U_b(n)=c(n)/b^{V_b(n)}$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $b=2^k$, then $U_b(n)\le2^{k-1}\,\mathrm{odd}(c(n))$ and
+$\sum_{n\le x}\mathrm{odd}(c(n))\ll x/\sqrt{\log x}$; hence the widths $u_b(n)$ have bounded
+mean on the support.
+\item If $b$ is not a power of $2$ and $q_0$ is an odd prime dividing $b$, then
+$V_b(n)\le v_{q_0}(c(n))=\sum_{p^e\|n,\ \chi(p)=1}v_{q_0}(e+1)$, every nonzero term has
+$e\ge q_0-1\ge2$, and $\sum_{n\le x,\,c(n)>0}v_{q_0}(c(n))\ll x/\sqrt{\log x}$.
+\item In every radix, $\cnt\{n\le x:V_b(n)>H\}\le b^{-H}\sum_{n\le x}c(n)\ll xb^{-H}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) uses \cref{thm:meanvalues}(a) for $\mathrm{odd}(c)$, whose split-prime value is $1$.
+(b) $q_0\mid e+1$ forces $e\ge q_0-1$ (the finite step is the declaration
+\decl{padicVal_succ_pos_imp} of \texttt{RadixWidthLaw}); sum the prime-power decomposition of
+\cref{lem:firstmoment} over $e\ge2$. (c) is Markov's inequality with $b^{V_b}\le c$ and the
+hyperbola bound $\sum_{n\le x}c(n)=L(1,\chi)x+O(\sqrt x)$.
+\end{proof}
+
+\begin{lemma}[Pairs]\label{lem:pairs}\evidence{Paper proof}
+Uniformly for $1\le|h|\le\sqrt x$, $\cnt\{n\le x:c(n)c(n+h)>0\}\ll x\log\log x/\log x$.
+\end{lemma}
+
+\begin{proof}
+If $n,n+h$ are supported and an inert prime $p\nmid h$ divides $n(n+h)$, then $p^2$ divides
+$n$ or $n+h$. Discard the $n$ with $p^2\mid n(n+h)$ for some inert $p>z_0=(\log x)^2$
+($\le2x/z_0+2\sqrt x$ of them). The rest avoid two classes modulo every inert
+$p\in(z_0,\sqrt x]$, $p\nmid h$; Brun's sieve in dimension $1$ and Mertens give
+$\ll x\log z_0/\log x$. Dropping the primes $p\mid h$ costs a factor
+$(1-2/z_0)^{-\log_2x}\to1$.
+\end{proof}
+
+\begin{theorem}[Lambert series in every radix]\label{thm:lambertradix}\evidence{Lean-supported paper proof}
+For every real nonprincipal $\chi$ and every $b\ge2$,
+\[
+1-D_N(L_\chi(b);b)\sim
+\begin{cases}\dfrac{C_\chi}{2\log b}\dfrac{LL}{\sqrt{\log N}},&b=2^k,\\[2ex]
+\dfrac{C_\chi(1+\log2)}{2\log b}\dfrac{LL}{\sqrt{\log N}},&\text{otherwise.}\end{cases}
+\]
+The same holds for $\Theta_3(1/b)^2=1+4L_{\chi_{-4}}(b)$ with $\chi=\chi_{-4}$.
+\end{theorem}
+
+\begin{proof}
+Apply \cref{thm:widthlaw} with $B=0$, $\kappa=\frac12$; then
+$\lambda_N=\frac12\ell_N-\log_bC_\chi+o(1)$ and
+$\rho_N\lambda_N\sim C_\chi LL/(2\log b\sqrt{\log N})$. (W0) and (W1) hold by the support
+asymptotic, the hyperbola bound and $c(n)\le\tau(n)$. (W2) follows by summing
+\cref{lem:pairs} over $|h|\le H_N=O(\ell_N)$, which removes $O(N\ell_NLL/\log N)=o(S(N))$
+indices. For $b=2^k$, (W3) holds with $\omega=0$ by \cref{lem:valuations}(a). Otherwise
+$u_b(n)\in[\log_bc(n)-V_b(n),\log_bc(n)-V_b(n)+1]$, so \cref{lem:firstmoment} gives
+$W(N)\le(\log2+o(1))S(N)\lambda_N$, while \cref{lem:valuations}(b) and \cref{lem:concentration}
+give the lower tail; so (W3) holds with $\omega=\log2<1$. For $\Theta_3(1/b)^2$, multiplication
+by $4$ changes $V_b,U_b,u_b$ by $O(1)$ and adding $1$ changes nothing, so the proof applies
+verbatim; in base $2$, $|D_N(\Theta_3(1/2)^2)-D_N(L_{\chi_{-4}}(2))|\le2/N$.
+\end{proof}
+
+In base $2$ and for $\chi_{-4}$ the constant is $K/(2\log2)$. The cost decomposition is
+transparent: every isolated source needs $\frac12\log_b\log N$ digits of precision, and when the
+radix cannot absorb the powers of $2$ in $c(n)\approx2^{\omega_{\rm split}(n)}$ the coefficient
+itself occupies another $\frac{\log2}2\log_b\log N$ digits. At $N=2^{17}$ the exact deficit of
+$L_{\chi_{-4}}(b)$ is $0.59476$, $0.59045$, $0.39883$ for $b=2,3,4$; since $\log\log N<2.5$
+there, these finite values do not test the constants.
+
+\subsection{The prime-density class}\label{subsec:primedensity}
+
+Let $c$ be multiplicative with $0\le c(p^e)\le e+1$, $c(p)=2$ on a set of primes $\mathcal S$
+of natural density $\delta\in(0,1)$ with
+$\sum_{p\le x,\,p\in\mathcal S}1/p=\delta\log\log x+M_{\mathcal S}+o(1)$, and $c(p)=0$ at the
+other primes not dividing a fixed modulus $q_0$. Put $\kappa=1-\delta$, let
+$S(N)\sim C_fN/(\log N)^\kappa$ be the support count (\cref{thm:meanvalues}(b)),
+$L_f(b)=\sum_nc(n)b^{-n}$, and
+\begin{equation}\label{eq:PhiN}
+\Phi_N=\frac{C_f\log\log N}{\log b\,(\log N)^\kappa},\qquad \omega=\frac{\delta\log2}\kappa .
+\end{equation}
+For $b=2^sb'$ with $b'$ odd let $\beta_b=\log b/\log b'$ ($\beta_b=1$ for odd $b$,
+$\beta_b=\infty$ for $b=2^k$), $\gamma=1-1/\beta_b$, and
+$g_\beta(y)=\sum_{i\ge0}(y\gamma^i/\beta-1)_+$, with $g_1(y)=(y-1)_+$.
+
+\begin{lemma}[$2$-adic run barrier]\label{lem:runbarrier}\evidence{Paper proof}
+Let $b=2^sb'$ with $s\ge1$, $b'>1$ odd, and $U\ge1$ with $b\nmid U$. If the base-$b$ digits of
+$U$ in positions $s_0,\dots,s_0+\ell-1$, with $\ell\ge1$ (position $0$ is the units digit), are all $0$ or all
+$b-1$, and $s_0+\ell\le v_2(U)/s$, then $s_0\ge1$ and $\ell<s_0/(\beta_b-1)$.
+\end{lemma}
+
+\begin{proof}
+Put $J=s_0+\ell$ and $r=U\bmod b^J$. Since $sJ\le v_2(U)$, both $r$ and $b^J-r$ are positive
+multiples of $2^{sJ}$, so $\min(r,b^J-r)\ge2^{sJ}$. With zero digits $r<b^{s_0}$; with digits
+$b-1$, $b^J-r=b^{s_0}-(U\bmod b^{s_0})<b^{s_0}$, and $s_0=0$ would give $b^J-r=1$. Hence
+$2^{sJ}<b^{s_0}$, that is, $\ell s\log2<s_0\log b'$, and $s\log2/\log b'=\beta_b-1$.
+\end{proof}
+
+\begin{lemma}[Packing]\label{lem:packing}\evidence{Paper proof}
+Let $\beta>1$, $\kappa_0>0$, and let $[s_i,s_i+\ell_i)$ be pairwise disjoint intervals in
+$[0,x]$ with $0<\ell_i<s_i/(\beta-1)$. Then $\sum_i(\ell_i-\kappa_0)_+\le\kappa_0g_\beta(x/\kappa_0)$,
+and this is sharp.
+\end{lemma}
+
+\begin{proof}
+Scale to $\kappa_0=1$. The function $g=g_\beta$ is continuous, nondecreasing, $1$-Lipschitz
+and satisfies $g(y)=(y/\beta-1)_++g(\gamma y)$. Induct on the number of intervals: let
+$[s,s+\ell)$ have the largest left endpoint; the others contribute at most $g(s)$, and
+$\ell<(x-\ell)/(\beta-1)$ gives $\ell<x/\beta$. If $\ell\le1$ the total is at most $g(x)$;
+otherwise it is at most $(\ell-1)+g(x-\ell)\le x/\beta-1+g(\gamma x)=g(x)$, because
+$\ell\mapsto\ell+g(x-\ell)$ is nondecreasing. Geometric families with tops $\gamma^ix$ show
+sharpness.
+\end{proof}
+
+\begin{theorem}[Prime-density class]\label{thm:primedensity}\evidence{Lean-supported paper proof}
+\leavevmode
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $b=2^k$, then $1-D_N(L_f(b);b)\sim\kappa\Phi_N$ for every $\delta\in(0,1)$.
+\item If $b$ is not a power of $2$, then unconditionally
+\[
+\kappa\bigl(1+\omega-g_{\beta_b}(\omega)\bigr)\le\liminf_N\frac{1-D_N}{\Phi_N}\le\limsup_N\frac{1-D_N}{\Phi_N}\le\kappa+\delta\log2 .
+\]
+In particular $1-D_N\sim(\kappa+\delta\log2)\Phi_N$ whenever
+$\delta\le\delta_b^*=\beta_b/(\beta_b+\log2)$. For odd $b$, $\delta_b^*=1/(1+\log2)=0.590616\ldots$
+and the lower value is $\kappa(1+\min(\omega,1))$; for $b=6,10,12$, $\delta_b^*=0.701754$,
+$0.673632$, $0.765433$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The changes to the proof of \cref{thm:lambertradix} are the following. The mass is
+$\ll X(\log X)^{2\delta-1}$ by \cref{thm:meanvalues}(a), so (W1) holds with
+$B=\max(0,2\delta-1)$. The pair sieve uses the primes outside $\mathcal S$ in dimension $2\kappa$
+and gives $\ll x(\log\log x)^{2\kappa}/(\log x)^{2\kappa}$ pairs per shift; summed over
+$|h|\le H$ this is $o(S(N))$ for every $H\le(\log N)^\kappa/(LL)^{2\kappa+1}$, so distinct
+sources are isolated far beyond the radius needed, at every density. On the support
+$\log c(n)=\omega_{\mathcal S,1}(n)\log2+\log M(n)$, where $\omega_{\mathcal S,1}$ counts primes of
+$\mathcal S$ with exponent exactly $1$ and $M(n)=\prod_{p^e\|n,\,e\ge2\text{ or }p\mid q_0}c(p^e)$ is
+tight on the support; the first moment and concentration go through with centre $\delta\log2$
+and weight $(1-\log p/\log N)^{-\kappa}$. For odd $q_0\mid b$, $v_{q_0}(c(p))=0$, so
+\cref{lem:valuations} holds verbatim. Hence (W3) holds with $\omega=0$ for $b=2^k$ and with
+$\omega=\delta\log2/\kappa$ otherwise, and $\lambda_N=\kappa\ell_N+O(1)$; \cref{thm:widthlaw}
+gives (a), the upper bound in (b), and the lower value $\kappa(1+\min(\omega,1))$.
+
+For even composite $b$, add to the good set the condition (G7) $v_2(U(n))\ge s\,u(n)$. It holds
+whenever $\omega_{\mathcal S,1}(n)\log b'/\log b\ge s(\log_bM(n)+1)$, which fails for $o(S(N))$
+indices by tightness of $M$ and the lower tail of $\omega_{\mathcal S,1}$. For a good source,
+an internal position $\lambda'<j\le u$ with $\dist{Y/b^j}<\eta$ forces the $\lambda'$ digits of
+$U$ below position $j$ to be all $0$ or all $b-1$; a maximal such run of length $\ell$ yields at
+most $\ell-\lambda'+1$ near positions. By (G7) every run lies below $v_2(U)/s$, so
+\cref{lem:runbarrier,lem:packing} (with $\kappa_0=\lambda'-1$, $x=u$) bound the number of near
+internal positions by $(\lambda'-1)g_\beta(u/(\lambda'-1))$. Each good source therefore marks at
+least $(1+\omega-g_\beta(\omega+\varepsilon)-2\varepsilon-o(1))\lambda_N$ far shifts in its
+arrival-free interval, and \cref{lem:circle} concludes as in \cref{thm:widthlaw}. Finally
+$g_\beta(\omega)=0$ if and only if $\omega\le\beta$, that is, $\delta\le\delta_b^*$.
+\end{proof}
+
+For odd $b$ and $\delta>\delta^*$ the exact constant is decided by how often the integers
+$M\cdot2^m$ have base-$b$ runs of $0$ or of $b-1$ whose length is a fixed proportion of their
+number of digits, for $m$ in windows of width $\asymp\sqrt{LL}$; linear forms in logarithms and
+$q_0$-adic logarithms exclude only $o(\lambda_N)$ positions, and we know no result that decides
+it.
+
+\subsection{Euler's square in every radix}\label{subsec:squareradix}
+
+\begin{theorem}[Euler's square]\label{thm:squareradix}\evidence{Lean-supported paper proof}
+Granting \cref{thm:etainput},
+\[
+1-D_N(E_b^2;b)\sim\begin{cases}\dfrac{3C_\eta}{4\log b}\dfrac{LL}{(\log N)^{3/4}},&b=2^k,\\[2ex]
+\dfrac{C_\eta(3+\log2)}{4\log b}\dfrac{LL}{(\log N)^{3/4}},&\text{otherwise.}\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+Apply \cref{thm:widthlaw} to $a_2$ with $\kappa=\frac34$, $B=0$. (W1) follows from
+\cref{thm:square}(b) and $|a_2(n)|\le\tau(12n+1)$. For (W2), if $a_2(n)a_2(n+h)\ne0$ then
+$12n+1$ and $12n+12h+1$ lie in $\mathcal S$; discard the $n$ for which $p^2$ divides either
+number for some $p>z_0=(\log N)^2$ with $p\not\equiv1\pmod{12}$, and sift the rest by two
+classes modulo each such $p\le\sqrt N$, $p\nmid h$; these primes have density $\frac34$, and
+Brun's sieve in dimension $\frac32$ gives $\ll N(\log z_0/\log N)^{3/2}$ uniformly in $h$ (or
+use \cref{thm:S}). For (W3), $\log|a_2(n)|=\sum_{p^e\|12n+1,\,p\equiv1\,(12)}\log(e+1)$ has first
+moment $(\frac{\log2}4+o(1))S_\eta(N)LL$ by the decomposition of \cref{lem:firstmoment} with
+weight $(1-\log p/\log x)^{-3/4}$; for $b=2^k$ the remainder is at most
+$2^{k-1}\mathrm{odd}(|a_2|)$, of bounded mean, and for odd $q_0\mid b$, $q_0\mid e+1$ forces
+$e\ge2$. So $\omega=0$ for $b=2^k$ and $\omega=\frac{\log2/4}{3/4}=\frac{\log2}3<1$ otherwise.
+Half of the coefficients are negative; by \cref{rem:widthlaw} the signs are harmless.
+\end{proof}
+
+\subsection{Binary quadratic forms}\label{subsec:forms}
+
+Let $Q=gQ_0$ with $Q_0$ primitive of discriminant $\Delta_0$, $r_Q(n)=r_{Q_0}(n/g)$, and
+$S_Q(N)\sim C_QN/\sqrt{\log N}$. Put $\Psi_N=C_QLL/(2\log b\sqrt{\log N})$. We use: the mass
+$\sum_{n\le X}r_Q(n)=2\pi X/\sqrt{|\Delta|}+O(\sqrt X)$ (\cref{lem:lattice}); the pointwise bound
+$r_{Q_0}(m)\le C\,2^{\omega_{\rm split}(m)}\prod_{p^e\|m}(\lfloor e/2\rfloor+1)=m^{o(1)}$; the
+support condition $v_p(n)$ even whenever $(\Delta_0/p)=-1$ (\cref{lem:bernays}); and, for
+fundamental $\Delta$ and $Q$ in the ideal class $C$, $r_Q=w\,a_C$, where $a_C(n)$ counts ideals
+of norm $n$ in $C$ and $\sum_Ca_C=1*\chi_\Delta$.
+
+\begin{proposition}[Lower bound for every form]\label{prop:formlower}\evidence{Lean-supported paper proof}
+For every positive definite integral binary $Q$ and every $b\ge2$,
+$1-D_N(\Theta_Q(1/b);b)\ge(1-o(1))\,\frac{S_Q(N)}N\cdot\frac12\log_b\log N$.
+\end{proposition}
+
+\begin{proof}
+Run the lower-bound half of \cref{thm:widthlaw} with $\rho_N=S_Q(N)/N$, $H_V=\lceil2\ell_N\rceil$,
+$R=\lceil\lambda_N+2\ell_N\rceil$ and conditions (G1)--(G4) only. (G1) fails for
+$\ll N/(\log N)^2$ indices by the linear mass. For (G2), two sources $gj<gj'$ within distance
+$H$ have $j,j+h'\in\{v_p\text{ even at inert }p\}$ with $1\le h'\le H$; Brun's sieve in dimension
+$1$, as in \cref{lem:pairs}, removes $o(S_Q(N))$ indices. (G3) and (G4) follow as before, using
+$\sum_{s<M}|A(s)|\ll M$. Every good source marks the positions $1\le j\le\lambda'$ by
+\cref{lem:onesource}, in disjoint gaps, and \cref{lem:circle} with
+$\zeta=(\log N)^{-1/2}$ and $\eta=\zeta+2\rho_N\lambda_N$ gives the claim. No multiplicativity is
+used.
+\end{proof}
+
+\begin{lemma}[Order-$4$ annihilation]\label{lem:annihilation}\evidence{Paper proof}
+Let $\Delta<0$ be fundamental, $G=\Cl(\Delta)=G_2\times G_{\rm odd}$, $h_0=|G^2|$, and for
+$n\in\supp(1*\chi_\Delta)$ let
+$X_n=\prod_{p^e\|n\text{ split}}\sum_{i=0}^e[\mathfrak p]^{2i-e}\prod_{p^e\|n\text{ ramified}}[\mathfrak p]^e\in\Z[G]$,
+so that $a_C(n)$ is the coefficient of $C$ in $X_n$. Suppose that for every character $\chi$
+of $G$ with $4\mid\ord\chi$ some split $p\|n$ has $\chi(\mathfrak p)^2=-1$. Then
+$|G_2^2|\,a_C(n)=\ind[n\in\mathrm{genus}(C)]\,b_{C_{\rm o}}(n)$, where $b_c(n)$ is the coefficient
+of $c$ in the image of $X_n$ in $\Z[G_{\rm odd}]$. The hypothesis fails for
+$\ll S_\Delta(N)(\log N)^{-c}$ integers $n\le N$, $c=c(\Delta)>0$.
+\end{lemma}
+
+\begin{proof}
+If $\chi(\mathfrak p)=\pm i$ and $p\|n$, the local factor $\chi(\mathfrak p)+\chi(\mathfrak p)^{-1}$
+vanishes, so only characters of $G/G_2^2\cong(G/G^2)\times G_{\rm odd}$ survive, and orthogonality
+on that group gives the identity. The exceptional set is the support of a multiplicative
+function vanishing on a Chebotarev set of primes of positive density; apply
+\cref{thm:meanvalues}(a).
+\end{proof}
+
+\begin{lemma}[Strassmann]\label{lem:strassmann}\evidence{Paper proof}
+Let $\mathcal O$ be the ring of integers of a finite extension of $\Q_\ell$,
+$\beta_1,\dots,\beta_r\in\mathcal O^\times$ with no ratio $\beta_i/\beta_j$ $(i\ne j)$ a root of
+unity, and $\mathcal C\subset\mathcal O^r$ compact with all coordinates nonzero. For
+$A\in\mathcal C$ put $f_A(j)=\sum_iA_i\beta_i^j$. Then there is $T\ge1$ such that for each $H$ the
+event $v(f_A(j))\ge H$ depends only on $j$ modulo $T\ell^{a(H)}$, and its density tends to $0$ as
+$H\to\infty$, uniformly in $A\in\mathcal C$.
+\end{lemma}
+
+\begin{proof}
+Choose $T$ with $\beta_i^T\in1+\mathfrak m^\nu$, where $\log$ and $\exp$ are inverse isometries.
+On $j=j_0+Tk$, $f_A(j)=\sum_iA_i\beta_i^{j_0}\exp(kL_i)$ with pairwise distinct
+$L_i=\log\beta_i^T$, an analytic function of $k\in\Z_\ell$ whose derivatives at $0$ cannot all
+vanish (Vandermonde). By Strassmann's theorem \cite{Strassmann1928} it has finitely many zeros,
+so the Haar measure $\phi_H(A)$ of $\{v(f_A)\ge H\}$ decreases to $0$; each $\phi_H$ depends only
+on $A$ modulo $\mathfrak m^H$, hence is continuous, and Dini's theorem makes the convergence
+uniform on $\mathcal C$.
+\end{proof}
+
+\begin{theorem}[Class groups]\label{thm:classgroups}\evidence{Lean-supported paper proof}
+Let $\Delta<0$ be a fundamental discriminant, $Q$ a primitive form of discriminant $\Delta$ in any
+class, and $G=\Cl(\Delta)=G_2\times G_{\rm odd}$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item For every odd prime $q_0$, $v_{q_0}(r_Q(n))$ is tight on the support of $r_Q$.
+Consequently $1-D_N(\Theta_Q(1/b);b)\sim(1+\log2)\Psi_N$ for every $b$ that is not a power of $2$.
+\item For $b=2^k$, $1-D_N(\Theta_Q(1/b);b)\sim(1+\log2\cdot\mathbb E_\Delta[1-1/d])\Psi_N$, where
+$d=d(n)$ is the largest order of a character of $G_{\rm odd}$ not annihilated by a prime power
+exactly dividing $n$, and $\mathbb E_\Delta$ is its limiting law on the support, an explicit Euler
+product. If $G$ is a $2$-group the factor is $1$, and $r_Q(n)=w(1*\chi_\Delta)(n)/h_0$ for almost
+all $n$ in the genus of $Q$. If $G_{\rm odd}\cong\Z/\ell$ with $\ell$ prime, the factor is
+$1+(1-\frac1\ell)(1-\pi_{J,\ell})\log2$ with
+\[
+1-\pi_{J,\ell}=\prod_{\substack{p\text{ split}\\ [\mathfrak p]\notin G_2}}\Bigl(1-\frac{(1-1/p)\,p^{1-\ell}}{1-p^{-\ell}}\Bigr);
+\]
+for $\Delta=-23$ $(\Z/3)$ it equals $1.362117\ldots$, for $\Delta=-47$ $(\Z/5)$ $1.531999\ldots$,
+and for $\Delta=-71$ $(\Z/7)$ $1.588879\ldots$ (Euler products truncated at $p\le2\cdot10^5$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Write $a=1*\chi_\Delta$, so that $r_Q=w\,a_C$ and $a_C\le a$. Both parts use
+\cref{thm:widthlaw} in its mixture form (\cref{rem:widthlaw}), whose hypotheses are: the
+support asymptotic (Bernays), isolation (as in \cref{prop:formlower}), convergence in
+probability of $u_b(n)/\lambda_N$ to a law on $[0,1)$, and the matching first-moment bound for
+$W(N)$. The lower value $1$ is \cref{prop:formlower}.
+
+\emph{Three common facts.} (i) Genus characters show, as in \cref{lem:firstmoment}, that the first
+moment of $\log a$ over the support of $r_Q$ is $(\frac{\log2}2+o(1))S_Q(N)LL$. (ii)
+$a_C(n)=(1+o(1))a(n)/h_0$ in probability on the support of $r_Q$: by orthogonality on
+$\widehat G$, the genus characters contribute exactly $a(n)/h_0$, and every character $\psi$
+with $\psi^2\ne1$ contributes at most
+$a(n)\prod_{p\|n\text{ split},\,[\mathfrak p]\notin\ker\psi^2}|\cos\arg\psi(\mathfrak p)|$; these
+primes have positive Chebotarev density, so the product tends to $0$ in probability
+(Rankin's argument of \cref{lem:concentration}). (iii) $\log_2a(n)=\omega_{\rm split}(n)+T(n)$
+with $T(n)=\sum_{p^e\|n,\ e\ge2,\ p\text{ split}}(\log_2(e+1)-1)$, a tight (bounded in
+probability, not uniformly bounded) quantity, and $\omega_{\rm split}(n)=(\frac12+o(1))LL$ in
+probability. Hence $\log_2a_C(n)=(\frac12+o(1))LL$ in probability. Finally, the exceptional
+set $\mathcal E_N$ of \cref{lem:annihilation} has total width $o(S_Q(N)\lambda_N)$ for
+\emph{every} $G$: by the pointwise bound on $r_{Q_0}$ and \cref{thm:meanvalues}(a) with
+exponent $s=1/LL$, $\sum_{n\le N}r_Q(n)^{1/LL}\ll S_Q(N)$, hence
+$\sum(\log_br_Q(n))^2\ll S_Q(N)(LL)^2$, and Cauchy--Schwarz gives
+$\sum_{n\in\mathcal E_N}u(n)\le|\mathcal E_N|+(|\mathcal E_N|\sum(\log_br_Q)^2)^{1/2}
+\ll S_Q(N)LL(\log N)^{-c/2}$.
+
+(a) Off $\mathcal E_N$, fix a local pattern $\pi$ at the primes $\le P_0$ (outside probability
+$\varepsilon$) and a genus. With $\eta_c=c+c^{-1}$ for $c\in G_{\rm odd}$, so that
+$\psi(\eta_c)=\psi(c)+\psi(c)^{-1}$ is $2$ or a cyclotomic unit, \cref{lem:annihilation} and
+Fourier inversion on $G_{\rm odd}$ give, after pairing $\psi$ with $\bar\psi$,
+\[
+h_0a_C(n)=\sum_{\{\psi,\bar\psi\}}\epsilon_\psi\,\psi(\eta_{C_{\rm o}})\,w_\psi(\pi)\prod_{c\in G_{\rm odd}/\pm}\psi(\eta_c)^{m^{\rm o}_c(n)},
+\]
+over the pairs of characters surviving $\pi$, where $\epsilon_1=\frac12$, $\epsilon_\psi=1$
+otherwise, $w_\psi(\pi)\ne0$ collects the primes $\le P_0$ and the ramified primes, and
+$m^{\rm o}_c(n)$ counts split $p\|n$, $p>P_0$, with $[\mathfrak p]_{\rm o}\in\{c,c^{-1}\}$.
+Split $m^{\rm o}_c=m_{(1,c)}+m^{\rm rest}_c$, where $m_{(1,c)}$ counts the primes whose class is
+$(1,c^{\pm1})$, which lies in $G^2$, and $m^{\rm rest}_c$ the primes with nontrivial
+$2$-component. Condition on all $m^{\rm rest}_c$: their factors are units at every prime above
+an odd $q_0$, so they are absorbed into coefficients ranging over a compact set with nonzero
+coordinates, and moving the coordinates $m_{(1,c)}$ does not change the genus. By
+Selberg--Delange for Hecke $L$-functions of class-group characters, these coordinates are
+asymptotically uniform modulo every $M$, given the conditioned data. If
+$\{\psi,\bar\psi\}\ne\{\psi',\bar\psi'\}$, some $\psi(\eta_c)/\psi'(\eta_c)$ is not a root of
+unity (squaring is a bijection of $G_{\rm odd}$, and characters are linearly independent), and a
+lattice direction $\mathbf w$ with first coordinate $1$ separates all pairs simultaneously.
+Along the lines $(0,\mathbf u)+j\mathbf w$ the sum is $f_A(j)$ of \cref{lem:strassmann} over the
+completion of $\Q(\zeta_{|G_{\rm odd}|})^+$ at a prime above $q_0$, so
+$\mathbb P(v_{q_0}(h_0a_C(n))\ge H)\le2\varepsilon$ for $H\ge H(\varepsilon)$. Hence
+$V_b\le v_{q_0}(r_Q)$ is tight. With fact (ii)--(iii), $u_b(n)/\lambda_N\to\log2$ in
+probability, and fact (i) with $a_C\le a$ gives $W(N)\le(\log2+o(1))S_Q(N)\lambda_N$; the
+constant is $1+\log2$.
+
+(b) For a surviving character $\psi$ of order $d\ge3$, the same expansion shows that the
+$2$-adic valuation of the $\psi$-component equals the number $m_{\ker\psi}(n)$ of split $p\|n$
+with $[\mathfrak p]_{\rm o}\in\ker\psi$, up to a bounded term; these primes form a proportion $1/d$
+of the split primes (Chebotarev in the Hilbert class field), so $m_{\ker\psi}(n)=(\frac1{2d}+o(1))LL$
+in probability. On the annihilated set $v_2(a_C(n))\ge\min_{\psi}m_{\ker\psi}(n)-v_2(h_0)$ over
+the survivors, always. For the matching upper bound, all constants are fixed first and the
+minimizing kernel is selected last: \cref{lem:strassmann} ($2$-adically, along the
+coordinate of a class pair in $G^2$) bounds the probability of cancellation within each fixed
+kernel, the uniformity modulo $M$ bounds the probability that two kernels tie within a fixed
+margin, and a union bound over the finitely many kernels gives
+$v_2(a_C(n))=(\frac1{2d(n)}+o(1))LL$ in probability. With facts (ii)--(iii) this gives
+$u_{2^k}(n)/\lambda_N\to(1-1/d(n))\log2$ in probability. The survivors are determined by local
+events at split $p^e\|n$ with $e\ge2$ (a nontrivial $\psi$ with $\psi(\mathfrak p)$ of order $o$
+dies exactly when $o\mid e+1$), and on the support the exponents at finitely many split primes
+are asymptotically independent with $\mathbb P(v_p=e)=(1-\frac1p)p^{-e}$; this gives the law of
+$d$ and, for $G_{\rm odd}\cong\Z/\ell$, the stated product. For the first moment,
+$u_{2^k}\le(\log_2a-v_2(a_C))/k+O(1)$, the lower bound for $v_2$ holds off a set of $o(S_Q)$
+indices, $1/d$ is bounded, and the exceptional set has negligible width by the common facts, so
+$W(N)\le(\log2\,\mathbb E_\Delta[1-1/d]+o(1))S_Q(N)\lambda_N$. The limit law of $u/\lambda_N$ is
+supported in $[0,(1-|G_{\rm odd}|^{-1})\log2]\subset[0,1)$, so the mixture form applies. For
+$2$-groups, $G_{\rm odd}=1$ and \cref{lem:annihilation} gives $r_Q=w(1*\chi_\Delta)/h_0$ on the
+genus of $Q$ off $\mathcal E_N$.
+\end{proof}
+
+\Cref{thm:D}(iii) follows from \cref{prop:formlower,thm:classgroups}. For class number one,
+$r_Q=w(1*\chi_\Delta)$ and \cref{thm:lambertradix} applies directly; for one class per genus
+($h_0=1$, for example $\Delta=-20,-24$), $r_Q=w(1*\chi_\Delta)\ind_{\rm genus}$. For non-fundamental
+or imprimitive forms only the lower value $1$ and the order are proved here.
+
+\section{Theta values, weight-one forms and periodic weights}\label{sec:theta}
+
+\subsection{Binary theta values}\label{subsec:thetaupper}
+
+Let $Q(m,n)=\alpha m^2+\beta mn+\gamma n^2$ be positive definite and integral with discriminant
+$\Delta=\beta^2-4\alpha\gamma<0$, $Q=gQ_0$ with $Q_0$ primitive of discriminant $\Delta_0$, and
+$r_Q(j)=\cnt\{(m,n):Q(m,n)=j\}$, so that $\Theta_Q(1/b)=F_b(r_Q)$.
+
+\begin{lemma}[Lattice points]\label{lem:lattice}\evidence{Paper proof}
+$\sum_{j\le X}r_Q(j)=2\pi X/\sqrt{|\Delta|}+O_Q(\sqrt X)$ and
+$r_Q(j)\le2(2\sqrt{4\alpha j/|\Delta|}+1)$.
+\end{lemma}
+
+\begin{proof}
+The ellipse $\{Q\le X\}$ has area $2\pi X/\sqrt{|\Delta|}$, and unit squares centred at its lattice
+points lie between the ellipses shrunk and enlarged by $\sqrt2/2$. For the pointwise bound,
+$Q(m,n)\ge(|\Delta|/4\alpha)n^2$ and each $n$ admits at most two values of $m$.
+\end{proof}
+
+\begin{lemma}[Even exponents]\label{lem:bernays}\evidence{Paper proof}
+If $(\Delta_0/p)=-1$ then $v_p(Q_0(m,n))$ is even for all $(m,n)\ne(0,0)$. Hence
+$B_Q(X)=\cnt\{1\le j\le X:r_Q(j)>0\}\ll_QX/\sqrt{\log X}$.
+\end{lemma}
+
+\begin{proof}
+For odd $p$ with $(\Delta_0/p)=-1$, the identity $4\alpha Q_0=(2\alpha m+\beta n)^2-\Delta_0n^2$
+(or its analogue with $\gamma$) shows that $Q_0$ is anisotropic modulo $p$, so $p\mid Q_0(m,n)$
+forces $p\mid m$, $p\mid n$; iterate. For $p=2$, $\Delta_0\equiv5\pmod8$ forces $\alpha,\beta,\gamma$
+odd, and $m^2+mn+n^2$ has no nontrivial zero over $\mathbb F_2$. The represented set therefore
+lies in a multiplicative set of prime density $\frac12$, and \cref{thm:meanvalues}(a) applies;
+$B_Q(X)=B_{Q_0}(X/g)$.
+\end{proof}
+
+\begin{theorem}[Theta values]\label{thm:thetaupper}\evidence{Lean-supported paper proof}
+For every positive definite integral binary $Q$ and every $b\ge2$, $\Theta_Q(1/b)\in K_b$ and
+$1-D_N(\Theta_Q(1/b);b)\ll_{Q,b}\LL/\sqrt{\log N}$.
+\end{theorem}
+
+\begin{proof}
+\Cref{lem:lattice} gives linear mass and \cref{lem:bernays} gives $S(X)\ll X/\sqrt{\log X}$;
+apply \cref{thm:leantransfer} for membership and \cref{thm:largermass} for the rate.
+\end{proof}
+
+\begin{proposition}[Extensions]\label{prop:extensions}\evidence{Lean-supported paper proof}
+The conclusion of \cref{thm:thetaupper} holds for:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item integral shifted lattices $\sum_{(m,n)}b^{-f(m,n)}$ with
+$f=Q+l_1m+l_2n+l_0$, $l_i\in\Z$;
+\item congruence subsums $\sum_{(m,n)\equiv(r,s)\,(D)}b^{-Q(m,n)}$;
+\item weighted sums $\sum\chi(m,n)b^{-Q(m,n)}$ with integer weights $|\chi|\le B$;
+\item finite $\Z[1/b]$-linear combinations of the above.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) With $U=2\gamma l_1-\beta l_2$ and $V=2\alpha l_2-\beta l_1$,
+$|\Delta|^2f(m,n)=Q(|\Delta|m+U,|\Delta|n+V)+E_0$ with $E_0\in\Z$, so the values of $f$ lie in an affine
+image of the represented set, with count $\ll X/\sqrt{\log X}$; the mass is $O(X)$ by area, and the
+finitely many nonpositive values contribute integers. (b) and (c) have coefficients bounded by
+$Br_Q(j)$ on the same support. (d) is \cref{lem:linear}.
+\end{proof}
+
+Harmonic polynomial weights of degree $\nu\ge1$ give cusp forms of weight $1+\nu$ whose mass
+grows like $X^{1+\nu/2}$; they fall outside the method (\cref{sec:limits}).
+
+\begin{proposition}[Arithmetic nature]\label{prop:arith}\evidence{Paper proof}
+Let $a\ge0$ be an integer sequence with infinitely many nonzero terms, $A(X)=O(X)$ and
+$S(X)=o(X)$. Then $F_b(a)$ is irrational. In particular every $\Theta_Q(1/b)$ and every
+$L_\chi(b)$ with $\chi$ real nonprincipal is irrational. Every $\Theta_Q(1/b)$, every $L_\chi(b)$
+with $\chi$ odd, and $E_b$ are transcendental
+\cite{Nesterenko1996,DNNS1996,Bertrand1997,HamiehMurty2016}.
+\end{proposition}
+
+\begin{proof}
+A rational element of $K_b$ has an eventually periodic orbit ending at a fixed point
+\cite{DiscrepancyCompanion}; since the orbit concentrates at $0$, the number would lie in
+$\Z[1/b]$, and the positive tails $\tau_n=\sum_{m>n}a(m)b^{n-m}$ would be integers $\ge1$ for all
+large $n$. But at least $X-L\,S(X+L)\ge X/2$ of the $n\le X$ have no support in $(n,n+L]$, and their
+tails average $\ll b^{-L}$ by \cref{lem:meantail}, so some tail lies in $(0,1)$. For transcendence:
+$\Theta_Q$ is a weight-one modular form with integer coefficients and $q=1/b$ is algebraic, so
+\cite[Thm.~3.1]{HamiehMurty2016} applies; for odd $\chi$, $L_\chi(b)$ is the value at $q=1/b$ of
+the $q$-analogue $L_q(1,\chi)$, transcendental by \cite[Thm.~1.1]{HamiehMurty2016} for primitive
+$\chi$ and by Theorem~3.1 there in general (the case of even $\chi$ is open); and $E_b$ is
+transcendental because
+$1728\,b^{-1}E_b^{24}=Q(1/b)^3-R(1/b)^2$ in Ramanujan's notation, while $Q(1/b)$ and $R(1/b)$ are
+algebraically independent by Nesterenko's theorem.
+\end{proof}
+
+\subsection{Weight one}\label{subsec:weightone}
+
+\begin{theorem}[Weight-one inputs]\label{thm:weightoneinput}\evidence{External input}
+$M_1(\Gamma_1(M))$ is spanned by $g(t\tau)$ for newforms $g$ of weight one and level $M'\mid M$,
+$t\mid M/M'$, and by Eisenstein series $E_1^{\psi,\varphi}(t\tau)$ with $\psi\varphi$ odd
+\cite[Thms.~4.8.1, 5.8.3]{DiamondShurman}. A weight-one newform corresponds to an odd irreducible
+Artin representation $\rho$ with finite image and $a_g(p)=\tr\rho(\mathrm{Frob}_p)$ for $p\nmid M'$
+\cite{DeligneSerre1974}; the primes with $\tr\rho(\mathrm{Frob}_p)=0$ have a positive Chebotarev
+density, equal to the proportion of involutions in the projective image
+\cite[Thm.~18]{Serre1981}.
+\end{theorem}
+
+\begin{theorem}[Weight one]\label{thm:weightone}\evidence{Lean-supported paper proof}
+Let $f=\sum_{n\ge0}a(n)q^n\in M_1(\Gamma_1(M))$ with all $a(n)\in\Z$. Let $\alpha_f>0$ be the minimum,
+over the newform constituents $g$ of $f$, of the density of primes with $\tr\rho_g(\mathrm{Frob}_p)=0$,
+and over the Eisenstein constituents $E_1^{\psi,\varphi}$, of $1/m$, where $m$ is the order of
+$\varphi\bar\psi$. Then $S_f(X)\ll X/(\log X)^{\alpha_f}$, $A_f(X)\ll X\log X$, and for every $b\ge2$,
+$f(1/b)\in K_b$ with $1-D_N(f(1/b);b)\ll_{f,b}\LL/(\log N)^{\alpha_f}$.
+\end{theorem}
+
+\begin{proof}
+Write $f$ as a finite combination of the basis of \cref{thm:weightoneinput}. For a newform the
+Frobenius eigenvalues are roots of unity, so $|a_g(n)|\le\tau(n)$, and for $p$ with trace-zero
+Frobenius the Hecke recursion $a(p^{e+1})=a(p)a(p^e)-\chi(p)a(p^{e-1})$ kills all odd powers; so
+the support lies in a multiplicative set of prime density $1-\delta_0(g)$. For an Eisenstein series,
+$\sigma(n)=\sum_{d\mid n}\psi(n/d)\varphi(d)$ and $\sigma(p)=\psi(p)(1+\omega(p))$ with
+$\omega=\varphi\bar\psi$. Since $\psi\varphi$ is odd, $\omega(-1)=-1$, so $\omega$ has even order $m$,
+$\omega(p)=-1$ on primes of density $1/m$, and there
+$\sigma(p^{2e+1})=\psi(p)^{2e+1}\sum_{i=0}^{2e+1}(-1)^i=0$. Hence every constituent is lacunary, the
+support of $a_f$ lies in a finite union of dilates of these sets, and $|a_f(n)|\le C_f\tau(n)$.
+\Cref{thm:meanvalues}(a), \cref{thm:leantransfer} (logarithmic mass, $\gamma=1$) and
+\cref{thm:largermass} conclude; integrality of all $a(n)$, including $a(0)$, makes the heads integers.
+\end{proof}
+
+The exponent $\alpha_f$ is $\frac12$ for $\Theta_Q$, $\frac34$ for the form $\eta(12\tau)^2$ behind
+$E_b^2$, and would be $\frac14$ for an integer-coefficient form of tetrahedral or icosahedral type
+(for instance the trace over the Hecke field of an exotic newform). For a rational form with
+denominator $d$ only $d\,f(1/b)\in K_b$ follows. The mean of $|\tr|$ over the binary polyhedral group
+is less than $1$ for every finite projective image, so every weight-one newform has $A_g(X)=o(X)$,
+whereas an Eisenstein series with $m\ge4$ has $A(X)\asymp X(\log X)^{\kappa_m-1}$ with
+$\kappa_m=\frac1m\sum_j|1+e^{2\pi ij/m}|>1$; the logarithmic-mass transfer absorbs this.
+
+\subsection{Characters of even order and periodic weights}\label{subsec:periodic}
+
+For a weight $w$ put $\mathcal L_w(b)=\sum_{m\ge1}w(m)/(b^m-1)=\sum_n(1*w)(n)b^{-n}$, and for a
+Dirichlet character $\chi$ write $c_\chi=1*\chi$. Locally $c_\chi(p^e)=\sum_{i\le e}\chi(p)^i$,
+which vanishes exactly when $\chi(p)\ne1$ has order dividing $e+1$.
+
+\begin{theorem}[Even-order characters]\label{thm:evenorder}\evidence{Lean-supported paper proof}
+Let $\chi$ have even order $h$. Then $\cnt\{n\le X:c_\chi(n)\ne0\}\sim C_\chi X(\log X)^{-1/h}$, and
+$\sum_{n\le X}|c_\chi(n)|\asymp X(\log X)^{\kappa_h-1}$ with $\kappa_h=\frac2h\cot\frac\pi{2h}$; in
+particular the mass is linear only for real $\chi$. If $\chi_1,\dots,\chi_J$ have even orders with
+maximum $H$, $d_j\ge1$, and $a(n)=\sum_j\lambda_jc_{\chi_j}(n/d_j)$ is integer valued (with
+$c(x)=0$ for $x\notin\Z$), then for every $b\ge2$, $F_b(a)\in K_b$ and
+$1-D_N(F_b(a);b)\ll\LL/(\log N)^{1/H}$. If $\chi$ has odd order, the support of $c_\chi$ has
+positive lower density.
+\end{theorem}
+
+\begin{proof}
+For even $h$ the primes with $\chi(p)=-1$ form a coset of $\ker\chi$ of density $1/h$, and
+$c_\chi(p^e)=0$ for odd $e$ at them; at all other primes $c_\chi(p)\ne0$. The support indicator is
+multiplicative with prime density $1-1/h$, and \cref{thm:meanvalues} gives the asymptotic; the zeros
+at exponents $e\ge2$ change only the constant. The mass follows from Wirsing's theorem applied to
+$|c_\chi|$, since $\chi(p)$ is equidistributed in $\mu_h$. For the combination,
+$\supp a\subseteq\bigcup_jd_j\supp c_{\chi_j}$ and $|a(n)|\le(\sum|\lambda_j|)\tau(n)$; apply
+\cref{thm:leantransfer} (logarithmic mass) and \cref{thm:largermass}. For odd order,
+$c_\chi(n)=\prod_{p\mid n}(1+\chi(p))\ne0$ for squarefree $n$ prime to the modulus.
+\end{proof}
+
+\begin{theorem}[Odd periodic weights]\label{thm:oddweights}\evidence{Lean-supported paper proof}
+Let $w:\Z\to\Z$ be $M$-periodic and odd, $w(-m)=-w(m)$. If $p$ is a prime with $w(px)=-w(x)$ for all
+$x$ (for instance $p\equiv-1\pmod M$), then $(1*w)(n)=0$ whenever $v_p(n)$ is odd. Consequently
+$\cnt\{n\le X:(1*w)(n)\ne0\}\ll X(\log X)^{-1/\varphi(M)}$,
+$\sum_{n\le X}|(1*w)(n)|\le2\max|w|\cdot X\log(X+2)$, and $\mathcal L_w(b)\in K_b$ for every $b\ge2$.
+\end{theorem}
+
+\begin{proof}
+Write $n=p^em$ with $p\nmid m$. The divisors are $p^id'$ with $d'\mid m$, and
+$w(p^id')=(-1)^iw(d')$, so $(1*w)(n)=\sum_{d'\mid m}w(d')\sum_{i=0}^e(-1)^i=0$ for odd $e$. For
+$p\equiv-1\pmod M$ this cancellation is
+\leanP{AntisymmetricLambert}{101}{dirichletOneConv_eq_zero_of_odd_padicVal}, the
+mass bound is \leanP{AntisymmetricLambert}{271}{absMass_dirichletOneConv_le}, and the reduction of
+membership to sparsity for bounded weights is
+\leanP{AntisymmetricLambert}{510}{bounded_dirichletOneConv_tendsto_one_of_sparse}. The support
+bound follows from \cref{thm:meanvalues}(a) with the primes $\equiv-1\pmod M$, which supplies the
+sparsity hypothesis.
+\end{proof}
+
+For $w=\ind_r-\ind_{-r}$ with $\gcd(r,M)=1$ only odd characters occur in the Fourier expansion of
+$w$, each of even order, and the largest such order is the Carmichael exponent $\lambda(M)$.
+\Cref{thm:evenorder} applied to this expansion therefore gives the support bound
+$\ll X(\log X)^{-1/\lambda(M)}$, an improvement on the exponent $1/\varphi(M)$ of
+\cref{thm:oddweights}; we do not prove here that this exponent is sharp.
+
+Let $\psi_q(x)=\Gamma_q'(x)/\Gamma_q(x)=-\log(1-q)+\log q\sum_{j\ge1}q^{jx}/(1-q^j)$ be the
+$q$-digamma function \cite[\S1.10]{GasperRahman}, and
+$A_{r,M}(b)=\sum_{m\equiv r\,(M)}1/(b^m-1)$.
+
+\begin{theorem}[$q$-digamma reflections]\label{thm:qdigamma}\evidence{Lean-supported paper proof}
+Let $b\ge2$, $M\ge2$, $1\le r<M$ and $q=b^{-M}$. Then
+\[
+\frac{\psi_q(r/M)-\psi_q(1-r/M)}{\log q}=A_{r,M}(b)-A_{M-r,M}(b)
+=\sum_{n\ge1}\bigl(\tau_{r,M}(n)-\tau_{-r,M}(n)\bigr)b^{-n},
+\]
+where $\tau_{r,M}(n)$ counts divisors $d\equiv r\pmod M$ of $n$. This number lies in $K_b$. If
+$2r\ne M$, $g=\gcd(r,M)$ and $M'=M/g$, then
+$1-D_N\ll_{b,M,r}\LL/(\log N)^{1/\lambda(M')}$.
+\end{theorem}
+
+\begin{proof}
+The $-\log(1-q)$ terms cancel, and termwise $q^{k+r/M}/(1-q^{k+r/M})=1/(b^{kM+r}-1)$; the identity is
+\leanP{GeneralMassTransfer}{991}{qDigamma_reflection_eq_residueLambert}. The weight
+$\ind_r-\ind_{-r}$ is odd, so \cref{thm:oddweights} gives the sparsity hypothesis of
+\leanP{AntisymmetricLambert}{525}{qDigamma_reflection_tendsto_one_of_sparse}, which yields
+membership. After the dilation by $g$, the remark above and \cref{thm:largermass} give the
+rate.
+\end{proof}
+
+\begin{proposition}[Residue-class Lambert sums]\label{prop:residueclass}\evidence{Lean-supported paper proof}
+Let $H\le G=(\Z/q)^\times$ with $G/H$ elementary abelian of order $2^k$, and
+$A_{gH}(b)=\sum_{m\bmod q\in gH}1/(b^m-1)$, $E_q(b)=\sum_{(m,q)=1}1/(b^m-1)$. Then
+$A_{gH}(b)-A_{g'H}(b)\in K_b$ and $2^kA_{gH}(b)-E_q(b)\in K_b$ for every $b\ge2$, with
+$1-D_N\ll\LL/\sqrt{\log N}$. In base $2$, for $q=8$ and $r\in\{1,3,5,7\}$,
+$4A_r-E_{\rm odd}=\chi_{-4}(r)L_{\chi_{-4}}+\chi_8(r)L_{\chi_8}+\chi_{-8}(r)L_{\chi_{-8}}$ and
+$|D_N(A_r;2)-D_N(E_{\rm odd};2)|\le\frac2N+\sum_{\chi\ne\chi_0}(1-D_N(L_\chi;2))\ll\LL/\sqrt{\log N}$;
+so $A_1,A_3,A_5,A_7$ and $E_{\rm odd}$ share all limit points of $D_N$.
+\end{proposition}
+
+\begin{proof}
+The characters trivial on $H$ are real, and $\ind_{gH}=2^{-k}\sum_{\chi|_H=1}\chi(g)\chi$, so both
+differences are Lambert series of integer weights whose divisor sums are dominated by
+$\sum_{\chi\ne\chi_0}1*\chi$; apply \cref{thm:leantransfer,thm:largermass}. The mod-$8$ identities
+are \leanP{CharacterLambertTransfer}{299}{mod8_character_identities}, and the finite inequalities
+are \leanP{CharacterLambertTransfer}{329}{mod8_odd_discrepancy_diff},
+\leanP{CharacterLambertTransfer}{381}{mod8_class_discrepancy_diff} and
+\leanP{CharacterLambertTransfer}{407}{mod8_asymptotic_equivalence}; the rate uses
+\cref{thm:lambertradix}.
+\end{proof}
+
+Nothing here concerns $E_{\rm odd}$, $E_{\rm even}$ or the Erd\H{o}s--Borwein constant
+$\sum_m1/(2^m-1)$ individually.
+
+\section{Digit frequencies in the kernel}\label{sec:digits}
+
+For a word $w=w_1\cdots w_L$ over $\{0,\dots,b-1\}$ let $v(w)=\sum_iw_ib^{L-i}$ and
+$C_w=[v(w)b^{-L},(v(w)+1)b^{-L})$. The word read at shift $n$ (the digits $n+1,\dots,n+L$) equals
+$w$ exactly when $x_n\in C_w$. Put $f_w(N)=\frac1N\cnt\{n<N:x_n\in C_w\}$ and
+$\delta_N(z)=1-D_N(z;b)$. The fixed points of $t\mapsto bt$ on $\T$ are $c_m=m/(b-1)$,
+$0\le m\le b-2$; we call $c_0=0$ the boundary fixed point and the others interior.
+
+\subsection{The dichotomy}\label{subsec:dichotomy}
+
+\begin{lemma}[Fixed points and cylinders]\label{lem:fixedcyl}\evidence{Paper proof}
+Let $L\ge1$. If $b\ge3$ and $1\le m\le b-2$, then every $t\in[0,1)$ with
+$\dist{t-c_m}<\eta_{m,L}=\min(m,b-1-m)/((b-1)b^L)$ lies in $C_{m^L}$, and
+$\eta_{m,L}\ge1/((b-1)b^L)$. Every $t$ with $\dist t<b^{-L}$ reads $0^L$ if $t<\frac12$ and
+$(b-1)^L$ if $t>\frac12$.
+\end{lemma}
+
+\begin{proof}
+$b^Lc_m=mR_L+m/(b-1)$ with $R_L=(b^L-1)/(b-1)$, so $c_m$ lies in $C_{m^L}=[mR_Lb^{-L},(mR_L+1)b^{-L})$
+at distances $m/((b-1)b^L)$ and $(b-1-m)/((b-1)b^L)$ from its endpoints. The second claim is
+$C_{0^L}=[0,b^{-L})$ and $C_{(b-1)^L}=[1-b^{-L},1)$.
+\end{proof}
+
+\begin{lemma}[Localization]\label{lem:localize}\evidence{Paper proof}
+If $N\ge3$ and $\delta=\delta_N(z)<\frac12-\frac1N$, then for some fixed point $c$,
+$\cnt\{n<N:\dist{x_n-c}>b\delta/(b-1)\}\le\delta N$.
+\end{lemma}
+
+\begin{proof}
+Fix $\delta<\delta'\le\frac12-\frac1N$. By \cref{lem:arcs} some arc $J$ of length $\ell$ has
+$e+\ell<\delta'$, where $e=1-\mu_N(J)$; let $c'$ be its midpoint. At least
+$N-1-2eN>N-1-2\delta'N\ge1$ indices $n\le N-2$ have $x_n,x_{n+1}\in J$, and for such $n$
+$\dist{(b-1)c'}\le\dist{bc'-bx_n}+\dist{x_{n+1}-c'}\le(b+1)\ell/2$. If $c$ is the fixed point nearest
+to $c'$ then $\dist{(b-1)c'}=(b-1)\dist{c'-c}$, so $\dist{c'-c}\le(b+1)\ell/(2(b-1))$ and every
+$x_n\in J$ satisfies $\dist{x_n-c}\le b\ell/(b-1)<b\delta'/(b-1)$. Let $\delta'\downarrow\delta$;
+one fixed point recurs infinitely often, and the exceptional sets stabilize.
+\end{proof}
+
+\begin{theorem}[Finite dichotomy]\label{thm:dichotomy}\evidence{Paper proof}
+Let $L\ge1$, $N\ge4$ and $\delta=\delta_N(z)<b^{-L-1}$. Then exactly one of the following holds:
+\textup{(i)} the words of length $L$ other than $0^L$ and $(b-1)^L$ have total frequency at most
+$\delta$; \textup{(ii)} $b\ge3$ and $f_{m^L}(N)\ge1-\delta$ for one $1\le m\le b-2$.
+\end{theorem}
+
+\begin{proof}
+\Cref{lem:localize} gives $c$ with at most $\delta N$ shifts farther than
+$r=b\delta/(b-1)<b^{-L}/(b-1)$. If $c=0$, \cref{lem:fixedcyl} shows that every other shift reads
+$0^L$ or $(b-1)^L$. If $c=c_m$, then $r<\eta_{m,L}$, so every other shift reads $m^L$. The
+alternatives are exclusive since $\delta<\frac12$.
+\end{proof}
+
+\begin{theorem}[Classification in $K_b$]\label{thm:classification}\evidence{Paper proof}
+Let $z\in K_b$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item A single alternative of \cref{thm:dichotomy}, with a single $m$ in case (ii), holds for every
+$L$ and all large $N$.
+\item In case (ii), $f_{m^L}(N)\to1$ for every $L$.
+\item In case (i), for every $L$, $\sum_{w\ne0^L,(b-1)^L}f_w(N)\to0$,
+$f_{0^L}(N)-f_0(N)\to0$, $f_{(b-1)^L}(N)-f_{b-1}(N)\to0$ and $f_0(N)+f_{b-1}(N)\to1$. The limit
+points of the length-$L$ word distribution are exactly the measures
+$\alpha\delta_{0^L}+(1-\alpha)\delta_{(b-1)^L}$ with $\alpha\in[\liminf f_0(N),\limsup f_0(N)]$.
+\item For $b\ge3$, $z$ is not simply normal in base $b$. For every $b\ge2$, $z$ is not normal in
+base $b$: the frequency of the word $0(b-1)$ tends to $0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Fix $L$ and $N_0\ge5$ with $\delta_N<\min(b^{-L-1},\frac18)$ for $N\ge N_0$. Since
+$|f_w(N+1)-f_w(N)|\le1/(N+1)$, an interior alternative at $N$ ($f_{m^L}\ge\frac78$) forces
+$f_{m^L}(N+1)\ge\frac7{10}$, which excludes every other alternative at $N+1$; and the boundary
+alternative at $N$ forces $f_{m^L}(N+1)\le\frac18+\frac15<\frac78$. So the alternative is constant.
+It does not depend on $L$: an interior alternative at level $L$ gives one at level $1$, and the
+boundary alternative at level $L$ makes every interior digit an other word. Parts (b) and (c) follow
+from $\delta_N\to0$, since a start reading a word beginning with $0$ but different from $0^L$ reads
+an other word. The limit points of $f_0(N)$ form an interval because its steps tend to $0$. For
+part (d) with $b\ge3$: in case (i) the $b-2$ interior digits have total frequency at most
+$\delta_N\to0\ne(b-2)/b$, while in case (ii) $f_m(N)\to1\ne1/b$; either way $z$ is not simply
+normal. The word $0(b-1)$ is an other word in case (i) and differs from $m^2$ in case (ii), so
+its frequency tends to $0$.
+\end{proof}
+
+In base $2$ only case (i) exists, and for $z\in K_2$ simple normality is equivalent to
+$f_{0^L}(N)\to\frac12$ for some, equivalently every, $L$: the orbit must approach $0$ from above and
+from below equally often.
+
+\subsection{Oriented tails}\label{subsec:oriented}
+
+For $z=F_b(a)$ let $I_n=\sum_{m\le n}a(m)b^{n-m}\in\Z$ and $\tau_n=b^nz-I_n=\sum_{m>n}a(m)b^{n-m}$,
+so $x_n=\fr{\tau_n}$. Put $\rho_+(N)=\frac1N\cnt\{n<N:\tau_n\ge0\}$ and
+$B_L(N)=\cnt\{n<N:|\tau_n|\ge b^{-L}\}$.
+
+\begin{lemma}[Oriented tails]\label{lem:oriented}\evidence{Paper proof}
+\leavevmode
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $0\le\tau_n<b^{-L}$ the word at shift $n$ is $0^L$; if $-b^{-L}<\tau_n<0$ it is $(b-1)^L$.
+\item $|Nf_{0^L}(N)-N\rho_+(N)|\le B_L(N)$, $|Nf_{(b-1)^L}(N)-N(1-\rho_+(N))|\le B_L(N)$, and every
+other word occurs at most $B_L(N)$ times.
+\item If $0=m_0<m_1<\cdots$ contains the support of $a$ in $[1,\infty)$ and $n\in[m_k,m_{k+1})$, then
+$\tau_n=b^{n-m_{k+1}}V_{k+1}$ with $V_{k+1}=a(m_{k+1})+\tau_{m_{k+1}}$; so
+$N\rho_+(N)$ is the gap-weighted count of nonnegative $V_{k+1}$, and $\sgn V_{k+1}=\sgn a(m_{k+1})$
+whenever $|\tau_{m_{k+1}}|<1$.
+\item For all $N,R,L\ge1$,
+$B_L(N)\le R\,S(N+R-1)+\frac{b^{L-R}}{b-1}\sum_{m>R}|a(m)|b^{-(m-R-N)_+}$. If
+$S(X)\ll X(\log X)^{-\kappa}$ and $A(X)\ll X(\log X)^\beta$, then
+$B_L(N)=O_L(N\log\log N/(\log N)^\kappa)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) The word is $\lfloor b^L\fr{b^nz}\rfloor$ written with $L$ digits, and $\fr{b^nz}$ equals
+$\tau_n$ or $1+\tau_n$. (b) follows from (a). (c) There is no support in $(n,m_{k+1})$, and
+$|a(m_{k+1})|\ge1$. (d) is the argument of \cref{thm:finitetransfer} applied to $|\tau_n|$ with
+window $R$ and Markov threshold $b^{-L}$; for the rate take $R=L+\lceil(\kappa+\beta)\log_b\log N\rceil$.
+\end{proof}
+
+Concentration of $\dist{b^nz}$ at $0$ alone does not give $B_L(N)=o(N)$: for $a(m)=-(b-1)$,
+$m\ge1$, one has $\tau_n=-1$ for all $n$.
+
+\begin{theorem}[Nonnegative sparse series]\label{thm:nonneg}\evidence{Paper proof}
+Let $a\ge0$ be integers with $\sum_ma(m)b^{-m}<\infty$ and $z=F_b(a)$, and let $b\ge2$, $L\ge1$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $a$ satisfies one of the three hypotheses of \cref{thm:leantransfer}
+\textup{(}$A(X)=O(X)$ and $S(X)=o(X)$; $A(X)\le C(X+1)^k$ and $S(X)\log X=o(X)$;
+$A(X)\le CX(\log(X+2))^\gamma$ and $S(X)\log\log X=o(X)$\textup{)}, then $f_{0^L}(N)\to1$.
+\item If $S(X)\ll X(\log X)^{-\kappa}$ and $A(X)\ll X(\log X)^\beta$ with $\kappa>0$, $\beta\ge0$,
+then $1-f_{0^L}(N)=O_L(\LL/(\log N)^\kappa)$.
+\item If the support lies in the squares and $a(m)\le2m^\gamma$ with $\gamma\ge0$, then
+$1-f_{0^L}(N)\le R(\sqrt{N+R}+1)/N$ for every
+$R\ge L+\lceil\log_b(2C_{b,\gamma}(N+R)^\gamma)\rceil+1$, where
+$C_{b,\gamma}=\sum_{k\ge1}(1+k)^\gamma b^{-k}$.
+\end{enumerate}
+In each case, if $a$ has infinitely many nonzero terms, $z$ is not simply normal in any base,
+and in base $2$ its digit $0$ has frequency $1$.
+\end{theorem}
+
+\begin{proof}
+Since $a\ge0$, $\tau_n\ge0$ for all $n$, so $\rho_+(N)=1$ and \cref{lem:oriented}(b) gives
+$1-f_{0^L}(N)\le B_L(N)/N$. In \cref{lem:oriented}(d) the last sum is at most $\Ahat(N+R)$.
+(a) Under linear mass, $\Ahat(N+R)\le C(N+R+1)$ by \cref{lem:meantail}; for fixed $R$,
+$\limsup_NB_L(N)/N\le Cb^{L-R}/(b-1)$, and $R$ is arbitrary. Under polynomial mass,
+$\Ahat(X)\le C_{b,k}'(X+1)^k$ by Abel summation; take
+$R=L+\lceil(k-1)^+\log_bN\rceil+\omega_N$ with $\omega_N\to\infty$ and $\omega_N\le\log N$, so
+the Markov term is $\ll b^{-\omega_N}N$ and $RS(N+R-1)\ll(\log N)(S(N)+R)=o(N)$. Under
+logarithmic mass, $\Ahat(X)\ll X(\log X)^\gamma$; take
+$R=L+\lceil\gamma\log_b\log N\rceil+\omega_N$ with $\omega_N\to\infty$ and
+$\omega_N\le\log\log N$, so that both terms are $o(N)$. (b) is \cref{lem:oriented}(d). (c) If no
+square lies in $(n,n+R]$, then
+$\tau_n\le2\sum_{i>R}(N+i)^\gamma b^{-i}\le2(N+R)^\gamma C_{b,\gamma}b^{-R}<b^{-L}$, using
+$N+R+k\le(N+R)(1+k)$ and $\gamma\ge0$, and at most $R(\sqrt{N+R}+1)$ shifts have a square in
+$(n,n+R]$. The final sentence holds because $f_0(N)\to1$ forces $f_d(N)\to0$ for $d\ne0$.
+\end{proof}
+
+Since $(1*\chi)(p^e)\in\{1,e+1,(1+(-1)^e)/2\}$ for real $\chi$, $1*\chi\ge0$, and
+\cref{thm:nonneg} applies to $L_\chi(b)$ for every real nonprincipal $\chi$, to every
+$\Theta_Q(1/b)$, to $\Theta_3(1/b)$ and to $D^j\Theta_3(1/b)$ $(j\ge1)$, with $D=q\,d/dq$, in every
+base. This proves \cref{thm:F}(ii).
+
+\subsection{Signed quadratic families}\label{subsec:signedfamilies}
+
+By \cref{thm:eulerjacobi}, for $j\ge0$,
+\[
+D^jE_b=\sum_{k\ge1}(-1)^k\bigl((P_k^-)^jb^{-P_k^-}+(P_k^+)^jb^{-P_k^+}\bigr)+[j=0],\qquad
+D^jE_b^3=\sum_{k\ge0}(-1)^k(2k+1)T_k^jb^{-T_k},
+\]
+and $E_b^2DE_b=\frac13D(E_b^3)=\sum_{k\ge1}(-1)^k\frac{k(k+1)(2k+1)}6b^{-T_k}$. In each case every
+nonzero coefficient has the sign $(-1)^k$ of its pair.
+
+\begin{proposition}[Lean statements for derivatives]\label{prop:leanderiv}\evidence{Kernel-verified}
+If $A(X)\le C(X+1)^k$ and $S(X)\log X=o(X)$, then $D^jF_b(a)\in K_b$ for every $j\ge0$ and every
+$b\ge2$. Every $D^j$ of the pentagonal series, of Jacobi's triangular series and of the series of
+$\Theta_3(1/b)$ lies in $K_b$; the coefficients of $E_b^2DE_b$ are exactly one third of those of
+$D$ applied to Jacobi's series; and the series $E_b^2DE_b$ lies in $K_b$.
+\end{proposition}
+
+\begin{proof}
+\leanP{DerivativeTransfer}{96}{derivCoeff_tendsto_one},
+\leanP{DerivativeTransfer}{196}{deriv_eulerPentagonal_discrepancy_tendsto_one},
+\leanP{DerivativeTransfer}{219}{deriv_eulerCube_discrepancy_tendsto_one},
+\leanP{DerivativeTransfer}{291}{deriv_thetaThree_discrepancy_tendsto_one},
+\leanP{DerivativeTransfer}{350}{three_mul_eulerSqDerivCoeff} and
+\leanP{DerivativeTransfer}{373}{eulerSqDeriv_discrepancy_tendsto_one}.
+\end{proof}
+
+\begin{theorem}[Frequencies]\label{thm:signedfreq}\evidence{Lean-supported paper proof}
+Let $z$ be $D^jE_b$ or $D^jE_b^3$ $(j\ge0)$ or $E_b^2DE_b$. For every $L\ge1$ and $N\ge2$,
+\[
+\Bigl|f_{0^L}(N)-\tfrac12\Bigr|+\Bigl|f_{(b-1)^L}(N)-\tfrac12\Bigr|+\sum_{w\ne0^L,(b-1)^L}f_w(N)\le C_{b,j}\frac{L+\log N}{\sqrt N}.
+\]
+Hence these numbers are simply normal in base $2$ and not $2$-normal, and for $b\ge3$ they are not
+simply normal in base $b$. For every $k\ge2$, in base $b^k$ the digits $0$ and $b^k-1$ each have
+frequency $\frac12$; in particular they are not simply normal in base $4$.
+\end{theorem}
+
+\begin{proof}
+Let the support be $m_1<m_2<\cdots$ with coefficients $c_i$ and signs $\sigma_i$, and
+$R_i=\sum_{l>i}|c_l|b^{m_i-m_l}$. The gaps beyond $m_i$ are at least $K\asymp\sqrt{m_i}$ while the
+coefficients are polynomial in $m_i$, so $R_i\le\frac12$ for $i\ge i_0$. For $n\in[m_{i-1},m_i)$ with
+$r=m_i-n\ge\ell_i=L+\lceil\log_b(|c_i|+\frac12)\rceil+1$, \cref{lem:oriented}(c) gives
+$\tau_n=b^{-r}(c_i+\theta R_i)$ with $|\theta|\le1$, of sign $\sigma_i$ and modulus $<b^{-L}$; so the
+word is $0^L$ or $(b-1)^L$ according to $\sigma_i$. The exceptional shifts number
+$\sum_{m_{i-1}<N}\ell_i+m_{i_0}=O_{b,j}(\sqrt N(L+\log N))$. It remains to show that the shifts
+whose next support point is positive and those whose next support point is negative differ in
+number by $O(\sqrt N)$. In the pentagonal case the gaps preceding $P_K^-$ and $P_K^+$ are $2K-1$ and
+$K$, both with sign $(-1)^K$, and $|\sum_{K\le K_0}(-1)^K(3K-1)|\le(3K_0+2)/2$; in the triangular case
+the gap before $T_k$ is $k$ with sign $(-1)^k$. For base $b^k$, the base-$b^k$ digit at place
+$n+1$ is the base-$b$ word of length $k$ at shift $kn$, and the balance argument applies with an extra
+$O(1)$ per gap. The Lean support is \cref{prop:leanderiv}, which gives membership in $K_b$.
+\end{proof}
+
+\begin{theorem}[Disjunctivity]\label{thm:disjunctive}\evidence{Paper proof}
+For every $b\ge2$, $D^jE_b$ $(j\ge1)$, $D^jE_b^3$ $(j\ge0)$ and $E_b^2DE_b$ are disjunctive in base $b$.
+\end{theorem}
+
+\begin{proof}
+Let $m=m_i$ with $i\ge i_0$, let $\ell$ be the number of digits of $|c_i|$, and suppose the gap before
+$m$ is at least $\ell$ and $|\tau_m|<1$; both hold for large $i$. Then
+$\lfloor b^mz\rfloor=b^gI_{m_{i-1}}+c_i+\lfloor\tau_m\rfloor$, so the digits at places
+$m-\ell+1,\dots,m$ form the $\ell$-digit expansion of $(c_i+\epsilon)\bmod b^\ell$, with $\epsilon=0$
+if $\tau_m>0$ and $\epsilon=-1$ if $\tau_m<0$; the sign of $\tau_m$ is $\sigma_{i+1}$. For $D^jE_b$ take
+$m=P_K^-$ with $K$ even: then $\sigma_i=\sigma_{i+1}=+1$ and the window reads $v_K=(P_K^-)^j$. For
+$D^jE_b^3$ and $E_b^2DE_b$ take $m=T_k$ with $k$ even: then the window reads $v_k=c_k-1$. In each case
+$v_K\to\infty$ increases with $v_{K+2}/v_K\to1$. Given a word $w$, let $W$ have digits $1w$; for large
+$s$ some $v_{K+2}$ lies in $[Wb^s,(W+1)b^s)$ and so begins with $1w$.
+\end{proof}
+
+\Cref{thm:F}(iii) follows from \cref{thm:signedfreq,thm:disjunctive}; recall from
+\cref{cor:missing} that $E_b$ itself is not disjunctive.
+
+\subsection{Euler's square}\label{subsec:squaredigits}
+
+\begin{theorem}[Digit law of $E_b^2$]\label{thm:squaredigits}\evidence{Paper proof}
+For every $b\ge2$ and $L\ge1$, $f_{0^L}(N;E_b^2)=\rho_+(N)+o(1)$,
+$f_{(b-1)^L}(N;E_b^2)=1-\rho_+(N)+o(1)$, and all other words have frequency $o(1)$, where
+$\rho_+(N)$ is the gap-weighted proportion of support points $m$ with
+$\sum_{m'\ge m}a_2(m')b^{m-m'}\ge0$. Hence $E_b^2$ is not simply normal for $b\ge3$, and $E_2^2$ is simply
+normal in base $2$ if and only if $\rho_+(N)\to\frac12$ for $b=2$.
+\end{theorem}
+
+\begin{proof}
+By \cref{prop:squareelem}, $S(X)\ll X/\sqrt{\log X}$ and $A(X)=O(X)$, so
+\cref{lem:oriented}(d) gives $B_L(N)=O(N\LL/\sqrt{\log N})$; apply \cref{lem:oriented}(b),(c).
+\end{proof}
+
+The oriented values are in fact never $0$: a vanishing value would make $b^mE_b^2$ an integer, while
+$E_b$ is transcendental by Nesterenko's theorem (\cref{prop:arith}). This remark uses that external
+input; \cref{thm:squaredigits} does not.
+
+\begin{theorem}[Wirsing's mean-value theorem {\cite{Wirsing1967}}]\label{thm:wirsing67}\evidence{External input}
+Let $g$ be multiplicative with $0\le g(n)\le1$ for all $n$, and let $f$ be real multiplicative with
+$|f|\le g$. If $\sum_{p\le x}g(p)\log p\sim\tau x$ with $\tau>0$ and
+$\sum_p(g(p)-f(p))/p=\infty$, then $\sum_{n\le x}f(n)=o(\sum_{n\le x}g(n))$.
+\end{theorem}
+
+\begin{theorem}[Both constant words]\label{thm:squarebothwords}\evidence{Paper proof}
+Granting \cref{thm:etainput}, there is $c>0$ such that for every $b\ge2$ and $L\ge1$,
+$c\le\liminf_Nf_{0^L}(N;E_b^2)\le\limsup_Nf_{0^L}(N;E_b^2)\le1-c$.
+\end{theorem}
+
+\begin{proof}
+Let $U=\supp a_2$ and $s=\sgn a_2$ on $U$. The function $f(m)=\sgn c(m)$ is real multiplicative with
+$|f|\le g$, the indicator of $\{12n+1:n\in U\}$, and $\sum_{p\le x}g(p)\log p\sim x/4$. By
+\cref{thm:square}(c) the primes with $\epsilon_p=-1$ have Chebotarev density $\frac18$ in the ring
+class field, so $\sum_p(g(p)-f(p))/p=\infty$, and \cref{thm:wirsing67} gives
+$\sum_{n\le N,\,n\in U}s(n)=o(S_\eta(N))$. Hence $U\cap(N/2,N]$ contains at least
+$\kappa'N/(\log N)^{3/4}$ positive points for large $N$. Let $H=\lfloor\eta(\log N)^{3/4}\rfloor$. By
+\cref{thm:S}, at most $2C_0HN/(\log N)^{3/2}\le\frac18\kappa'N/(\log N)^{3/4}$ points of $U\cap(N/2,N]$
+have another support point within $H$ when $\eta\le\kappa'/(16C_0)$. By Markov's inequality,
+$o(N/(\log N)^{3/4})$ points have $|a_2(n)|>(\log N)^{1/3}$, and $O(Nb^{-H})$ isolated points have
+$|\tau_m|\ge1$. Every remaining positive point $m$ has a positive oriented value
+$a_2(m)+\tau_m$ and produces the word $0^L$ at the
+shifts in $[m-H,m-r_0]$, $r_0=L+\log_b(2(\log N)^{1/3})+1$, by \cref{lem:oriented}; these sets are
+disjoint, so $Z_{0^L}(N)\ge(H-r_0)\frac14\kappa'N/(\log N)^{3/4}\ge\frac15\eta\kappa'N$. The same
+argument with $s=-1$ bounds $Z_{(b-1)^L}(N)$ from below, and $Z_{0^L}+Z_{(b-1)^L}\le N$.
+\end{proof}
+
+At $N=2^{18}$ the certified binary digits of $E_2^2$ give $f_0=0.50170$ against $\rho_+=0.50179$; this
+is a finite measurement, and the simple normality of $E_2^2$ in base $2$ remains open.
+
+\subsection{Rational scalings}\label{subsec:automaton}
+
+Let $d\ge2$ with $\gcd(d,b)=1$, $a\ne0$ with $\gcd(a,d)=1$, and $t=\ord_d(b)$. Let
+$z\in\{E_b,E_b^3\}$ with insertion positions $p_j$ and coefficients $c_j$. Then
+$b^n\frac adz=\frac adI_n+\frac ad\tau_n$, and the \emph{atom} at shift $n$ is $\alpha_n=aI_n\bmod d$.
+Between insertions $I_{n+1}=bI_n$, and at an insertion $I_p=bI_{p-1}+c_p$.
+
+\begin{lemma}[Nonzero atoms are interior]\label{lem:atoms}\evidence{Paper proof}
+For $1\le c\le d-1$ and $L\ge1$, $c/d$ is at distance at least $1/(db^L)$ from $b^{-L}\Z$; so $c/d$ lies
+in the interior of the cylinder labelled by the first $L$ digits $\pi_L(c/d)$ of its purely periodic
+expansion.
+\end{lemma}
+
+\begin{proof}
+$|c/d-k/b^L|=|cb^L-kd|/(db^L)$ and $d\nmid cb^L$.
+\end{proof}
+
+\begin{theorem}[Signed automaton]\label{thm:automaton}\evidence{Lean-supported paper proof}
+Augment each run between insertions with the sign $\sigma$ of the insertion that ends it. The pairs
+(atom at the start of the run, $\sigma$) evolve by a purely periodic finite automaton, and every word
+$w$ of every length $L$ has a rational limiting frequency
+\[
+f_w=\sum_{(u,\sigma)}\omega(u,\sigma)\frac1{|O(u)|}\sum_{x\in O(u)}\ind\bigl[\mathrm{word}(ax\bmod d,\sigma\sgn a)=w\bigr],
+\]
+where $O(u)$ is the orbit of $u$ under multiplication by $b$, $\omega(u,\sigma)$ is the limiting share
+of runs of that class, $\mathrm{word}(c,\cdot)=\pi_L(c/d)$ for $c\ne0$, $\mathrm{word}(0,+)=0^L$ and
+$\mathrm{word}(0,-)=(b-1)^L$. Moreover $\max_{|w|=L}|f_w(N)-f_w|$ is $O(N^{-1/2})$ for $E_b$ and
+$O(\log N/\sqrt N)$ for $E_b^3$.
+\end{theorem}
+
+\begin{proof}
+For $E_b$ the state after the pair $k$ is $(k\bmod\mathrm{lcm}(2,t),\,I_{P_k^+}\bmod d)$, updated by an
+affine bijection of $\Z/d$; pure periodicity is
+\leanP{NormalReciprocalCore}{336}{eulerAutomaton_purely_periodic}, via
+\leanP{NormalReciprocalCore}{315}{eulerAutomatonStep_bijective}; the cube is analogous with states
+modulo $\mathrm{lcm}(t,2,d)$. Let $n$ lie in the run ending at the insertion $p$ with coefficient $c$,
+at distance $r=p-n\ge\ell=L+\lceil\log_b(|a|(|c|+\frac12))\rceil+1$, beyond the finitely many
+insertions whose remainder exceeds $\frac12$. Then $a\tau_n$ has sign $\sigma\sgn a$ and modulus
+$<b^{-L}$. If $\alpha_n\ne0$, then $|x_n-\alpha_n/d|<1/(db^L)$ and \cref{lem:atoms} gives the word
+$\pi_L(\alpha_n/d)$; if $\alpha_n=0$, \cref{lem:oriented}(a) gives $0^L$ or $(b-1)^L$ by the sign. The
+exceptional shifts number $O(\sqrt N(L+\log(|a|N)))$. Inside a run $\alpha_n$ moves along $u\mapsto ub$
+while $\sigma$ is constant, and runs of one type have lengths that are the same linear function of
+$k$ for every class, so each class receives its share up to $O(1/\sqrt N)$.
+\end{proof}
+
+\begin{theorem}[Odd order]\label{thm:oddorder}\evidence{Paper proof}
+If $t=\ord_d(b)$ is odd, then the limit word law of $\frac adE_b$, and of $\frac adE_b^3$ when moreover
+$d$ is odd, is invariant under the digit complement $w\mapsto\bar w$, $\bar w_i=b-1-w_i$. In particular,
+in base $2$, $\frac adE_2$ and $\frac adE_2^3$ are simply normal whenever $\ord_d(2)$ is odd.
+\end{theorem}
+
+\begin{proof}
+For $E_b$ write $P(j)=j(3j-1)/2$ for $j\in\Z$, so that the generalized pentagonal numbers up to $P_k^+$
+are $P(j)$, $-k\le j\le k$, and $I_{P_k^+}\equiv b^{P_k^+}\sum_{j=-k}^k\mathrm{tm}(j)$ with
+$\mathrm{tm}(j)=(-1)^jb^{-P(j)}\bmod d$. Since $t$ is odd, $P(j+t)-P(j)=t(6j+3t-1)/2\equiv0\pmod t$,
+so $\mathrm{tm}(j+t)=-\mathrm{tm}(j)$, any $2t$ consecutive terms sum to $0$, and the atom of the run
+of index $k+t$ is the negative of that of index $k$, while $b^{P_{k+t}^\pm}=b^{P_k^\pm}$ and the run
+signs flip. Negation sends $\pi_L(c/d)$ to its complement and swaps $0^L$ with $(b-1)^L$, and classes
+$k$ and $k+t$ have equal weight. For $E_b^3$ let $T=\mathrm{lcm}(t,d)$, odd, and
+$\mathrm{tm}(i)=(-1)^i(2i+1)b^{-T_i}\bmod d$. Then $\mathrm{tm}(i+T)=-\mathrm{tm}(i)$, and the
+involution $i\mapsto T-1-i$ gives $\mathrm{tm}(T-1-i)=-\mathrm{tm}(i)$, so $\sum_{i<T}\mathrm{tm}(i)=0$
+(as $d$ is odd) and the argument concludes as before.
+\end{proof}
+
+\begin{proposition}[No higher normality]\label{prop:nohigher}\evidence{Paper proof}
+At most $d+1$ words of length $L$ have positive limit frequency in $\frac adE_b$ or $\frac adE_b^3$.
+Hence these numbers are not $L$-normal for $b^L>d+1$, and never normal.
+\end{proposition}
+
+\begin{proof}
+By \cref{thm:automaton} the only words with positive limit frequency are $\pi_L(c/d)$, $c\ne0$, and
+$0^L$, $(b-1)^L$.
+\end{proof}
+
+For example, $\frac17E_2$ and $\frac17E_2^3$ are simply normal in base $2$ (as $\ord_7(2)=3$), with
+$f_{00}=f_{11}=\frac{11}{54}$ for $\frac17E_2$, whereas $\frac13E_2$ has $f_0=\frac7{12}$ and
+$\frac12E_3$ has digit frequencies $\frac16,\frac23,\frac16$ in base $3$. In every case examined with
+$d<64$, simple normality of $\frac adE_2$ in base $2$ holds exactly when $\ord_d(2)$ is odd; the
+converse of \cref{thm:oddorder} is open (\cref{sec:open}).
+
+\section{A uniform pair sieve for Euler's square}\label{sec:sieve}
+
+Let $\mathcal P_0$ be the set of primes $p\ge5$ with $p\not\equiv1\pmod{12}$. By \cref{thm:square}(a),
+if $a_2(n)\ne0$ then $v_p(12n+1)$ is even for every $p\in\mathcal P_0$; for such $n$ put
+$v(n)=\prod_{p\in\mathcal P_0}p^{v_p(12n+1)/2}$ and $u(n)=(12n+1)/v(n)^2$, a product of primes
+$\equiv1\pmod{12}$.
+
+\begin{theorem}[Uniform pair sieve]\label{thm:S}\evidence{Paper proof}
+Granting \cref{thm:etainput}, there is an absolute constant $C_0$ such that for all $N\ge2$ and
+$1\le H\le N$,
+\[
+\sum_{h=1}^H\cnt\{1\le n\le N:\ a_2(n)a_2(n+h)\ne0\}\le C_0\frac{HN}{(\log N)^{3/2}}.
+\]
+\end{theorem}
+
+\begin{lemma}[Selberg's upper bound]\label{lem:selberg}\evidence{Paper proof}
+Let $F\in\Z[m]$, let $I$ be a set of $X$ consecutive integers, $\mathcal Q$ a finite set of primes,
+$P=\prod_{p\in\mathcal Q}p$, $\rho(d)=\cnt\{m\bmod d:d\mid F(m)\}$ for squarefree $d\mid P$, and assume
+$1\le\rho(p)<p$ on $\mathcal Q$. Put $g(d)=\prod_{p\mid d}\rho(p)/(p-\rho(p))$,
+$G(\xi)=\sum_{d<\xi,\,d\mid P}g(d)$ and $r_d=\cnt\{m\in I:d\mid F(m)\}-X\rho(d)/d$. Then $|r_d|\le\rho(d)$
+and for every $\xi>1$
+\[
+\cnt\{m\in I:\gcd(F(m),P)=1\}\le\frac X{G(\xi)}+\sum_{d_1,d_2<\xi,\ d_i\mid P}|r_{[d_1,d_2]}|.
+\]
+\end{lemma}
+
+\begin{proof}
+$\rho$ is multiplicative by the Chinese remainder theorem and each of the $\rho(d)$ classes meets $I$
+in $\lfloor X/d\rfloor$ or $\lceil X/d\rceil$ points. For real $\lambda_d$ ($d\mid P$, $d<\xi$) with
+$\lambda_1=1$, $\ind[\gcd(F(m),P)=1]\le(\sum_{d\mid\gcd(F(m),P)}\lambda_d)^2$, so the count is at most
+$XQ(\lambda)+\sum\lambda_{d_1}\lambda_{d_2}r_{[d_1,d_2]}$ with
+$Q(\lambda)=\sum\lambda_{d_1}\lambda_{d_2}f([d_1,d_2])$, $f(d)=\rho(d)/d$. With $h=1/f-1$ extended
+multiplicatively and $y_t=\sum_{t\mid d}\lambda_df(d)$, $Q(\lambda)=\sum_th(t)y_t^2$ and
+$1=\sum_t\mu(t)y_t$, so Cauchy--Schwarz gives $Q\ge1/G(\xi)$ with equality for
+$y_t=\mu(t)g(t)/G(\xi)$. For this choice
+$\lambda_d=\mu(d)\frac{g(d)}{f(d)}\frac{G_d(\xi/d)}{G(\xi)}$ with $G_d(y)=\sum_{k<y,\,k\mid P,\,(k,d)=1}g(k)$;
+since $g(d)/f(d)=\sum_{s\mid d}g(s)$ and the products $sk$ are distinct divisors of $P$ below $\xi$,
+$|\lambda_d|\le1$.
+\end{proof}
+
+\begin{lemma}[Lower bound for $G$]\label{lem:Glower}\evidence{Paper proof}
+In \cref{lem:selberg} assume also $\rho(p)\in\{1,2\}$ and $5\le p\le z$ on $\mathcal Q$, $\log z\ge2$
+and $\xi\ge z^{17}$. Then $G(\xi)\ge\frac12\prod_{p\in\mathcal Q}(1-1/p)^{-\rho(p)}$.
+\end{lemma}
+
+\begin{proof}
+Let $\kappa$ be multiplicative with $\kappa(p^k)=\binom{k+\rho(p)-1}{\rho(p)-1}\le\rho(p)^k$. Then
+$g(e)\ge\sum_{\rad n=e}\kappa(n)/n$ for squarefree $e\mid P$, so $G(\xi)\ge\Pi-T$ with
+$\Pi=\prod_{p\in\mathcal Q}(1-1/p)^{-\rho(p)}$ and $T=\sum_{n\ge\xi,\,\rad n\mid P}\kappa(n)/n$. With
+$\delta=1/\log z$, Rankin's trick gives $T\le\xi^{-\delta}\prod_p(1-p^{\delta-1})^{-\rho(p)}$; since
+$\delta\log p\le1$, $p^\delta-1\le(e-1)\delta\log p$ and $1-p^{\delta-1}\ge1-e/5$, and Mertens'
+bound $\sum_{p\le z}(\log p)/p\le\log z+2$ gives $T\le\xi^{-\delta}\Pi e^{15.07}\le e^{-1.93}\Pi<\Pi/2$.
+\end{proof}
+
+\begin{lemma}[Mertens over $\mathcal P_0$]\label{lem:mertensP0}\evidence{Paper proof}
+There is an absolute $B$ with $\prod_{p\le z,\,p\in\mathcal P_0}(1-1/p)^2\le e^{2B}(\log z)^{-3/2}$ for
+$z\ge5$.
+\end{lemma}
+
+\begin{proof}
+For $a\in\{5,7,11\}$, $\sum_{p\le x,\,p\equiv a\,(12)}(\log p)/p=\frac14\log x+O(1)$
+\cite[Thm.~7.3]{Apostol}; partial summation and $(1-1/p)^2\le e^{-2/p}$.
+\end{proof}
+
+\begin{lemma}[Supported pairs]\label{lem:pairstructure}\evidence{Paper proof}
+Let $h\ge1$, $a_2(n)a_2(n+h)\ne0$, $v=v(n)$, $v'=v(n+h)$ and $g=\gcd(v,v')$. Then $g^2\mid h$. For
+$v,v'$ prime to $6$ with $g^2\mid h$, the $n$ with $v^2\mid12n+1$ and $v'^2\mid12(n+h)+1$ form one class
+$n\equiv n_0\pmod L$, $L=v^2v'^2/g^2$; writing $n=n_0+mL$,
+$(12n+1)/v^2=A_1m+B_1$ and $(12(n+h)+1)/v'^2=A_2m+B_2$ with $A_1=12v'^2/g^2$, $A_2=12v^2/g^2$ and
+$A_1B_2-A_2B_1=144h/g^2$. For $p\in\mathcal P_0$ with $p\nmid vv'$, the product
+$(A_1m+B_1)(A_2m+B_2)$ has $2$ roots modulo $p$ if $p\nmid h$ and $1$ root if $p\mid h$.
+\end{lemma}
+
+\begin{proof}
+$g^2$ divides $12n+1$ and $12n+12h+1$, hence $12h$, and $\gcd(g,6)=1$. The congruences are solvable
+exactly when they agree modulo $g^2$, that is, $g^2\mid h$, and then the solution is unique modulo
+$L$. The relation $v^2(A_1m+B_1)+12h=v'^2(A_2m+B_2)$ gives the determinant, and two roots modulo
+$p\nmid12vv'$ coincide exactly when $p\mid144h/g^2$, that is, $p\mid h$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:S}]
+We first show that for $N\ge N_1=\lceil e^{200}\rceil$ and $1\le h\le N$,
+\begin{equation}\label{eq:pershift}
+P_h(N):=\cnt\{1\le n\le N:a_2(n)a_2(n+h)\ne0\}\le C_1\frac h{\varphi(h)}\frac N{(\log N)^{3/2}},
+\end{equation}
+with $C_1=4000e^{2B}C_5+1$ and
+$C_5=\sum_g(g/\varphi(g))^4g^{-2}\bigl(\sum_w(w/\varphi(w))^2w^{-2}\bigr)^2<\infty$. Put
+$V=(\log N)^3$, $z=N^{1/100}$, $\xi=z^{17}$. Pairs with $v(n)>V$ or $v(n+h)>V$ number at most
+$2N/V+\sqrt{12N+1}+\sqrt{24N+1}$, since each $v$ prime to $6$ fixes one class modulo $v^2$ and
+$\sum_{v>V,\,(v,6)=1}v^{-2}\le1/V$. For the other pairs, fix $(v,v')$ with $v,v'\le V$ and $g^2\mid h$.
+By \cref{lem:pairstructure} the relevant $m$ form a set of $X\le2N/L$ consecutive integers at which
+$F(m)=(A_1m+B_1)(A_2m+B_2)$ has no prime factor in $\mathcal Q=\{p\in\mathcal P_0:p\le z,\ p\nmid vv'\}$,
+and $\rho(p)\in\{1,2\}$ there. \Cref{lem:selberg,lem:Glower,lem:mertensP0}, together with
+$|r_e|\le\tau(e)$ and $\sum_{d<\xi}\tau(d)\le\xi(1+\log\xi)$, bound this count by
+\[
+4000e^{2B}\frac h{\varphi(h)}\frac N{(\log N)^{3/2}}\cdot\frac{(v/\varphi(v))^2(v'/\varphi(v'))^2}L+\xi^2(1+\log\xi)^2 .
+\]
+Writing $v=gw$, $v'=gw'$ with $\gcd(w,w')=1$, $L=g^2w^2w'^2$, and the sum of the last factor over all
+pairs is at most $C_5$, uniformly in $h$. The remainders total at most
+$V^2\xi^2(1+\log\xi)^2+2N/V+9\sqrt N\le N(\log N)^{-3/2}$ for $\log N\ge200$. This proves
+\eqref{eq:pershift}. Since $h/\varphi(h)=\sum_{d\mid h}\mu(d)^2/\varphi(d)$,
+$\sum_{h\le H}h/\varphi(h)\le H\zeta(2)\zeta(3)/\zeta(6)\le1.9436H$. For $N<N_1$ use the trivial bound
+$HN\le(\log N_1)^{3/2}HN/(\log N)^{3/2}$.
+\end{proof}
+
+\begin{theorem}[Rational scalings of $E_b^2$]\label{thm:squarescaling}\evidence{Paper proof}
+Granting \cref{thm:etainput}, for a reduced fraction $a/d$, $\frac adE_b^2\in K_b$ if and only if
+$a/d\in\Z[1/b]$.
+\end{theorem}
+
+\begin{proof}
+As in the proof of \cref{thm:polyscal} it suffices to show $\frac1\ell E_b^2\notin K_b$ for each prime
+$\ell\nmid b$; $\ell=2$ is \cref{thm:polyscal}(c). Let $\ell$ be odd and suppose
+$\frac1\ell E_b^2\in K_b$. With $I_n$ and $\tau_n$ as in \cref{subsec:oriented}, the transfer bounds
+give $|\tau_n|\to0$ in density, so $I_n\equiv c\pmod\ell$ for a density-one set of $n$, for some $c$
+with $bc\equiv c$. Let $S_\ell=\{n:\ell\nmid a_2(n)\}$. Between consecutive elements of $S_\ell$,
+$I_n\equiv bI_{n-1}\pmod\ell$, so on each such run $I_n\equiv c$ everywhere or nowhere, and two
+consecutive runs cannot both sit at $c$. Let $S'$ be the set of $n$ with $12n+1=uv^2$, $u$ squarefree
+composed of primes $\equiv1\pmod{12}$ and $v$ composed of primes in $\mathcal P_0$; by
+\cref{thm:square}(a), $|a_2(n)|=2^{\omega(u)}$ on $S'$, so $S'\subseteq S_\ell$, and Wirsing's theorem
+gives $|S'\cap(N/2,N]|\ge\kappa N(\log N)^{-3/4}$. By \cref{thm:S} applied to $n$ and to $n-h$, with
+$H=\lfloor\kappa(\log N)^{3/4}/(4C_0)\rfloor$, at least $\frac12\kappa N(\log N)^{-3/4}$ points of
+$S_\ell\cap(N/2,N]$ have both neighbouring gaps at least $H$, and at each of them one of the two
+adjacent stretches of length $H$ avoids $c$. Each $n$ lies in at most two such stretches, so
+$\cnt\{n<N+H:I_n\not\equiv c\}\ge\frac H2\cdot\frac{\kappa N}{2(\log N)^{3/4}}\ge\frac{\kappa^2}{20C_0}N$,
+a contradiction.
+\end{proof}
+
+\Cref{thm:C}(iii) follows from \cref{thm:polyscal,thm:squarescaling}. The limit law of
+$\frac adE_b^2$ for odd $d>1$ is not determined here.
+
+\section{Limits of sparse and signed transfer}\label{sec:limits}
+
+\subsection{Products and dense series}\label{subsec:products}
+
+\begin{proposition}[Sumset criterion]\label{prop:sumset}\evidence{Lean-supported paper proof}
+Let $x=F_b(a)$ and $y=F_b(c)$ with absolutely convergent integer series, and
+$\bar A_a(X)=\sum_{0\le m\le X}|a(m)|$. If
+$\cnt\bigl((\supp a\cap[0,X])+(\supp c\cap[0,X])\bigr)=o(X)$ and $\bar A_a(X)\bar A_c(X)=O(X)$, then
+$xy\in K_b$.
+\end{proposition}
+
+\begin{proof}
+$xy=F_b(a*c)$, $\supp(a*c)\subseteq\supp a+\supp c$, and the convolution mass bound of
+\cref{prop:leaneuler} gives $\sum_{m\le X}|(a*c)(m)|\le\bar A_a(X)\bar A_c(X)$; apply
+\cref{thm:leantransfer}.
+\end{proof}
+
+\begin{proposition}[Squares leave the kernel]\label{prop:squaring}\evidence{Paper proof}
+Let $\mathcal B$ be the set of integers whose base-$4$ digits lie in $\{0,1\}$, $r\ge2$,
+$U=\sum_{\beta\in\mathcal B}b^{-r\beta}$, $V=\sum_{\beta\in\mathcal B}b^{-2r\beta}$ and $x=U+V$. Then
+$x\in K_b$ and $x^2\notin K_b$.
+\end{proposition}
+
+\begin{proof}
+Every $n\ge0$ is uniquely $\beta+2\beta'$ with $\beta,\beta'\in\mathcal B$ (Moser--de Bruijn), so
+$UV=\sum_nb^{-rn}=b^r/(b^r-1)$. Both $U$ and $V$ have bounded coefficients and support
+$\ll X^{1/2}$, so $x\in K_b$. Sums of two elements of $\mathcal B$ have base-$4$ digits in
+$\{0,1,2\}$, so $\mathcal B+\mathcal B$ has counting function $\asymp X^{\log3/\log4}=o(X)$, and
+\cref{prop:sumset} gives $U^2,V^2\in K_b$. Hence $x^2\equiv2b^r/(b^r-1)\pmod{K_b}$. The reduced
+denominator $(b^r-1)/\gcd(2,b^r-1)$ is prime to $b$ and exceeds $b-1$, so this rational is not in
+$K_b$ \cite{DiscrepancyCompanion}, and neither is $x^2$.
+\end{proof}
+
+\begin{proposition}[Theta powers modulo the kernel]\label{prop:thetapowers}\evidence{Paper proof}
+In every base $b\ge2$, with $\Theta=\Theta_3(1/b)$ and $L=L_{\chi_{-4}}(b)$,
+$\Theta^4-16L^2\in K_b$ and $\Theta^3-4\Theta L\in K_b$. In base $2$,
+$|D_N(\Theta_3(1/2)^4)-D_N(L_{\chi_{-4}}(2)^2)|\le1-D_N(L_{\chi_{-4}}(2))+7/N\ll\LL/\sqrt{\log N}$.
+\end{proposition}
+
+\begin{proof}
+$\Theta^2=1+4L$, so $\Theta^4=1+8L+16L^2$ and $\Theta^3=\Theta+4\Theta L$, while $L$ and $\Theta$ lie in
+$K_b$ (\cref{thm:thetaupper}). Apply \cref{lem:linear}. For the base-$2$ bound, write
+$2^4L^2-\Theta^4=-1-z$ with $z=2^3L$ and apply \cref{lem:linear} with $k=4$ and the single term
+$z$ (coefficient $-1$; the integer $-1$ does not change $D_N$); this gives $4/N+(1-D_N(z))$, and
+\cref{lem:linear} again gives $1-D_N(z)\le1-D_N(L)+3/N$.
+\end{proof}
+
+These transfers decide nothing: membership in $K_b$, normality and $D^+<1$ are open for
+$\Theta_3(1/b)^3$, $\Theta_3(1/b)^4$, $E_2(1/b)$, $E_4(1/b)$, $E_6(1/b)$, $\Delta(1/b)=b^{-1}E_b^{24}$ and
+the partition constant $P_b=1/E_b=\sum p(n)b^{-n}$. For dense coefficient series the exact identity
+$\dist{x_n-R_{n,L}b^{-L}}\le\sum_{j>L}|a(n+j)|b^{-j}$, with
+$R_{n,L}=\sum_{j\le L}a(n+j)b^{L-j}\bmod b^L$, reduces $D_N$ to finite residues; for $P_b$ the required
+window is $(\pi\sqrt{2/3}/\log b)\sqrt N+O(\log N)$ digits, sharp to first order by the
+Hardy--Ramanujan asymptotic \cite{HardyRamanujan1918}. Congruences such as Ramanujan's
+$p(5k+4)\equiv0\pmod5$ leave no trace in the digits:
+
+\begin{proposition}[Wash-out]\label{prop:washout}\evidence{Paper proof}
+Let $Z\subset\Z_{\ge1}$ contain no two consecutive integers. Every real $u$ has a representation
+$u=\lfloor u\rfloor+\sum_{m\ge1}a^*(m)b^{-m}$ with integers $0\le a^*(m)\le b^2-1$ and $a^*(m)=0$ for
+$m\in Z$.
+\end{proposition}
+
+\begin{proof}
+Let $d_1d_2\cdots$ be the base-$b$ digits of $\fr u$. Move each digit $d_m$, $m\in Z$, to position
+$m+1\notin Z$ via $d_mb^{-m}=(bd_m)b^{-m-1}$; the new coefficient at $m+1$ is
+$d_{m+1}+bd_m\le b^2-1$.
+\end{proof}
+
+\subsection{Signed digits: completeness}\label{subsec:completeness}
+
+A \emph{local decomposition} of $a$ assigns to each $m$ a finite multiset $\mathcal D_m$ of pairs
+$(u,e)$ with $u\in\Z\setminus\{0\}$, $e\ge0$, $\sum_{\mathcal D_m}ub^e=a(m)$ and
+$\sum_m\sum_{\mathcal D_m}|u|b^{e-m}<\infty$. Its net sequence is
+$A_{\rm net}(t)=\sum_m\sum_{(u,e)\in\mathcal D_m,\ m-e=t}u$.
+
+\begin{theorem}[Net transfer]\label{thm:net}\evidence{Lean-supported paper proof}
+If $m-e\ge-E_0$ for all pairs, then $F_b(a)-\sum_{t\ge1}A_{\rm net}(t)b^{-t}\in\Z$. Consequently
+$F_b(a)\in K_b$ whenever $A'(t)=A_{\rm net}(t)-c$ satisfies, for some $c\in\Z$, the hypotheses of
+any of the three cases of \cref{thm:leantransfer}.
+\end{theorem}
+
+\begin{proof}
+Absolute convergence permits the rearrangement and the terms with $t\le0$ are integers. Then
+$F_b(a)\equiv c/(b-1)+F_b(A')$, with $c/(b-1)$ a fixed point, and $K_b$ is invariant under such
+translations \cite{DiscrepancyCompanion}; apply the Lean theorems listed in
+\cref{thm:leantransfer} to $A'$.
+\end{proof}
+
+\begin{theorem}[Completeness]\label{thm:completeness}\evidence{Paper proof}
+$x\in K_b$ if and only if there are $c\in(b-1)^{-1}\Z$ and integers $A(t)$ $(t\ge1)$ with
+$|A(t)|\le\lfloor b/2\rfloor$, $\cnt\{t\le N:A(t)\ne0\}=o(N)$ and
+$x-c-\sum_{t\ge1}A(t)b^{-t}\in\Z$. One may take $A(t)=I_t-bI_{t-1}$ with
+$I_t=\lfloor b^t(x-c)+\frac12\rfloor$. In base $2$, $x\in K_2$ if and only if the binary digits of $x$
+change $o(N)$ times among the first $N$.
+\end{theorem}
+
+\begin{proof}
+``If'' is \cref{thm:net}. Conversely $x=c+w$ with $M_N(w)\to0$ \cite{DiscrepancyCompanion}. With
+$\varepsilon_t=I_t-b^tw\in(-\frac12,\frac12]$, $A(t)=\varepsilon_t-b\varepsilon_{t-1}$ has modulus
+$<(b+1)/2$, so $|A(t)|\le\lfloor b/2\rfloor$; if $\dist{b^{t-1}w}<1/(2b)$ then $I_t=bI_{t-1}$, so by
+Markov's inequality $\cnt\{t\le N:A(t)\ne0\}\le2bNM_N(w)=o(N)$. In base $2$ the canonical sequence is
+$A(n)=d_{n+1}-d_n$.
+\end{proof}
+
+So every element of $K_b$ has a sparse bounded signed representation computed from its own digits,
+and signed transfer with arbitrary cancellation between coefficients is equivalent to membership.
+A barrier can only concern decompositions fixed in advance, coefficient by coefficient.
+
+\subsection{The entropy--multiplicity wall}\label{subsec:wall}
+
+For an integer $x\ne0$ let $w_b^\pm(x)$ be the least $r$ such that $x=\sum_{i\le r}u_ib^{e_i}$ with
+distinct $e_i\ge0$ and $1\le|u_i|\le b-1$. (For $b=2$ this is the weight of the non-adjacent form
+\cite{Reitwiesner1960}.)
+
+\begin{lemma}[Counting signed representations]\label{lem:entropy}\evidence{Paper proof}
+\leavevmode
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item If $x=\sum_{i\le r}u_ib^{e_i}$ with $e_1>\dots>e_r\ge0$ and $1\le|u_i|\le b-1$, then
+$|x|\ge b^{e_1-r+1}$.
+\item If $x=\sum_ec_eb^e$ is finite, then $w_b^\pm(x)\le\sum_e|c_e|$; so a decomposition of $x$ into
+$r$ terms $ub^e$ with $|u|\le B$ has $r\ge w_b^\pm(x)/B$.
+\item For $X\ge b$ and $k\ge0$, $\cnt\{0<|x|\le X:w_b^\pm(x)\le k\}\le\sum_{r\le k}\binom Er(2b-2)^r$
+with $E=\lfloor\log_bX\rfloor+k$. If $N\ge b^2$, $A\ge1$, $\theta\in[2^{-20},1]$, $X=N^A$ and
+$k\le\frac\theta{40A}\log_bN$, the count is at most $N^\theta$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $|x|\ge b^{e_1}-(b-1)(b^{e_1-1}+\dots+b^{e_1-r+1})=b^{e_1-r+1}$. (b) Normalize carries upward:
+replacing $c_e=qb+s$ ($|s|<b$, $s$ of the sign of $c_e$) by $s$ and adding $q$ to $c_{e+1}$ lowers
+$\sum|c_e|$ by $(b-1)|q|$. (c) By (a), exponents are at most $\log_bX+k-1$; choose $r$ positions
+and signed digits. With $\ell=\log_bN$ and $c=k/\ell$, $\sum_{r\le k}\binom Er\le2^{(A+c)\ell H(c/(A+c))}$
+with $H(p)\le p\log_2(e/p)$, and the resulting exponent is at most $\theta\ell\log_2b$ at
+$c=\theta/(40A)$.
+\end{proof}
+
+\begin{theorem}[Entropy--multiplicity wall]\label{thm:wall}\evidence{Paper proof}
+Let $b\ge2$, $A\ge1$, $\theta\in[2^{-20},1]$, $c=\theta/(40A)$, $N\ge b^2$, and $\mathcal T\subseteq[1,N]$
+with $0<|a(n)|\le N^A$ on $\mathcal T$. Let $\mu=\max_y\cnt\{n\in\mathcal T:a(n)=y\}$. Then
+$\sum_{n\in\mathcal T}w_b^\pm(a(n))\ge c\log_bN\,(|\mathcal T|-\mu N^\theta)$, and every local
+decomposition with $|u|\le B$ uses at least $(c/B)\log_bN\,(|\mathcal T|-\mu N^\theta)$ pairs on
+$\mathcal T$.
+\end{theorem}
+
+\begin{proof}
+Each value $y$ with $w^\pm(y)\le c\log_bN$ is taken at most $\mu$ times, and there are at most $N^\theta$
+such values by \cref{lem:entropy}(c). The last claim is \cref{lem:entropy}(b).
+\end{proof}
+
+\begin{theorem}[CM forms of weight $2$, $3$, $4$ {\cite{Ribet1977,Serre1981,Serre1985}}]\label{thm:cminput}\evidence{External input}
+Let $g$ be one of $\eta(6\tau)^4$, $\eta(4\tau)^6$, $\eta(3\tau)^8$, of weight $k\in\{2,3,4\}$. Then
+$g$ is a newform with complex multiplication by $F=\Q(\sqrt{-3})$, $\Q(i)$, $\Q(\sqrt{-3})$
+respectively: for split $p\nmid$ level, $p=\alpha\bar\alpha$ in $\mathcal O_F$ and
+$a(p)=2\Re(\chi(\alpha)\alpha^{k-1})$ with $\chi$ taking values in a finite set of roots of unity;
+$a(p)=0$ for inert $p$; $|a(n)|\le\tau(n)n^{(k-1)/2}$; and the support of $a$ has counting function
+$\asymp X/\sqrt{\log X}$.
+\end{theorem}
+
+\begin{corollary}[Signed width of modular coefficients]\label{cor:wall}\evidence{Paper proof}
+In every radix $b\ge2$, with $W_\pm(N)=\sum_{n\le N,\,a(n)\ne0}w_b^\pm(a(n))$:
+\textup{(a)} for $D(\Theta_3(1/b)^2)=\sum_nnr_2(n)b^{-n}$, $W_\pm(N)\asymp N\sqrt{\log N}$;
+\textup{(b)} for $D(E_b^2)$, granting \cref{thm:etainput}, $W_\pm(N)\asymp N(\log N)^{1/4}$;
+\textup{(c)} for $E_b^4$, $E_b^6$, $E_b^8$, $W_\pm(N)\asymp N\sqrt{\log N}$. The same lower bounds,
+divided by $B$, hold for the number of pairs of every local decomposition with $|u|\le B$.
+\end{corollary}
+
+\begin{proof}
+Upper bounds: $W_\pm\le\sum_{a(n)\ne0}(1+\log_b|a(n)|)$ with the support bounds and
+$|a(n)|\le N^{O(1)}$. (a) Take $\mathcal T=\supp r_2\cap[1,N]$, $A=2$, $\theta=\frac14$; if
+$nr_2(n)=y$ then $r_2(n)$ is $4$ times a divisor count, so $\mu\le\max_{n\le N}\tau(n)=N^{o(1)}$, and
+\cref{thm:wall} gives $W_\pm\gg\log_bN\cdot N/\sqrt{\log N}$. (b) Take $\mathcal T=\supp a_2\cap[1,N]$,
+of size $\gg N(\log N)^{-3/4}$; $n|a_2(n)|\le N^2$, and $\mu\le\max_{m\le N^2}\tau(m)=N^{o(1)}$. (c) In the
+index of the newform $g$ of \cref{thm:cminput}, let $\mathcal T_g$ be the set of $n=pm\le Y$ with $p$
+a split prime in $(Y^{1/2},Y^{3/4}]$ with $a(p)\ne0$ and $a(m)\ne0$ (the split primes with $a(p)=0$
+are $O(\sqrt Y)$ in number by the count below with $t=0$); then $a(n)=a(p)a(m)\ne0$, $p$ is determined by
+$n$, and $|\mathcal T_g|\gg Y/\sqrt{\log Y}$ by the support asymptotic. For $t\ne0$, the integer
+points of the box $|x|,|y|\le2\sqrt Y$ on the curve $2\Re(\zeta(x+y\omega)^{k-1})=t$ number $O(\sqrt Y)$,
+so $\cnt\{p\le Y:a(p)=t\}\le C_g\sqrt Y$, and
+$\cnt\{n\in\mathcal T_g:a(n)=y\}\le C_gY^{1/2}\cdot Y^{3/8}$. With $A=k$ and $\theta=\frac1{16}$,
+$\mu Y^\theta=o(|\mathcal T_g|)$. The coefficients of $E_b^r$ are those of $g$ along an arithmetic
+progression of indices, so the bound pulls back.
+\end{proof}
+
+For comparison, $F=\sum_m(2^{w(m)}-1)2^{-m}$, with $w(m)$ the binary length of $m$, lies in $K_2$
+although its raw width is $\sim N\log_2N$: the decomposition $2^{w(m)}-2^0$ has net sequence supported
+on $\{0\}\cup\{2^s-s-1\}$ because the $-1$ at index $m$ cancels the $+1$ contributed by another
+index. \Cref{cor:wall} says that for the four modular examples every coefficient-by-coefficient
+decomposition places $\gg N\sqrt{\log N}$ signed digits, so membership could only come from massive
+cancellation between different coefficients; by \cref{thm:completeness} that is exactly the
+membership question. Weight one is the threshold at which $|a(n)|\le\tau(n)=n^{o(1)}$ and the typical
+footprint of a coefficient is bounded. At $N=2^{14}$ the binary orbits of $E_2^4$ and $E_2^6$ have
+$D_N$ near $0.01$, the size expected for independent samples; this is a finite measurement.
+
+\Cref{thm:G} follows from \cref{thm:completeness}, \cref{cor:wall} and
+\cref{prop:squaring,prop:thetapowers}.
+
+\section{Open problems}\label{sec:open}
+
+\begin{enumerate}[nosep]
+\item Is $E_b^4\in K_b$? By \cref{thm:completeness} this is equivalent to a lower bound for the canonical
+net density of its digits, and \cref{cor:wall} rules out coefficient-by-coefficient arguments.
+\item Prove $D^+(P_b)<1$, or $P_b\notin K_b$, in some base.
+\item Determine the constant of \cref{thm:primedensity} above the threshold $\delta_b^*$. It is fixed by
+the frequency of long base-$b$ runs of $0$ or $b-1$ in $M\cdot2^m$.
+\item Exact constants for theta values of non-fundamental and imprimitive forms.
+\item Is $E_2^2$ simply normal in base $2$? Equivalently, does the gap-weighted proportion of positive
+oriented values tend to $\frac12$?
+\item Is the converse of \cref{thm:oddorder} true in base $2$: is $\frac adE_2$ simply normal only when
+$\ord_d(2)$ is odd? Is some rational scaling of $E_b$ simply normal in a base $b\ge3$?
+\item Determine the limit law of $\frac adE_b^2$ for odd $d>1$.
+\item Second-order terms of the deficits of $E_b$ and $E_b^3$, which oscillate with $\fr{\log_bN}$.
+\item Is $\Theta_Q(1/b)$ disjunctive for every $Q$ and $b$? Is $E_b^2$ disjunctive?
+\end{enumerate}
+
+\section{Verification and data}\label{sec:verification}
+
+The Lean declarations used are listed below with the statements that rest on them. All links point
+to commit \texttt{347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8}.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.52\linewidth}p{0.42\linewidth}@{}}
+\toprule
+Declaration & Used in\\
+\midrule
+\leanP{SharpTranslation}{386}{sharp_translation_isGreatest} & \cref{thm:sharp}, \eqref{eq:sharp}\\
+\leanP{SharpTranslation}{123}{arc_le}, \leanP{SharpTranslation}{167}{interval_eq_arc_excess} & \cref{lem:arcs}\\
+\leanP{Phase18Synthetic}{524}{discrepancy_deficit_le} & \cref{lem:deficit}\\
+\leanP{Phase18Synthetic}{768}{sparse_farCount_le} & \cref{thm:eulerdeficit} (upper bound)\\
+\leanP{CoefficientTransfer}{686}{one_sub_discrepancy_ge_of_bulk_and_far} & \cref{lem:circle}\\
+\leanP{CharacterLambertTransfer}{175}{radix_pow_linear_transfer}, \leanP{Phase18Synthetic}{681}{discrepancy_add_int} & \cref{lem:linear}\\
+\leanP{CoefficientTransfer}{392}{finite_sparse_mass_transfer} and three companions & \cref{thm:leantransfer}\\
+\leanP{GeneralMassTransfer}{253}{finite_poly_mass_transfer} and three companions & \cref{thm:leantransfer}\\
+\leanP{CoefficientTransfer}{588}{radixVal_mul_radixUnit}, \decl{not_dvd_radixUnit}, \leanP{CoefficientTransfer}{617}{displaced_term_eq} & \cref{lem:radixval}\\
+\texttt{RadixWidthLaw}: seven declarations & \cref{thm:displacedwidth,lem:onesource,thm:widthlaw,lem:firstmoment,lem:valuations}\\
+\texttt{EulerPentagonal}: ten declarations & \cref{prop:leaneuler}\\
+\texttt{DerivativeTransfer}: six declarations & \cref{prop:leanderiv}\\
+\texttt{AntisymmetricLambert}: four declarations & \cref{thm:oddweights,thm:qdigamma}\\
+\leanP{GeneralMassTransfer}{991}{qDigamma_reflection_eq_residueLambert} & \cref{thm:qdigamma}\\
+\texttt{CharacterLambertTransfer}: four mod-$8$ declarations & \cref{prop:residueclass}\\
+\leanP{NormalReciprocalCore}{336}{eulerAutomaton_purely_periodic}, \leanP{NormalReciprocalCore}{315}{eulerAutomatonStep_bijective} & \cref{thm:automaton}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These declarations are finite or qualitative statements about explicitly defined series and real
+numbers. Lean does not check Euler's or Jacobi's identity, any statement about $E_b^2$, any analytic
+number theory input, the exact constants, the digit formulas or the sieve of \cref{sec:sieve}. Exact
+scripts in the repository reproduce every finite number quoted in the text; they illustrate the
+theorems and are used in no proof. The theorem-by-theorem evidence map, the reproduction commands
+and the literature ledger accompany the source of this manuscript (directory
+\texttt{papers/11-generating-functions-digits}, files \texttt{VERIFICATION.md} and
+\texttt{LEDGER.md}). Human specialist review of the written proofs is outstanding.
+
+\section{Use of AI tools}\label{sec:ai}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed
+conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations
+and the Lean~4 formalizations, searched the literature and reviewed drafts across several model
+providers. The repository owner directed the project and is responsible for its release. The Lean
+kernel checked the declarations listed in \cref{sec:verification}. The written proofs, literature
+comparisons and priority statements have been checked only by AI models from different providers.
+They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

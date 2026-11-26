@@ -185,7 +185,7 @@ Hence $v_p(q_n)\ge rsJ-L+1$ off the discarded intervals, with $L$ fixed, and tho
 - $G\ge K^{rs-o(1)}$ (so $1/G_n\le\exp(-c\sqrt{\log N})$ for $n\ge\sqrt N$);
 - there are $N^{o(1)}$ runs, each with period $N^{o(1)}$. $\square$
 
-The bookkeeping indicates $D_N\ll_P\exp(-c_P\sqrt{\log N})$, dominated by the discarded intervals, whose relative size is $K^{-2p^{-H-1}}$. This is a sketch and is not claimed. The script shows the budget ratio $\log(\text{runs}\times\text{period})/\log n_K$ for $r=3$ falling: $1.29,0.77,0.45,0.26,0.14$ at $\log K=10,20,40,80,160$. Consecutive ratios $n_{i+1}/n_i\to1$, so the Liouville property is lost.
+The bookkeeping indicates $D_N\ll_P\exp(-c_P\sqrt{\log N})$, dominated by the discarded intervals, whose relative size is $K^{-2p^{-H-1}}$. This is a sketch and is not claimed. The script shows the budget ratio $\log(\text{runs}\times\text{period})/\log n_K$ for $r=3$ falling: $1.29,0.77,0.45,0.26,0.14$ at $\log K=10,20,40,80,160$. Consecutive ratios satisfy $n_{i+1}/n_i\to1$, so the consecutive-gap Liouville proof no longer applies; whether $W$ is non-Liouville or has finite irrationality exponent is not proved by consecutive ratios alone and remains open here.
 
 ## 8. Where the primes can appear
 

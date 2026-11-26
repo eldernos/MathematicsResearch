@@ -599,6 +599,263 @@ def replace_block(text, name, body):
 
 
 # ---------------------------------------------------------------------------
+# docs/benchmarks/progress.md and benchmark checks
+
+BENCH_CATS = (
+    ("algebraic", "Algebraic irrationals"),
+    ("logarithmic_and_pi", "Logarithms, π and Gelfond–Schneider values"),
+    ("exponential_and_bessel", "Exponential, Gamma and Bessel values"),
+    ("zeta_and_l_values", "Zeta and Dirichlet L-values"),
+    ("q_series_and_modular", "q-series, theta and modular values"),
+    ("lambert_and_divisor", "Lambert and divisor series"),
+    ("continued_fraction_and_mahler", "Continued-fraction and Mahler-type numbers"),
+    ("synthetic_classical", "Classical normal-number constructions"),
+)
+BENCH_CAT_MAP = dict(BENCH_CATS)
+BENCH_EVIDENCE_LABEL = {
+    "lean": "Kernel-verified",
+    "lean+paper": "Lean-supported paper proof",
+    "paper": "Paper proof",
+    "external": "External input",
+    "open": "Open",
+}
+BENCH_DISPLAY = {
+    "proved_normal": "normal",
+    "proved_nonnormal": "nonnormal",
+    "proved_simply_normal": "simply normal",
+    "proved_not_simply_normal": "not simply normal",
+    "radix_dependent": "depends on radix",
+    "proved_disjunctive": "disjunctive",
+    "proved_non_disjunctive": "not disjunctive",
+    "zero_normal": "*D*<sub>*N*</sub> → 0",
+    "exact_positive": "exact *D*<sub>∞</sub> ∈ (0, 1)",
+    "strict_upper_bound": "*D*⁺ < 1",
+    "maximal_K_b": "*D*<sub>*N*</sub> → 1 (in *K*<sub>*b*</sub>)",
+    "classified": "classified",
+    "partial": "partial",
+    "open": "open",
+    "resolved": "resolved",
+    "barrier_proved": "barrier proved",
+    "no_barrier_recorded": "none recorded",
+}
+BENCH_C_ENUM = {
+    "full_normality": {"proved_normal", "proved_nonnormal", "open"},
+    "simple_normality": {"proved_simply_normal", "proved_not_simply_normal", "radix_dependent", "open"},
+    "disjunctivity": {"proved_disjunctive", "proved_non_disjunctive", "open"},
+    "discrepancy_status": {"zero_normal", "exact_positive", "strict_upper_bound", "maximal_K_b", "open"},
+    "barrier_status": {"resolved", "barrier_proved", "no_barrier_recorded"},
+    "evidence": set(BENCH_EVIDENCE_LABEL),
+}
+BENCH_STATUS_FIELDS = ("full_normality", "simple_normality", "disjunctivity", "discrepancy_status")
+BENCH_F_ENUM = {
+    k: (v | {"classified", "partial"}) if k in BENCH_STATUS_FIELDS else v
+    for k, v in BENCH_C_ENUM.items()
+}
+BENCH_C_FIELDS = (
+    "id", "name", "formula", "category", "arithmetic_nature", "radices_scope",
+    "full_normality", "simple_normality", "disjunctivity", "discrepancy_status",
+    "barrier_status", "evidence", "discrepancy_summary", "registry_ids",
+    "external_sources", "notes",
+)
+BENCH_F_FIELDS = (
+    "id", "name", "definition", "radices_scope", "full_normality",
+    "simple_normality", "disjunctivity", "discrepancy_status", "barrier_status",
+    "evidence", "registry_ids", "external_sources", "summary", "open_frontier",
+)
+BENCH_BAD_CHAR_RE = re.compile(r"[\\$*`|]")
+BENCH_YEAR_RE = re.compile(r"\b(1[5-9]|20)\d{2}\b")
+BENCH_ID_RE = re.compile(r"\b(?:BC|BF)-\d{2}\b")
+
+
+def load_benchmarks():
+    c_path = ROOT / "docs/benchmarks/classical-constants.toml"
+    f_path = ROOT / "docs/benchmarks/arithmetic-families.toml"
+    if not (c_path.exists() and f_path.exists()):
+        return None, None
+    return (
+        tomllib.loads(c_path.read_text(encoding="utf-8")),
+        tomllib.loads(f_path.read_text(encoding="utf-8")),
+    )
+
+
+def build_benchmarks_progress(c_data, f_data):
+    frm = "docs/benchmarks/progress.md"
+    constants = c_data.get("constant", [])
+    families = f_data.get("family", [])
+    status_as_of = c_data.get("meta", {}).get("status_as_of", "")
+
+    def reg_links(rids):
+        if not rids:
+            return "—"
+        return " ".join(f"[{rid}]({rel('docs/results.md', frm)}#{anchor(rid)})" for rid in rids)
+
+    obj1 = sum(1 for e in constants if e["full_normality"] == "proved_normal" or e["simple_normality"] == "proved_simply_normal")
+    obj2 = sum(1 for e in constants if e["full_normality"] == "proved_nonnormal"
+               or e["simple_normality"] == "proved_not_simply_normal"
+               or e["disjunctivity"] == "proved_non_disjunctive"
+               or e["discrepancy_status"] == "maximal_K_b")
+    obj3 = sum(1 for e in constants if e["discrepancy_status"] != "open")
+    obj4 = sum(1 for e in constants if e["barrier_status"] == "barrier_proved")
+    all_open = sum(1 for e in constants if all(e[k] == "open" for k in BENCH_STATUS_FIELDS))
+
+    out = [
+        GENERATED_NOTE.format(src="docs/benchmarks/classical-constants.toml and docs/benchmarks/arithmetic-families.toml"),
+        "# Benchmark progress\n",
+        f"**Status as of:** {status_as_of}. Generated from [classical-constants.toml](classical-constants.toml) "
+        f"({len(constants)} fixed irrational constants) and [arithmetic-families.toml](arithmetic-families.toml) "
+        f"({len(families)} arithmetic families). See [research-objectives.md](../research-objectives.md) and "
+        "[SCHEMA.md](SCHEMA.md).\n",
+        "**Evidence legend.** " + " · ".join(f"`{k}` = {v}" for k, v in BENCH_EVIDENCE_LABEL.items()) + ".\n",
+        "## Summary by objective (50 fixed constants)\n",
+        "Objective counts overlap (for example, *E*<sub>2</sub> is simply normal, proved nonnormal, and in *K*<sub>2</sub>) and do not sum to 50.\n",
+        "| Objective | Count / 50 | Criterion |\n| --- | ---: | --- |",
+        f"| Objective 1 (Establish normality / simple normality) | {obj1} | `full_normality = proved_normal` or `simple_normality = proved_simply_normal` |",
+        f"| Objective 2 (Establish nonnormality) | {obj2} | `proved_nonnormal`, `proved_not_simply_normal`, `proved_non_disjunctive`, or `maximal_K_b` |",
+        f"| Objective 3 (Quantify digit distribution) | {obj3} | `discrepancy_status` other than `open` |",
+        f"| Objective 4 (Rigorous mathematical limitations) | {obj4} | `barrier_status = barrier_proved` |",
+        f"| All four distributional fields open | {all_open} | `full_normality`, `simple_normality`, `disjunctivity`, `discrepancy_status` all `open` |\n",
+        "## Counts by category\n",
+        "| Category | Total | Normal | Nonnormal | In *K*<sub>*b*</sub> | Barrier proved | All open |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for key, label in BENCH_CATS:
+        mine = [e for e in constants if e["category"] == key]
+        n_norm = sum(1 for e in mine if e["full_normality"] == "proved_normal")
+        n_non = sum(1 for e in mine if e["full_normality"] == "proved_nonnormal")
+        n_kb = sum(1 for e in mine if e["discrepancy_status"] == "maximal_K_b")
+        n_bar = sum(1 for e in mine if e["barrier_status"] == "barrier_proved")
+        n_open = sum(1 for e in mine if all(e[k] == "open" for k in BENCH_STATUS_FIELDS))
+        out.append(f"| {label} | {len(mine)} | {n_norm} | {n_non} | {n_kb} | {n_bar} | {n_open} |")
+    out.append("")
+    out.append("## Classical constants (`BC-01` … `BC-50`)\n")
+    out.append("| ID | Constant | Scope | Normality | Simple normality | Disjunctivity | Discrepancy | Barrier | Evidence | Registry |\n"
+               "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    for e in constants:
+        out.append(
+            f"| {e['id']} | {e['name']} | {e['radices_scope']} | {BENCH_DISPLAY[e['full_normality']]} | "
+            f"{BENCH_DISPLAY[e['simple_normality']]} | {BENCH_DISPLAY[e['disjunctivity']]} | "
+            f"{BENCH_DISPLAY[e['discrepancy_status']]} | {BENCH_DISPLAY[e['barrier_status']]} | "
+            f"{BENCH_EVIDENCE_LABEL[e['evidence']]} | {reg_links(e['registry_ids'])} |"
+        )
+    out.append("")
+    out.append("## Arithmetic families (`BF-01` …)\n")
+    out.append("| ID | Family | Scope | Normality | Simple normality | Disjunctivity | Discrepancy | Barrier | Evidence | Registry | Open frontier |\n"
+               "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    for e in families:
+        out.append(
+            f"| {e['id']} | {e['name']} | {e['radices_scope']} | {BENCH_DISPLAY[e['full_normality']]} | "
+            f"{BENCH_DISPLAY[e['simple_normality']]} | {BENCH_DISPLAY[e['disjunctivity']]} | "
+            f"{BENCH_DISPLAY[e['discrepancy_status']]} | {BENCH_DISPLAY[e['barrier_status']]} | "
+            f"{BENCH_EVIDENCE_LABEL[e['evidence']]} | {reg_links(e['registry_ids'])} | {e['open_frontier']} |"
+        )
+    return "\n".join(out).rstrip() + "\n"
+
+
+def check_benchmarks(ids, errors):
+    c_data, f_data = load_benchmarks()
+    if c_data is None:
+        return
+    reg = {rid: r["status"] for rid, r in ids.items()}
+    c_meta = c_data.get("meta")
+    f_meta = f_data.get("meta")
+    if set(c_data) != {"meta", "constant"} or not isinstance(c_meta, dict) or set(c_meta) != {"schema_version", "status_as_of", "roster_size"} or c_meta.get("schema_version") != 1 or c_meta.get("roster_size") != 50 or not isinstance(c_meta.get("status_as_of"), str):
+        errors.append("docs/benchmarks/classical-constants.toml: invalid [meta] or top-level keys")
+    if set(f_data) != {"meta", "family"} or not isinstance(f_meta, dict) or set(f_meta) != {"schema_version", "status_as_of"} or f_meta.get("schema_version") != 1 or not isinstance(f_meta.get("status_as_of"), str):
+        errors.append("docs/benchmarks/arithmetic-families.toml: invalid [meta] or top-level keys")
+    constants = c_data.get("constant", [])
+    families = f_data.get("family", [])
+    if len(constants) != 50:
+        errors.append(f"docs/benchmarks/classical-constants.toml: expected 50 constants, found {len(constants)}")
+    bench_ids = {e.get("id") for e in constants if isinstance(e, dict)} | {e.get("id") for e in families if isinstance(e, dict)}
+
+    def validate_list(entries, fields, enum, prefix, scopes, is_const, fname):
+        seen_names = set()
+        for i, e in enumerate(entries, 1):
+            eid = e.get("id", "?")
+            where = f"{fname}:{eid}"
+            if eid != f"{prefix}-{i:02d}":
+                errors.append(f"{where}: expected id {prefix}-{i:02d}")
+            name = e.get("name")
+            if name in seen_names:
+                errors.append(f"{where}: duplicate name {name!r}")
+            seen_names.add(name)
+            if set(e) != set(fields):
+                errors.append(f"{where}: field mismatch {sorted(set(e) ^ set(fields))}")
+                continue
+            for k, v in e.items():
+                if k in ("registry_ids", "external_sources"):
+                    if not isinstance(v, list) or not all(isinstance(x, str) for x in v):
+                        errors.append(f"{where}: {k} must be a list of strings")
+                        continue
+                    strs = v
+                else:
+                    if not isinstance(v, str):
+                        errors.append(f"{where}: {k} must be a string")
+                        continue
+                    strs = [v]
+                for s in strs:
+                    if BENCH_BAD_CHAR_RE.search(s):
+                        errors.append(f"{where}: forbidden character in {k}")
+                    for tok in ID_RE.findall(s):
+                        rid = f"{tok[0]}-{tok[1]}"
+                        if rid not in reg:
+                            errors.append(f"{where}: unknown inline registry id {rid} in {k}")
+                    for bid in BENCH_ID_RE.findall(s):
+                        if bid not in bench_ids:
+                            errors.append(f"{where}: unknown inline benchmark id {bid} in {k}")
+            for k, allowed in enum.items():
+                if e[k] not in allowed:
+                    errors.append(f"{where}: invalid {k}={e[k]!r}")
+            if is_const and e["category"] not in BENCH_CAT_MAP:
+                errors.append(f"{where}: unknown category {e['category']!r}")
+            if not any(re.fullmatch(p, e["radices_scope"]) for p in scopes):
+                errors.append(f"{where}: invalid radices_scope {e['radices_scope']!r}")
+            for rid in e["registry_ids"]:
+                if rid not in reg:
+                    errors.append(f"{where}: unknown registry id {rid}")
+                elif reg[rid] in ("withdrawn", "computation"):
+                    errors.append(f"{where}: registry id {rid} has disallowed status {reg[rid]}")
+            fn, sn, dj, ds = (e[k] for k in BENCH_STATUS_FIELDS)
+            bs, ev = e["barrier_status"], e["evidence"]
+            if (fn == "proved_normal") != (ds == "zero_normal"):
+                errors.append(f"{where}: proved_normal <-> zero_normal violated")
+            if fn == "proved_normal" and (sn != "proved_simply_normal" or dj != "proved_disjunctive"):
+                errors.append(f"{where}: proved_normal implies proved_simply_normal and proved_disjunctive")
+            if ds in ("exact_positive", "maximal_K_b") and fn != "proved_nonnormal":
+                errors.append(f"{where}: discrepancy_status={ds} implies proved_nonnormal")
+            if (sn == "proved_not_simply_normal" or dj == "proved_non_disjunctive") and fn != "proved_nonnormal":
+                errors.append(f"{where}: negative simple_normality/disjunctivity implies proved_nonnormal")
+            if is_const and sn == "radix_dependent" and e["radices_scope"] != "all integer bases b ≥ 2":
+                errors.append(f"{where}: radix_dependent requires all integer bases scope")
+            if bs == "resolved" and (fn not in ("proved_normal", "proved_nonnormal", "classified") or ds in ("open", "partial")):
+                errors.append(f"{where}: resolved requires decided normality and non-open/non-partial discrepancy")
+            if (ev == "open") != all(e[k] == "open" for k in BENCH_STATUS_FIELDS):
+                errors.append(f"{where}: evidence=open iff all four status fields are open")
+            reg_statuses = {reg.get(rid) for rid in e["registry_ids"]}
+            if ev in ("lean", "lean+paper", "paper") and not e["registry_ids"]:
+                errors.append(f"{where}: evidence={ev} requires nonempty registry_ids")
+            if ev == "lean" and "lean" not in reg_statuses:
+                errors.append(f"{where}: evidence=lean requires a listed lean registry entry")
+            if ev == "lean+paper" and "lean+paper" not in reg_statuses:
+                errors.append(f"{where}: evidence=lean+paper requires a listed lean+paper registry entry")
+            if ev == "external" and not e["external_sources"]:
+                errors.append(f"{where}: evidence=external requires nonempty external_sources")
+            if bs == "barrier_proved" and not e["registry_ids"]:
+                errors.append(f"{where}: barrier_proved requires nonempty registry_ids")
+            if is_const and not e["external_sources"]:
+                errors.append(f"{where}: constant requires nonempty external_sources")
+            for src in e["external_sources"]:
+                if not BENCH_YEAR_RE.search(src):
+                    errors.append(f"{where}: external_sources entry missing 4-digit year: {src[:50]}")
+
+    validate_list(constants, BENCH_C_FIELDS, BENCH_C_ENUM, "BC",
+                  (r"base [2-9]|base [1-9]\d+", r"all integer bases b ≥ 2"),
+                  True, "docs/benchmarks/classical-constants.toml")
+    validate_list(families, BENCH_F_FIELDS, BENCH_F_ENUM, "BF",
+                  (r"base [2-9]|base [1-9]\d+", r"all integer bases b ≥ 2", r"construction radix b"),
+                  False, "docs/benchmarks/arithmetic-families.toml")
+
+
+# ---------------------------------------------------------------------------
 # build
 
 def derived(refresh_checkpoint: bool):
@@ -613,6 +870,9 @@ def derived(refresh_checkpoint: bool):
         "docs/figures.md": build_figures(figures),
         "docs/data/checkpoint.json": json.dumps(ckpt, indent=1) + "\n",
     }
+    c_data, f_data = load_benchmarks()
+    if c_data is not None:
+        files["docs/benchmarks/progress.md"] = build_benchmarks_progress(c_data, f_data)
     for page in FIGURE_PAGES:
         path = ROOT / page
         if not path.exists():
@@ -948,6 +1208,7 @@ def cmd_check(args):
         if not p.exists() or p.read_text(encoding="utf-8") != text:
             errors.append(f"{path} is stale. Run python3 scripts/portal.py build")
     ids = check_registry(errors, warnings)
+    check_benchmarks(ids, errors)
     check_id_mentions(ids, errors)
     check_topics(errors)
     check_papers(ids, errors, warnings, args.strict)

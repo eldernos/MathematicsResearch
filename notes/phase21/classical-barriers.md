@@ -216,7 +216,7 @@ The deep dyadic layers of the divisor function are negligible in discrepancy, bu
 
 ### 2.5 What remains open
 
-- The digit statistics of $E(b)$, $E_{\rm odd}(b)$, $E(b^2)$ in any radix: $D^\pm$, normality, and even membership or non-membership in $K_b$.
+- The digit statistics of $E(b)$, $E_{\rm odd}(b)$, $E(b^2)$ in any radix: normality, simple normality/non-normality, and membership or non-membership in $K_b$ remain open in this repository (for $E(2)$, Mira Cult's pinned external positive-word-density result at `Mira-Cult/math` commit `1498319` implies $D^+(E;2)<1$ subject to independent verification of its analytic inputs; no independent proof is claimed here).
 - Whether $E(b^2)\in K_b$, equivalently whether $E\equiv E_{\rm odd}\pmod{K_b}$. Proposition 2.3 shows this is at least as hard as $E(b^2)\in K_{b^2}$.
 - Any constraint between the three numbers beyond Proposition 2.1.
 
@@ -278,7 +278,7 @@ These are two structural reasons, one for each family, why a method that decides
 
 ### 3.6 Verdict
 
-No new unconditional estimate yields $D^+(\ln2)<1$ or $D^-(\ln2)>0$. Not even $\ln2\notin K_2$ is established here. The same holds for $\pi$, $e$, $\sqrt2$, $\varphi$ and the Erdős–Borwein constants $E$, $E_{\rm odd}$, $E_{\rm even}$: their digit distribution in every radix **remains open**.
+No new unconditional estimate in this repository yields $D^+(\ln2)<1$ or $D^-(\ln2)>0$. Not even $\ln2\notin K_2$ is established here. The same holds for $\pi$, $e$, $\sqrt2$, $\varphi$ and $E_{\rm odd}$, $E_{\rm even}$, and independently in this repository for $E$ (noting that Mira Cult's pinned external positive-word-density result at `Mira-Cult/math` commit `1498319` implies $D^+(E;2)<1$ if its analytic inputs are independently verified, while normality and simple non-normality of $E$ remain open everywhere).
 
 - $\pi$: its BBP prefixes fall under the OP-11 scope.
 - $e$: its factorial denominators have no radix structure.

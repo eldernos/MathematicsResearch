@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1471 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1594 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 458 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 581 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -588,6 +588,48 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Phase18Synthetic.quadratic_insertions_le`](../NormalityChecker/Phase18Synthetic.lean#L825) | Quadratic insertion positions `(k+1)(k+2)` below `M` number at most `⌊√M⌋`. |
 | [`Phase18Synthetic.quadratic_sparse_transfer`](../NormalityChecker/Phase18Synthetic.lean#L837) [SY-12](results.md#sy-12) | **The flagship sparse perturbation** `Z = ∑_{k≥1} 2^-(k(k+1))`. |
 
+### Phase22Cores
+
+[`NormalityChecker/Phase22Cores.lean`](../NormalityChecker/Phase22Cores.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase22Cores.digits_eq_zero_of_fract_lt`](../NormalityChecker/Phase22Cores.lean#L63) | **Lemma 0.1 (positive side):** a nonnegative fractional part below `b^(-L)` forces `L` zero digits. |
+| [`Phase22Cores.digits_eq_top_of_fract_gt`](../NormalityChecker/Phase22Cores.lean#L77) | **Lemma 0.1 (negative side):** a fractional part above `1 - b^(-L)` forces `L` digits `b - 1`. |
+| [`Phase22Cores.dirichletOneConv_mul_of_coprime`](../NormalityChecker/Phase22Cores.lean#L94) | Multiplicativity of `dirichletOneConv χ` on coprime arguments. |
+| [`Phase22Cores.dirichletOneConv_prime_pow_of_completelyMul`](../NormalityChecker/Phase22Cores.lean#L165) | Prime-power evaluation of `1 * χ` for any completely multiplicative `χ : ℕ → ℤ`. |
+| [`Phase22Cores.dirichletOneConv_prime_pow_nonneg_of_realMul`](../NormalityChecker/Phase22Cores.lean#L207) | Explicit local prime-power nonnegativity of `1 * χ` for real completely multiplicative functions taking values in `{-1, 0, 1}` (Proposition 1.1 local factor). |
+| [`Phase22Cores.dirichletOneConv_nonneg_of_realMul`](../NormalityChecker/Phase22Cores.lean#L228) [GF-20](results.md#gf-20) | **Proposition 1.1 (Track A3): nonnegativity of `1 * χ` for completely multiplicative real characters.** If `χ : ℕ → ℤ` is completely multiplicative (`χ 1 =… |
+| [`Phase22Cores.chi12_one`](../NormalityChecker/Phase22Cores.lean#L277) |  |
+| [`Phase22Cores.chi12_neg`](../NormalityChecker/Phase22Cores.lean#L279) |  |
+| [`Phase22Cores.chi12_mul`](../NormalityChecker/Phase22Cores.lean#L282) |  |
+| [`Phase22Cores.chi12_sq_sub_sq`](../NormalityChecker/Phase22Cores.lean#L288) [GF-20](results.md#gf-20) | **Proposition 4.1 finite core (Track A3):** For `u, v : ZMod 12` with `u` odd, `v` even, and exactly one of `u, v` divisible by `3`, `χ₁₂(u² - v²) = 1` if `3… |
+| [`Phase22Cores.chi12_int_sq_sub_sq`](../NormalityChecker/Phase22Cores.lean#L297) [GF-20](results.md#gf-20) | Integer form of Proposition 4.1's sign rule: if `u, v : ℤ` have `u` odd, `v` even, and `u² + v² ≡ 1 [ZMOD 12]`, then exactly one of `u, v` is divisible by `3`… |
+| [`Phase22Cores.sum_alt_pent_gaps`](../NormalityChecker/Phase22Cores.lean#L346) | Exact closed form of the alternating pentagonal gap sum `∑_{k=1}^K (-1)^k (3k - 1)`. |
+| [`Phase22Cores.abs_sum_alt_pent_gaps_le`](../NormalityChecker/Phase22Cores.lean#L379) [GF-20](results.md#gf-20) | **Theorem 2 sign balance core (Track A3):** For every `K : ℕ`, `\|∑_{k=1}^K (-1)^k (3k - 1)\| ≤ (3K + 2) / 2`. |
+| [`Phase22Cores.atom_ne_grid`](../NormalityChecker/Phase22Cores.lean#L397) [GF-20](results.md#gf-20) | **Lemma 5.1 (Track A4):** nonzero atoms `c / d` (`0 < c < d`, `Nat.Coprime d b`) never land on a `b`-adic grid point `k / b^L`. |
+| [`Phase22Cores.two_mul_genPent`](../NormalityChecker/Phase22Cores.lean#L413) |  |
+| [`Phase22Cores.pentTerm_add_order`](../NormalityChecker/Phase22Cores.lean#L531) | Under odd multiplicative order `t = orderOf (b : ZMod d)`, shifting `j` by `t` negates `pentTerm b d j`. |
+| [`Phase22Cores.sum_pentTerm_two_orders_eq_zero`](../NormalityChecker/Phase22Cores.lean#L551) | Any block of `2 * orderOf (b : ZMod d)` consecutive pentagonal terms sums to `0` when the multiplicative order is odd. |
+| [`Phase22Cores.pentHeadSum_add_order`](../NormalityChecker/Phase22Cores.lean#L586) | **Theorem 5.3, Euler part (Track A4):** When `t = orderOf (b : ZMod d)` is odd and `Nat.Coprime b d`, the generalized pentagonal head sum is antiperiodic of… |
+| [`Phase22Cores.eulerAutomaton_iterate_eq`](../NormalityChecker/Phase22Cores.lean#L623) | Exact closed form of the `k`-th iterate of `NormalReciprocalCore.eulerAutomatonStep` from `(0, 1)` in terms of `pentHeadSum`. |
+| [`Phase22Cores.eulerAutomaton_snd_add_order`](../NormalityChecker/Phase22Cores.lean#L720) [GF-20](results.md#gf-20) | **Track A4 — Odd-order complement symmetry of `NormalReciprocalCore.eulerAutomatonStep`:** When `t = orderOf (b : ZMod d)` is odd, `Nat.Coprime b d`, `2 ∣ L`,… |
+| [`Phase22Cores.cubeHeadSum_add_period`](../NormalityChecker/Phase22Cores.lean#L758) [GF-20](results.md#gf-20) | **Theorem 5.3, Jacobi cube part (Track A4):** When `t = orderOf (b : ZMod d)` and `d` are both odd and `Nat.Coprime b d`, the Jacobi-cube head sum is… |
+| [`Phase22Cores.one_sub_radixDiscrepancy_natMul_le`](../NormalityChecker/Phase22Cores.lean#L888) [GF-24](results.md#gf-24) | **Lemma W (second inequality, Track C1):** For every radix `b`, cutoff `N > 0`, multiplier `m : ℕ`, and `x : ℝ`, `1 - D_N(m x; b) ≤ m * (1 - D_N(x; b))`. |
+| [`Phase22Cores.one_sub_radixDiscrepancy_intMul_le`](../NormalityChecker/Phase22Cores.lean#L894) [GF-24](results.md#gf-24) | Integer-multiplier version of Lemma W (Track C1): `1 - D_N(m x; b) ≤ \|m\| * (1 - D_N(x; b))` for every `m : ℤ`. |
+| [`Phase22Cores.fixed_depth_transfer_deficit_le`](../NormalityChecker/Phase22Cores.lean#L902) [GF-24](results.md#gf-24) | **Corollary R3(2) finite transfer bound (Track C1):** Whenever `m * x = F + z`, the discrepancy deficit of `x` is controlled from below by that of `z` minus… |
+| [`Phase22Cores.total_depth_split_sum`](../NormalityChecker/Phase22Cores.lean#L920) | **Theorem R1 finite core (Track C1): total-depth retirement split.** For any finite index set `S`, valuation function `v : ι → ℕ`, summand `f : ι → K`,… |
+| [`Phase22Cores.total_depth_split_sum_zpow`](../NormalityChecker/Phase22Cores.lean#L970) [GF-24](results.md#gf-24) | `zpow`-form corollary of `total_depth_split_sum` matching `p^(-s * v i)` notation directly. |
+| [`Phase22Cores.card_divisors_eq_succ_fac_two_mul_tauOdd`](../NormalityChecker/Phase22Cores.lean#L1023) | Exact factorization `τ(n) = (v₂(n) + 1) * τ_odd(n)` for `n > 0`. |
+| [`Phase22Cores.erdosBorweinPlusCoeff_eq`](../NormalityChecker/Phase22Cores.lean#L1052) [GF-28](results.md#gf-28) | **Proposition 1.1 (Track E1): exact coefficient formula for `E_+(b)`.** For every `n ≥ 1`, `erdosBorweinPlusCoeff n = (1 - v₂(n)) * tauOdd n`. |
+| [`Phase22Cores.erdosBorweinPlusCoeff_eq_altDivisorSum`](../NormalityChecker/Phase22Cores.lean#L1083) [GF-28](results.md#gf-28) | Alternating divisor-sum representation: for `n ≥ 1`, `erdosBorweinPlusCoeff n = ∑_{d ∣ n} (-1)^(d - 1)`. |
+| [`Phase22Cores.erdosBorweinPlusCoeff_pos_iff`](../NormalityChecker/Phase22Cores.lean#L1156) [GF-28](results.md#gf-28) | Exact positivity criterion for `a_+(n)`: for `n ≥ 1`, `0 < a_+(n) ↔ Odd n`. |
+| [`Phase22Cores.erdosBorweinPlusCoeff_eq_zero_iff`](../NormalityChecker/Phase22Cores.lean#L1177) [GF-28](results.md#gf-28) | **Proposition 1.1 vanishing criterion (Track E1):** For every `n ≥ 1`, `erdosBorweinPlusCoeff n = 0 ↔ n % 4 = 2`. |
+| [`Phase22Cores.erdosBorweinPlusCoeff_neg_iff`](../NormalityChecker/Phase22Cores.lean#L1202) [GF-28](results.md#gf-28) | Exact negativity criterion for `a_+(n)`: for `n ≥ 1`, `a_+(n) < 0 ↔ 4 ∣ n`. |
+| [`Phase22Cores.erdosBorweinPlusCoeff_odd_iff`](../NormalityChecker/Phase22Cores.lean#L1310) [GF-28](results.md#gf-28) | **Proposition 1.1 parity criterion (Track E1):** For every `n ≥ 1`, `Odd (erdosBorweinPlusCoeff n) ↔ IsSquare n`. |
+| [`Phase22Cores.erdosBorweinPlus_term_identity`](../NormalityChecker/Phase22Cores.lean#L1335) | Exact termwise algebraic identity `1 / (x + 1) = 1 / (x - 1) - 2 / (x^2 - 1)` for `1 < x`. |
+| [`Phase22Cores.erdosBorweinPlus_eq_sub`](../NormalityChecker/Phase22Cores.lean#L1345) [GF-28](results.md#gf-28) | **Proposition 1.1 series identity (Track E1):** For every integer base `b ≥ 2`, `E_+(b) = E(b) - 2 E(b^2)`. |
+
 ### PositiveSummation
 
 [`NormalityChecker/PositiveSummation.lean`](../NormalityChecker/PositiveSummation.lean)
@@ -637,6 +679,53 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`ProtectedPole.shifted_prefix_aux_prime_dvd_den`](../NormalityChecker/ProtectedPole.lean#L143) [GF-10](results.md#gf-10) | **Auxiliary prime survival (Track C1).** If `ℓ k` is prime and coprime to `b`, `p`, and all earlier `ℓ j` (`1 ≤ j < k`), and `n j ≤ N` for all `1 ≤ j ≤ k`,… |
 | [`ProtectedPole.shifted_prefix_protected_prime_pow_dvd_den`](../NormalityChecker/ProtectedPole.lean#L245) [GF-10](results.md#gf-10) | **Exact protected prime-power depth of `W`'s shifted prefixes (Track C1).** If `p` is prime, `p ∤ b`, `p ∤ ℓ j` for `1 ≤ j ≤ k`, `e j < e k` for `1 ≤ j < k`,… |
 | [`ProtectedPole.truncated_poly_pole_dvd_den`](../NormalityChecker/ProtectedPole.lean#L347) [GF-10](results.md#gf-10) | **Truncated polynomial pole dominance (Track C1 core).** Let `U = u / (p^(e₁) · Q₁)` and `V = v / (p^(e₂) · Q₂)` with `p` prime and `p ∤ u, v, Q₁, Q₂`. |
+
+### RadixPowerTower
+
+[`NormalityChecker/RadixPowerTower.lean`](../NormalityChecker/RadixPowerTower.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`RadixPowerTower.inv_pow_sub_one_radixDiscrepancy_pow`](../NormalityChecker/RadixPowerTower.lean#L96) | For every `b ≥ 2`, `k ≥ 1`, and `N ≥ 1`, the rational `1 / (b^k - 1)` has base-`b^k` extreme discrepancy identically equal to `1`. |
+| [`RadixPowerTower.inv_pow_sub_one_mem_pow_kernel`](../NormalityChecker/RadixPowerTower.lean#L106) [GF-23](results.md#gf-23) | **Membership in the higher kernel:** for `b ≥ 2` and `k ≥ 1`, `1 / (b^k - 1) ∈ K_{b^k}`. |
+| [`RadixPowerTower.inv_pow_sub_one_radixDiscrepancy_le`](../NormalityChecker/RadixPowerTower.lean#L128) | **Uniform discrepancy ceiling for `1 / (b^k - 1)` in base `b` (Track G1 Correction A):** for `b ≥ 2`, `k ≥ 2`, and every `M ≥ 1`, `D_{kM}(1 / (b^k - 1); b)`… |
+| [`RadixPowerTower.inv_pow_sub_one_not_mem_kernel`](../NormalityChecker/RadixPowerTower.lean#L307) [GF-23](results.md#gf-23) | **Non-membership in the base kernel (Track G1 Correction A):** for every `b ≥ 2` and `k ≥ 2`, `1 / (b^k - 1) ∉ K_b`. |
+| [`RadixPowerTower.strict_kernel_inclusion`](../NormalityChecker/RadixPowerTower.lean#L347) [GF-23](results.md#gf-23) | **Strict radix-power kernel inclusion `K_b ⊊ K_{b^k}` (Track G1 Correction A, Track B4):** for every `b ≥ 2` and `k ≥ 2`, the discrepancy kernel `K_b` is a… |
+| [`RadixPowerTower.circDist_nonneg`](../NormalityChecker/RadixPowerTower.lean#L368) |  |
+| [`RadixPowerTower.circDist_le_half`](../NormalityChecker/RadixPowerTower.lean#L372) |  |
+| [`RadixPowerTower.circDist_fract`](../NormalityChecker/RadixPowerTower.lean#L378) |  |
+| [`RadixPowerTower.circDist_add_intCast`](../NormalityChecker/RadixPowerTower.lean#L381) |  |
+| [`RadixPowerTower.circDist_eq_zero_iff`](../NormalityChecker/RadixPowerTower.lean#L384) |  |
+| [`RadixPowerTower.circDist_le_abs_sub_int`](../NormalityChecker/RadixPowerTower.lean#L399) |  |
+| [`RadixPowerTower.exists_int_abs_sub_eq_circDist`](../NormalityChecker/RadixPowerTower.lean#L413) |  |
+| [`RadixPowerTower.circDist_add_le`](../NormalityChecker/RadixPowerTower.lean#L428) |  |
+| [`RadixPowerTower.circDist_neg`](../NormalityChecker/RadixPowerTower.lean#L436) |  |
+| [`RadixPowerTower.circDist_natMul_le`](../NormalityChecker/RadixPowerTower.lean#L446) |  |
+| [`RadixPowerTower.circMean_nonneg`](../NormalityChecker/RadixPowerTower.lean#L454) |  |
+| [`RadixPowerTower.circMean_pow_le`](../NormalityChecker/RadixPowerTower.lean#L467) | **Sharp lower comparison (Track B4, Theorem 7.1(i)):** `M_N(x; b^k) ≤ k * M_{kN}(x; b)` for all `k ≥ 1`, `N ≥ 1`. |
+| [`RadixPowerTower.circMean_le_circMean_pow`](../NormalityChecker/RadixPowerTower.lean#L531) | **Sharp upper comparison at multiples `k * N` (Track B4, Theorem 7.1(ii)):** `M_{kN}(x; b) ≤ ((b^k - 1) / (k * (b - 1))) * M_N(x; b^k)`. |
+| [`RadixPowerTower.circMean_le_circMean_pow_add`](../NormalityChecker/RadixPowerTower.lean#L553) | **General cutoff upper comparison (Track B4, Theorem 7.1(iii)):** for `b ≥ 2`, `k ≥ 1`, `r < k`, and `k * N + r > 0`, `M_{kN + r}(x; b) ≤ ((b^k - 1) / (b -… |
+| [`RadixPowerTower.circMean_le_circMean_pow_general`](../NormalityChecker/RadixPowerTower.lean#L581) | **General cutoff upper comparison with uniform constant for `M ≥ k`:** `M_M(x; b) ≤ (2 * (b^k - 1) / (k * (b - 1))) * M_{M / k + 1}(x; b^k)`. |
+| [`RadixPowerTower.tendsto_circMean_iff_pow`](../NormalityChecker/RadixPowerTower.lean#L625) | **Zero-orbit subgroup invariance `M_b = M_{b^k}` (Track B4, Theorem 7.1):** for every `b ≥ 2`, `k ≥ 1`, and `x : ℝ`, `M_N(x; b^k) → 0 ↔ M_N(x; b) → 0`. |
+| [`RadixPowerTower.zeroOrbitSubgroup_pow_eq`](../NormalityChecker/RadixPowerTower.lean#L694) [GF-23](results.md#gf-23) | `M_{b^k} = M_b` as additive subgroups of `ℝ`. |
+| [`RadixPowerTower.fixedPointSubgroup_le_pow`](../NormalityChecker/RadixPowerTower.lean#L723) | `F_b ≤ F_{b^k}` for all `b ≥ 2` and `k : ℕ`. |
+| [`RadixPowerTower.fixedPointCoordHom_ker`](../NormalityChecker/RadixPowerTower.lean#L759) |  |
+| [`RadixPowerTower.fixedPointCoordHom_surjective`](../NormalityChecker/RadixPowerTower.lean#L796) |  |
+| [`RadixPowerTower.fixedPoint_quotient_equiv_gen`](../NormalityChecker/RadixPowerTower.lean#L828) [GF-23](results.md#gf-23) | The canonical generator `1 / (b^k - 1) ∈ F_{b^k}` maps to `1 ∈ ZMod ((b^k - 1) / (b - 1))` under `fixedPoint_quotient_equiv`. |
+| [`RadixPowerTower.fixedPoint_quotient_card`](../NormalityChecker/RadixPowerTower.lean#L846) [GF-23](results.md#gf-23) | **Exact cardinality of the fixed-point quotient:** `\|F_{b^k} / F_b\| = (b^k - 1) / (b - 1)`. |
+| [`RadixPowerTower.fixedPoint_inter_zeroOrbit`](../NormalityChecker/RadixPowerTower.lean#L854) | **Fixed-point / zero-orbit intersection (Track B4, Theorem 8.1(1)):** `r / (b^k - 1) ∈ M_b ↔ (b^k - 1) ∣ r`. |
+| [`RadixPowerTower.fixedPointSubgroup_inter_zeroOrbitSubgroup`](../NormalityChecker/RadixPowerTower.lean#L896) [GF-23](results.md#gf-23) | Subgroup-intersection form `F_{b^k} ∩ M_b = ℤ` (Track B4, Theorem 8.1(1)). |
+| [`RadixPowerTower.coprime_rat_cylinder_margin`](../NormalityChecker/RadixPowerTower.lean#L928) [GF-20](results.md#gf-20) | **Strict cylinder interiority of coprime rationals (Track A4 Lemma 5.1, Track B4 Theorem 9.2(4)):** if `b ≥ 2`, `d ≥ 2`, `Nat.Coprime d b`, `1 ≤ r < d`, and… |
+| [`RadixPowerTower.coprime_rat_dist_grid_ge`](../NormalityChecker/RadixPowerTower.lean#L981) | Uniform separation from all `b`-adic grid points `m / b^L` (`m : ℤ`). |
+| [`RadixPowerTower.coprime_rat_cylinder_stable`](../NormalityChecker/RadixPowerTower.lean#L1012) [GF-20](results.md#gf-20) | **Cylinder stability under small perturbations:** any `y` within `1 / (d * b^L)` of `r / d` lies in the same base-`b` length-`L` cylinder `[k / b^L, (k + 1) /… |
+| [`RadixPowerTower.coprime_of_dvd_pow_sub_one`](../NormalityChecker/RadixPowerTower.lean#L1047) | If `D ∣ b^m - 1` with `b ≥ 1` and `m ≥ 1`, then `Nat.Coprime b D`. |
+| [`RadixPowerTower.dvd_pow_sub_one_iff_orderOf_dvd`](../NormalityChecker/RadixPowerTower.lean#L1063) | Equivalence `D ∣ b^m - 1 ↔ orderOf (b : ZMod D) ∣ m` for `b ≥ 2`. |
+| [`RadixPowerTower.pow_sub_one_dvd_pow_sub_one_iff`](../NormalityChecker/RadixPowerTower.lean#L1069) | Exact divisibility for pure Mersenne-like bases: `b^m - 1 ∣ b^n - 1 ↔ m ∣ n` for all `b ≥ 2`, `m ≥ 1`, `n ≥ 1`. |
+| [`RadixPowerTower.mul_pow_sub_one_dvd_pow_sub_one_iff`](../NormalityChecker/RadixPowerTower.lean#L1209) [GF-26](results.md#gf-26) | **Complete divisibility criterion for `D * (b^m - 1)`:** for every `b ≥ 2`, `D ≥ 1`, `m ≥ 1`, `n ≥ 1` with `D ∣ b^m - 1`, `D * (b^m - 1) ∣ b^n - 1 ↔ m * D ∣ n`. |
+| [`RadixPowerTower.orderOf_mul_pow_sub_one`](../NormalityChecker/RadixPowerTower.lean#L1247) [GF-26](results.md#gf-26) | **Exact reciprocal period identity for `D * (b^m - 1)` (Track D1–D2):** for every `b ≥ 2`, `D ≥ 1`, and `m ≥ 1` with `D ∣ b^m - 1`, `orderOf (b : ZMod (D *… |
+| [`RadixPowerTower.orderOf_mul_pow_sub_one_of_orderOf`](../NormalityChecker/RadixPowerTower.lean#L1264) [GF-26](results.md#gf-26) | Equivalent formulation of `orderOf_mul_pow_sub_one` assuming `orderOf (b : ZMod D) ∣ m`. |
+| [`RadixPowerTower.orderOf_mul_pow_add_one`](../NormalityChecker/RadixPowerTower.lean#L1272) [GF-26](results.md#gf-26) | **Exact reciprocal period identity for `D * (b^m + 1)` (Track D1–D2):** for every `b ≥ 2`, `D ≥ 1`, and `m ≥ 1` with `D ∣ b^m - 1`, `orderOf (b : ZMod (D *… |
+| [`RadixPowerTower.orderOf_mul_pow_add_one_of_orderOf`](../NormalityChecker/RadixPowerTower.lean#L1330) [GF-26](results.md#gf-26) | Equivalent formulation of `orderOf_mul_pow_add_one` assuming `orderOf (b : ZMod D) ∣ m`. |
 
 ### RadixTelescoping
 
@@ -745,6 +834,61 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
 | [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
 | [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) [GF-05](results.md#gf-05) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
+
+### SimpleNormalityKernel
+
+[`NormalityChecker/SimpleNormalityKernel.lean`](../NormalityChecker/SimpleNormalityKernel.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`SimpleNormalityKernel.near_iff_distInt_le`](../NormalityChecker/SimpleNormalityKernel.lean#L94) | `Near y r` holds if and only if `distInt y ≤ r`. |
+| [`SimpleNormalityKernel.wordFreq_eq_frequency`](../NormalityChecker/SimpleNormalityKernel.lean#L173) | `wordFreq` agrees with `NormalityChecker.frequency` on the corresponding base-`b` cylinder. |
+| [`SimpleNormalityKernel.wordAt_lt`](../NormalityChecker/SimpleNormalityKernel.lean#L184) | Every base-`b` word of length `L` has integer value strictly less than `b^L`. |
+| [`SimpleNormalityKernel.wordCount_bounds`](../NormalityChecker/SimpleNormalityKernel.lean#L193) |  |
+| [`SimpleNormalityKernel.wordFreq_bounds`](../NormalityChecker/SimpleNormalityKernel.lean#L197) |  |
+| [`SimpleNormalityKernel.wordCount_add_le_of_ne`](../NormalityChecker/SimpleNormalityKernel.lean#L206) |  |
+| [`SimpleNormalityKernel.otherWordCount_eq_sub`](../NormalityChecker/SimpleNormalityKernel.lean#L223) |  |
+| [`SimpleNormalityKernel.otherWordCount_cast_eq`](../NormalityChecker/SimpleNormalityKernel.lean#L259) |  |
+| [`SimpleNormalityKernel.sum_wordCount_eq`](../NormalityChecker/SimpleNormalityKernel.lean#L273) |  |
+| [`SimpleNormalityKernel.otherWordCount_eq_sum`](../NormalityChecker/SimpleNormalityKernel.lean#L292) |  |
+| [`SimpleNormalityKernel.interior_fixed_point_margins`](../NormalityChecker/SimpleNormalityKernel.lean#L320) | **Lemma 1.1 (exact margins).** For `b ≥ 2`, `1 ≤ m ≤ b - 2`, and any `L`, the interior fixed point `c_m = m / (b - 1)` lies in the cylinder of `m^L` with… |
+| [`SimpleNormalityKernel.interior_fixed_point_margin`](../NormalityChecker/SimpleNormalityKernel.lean#L339) | **Lemma 1.1 (interior fixed-point margin).** For `1 ≤ m ≤ b - 2` and any `L`: 1. |
+| [`SimpleNormalityKernel.floor_eq_repunit_of_near`](../NormalityChecker/SimpleNormalityKernel.lean#L406) | **Lemma 1.1 (interior fixed points).** |
+| [`SimpleNormalityKernel.floor_eq_zero_or_top_of_near`](../NormalityChecker/SimpleNormalityKernel.lean#L414) | **Lemma 1.2 (the boundary fixed point).** |
+| [`SimpleNormalityKernel.exists_fixed_center_of_deficit`](../NormalityChecker/SimpleNormalityKernel.lean#L459) | **Lemma 2.2 (localization; strict form).** If `b ≥ 2`, `N ≥ 3`, and `1 - D_N(x; b) < δ ≤ 1/2 - 1/N`, then there is a fixed point `c_j = j / (b - 1)` (`0 ≤ j ≤… |
+| [`SimpleNormalityKernel.exists_fixed_center_of_deficit_le`](../NormalityChecker/SimpleNormalityKernel.lean#L640) [GF-19](results.md#gf-19) | **Lemma 2.2 (localization; exact non-strict deficit form).** For `b ≥ 2`, `N ≥ 3`, and `δ = 1 - D_N(x; b) < 1/2 - 1/N`, there is `j` with `j + 2 ≤ b` such… |
+| [`SimpleNormalityKernel.word_dichotomy_of_deficit`](../NormalityChecker/SimpleNormalityKernel.lean#L732) | **Theorem 3.2 (finite dichotomy; strict form).** |
+| [`SimpleNormalityKernel.mul_repunit_ne_boundary`](../NormalityChecker/SimpleNormalityKernel.lean#L816) | Helper: `m * repunit b L` is distinct from `0` and `b^L - 1` when `1 ≤ m ≤ b - 2` and `L ≥ 1`. |
+| [`SimpleNormalityKernel.finite_digit_dichotomy`](../NormalityChecker/SimpleNormalityKernel.lean#L841) [GF-19](results.md#gf-19) | **Theorem 3.2 (exact exclusive finite digit dichotomy).** Let `b ≥ 2`, `L ≥ 1`, `N ≥ 4`, and `δ = 1 - D_N(x; b) < b^{-(L+1)}`. |
+| [`SimpleNormalityKernel.exists_digit_freq_le_of_deficit`](../NormalityChecker/SimpleNormalityKernel.lean#L970) | **Corollary 3.3 (quantitative finite failure of simple normality).** For `b ≥ 3`, `N ≥ 4`, and `δ = 1 - D_N(x; b) < b^(-2)`, some base-`b` digit `d < b` has… |
+| [`SimpleNormalityKernel.not_simply_normal_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1049) [GF-19](results.md#gf-19) | **Theorem 3.4(d) / Corollary 3.3 (no simple normality in `K_b` for `b ≥ 3`).** For every integer base `b ≥ 3` and every `x ∈ K_b` (`D_N(x; b) → 1`), `x` is… |
+| [`SimpleNormalityKernel.binary_transitions_tendsto_zero_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1089) [GF-19](results.md#gf-19) | **Binary kernel transitions vanish.** For every `x ∈ K_2`, the frequencies of the length-2 binary words `01` (`v = 1`) and `10` (`v = 2`) both tend to `0`. |
+| [`SimpleNormalityKernel.not_two_normal_of_mem_binary_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1122) [GF-19](results.md#gf-19) | **No 2-normality in the binary kernel `K_2`.** For every `x ∈ K_2`, the length-2 words `01` and `10` have frequency tending to `0`, so `x` is not 2-normal… |
+| [`SimpleNormalityKernel.wordFreq_transition_tendsto_zero_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1133) | For every base `b ≥ 2` and every `x ∈ K_b`, the length-2 non-constant word `0(b - 1)` (value `b - 1`) has frequency tending to `0`. |
+| [`SimpleNormalityKernel.not_normalIn_of_mem_kernel`](../NormalityChecker/SimpleNormalityKernel.lean#L1169) [GF-19](results.md#gf-19) | **No normality in `K_b` (Theorem 3.4(d)).** For every base `b ≥ 2`, no element of `K_b` is normal in base `b`. |
+| [`SimpleNormalityKernel.kernel_eventual_dichotomy`](../NormalityChecker/SimpleNormalityKernel.lean#L1192) | **Theorem 3.4(a–c) (asymptotic classification in `K_b`).** Every `x ∈ K_b` satisfies a single alternative valid for every word length `L ≥ 1`: -… |
+| [`SimpleNormalityKernel.posTailCount_add_negTailCount`](../NormalityChecker/SimpleNormalityKernel.lean#L1582) |  |
+| [`SimpleNormalityKernel.pow_mul_coeffSeries_eq_int_add_tail`](../NormalityChecker/SimpleNormalityKernel.lean#L1622) | **Lemma 5.1 (integer head + oriented tail decomposition).** |
+| [`SimpleNormalityKernel.shift_coeffSeries_eq_fract_tail`](../NormalityChecker/SimpleNormalityKernel.lean#L1650) | **Lemma 5.1.** `{b^n F_b(a)} = {T_n}` for every absolutely convergent integer coefficient series. |
+| [`SimpleNormalityKernel.shift_eq_fract_tail`](../NormalityChecker/SimpleNormalityKernel.lean#L1657) | Alias for `shift_coeffSeries_eq_fract_tail`. |
+| [`SimpleNormalityKernel.orientedTail_succ`](../NormalityChecker/SimpleNormalityKernel.lean#L1663) | **Lemma 5.1 (tail recursion).** `T_n = (a(n + 1) + T_{n + 1}) / b`. |
+| [`SimpleNormalityKernel.floor_fract_eq_zero`](../NormalityChecker/SimpleNormalityKernel.lean#L1681) | **Theorem 5.2(a) (positive side).** If `0 ≤ T < b^(-L)`, then `{T}` reads `0^L`. |
+| [`SimpleNormalityKernel.floor_fract_eq_top`](../NormalityChecker/SimpleNormalityKernel.lean#L1691) | **Theorem 5.2(a) (negative side).** If `-b^(-L) ≤ T < 0`, then `{T}` reads `(b - 1)^L`. |
+| [`SimpleNormalityKernel.otherWordCount_le_badTailCount`](../NormalityChecker/SimpleNormalityKernel.lean#L1710) | **Theorem 5.2(b) (other words bounded by bad tails).** |
+| [`SimpleNormalityKernel.wordCount_zeros_sub_posTail_le`](../NormalityChecker/SimpleNormalityKernel.lean#L1729) [GF-19](results.md#gf-19) | **Theorem 5.2(c) (finite oriented-tail bound for `0^L`).** Among the first `N` starts, the count of `0^L` differs from `#{n < N : T_n ≥ 0}` by at most… |
+| [`SimpleNormalityKernel.wordCount_maxDigit_sub_negTail_le`](../NormalityChecker/SimpleNormalityKernel.lean#L1797) [GF-19](results.md#gf-19) | **Theorem 5.2(c) (finite oriented-tail bound for `(b - 1)^L`).** Among the first `N` starts, the count of `(b - 1)^L` differs from `#{n < N : T_n < 0}` by at… |
+| [`SimpleNormalityKernel.nearSupport_card_le_succ`](../NormalityChecker/SimpleNormalityKernel.lean#L1859) | **Sharp local-support shadow bound.** The number of shifts `n < N` with a nonzero coefficient in `(n, n + L]` is at most `L * (1 + S(N - 1))` (using only… |
+| [`SimpleNormalityKernel.badTail_card_le_of_shiftedTail`](../NormalityChecker/SimpleNormalityKernel.lean#L1949) | **Theorem 5.3 (general shifted-tail bad-tail bound).** For every `b ≥ 2`, summable `a`, and `N, L, k : ℕ`, `badTailCount b a L N ≤ (L + k)(1 + S(N - 1)) + b^L… |
+| [`SimpleNormalityKernel.badTail_card_le_linear_mass`](../NormalityChecker/SimpleNormalityKernel.lean#L2028) | **Theorem 5.3 (linear-mass bad-tail bound).** Under `absMass a X ≤ C * X`, for all `N, L, k`: `badTailCount b a L N ≤ (L + k)(1 + S(N - 1)) + C * (N + L + k +… |
+| [`SimpleNormalityKernel.orientedTail_of_gap`](../NormalityChecker/SimpleNormalityKernel.lean#L2048) | **Proposition 6.1 (gap-exact tail scaling).** Across a gap of `g - 1` zero coefficients `a(n + 1) = ... |
+| [`SimpleNormalityKernel.abs_orientedTail_lt`](../NormalityChecker/SimpleNormalityKernel.lean#L2069) | **Lemma 6.2(b) (strict geometric tail bound).** If `\|a(n + 1 + j)\| ≤ H` for all `j` with strict inequality for at least one `j`, then `\|T_n\| < H / (b - 1)`. |
+| [`SimpleNormalityKernel.sign_of_dominant`](../NormalityChecker/SimpleNormalityKernel.lean#L2112) | **Lemma 6.2(c) (sign determination under dominance).** If `\|T_m\| < \|a(m)\|`, then `a(m) + T_m > 0 ↔ a(m) > 0`. |
+| [`SimpleNormalityKernel.badTail_card_le`](../NormalityChecker/SimpleNormalityKernel.lean#L2131) | **Corollary 6.4 (bounded coefficients with `H ≤ b - 1`).** If `\|a(m)\| ≤ H ≤ b - 1` for all `m` and `a` is not cofinally nonzero (infinitely many zero… |
+| [`SimpleNormalityKernel.badTailFreq_tendsto_zero_of_linear_mass`](../NormalityChecker/SimpleNormalityKernel.lean#L2186) | Under linear coefficient mass `A(X) ≤ C * X` and density-zero support `S(N) / N → 0`, the bad-tail frequency `B'_L(N) / N` tends to `0` for every word length… |
+| [`SimpleNormalityKernel.asymptotic_oriented_tail_transfer`](../NormalityChecker/SimpleNormalityKernel.lean#L2260) [GF-19](results.md#gf-19) | **Theorem 6.7 (asymptotic oriented-tail transfer).** 1. |
+| [`SimpleNormalityKernel.nonneg_sparse_zeros_tendsto_one`](../NormalityChecker/SimpleNormalityKernel.lean#L2334) [GF-19](results.md#gf-19) | **Corollary 7.1 (nonnegative sparse series read almost exclusively `0^L`).** For every base `b ≥ 2` (including `b = 2`), every nonnegative integer sequence `a… |
+| [`SimpleNormalityKernel.not_simply_normal_of_nonneg_sparse`](../NormalityChecker/SimpleNormalityKernel.lean#L2386) [GF-19](results.md#gf-19) | **Corollary 7.1 (non-simple-normality in EVERY base `b ≥ 2`, including base `2`).** Any nonnegative integer sequence with linear mass and density-zero support… |
+| [`SimpleNormalityKernel.beatty_odd_weight`](../NormalityChecker/SimpleNormalityKernel.lean#L2404) [GF-19](results.md#gf-19) | **Lemma 8.0 (odd-weighted Beatty sum).** For every real `α` and `K : ℕ`, `\|∑_{k=1}^K (⌊kα⌋ - ⌊(k-1)α⌋)(2k - 1) - α K^2\| ≤ 2K`. |
 
 ### SurvivingGrid
 

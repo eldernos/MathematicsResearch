@@ -147,3 +147,6 @@ public import NormalityChecker.ClassicalBarriers
 public import NormalityChecker.RadixWidthLaw
 public import NormalityChecker.DerivativeTransfer
 public import NormalityChecker.NormalReciprocalCore
+public import NormalityChecker.SimpleNormalityKernel
+public import NormalityChecker.RadixPowerTower
+public import NormalityChecker.Phase22Cores
