@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1332 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1387 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 319 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 374 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -159,6 +159,22 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`anchored_difference`](../NormalityChecker/BinaryDiscrepancy.lean#L266) |  |
 | [`normal_iff_discrepancy_zero`](../NormalityChecker/BinaryDiscrepancy.lean#L280) |  |
 
+### CharacterLambertTransfer
+
+[`NormalityChecker/CharacterLambertTransfer.lean`](../NormalityChecker/CharacterLambertTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`CharacterLambertTransfer.shift_mul_pow`](../NormalityChecker/CharacterLambertTransfer.lean#L39) |  |
+| [`CharacterLambertTransfer.radixDiscrepancy_mul_pow_sub_le`](../NormalityChecker/CharacterLambertTransfer.lean#L97) | **Radix shift invariance of finite extreme discrepancy.** For every integer radix `b`, real `x`, `k : ℕ`, and `N > 0`, `\|D_N(b^k x; b) - D_N(x; b)\| ≤ k / N`. |
+| [`CharacterLambertTransfer.discDist_sum_intMul_le`](../NormalityChecker/CharacterLambertTransfer.lean#L149) | `discDist` of a finite integer linear combination from `0` is bounded by the weighted sum of individual deficits `1 - D_N(z_i)`. |
+| [`CharacterLambertTransfer.radix_pow_linear_transfer`](../NormalityChecker/CharacterLambertTransfer.lean#L175) [GF-07](results.md#gf-07) | **General power-of-radix linear discrepancy transfer.** If `b^k x - y = ∑ i ∈ s, c_i z_i` with integer coefficients `c_i`, then for every `N > 0`, `\|D_N(x; b)… |
+| [`CharacterLambertTransfer.summable_binaryLambert`](../NormalityChecker/CharacterLambertTransfer.lean#L229) | Summability of `binaryLambert w` for any bounded weight `\|w(m)\| ≤ B`. |
+| [`CharacterLambertTransfer.mod8_character_identities`](../NormalityChecker/CharacterLambertTransfer.lean#L299) [GF-07](results.md#gf-07) | Exact mod-8 character-orthogonality identities for `4 A_r - E_odd` (`r ∈ {1, 3, 5, 7}`). |
+| [`CharacterLambertTransfer.mod8_odd_discrepancy_diff`](../NormalityChecker/CharacterLambertTransfer.lean#L329) [GF-07](results.md#gf-07) | **Finite mod-8 transfer to the odd-index Erdős–Borwein sum (Track E1).** For every `r ∈ {1, 3, 5, 7}` and every `N > 0`, `\|D_N(A_r; 2) - D_N(E_odd; 2)\| ≤ 2/N… |
+| [`CharacterLambertTransfer.mod8_class_discrepancy_diff`](../NormalityChecker/CharacterLambertTransfer.lean#L381) [GF-07](results.md#gf-07) | **Pairwise mod-8 residue-class discrepancy transfer (Track E1).** For every `r, s ∈ {1, 3, 5, 7}` and `N > 0`, `\|D_N(A_r; 2) - D_N(A_s; 2)\| ≤ 4/N + 2·((1 -… |
+| [`CharacterLambertTransfer.mod8_asymptotic_equivalence`](../NormalityChecker/CharacterLambertTransfer.lean#L407) [GF-07](results.md#gf-07) | **Asymptotic discrepancy equivalence of mod-8 Lambert classes and `E_odd` (Track E1).** Given `D_N(L_{χ}; 2) → 1` for the three nonprincipal real characters… |
+
 ### CircleDiscrepancy
 
 [`NormalityChecker/CircleDiscrepancy.lean`](../NormalityChecker/CircleDiscrepancy.lean)
@@ -169,6 +185,31 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`CircleDiscrepancy.disc_le`](../NormalityChecker/CircleDiscrepancy.lean#L27) |  |
 | [`CircleDiscrepancy.disc_mixture_bound`](../NormalityChecker/CircleDiscrepancy.lean#L35) | A uniform error for interval counts transfers to the discrepancy of a mixture of Lebesgue measure and a finite sample, even at atoms. |
 | [`CircleDiscrepancy.disc_sub_tendsto`](../NormalityChecker/CircleDiscrepancy.lean#L137) | Vanishing signed differences of lifts leave the full prefix discrepancy unchanged asymptotically. |
+
+### CoefficientTransfer
+
+[`NormalityChecker/CoefficientTransfer.lean`](../NormalityChecker/CoefficientTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`CoefficientTransfer.absMass_nonneg`](../NormalityChecker/CoefficientTransfer.lean#L67) |  |
+| [`CoefficientTransfer.absMass_mono`](../NormalityChecker/CoefficientTransfer.lean#L70) |  |
+| [`CoefficientTransfer.supportCount_mono`](../NormalityChecker/CoefficientTransfer.lean#L74) |  |
+| [`CoefficientTransfer.summable_abs_of_linear_mass`](../NormalityChecker/CoefficientTransfer.lean#L82) | Linear-mass summability: if `∑_{1 ≤ m ≤ X} \|a(m)\| ≤ C · X` for all `X` and `b ≥ 2`, then `∑' m, \|a(m)\| / b^m` converges. |
+| [`CoefficientTransfer.near_of_no_local_support`](../NormalityChecker/CoefficientTransfer.lean#L111) | If no nonzero coefficient occurs in `(n, n+L]` and the tail beyond `L` is at most `ε`, then `b^n F_b(a)` is within `ε` of an integer. |
+| [`CoefficientTransfer.nearSupport_card_le`](../NormalityChecker/CoefficientTransfer.lean#L201) | Counting shifts with a nonzero coefficient within the next `L` positions: `#{n < N : ∃ 1 ≤ j ≤ L, a(n + j) ≠ 0} ≤ L · S(N + L)`. |
+| [`CoefficientTransfer.farCount_le_local_add_tail`](../NormalityChecker/CoefficientTransfer.lean#L233) | Splitting `farCount` into local-support hits and large-tail shifts. |
+| [`CoefficientTransfer.markov_tail_card_le`](../NormalityChecker/CoefficientTransfer.lean#L264) | Markov bound on the number of shifts with `shiftedTail > ε`. |
+| [`CoefficientTransfer.sum_shiftedTail_le_of_linear_mass`](../NormalityChecker/CoefficientTransfer.lean#L326) | Total shifted tail budget under linear coefficient mass `A(X) ≤ C · X`: `∑_{n < N} shiftedTail b a n L ≤ C · (N + L + 2) / b^L`. |
+| [`CoefficientTransfer.finite_sparse_mass_transfer`](../NormalityChecker/CoefficientTransfer.lean#L392) [GF-01](results.md#gf-01) [GF-06](results.md#gf-06) | **Finite sparse-support / linear-mass discrepancy-transfer inequality (Track B1).** For every radix `b ≥ 2`, integer sequence `a` with `A(X) ≤ C · X`, cutoff… |
+| [`CoefficientTransfer.finite_sparse_mass_translation`](../NormalityChecker/CoefficientTransfer.lean#L423) [GF-01](results.md#gf-01) | Uniform translation version of `finite_sparse_mass_transfer`: bounds `\|D_N(x + F_b(a); b) - D_N(x; b)\|` for every `x : ℝ`. |
+| [`CoefficientTransfer.linear_mass_sparse_tendsto_one`](../NormalityChecker/CoefficientTransfer.lean#L434) [GF-01](results.md#gf-01) [GF-06](results.md#gf-06) | **Asymptotic coefficient-to-discrepancy transfer (Track B1).** If `A(X) = O(X)` and `S(X) = o(X)`, then `D_N(F_b(a); b) → 1`. |
+| [`CoefficientTransfer.linear_mass_sparse_preserves_discrepancy`](../NormalityChecker/CoefficientTransfer.lean#L512) [GF-01](results.md#gf-01) | **Universal discrepancy preservation (`F_b(a) ∈ K_b`).** Under `A(X) = O(X)` and `S(X) = o(X)`, `F_b(a)` universally preserves asymptotic extreme discrepancy… |
+| [`CoefficientTransfer.radixVal_pow_dvd`](../NormalityChecker/CoefficientTransfer.lean#L578) | `b^(radixVal b a)` divides `a` for every integer `a` and radix `b`. |
+| [`CoefficientTransfer.radixVal_mul_radixUnit`](../NormalityChecker/CoefficientTransfer.lean#L588) [GF-01](results.md#gf-01) | Exact displaced-source factorization: `a = b^(radixVal b a) * radixUnit b a`. |
+| [`CoefficientTransfer.not_dvd_radixUnit`](../NormalityChecker/CoefficientTransfer.lean#L594) | Maximality of `radixVal`: for `b ≥ 2` and `a ≠ 0`, `b` does not divide `radixUnit b a`. |
+| [`CoefficientTransfer.displaced_term_eq`](../NormalityChecker/CoefficientTransfer.lean#L617) [GF-01](results.md#gf-01) [GF-05](results.md#gf-05) | **Displaced-source shift identity (Track B2).** For `a = b^v U` (`v = radixVal b a`, `U = radixUnit b a`), the shifted term `b^n (a / b^m)` is an integer… |
+| [`CoefficientTransfer.one_sub_discrepancy_ge_of_bulk_and_far`](../NormalityChecker/CoefficientTransfer.lean#L686) [GF-01](results.md#gf-01) [GF-05](results.md#gf-05) | **Two-sided circular concentration lower bound (Tracks A1, B3, B4).** In any radix `b`, for any `x : ℝ`, `N > 0`, and `ε₀, δ : ℝ`: let `B` be the bulk of… |
 
 ### ComputableNormalityUndecidability
 
@@ -290,6 +331,36 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`normal_of_dominated_perturbation`](../NormalityChecker/DominatedPerturbation.lean#L16) | Outside a sparse insertion schedule, two prefixes follow the radix orbit. |
+
+### EulerPentagonal
+
+[`NormalityChecker/EulerPentagonal.lean`](../NormalityChecker/EulerPentagonal.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`EulerPentagonal.two_mul_pentMinus`](../NormalityChecker/EulerPentagonal.lean#L51) |  |
+| [`EulerPentagonal.two_mul_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L60) |  |
+| [`EulerPentagonal.pentMinus_lt_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L69) |  |
+| [`EulerPentagonal.pentPlus_lt_pentMinus_succ`](../NormalityChecker/EulerPentagonal.lean#L76) |  |
+| [`EulerPentagonal.pentMinus_strictMono`](../NormalityChecker/EulerPentagonal.lean#L84) |  |
+| [`EulerPentagonal.pentPlus_strictMono`](../NormalityChecker/EulerPentagonal.lean#L96) |  |
+| [`EulerPentagonal.pentMinus_ne_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L103) |  |
+| [`EulerPentagonal.abs_pentCoeff_le_one`](../NormalityChecker/EulerPentagonal.lean#L126) |  |
+| [`EulerPentagonal.pentCoeff_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L135) |  |
+| [`EulerPentagonal.pentagonal_index_bound`](../NormalityChecker/EulerPentagonal.lean#L142) |  |
+| [`EulerPentagonal.pentagonal_supportCount_le`](../NormalityChecker/EulerPentagonal.lean#L157) [GF-03](results.md#gf-03) | Support count of the pentagonal series through `M`: at most `2 * (Nat.sqrt (2 * M) + 1)`. |
+| [`EulerPentagonal.eulerPentagonal_finite_gap_upper`](../NormalityChecker/EulerPentagonal.lean#L234) [GF-03](results.md#gf-03) | **Finite discrepancy-gap upper bound for Euler's pentagonal series (Track A1).** |
+| [`EulerPentagonal.eulerPentagonal_discrepancy_tendsto_one`](../NormalityChecker/EulerPentagonal.lean#L251) [GF-03](results.md#gf-03) | **Maximal discrepancy of Euler's infinite product (Track A1).** For every integer radix `b ≥ 2`, `D_N(E_b; b) → 1`. |
+| [`EulerPentagonal.eulerPentagonal_preserves_discrepancy`](../NormalityChecker/EulerPentagonal.lean#L265) [GF-03](results.md#gf-03) | **Universal discrepancy preservation by Euler's infinite product (Track A1).** For every integer radix `b ≥ 2` and every real `x`, `D_N(x + E_b; b) - D_N(x;… |
+| [`EulerPentagonal.two_mul_triNum`](../NormalityChecker/EulerPentagonal.lean#L283) |  |
+| [`EulerPentagonal.triNum_strictMono`](../NormalityChecker/EulerPentagonal.lean#L290) |  |
+| [`EulerPentagonal.triNum_index_bound`](../NormalityChecker/EulerPentagonal.lean#L305) |  |
+| [`EulerPentagonal.abs_jacobiCubeCoeff_triNum`](../NormalityChecker/EulerPentagonal.lean#L309) |  |
+| [`EulerPentagonal.jacobiCube_supportCount_le`](../NormalityChecker/EulerPentagonal.lean#L320) [GF-04](results.md#gf-04) | Support count of Jacobi's cube series: `S(M) ≤ Nat.sqrt (2 * M)`. |
+| [`EulerPentagonal.jacobiCube_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L357) [GF-04](results.md#gf-04) | Aggregate absolute coefficient mass of Jacobi's cube series is linear: `A(M) ≤ 4 · M`. |
+| [`EulerPentagonal.eulerCube_discrepancy_tendsto_one`](../NormalityChecker/EulerPentagonal.lean#L412) [GF-04](results.md#gf-04) | **Maximal discrepancy of Jacobi's cube series `E_b³` (Track A2).** For every integer radix `b ≥ 2`, `D_N(E_b³; b) → 1`. |
+| [`EulerPentagonal.eulerCube_preserves_discrepancy`](../NormalityChecker/EulerPentagonal.lean#L423) [GF-04](results.md#gf-04) | **Universal discrepancy preservation by Jacobi's cube series `E_b³` (Track A2).** For every integer radix `b ≥ 2` and every real `x`, `D_N(x + E_b³; b) -… |
+| [`EulerPentagonal.cauchyConv_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L444) [GF-04](results.md#gf-04) | **Cauchy convolution aggregate mass bound (Tracks A2 and B5).** For any integer sequences `a, c`, `absMass (cauchyConv a c) M ≤ (\|a 0\| + absMass a M) * (\|c 0\|… |
 
 ### FourierTest
 
@@ -437,6 +508,18 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`PrimePowerGrid.primePower_period_count`](../NormalityChecker/PrimePowerGrid.lean#L313) | **Prime-power period count.** Over one full period `n < t p^g`, the number of samples `fract (bⁿ a' / p^(e+g))` in `[a, c)` differs from `t p^g (c - a)` by at… |
 | [`PrimePowerGrid.crt_period_count`](../NormalityChecker/PrimePowerGrid.lean#L337) [OP-08](results.md#op-08) | **CRT period count.** Let `q = p^(e+g) Q` with `Q` prime to `p` and `Q ∣ b^t - 1`, where `e` is the exact `p`-adic valuation of `b^t - 1`. |
 
+### ProtectedPole
+
+[`NormalityChecker/ProtectedPole.lean`](../NormalityChecker/ProtectedPole.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProtectedPole.prime_pow_dvd_rat_den_of_repr`](../NormalityChecker/ProtectedPole.lean#L45) | If `q = num / (p^d * M)` with `p` prime, `M > 0`, and `p^(v+1) ∤ num` (`v ≤ d`), then `p^(d - v) ∣ q.den`. |
+| [`ProtectedPole.not_prime_pow_succ_dvd_rat_den_of_repr`](../NormalityChecker/ProtectedPole.lean#L100) | Upper bound on `p`-adic denominator depth: if `q = num / (p^d * M)` with `p ∤ M`, then `¬ p^(d + 1) ∣ q.den`. |
+| [`ProtectedPole.shifted_prefix_aux_prime_dvd_den`](../NormalityChecker/ProtectedPole.lean#L143) [GF-10](results.md#gf-10) | **Auxiliary prime survival (Track C1).** If `ℓ k` is prime and coprime to `b`, `p`, and all earlier `ℓ j` (`1 ≤ j < k`), and `n j ≤ N` for all `1 ≤ j ≤ k`,… |
+| [`ProtectedPole.shifted_prefix_protected_prime_pow_dvd_den`](../NormalityChecker/ProtectedPole.lean#L245) [GF-10](results.md#gf-10) | **Exact protected prime-power depth of `W`'s shifted prefixes (Track C1).** If `p` is prime, `p ∤ b`, `p ∤ ℓ j` for `1 ≤ j ≤ k`, `e j < e k` for `1 ≤ j < k`,… |
+| [`ProtectedPole.truncated_poly_pole_dvd_den`](../NormalityChecker/ProtectedPole.lean#L347) [GF-10](results.md#gf-10) | **Truncated polynomial pole dominance (Track C1 core).** Let `U = u / (p^(e₁) · Q₁)` and `V = v / (p^(e₂) · Q₂)` with `p` prime and `p ∤ u, v, Q₁, Q₂`. |
+
 ### RadixTelescoping
 
 [`NormalityChecker/RadixTelescoping.lean`](../NormalityChecker/RadixTelescoping.lean)
@@ -528,7 +611,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SharpTranslation.sharp_translation`](../NormalityChecker/SharpTranslation.lean#L343) [SY-04](results.md#sy-04) | **The exact worst-case change.** For every real `x`, `z` and every `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 1 - D_N(z)`. |
 | [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
 | [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
-| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
+| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) [GF-05](results.md#gf-05) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
 
 ### SurvivingGrid
 
@@ -537,7 +620,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`SurvivingGrid.return_iff`](../NormalityChecker/SurvivingGrid.lean#L13) [OP-08](results.md#op-08) | The exact return times for a stride `g` which fixes the complementary modulus and is one modulo the distinguished odd prime. |
-| [`SurvivingGrid.stride_order`](../NormalityChecker/SurvivingGrid.lean#L43) [OP-08](results.md#op-08) | Multiplicative order, hence the exact number of grid points, at any depth. |
+| [`SurvivingGrid.stride_order`](../NormalityChecker/SurvivingGrid.lean#L43) [OP-08](results.md#op-08) [GF-10](results.md#gf-10) | Multiplicative order, hence the exact number of grid points, at any depth. |
 | [`SurvivingGrid.visits_every_lift`](../NormalityChecker/SurvivingGrid.lean#L56) [OP-08](results.md#op-08) | If the return period equals the number of lifts of a fixed residue, every lift is visited. |
 
 ## Stoneham polynomial images and products

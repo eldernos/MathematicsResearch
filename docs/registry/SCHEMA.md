@@ -15,12 +15,13 @@ Identifiers are editorial and permanent. They stay attached to a mathematical st
 | CC | Classical constant arithmetic | [papers/05-classical-denominators](../../papers/05-classical-denominators) |
 | SY | Synthetic expansions and translations | [papers/07-synthetic-expansions](../../papers/07-synthetic-expansions) (candidate; research record in [Phase 18](../../notes/phase18/README.md)) |
 | OP | Arithmetic of discrepancy and unrestricted prime support | [Phase 19 research](../../notes/phase19/README.md) |
+| GF | Arithmetic generating functions and transfer | [Phase 20 research](../../notes/phase20/README.md) |
 
 ## Fields of a `[[result]]` table
 
 | Field | Required | Meaning |
 | --- | --- | --- |
-| `id` | yes | Identifier such as `ST-01`. The prefix fixes the family. SY and OP record research preceding a manuscript release. |
+| `id` | yes | Identifier such as `ST-01`. The prefix fixes the family. SY, OP and GF record research preceding a manuscript release. |
 | `title` | yes | A short name of the result, readable without notation. |
 | `topic` | yes | One of the topic keys listed below. |
 | `principal` | no | `true` for results featured in the README. |

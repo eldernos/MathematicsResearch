@@ -1,6 +1,6 @@
 # Repository metadata proposal
 
-**Status: proposal for owner approval. The commands below have not been run.** They change the public GitHub repository settings (description, homepage, topics), which are outward-facing, so the owner runs them after approval.
+**Status (26 November 2026): applied.** The live GitHub repository settings match the proposal below: the homepage is `https://eldernos.github.io/MathematicsResearch/`, all 17 topics are set, GitHub Pages is enabled with the Actions source, and `manuscripts-v2.0.0` is published. The commands below are retained as the record of what was proposed and applied.
 
 ## Current values
 
@@ -18,7 +18,7 @@ gh repo view eldernos/MathematicsResearch --json description,homepageUrl,reposit
 }
 ```
 
-The description already matches the proposed text. No homepage and no topics are set.
+The description already matched the proposed text. At the time of that query no homepage and no topics were set; they have since been set as proposed.
 
 ## Proposed values
 
@@ -67,8 +67,8 @@ To check the result:
 gh repo view eldernos/MathematicsResearch --json description,homepageUrl,repositoryTopics
 ```
 
-## Related owner actions
+## Related owner actions (completed)
 
-- Enable GitHub Pages with the Actions source ([site.md](site.md)).
-- Decide the manuscript licence ([licensing-proposal.md](licensing-proposal.md)).
-- Publish the release `manuscripts-v2.0.0` only after the manuscripts, checksums and `CITATION.cff` are approved ([papers/ARCHIVING.md](../papers/ARCHIVING.md)).
+- Enable GitHub Pages with the Actions source ([site.md](site.md)) — done.
+- Decide the manuscript licence ([licensing-proposal.md](licensing-proposal.md)) — done (`CC BY 4.0` for `manuscripts-v2.0.0`).
+- Publish the release `manuscripts-v2.0.0` ([papers/ARCHIVING.md](../papers/ARCHIVING.md)) — done (26 November 2026).

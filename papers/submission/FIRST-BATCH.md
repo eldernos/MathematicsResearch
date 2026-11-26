@@ -26,7 +26,7 @@ Submit first. Cites manuscript X for the translation identity; that citation res
 | URL slug | `disjunctive-nonnormal-multiplicative-lambert-series` |
 | AI disclosure stages | idea: mixed, literature: ai, experiments: ai, analysis: ai, writing: ai |
 | AI tools recorded | 4: Claude, GPT and Gemini models (several versions) (Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases (Phases 1-19)); Claude Opus 5.5 (Drafted the manuscript and proofs, checked primary sources, and revised it in response to both reviews); GPT-6.2 Astra (Independent referee report (analytic number theory)); Gemini 4 Argon (Independent referee report (primary sources and novelty)) |
-| Owner confirmed | **not yet** |
+| Pipeline flag `owner_confirmed` | false (published through the web form; the API pipeline was not used) |
 | Verification scope | [`VERIFICATION.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/06-multiplicative-lambert/VERIFICATION.md) · [ledger](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/06-multiplicative-lambert/LEDGER.md) · [reviews](https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/reviews/06-multiplicative-lambert) |
 | Prepared text | [`submission/alphaxiv.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/06-multiplicative-lambert/submission/alphaxiv.md) (abstract, categories, disclosure, verification scope) |
 
@@ -50,7 +50,7 @@ Submit second, so that the two papers citing it (VI and VII) can be updated with
 | URL slug | `arithmetic-of-extreme-discrepancy` |
 | AI disclosure stages | idea: mixed, literature: ai, experiments: ai, analysis: ai, writing: ai |
 | AI tools recorded | 5: Claude, GPT and Gemini models (several versions) (Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases (Phases 1-19)); Claude Opus 5.5 (Drafted the manuscript and proofs); Gemini 4 Argon (Independent referee report); Gemini 4 Neon (Independent referee report (Lean correspondence and bibliography)); Claude Sonnet 5.5 (Revised the manuscript in response to both reviews) |
-| Owner confirmed | **not yet** |
+| Pipeline flag `owner_confirmed` | false (published through the web form; the API pipeline was not used) |
 | Verification scope | [`VERIFICATION.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/10-discrepancy-arithmetic/VERIFICATION.md) · [ledger](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/10-discrepancy-arithmetic/LEDGER.md) · [reviews](https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/reviews/10-discrepancy-arithmetic) |
 | Prepared text | [`submission/alphaxiv.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/10-discrepancy-arithmetic/submission/alphaxiv.md) (abstract, categories, disclosure, verification scope) |
 
@@ -74,7 +74,7 @@ Submit third. Cites manuscript X.
 | URL slug | `synthetic-arithmetic-expansions-prescribed-discrepancy` |
 | AI disclosure stages | idea: mixed, literature: ai, experiments: ai, analysis: ai, writing: ai |
 | AI tools recorded | 4: Claude, GPT and Gemini models (several versions) (Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases (Phases 1-19)); Claude Opus 5.5 (Drafted, restructured (split of manuscript X) and revised the manuscript and proofs); GPT-6.2 Astra (Independent referee report); Gemini 4 Argon (Independent referee report (primary sources and novelty)) |
-| Owner confirmed | **not yet** |
+| Pipeline flag `owner_confirmed` | false (published through the web form; the API pipeline was not used) |
 | Verification scope | [`VERIFICATION.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/07-synthetic-expansions/VERIFICATION.md) · [ledger](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/07-synthetic-expansions/LEDGER.md) · [reviews](https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/reviews/07-synthetic-expansions) |
 | Prepared text | [`submission/alphaxiv.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/07-synthetic-expansions/submission/alphaxiv.md) (abstract, categories, disclosure, verification scope) |
 
@@ -98,7 +98,7 @@ Submit fourth. Version 2.0 revises the GitHub-released version 1.1, which has no
 | URL slug | `polynomial-images-of-stoneham-numbers` |
 | AI disclosure stages | idea: mixed, literature: ai, experiments: ai, analysis: ai, writing: ai |
 | AI tools recorded | 4: Claude, GPT and Gemini models (several versions) (Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases (Phases 1-19)); GPT-6.2 Astra (Drafted the version 2.0 manuscript and began the revision in response to both reviews); Claude Opus 5.5 (Independent referee report; after the GPT revision was interrupted, completed the revision and resolution record); Gemini 4 Argon (Independent referee report (primary sources and Lean correspondence)) |
-| Owner confirmed | **not yet** |
+| Pipeline flag `owner_confirmed` | false (published through the web form; the API pipeline was not used) |
 | Verification scope | [`VERIFICATION.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/01-stoneham-polynomials-v2/VERIFICATION.md) · [ledger](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/01-stoneham-polynomials-v2/LEDGER.md) · [reviews](https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/reviews/01-stoneham-polynomials-v2) |
 | Prepared text | [`submission/alphaxiv.md`](https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/01-stoneham-polynomials-v2/submission/alphaxiv.md) (abstract, categories, disclosure, verification scope) |
 

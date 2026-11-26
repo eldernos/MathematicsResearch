@@ -56,6 +56,7 @@ FAMILIES = {
     "CC": ("Classical constant arithmetic", "V"),
     "SY": ("Synthetic expansions and translations", None),
     "OP": ("Arithmetic of discrepancy and unrestricted prime support", None),
+    "GF": ("Arithmetic generating functions and transfer", None),
 }
 TOPICS = {
     "stoneham": "Stoneham polynomial images and products",
@@ -97,7 +98,7 @@ META_AFFILIATION = "Independent Researcher"
 MSC_RE = re.compile(r"^\d{2}[A-Z](\d{2}|xx)$")
 WAVE2_FILES = ("paper.pdf", "paper.tex", "references.bib", "VERIFICATION.md", "LEDGER.md", "submission")
 REQUIRED = ("id", "title", "topic", "status", "statement", "scope", "proof")
-ID_RE = re.compile(r"\b(ST|LS|MW|CR|DS|AC|CC|SY|OP)-(\d{2})\b")
+ID_RE = re.compile(r"\b(ST|LS|MW|CR|DS|AC|CC|SY|OP|GF)-(\d{2})\b")
 
 FIGURE_PAGES = ("README.md", "docs/survey.md", "docs/framework.md", "docs/guide-newcomers.md",
                 "docs/open-problems.md")
@@ -499,7 +500,21 @@ def paper_label(p) -> str:
     return label
 
 
-def paper_files(p, frm="README.md"):
+def load_alphaxiv_records() -> dict[str, str]:
+    """Map permanent manuscript id -> verified alphaXiv URL from papers/alphaxiv-records.toml."""
+    path = ROOT / "papers" / "alphaxiv-records.toml"
+    if not path.is_file():
+        return {}
+    out = {}
+    for rec in tomllib.loads(path.read_text(encoding="utf-8")).get("record", []):
+        rid = str(rec.get("id", "")).strip()
+        url = str(rec.get("alphaxiv", "")).strip()
+        if rid and url.startswith("https://www.alphaxiv.org/"):
+            out[rid] = url
+    return out
+
+
+def paper_files(p, frm="README.md", alphaxiv_map=None):
     d = rel(p["dir"], frm)
     if p["layout"] == "released":
         parts = [("PDF", "paper.pdf"), ("LaTeX", "paper.tex"), ("References", "references.bib"),
@@ -507,11 +522,17 @@ def paper_files(p, frm="README.md"):
     else:
         parts = [("PDF", "paper.pdf"), ("LaTeX", "paper.tex"), ("Verification map", "VERIFICATION.md"),
                  ("Ledger", "LEDGER.md")]
-    return " · ".join(f"[{name}]({d}/{f})" for name, f in parts)
+    links = [f"[{name}]({d}/{f})" for name, f in parts]
+    if alphaxiv_map and p.get("current"):
+        mid = str((p.get("metadata") or {}).get("id") or p.get("number", "")).strip()
+        if mid in alphaxiv_map:
+            links.append(f"[alphaXiv]({alphaxiv_map[mid]})")
+    return " · ".join(links)
 
 
 def build_papers_block(papers):
     frm = "README.md"
+    alphaxiv_map = load_alphaxiv_records()
     current = sorted((p for p in papers if p["current"]), key=paper_key)
     old = sorted((p for p in papers if not p["current"]), key=paper_key)
     rows = ["| | Manuscript | Version | Results | Status | Files |", "| --- | --- | --- | --- | --- | --- |"]
@@ -519,7 +540,7 @@ def build_papers_block(papers):
         ids = " ".join(f"[{x}](docs/results.md#{anchor(x)})" for x in p["principal"])
         retained = f" (retained in `{CANDIDATE_TAG}`)" if p["layout"] == "released" else ""
         rows.append(f"| {p['number']} | **{p['title']}** | {p['version']}{retained} | {ids} | "
-                    f"{paper_label(p)} | {paper_files(p)} |")
+                    f"{paper_label(p)} | {paper_files(p, alphaxiv_map=alphaxiv_map)} |")
     out = ["\n".join(rows)]
     if old:
         hist = ["| | Superseded manuscript | Version | Replaced by | Files |", "| --- | --- | --- | --- | --- |"]
@@ -542,6 +563,7 @@ FAMILY_SURVEY = {
     "DS": "exact-discrepancy-and-symbolic-spectra", "AC": "rational-orbit-certificates",
     "CC": "classical-constant-arithmetic", "SY": "iv-designing-the-distribution-through-rational-insertions",
     "OP": "v-arithmetic-operations-and-all-prime-support",
+    "GF": "vi-arithmetic-generating-functions-and-coefficient-transfer",
 }
 
 

@@ -136,3 +136,7 @@ public import NormalityChecker.DiscrepancyGeometry
 public import NormalityChecker.SurvivingGrid
 public import NormalityChecker.PrimePowerGrid
 public import NormalityChecker.AdditionSpectrum
+public import NormalityChecker.CoefficientTransfer
+public import NormalityChecker.EulerPentagonal
+public import NormalityChecker.CharacterLambertTransfer
+public import NormalityChecker.ProtectedPole

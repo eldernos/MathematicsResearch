@@ -170,8 +170,12 @@ def bib_note(p) -> str:
     if p["layout"] == "released":
         return (f"Version {p['version']}, release {portal.RELEASED_TAG}. Preprint draft; not peer reviewed. "
                 "The archived PDF carries no author line.")
-    return (f"Version {p['version']}, preprint draft in release {portal.CANDIDATE_TAG}. "
+    note = (f"Version {p['version']}, preprint draft in release {portal.CANDIDATE_TAG}. "
             "Not peer reviewed. AI-assisted research; see the AI-use statement in the manuscript.")
+    ax = alphaxiv_record(p.get("metadata"))
+    if ax:
+        note += f" Also posted on alphaXiv's AI Track (screening is not peer review): {ax}."
+    return note
 
 
 def bibtex(p, year=None, url=None) -> str:

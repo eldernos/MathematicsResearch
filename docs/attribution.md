@@ -23,7 +23,7 @@ Verification does **not** establish:
 
 ### Release `manuscripts-v2.0.0`
 
-Cite a manuscript by author, title, version and release tag. The author of the v2 manuscripts is Christopher Anderson, Independent Researcher. The release is a **candidate** until the owner publishes the tag, and no DOI has been issued. A BibTeX entry for every current manuscript is in [papers/BIBLIOGRAPHY.bib](../papers/BIBLIOGRAPHY.bib), and the repository itself is described by [CITATION.cff](../CITATION.cff), which GitHub shows under "Cite this repository". Paper III is retained at version 1.1 in this release. The manuscripts are preprint drafts and have not been peer reviewed.
+Cite a manuscript by author, title, version and release tag. The author of the v2 manuscripts is Christopher Anderson, Independent Researcher. The release `manuscripts-v2.0.0` was published on 26 November 2026, and no DOI has been issued. A BibTeX entry for every current manuscript is in [papers/BIBLIOGRAPHY.bib](../papers/BIBLIOGRAPHY.bib), and the repository itself is described by [CITATION.cff](../CITATION.cff), which GitHub shows under "Cite this repository". Paper III is included in `manuscripts-v2.0.0` as the version 1.2 named-author edition (its archived version 1.1 stays unchanged at `manuscripts-v1.1.0`). The manuscripts are preprint drafts and have not been peer reviewed.
 
 ```bibtex
 @unpublished{anderson-stoneham-polynomials-v2,
