@@ -77,7 +77,7 @@ def markdown(data):
         "",
         "Every manuscript release is a Git tag. A tag is never moved and earlier files are never replaced:",
         "a revision appears in a new directory with a new version number. The table lists the release",
-        f"candidate {data['release']}. Its Lean links point to the immutable commit",
+        f"{data['release']}. Its Lean links point to the immutable commit",
         f"[`{data['lean_commit'][:12]}`]({REPO}/tree/{data['lean_commit']}) (research-checkpoint-18).",
         "The SHA-256 digests identify the PDFs committed at the source commit of this record.",
         "",

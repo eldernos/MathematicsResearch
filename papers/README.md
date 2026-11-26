@@ -1,6 +1,6 @@
 # Manuscripts
 
-**Release candidate `manuscripts-v2.0.0`.** The tag does not exist until the owner approves the release. The author of every manuscript in it is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)). The v1.0.0 and v1.1.0 files carry no author line and are unchanged. All are preprint drafts. Each has been checked by independent AI reviewers from a different provider than its writer, which is not independent human peer review.
+**Release [`manuscripts-v2.0.0`](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v2.0.0)**, published 26 November 2026. The author of every manuscript in it is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)). The v1.0.0 and v1.1.0 files carry no author line and are unchanged. All are preprint drafts. Each has been checked by independent AI reviewers from a different provider than its writer, which is not independent human peer review.
 
 | | Manuscript | Version | Directory | First alphaXiv batch |
 | --- | --- | --- | --- | --- |

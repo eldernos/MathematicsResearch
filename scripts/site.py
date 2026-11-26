@@ -169,7 +169,7 @@ def bib_note(p) -> str:
     if p["layout"] == "released":
         return (f"Version {p['version']}, release {portal.RELEASED_TAG}. Preprint draft; not peer reviewed. "
                 "The archived PDF carries no author line.")
-    return (f"Version {p['version']}, preprint draft in release candidate {portal.CANDIDATE_TAG}. "
+    return (f"Version {p['version']}, preprint draft in release {portal.CANDIDATE_TAG}. "
             "Not peer reviewed. AI-assisted research; see the AI-use statement in the manuscript.")
 
 
@@ -201,7 +201,7 @@ def build_bibliography(papers) -> str:
            "% These are preprint drafts. None has been peer reviewed. The v1.0.0 and v1.1.0 archives carry no",
            "% author line; the author field records the repository owner who is responsible for the release.",
            ""]
-    out.append("% Release candidate manuscripts-v2.0.0: current manuscripts")
+    out.append("% Release manuscripts-v2.0.0: current manuscripts")
     for p in sorted((q for q in papers if q["current"]), key=portal.paper_key):
         out += [bibtex(p), ""]
     out.append("% Historical releases (kept unchanged at their tags)")
@@ -453,7 +453,7 @@ def index_page(papers, base):
              f'<p>Exact statements, scope and proofs: <a href="{REPO}#principal-theorems">repository README</a> · '
              f'<a href="{REPO}/blob/{DEFAULT_BRANCH}/docs/results.md">result index</a>.</p>',
              '<h2 id="manuscripts">Manuscripts</h2>',
-             f"<p>Release candidate <code>{esc(portal.CANDIDATE_TAG)}</code>. Version 1.0 and 1.1 PDFs remain "
+             f"<p>Release <code>{esc(portal.CANDIDATE_TAG)}</code>. Version 1.0 and 1.1 PDFs remain "
              "unchanged at their release tags.</p>",
              '<div class="scroll"><table><thead><tr><th scope="col"></th><th scope="col">Manuscript</th>'
              '<th scope="col">Version</th><th scope="col">Status</th></tr></thead><tbody>' + "".join(rows) +

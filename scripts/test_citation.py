@@ -16,8 +16,10 @@ class CitationTests(unittest.TestCase):
         self.assertEqual(data["type"], "software")
         self.assertEqual(data["license"], "MIT")
 
-    def test_candidate_comment_present(self):
-        self.assertRegex((ROOT / "CITATION.cff").read_text(encoding="utf-8"), r"(?i)#\s*CANDIDATE")
+    def test_release_date_recorded(self):
+        # manuscripts-v2.0.0 was published on 2026-11-26; the candidate comment was removed at release.
+        self.assertEqual(self.load()["date-released"], "2026-11-26")
+        self.assertNotRegex((ROOT / "CITATION.cff").read_text(encoding="utf-8"), r"(?i)#\s*CANDIDATE")
 
     def load(self):
         return cc.parse((ROOT / "CITATION.cff").read_text(encoding="utf-8"))

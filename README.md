@@ -128,7 +128,7 @@ The later results on individual Taylor rows of ln 2 ([OP-13](docs/results.md#op-
 
 ## Research papers
 
-The manuscripts are preprint drafts. The release candidate `manuscripts-v2.0.0` contains revised Papers I, II, IV and V (version 2.0), Paper III unchanged (version 1.1), and four new manuscripts, VI to IX. None has been peer reviewed. Each v2 directory holds `VERIFICATION.md`, a theorem-by-theorem map to Lean declarations and external inputs, and `LEDGER.md`, a claim-to-source ledger for priority. The v1.0.0 and v1.1.0 files are unchanged at their release tags. [Publication status and review reports](papers/README.md) · [Shared notation](papers/notation.md) · [Archiving and citation](papers/ARCHIVING.md) · [Bibliography](papers/BIBLIOGRAPHY.bib) · [Research site](docs/site.md)
+The manuscripts are preprint drafts. The release [`manuscripts-v2.0.0`](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v2.0.0) contains revised Papers I, II, IV and V (version 2.0), Paper III unchanged (version 1.1), and four new manuscripts, VI to IX. None has been peer reviewed. Each v2 directory holds `VERIFICATION.md`, a theorem-by-theorem map to Lean declarations and external inputs, and `LEDGER.md`, a claim-to-source ledger for priority. The v1.0.0 and v1.1.0 files are unchanged at their release tags. [Publication status and review reports](papers/README.md) · [Shared notation](papers/notation.md) · [Archiving and citation](papers/ARCHIVING.md) · [Bibliography](papers/BIBLIOGRAPHY.bib) · [Research site](docs/site.md)
 
 <!-- BEGIN PAPERS -->
 | | Manuscript | Version | Results | Status | Files |
@@ -240,7 +240,7 @@ Verification runs the exact-arithmetic tests, builds the library, audits the lis
 
 ## Attribution, citation and contributing
 
-The author of the release candidate manuscripts is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)); the archived v1.1 manuscripts carry no author line, and Paper III v1.2 is its named-author edition. [How the work was done and what verification covers](docs/attribution.md) · [How to cite](docs/attribution.md#how-to-cite) · [CITATION.cff](CITATION.cff) · [Archiving and DOIs](papers/ARCHIVING.md) · [Manuscript licence](LICENSE-MANUSCRIPTS.md) · [Repository metadata proposal](docs/repository-metadata.md)
+The author of the manuscripts-v2.0.0 manuscripts is Christopher Anderson, Independent Researcher ([alphaXiv profile](https://www.alphaxiv.org/@christopher-anderson)); the archived v1.1 manuscripts carry no author line, and Paper III v1.2 is its named-author edition. [How the work was done and what verification covers](docs/attribution.md) · [How to cite](docs/attribution.md#how-to-cite) · [CITATION.cff](CITATION.cff) · [Archiving and DOIs](papers/ARCHIVING.md) · [Manuscript licence](LICENSE-MANUSCRIPTS.md) · [Repository metadata proposal](docs/repository-metadata.md)
 
 The manuscripts of manuscripts-v2.0.0, with their designated accompanying prose and figures, are licensed under [CC BY 4.0](LICENSE-MANUSCRIPTS.md) (© 2026 Christopher Anderson). Code keeps the [MIT license](LICENSE), the port of Trevor Morris's Weyl criterion keeps its [Apache-2.0 license](NormalityChecker/Analysis/Weyl.lean), earlier releases are not relicensed, and third-party material belongs to its authors.
 
