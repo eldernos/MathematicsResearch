@@ -1,4 +1,4 @@
-id = "H"
+id = "X"   # permanent manuscript number; a revision keeps it
 title = "The Arithmetic of Extreme Discrepancy: Translation, Addition Spectra and Rational Operations"
 short_title = "The arithmetic of extreme discrepancy"
 version = "1.0"
@@ -15,3 +15,4 @@ supersedes = ""
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 lean_commit_phase19 = "c2c9da683666b3b9368e5d4b5cb858caccf528f5"
 registry_ids = ["SY-04", "SY-12", "OP-01", "OP-02", "OP-03", "OP-05", "OP-06", "OP-07", "OP-12"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

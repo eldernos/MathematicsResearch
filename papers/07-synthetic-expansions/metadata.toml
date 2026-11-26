@@ -1,4 +1,4 @@
-id = "C"
+id = "VII"   # permanent manuscript number; a revision keeps it
 title = "Synthetic Arithmetic Expansions and Prescribed Discrepancy"
 short_title = "Synthetic expansions and prescribed discrepancy"
 version = "1.0"
@@ -15,3 +15,4 @@ supersedes = ""
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 lean_commit_phase19 = "c2c9da683666b3b9368e5d4b5cb858caccf528f5"
 registry_ids = ["SY-01", "SY-02", "SY-03", "SY-06", "SY-07", "SY-11", "SY-13", "SY-16", "SY-19", "OP-08", "OP-09", "OP-14"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

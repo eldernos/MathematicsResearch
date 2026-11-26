@@ -26,3 +26,7 @@ Lean verifies the finite comparison on the first 71 prime-band cells and specifi
 ## Use of AI tools
 
 This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+## Licence
+
+CC BY 4.0 (select it in the alphaXiv form). Copyright 2026 Christopher Anderson. The licence covers this manuscript and its designated accompanying files; code in the repository is MIT. See `LICENSE-MANUSCRIPTS.md` in the repository.

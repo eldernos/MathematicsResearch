@@ -16,7 +16,7 @@ Let c be a nonnegative integer-valued multiplicative function with c(pᵉ) ≤ e
 
 ## Source and verification
 
-- Manuscript source, verification map and novelty ledger: `papers/06-multiplicative-lambert/` in https://github.com/eldernos/MathematicsResearch (pin this link to the release commit at integration).
+- Manuscript source, verification map and novelty ledger: <https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/06-multiplicative-lambert> (release `manuscripts-v2.0.0`).
 - Lean declarations (pinned to commit e4809cf561573aef588e6ffc491a35cdb79fd9ec):
   - [`one_sub_discrepancy_le_one_bits`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/Phase17DiscrepancyBounds.lean#L98)
   - [`one_sub_discrepancy_ge_of_separated_mass`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/Phase17DiscrepancyBounds.lean#L123)
@@ -36,3 +36,7 @@ Lean checks only finite statements valid for every real number. These are the tw
 ## Use of AI tools
 
 This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+## Licence
+
+CC BY 4.0 (select it in the alphaXiv form). Copyright 2026 Christopher Anderson. The licence covers this manuscript and its designated accompanying files; code in the repository is MIT. See `LICENSE-MANUSCRIPTS.md` in the repository.

@@ -92,6 +92,8 @@ def check_metadata(entry, folder):
             problems.append(f"{path.relative_to(ROOT)} lacks `{key}`")
     if str(data.get("version", "")) != entry["version"]:
         problems.append(f"{path.relative_to(ROOT)} version {data.get('version')!r} differs from the manifest")
+    if str(data.get("id", "")).split("#")[0].strip() != entry["id"]:
+        problems.append(f"{path.relative_to(ROOT)} id {data.get('id')!r} differs from the manifest ({entry['id']!r})")
     if data.get("lean_commit") != MANIFEST["lean_commit"]:
         problems.append(f"{path.relative_to(ROOT)} lean_commit differs from the manifest")
     return problems

@@ -22,7 +22,7 @@ The finite identity, the pseudometric axioms and the qualitative addition spectr
 
 ## Source and verification
 
-- **Manuscript source and PDF:** `papers/10-discrepancy-arithmetic/` on the `publication/wave-2` branch. The release-commit link will be added at integration; every Lean link inside the paper is already pinned to the commits below.
+- **Manuscript source and PDF:** <https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/10-discrepancy-arithmetic> (release `manuscripts-v2.0.0`).
 - **Lean declarations (checkpoint 18):** pinned to [`e4809cf561573aef588e6ffc491a35cdb79fd9ec`](https://github.com/eldernos/MathematicsResearch/tree/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker):
   - [SharpTranslation.lean](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/SharpTranslation.lean)
   - [Phase18Synthetic.lean](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/Phase18Synthetic.lean)
@@ -48,3 +48,7 @@ Both builds' axiom audits accepted only `propext`, `Classical.choice` and `Quot.
 ## Use of AI tools
 
 This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+## Licence
+
+CC BY 4.0 (select it in the alphaXiv form). Copyright 2026 Christopher Anderson. The licence covers this manuscript and its designated accompanying files; code in the repository is MIT. See `LICENSE-MANUSCRIPTS.md` in the repository.

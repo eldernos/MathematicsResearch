@@ -49,14 +49,14 @@ reviews = ["gemini", "sonnet", "resolution"]
 # ---- manuscripts-v2.0.0 candidates -------------------------------------------------
 
 [[paper]]
-id = "A"
+id = "VI"
 dir = "06-multiplicative-lambert"
 version = "1.0"
 batch = 1
 reviews = ["review-1", "review-2", "resolution"]
 
 [[paper]]
-id = "B"
+id = "I"
 dir = "01-stoneham-polynomials-v2"
 version = "2.0"
 batch = 1
@@ -64,28 +64,28 @@ supersedes = "01-stoneham-polynomials"
 reviews = ["review-1", "review-2", "resolution"]
 
 [[paper]]
-id = "C"
+id = "VII"
 dir = "07-synthetic-expansions"
 version = "1.0"
 batch = 1
 reviews = ["review-1", "review-2", "resolution"]
 
 [[paper]]
-id = "H"
+id = "X"
 dir = "10-discrepancy-arithmetic"
 version = "1.0"
 batch = 1
 reviews = ["review-1", "review-2", "resolution"]
 
 [[paper]]
-id = "D"
+id = "VIII"
 dir = "08-stoneham-product-orbits"
 version = "1.0"
 batch = 2
 reviews = ["review-1", "resolution"]
 
 [[paper]]
-id = "E"
+id = "II"
 dir = "02-localized-normality-v2"
 version = "2.0"
 batch = 2
@@ -93,7 +93,7 @@ supersedes = "02-localized-normality"
 reviews = ["review-1", "resolution"]
 
 [[paper]]
-id = "F"
+id = "V"
 dir = "05-classical-denominators-v2"
 version = "2.0"
 batch = 2
@@ -101,7 +101,7 @@ supersedes = "05-classical-denominators"
 reviews = ["review-1", "resolution"]
 
 [[paper]]
-id = "G"
+id = "IV"
 dir = "04-arithmetic-certificates-v2"
 version = "2.0"
 batch = 2
@@ -118,7 +118,7 @@ reviews = ["gemini", "sonnet", "resolution"]
 review_dir = "03-signed-resonance"   # named-author edition; the mathematics was reviewed at v1.1
 
 [[paper]]
-id = "EB"
+id = "IX"
 dir = "09-erdos-borwein-note"
 version = "1.0"
 batch = 2

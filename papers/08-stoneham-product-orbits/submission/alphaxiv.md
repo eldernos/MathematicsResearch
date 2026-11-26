@@ -43,3 +43,7 @@ Suggested structured `ai_disclosure` ratings for owner confirmation on the AI Tr
   - `https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/scripts/phase17_mixed_product_orbits.py`
   - `https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/scripts/phase17_dyadic_stoneham.py`
 - Manuscript directory (on release branch): `papers/08-stoneham-product-orbits/` (`paper.tex`, `paper.pdf`, `VERIFICATION.md`, `LEDGER.md`, `metadata.toml`)
+
+## Licence
+
+CC BY 4.0 (select it in the alphaXiv form). Copyright 2026 Christopher Anderson. The licence covers this manuscript and its designated accompanying files; code in the repository is MIT. See `LICENSE-MANUSCRIPTS.md` in the repository.

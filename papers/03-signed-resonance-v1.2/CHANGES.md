@@ -6,6 +6,7 @@ Version 1.2 is the named-author edition of Paper III version 1.1 (`papers/03-sig
 | --- | --- |
 | Author line: Christopher Anderson, Independent Researcher (owner decision, 25 November 2026) | `\author` |
 | PDF author metadata | `hyperref` options |
+| Copyright and CC BY 4.0 licence notice for this edition (owner decision, 25 November 2026; the v1.1 release is not relicensed) | `\date` |
 | Version line and the public correction route (the repository issue tracker) | `\date` |
 | The short "AI assistance" paragraph is replaced by the standard "Use of AI tools" disclosure used across manuscripts-v2.0.0 | end matter |
 

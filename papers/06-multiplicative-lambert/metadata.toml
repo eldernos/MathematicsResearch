@@ -1,4 +1,4 @@
-id = "06-multiplicative-lambert"
+id = "VI"   # permanent manuscript number; a revision keeps it
 title = "Disjunctive but Nonnormal Multiplicative Lambert Series"
 short_title = "Multiplicative Lambert series"
 version = "1.0"
@@ -25,3 +25,4 @@ msc_secondary = ["11N36", "11N37", "11J81", "11N25", "11K38"]
 supersedes = ""
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 registry_ids = ["CC-48", "CC-46", "SY-24"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

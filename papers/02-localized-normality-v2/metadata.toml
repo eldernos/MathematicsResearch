@@ -1,4 +1,4 @@
-id = "02-localized-normality-v2"
+id = "II"   # permanent manuscript number; a revision keeps it
 title = "Normality of localized logarithms and polylogarithms on finite prime supports"
 short_title = "Localized logarithms and polylogarithms"
 version = "2.0"
@@ -12,3 +12,4 @@ lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 registry_ids = ["LS-01", "LS-02", "LS-03", "LS-04", "LS-08", "LS-09", "LS-10", "MW-01", "MW-02", "MW-03", "MW-07", "MW-08", "MW-10"]
 authors = ["Christopher Anderson"]
 affiliation = "Independent Researcher"
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

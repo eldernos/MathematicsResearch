@@ -20,7 +20,7 @@ Your work [cite: e.g. *Differencing methods for Korobov-type exponential sums*, 
 
 The manuscript was produced in an AI-assisted research project. The denominator identity and the switch are checked by the Lean 4 kernel; the written proofs and the literature comparisons have been checked only by AI models and await review by a human specialist.
 
-The verification map and the exact Lean statements are at [link to `papers/07-synthetic-expansions/VERIFICATION.md` at the release commit].
+The verification map and the exact Lean statements are at <https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/07-synthetic-expansions/VERIFICATION.md>.
 
 With thanks,
 Christopher Anderson

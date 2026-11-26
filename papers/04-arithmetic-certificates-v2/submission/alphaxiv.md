@@ -39,10 +39,10 @@ Explicit pairs of computable binary streams separate odd-primary rational data (
 
 *(Pin to the immutable `manuscripts-v2.0.0` release tag once published.)*
 
-- **Manuscript directory:** https://github.com/eldernos/MathematicsResearch/tree/publication/wave-2/papers/04-arithmetic-certificates-v2
-- **LaTeX source (`paper.tex`):** https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/paper.tex
-- **Statement and axiom check (`Check.lean`):** https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/Check.lean
-- **Verification map (`VERIFICATION.md`):** https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/VERIFICATION.md
+- **Manuscript directory:** https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2
+- **LaTeX source (`paper.tex`):** https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/paper.tex
+- **Statement and axiom check (`Check.lean`):** https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/Check.lean
+- **Verification map (`VERIFICATION.md`):** https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/VERIFICATION.md
 
 ## Verification scope
 
@@ -51,3 +51,7 @@ Each numbered result in the manuscript carries an explicit evidence label. Lean 
 ## Use of AI tools
 
 This manuscript was produced in an AI-assisted research project. Large language models proposed conjectures and proof strategies, wrote the proofs and the text, implemented the exact computations and Lean 4 formalizations, searched the literature and reviewed drafts across several model providers. The repository owner directed the project and is responsible for its release. The Lean kernel checked the declarations listed in the verification map. The written proofs, literature comparisons and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not peer review.
+
+## Licence
+
+CC BY 4.0 (select it in the alphaXiv form). Copyright 2026 Christopher Anderson. The licence covers this manuscript and its designated accompanying files; code in the repository is MIT. See `LICENSE-MANUSCRIPTS.md` in the repository.

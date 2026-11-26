@@ -60,9 +60,9 @@
 
 *(Pin to the immutable `manuscripts-v2.0.0` release tag once published.)*
 
-- **LaTeX source:** https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/paper.tex
-- **Lean 4 check file (`Check.lean`, 30 declarations audited against `propext`, `Classical.choice`, `Quot.sound`):** https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/Check.lean
-- **Verification map & novelty ledger:** https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/VERIFICATION.md · https://github.com/eldernos/MathematicsResearch/blob/publication/wave-2/papers/04-arithmetic-certificates-v2/LEDGER.md
+- **LaTeX source:** https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/paper.tex
+- **Lean 4 check file (`Check.lean`, 30 declarations audited against `propext`, `Classical.choice`, `Quot.sound`):** https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/Check.lean
+- **Verification map & novelty ledger:** https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/VERIFICATION.md · https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/04-arithmetic-certificates-v2/LEDGER.md
 
 ---
 

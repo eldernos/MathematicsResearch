@@ -1,4 +1,4 @@
-id = "01-stoneham-polynomials-v2"
+id = "I"   # permanent manuscript number; a revision keeps it
 title = "Polynomial Images of Stoneham Numbers"
 authors = ["Christopher Anderson"]
 affiliation = "Independent Researcher"
@@ -12,3 +12,4 @@ msc_secondary = ["11J81", "11A63"]
 supersedes = "papers/01-stoneham-polynomials"
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 registry_ids = ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05", "ST-11", "ST-12", "ST-13", "ST-17", "ST-18", "ST-19", "ST-20", "ST-23", "ST-24", "ST-28", "ST-30", "ST-31", "ST-33"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

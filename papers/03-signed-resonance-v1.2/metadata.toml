@@ -1,4 +1,4 @@
-id = "III"
+id = "III"   # permanent manuscript number; a revision keeps it
 title = "Resonance and Discrepancy in Signed Stoneham Expansions"
 authors = ["Christopher Anderson"]
 affiliation = "Independent Researcher"
@@ -13,3 +13,4 @@ supersedes = "papers/03-signed-resonance"
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 registry_ids = ["CR-01", "CR-03", "DS-01", "DS-02", "DS-03", "DS-04"]
 note = "Named-author edition. The mathematics, bibliography, figures and Lean links are identical to version 1.1. The paper's Lean links remain pinned at Checkpoint 11 (a09e011); every cited Lean file is byte-identical at e4809cf."
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

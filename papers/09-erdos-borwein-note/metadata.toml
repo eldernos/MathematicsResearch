@@ -1,4 +1,4 @@
-id = "EB"
+id = "IX"   # permanent manuscript number; a revision keeps it
 title = "Finite-statistic thresholds and statistical obstructions for the binary digits of the Erdős–Borwein constant"
 short_title = "Finite statistics for Erdős–Borwein digits"
 version = "1.0"
@@ -12,3 +12,4 @@ msc_secondary = ["11N37", "11Y60", "11K06"]
 supersedes = ""
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 registry_ids = ["CC-49", "CC-30", "CC-28", "CC-47", "CC-20", "CC-21"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

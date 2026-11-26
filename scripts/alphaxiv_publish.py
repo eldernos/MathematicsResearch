@@ -56,6 +56,16 @@ class Refusal(SystemExit):
     pass
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Refuse every redirect, so a request carrying the API key can never be forwarded to another host."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise Refusal(f"refusing redirect {code} from {req.full_url} to {newurl}")
+
+
+OPENER = urllib.request.build_opener(_NoRedirect)
+
+
 def load_toml(path: Path) -> dict:
     return tomllib.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
 
@@ -69,8 +79,10 @@ def git(*args: str) -> str:
 
 def trusted_host(url: str) -> bool:
     parts = urllib.parse.urlsplit(url)
-    host = (parts.hostname or "").lower()
-    return parts.scheme == "https" and (host == TRUSTED_SUFFIX or host.endswith("." + TRUSTED_SUFFIX))
+    host = (parts.hostname or "").lower().rstrip(".")
+    if parts.scheme != "https" or parts.username or parts.password or parts.port not in (None, 443):
+        return False
+    return host == TRUSTED_SUFFIX or host.endswith("." + TRUSTED_SUFFIX)
 
 
 def manuscript(paper_dir: Path) -> tuple[dict, dict]:
@@ -155,7 +167,7 @@ def post_json(url: str, payload: dict, key: str) -> dict:
     request = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST", headers={
         "Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent": USER_AGENT,
         "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": PROTOCOL})
-    with urllib.request.urlopen(request, timeout=300) as response:
+    with OPENER.open(request, timeout=300) as response:
         text = response.read().decode("utf-8")
     if text.lstrip().startswith("{"):
         return json.loads(text)
@@ -204,7 +216,7 @@ def upload(pdf: Path, key: str) -> str:
     body = (f"--{boundary}\r\nContent-Disposition: form-data; name=\"{field}\"; filename=\"{pdf.name}\"\r\n"
             "Content-Type: application/pdf\r\n\r\n").encode() + pdf.read_bytes() + f"\r\n--{boundary}--\r\n".encode()
     headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
-    with urllib.request.urlopen(urllib.request.Request(url, data=body, method="POST", headers=headers),
+    with OPENER.open(urllib.request.Request(url, data=body, method="POST", headers=headers),
                                 timeout=300) as response:
         reply = json.loads(response.read().decode("utf-8"))
     pdf_id = reply.get("pdfId")

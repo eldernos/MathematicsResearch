@@ -18,7 +18,7 @@ Your Proposition 4.9 and Corollary 4.10(1) in [cite: *On preservation of normali
 
 **Question.** Is the full five-vertex polytope known to be the exact set of attainable entropy triples, so that the discrepancy statement should be presented as a parallel of a known complete description, or is completeness open on the entropy side?
 
-The verification map and exact Lean statements are at [link to `papers/10-discrepancy-arithmetic/VERIFICATION.md` at the release commit].
+The verification map and exact Lean statements are at <https://github.com/eldernos/MathematicsResearch/blob/manuscripts-v2.0.0/papers/10-discrepancy-arithmetic/VERIFICATION.md>.
 
 With thanks,
 Christopher Anderson

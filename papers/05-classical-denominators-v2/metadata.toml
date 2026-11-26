@@ -1,4 +1,4 @@
-id = "F"
+id = "V"   # permanent manuscript number; a revision keeps it
 title = "Denominator Growth and Rational Shadowing for Classical Constants"
 authors = ["Christopher Anderson"]
 affiliation = "Independent Researcher"
@@ -12,3 +12,4 @@ msc_secondary = ["11J82", "11K16", "11N05", "33C45"]
 supersedes = "papers/05-classical-denominators"
 lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
 registry_ids = ["CC-01", "CC-02", "CC-03", "CC-07", "CC-08", "CC-12", "CC-14", "CC-23", "CC-40", "CC-41", "CC-42", "CC-43", "CC-44", "CC-50"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

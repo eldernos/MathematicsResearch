@@ -1,5 +1,7 @@
 # Licensing proposal for manuscripts and code
 
+> **Adopted 25 November 2026.** The owner approved CC BY 4.0 for the manuscripts-v2.0.0 manuscripts and their designated accompanying prose and figures, subject to third-party rights, with MIT retained for code and every existing third-party licence and historical release preserved. The designation is narrower than the option below that also covered `notes/` and `docs/`: see [LICENSE-MANUSCRIPTS.md](../LICENSE-MANUSCRIPTS.md). The rest of this page is the proposal as written.
+
 **Status: proposal for explicit owner approval. Nothing in this file has been applied.** The [LICENSE](../LICENSE) file is unchanged. This is not legal advice. The repository owner decides, and may wish to confirm the points below with the policies of the venues involved.
 
 ## Current situation

@@ -33,10 +33,14 @@ This manuscript was produced in an AI-assisted research project. Large language 
 ## Source and verification links (pinned)
 
 - Repository at research-checkpoint-18: https://github.com/eldernos/MathematicsResearch/tree/e4809cf561573aef588e6ffc491a35cdb79fd9ec
-- Note directory (paper, bibliography, ledger, verification map): `papers/09-erdos-borwein-note/` on the `publication/wave-2` branch. The pinned checkpoint predates the note, so replace this line with the release commit link once the branch is tagged.
+- Note directory (paper, bibliography, ledger, verification map): <https://github.com/eldernos/MathematicsResearch/tree/manuscripts-v2.0.0/papers/09-erdos-borwein-note> (release `manuscripts-v2.0.0`; the pinned Lean checkpoint predates the note).
 - Lean declarations used: [`carry_knapsack_le`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/Phase17DiscrepancyBounds.lean#L375), [`parity_bonferroni_dual_le`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/Phase17DiscrepancyBounds.lean#L432), [`source_phase`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/ErdosBorweinArrivals.lean#L16), [`arrival_sum`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/ErdosBorweinArrivals.lean#L41), [`one_bit_carry`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker/ErdosBorweinArrivals.lean#L86)
 - Certificate script: [`scripts/phase17_erdos_borwein_bias.py`](https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/scripts/phase17_erdos_borwein_bias.py) (standard library only, about 20 s, ends with "all assertions passed")
 
 ## Verification scope
 
 Lean checks two pointwise inequalities (the carry-knapsack dual and the parity Bonferroni dual) and three finite identities. Nothing in the note is completely kernel-verified: the tail-mean estimate, the linear-programming and dynamic-programming certificates, the Jordan-inversion argument for the order-92 witness and the Fourier computations are written proofs or computations. The Fourier-side computations (Propositions 8.2 and 8.3) use IEEE arithmetic with explicit error radii rather than interval arithmetic and are labelled numerical evidence, not finite certificates. The Selberg–Vaaler majorant inequality is an external input: J. D. Vaaler, Bull. Amer. Math. Soc. 12 (1985), 183–216, Theorems 6, 18 and 19 (pp. 193, 210–212), as read from the published paper by a referee model. The written proofs have been checked only by AI models; no human specialist has reviewed them.
+
+## Licence
+
+CC BY 4.0 (select it in the alphaXiv form). Copyright 2026 Christopher Anderson. The licence covers this manuscript and its designated accompanying files; code in the repository is MIT. See `LICENSE-MANUSCRIPTS.md` in the repository.

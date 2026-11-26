@@ -231,6 +231,8 @@ def highwire(p, url, date, keywords) -> list[str]:
              meta_tag("citation_language", "en")]
     if keywords:
         tags.append(meta_tag("citation_keywords", "; ".join(keywords)))
+    if (p.get("metadata") or {}).get("license") == "CC-BY-4.0":
+        tags.append(meta_tag("DC.rights", "https://creativecommons.org/licenses/by/4.0/"))
     return tags
 
 
@@ -343,6 +345,11 @@ def manuscript_page(p, by_dir, base, strict):
     if keywords:
         parts.append("<h2>Keywords</h2>")
         parts.append("<p>" + ", ".join(esc(k) for k in keywords) + "</p>")
+    if meta and meta.get("license") == "CC-BY-4.0":
+        parts.append("<h2>Licence</h2>")
+        parts.append('<p>&copy; 2026 Christopher Anderson. The manuscript is licensed under '
+                     '<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> '
+                     f'(<a href="{REPO}/blob/{DEFAULT_BRANCH}/LICENSE-MANUSCRIPTS.md">scope</a>); code in the repository is MIT.</p>')
     if primary:
         codes = [primary] + secondary
         items = "".join(

@@ -1,6 +1,6 @@
 # Individualized inquiry templates (drafts for the owner; not to be sent)
 
-Both drafts are to be sent only after the reviewer packet and the release links have been finalized. The paper credits public work of Captain Sude, Mira and Mira Cult for the order-one and coprime cases and records extensions of those arguments (Section 1.2); the drafts below concern only the points on which a specialist's reading is wanted.
+Both drafts are to be sent only with the owner's approval; the release links point to the tag manuscripts-v2.0.0. The paper credits public work of Captain Sude, Mira and Mira Cult for the order-one and coprime cases and records extensions of those arguments (Section 1.2); the drafts below concern only the points on which a specialist's reading is wanted.
 
 Placeholders: `[Name]`, `[Your name]`. No addresses are given on purpose.
 

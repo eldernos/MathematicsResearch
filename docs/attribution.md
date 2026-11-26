@@ -54,7 +54,7 @@ Replace the commit, identifier and declaration as needed; `python3 scripts/porta
 
 ## License
 
-Original contributions are released under the [MIT license](../LICENSE). The port of Trevor Morris's Weyl criterion in [NormalityChecker/Analysis/Weyl.lean](../NormalityChecker/Analysis/Weyl.lean) retains its Apache-2.0 license and attribution. Cited papers belong to their authors and are linked, not redistributed.
+The manuscripts of manuscripts-v2.0.0 and their designated accompanying prose and figures are licensed under [CC BY 4.0](../LICENSE-MANUSCRIPTS.md), © 2026 Christopher Anderson; earlier releases are not relicensed. Other original contributions, including all code, are released under the [MIT license](../LICENSE). The port of Trevor Morris's Weyl criterion in [NormalityChecker/Analysis/Weyl.lean](../NormalityChecker/Analysis/Weyl.lean) retains its Apache-2.0 license and attribution. Cited papers belong to their authors and are linked, not redistributed.
 
 ## Corrections and contact
 

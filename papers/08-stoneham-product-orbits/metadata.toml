@@ -1,4 +1,4 @@
-id = "D"
+id = "VIII"   # permanent manuscript number; a revision keeps it
 title = "Exceptional Orbits and Discrepancy of Stoneham Products"
 authors = ["Christopher Anderson"]
 affiliation = "Independent Researcher"
@@ -38,3 +38,4 @@ registry_ids = [
   "ST-34",
   "ST-35"
 ]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

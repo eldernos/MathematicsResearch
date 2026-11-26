@@ -16,7 +16,16 @@ This page describes how a research result moves from a research phase to a publi
 
 alphaXiv documents an MCP server at `https://api.alphaxiv.org/mcp/v1` (Streamable HTTP). For scripts and CI it accepts a personal API key from *Settings > MCP/API*, sent as `Authorization: Bearer <key>`. Publishing has two steps. `get_upload_instructions` returns an upload command (PDF, at most 50 MB) that answers with a `pdfId`. `publish_paper` then takes `pdf_id`, optional `title`, `abstract`, `authors`, `url_slug` or `new_version_of`, and the required `ai_disclosure`. That disclosure rates idea, literature, experiments, analysis and writing as `ai`, `mixed` or `human`, and lists up to ten tools with model, harness and contribution. The call returns `published` with a URL, `rejected` with a reason, or `in_review`. Licence and subject category are not API parameters; set them in the alphaXiv web form. One submission per account can be in progress at a time, so the workflow serializes runs. Every submission is screened, and screening is not peer review. [alphaXiv MCP documentation](https://www.alphaxiv.org/docs/mcp) · [Submission policy](https://www.alphaxiv.org/docs/submission-policy) · [Policy review](../papers/submission/POLICIES.md)
 
-The upload endpoint is not documented statically. The script reads it from the server's instructions at run time, and that part has not been exercised against the live service. Run a dry run first, then a single real submission while watching the result. Each `submission/alphaxiv.toml` starts with `owner_confirmed = false`, and the script refuses to publish until the owner has reviewed the disclosure ratings and set it to `true`.
+### Safeguards
+
+- **Dry run by default.** It contacts no one. It prints the exact `publish_paper` arguments, including disclosure metadata that the owner has not yet confirmed, with a warning.
+- **Owner confirmation.** An actual submission is refused until the owner sets `owner_confirmed = true` in the paper's `submission/alphaxiv.toml`.
+- **Approved release only.** `--publish` needs `--release <tag>`. The tag must be the release named in `papers/manifest.toml`, the checkout must be exactly the tagged commit with a clean tree, and the PDF must match `papers/SHA256SUMS` *at that tag*. The workflow checks out `refs/tags/<release>`, without persisted credentials.
+- **Credential destinations.** The API key is sent only to `https` hosts under `alphaxiv.org`, on the default port and without embedded credentials. An upload destination elsewhere, for example a presigned storage URL, receives no credentials. Redirects are refused, so a request carrying the key is never forwarded.
+- **No shell interpolation.** The server's curl instructions are parsed, never executed. Workflow inputs reach the shell only through environment variables and are validated against fixed patterns first.
+- **Persistent identifiers.** Records are keyed by the manuscript's permanent identifier (`id` in `metadata.toml`). A recorded manuscript is posted with `new_version_of`, which keeps its alphaXiv URL across revisions and directory changes, and a version already recorded is never resubmitted.
+- **Compatibility.** alphaXiv's Cloudflare front end rejects the default Python User-Agent (error 1010), so the script sends its own. With it, an unauthenticated request receives `401` with `WWW-Authenticate: Bearer realm="mcp"`, which confirms the endpoint and the authentication scheme. The authenticated tool schemas, and the upload address that `get_upload_instructions` returns at run time, have not yet been exercised. For the first real submission, run a dry run, then publish one paper while watching the result.
+- **Independent review.** The pipeline was reviewed by a model from a different provider before any key existed: [PIPELINE-REVIEW.md](../papers/submission/PIPELINE-REVIEW.md).
 
 ## One-time owner setup
 
@@ -32,4 +41,4 @@ The upload endpoint is not documented statically. The script reads it from the s
 3. Run it again with `publish` checked and approve the environment gate.
 4. Commit the returned URL to `papers/alphaxiv-records.toml`.
 
-For a local run instead of CI: `python3 -B scripts/alphaxiv_publish.py papers/<dir>` prints the request, and adding `--publish` with `ALPHAXIV_API_KEY` set submits it.
+For a local run instead of CI, `python3 -B scripts/alphaxiv_publish.py papers/<dir>` prints the request. On a clean checkout of the release tag, `--publish --release manuscripts-v2.0.0` with `ALPHAXIV_API_KEY` set submits it.
