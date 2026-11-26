@@ -59,9 +59,15 @@ class TrustedHostTests(unittest.TestCase):
 
 
 class BuildRequestAndDisclosureTests(unittest.TestCase):
+    PAPER = ap.ROOT / "papers" / "06-multiplicative-lambert"
+
+    def inputs(self):
+        return ap.load_inputs(self.PAPER, None)
+
     def test_dry_run_request_for_paper_06(self) -> None:
-        paper_dir = ap.ROOT / "papers" / "06-multiplicative-lambert"
-        request, confirmed = ap.build_request(paper_dir)
+        meta, sub = self.inputs()
+        self.assertEqual(meta["id"], "VI")
+        request, confirmed = ap.build_request(meta, sub, None)
         self.assertFalse(confirmed)
         self.assertEqual(request["title"], "Disjunctive but Nonnormal Multiplicative Lambert Series")
         self.assertEqual(request["authors"], ["Christopher Anderson"])
@@ -71,149 +77,176 @@ class BuildRequestAndDisclosureTests(unittest.TestCase):
         self.assertEqual(len(request["ai_disclosure"]["tools"]), 4)
 
     def test_build_request_switches_to_new_version_of_when_recorded(self) -> None:
-        paper_dir = ap.ROOT / "papers" / "06-multiplicative-lambert"
-        meta, _ = ap.manuscript(paper_dir)
-        fake_record = {
-            "id": meta["id"],
-            "alphaxiv": "https://www.alphaxiv.org/abs/06-test-id",
-            "versions": [{"version": "0.9", "release": "manuscripts-v1.1.0"}],
-        }
-        with mock.patch.object(ap, "find_record", return_value=fake_record):
-            request, _ = ap.build_request(paper_dir)
+        meta, sub = self.inputs()
+        record = {"id": "VI", "alphaxiv": "https://www.alphaxiv.org/abs/06-test-id",
+                  "versions": [{"version": "0.9", "release": "manuscripts-v1.1.0"}]}
+        with mock.patch.object(ap, "find_record", return_value=record):
+            request, _ = ap.build_request(meta, sub, None)
         self.assertEqual(request.get("new_version_of"), "https://www.alphaxiv.org/abs/06-test-id")
         self.assertNotIn("url_slug", request)
 
-    def test_build_request_rejects_invalid_stages_and_tools(self) -> None:
-        paper_dir = ap.ROOT / "papers" / "06-multiplicative-lambert"
-        meta, sub = ap.manuscript(paper_dir)
-
-        bad_stages = copy.deepcopy(sub)
-        bad_stages["ai_disclosure"]["stages"]["writing"] = "invalid_rating"
-        with mock.patch.object(ap, "manuscript", return_value=(meta, bad_stages)):
+    def test_record_url_must_be_alphaxiv(self) -> None:
+        meta, sub = self.inputs()
+        with mock.patch.object(ap, "find_record", return_value={"id": "VI", "alphaxiv": "https://evil.example/abs/1"}):
             with self.assertRaises(ap.Refusal):
-                ap.build_request(paper_dir)
+                ap.build_request(meta, sub, None)
 
-        empty_tools = copy.deepcopy(sub)
-        empty_tools["ai_disclosure"]["tools"] = []
-        with mock.patch.object(ap, "manuscript", return_value=(meta, empty_tools)):
+    def test_build_request_rejects_invalid_stages_tools_and_slugs(self) -> None:
+        meta, sub = self.inputs()
+        for mutate in (lambda d: d["ai_disclosure"]["stages"].__setitem__("writing", "invalid_rating"),
+                       lambda d: d["ai_disclosure"].__setitem__("tools", []),
+                       lambda d: d.__setitem__("url_slug", "x" * 121),
+                       lambda d: d.__setitem__("url_slug", "Bad Slug")):
+            bad = copy.deepcopy(sub)
+            mutate(bad)
             with self.assertRaises(ap.Refusal):
-                ap.build_request(paper_dir)
+                ap.build_request(meta, bad, None)
+
+    def test_confirmation_requires_literal_true(self) -> None:
+        meta, sub = self.inputs()
+        for value in ("true", 1, "yes"):
+            loose = copy.deepcopy(sub)
+            loose["owner_confirmed"] = value
+            self.assertFalse(ap.build_request(meta, loose, None)[1])
+
+    def test_submission_state_is_read_from_control_ref(self) -> None:
+        def fake_git(*args, check=True):
+            if args[0] == "show" and args[1].endswith("submission/alphaxiv.toml"):
+                return 'owner_confirmed = true\n[ai_disclosure.stages]\nidea = "mixed"\n'
+            return ""
+        with mock.patch.object(ap, "git", side_effect=fake_git):
+            meta, sub = ap.load_inputs(self.PAPER, "refs/remotes/origin/main")
+        self.assertIs(sub["owner_confirmed"], True)
+        self.assertEqual(meta["id"], "VI")  # metadata still comes from the checked-out release tree
 
 
 class ReleaseAndPdfGuardTests(unittest.TestCase):
+    META = {"id": "VI", "version": "1.0"}
+    CONTROL = "refs/remotes/origin/main"
+
     def test_check_pdf_accepts_recorded_working_tree_pdf(self) -> None:
         paper_dir = ap.ROOT / "papers" / "06-multiplicative-lambert"
-        pdf = ap.check_pdf(paper_dir, None)
-        self.assertEqual(pdf, paper_dir / "paper.pdf")
+        self.assertEqual(ap.check_pdf(paper_dir, None), paper_dir / "paper.pdf")
 
     def test_check_pdf_rejects_checksum_mismatch(self) -> None:
         paper_dir = ap.ROOT / "papers" / "06-multiplicative-lambert"
         with mock.patch.object(ap, "git", return_value="00" * 32 + "  papers/06-multiplicative-lambert/paper.pdf\n"):
             with self.assertRaises(ap.Refusal):
-                ap.check_pdf(paper_dir, "manuscripts-v2.0.0")
+                ap.check_pdf(paper_dir, "refs/tags/manuscripts-v2.0.0")
 
     def test_check_release_rejects_unapproved_tag(self) -> None:
-        meta = {"id": "A", "version": "1.0"}
-        with self.assertRaises(ap.Refusal):
-            ap.check_release(meta, "manuscripts-v1.1.0")
-        with self.assertRaises(ap.Refusal):
-            ap.check_release(meta, "not-a-tag")
+        for tag in ("manuscripts-v1.1.0", "not-a-tag"):
+            with self.assertRaises(ap.Refusal):
+                ap.check_release(self.META, tag, self.CONTROL)
 
-    def test_check_release_rejects_commit_mismatch_dirty_tree_and_duplicate_version(self) -> None:
-        meta = {"id": "A", "version": "1.0"}
-
-        # 1. Commit mismatch between tag and HEAD
-        def git_mismatch(*args: str) -> str:
+    def _git(self, tag="1" * 40, head="1" * 40, status="", control="3" * 40):
+        def fake(*args, check=True):
             if args[:3] == ("rev-parse", "--verify", "--quiet"):
-                return "1111111111111111111111111111111111111111\n"
+                return (tag if args[3].startswith("refs/tags/") else control) + "\n"
             if args == ("rev-parse", "HEAD"):
-                return "2222222222222222222222222222222222222222\n"
-            return ""
-
-        with mock.patch.object(ap, "git", side_effect=git_mismatch):
-            with self.assertRaises(ap.Refusal) as ctx:
-                ap.check_release(meta, "manuscripts-v2.0.0")
-            self.assertIn("not the commit tagged", str(ctx.exception))
-
-        # 2. Dirty working tree
-        def git_dirty(*args: str) -> str:
-            if "rev-parse" in args:
-                return "1111111111111111111111111111111111111111\n"
+                return head + "\n"
             if args[:2] == ("status", "--porcelain"):
-                return " M papers/06-multiplicative-lambert/paper.pdf\n"
+                return status
             return ""
+        return fake
 
-        with mock.patch.object(ap, "git", side_effect=git_dirty):
+    def test_check_release_guards(self) -> None:
+        cases = [(dict(tag=""), "does not exist"), (dict(head="2" * 40), "not the commit tagged"),
+                 (dict(status=" M papers/x\n"), "uncommitted changes"), (dict(control=""), "control ref")]
+        for kwargs, message in cases:
+            with mock.patch.object(ap, "git", side_effect=self._git(**kwargs)):
+                with self.assertRaises(ap.Refusal) as ctx:
+                    ap.check_release(self.META, "manuscripts-v2.0.0", self.CONTROL)
+                self.assertIn(message, str(ctx.exception))
+
+    def test_duplicate_version_refused_and_new_version_allowed(self) -> None:
+        recorded = {"id": "VI", "alphaxiv": "https://www.alphaxiv.org/abs/t", "versions": [{"version": "1.0"}]}
+        with mock.patch.object(ap, "git", side_effect=self._git()), mock.patch.object(ap, "find_record", return_value=recorded):
             with self.assertRaises(ap.Refusal) as ctx:
-                ap.check_release(meta, "manuscripts-v2.0.0")
-            self.assertIn("uncommitted changes", str(ctx.exception))
-
-        # 3. Duplicate version already recorded
-        def git_clean(*args: str) -> str:
-            if "rev-parse" in args:
-                return "1111111111111111111111111111111111111111\n"
-            return ""
-
-        recorded = {"id": "A", "alphaxiv": "https://www.alphaxiv.org/abs/test", "versions": [{"version": "1.0"}]}
-        with mock.patch.object(ap, "git", side_effect=git_clean), mock.patch.object(
-            ap, "find_record", return_value=recorded
-        ):
-            with self.assertRaises(ap.Refusal) as ctx:
-                ap.check_release(meta, "manuscripts-v2.0.0")
+                ap.check_release(self.META, "manuscripts-v2.0.0", self.CONTROL)
             self.assertIn("already recorded", str(ctx.exception))
+        older = {"id": "VI", "alphaxiv": "https://www.alphaxiv.org/abs/t", "versions": [{"version": "0.9"}]}
+        with mock.patch.object(ap, "git", side_effect=self._git()), mock.patch.object(ap, "find_record", return_value=older):
+            ap.check_release(self.META, "manuscripts-v2.0.0", self.CONTROL)
 
-        # 4. Clean tree, exact tag commit, unrecorded version -> passes
-        unrecorded = {"id": "A", "alphaxiv": "https://www.alphaxiv.org/abs/test", "versions": [{"version": "0.9"}]}
-        with mock.patch.object(ap, "git", side_effect=git_clean), mock.patch.object(
-            ap, "find_record", return_value=unrecorded
-        ):
-            ap.check_release(meta, "manuscripts-v2.0.0")
+
+class TransportTests(unittest.TestCase):
+    def test_redirects_are_refused(self) -> None:
+        handler = ap._NoRedirect()
+        req = urllib.request.Request("https://api.alphaxiv.org/mcp/v1", headers={"Authorization": "Bearer k"})
+        with self.assertRaises(ap.Refusal):
+            handler.redirect_request(req, None, 302, "Found", {}, "https://evil.example/")
+
+    def test_credentials_never_leave_alphaxiv(self) -> None:
+        with self.assertRaises(ap.Refusal):
+            ap.post_json("https://evil.example/mcp", {"id": "1"}, "secret")
+
+    def test_sse_response_selects_matching_id(self) -> None:
+        body = ('event: message\ndata: {"jsonrpc":"2.0","id":"other","result":{}}\n\n'
+                'event: message\ndata: {"jsonrpc":"2.0","id":"abc",\ndata: "result":{"ok":true}}\n\n')
+
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+            def read(self):
+                return body.encode()
+
+        with mock.patch.object(ap.OPENER, "open", return_value=Response()):
+            message = ap.post_json(ap.ENDPOINT, {"id": "abc"}, "k")
+        self.assertEqual(message["result"], {"ok": True})
+
+    def test_outcome_parsing_handles_fenced_json(self) -> None:
+        self.assertEqual(ap.parse_outcome('Done.\n```json\n{"status": "published", "url": "u"}\n```')["status"], "published")
+        self.assertEqual(ap.parse_outcome("plain text")["raw"], "plain text")
 
 
 class UploadInstructionParsingTests(unittest.TestCase):
-    def test_upload_refuses_non_https_url_and_Withholds_credentials_from_external_host(self) -> None:
+    def test_parser_handles_fences_continuations_and_fields(self) -> None:
+        text = ("Upload the PDF:\n```bash\ncurl -X POST https://api.alphaxiv.org/v1/pdf \\\n"
+                "  -H 'Authorization: Bearer $KEY' -H 'X-Upload-Token: t1' \\\n"
+                "  -F 'key=uploads/1' -F 'file=@paper.pdf'\n```\nDon't forget to ask the operator.")
+        url, headers, fields, file_field = ap.parse_upload_command(text)
+        self.assertEqual(url, "https://api.alphaxiv.org/v1/pdf")
+        self.assertNotIn("authorization", headers)  # Authorization is never taken from the instructions
+        self.assertEqual(headers["x-upload-token"], "t1")
+        self.assertEqual(fields, {"key": "uploads/1"})
+        self.assertEqual(file_field, "file")
+
+    def test_parser_rejects_unsafe_field_names_and_http(self) -> None:
+        with self.assertRaises(ap.Refusal):
+            ap.parse_upload_command('curl https://api.alphaxiv.org/u -F \'a"b=@paper.pdf\'')
+        with self.assertRaises(ap.Refusal):
+            ap.parse_upload_command("curl -X POST http://storage.example.com/upload -F file=@paper.pdf")
+
+    def test_external_upload_host_receives_no_credentials(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             pdf = Path(tmp) / "paper.pdf"
             pdf.write_bytes(b"%PDF-1.5\nhello\n%%EOF\n")
+            captured: list[urllib.request.Request] = []
 
-            # Non-HTTPS upload URL in instructions must be refused before any network request
-            with mock.patch.object(
-                ap,
-                "tool",
-                return_value='curl -X POST http://storage.example.com/upload -F "file=@paper.pdf"',
-            ):
-                with self.assertRaises(ap.Refusal) as ctx:
-                    ap.upload(pdf, "secret-key")
-                self.assertIn("non-https", str(ctx.exception))
-
-            # External HTTPS storage host must NOT receive Authorization header
-            captured_requests: list[urllib.request.Request] = []
-
-            class FakeResponse:
+            class Response:
                 def __enter__(self):
                     return self
 
                 def __exit__(self, *exc):
                     return False
 
-                def read(self) -> bytes:
+                def read(self):
                     return b'{"pdfId": "3f2b8c1e-9a4d-4e7b-8c2f-1d5e6a7b9c0d"}'
 
-            def fake_urlopen(req: urllib.request.Request, timeout: int = 300):
-                captured_requests.append(req)
-                return FakeResponse()
+            def fake_open(req, timeout=300):
+                captured.append(req)
+                return Response()
 
-            with mock.patch.object(
-                ap,
-                "tool",
-                return_value='curl -X POST https://storage.googleapis.com/alphaxiv-uploads/slot '
-                '-H "x-upload-token: tok-123" -F "pdf=@paper.pdf"',
-            ), mock.patch.object(urllib.request, "urlopen", side_effect=fake_urlopen):
-                pdf_id = ap.upload(pdf, "secret-key")
-
-            self.assertEqual(pdf_id, "3f2b8c1e-9a4d-4e7b-8c2f-1d5e6a7b9c0d")
-            self.assertEqual(len(captured_requests), 1)
-            sent = captured_requests[0]
+            with mock.patch.object(ap, "tool", return_value='curl -X POST https://storage.googleapis.com/slot '
+                                   '-H "x-upload-token: tok-123" -F "pdf=@paper.pdf"'), \
+                    mock.patch.object(ap.OPENER, "open", side_effect=fake_open):
+                self.assertEqual(ap.upload(pdf, "secret-key"), "3f2b8c1e-9a4d-4e7b-8c2f-1d5e6a7b9c0d")
+            sent = captured[0]
             self.assertIsNone(sent.get_header("Authorization"))
             self.assertEqual(sent.get_header("X-upload-token"), "tok-123")
             self.assertIn(b'name="pdf"; filename="paper.pdf"', sent.data)

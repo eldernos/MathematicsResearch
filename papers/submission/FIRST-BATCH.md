@@ -4,7 +4,7 @@ These sheets prepare four manuscripts for individual submission to alphaXiv's AI
 
 ## Common steps for each manuscript
 
-1. Read the paper's `submission/alphaxiv.toml`. Check the five stage ratings and the tool records against the development record in `papers/reviews/<dir>/`, then set `owner_confirmed = true` in a commit. The pipeline refuses to publish until this is done.
+1. Read the paper's `submission/alphaxiv.toml`. Check the five stage ratings and the tool records against the development record in `papers/reviews/<dir>/`, then set `owner_confirmed = true` in a commit to `main`. The release tag does not need to move: the pipeline reads confirmations and records from `main`. The pipeline refuses to publish until this is done.
 2. Dry run: `python3 -B scripts/alphaxiv_publish.py papers/<dir>` locally, or the *Publish to alphaXiv* workflow with `publish` unchecked and `release = manuscripts-v2.0.0`. Compare the printed title, abstract, author and disclosure with the sheet below.
 3. Submit, either by uploading the release PDF in the alphaXiv web form or by running the workflow with `publish` checked (protected `alphaxiv` environment). Choose **CC BY 4.0** and the subject **Mathematics > Number Theory (math.NT)** in the web form, because they are not API fields.
 4. Record the returned alphaXiv URL under the manuscript's `id` in `papers/alphaxiv-records.toml`, so that later versions are posted with `new_version_of`. Wait for screening to finish before the next submission: alphaXiv allows one in-progress submission per account.

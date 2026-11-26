@@ -19,18 +19,18 @@ alphaXiv documents an MCP server at `https://api.alphaxiv.org/mcp/v1` (Streamabl
 ### Safeguards
 
 - **Dry run by default.** It contacts no one. It prints the exact `publish_paper` arguments, including disclosure metadata that the owner has not yet confirmed, with a warning.
-- **Owner confirmation.** An actual submission is refused until the owner sets `owner_confirmed = true` in the paper's `submission/alphaxiv.toml`.
+- **Owner confirmation and submission state.** An actual submission is refused until the owner sets `owner_confirmed = true` in the paper's `submission/alphaxiv.toml` *on the default branch*. Release content (the PDF, checksum and metadata) comes from the tag, while the confirmation, the AI disclosure and the alphaXiv records are read from `origin/main`. So they can be updated after tagging without moving the tag.
 - **Approved release only.** `--publish` needs `--release <tag>`. The tag must be the release named in `papers/manifest.toml`, the checkout must be exactly the tagged commit with a clean tree, and the PDF must match `papers/SHA256SUMS` *at that tag*. The workflow checks out `refs/tags/<release>`, without persisted credentials.
 - **Credential destinations.** The API key is sent only to `https` hosts under `alphaxiv.org`, on the default port and without embedded credentials. An upload destination elsewhere, for example a presigned storage URL, receives no credentials. Redirects are refused, so a request carrying the key is never forwarded.
 - **No shell interpolation.** The server's curl instructions are parsed, never executed. Workflow inputs reach the shell only through environment variables and are validated against fixed patterns first.
 - **Persistent identifiers.** Records are keyed by the manuscript's permanent identifier (`id` in `metadata.toml`). A recorded manuscript is posted with `new_version_of`, which keeps its alphaXiv URL across revisions and directory changes, and a version already recorded is never resubmitted.
 - **Compatibility.** alphaXiv's Cloudflare front end rejects the default Python User-Agent (error 1010), so the script sends its own. With it, an unauthenticated request receives `401` with `WWW-Authenticate: Bearer realm="mcp"`, which confirms the endpoint and the authentication scheme. The authenticated tool schemas, and the upload address that `get_upload_instructions` returns at run time, have not yet been exercised. For the first real submission, run a dry run, then publish one paper while watching the result.
-- **Independent review.** The pipeline was reviewed by a model from a different provider before any key existed: [PIPELINE-REVIEW.md](../papers/submission/PIPELINE-REVIEW.md).
+- **Independent review.** The pipeline was reviewed by a model from a different provider before any key existed: [report](../papers/submission/PIPELINE-REVIEW.md) · [resolution](../papers/submission/PIPELINE-REVIEW-RESOLUTION.md).
 
 ## One-time owner setup
 
 1. Create an alphaXiv API key under *Settings > MCP/API*.
-2. In GitHub, open *Settings > Environments*, create `alphaxiv`, add yourself as a required reviewer, and add the secret `ALPHAXIV_API_KEY`.
+2. In GitHub, open *Settings > Environments*, create `alphaxiv`, add yourself as a required reviewer, restrict *Deployment branches and tags* to the default branch (`main`), and add the secret `ALPHAXIV_API_KEY`.
 3. Enable Pages with *Settings > Pages > Source: GitHub Actions* ([site guide](site.md)).
 4. For each paper, review `submission/alphaxiv.toml` and set `owner_confirmed = true`.
 
