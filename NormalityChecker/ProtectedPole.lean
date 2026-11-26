@@ -13,8 +13,8 @@ enumerates auxiliary off-radix primes:
    For every `k ≥ 1`, if `ℓ_k` is prime, coprime to `b`, `p`, and all earlier `ℓ_j` (`1 ≤ j < k`),
    then for every shift `N ≥ n_k`, `ℓ_k` divides the reduced denominator of `b^N U_k`, where
    `U_k = ∑_{1 ≤ j ≤ k} 1 / (p^(e j) · ℓ_j · b^(n j))`.
-   Hence the reduced denominators of the shifted prefixes of `W` eventually contain every prime
-   coprime to `b`.
+   (Only the newest prime `ℓ_k` of the prefix `U_k` is covered; that every earlier `ℓ_i` persists
+   in later prefixes is a written argument.)
 
 2. **Protected prime-power depth (`shifted_prefix_protected_prime_pow_dvd_den`).**
    If `e` is strictly increasing on `1..k` and `p` does not divide `b` or any `ℓ_j` (`1 ≤ j ≤ k`),
@@ -29,7 +29,7 @@ enumerates auxiliary off-radix primes:
    the unique leading term `(d, j) = (r, l)` dominates every other term `p`-adically, and
      `p^(l * e₂ + (r - l) * e₁ - g) ∣ (F_l(U, V)).den`.
    For `e_k = k²` this yields protected pole depth `l k² + (r - l)(k - 1)² - O_P(1)` in
-   Track C1, feeding directly into `SurvivingGrid.stride_order` and `PrimePowerGrid.crt_period_count`.
+   Track C1, the arithmetic core for `SurvivingGrid.stride_order` and `PrimePowerGrid.crt_period_count`.
 -/
 
 @[expose] public section

@@ -38,7 +38,7 @@ topic = "classical"
 status = "lean+paper"
 principal = true
 statement = "For every integer radix b ≥ 2, the Euler pentagonal value E_b = ∏_{k ≥ 1} (1 − b^{−k}) belongs to K_b and preserves every input's discrepancy. Its base-b expansion splits after four digits into explicit blocks 1 0^{2j} (b − 1)^{4j} (b − 2) (b − 1)^{2j+1} 0^{4j+2}. For every word length L ≥ 1, the constant words 0^L and (b − 1)^L each have asymptotic frequency 1/2 with explicit all-prefix error O_L(N^{−1/2}), and every other word occurs O_L(√N) times; thus E_2 is simply normal in base 2, E_b is not simply normal for b ≥ 3, and E_b is never disjunctive. Its extreme discrepancy satisfies 1 − D_N(E_b; b) = √(2/3) (log_b N)/√N + O_b(1/√N)."
-scope = "Lean verifies E_b ∈ K_b, exact discrepancy preservation under translation by E_b, the pentagonal support bound, and the finite gap upper bound for the pentagonal series. The exact block digit formula, explicit all-prefix word bounds, non-disjunctivity, and matching √(2/3) lower bound are written proofs."
+scope = "Convention. Lean's eulerPentagonalSum b is the pentagonal series 1 + Σ_{k ≥ 1} (−1)^k (b^{−k(3k−1)/2} + b^{−k(3k+1)/2}) by definition. Euler's pentagonal number theorem, which identifies it with the product E_b = ∏_{k ≥ 1} (1 − b^{−k}), is classical and is not formalized; the statements about the product follow from that identity. For the series Lean verifies D_N → 1 and D_N(x + ·) − D_N(x) → 0 for every real x and every radix b ≥ 2, the support bound (at most 2(⌊√(2M)⌋ + 1) nonzero coefficients up to M), and an explicit finite upper bound on 1 − D_N with a non-sharp constant. The proofs use only the support and |a(m)| ≤ 1, never the signs. The exact block digit formula, the all-prefix word bounds, non-disjunctivity, and the sharp √(2/3) asymptotic (upper bound: the general kernel-checked inequality sparse_farCount_le instantiated on paper; lower bound: written) are written proofs."
 lean = [
   "NormalityChecker.EulerPentagonal.eulerPentagonal_discrepancy_tendsto_one",
   "NormalityChecker.EulerPentagonal.eulerPentagonal_preserves_discrepancy",
@@ -56,8 +56,8 @@ title = "Euler's cube, Euler's square, low-degree polynomials and rational scali
 topic = "classical"
 status = "lean+paper"
 principal = true
-statement = "For every integer radix b ≥ 2, E_b^3 belongs to K_b, is base-b disjunctive while 0^L and (b − 1)^L each have frequency 1/2, and satisfies 1 − D_N(E_b^3; b) = √2 (log_b N)/√N + O_b(1/√N). The square E_b^2 corresponds to the weight-one Klein-four CM eigenform η(12τ)^2, giving support count ≍ X/(log X)^{3/4} and 1 − D_N(E_b^2; b) ≍ (log log N)/(log N)^{3/4}. Every polynomial P ∈ ℤ[1/b][x] of degree at most 3 satisfies P(E_b) ∈ K_b, whereas a reduced rational scaling (a/d) E_b lies in K_b if and only if a/d ∈ ℤ[1/b] (with D_N(E_2/3; 2) → 1/2 and D_N(E_3/2; 3) → 2/3)."
-scope = "Lean verifies E_b^3 ∈ K_b, exact discrepancy preservation, the triangular support and linear-mass bounds for Jacobi's cube series, and the Cauchy convolution mass bound. The disjunctivity of E_b^3, the exact √2 constant, the η(12τ)^2 analysis of E_b^2, and the polynomial and rational-scalar theorems are written proofs."
+statement = "For every integer radix b ≥ 2, E_b^3 belongs to K_b, is base-b disjunctive while 0^L and (b − 1)^L each have frequency 1/2, and satisfies 1 − D_N(E_b^3; b) = √2 (log_b N)/√N + O_b(1/√N). The coefficients of E_b^2 are the coefficients c(12n + 1) of the weight-one CM eigenform η(12τ)^2 with Klein-four projective image, so its support count is ≍ X/(log X)^{3/4} and 1 − D_N(E_b^2; b) ≍ (log log N)/(log N)^{3/4}. Every polynomial P ∈ ℤ[1/b][x] of degree at most 3 satisfies P(E_b) ∈ K_b, whereas a reduced rational scaling (a/d) E_b lies in K_b if and only if a/d ∈ ℤ[1/b] (with D_N(E_2/3; 2) → 1/2 and D_N(E_3/2; 3) → 2/3)."
+scope = "Convention as for GF-03. Lean's eulerCubeSum b is Jacobi's triangular series Σ_{k ≥ 0} (−1)^k (2k + 1) b^{−k(k+1)/2} by definition; Jacobi's identity ∏ (1 − q^m)^3 = Σ (−1)^k (2k + 1) q^{k(k+1)/2}, which identifies it with E_b^3, is classical and not formalized. For this series Lean verifies |a(T_k)| = 2k + 1 at the triangular numbers T_k, the support bound, the linear mass bound A(M) ≤ 4M, D_N → 1 and translation preservation, and, for arbitrary integer sequences, the Cauchy convolution mass bound. Nothing about E_b^2 (coefficients, support or K_b-membership) is formalized. The disjunctivity of E_b^3, the exact √2 constant, the analysis of E_b^2 through η(12τ)^2 (which uses the cited Hecke-eigenform input; its elementary O((log log N)/√(log N)) upper bound needs only a Landau-type count), the degree ≤ 3 polynomial theorem and the rational scalar theorem are written proofs."
 lean = [
   "NormalityChecker.EulerPentagonal.eulerCube_discrepancy_tendsto_one",
   "NormalityChecker.EulerPentagonal.eulerCube_preserves_discrepancy",
@@ -77,7 +77,7 @@ topic = "classical"
 status = "lean+paper"
 principal = true
 statement = "In base 2, the multiplicative Lambert series L_{χ_4} = Σ_{m ≥ 1} χ_4(m)/(2^m − 1) and the squared theta value Θ_3(1/2)^2 = 1 + 4 L_{χ_4} satisfy 1 − D_N(L_{χ_4}; 2) = sup_x |D_N(x + L_{χ_4}; 2) − D_N(x; 2)| ∼ [K/(2 log 2)] (log log N)/√(log N), where K = 0.76422365… is the Landau–Ramanujan constant. More generally, for every real nonprincipal Dirichlet character χ modulo q, 1 − D_N(L_χ; 2) ∼ [C_χ/(2 log 2)] (log log N)/√(log N), where C_χ is the support density constant of 1 ∗ χ."
-scope = "Upgrades the order result of CC-48 to an exact leading constant in base 2 (where 2-adic valuation absorbs powers of 2 in r_2(n)/4; in odd radices such as base 3, powers of 2 are not absorbed and typical digit widths grow like (1/2) log_b(2) log log m). Lean verifies the sharp translation identity, composite-radix displaced factorization, and circle-separation lower bound; the asymptotic proof uses published analytic number theory inputs."
+scope = "Base 2 only. Lean verifies the sharp translation identity (sup over x of |D_N(x + z) − D_N(x)| equals 1 − D_N(z) for each N ≥ 1), the composite-radix displaced-source factorization and the circle-separation lower bound. The displaced-width transfer, the source decomposition, the exceptional-set estimates (including a pair sieve uniform in shifts |h| ≤ O(log log N)) and the asymptotic itself are written proofs that use the external inputs listed here. The relative error is O((log log log N)/(log log N)), so finite computations (ratio ≈ 1.48 at N = 2^18) are not evidence for the constant. In base 2 the 2-adic valuation absorbs the powers of 2 in c(n) = r_2(n)/4, so the residual odd part has bounded mean. In an odd radix such as 3 the powers of 2 are not absorbed and typical digit widths grow like ½ log_b(2) log log m: only the upper bound O_b((log log N)/√(log N)) is established there in Phase 20, no exact constant and no lower bound of that order is claimed here, and the factor 1 + log 2 suggested for m^2 + n^2 in base 3 is heuristic in Phase 20. Radices 2^k with k ≥ 2 are not treated in GF-05."
 lean = [
   "NormalityChecker.CoefficientTransfer.one_sub_discrepancy_ge_of_bulk_and_far",
   "NormalityChecker.CoefficientTransfer.displaced_term_eq",
@@ -86,7 +86,7 @@ lean = [
 proof = ["notes/phase20/lambert-leading-constant.md", "notes/phase20/coefficient-transfer.md"]
 inputs = ["Landau's theorem and Wirsing's / Selberg–Delange support theorem; Shiu's theorem (1980); Gauss / Dirichlet hyperbola mean; Brun's upper-bound sieve (Halberstam and Richert, Theorem 2.2); Mertens' theorem in arithmetic progressions."]
 computation = ["scripts/phase20_transfer.py"]
-related = ["CC-48", "GF-01", "GF-02", "GF-06"]
+related = ["CC-48", "GF-01", "GF-02", "GF-06", "GF-12"]
 
 [[result]]
 id = "GF-06"
@@ -94,16 +94,16 @@ title = "Binary quadratic-form theta values and integer-coefficient weight-one m
 topic = "classical"
 status = "lean+paper"
 principal = true
-statement = "For every positive definite integral binary quadratic form Q and every integer radix b ≥ 2, the theta value Θ_Q(1/b) = Σ_{(m,n) ∈ ℤ^2} b^{−Q(m,n)} lies in K_b with 1 − D_N(Θ_Q(1/b); b) ≪_{Q,b} (log log N)/√(log N) (and a matching lower bound), extending to imprimitive forms, shifted lattices, congruence subsums, bounded weights, and degree-≤ 2 polynomials in unary quadratic-polynomial series. More generally, every holomorphic weight-one modular form f(q) = Σ_{n ≥ 0} a(n) q^n on Γ_1(M) with integer coefficients satisfies f(1/b) ∈ K_b with 1 − D_N(f(1/b); b) ≪_{f,b} (log log N)/(log N)^{α_f} for some α_f > 0, covering dihedral CM, exotic A_4/S_4/A_5, and weight-one Eisenstein series. By contrast, coefficient transfer fails structurally for Serre's lacunary even η-powers η^r (r ∈ {4, 6, 8, 10, 14, 26})."
-scope = "Lean verifies the linear-mass sparse coefficient transfer theorem underlying the Θ_Q case. The quantitative Bernays/Landau, Deligne–Serre, Chebotarev, and logarithmic-mass (A(X) ≪ X log X) deductions for weight-1 modular forms, as well as the unary-quadratic polynomial extension and weight-≥ 2 overlap obstruction, are written proofs."
+statement = "For every positive definite integral binary quadratic form Q and every integer radix b ≥ 2, Θ_Q(1/b) = Σ_{(m,n) ∈ ℤ^2} b^{−Q(m,n)} lies in K_b with 1 − D_N(Θ_Q(1/b); b) ≪_{Q,b} (log log N)/√(log N). The same upper bound holds for imprimitive forms, integral shifted lattices, congruence subsums, integer-valued weights bounded by a constant, finite ℤ[1/b]-combinations, and polynomials of total degree at most 2 in finitely many unary quadratic-polynomial series (degree 3 is out of reach: Θ_3(1/b)^3 has support of density 5/6). A lower bound of the same order is proved for Θ_3(1/2)^2 in base 2 (GF-05) and only outlined in Phase 20 for other forms and radices. More generally, every holomorphic weight-one modular form f(q) = Σ_{n ≥ 0} a(n) q^n on Γ_1(M) with all a(n) ∈ ℤ, including a(0), satisfies f(1/b) ∈ K_b with 1 − D_N(f(1/b); b) ≪_{f,b} (log log N)/(log N)^{α_f}, where α_f > 0 is the least density of primes with vanishing coefficient among the newform and Eisenstein constituents of f; this covers dihedral CM, exotic A_4/S_4/A_5 (α_f as small as 1/4) and weight-one Eisenstein constituents. The coefficient-transfer method fails structurally for Serre's lacunary even η-powers η^r (r ∈ {4, 6, 8, 10, 14, 26}); no distributional conclusion is drawn for them."
+scope = "Lean verifies only the generic linear-mass sparse coefficient transfer, which gives K_b-membership once S(X) = o(X) and A(X) ≤ CX are supplied. Everything specific to Θ_Q and to modular forms is a written proof: the lattice-point and support counts (the elementary anisotropy argument gives the upper bound that is needed), the logarithmic-mass rate (any A(X) ≪ X (log X)^β), the Deligne–Serre, Chebotarev and Eisenstein lacunarity deductions with A_f(X) ≪ X log X, the shifted-lattice, congruence-subsum, bounded-weight and ℤ[1/b]-combination extensions under the hypotheses stated above, and the degree ≤ 2 polynomial extension. The matching lower bound is a proof outline in Phase 20 for general Q and b: it needs a pair-sieve bound uniform in the shift and a multiplicative majorant of the representation numbers, and both are written only for m^2 + n^2. Matching lower bounds for weight-one forms are open. A rational form with denominator d only gives d·f(1/b) ∈ K_b. Only the failure of the method is shown for weight ≥ 2; the distribution of E_b^r for r ≥ 4 is open."
 lean = [
   "NormalityChecker.CoefficientTransfer.linear_mass_sparse_tendsto_one",
   "NormalityChecker.CoefficientTransfer.finite_sparse_mass_transfer"
 ]
 proof = ["notes/phase20/theta-and-modular.md", "notes/phase20/euler-product.md"]
-inputs = ["Landau (1908) and Bernays (1912) binary quadratic-form counting; Deligne and Serre (1974) weight-one Galois representations; Serre (1981, 1985) Chebotarev lacunarity and lacunary η-powers; Nesterenko (1996) and Hamieh–Murty (2016) for transcendence."]
+inputs = ["Landau (1908) and Bernays (1912) binary quadratic-form counting; Deligne and Serre (1974) weight-one Galois representations; Serre (1981, 1985) Chebotarev lacunarity and lacunary η-powers; Nesterenko (1996) and Hamieh–Murty (2016) for transcendence; Halberstam–Richert mean-value bound and Shiu (1980) for multiplicative functions; Brun/Selberg sieve for pair counts; Diamond–Shurman Theorems 4.8.1 and 5.8.3; effective Chebotarev density theorem; Bailey–Borwein–Crandall–Pomerance (2004), Lemma 9.5."]
 computation = ["scripts/phase20_euler_theta.py"]
-related = ["GF-01", "GF-04", "GF-05"]
+related = ["GF-01", "GF-04", "GF-05", "GF-12", "GF-17"]
 
 [[result]]
 id = "GF-07"
@@ -153,7 +153,7 @@ topic = "certificates"
 status = "lean+paper"
 principal = true
 statement = "For any integer radix b ≥ 2, odd prime p not dividing b, and increasing list ℓ_1 < ℓ_2 < … of all other primes coprime to b, let W = Σ_{k ≥ 1} 1/(p^{k^2} ℓ_k b^{2^{k^3}}). Every nonconstant rational polynomial P(W) is base-b normal and Liouville, with all-prefix extreme discrepancy D_N(P(W); b) ≪_{P,c} exp(−c (log N)^{2/3}) for every c < min(3 (log 2)^{1/3}, (deg P · log p)/(log 2)^{2/3}), and every prime coprime to b divides all shifted prefix denominators of W from some point on. The same protected-pole method yields general single-generator, shared-prime, and distinct-odd-prime + auxiliary-prime normal Liouville polynomial algebras."
-scope = "Lean verifies the truncated-polynomial protected-pole lower bound, exact p-adic valuation of shifted prefixes of W, auxiliary-prime survival of ℓ_k, and the Phase 19 surviving-grid core. The window rule, prefix discrepancy rate, Liouville property, and general C2a–C2c extensions are written proofs verified by exact scripts and an independent cross-provider review (with the fixed-r vs. all-r quantifier in C2b corrected)."
+scope = "Lean verifies (i) the exact p-adic valuation of the shifted prefixes of W (p^{e_k} divides the reduced denominator of b^N U_k and p^{e_k + 1} does not); (ii) survival of the newest auxiliary prime only (ℓ_k divides that denominator for N ≥ n_k); (iii) the lower bound p^{l e_2 + (r − l) e_1 − g} dividing the denominator of the truncated Taylor expression F_l(U, V) for rational U, V of exact p-adic depths e_1 < e_2; and (iv) the Phase 19 surviving-grid core. Written proofs: persistence of every earlier ℓ_i in later shells and the exact denominator p^{k^2} ℓ_1 ⋯ ℓ_k of the shifted prefixes of W; the window rule and the identity b^{−n} R_n = F_l(U_{k−1}, V_k); the bound log q_n = O(k^2); the prefix discrepancy rate; the Liouville property; and the general C2a–C2c extensions. These were checked by exact scripts and one independent cross-provider review (with the fixed-r versus all-r quantifier in C2b corrected). The all-prime persistence statement is for W (degree 1); for P(W) with r ≥ 2 only p and, when l = r, the newest prime ℓ_k are controlled."
 lean = [
   "NormalityChecker.ProtectedPole.truncated_poly_pole_dvd_den",
   "NormalityChecker.ProtectedPole.shifted_prefix_protected_prime_pow_dvd_den",
@@ -172,8 +172,151 @@ topic = "stoneham"
 status = "paper"
 principal = true
 statement = "For any integer radix b ≥ 2, odd prime p not dividing b, t = ord_p(b), and integers s ≥ 1, r ≥ 1 and d ≥ r + 1, let C = Σ_{i ≥ 1} p^{−s v_p(i)} b^{−t i^d}. Every nonconstant rational polynomial P(C) of degree at most r is normal in base b. Consequently C(b, p, s, d) is not algebraic of degree less than d, and the shifts of (C, C^2, …, C^{d − 1}) are jointly uniformly distributed; in particular C(2, 3, 1, 4), its square and its cube are jointly binary normal."
-scope = "Extends OP-14 (r = 2, d ≥ 3) to all r ≥ 3 and d ≥ r + 1 without an effective discrepancy rate. Written proof using constant-measure dominant-anchor level-H isolation, reverse Fatou and Lebesgue density, and Titchmarsh's q-th derivative test (orders q = 4, …, r + 1 with exact uniform margin σ_r = 1/(r(2^{r+1} − 2))). Audited by an independent cross-provider review with all three major findings (B = 0 rational separation & H' > H peeling, all-r / β ≤ 1 margin proof, and lattice-counting / Titchmarsh reduction steps) repaired. The boundary case d = r (e.g., cubes on t k^3) remains open."
+scope = "Extends OP-14 (r = 2, d ≥ 3) to all r ≥ 3 and d ≥ r + 1 without an effective discrepancy rate; the boundary d = r (for example cubes on t k^3) remains open, while Phase 21 extends GF-11 to effective rates (GF-14) and mixed-order multivariate polynomials (GF-14). Written proof in Phase 20 (constant-measure dominant-anchor level-H isolation, reverse Fatou and Lebesgue density, B = 0 rational-separation and peeling, and Titchmarsh's q-th derivative test with exact uniform margin σ_r = 1/(r(2^{r+1} − 2))). After Phase 20 cross-provider repairs, Phase 21 Track C1 re-audited all seven pressure points (confirmed sound by an independent Gemini 4 cross-provider review) and formalized the finite algebraic/combinatorial peeling, divisor-bound, Φ_q nonvanishing, and truncated-mass jump cores in PowerSumPeeling.lean; no human specialist has read the written proof. Finite exact checks illustrate the mechanism and do not prove the estimates."
 proof = ["notes/phase20/cubic-power-schedule.md"]
 inputs = ["Titchmarsh, The Theory of the Riemann Zeta-Function, Theorem 5.13 (q-th derivative exponential-sum bound); Erdős–Turán inequality; divisor bound; Lebesgue density theorem."]
 computation = ["scripts/phase20_normality.py"]
-related = ["SY-02", "OP-14", "GF-10"]
+related = ["SY-02", "OP-14", "GF-10", "GF-14"]
+
+[[result]]
+id = "GF-12"
+title = "Exact radix-dependent discrepancy constants for Lambert series, Euler's square and binary quadratic forms"
+topic = "classical"
+status = "lean+paper"
+principal = true
+statement = "For every integer radix b ≥ 2 and every real nonprincipal Dirichlet character χ, 1 − D_N(L_χ(b); b) ∼ [C_χ / (2 log b)] (log log N)/√(log N) when b = 2^k, and ∼ [C_χ (1 + log 2)/(2 log b)] (log log N)/√(log N) otherwise, proving a sharp radix-2^k discontinuity. More generally, a sub-threshold width law gives exact leading constants for multiplicative functions supported on a prime set of density δ ∈ (0, 1) below the critical threshold δ* (where typical b-adic width overtakes the isolation logarithm). For Euler's square E_b^2 (via η(12τ)^2, C_η = 2.41852914…), 1 − D_N(E_b^2; b) ∼ [3 C_η/(4 log b)] (log log N)/(log N)^{3/4} for b = 2^k and ∼ [C_η (3 + log 2)/(4 log b)] (log log N)/(log N)^{3/4} otherwise. For every positive definite integral binary quadratic form Q of discriminant Δ, 1 − D_N(Θ_Q(1/b); b) satisfies a matching lower bound of order (log log N)/√(log N) in every radix, with exact leading constants for h_0 = 1 (one class per genus, e.g. idoneal discriminants) in all radices and for class group ℤ/3 (e.g. Δ = −23) in radices b = 2^k via the explicit factor 1 + (2/3)(1 − π_J) log 2 = 1.36211738…."
+scope = "Lean (RadixWidthLaw.lean) verifies the finite radix-gap bounds (dist0_div_pow_ge, dist0_div_pow_eq, card_far_in_gap_ge), right-isolation Markov tail control (card_large_tail_le), the exact multiplicative first-moment decomposition (sum_log_eq_sum_primePow), and the finite sub-threshold width upper bound (width_law_upper). The sub-threshold width law (Theorem 1), Theorems A1–A4, and Proposition 4.1 are written proofs checked by exact scripts and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Exact constants for δ > δ* (under (R_b)) and for general class groups with h_0 > 1 outside radices 2^k (under (V_q)) are conditional; exact radix-2^k constants for general class groups beyond h_0 = 1 and ℤ/3 remain open."
+lean = [
+  "NormalityChecker.RadixWidthLaw.dist0_div_pow_ge",
+  "NormalityChecker.RadixWidthLaw.dist0_div_pow_eq",
+  "NormalityChecker.RadixWidthLaw.card_far_in_gap_ge",
+  "NormalityChecker.RadixWidthLaw.card_large_tail_le",
+  "NormalityChecker.RadixWidthLaw.sum_log_eq_sum_primePow",
+  "NormalityChecker.RadixWidthLaw.width_law_upper"
+]
+proof = ["notes/phase21/radix-lambert.md", "notes/phase21/euler-square-and-forms.md"]
+inputs = ["Landau, Wirsing and Selberg–Delange support theorems; Shiu (1980); Halberstam–Richert / Brun upper-bound sieve; Mertens in progressions; Hardy–Ramanujan Chebyshev induction; Hecke eigenform identification of η(12τ)^2 (Serre 1981, 1985); genus theory and Chebotarev density for binary quadratic forms."]
+computation = ["scripts/phase21_radix.py"]
+related = ["GF-04", "GF-05", "GF-06"]
+
+[[result]]
+id = "GF-13"
+title = "Polynomial-mass and logarithmic-mass transfers, even-order character Lambert series and q-digamma reflections in K_b"
+topic = "classical"
+status = "lean+paper"
+principal = true
+statement = "In every radix b ≥ 2, an integer series F_b(a) lies in K_b and preserves discrepancy whenever either A(X) ≤ C(X + 1)^k with S(X) = o(X/log X), or A(X) ≤ C X (log(X + 2))^γ with S(X) = o(X/log log X) (both kernel-verified in GeneralMassTransfer.lean). For every even-order Dirichlet character χ of order h, the divisor sum 1 ∗ χ has sharp support density ≍ X/(log X)^{1/h} (with superlinear mass X (log X)^{κ_h − 1} for complex h ≥ 4), and every integer-valued linear combination of even-order character Lambert series lies in K_b with 1 − D_N ≪ (log log N)/(log N)^{1/h_max}. Every odd M-periodic integer-valued function w (w(M − n) = −w(n)) satisfies (1 ∗ w)(n) = 0 whenever v_p(n) is odd for a prime p ≡ −1 (mod M), placing its Lambert series in K_b. Consequently, for every b ≥ 2, M ≥ 2, and 1 ≤ r < M, the normalized q-digamma reflection (ψ_q(r/M) − ψ_q((M − r)/M))/log q at q = b^{−M} equals A_{r,M}(b) − A_{M−r,M}(b) and lies in K_b with 1 − D_N ≪ (log log N)/(log N)^{1/φ(M)}."
+scope = "Lean verifies both general mass transfers (GeneralMassTransfer.lean), the exact q-digamma reflection identity at q = b^{−M} (qDigamma_reflection_eq_residueLambert), the odd-periodic divisor-involution cancellation, the exact divisor-counting logarithmic mass bound A(X) ≤ B X (1 + log X), and the K_b-membership reduction from sparsity (AntisymmetricLambert.lean), plus the multi-stratum algebraic identity (ClassicalBarriers.lean). The sharp support exponent 1/h for even-order characters, superlinear mass growth κ_h, multi-stratum sparse transfer, and explicit discrepancy rates are written proofs verified by 374,840 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Odd-order characters (e.g. order 3) have positive-density support and are excluded."
+lean = [
+  "NormalityChecker.GeneralMassTransfer.finite_poly_mass_transfer",
+  "NormalityChecker.GeneralMassTransfer.poly_mass_sparse_tendsto_one",
+  "NormalityChecker.GeneralMassTransfer.finite_log_mass_transfer",
+  "NormalityChecker.GeneralMassTransfer.log_mass_sparse_tendsto_one",
+  "NormalityChecker.GeneralMassTransfer.qDigamma_reflection_eq_residueLambert",
+  "NormalityChecker.AntisymmetricLambert.dirichletOneConv_eq_zero_of_odd_padicVal",
+  "NormalityChecker.AntisymmetricLambert.absMass_dirichletOneConv_le",
+  "NormalityChecker.AntisymmetricLambert.qDigamma_reflection_tendsto_one_of_sparse"
+]
+proof = ["notes/phase21/character-q-digamma.md"]
+inputs = ["Wirsing / Selberg–Delange / Landau support estimates for multiplicative sets defined by congruence conditions modulo M; Dirichlet's theorem on primes in arithmetic progressions."]
+computation = ["scripts/phase21_characters_classical.py"]
+related = ["GF-01", "GF-07", "GF-17", "GF-18"]
+
+[[result]]
+id = "GF-14"
+title = "Effective nonlinear discrepancy rates, multivariate distinct-order normality, and the d = r boundary"
+topic = "stoneham"
+status = "lean+paper"
+principal = true
+statement = "For C = C(b, p, s, d) = Σ_{i ≥ 1} p^{−s v_p(i)} b^{−t i^d} (odd prime p ∤ b, t = ord_p(b), s ≥ 1, d ≥ 2) and any degree r ≥ 2: (1) level-H isolation extends to all d ≥ 2, so every level set of M_r is null; (2) uniform multiscale isolation at scale p^{−σ_r H/3} is false (explicit δ_H-net counterexample near u = 2 at p = 3, d = 4, r = 3, H ≥ 4), but averaged isolation on unions of intervals yields the effective small-ball bound |{u ∈ [1, p^d) : M_r(u) ≡ w (mod p^L)}| ≪ (log L)^{−d/(d − 1)} and, whenever d > r(s + 1), the explicit discrepancy rate D_N(P(C); b) ≪_P (log log N)^{−d/(d − 1)}; (3) at the boundary d = r, the p-adic depth defect rsJ(n) − v_p(q_n) is tight in density (upper density ≤ C_P (log L)^{−d/(d − 1)} for L ≥ 3), whereas an exact barrier lemma shows denominator-only data cannot determine digits on runs shorter than log_b(q/2); (4) for any distinct orders s_1 < … < s_m and any nonconstant rational polynomial P(X_1, …, X_m) of total degree r < d in X_a = C(b, p, s_a, d), P(X_1, …, X_m) is normal in base b."
+scope = "Lean (PowerSumPeeling.lean) verifies the finite algebraic and combinatorial cores: the d-th power difference divisor bound (card_pow_diff_eq_le_divisors), exact degree, leading coefficient and nonvanishing of Φ_q(X, B) (phiPoly_natDegree, phiPoly_leadingCoeff, phiPoly_ne_zero), the dominant-loss p-adic peeling lemma (dominant_loss_unique_top_coord), and the exact truncated-mass jump at an isolated centre (truncMass_sub, truncMass_jump_of_isolated). The refutation (Proposition 2.1), averaged isolation (Lemma I), Theorem Q, Corollary Q1, Proposition D, the denominator-only barrier, and Theorem M (pure lex-min selection, weighted peeling with sequential divisor-bound bounded numerators, and L^1 Lebesgue-point localization) are written proofs verified by exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Normality and D^+ < 1 at d = r remain open."
+lean = [
+  "NormalityChecker.PowerSumPeeling.card_pow_diff_eq_le_divisors",
+  "NormalityChecker.PowerSumPeeling.phiPoly_natDegree",
+  "NormalityChecker.PowerSumPeeling.phiPoly_leadingCoeff",
+  "NormalityChecker.PowerSumPeeling.phiPoly_ne_zero",
+  "NormalityChecker.PowerSumPeeling.dominant_loss_unique_top_coord",
+  "NormalityChecker.PowerSumPeeling.truncMass_sub",
+  "NormalityChecker.PowerSumPeeling.truncMass_jump_of_isolated"
+]
+proof = ["notes/phase21/nonlinear-boundary.md", "notes/phase21/multivariate-and-dense-allprime.md"]
+inputs = ["Titchmarsh, Theorem 5.13; Erdős–Turán inequality; divisor bound; Lebesgue density and Lebesgue differentiation theorems; Landau's two-squares theorem and Wooley's three-cubes lower bound (context in §7 only)."]
+computation = ["scripts/phase21_nonlinear.py"]
+related = ["OP-14", "GF-11", "GF-15"]
+
+[[result]]
+id = "GF-15"
+title = "Denser all-prime polynomial normality on polynomial and quasi-polynomial schedules"
+topic = "certificates"
+status = "paper"
+principal = true
+statement = "All-prime polynomial normality extends far below the doubly-exponential schedule 2^{k^3} of GF-10: (1) using the period bound Λ_k^{r−1} A(ℓ_k) in the protected-pole construction gives normal Liouville all-prime W at n_k = ⌈exp(k (log log(k + 16))^2)⌉, degree ≤ r polynomial normality at n_k = ⌈exp((r − 1 + ε) k log k)⌉, and all-degree polynomial normality whenever log n_k / (k log k) → ∞ and n_{k+1}/n_k → ∞; (2) on the polynomial schedule n_k = t k^d with d > r(s + 1), placing auxiliary primes ℓ_j at sparse indices k_j prime to p with log Λ_K = o(log K) yields W = Σ p^{−s v_p(k)} μ_k^{−1} b^{−t k^d} whose shifted prefix denominators are exactly p^{s ⌊log_p K⌋} Λ_K and every polynomial P(W) of degree 1 ≤ deg P ≤ r is normal with rate O_P((log log N)^{−d/(d − 1)}) (and O_{P,η}(N^{−η}) for deg P = 1); (3) on the quasi-polynomial schedule n_i = t i ⌈exp((log(i + 1))^2)⌉ with auxiliary primes at strictly increasing indices p ∤ k_j and log Λ_K = o((log K)^2), every nonconstant P(W) of arbitrary degree is normal and non-Liouville."
+scope = "Written proofs verified by exact scripts (exact denominators, p-adic residue preservation for p ∤ k_j versus pollution at k = p^J, primorial vs A(ℓ_k) tables, and quasi-polynomial budgets) and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). In complete-period constructions of degree ≥ 2 the j-th auxiliary prime still appears at position log n ≫ j log j; earlier prime introduction and the short-orbit range r + 1 ≤ d ≤ r(s + 1) remain open."
+proof = ["notes/phase21/multivariate-and-dense-allprime.md"]
+inputs = ["Ford–Luca–Pomerance bound for lcm_{ℓ ≤ L}(ℓ − 1) (via Phase 19 grids); Chebyshev prime bounds; Phase 19 universal quasi-polynomial plateau estimate; Phase 21 Theorem Q (GF-14)."]
+computation = ["scripts/phase21_nonlinear.py"]
+related = ["OP-09", "GF-10", "GF-14"]
+
+[[result]]
+id = "GF-16"
+title = "Exact rational-scaling discrepancy limits for Euler powers and base-b normal reciprocals of K_b elements"
+topic = "classical"
+status = "lean+paper"
+principal = true
+statement = "For every radix b ≥ 2, reduced a/d with d ≥ 2 coprime to b: (1) D_N((a/d) E_b; b) and D_N((a/d) E_b^3; b) converge without oscillation to exact rational limits D_∞ ∈ [1/d, 1) computed by finite residue automata on ZMod d, with error O_{b,d,a}((log N)/√N); for prime d with b a primitive root, D_∞ = 1/d + |w_0 − 1/d|; (2) for odd b and odd a, D_N((a/2) E_b^2; b) → 2/3 unconditionally via E(q)^2 ≡ E(q^2) (mod 2), and (a/d) E_b^2 ∈ K_b iff a/d ∈ ℤ[1/b] (unconditional when the b-coprime part of d is even; via η(12τ)^2, Wirsing and a sketched uniform Selberg sieve for odd prime factors); (3) reciprocation can map K_b onto normal numbers: for every admissible sequence (T_k | m_{k+1}, ω_k = m_{k+1}/T_k → ∞), x = ∏_{k ≥ 1} (1 − b^{−m_k}) is irrational with 1 − D_N(x; b) ≤ N^{−1 + o(1)} (deep in K_b), yet 1/x is base-b normal along all N; flipping factor signs gives a sharp dichotomy — 1/∏(1 + ε_k b^{−m_k}) is normal iff ε_k = −1 for all large k, else limsup D_N ≥ 1/2."
+scope = "Lean (NormalReciprocalCore.lean) verifies the exact rational band identity (band_identity), the alternating-sign odd-band vanishing identity (signed_band_identity), complete residue character-sum vanishing off D | k (sum_residues_cexp_eq_zero), and pure periodicity of the Euler rational-scaling automaton (eulerAutomatonStep_bijective, eulerAutomaton_purely_periodic). The atomic limit lemma, automata convergence rates, Theorem D1.4, Theorem D1.5, Proposition D2.3, Theorem D2, and Proposition D2.5 are written proofs verified by 13,086 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). The odd-d limit law for (a/d) E_b^2 and fast-rate normal reciprocals remain open."
+lean = [
+  "NormalityChecker.NormalReciprocalCore.band_identity",
+  "NormalityChecker.NormalReciprocalCore.signed_band_identity",
+  "NormalityChecker.NormalReciprocalCore.sum_residues_cexp_eq_zero",
+  "NormalityChecker.NormalReciprocalCore.eulerAutomatonStep_bijective",
+  "NormalityChecker.NormalReciprocalCore.eulerAutomaton_purely_periodic"
+]
+proof = ["notes/phase21/euler-scalings-and-reciprocals.md"]
+inputs = ["Erdős–Turán inequality; Phase 20 Theorem 6(a) (η(12τ)^2 eigenform input), Wirsing's theorem, and Halberstam–Richert Selberg upper-bound sieve (used only in the odd-prime case of Theorem D1.5, where Lemma S is sketched)."]
+computation = ["scripts/phase21_euler_reciprocals.py"]
+related = ["GF-03", "GF-04", "GF-08", "GF-17"]
+
+[[result]]
+id = "GF-17"
+title = "Partition carry-window obstructions, iterated derivatives in K_b, and the weight-2 width-density wall"
+topic = "classical"
+status = "lean+paper"
+principal = true
+statement = "For the partition constant P_b = 1/E_b: explicit all-N elementary and η-refined carry windows are sharp to log_b(N + L) + O(1) and (3/4) log_b(N + L) + O(1) digits, the pentagonal circle recurrence with admissible kicks admits both the zero orbit (D_N = 1) and almost-everywhere equidistributed {θ p(n)}, and rational approximants 1/E_b^{(K)} track P_b for at most Θ(√m_K) digits beyond denominator scale while their periods are ≥ m_K − O(1), blocking reciprocal-tracking arguments. Under polynomial mass A(X) ≤ C X^κ, 1 − D_N ≤ ρ_N(2 log_b(1/ρ_N) + (κ − 1) log_b N + O(1)). Every iterate D^j = (q d/dq)^j preserves K_b on E_b, E_b^3, Θ_3(1/b) and on E_b^2 · DE_b = (1/3) D(E_b^3) in every base b ≥ 2, whereas D^j(E_b^2) and D^j(Θ_3^2) cross the transfer wall at j = 1. For every weight k ≥ 2 integer-coefficient CM newform (in particular η^4, η^6, η^8), b-coprime factors survive radix displacement and force W_U(N) ≍ N √(log N) in every radix, blocking all sparse/width transfer methods; however W(N) = o(N) is not necessary for K_b (F = Σ (2^{w(m)} − 1) 2^{−m} ∈ K_2 has W(N) ∼ N log_2 N)."
+scope = "Lean (DerivativeTransfer.lean) verifies the general derivative transfer (derivCoeff_tendsto_one), K_b-membership for every iterate D^j of the pentagonal series, Jacobi's triangular series, Θ_3(1/b), and the cancellation series (1/3) D(E_b^3) (series definitions, with Euler/Jacobi product identities external), Lemma W.1 (coprimePart_le_natAbs_radixUnit_mul), and the carry-window shift register (carryWindow_succ_modEq). The partition bounds, sharp windows, pentagonal non-separation (Theorem D3.6), reciprocal obstruction (Theorem D3.7), sharp polynomial-mass rate (Theorem D4.1), CM width-density wall (Theorem D4.4, Lemma W.2, Corollary D4.5), and necessity counterexample (Proposition D4.6) are written proofs verified by 125,884 exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review). Normality and K_b-membership remain open for P_b, E_b^r (r ≥ 4), Θ_3^3, Θ_3^4, E_2, E_4, E_6, Δ."
+lean = [
+  "NormalityChecker.DerivativeTransfer.derivCoeff_tendsto_one",
+  "NormalityChecker.DerivativeTransfer.deriv_eulerPentagonal_discrepancy_tendsto_one",
+  "NormalityChecker.DerivativeTransfer.deriv_eulerCube_discrepancy_tendsto_one",
+  "NormalityChecker.DerivativeTransfer.deriv_thetaThree_discrepancy_tendsto_one",
+  "NormalityChecker.DerivativeTransfer.three_mul_eulerSqDerivCoeff",
+  "NormalityChecker.DerivativeTransfer.eulerSqDeriv_discrepancy_tendsto_one",
+  "NormalityChecker.DerivativeTransfer.coprimePart_le_natAbs_radixUnit_mul",
+  "NormalityChecker.DerivativeTransfer.carryWindow_succ_modEq"
+]
+proof = ["notes/phase21/partitions-and-higher-modular.md"]
+inputs = ["Apostol Theorem 14.5 & Dedekind η-transformation; Hardy–Ramanujan partition asymptotic; Weyl (1916) metric equidistribution; Hecke (1920) angle equidistribution; Serre (1981, 1985) lacunary modular forms & Chebotarev density; Martin (1996) multiplicative η-quotients; Deligne's bound."]
+computation = ["scripts/phase21_partitions_modular.py"]
+related = ["GF-03", "GF-04", "GF-06", "GF-08", "GF-13"]
+
+[[result]]
+id = "GF-18"
+title = "Classical transfer barriers, radix-power kernel invariance, and complementary-coverage obstructions"
+topic = "counterexamples"
+status = "lean+paper"
+principal = false
+statement = "For every radix b ≥ 2 and k ≥ 1, the discrepancy deficit satisfies the sharp inequality 1 − D_N(x; b^k) ≤ k (1 − D_{kN}(x; b)), which is strict for x = 1/(b^k − 1) (k ≥ 2), while the numerical translation kernel is invariant under radix powers: K_b = K_{b^k}. On divisor sums of periodic weights, complementary congruence coverage forces support density at least 1/(2k) whenever a combination has nonzero weight on a full complementary cover, structurally blocking additive K_b-cancellation routes to the Erdős–Borwein constant E, E_odd, and odd-order character sums. Combining these with Phase 20–21 results maps exact transfer barriers for E, ln 2, π, e, √2, φ and L(1, χ): no new distributional property is established for any of these classical constants."
+scope = "Lean (ClassicalBarriers.lean) verifies the complementary-cover support lower bound (complementary_cover, supportCount_complementary_sum_ge), the sharp radix-power deficit inequality and K_b = K_{b^k} invariance (one_sub_radixDiscrepancy_pow_le, tendsto_radixDiscrepancy_pow_one), and the anti-multiplicative / multi-stratum divisor identities (sum_pow_eq_zero_of_eq_neg_one, dirichletOneConv_eq_zero_of_antiMul, dirichletOneConv_strata). The strictness witness, exact D_{2m}(1/(b+1); b) evaluation, and classical barrier synthesis are written proofs verified by exact checks and an independent cross-provider review (all findings repaired and post-repair accepted; not human peer review)."
+lean = [
+  "NormalityChecker.ClassicalBarriers.complementary_cover",
+  "NormalityChecker.ClassicalBarriers.supportCount_complementary_sum_ge",
+  "NormalityChecker.ClassicalBarriers.one_sub_radixDiscrepancy_pow_le",
+  "NormalityChecker.ClassicalBarriers.tendsto_radixDiscrepancy_pow_one",
+  "NormalityChecker.ClassicalBarriers.dirichletOneConv_eq_zero_of_antiMul",
+  "NormalityChecker.ClassicalBarriers.dirichletOneConv_strata"
+]
+proof = ["notes/phase21/classical-barriers.md"]
+inputs = ["Existing classical constant bounds (CC-42 through CC-50, GF-08, GF-09) summarized for the barrier synthesis; the Lean theorems are self-contained."]
+computation = ["scripts/phase21_characters_classical.py"]
+related = ["CC-48", "CC-49", "CC-50", "GF-07", "GF-09", "GF-13"]

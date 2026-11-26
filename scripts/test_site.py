@@ -1,5 +1,6 @@
 """Unit tests for the research landing site generator (scripts/site.py)."""
 
+import hashlib
 import importlib.util
 import json
 import pathlib
@@ -7,6 +8,7 @@ import re
 import sys
 import tempfile
 import unittest
+import xml.dom.minidom
 from html.parser import HTMLParser
 
 import portal
@@ -147,7 +149,8 @@ class PageTests(unittest.TestCase):
             for url in c.links:
                 if url.startswith("http"):
                     self.assertRegex(url, r"^https://(github\.com/eldernos|raw\.githubusercontent\.com/eldernos|"
-                                          r"zbmath\.org/classification|www\.alphaxiv\.org/@christopher-anderson|example\.org)")
+                                          r"zbmath\.org/classification|www\.alphaxiv\.org/(@christopher-anderson|abs/2611\.)|"
+                                          r"example\.org)")
             self.assertNotIn("fonts.googleapis", text)
         self.assertNotIn("@import", research_site.STYLE)
         self.assertNotIn("url(", research_site.STYLE)
@@ -203,12 +206,108 @@ class PageTests(unittest.TestCase):
     def test_build_site_writes_expected_files(self):
         out = self.root / "out"
         written = research_site.build_site(self.papers, out, BASE)
-        for name in ("index.html", "style.css", ".nojekyll", "404.html", "papers/06-x/index.html"):
+        for name in ("index.html", "style.css", ".nojekyll", "404.html", "papers/06-x/index.html",
+                     "sitemap.xml", "robots.txt"):
             self.assertIn(name, written)
         index = (out / "index.html").read_text(encoding="utf-8")
         self.assertIn("Independent Researcher", index)
         self.assertIn("not\nindependent human peer review".replace("\n", " "), " ".join(index.split()))
         self.assertNotRegex(index, r"(?i)google scholar")
+
+
+PDF_BYTES = b"%PDF-1.7\n% fixture\n"
+RECORD = "https://www.alphaxiv.org/abs/2611.disjunctive-nonnormal"
+
+
+class DeployTests(unittest.TestCase):
+    """Same-origin PDF, UTC dates, alphaXiv sameAs, sitemap.xml and robots.txt (module ROOT redirected to a fixture)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self.tmp.name)
+        d = self.root / "papers/06-x"
+        d.mkdir(parents=True)
+        (d / "paper.pdf").write_bytes(PDF_BYTES)
+        self.digest = hashlib.sha256(PDF_BYTES).hexdigest()
+        (self.root / "papers/SHA256SUMS").write_text(f"{self.digest}  papers/06-x/paper.pdf\n", encoding="utf-8")
+        (self.root / "papers/alphaxiv-records.toml").write_text(
+            f'[[record]]\nid = "06-x"\nalphaxiv = "{RECORD}"\nversions = []\n', encoding="utf-8")
+        (d / "metadata.toml").write_text(
+            'id = "06-x"\ntitle = "Disjunctive but Nonnormal"\nauthors = ["Christopher Anderson"]\n'
+            'affiliation = "Independent Researcher"\nshort_title = "Lambert"\nversion = "1.0"\n'
+            'status = "preprint draft"\nlicense = "CC-BY-4.0"\nabstract = "We show it."\n'
+            'keywords = ["normal numbers"]\nmsc_primary = "11K16"\nmsc_secondary = []\nsupersedes = ""\n'
+            f'lean_commit = "{portal.WAVE2_LEAN_COMMIT}"\nregistry_ids = ["CC-48"]\n', encoding="utf-8")
+        self.papers = portal.enrich_papers([wave2()], root=self.root)
+        self.saved_root = research_site.ROOT
+        research_site.ROOT = self.root
+
+    def tearDown(self):
+        research_site.ROOT = self.saved_root
+        self.tmp.cleanup()
+
+    def page(self):
+        p = self.papers[0]
+        return research_site.manuscript_page(p, {p["dir"]: p}, BASE, strict=False)
+
+    def test_citation_pdf_url_is_same_directory_copy(self):
+        text = self.page()
+        meta = {a["name"]: a["content"] for t, a in parse(text).tags if t == "meta" and "name" in a}
+        self.assertEqual(meta["citation_pdf_url"], BASE + "papers/06-x/paper.pdf")
+        self.assertEqual(meta["citation_abstract_html_url"], BASE + "papers/06-x/")
+        self.assertEqual(meta["citation_pdf_url"].rsplit("/", 1)[0], meta["citation_abstract_html_url"].rstrip("/"))
+        self.assertIn(self.digest, text)
+        self.assertIn(f"{research_site.RAW}/{portal.CANDIDATE_TAG}/papers/06-x/paper.pdf", text)  # immutable link kept
+
+    def test_jsonld_same_as_licence_and_review_caveat(self):
+        raw = re.search(r'<script type="application/ld\+json">\n(.*?)\n</script>', self.page(), re.S).group(1)
+        data = json.loads(raw)
+        self.assertEqual(data["sameAs"], [RECORD])
+        self.assertEqual(data["license"], "https://creativecommons.org/licenses/by/4.0/")
+        self.assertEqual(data["creativeWorkStatus"], "Preprint draft, not peer reviewed")
+        self.assertEqual([e["contentUrl"] for e in data["encoding"]][0], BASE + "papers/06-x/paper.pdf")
+        self.assertEqual(len(data["encoding"]), 2)
+
+    def test_pdf_missing_falls_back_to_release_tag(self):
+        (self.root / "papers/06-x/paper.pdf").unlink()
+        meta = {a["name"]: a["content"] for t, a in parse(self.page()).tags if t == "meta" and "name" in a}
+        self.assertEqual(meta["citation_pdf_url"], f"{research_site.RAW}/{portal.CANDIDATE_TAG}/papers/06-x/paper.pdf")
+
+    def test_commit_dates_are_utc(self):
+        original = research_site.git
+        try:
+            research_site.git = lambda *a: "2026-11-25T19:08:04-06:00"
+            self.assertEqual(research_site.commit_date_utc("--", "x"), "2026-11-26")
+            research_site.git = lambda *a: "2026-11-26T01:08:04Z"
+            self.assertEqual(research_site.commit_date_utc("--", "x"), "2026-11-26")
+            research_site.git = lambda *a: ""
+            self.assertEqual(research_site.commit_date_utc("--", "x"), "")
+        finally:
+            research_site.git = original
+
+    def test_build_copies_pdf_and_writes_sitemap_and_robots(self):
+        out = self.root / "out"
+        written = research_site.build_site(self.papers, out, BASE, strict=True)
+        self.assertIn("papers/06-x/paper.pdf", written)
+        self.assertEqual((out / "papers/06-x/paper.pdf").read_bytes(), PDF_BYTES)
+        dom = xml.dom.minidom.parse(str(out / "sitemap.xml"))
+        locs = [n.firstChild.data for n in dom.getElementsByTagName("loc")]
+        self.assertEqual(locs, [BASE, BASE + "papers/06-x/", BASE + "papers/06-x/paper.pdf"])
+        self.assertEqual(dom.documentElement.namespaceURI, "http://www.sitemaps.org/schemas/sitemap/0.9")
+        robots = (out / "robots.txt").read_text(encoding="utf-8")
+        self.assertIn("User-agent: *", robots)
+        self.assertIn(f"Sitemap: {BASE}sitemap.xml", robots)
+        self.assertIn('name="robots" content="noindex"', (out / "404.html").read_text(encoding="utf-8"))
+        index = (out / "index.html").read_text(encoding="utf-8")
+        self.assertIn(RECORD, index)
+        self.assertNotRegex(index + self.page(), r"(?i)google scholar|\bindexed\b")
+
+    def test_strict_build_rejects_pdf_that_differs_from_sha256sums(self):
+        (self.root / "papers/06-x/paper.pdf").write_bytes(PDF_BYTES + b"x")
+        with self.assertRaises(SystemExit) as ctx:
+            research_site.build_site(self.papers, self.root / "out", BASE, strict=True)
+        self.assertIn("SHA256SUMS", str(ctx.exception))
+        research_site.build_site(self.papers, self.root / "out2", BASE, strict=False)  # non-strict still builds
 
 
 class BibliographyTests(unittest.TestCase):

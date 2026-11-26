@@ -2,33 +2,41 @@ module
 
 public import NormalityChecker.CoefficientTransfer
 
-/-! # Euler's pentagonal series and Jacobi's cube series (Tracks A1 and A2)
+/-! # The pentagonal series, Jacobi's triangular series and a convolution mass bound (Tracks A1 and A2)
 
-Kernel-checked discrepancy-maximality and universal discrepancy-preservation theorems for:
+**Convention.** Both series are defined directly by their coefficients. No identity between a series and
+an infinite product is proved in this file.
 
-1. **Euler's pentagonal series (`eulerPentagonalSum b`):**
-   `E_b = 1 + ∑_{k ≥ 1} (-1)^k (b^(-k(3k-1)/2) + b^(-k(3k+1)/2))` (equal to
-   `∏_{k ≥ 1} (1 - b^(-k))` by Euler's pentagonal number theorem).
-   - `pentagonal_supportCount_le`: `supportCount pentCoeff M ≤ 2 * Nat.sqrt (2 * M) + 2`.
-   - `pentagonal_absMass_le`: `absMass pentCoeff M ≤ M`.
-   - `eulerPentagonal_discrepancy_tendsto_one`: `D_N(E_b; b) → 1` for every radix `b ≥ 2`.
-   - `eulerPentagonal_preserves_discrepancy`: `D_N(x + E_b; b) - D_N(x; b) → 0` for every
+* `eulerPentagonalSum b` is the pentagonal series
+  `1 + ∑_{k ≥ 1} (-1)^k (b^(-k(3k-1)/2) + b^(-k(3k+1)/2))`. Euler's pentagonal number theorem identifies it
+  with `E_b = ∏_{k ≥ 1} (1 - b^(-k))`; that classical identity is not formalized, so the theorems below are
+  statements about the series and transfer to the product through Euler's identity.
+* `eulerCubeSum b` is Jacobi's triangular series `∑_{k ≥ 0} (-1)^k (2k + 1) b^(-k(k+1)/2)`. Jacobi's identity
+  `∏ (1 - q^m)^3 = ∑ (-1)^k (2k + 1) q^(k(k+1)/2)` identifies it with `E_b³`; it is not formalized either.
+
+The proofs use only the support of the coefficients and bounds on their absolute values
+(`|pentCoeff m| ≤ 1`, `|jacobiCubeCoeff (triNum k)| = 2k + 1`); the signs are never used. Nothing here concerns
+`E_b²`, digits, word frequencies, disjunctivity or lower bounds on the discrepancy.
+
+1. **Pentagonal series.**
+   - `pentagonal_supportCount_le`: `supportCount pentCoeff M ≤ 2 * (Nat.sqrt (2 * M) + 1)`.
+   - `pentCoeff_absMass_le`: `absMass pentCoeff M ≤ M`.
+   - `eulerPentagonal_discrepancy_tendsto_one`: `D_N(eulerPentagonalSum b; b) → 1` for every radix `b ≥ 2`.
+   - `eulerPentagonal_preserves_discrepancy`: `D_N(x + eulerPentagonalSum b; b) - D_N(x; b) → 0` for every
      radix `b ≥ 2` and every real `x`.
-   - `eulerPentagonal_finite_gap_upper`: explicit finite upper bound on `1 - D_N(E_b; b)` and
-     `|D_N(x + E_b; b) - D_N(x; b)|` for every `N ≥ 1`, `L`, `ε > 0`.
+   - `eulerPentagonal_finite_gap_upper`: an explicit finite upper bound, with a non-sharp constant, on
+     `1 - D_N(eulerPentagonalSum b; b)` for every `N ≥ 1`, `L` and `ε > 0`.
 
-2. **Jacobi's cube series (`eulerCubeSum b`):**
-   `E_b³ = ∑_{k ≥ 0} (-1)^k (2k + 1) b^(-k(k+1)/2)` (by Jacobi's identity).
-   - `jacobiCube_supportCount_le`: `supportCount jacobiCubeCoeff M ≤ Nat.sqrt (2 * M) + 1`.
+2. **Jacobi's triangular series.**
+   - `jacobiCube_supportCount_le`: `supportCount jacobiCubeCoeff M ≤ Nat.sqrt (2 * M)`.
    - `jacobiCube_absMass_le`: `absMass jacobiCubeCoeff M ≤ 4 * M`.
-   - `eulerCube_discrepancy_tendsto_one`: `D_N(E_b³; b) → 1` for every radix `b ≥ 2`.
-   - `eulerCube_preserves_discrepancy`: `D_N(x + E_b³; b) - D_N(x; b) → 0` for every
-     radix `b ≥ 2` and every real `x`.
+   - `eulerCube_discrepancy_tendsto_one` and `eulerCube_preserves_discrepancy`: the same two conclusions
+     for `eulerCubeSum b`.
 
-3. **Square-root support Cauchy convolution mass bound (`cauchy_absMass_le`):**
-   If two bounded sequences have support counts `O(√M)`, their Cauchy convolution has linear
-   aggregate absolute mass `absMass ≤ C · M`, feeding directly into `CoefficientTransfer`
-   for `E_b²` and products of unary quadratic series (Tracks A2 and B5).
+3. **Convolution mass bound (`cauchyConv_absMass_le`).** For integer sequences `a`, `c`,
+   `absMass (cauchyConv a c) M ≤ (|a 0| + absMass a M) * (|c 0| + absMass c M)`. If both factors have
+   `O(√M)` mass the convolution has linear mass, which is the input to `CoefficientTransfer` for `E_b²` and for
+   products of unary quadratic series (Tracks A2 and B5). No theorem in this file applies it to a specific series.
 -/
 
 @[expose] public section
@@ -120,8 +128,49 @@ noncomputable def pentCoeff (m : ℕ) : ℤ :=
     else if h : ∃ k ≥ 1, pentMinus k = m ∨ pentPlus k = m then (-1 : ℤ) ^ h.choose
     else 0
 
-/-- The pentagonal generating series `E_b = 1 + ∑_{k ≥ 1} (-1)^k (b^(-k(3k-1)/2) + b^(-k(3k+1)/2))`. -/
+/-- The pentagonal series `1 + ∑_{k ≥ 1} (-1)^k (b^(-k(3k-1)/2) + b^(-k(3k+1)/2))`; equal to
+`E_b = ∏ (1 - b^(-k))` by Euler's pentagonal number theorem, which is not formalized here. -/
 noncomputable def eulerPentagonalSum (b : ℕ) : ℝ := coeffSeries b pentCoeff
+
+theorem pentCoeff_zero : pentCoeff 0 = 1 := by
+  classical
+  simp [pentCoeff]
+
+theorem pentCoeff_pentMinus {k : ℕ} (hk : 1 ≤ k) : pentCoeff (pentMinus k) = (-1 : ℤ) ^ k := by
+  classical
+  have hpos : 1 ≤ pentMinus k := by
+    have h2 := two_mul_pentMinus k
+    have : 2 ≤ k * (3 * k - 1) := by
+      rcases k with _ | k'
+      · omega
+      · have : 3 * (k' + 1) - 1 = 3 * k' + 2 := by omega
+        rw [this]; nlinarith
+    omega
+  have hne : pentMinus k ≠ 0 := by omega
+  have hex : ∃ j ≥ 1, pentMinus j = pentMinus k ∨ pentPlus j = pentMinus k :=
+    ⟨k, hk, Or.inl rfl⟩
+  have hch : hex.choose = k := by
+    rcases hex.choose_spec with ⟨hj1, hjm | hjp⟩
+    · exact pentMinus_strictMono.injective hjm
+    · exact absurd hjp.symm (pentMinus_ne_pentPlus hk hj1)
+  unfold pentCoeff
+  simp only [hne, ↓reduceIte, hex, ↓reduceDIte, hch]
+
+theorem pentCoeff_pentPlus {k : ℕ} (hk : 1 ≤ k) : pentCoeff (pentPlus k) = (-1 : ℤ) ^ k := by
+  classical
+  have hpos : 1 ≤ pentPlus k := by
+    have h2 := two_mul_pentPlus k
+    have : 2 ≤ k * (3 * k + 1) := by nlinarith
+    omega
+  have hne : pentPlus k ≠ 0 := by omega
+  have hex : ∃ j ≥ 1, pentMinus j = pentPlus k ∨ pentPlus j = pentPlus k :=
+    ⟨k, hk, Or.inr rfl⟩
+  have hch : hex.choose = k := by
+    rcases hex.choose_spec with ⟨hj1, hjm | hjp⟩
+    · exact absurd hjm (pentMinus_ne_pentPlus hj1 hk)
+    · exact pentPlus_strictMono.injective hjp
+  unfold pentCoeff
+  simp only [hne, ↓reduceIte, hex, ↓reduceDIte, hch]
 
 theorem abs_pentCoeff_le_one (m : ℕ) : |(pentCoeff m : ℝ)| ≤ 1 := by
   classical
@@ -246,8 +295,9 @@ theorem eulerPentagonal_finite_gap_upper {b : ℕ} (hb : 2 ≤ b) {N : ℕ} (hN 
   simp only [one_mul] at htr
   linarith
 
-/-- **Maximal discrepancy of Euler's infinite product (Track A1).**
-For every integer radix `b ≥ 2`, `D_N(E_b; b) → 1`. -/
+/-- **Maximal discrepancy of the pentagonal series (Track A1).**
+For every integer radix `b ≥ 2`, `D_N(eulerPentagonalSum b; b) → 1`; by Euler's pentagonal number
+theorem this is the statement for `∏ (1 - b^(-k))`. -/
 theorem eulerPentagonal_discrepancy_tendsto_one {b : ℕ} (hb : 2 ≤ b) :
     Tendsto (fun N : ℕ => radixDiscrepancy b (eulerPentagonalSum b) N) atTop (𝓝 1) := by
   refine linear_mass_sparse_tendsto_one hb (C := 1) zero_le_one
@@ -260,8 +310,9 @@ theorem eulerPentagonal_discrepancy_tendsto_one {b : ℕ} (hb : 2 ≤ b) :
   rw [← mul_div_assoc]
   exact div_le_div_of_nonneg_right h1r (Nat.cast_nonneg N)
 
-/-- **Universal discrepancy preservation by Euler's infinite product (Track A1).**
-For every integer radix `b ≥ 2` and every real `x`, `D_N(x + E_b; b) - D_N(x; b) → 0`. -/
+/-- **Universal discrepancy preservation by the pentagonal series (Track A1).**
+For every integer radix `b ≥ 2` and every real `x`,
+`D_N(x + eulerPentagonalSum b; b) - D_N(x; b) → 0`. -/
 theorem eulerPentagonal_preserves_discrepancy {b : ℕ} (hb : 2 ≤ b) (x : ℝ) :
     Tendsto (fun N : ℕ => radixDiscrepancy b (x + eulerPentagonalSum b) N - radixDiscrepancy b x N)
       atTop (𝓝 0) := by
@@ -275,7 +326,7 @@ theorem eulerPentagonal_preserves_discrepancy {b : ℕ} (hb : 2 ≤ b) (x : ℝ)
   rw [← mul_div_assoc]
   exact div_le_div_of_nonneg_right h1r (Nat.cast_nonneg N)
 
-/-! ### Part 2: Jacobi's cube identity `E_b³ = ∑_{k ≥ 0} (-1)^k (2k+1) b^(-k(k+1)/2)` -/
+/-! ### Part 2: Jacobi's triangular series `∑_{k ≥ 0} (-1)^k (2k+1) b^(-k(k+1)/2)`, equal to `E_b³` by Jacobi's identity -/
 
 /-- Triangular number `k(k + 1)/2`. -/
 def triNum (k : ℕ) : ℕ := k * (k + 1) / 2
@@ -299,7 +350,8 @@ noncomputable def jacobiCubeCoeff (m : ℕ) : ℤ :=
   by classical
   exact if h : ∃ k : ℕ, triNum k = m then (-1 : ℤ) ^ h.choose * (2 * (h.choose : ℤ) + 1) else 0
 
-/-- Jacobi's cube series `E_b³ = ∑_{k ≥ 0} (-1)^k (2k + 1) b^(-k(k+1)/2)`. -/
+/-- Jacobi's triangular series `∑_{k ≥ 0} (-1)^k (2k + 1) b^(-k(k+1)/2)`; equal to `E_b³` by
+Jacobi's identity, which is not formalized here. -/
 noncomputable def eulerCubeSum (b : ℕ) : ℝ := coeffSeries b jacobiCubeCoeff
 
 theorem triNum_index_bound {k M : ℕ} (hm : triNum k ≤ M) : k ≤ Nat.sqrt (2 * M) := by
@@ -407,8 +459,8 @@ theorem jacobiCube_absMass_le (M : ℕ) : absMass jacobiCubeCoeff M ≤ 4 * (M :
         rw [Nat.cast_sub hpos] at hcast
         simpa using hcast
 
-/-- **Maximal discrepancy of Jacobi's cube series `E_b³` (Track A2).**
-For every integer radix `b ≥ 2`, `D_N(E_b³; b) → 1`. -/
+/-- **Maximal discrepancy of Jacobi's triangular series (Track A2).**
+For every integer radix `b ≥ 2`, `D_N(eulerCubeSum b; b) → 1`. -/
 theorem eulerCube_discrepancy_tendsto_one {b : ℕ} (hb : 2 ≤ b) :
     Tendsto (fun N : ℕ => radixDiscrepancy b (eulerCubeSum b) N) atTop (𝓝 1) := by
   refine linear_mass_sparse_tendsto_one hb (C := 4) (by norm_num) jacobiCube_absMass_le ?_
@@ -418,8 +470,9 @@ theorem eulerCube_discrepancy_tendsto_one {b : ℕ} (hb : 2 ≤ b) :
     exact_mod_cast (this.trans (Nat.le_succ _))
   exact div_le_div_of_nonneg_right h1 (Nat.cast_nonneg N)
 
-/-- **Universal discrepancy preservation by Jacobi's cube series `E_b³` (Track A2).**
-For every integer radix `b ≥ 2` and every real `x`, `D_N(x + E_b³; b) - D_N(x; b) → 0`. -/
+/-- **Universal discrepancy preservation by Jacobi's triangular series (Track A2).**
+For every integer radix `b ≥ 2` and every real `x`,
+`D_N(x + eulerCubeSum b; b) - D_N(x; b) → 0`. -/
 theorem eulerCube_preserves_discrepancy {b : ℕ} (hb : 2 ≤ b) (x : ℝ) :
     Tendsto (fun N : ℕ => radixDiscrepancy b (x + eulerCubeSum b) N - radixDiscrepancy b x N)
       atTop (𝓝 0) := by

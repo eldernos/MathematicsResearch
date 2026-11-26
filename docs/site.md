@@ -21,6 +21,7 @@ python3 scripts/site.py build            # writes site/ (git-ignored)
 python3 scripts/site.py build --strict   # also fails if a manuscript lacks metadata.toml or paper.pdf
 python3 scripts/site.py bib              # regenerates papers/BIBLIOGRAPHY.bib
 python3 -B scripts/test_site.py          # unit tests
+python3 -B scripts/check_live.py         # read-only check of the deployed pages, PDFs and alphaXiv records
 ```
 
 Open `site/index.html` in a browser. The pages use no JavaScript, external fonts, analytics or trackers, adapt to narrow screens and to a dark colour scheme, and have a skip link and landmark regions.
@@ -32,9 +33,10 @@ Open `site/index.html` in a browser. The pages use no JavaScript, external fonts
 | Manuscript list, versions, status, supersession | [docs/registry/papers.toml](registry/papers.toml) |
 | Title, abstract, keywords, MSC2020 codes, registry identifiers | `metadata.toml` in each manuscript directory, validated by `python3 scripts/portal.py check` |
 | Paper III (version 1.1, retained) | `papers.toml`, because its archived directory is never edited |
-| PDF links | `https://raw.githubusercontent.com/eldernos/MathematicsResearch/<tag>/<dir>/paper.pdf`, with the file on the `main` branch as a fallback until the release tag exists |
+| PDF | a byte-identical copy of `<dir>/paper.pdf` served beside each page (`papers/<slug>/paper.pdf`; in `--strict` mode its SHA-256 must equal the entry in `papers/SHA256SUMS`), the immutable file at the release tag `https://raw.githubusercontent.com/eldernos/MathematicsResearch/<tag>/<dir>/paper.pdf`, the alphaXiv-hosted PDF where a record exists, and the file on the `main` branch as a fallback |
 | Version history | the release tags `manuscripts-v1.0.0`, `manuscripts-v1.1.0` and `manuscripts-v2.0.0`; earlier PDFs stay unchanged at their tags |
-| Dates | `date` in `metadata.toml` if present, else the last commit that touched the manuscript directory |
+| Dates | `date` in `metadata.toml` if present, else the **UTC** date of the last commit that touched the manuscript directory (the release `manuscripts-v2.0.0` is 26 November 2026 in UTC and on alphaXiv) |
+| alphaXiv link, `sameAs` | `papers/alphaxiv-records.toml`, keyed by the manuscript's permanent id |
 
 ## Author information
 
@@ -42,6 +44,6 @@ The v2 manuscripts and their pages show "Christopher Anderson · Independent Res
 
 ## Indexing
 
-Each manuscript page carries Highwire Press `citation_*` meta tags (`citation_title`, `citation_author`, `citation_publication_date`, `citation_pdf_url`, `citation_keywords`) and schema.org `ScholarlyArticle` JSON-LD. These describe the page in the formats that scholarly indexers read. **Nothing here submits the site anywhere, and nothing guarantees that Google Scholar, any other index or any search engine will list it.** Services apply their own inclusion rules, and a page that is only a landing page for a PDF hosted on GitHub may not qualify. Do not describe the manuscripts as indexed unless a search service actually lists them.
+Each manuscript page carries Highwire Press `citation_*` meta tags (`citation_title`, `citation_author`, `citation_publication_date`, `citation_pdf_url`, `citation_abstract_html_url`, `citation_keywords`), a canonical link and schema.org `ScholarlyArticle` JSON-LD (with `sameAs` for the alphaXiv record and the licence where recorded, and `creativeWorkStatus` "Preprint draft, not peer reviewed"). `citation_pdf_url` points to the copy of the PDF served in the same directory as the abstract page, because Google Scholar's inclusion guidelines require that file to be "in the same subdirectory as the HTML abstract". `sitemap.xml` lists the landing page, the manuscript pages and the PDFs. `robots.txt` is written beside it but is only authoritative at a host root; on this project site (`/MathematicsResearch/`) crawlers do not read it, so the sitemap is not advertised through it to them. **Nothing here submits the site anywhere, and nothing guarantees that Google Scholar, any other index or any search engine will list it.** Services apply their own inclusion rules, and a page that is only a landing page for a PDF may not qualify. Do not describe the manuscripts as indexed unless a search service actually lists them.
 
 All pages state that the manuscripts are preprint drafts, that cross-model review is not independent human peer review, and that the Lean kernel checks only the declarations listed in each verification map.

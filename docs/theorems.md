@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1387 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1471 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 374 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 458 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -130,6 +130,24 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Weyl.trapLo_eq_zero_outside`](../NormalityChecker/Analysis/Weyl.lean#L465) |  |
 | [`Weyl.equidistributed_of_weyl`](../NormalityChecker/Analysis/Weyl.lean#L487) | **Weyl's criterion**, the direction used by the normality wiring: vanishing Fourier means at every nonzero frequency give equidistribution. |
 
+### AntisymmetricLambert
+
+[`NormalityChecker/AntisymmetricLambert.lean`](../NormalityChecker/AntisymmetricLambert.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AntisymmetricLambert.isOddPeriodic_antiIndicator`](../NormalityChecker/AntisymmetricLambert.lean#L67) |  |
+| [`AntisymmetricLambert.dirichletOneConv_sub`](../NormalityChecker/AntisymmetricLambert.lean#L94) |  |
+| [`AntisymmetricLambert.dirichletOneConv_eq_zero_of_odd_padicVal`](../NormalityChecker/AntisymmetricLambert.lean#L101) [GF-13](results.md#gf-13) | **Exact involution cancellation for odd periodic Dirichlet convolutions (Track B3).** If `f` is odd `M`-periodic, `p` is prime with `M ∣ p + 1`, `n ≠ 0`, and… |
+| [`AntisymmetricLambert.sum_card_divisors_eq`](../NormalityChecker/AntisymmetricLambert.lean#L204) | Exact divisor-counting identity `∑_{n=1}^X τ(n) = ∑_{d=1}^X ⌊X / d⌋`. |
+| [`AntisymmetricLambert.harmonic_sum_le_one_add_log`](../NormalityChecker/AntisymmetricLambert.lean#L251) | Elementary harmonic bound: `∑_{d=1}^X 1/d ≤ 1 + log X` for `X ≥ 1`. |
+| [`AntisymmetricLambert.absMass_dirichletOneConv_le`](../NormalityChecker/AntisymmetricLambert.lean#L271) [GF-13](results.md#gf-13) | **Logarithmic aggregate mass bound for bounded Dirichlet convolutions (Tracks B3–B4).** If `\|f(m)\| ≤ B` for all `m`, then `absMass (dirichletOneConv f) X ≤ 2… |
+| [`AntisymmetricLambert.residueLambert_eq_coeffSeries`](../NormalityChecker/AntisymmetricLambert.lean#L317) | Exact Lambert-to-Dirichlet expansion of a residue-class Lambert sum: `∑' k, 1 / (b^(k*M + r) - 1) = ∑' n, (#{d ∣ n : d % M = r}) / b^n`. |
+| [`AntisymmetricLambert.residueLambert_sub_eq_coeffSeries`](../NormalityChecker/AntisymmetricLambert.lean#L458) | **Exact antisymmetric residue-class Lambert identity (Track B3).** For every radix `b ≥ 2`, modulus `M ≥ 2`, and `1 ≤ r < M`, `A_{r, M}(b) - A_{M - r, M}(b) =… |
+| [`AntisymmetricLambert.qDigamma_reflection_eq_dirichletSeries`](../NormalityChecker/AntisymmetricLambert.lean#L492) | **Exact `q`-digamma reflection to Dirichlet series identity (Track B4).** At `q = b^(-M)`, `(ψ_q(r/M) - ψ_q(1 - r/M)) / log q = coeffSeries b… |
+| [`AntisymmetricLambert.bounded_dirichletOneConv_tendsto_one_of_sparse`](../NormalityChecker/AntisymmetricLambert.lean#L510) | **Conditional-on-sparsity `K_b` transfer for bounded Dirichlet convolutions (Track B3).** If `\|f m\| ≤ B` for all `m` and `supportCount (dirichletOneConv f) N… |
+| [`AntisymmetricLambert.qDigamma_reflection_tendsto_one_of_sparse`](../NormalityChecker/AntisymmetricLambert.lean#L525) [GF-13](results.md#gf-13) | **`q`-digamma reflection `K_b` transfer (Track B4).** Given the analytic support bound `S(N) * log(log(N + 3)) / N → 0` for `dirichletOneConv (antiIndicator M… |
+
 ### Basic
 
 [`NormalityChecker/Basic.lean`](../NormalityChecker/Basic.lean)
@@ -185,6 +203,22 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`CircleDiscrepancy.disc_le`](../NormalityChecker/CircleDiscrepancy.lean#L27) |  |
 | [`CircleDiscrepancy.disc_mixture_bound`](../NormalityChecker/CircleDiscrepancy.lean#L35) | A uniform error for interval counts transfers to the discrepancy of a mixture of Lebesgue measure and a finite sample, even at atoms. |
 | [`CircleDiscrepancy.disc_sub_tendsto`](../NormalityChecker/CircleDiscrepancy.lean#L137) | Vanishing signed differences of lifts leave the full prefix discrepancy unchanged asymptotically. |
+
+### ClassicalBarriers
+
+[`NormalityChecker/ClassicalBarriers.lean`](../NormalityChecker/ClassicalBarriers.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ClassicalBarriers.complementary_cover`](../NormalityChecker/ClassicalBarriers.lean#L58) [GF-18](results.md#gf-18) | **Complementary-support barrier (Track E1, Theorem 1.2).** For every `k`, `r`, and `n ≥ 1`, either `τ_{r, 2^k}(n) ≠ 0` or `a_{k, r}(n) ≠ 0`. |
+| [`ClassicalBarriers.supportCount_complementary_sum_ge`](../NormalityChecker/ClassicalBarriers.lean#L72) [GF-18](results.md#gf-18) | **Complementary support-count lower bound (Track E1, Theorem 1.2 consequence 2).** For every `k`, `r`, and `N`, `supportCount (tauModTwoPow k r) N +… |
+| [`ClassicalBarriers.one_sub_radixDiscrepancy_le_of_small`](../NormalityChecker/ClassicalBarriers.lean#L92) | **Small-number concentration core (Track E1, Lemma 1.1).** If `b ≥ 1`, `0 ≤ x`, `N ≥ 1`, and `b^(N - 1) * x < 1`, then `1 - D_N(x; b) ≤ b^(N - 1) * x`. |
+| [`ClassicalBarriers.one_sub_radixDiscrepancy_pow_le`](../NormalityChecker/ClassicalBarriers.lean#L141) [GF-18](results.md#gf-18) | **Radix-power discrepancy inequality (Track E2, Proposition 2.2).** For all `b ≥ 1`, `k ≥ 1`, `N ≥ 1`, and `x : ℝ`, `1 - D_N(x; b^k) ≤ k * (1 - D_{kN}(x; b))`. |
+| [`ClassicalBarriers.tendsto_radixDiscrepancy_pow_one`](../NormalityChecker/ClassicalBarriers.lean#L256) [GF-18](results.md#gf-18) | **Kernel inclusion `K_b ⊆ K_{b^k}` (Track E2, Proposition 2.2 corollary).** |
+| [`ClassicalBarriers.sum_pow_eq_zero_of_eq_neg_one`](../NormalityChecker/ClassicalBarriers.lean#L279) | Local vanishing at `ζ = -1` for odd exponent `e` (Track B1, Lemma 1.1). |
+| [`ClassicalBarriers.supportCount_combo_le`](../NormalityChecker/ClassicalBarriers.lean#L293) | **Support-union bound for finite linear combinations (Track B1, Theorem 1.5(1)).** |
+| [`ClassicalBarriers.dirichletOneConv_eq_zero_of_antiMul`](../NormalityChecker/ClassicalBarriers.lean#L318) [GF-18](results.md#gf-18) | **General anti-multiplicative vanishing theorem (Track B3, Theorem 3.2(2)).** If `p` is prime, `w (p * x) = - w x` for all `x`, `p ∤ m`, and `e` is odd, then… |
+| [`ClassicalBarriers.dirichletOneConv_strata`](../NormalityChecker/ClassicalBarriers.lean#L400) [GF-18](results.md#gf-18) | **Exact gcd-strata decomposition (Track B3, Lemma 3.3).** For any `M > 0`, `n > 0`, and `w : ℕ → ℤ`, `(1 * w)(n) = ∑_{g ∣ gcd(n, M)} (1 * w_g)(n / g)` where… |
 
 ### CoefficientTransfer
 
@@ -264,6 +298,33 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`fourierMean_zero_iff_of_error`](../NormalityChecker/Correlations.lean#L151) | A vanishing perturbation of the phases leaves each limiting Fourier mean unchanged. |
 | [`logTwo_normal_of_odd_prefix_fourier`](../NormalityChecker/Correlations.lean#L171) | One can test odd frequencies on the exact rational prefixes themselves. |
 
+### DerivativeTransfer
+
+[`NormalityChecker/DerivativeTransfer.lean`](../NormalityChecker/DerivativeTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`DerivativeTransfer.derivCoeff_supportCount_le`](../NormalityChecker/DerivativeTransfer.lean#L52) | Applying `D^j` does not enlarge the nonzero support count. |
+| [`DerivativeTransfer.derivCoeff_absMass_le`](../NormalityChecker/DerivativeTransfer.lean#L63) | Applying `D^j` multiplies aggregate absolute mass up to `X` by at most `X^j`. |
+| [`DerivativeTransfer.derivCoeff_poly_mass`](../NormalityChecker/DerivativeTransfer.lean#L77) | Polynomial mass preservation under `D^j`: `A_a(X) ≤ C (X + 1)^k` implies `A_{D^j a}(X) ≤ C (X + 1)^(k + j)`. |
+| [`DerivativeTransfer.derivCoeff_tendsto_one`](../NormalityChecker/DerivativeTransfer.lean#L96) [GF-17](results.md#gf-17) | If `a` has polynomial mass and `S_a(X) = o(X / log X)`, then `D^j F_b(a) ∈ K_b` for every `j ≥ 0` and every radix `b ≥ 2`. |
+| [`DerivativeTransfer.derivCoeff_preserves_discrepancy`](../NormalityChecker/DerivativeTransfer.lean#L111) | Discrepancy preservation for `D^j F_b(a)` under polynomial mass and `S_a(X) = o(X / log X)`. |
+| [`DerivativeTransfer.tendsto_sqrt_mul_log_div_self`](../NormalityChecker/DerivativeTransfer.lean#L131) | Elementary asymptotic: `((Nat.sqrt (2 * N) + 1) * log N) / N → 0`. |
+| [`DerivativeTransfer.deriv_eulerPentagonal_discrepancy_tendsto_one`](../NormalityChecker/DerivativeTransfer.lean#L196) [GF-17](results.md#gf-17) | **All derivatives of the Euler pentagonal series lie in `K_b` (Track D4.2).** For every `j ≥ 0` and every radix `b ≥ 2`, `D_N(D^j E_b; b) → 1`. |
+| [`DerivativeTransfer.deriv_eulerPentagonal_preserves_discrepancy`](../NormalityChecker/DerivativeTransfer.lean#L207) | Discrepancy preservation by `D^j E_b` for every `j ≥ 0`, `b ≥ 2`, `x ∈ ℝ`. |
+| [`DerivativeTransfer.deriv_eulerCube_discrepancy_tendsto_one`](../NormalityChecker/DerivativeTransfer.lean#L219) [GF-17](results.md#gf-17) | **All derivatives of Jacobi's cube series `E_b³` lie in `K_b` (Track D4.2).** |
+| [`DerivativeTransfer.deriv_eulerCube_preserves_discrepancy`](../NormalityChecker/DerivativeTransfer.lean#L233) | Discrepancy preservation by `D^j (E_b³)` for every `j ≥ 0`, `b ≥ 2`, `x ∈ ℝ`. |
+| [`DerivativeTransfer.thetaThree_supportCount_le`](../NormalityChecker/DerivativeTransfer.lean#L253) |  |
+| [`DerivativeTransfer.thetaThree_absMass_le`](../NormalityChecker/DerivativeTransfer.lean#L277) |  |
+| [`DerivativeTransfer.deriv_thetaThree_discrepancy_tendsto_one`](../NormalityChecker/DerivativeTransfer.lean#L291) [GF-17](results.md#gf-17) | **All derivatives of Jacobi's theta constant `Θ_3(1/b)` lie in `K_b` (Track D4.2).** |
+| [`DerivativeTransfer.deriv_thetaThree_preserves_discrepancy`](../NormalityChecker/DerivativeTransfer.lean#L306) | Discrepancy preservation by `D^j Θ_3(1/b)` for every `j ≥ 0`, `b ≥ 2`, `x ∈ ℝ`. |
+| [`DerivativeTransfer.six_dvd_sum_sq_num`](../NormalityChecker/DerivativeTransfer.lean#L325) | Exact divisibility `6 ∣ k * (k + 1) * (2 * k + 1)` for every `k : ℕ`. |
+| [`DerivativeTransfer.three_mul_eulerSqDerivCoeff`](../NormalityChecker/DerivativeTransfer.lean#L350) [GF-17](results.md#gf-17) | Exact integer identity `3 * eulerSqDerivCoeff m = derivCoeff 1 jacobiCubeCoeff m`. |
+| [`DerivativeTransfer.eulerSqDeriv_discrepancy_tendsto_one`](../NormalityChecker/DerivativeTransfer.lean#L373) [GF-17](results.md#gf-17) | **`E_b² · DE_b ∈ K_b` for every integer radix `b ≥ 2` (Track D4.2 / Corollary D4.3).** |
+| [`DerivativeTransfer.coprimePart_le_natAbs_radixUnit_mul`](../NormalityChecker/DerivativeTransfer.lean#L409) [GF-17](results.md#gf-17) | **Lemma W.1 (`b`-coprime parts survive in the displaced radix unit).** For any integer radix `b ≥ 2`, nonzero integers `x, y`, and any natural divisor `d ∣… |
+| [`DerivativeTransfer.carryWindow_succ_eq`](../NormalityChecker/DerivativeTransfer.lean#L440) | **Exact carry-window shift register (Proposition D3.5(1)).** For every `a : ℕ → ℤ` and `b, n, L : ℕ`, `R̂_{n+1, L} = b * R̂_{n, L} + a(n + L + 1) - a(n + 1) *… |
+| [`DerivativeTransfer.carryWindow_succ_modEq`](../NormalityChecker/DerivativeTransfer.lean#L478) [GF-17](results.md#gf-17) |  |
+
 ### Dilation
 
 [`NormalityChecker/Dilation.lean`](../NormalityChecker/Dilation.lean)
@@ -338,29 +399,32 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`EulerPentagonal.two_mul_pentMinus`](../NormalityChecker/EulerPentagonal.lean#L51) |  |
-| [`EulerPentagonal.two_mul_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L60) |  |
-| [`EulerPentagonal.pentMinus_lt_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L69) |  |
-| [`EulerPentagonal.pentPlus_lt_pentMinus_succ`](../NormalityChecker/EulerPentagonal.lean#L76) |  |
-| [`EulerPentagonal.pentMinus_strictMono`](../NormalityChecker/EulerPentagonal.lean#L84) |  |
-| [`EulerPentagonal.pentPlus_strictMono`](../NormalityChecker/EulerPentagonal.lean#L96) |  |
-| [`EulerPentagonal.pentMinus_ne_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L103) |  |
-| [`EulerPentagonal.abs_pentCoeff_le_one`](../NormalityChecker/EulerPentagonal.lean#L126) |  |
-| [`EulerPentagonal.pentCoeff_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L135) |  |
-| [`EulerPentagonal.pentagonal_index_bound`](../NormalityChecker/EulerPentagonal.lean#L142) |  |
-| [`EulerPentagonal.pentagonal_supportCount_le`](../NormalityChecker/EulerPentagonal.lean#L157) [GF-03](results.md#gf-03) | Support count of the pentagonal series through `M`: at most `2 * (Nat.sqrt (2 * M) + 1)`. |
-| [`EulerPentagonal.eulerPentagonal_finite_gap_upper`](../NormalityChecker/EulerPentagonal.lean#L234) [GF-03](results.md#gf-03) | **Finite discrepancy-gap upper bound for Euler's pentagonal series (Track A1).** |
-| [`EulerPentagonal.eulerPentagonal_discrepancy_tendsto_one`](../NormalityChecker/EulerPentagonal.lean#L251) [GF-03](results.md#gf-03) | **Maximal discrepancy of Euler's infinite product (Track A1).** For every integer radix `b ≥ 2`, `D_N(E_b; b) → 1`. |
-| [`EulerPentagonal.eulerPentagonal_preserves_discrepancy`](../NormalityChecker/EulerPentagonal.lean#L265) [GF-03](results.md#gf-03) | **Universal discrepancy preservation by Euler's infinite product (Track A1).** For every integer radix `b ≥ 2` and every real `x`, `D_N(x + E_b; b) - D_N(x;… |
-| [`EulerPentagonal.two_mul_triNum`](../NormalityChecker/EulerPentagonal.lean#L283) |  |
-| [`EulerPentagonal.triNum_strictMono`](../NormalityChecker/EulerPentagonal.lean#L290) |  |
-| [`EulerPentagonal.triNum_index_bound`](../NormalityChecker/EulerPentagonal.lean#L305) |  |
-| [`EulerPentagonal.abs_jacobiCubeCoeff_triNum`](../NormalityChecker/EulerPentagonal.lean#L309) |  |
-| [`EulerPentagonal.jacobiCube_supportCount_le`](../NormalityChecker/EulerPentagonal.lean#L320) [GF-04](results.md#gf-04) | Support count of Jacobi's cube series: `S(M) ≤ Nat.sqrt (2 * M)`. |
-| [`EulerPentagonal.jacobiCube_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L357) [GF-04](results.md#gf-04) | Aggregate absolute coefficient mass of Jacobi's cube series is linear: `A(M) ≤ 4 · M`. |
-| [`EulerPentagonal.eulerCube_discrepancy_tendsto_one`](../NormalityChecker/EulerPentagonal.lean#L412) [GF-04](results.md#gf-04) | **Maximal discrepancy of Jacobi's cube series `E_b³` (Track A2).** For every integer radix `b ≥ 2`, `D_N(E_b³; b) → 1`. |
-| [`EulerPentagonal.eulerCube_preserves_discrepancy`](../NormalityChecker/EulerPentagonal.lean#L423) [GF-04](results.md#gf-04) | **Universal discrepancy preservation by Jacobi's cube series `E_b³` (Track A2).** For every integer radix `b ≥ 2` and every real `x`, `D_N(x + E_b³; b) -… |
-| [`EulerPentagonal.cauchyConv_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L444) [GF-04](results.md#gf-04) | **Cauchy convolution aggregate mass bound (Tracks A2 and B5).** For any integer sequences `a, c`, `absMass (cauchyConv a c) M ≤ (\|a 0\| + absMass a M) * (\|c 0\|… |
+| [`EulerPentagonal.two_mul_pentMinus`](../NormalityChecker/EulerPentagonal.lean#L59) |  |
+| [`EulerPentagonal.two_mul_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L68) |  |
+| [`EulerPentagonal.pentMinus_lt_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L77) |  |
+| [`EulerPentagonal.pentPlus_lt_pentMinus_succ`](../NormalityChecker/EulerPentagonal.lean#L84) |  |
+| [`EulerPentagonal.pentMinus_strictMono`](../NormalityChecker/EulerPentagonal.lean#L92) |  |
+| [`EulerPentagonal.pentPlus_strictMono`](../NormalityChecker/EulerPentagonal.lean#L104) |  |
+| [`EulerPentagonal.pentMinus_ne_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L111) |  |
+| [`EulerPentagonal.pentCoeff_zero`](../NormalityChecker/EulerPentagonal.lean#L135) |  |
+| [`EulerPentagonal.pentCoeff_pentMinus`](../NormalityChecker/EulerPentagonal.lean#L139) |  |
+| [`EulerPentagonal.pentCoeff_pentPlus`](../NormalityChecker/EulerPentagonal.lean#L159) |  |
+| [`EulerPentagonal.abs_pentCoeff_le_one`](../NormalityChecker/EulerPentagonal.lean#L175) |  |
+| [`EulerPentagonal.pentCoeff_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L184) |  |
+| [`EulerPentagonal.pentagonal_index_bound`](../NormalityChecker/EulerPentagonal.lean#L191) |  |
+| [`EulerPentagonal.pentagonal_supportCount_le`](../NormalityChecker/EulerPentagonal.lean#L206) [GF-03](results.md#gf-03) | Support count of the pentagonal series through `M`: at most `2 * (Nat.sqrt (2 * M) + 1)`. |
+| [`EulerPentagonal.eulerPentagonal_finite_gap_upper`](../NormalityChecker/EulerPentagonal.lean#L283) [GF-03](results.md#gf-03) | **Finite discrepancy-gap upper bound for Euler's pentagonal series (Track A1).** |
+| [`EulerPentagonal.eulerPentagonal_discrepancy_tendsto_one`](../NormalityChecker/EulerPentagonal.lean#L301) [GF-03](results.md#gf-03) | **Maximal discrepancy of the pentagonal series (Track A1).** For every integer radix `b ≥ 2`, `D_N(eulerPentagonalSum b; b) → 1`; by Euler's pentagonal number… |
+| [`EulerPentagonal.eulerPentagonal_preserves_discrepancy`](../NormalityChecker/EulerPentagonal.lean#L316) [GF-03](results.md#gf-03) | **Universal discrepancy preservation by the pentagonal series (Track A1).** For every integer radix `b ≥ 2` and every real `x`, `D_N(x + eulerPentagonalSum b;… |
+| [`EulerPentagonal.two_mul_triNum`](../NormalityChecker/EulerPentagonal.lean#L334) |  |
+| [`EulerPentagonal.triNum_strictMono`](../NormalityChecker/EulerPentagonal.lean#L341) |  |
+| [`EulerPentagonal.triNum_index_bound`](../NormalityChecker/EulerPentagonal.lean#L357) |  |
+| [`EulerPentagonal.abs_jacobiCubeCoeff_triNum`](../NormalityChecker/EulerPentagonal.lean#L361) |  |
+| [`EulerPentagonal.jacobiCube_supportCount_le`](../NormalityChecker/EulerPentagonal.lean#L372) [GF-04](results.md#gf-04) | Support count of Jacobi's cube series: `S(M) ≤ Nat.sqrt (2 * M)`. |
+| [`EulerPentagonal.jacobiCube_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L409) [GF-04](results.md#gf-04) | Aggregate absolute coefficient mass of Jacobi's cube series is linear: `A(M) ≤ 4 · M`. |
+| [`EulerPentagonal.eulerCube_discrepancy_tendsto_one`](../NormalityChecker/EulerPentagonal.lean#L464) [GF-04](results.md#gf-04) | **Maximal discrepancy of Jacobi's triangular series (Track A2).** For every integer radix `b ≥ 2`, `D_N(eulerCubeSum b; b) → 1`. |
+| [`EulerPentagonal.eulerCube_preserves_discrepancy`](../NormalityChecker/EulerPentagonal.lean#L476) [GF-04](results.md#gf-04) | **Universal discrepancy preservation by Jacobi's triangular series (Track A2).** For every integer radix `b ≥ 2` and every real `x`, `D_N(x + eulerCubeSum b;… |
+| [`EulerPentagonal.cauchyConv_absMass_le`](../NormalityChecker/EulerPentagonal.lean#L497) [GF-04](results.md#gf-04) | **Cauchy convolution aggregate mass bound (Tracks A2 and B5).** For any integer sequences `a, c`, `absMass (cauchyConv a c) M ≤ (\|a 0\| + absMass a M) * (\|c 0\|… |
 
 ### FourierTest
 
@@ -378,6 +442,29 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`logTwo_normal_iff_lag_fourier`](../NormalityChecker/FourierTest.lean#L174) [CC-10](results.md#cc-10) | At any chosen fixed positive lag, odd-frequency correlations between separated rational prefixes give an equivalent test for binary normality. |
 | [`logTwo_not_normal_iff_odd_bias`](../NormalityChecker/FourierTest.lean#L183) [CC-10](results.md#cc-10) | One fixed odd frequency with a persistent bias along a subsequence is necessary and sufficient for binary nonnormality of log 2. |
 | [`logTwo_normal_iff_dyadic_lag_cancellation`](../NormalityChecker/FourierTest.lean#L190) [CC-10](results.md#cc-10) | An equivalent block estimate uniform in the endpoint of each dyadic interval. |
+
+### GeneralMassTransfer
+
+[`NormalityChecker/GeneralMassTransfer.lean`](../NormalityChecker/GeneralMassTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`GeneralMassTransfer.summable_pow_mul_geom`](../NormalityChecker/GeneralMassTransfer.lean#L47) | For `0 < r < 1` and any `k : ℕ`, `∑' j : ℕ, (j : ℝ)^k * r^j` converges. |
+| [`GeneralMassTransfer.polyGeomConst_nonneg`](../NormalityChecker/GeneralMassTransfer.lean#L79) |  |
+| [`GeneralMassTransfer.summable_poly_div_pow`](../NormalityChecker/GeneralMassTransfer.lean#L83) | Summability of `∑' j, (j : ℝ)^k / b^(j + 1)` for `b ≥ 2`. |
+| [`GeneralMassTransfer.summable_abs_of_poly_mass`](../NormalityChecker/GeneralMassTransfer.lean#L95) | Polynomial-mass summability: if `absMass a X ≤ C * (X + 1)^k` for all `X`, then `∑' m, \|a(m)\| / b^m` converges. |
+| [`GeneralMassTransfer.sum_shiftedTail_le_of_poly_mass`](../NormalityChecker/GeneralMassTransfer.lean#L152) | Bounding the sum of shifted tails `∑ n < N, shiftedTail b a n L` under polynomial mass `absMass a X ≤ C * (X + 1)^k`. |
+| [`GeneralMassTransfer.finite_poly_mass_transfer`](../NormalityChecker/GeneralMassTransfer.lean#L253) [GF-13](results.md#gf-13) | **Finite polynomial-mass sparse coefficient transfer inequality (Track D4 / B1).** |
+| [`GeneralMassTransfer.finite_poly_mass_translation`](../NormalityChecker/GeneralMassTransfer.lean#L286) | Uniform translation form of `finite_poly_mass_transfer`. |
+| [`GeneralMassTransfer.poly_mass_sparse_tendsto_one`](../NormalityChecker/GeneralMassTransfer.lean#L299) [GF-13](results.md#gf-13) | **Asymptotic polynomial-mass sparse coefficient transfer (Track D4).** If `A(X) ≤ C * (X + 1)^k` (arbitrary polynomial growth!) and `S(X) * log X / X → 0` (i.e. |
+| [`GeneralMassTransfer.poly_mass_sparse_preserves_discrepancy`](../NormalityChecker/GeneralMassTransfer.lean#L461) | Universal discrepancy preservation (`F_b(a) ∈ K_b`) under polynomial mass `A(X) = O(X^k)` and super-logarithmic sparsity `S(X) = o(X / log X)`. |
+| [`GeneralMassTransfer.summable_abs_of_log_mass`](../NormalityChecker/GeneralMassTransfer.lean#L488) | Logarithmic-mass summability: if `absMass a X ≤ C * X * (log (X + 2))^γ`, then `∑' m, \|a(m)\| / b^m` converges. |
+| [`GeneralMassTransfer.sum_shiftedTail_le_of_log_mass`](../NormalityChecker/GeneralMassTransfer.lean#L510) | Bounding the sum of shifted tails under logarithmic mass `absMass a X ≤ C * X * (log (X + 2))^γ`. |
+| [`GeneralMassTransfer.finite_log_mass_transfer`](../NormalityChecker/GeneralMassTransfer.lean#L657) [GF-13](results.md#gf-13) | **Finite logarithmic-mass sparse coefficient transfer inequality (Track B1–B4 & weight-1).** |
+| [`GeneralMassTransfer.log_mass_sparse_tendsto_one`](../NormalityChecker/GeneralMassTransfer.lean#L693) [GF-13](results.md#gf-13) | **Asymptotic logarithmic-mass sparse coefficient transfer (Track B1–B4 & weight-1 forms).** If `A(X) ≤ C * X * (log (X + 2))^γ` (e.g., `γ = 1` from the… |
+| [`GeneralMassTransfer.log_mass_sparse_preserves_discrepancy`](../NormalityChecker/GeneralMassTransfer.lean#L924) | Universal discrepancy preservation (`F_b(a) ∈ K_b`) under logarithmic mass `A(X) ≤ C * X * (log (X + 2))^γ` and `S(X) * log(log(X + 3)) / X → 0`. |
+| [`GeneralMassTransfer.qDigamma_term_eq_lambert`](../NormalityChecker/GeneralMassTransfer.lean#L962) | Termwise identity relating `q^(k + r/M) / (1 - q^(k + r/M))` at `q = b^(-M)` to `1 / (b^(k*M + r) - 1)`. |
+| [`GeneralMassTransfer.qDigamma_reflection_eq_residueLambert`](../NormalityChecker/GeneralMassTransfer.lean#L991) [GF-13](results.md#gf-13) | **Exact `q`-digamma reflection identity at `q = b^(-M)` (Track B4).** For every integer radix `b ≥ 2`, modulus `M ≥ 2`, and `1 ≤ r < M`, `(qDigamma (b^(-M))… |
 
 ### IndexedExpansion
 
@@ -403,6 +490,19 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`JointWeyl.rectangle_of_scalar_normal`](../NormalityChecker/JointWeyl.lean#L185) | Scalar normality for every nonzero integer linear combination implies convergence of the actual simultaneous rectangle frequencies in every finite dimension. |
+
+### NormalReciprocalCore
+
+[`NormalityChecker/NormalReciprocalCore.lean`](../NormalityChecker/NormalReciprocalCore.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`NormalReciprocalCore.exists_int_pow_sub_one_mul_rat`](../NormalityChecker/NormalReciprocalCore.lean#L44) | If `orderOf (b : ZMod R.den) ∣ m`, then `(b^m - 1) * R` is an integer. |
+| [`NormalReciprocalCore.band_identity`](../NormalityChecker/NormalReciprocalCore.lean#L74) [GF-16](results.md#gf-16) | **Lemma D2.1 (exact rational band identity).** If `2 ≤ b`, `1 ≤ m`, and `orderOf (b : ZMod R.den) ∣ m`, then for every `i, r : ℕ`, `b^(i * m + r) * (R * b^m /… |
+| [`NormalReciprocalCore.signed_band_identity`](../NormalityChecker/NormalReciprocalCore.lean#L139) [GF-16](results.md#gf-16) | **Proposition D2.5 (exact alternating-sign band identity).** With `+` in place of `-`, on every band `i` the leading multiplier is `1` for even `i` and `0`… |
+| [`NormalReciprocalCore.sum_residues_cexp_eq_zero`](../NormalityChecker/NormalReciprocalCore.lean#L255) [GF-16](results.md#gf-16) | **Lemma D2.2 (complete exponential sum over `ZMod D` vanishes off `D ∣ k`).** For `D ≥ 1`, `Nat.Coprime u D`, and `¬ D ∣ k`, `∑ c : ZMod D, Complex.exp (2 * π… |
+| [`NormalReciprocalCore.eulerAutomatonStep_bijective`](../NormalityChecker/NormalReciprocalCore.lean#L315) [GF-16](results.md#gf-16) | When `Nat.Coprime b d`, `eulerAutomatonStep b d L` is a bijection on `ZMod L × ZMod d`. |
+| [`NormalReciprocalCore.eulerAutomaton_purely_periodic`](../NormalityChecker/NormalReciprocalCore.lean#L336) [GF-16](results.md#gf-16) | **Theorem D1.1 (pure periodicity of the Euler automaton).** Any bijection on a nonempty finite type has a uniform positive period; in particular, for… |
 
 ### OrbitDifferencing
 
@@ -496,6 +596,24 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`hasSum_positive_rational_multiples`](../NormalityChecker/PositiveSummation.lean#L15) [SY-07](results.md#sy-07) | Positive rational multiples of any prescribed positive generators can sum to any prescribed positive real. |
 
+### PowerSumPeeling
+
+[`NormalityChecker/PowerSumPeeling.lean`](../NormalityChecker/PowerSumPeeling.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`PowerSumPeeling.strictMono_add_pow_sub_pow`](../NormalityChecker/PowerSumPeeling.lean#L45) | For `d ≥ 2` and `e ≥ 1`, the map `c ↦ (c + e)^d - c^d` is strictly increasing on `ℕ`. |
+| [`PowerSumPeeling.nat_sub_dvd_pow_sub_pow`](../NormalityChecker/PowerSumPeeling.lean#L69) | For `c ≤ a`, `a - c` divides `a^d - c^d`. |
+| [`PowerSumPeeling.card_pow_diff_eq_le_divisors`](../NormalityChecker/PowerSumPeeling.lean#L79) [GF-14](results.md#gf-14) | **Divisor bound for `d`-th power differences (`d ≥ 2`).** Any finite set `S` of pairs `(a, c) ∈ ℕ × ℕ` satisfying `c < a` and `a^d - c^d = M` (for `M > 0`)… |
+| [`PowerSumPeeling.phiLead_ne_zero`](../NormalityChecker/PowerSumPeeling.lean#L127) |  |
+| [`PowerSumPeeling.phiPoly_spec`](../NormalityChecker/PowerSumPeeling.lean#L168) | Joint induction on `n = q - 2`: `phiPoly d n` has `X`-degree at most `n` and exact coefficient `C (phiLead d n)` at degree `n`. |
+| [`PowerSumPeeling.phiPoly_ne_zero`](../NormalityChecker/PowerSumPeeling.lean#L222) [GF-14](results.md#gf-14) | For every `d ≥ 1` and `n = q - 2 ≥ 0`, `phiPoly d n` is nonzero. |
+| [`PowerSumPeeling.phiPoly_natDegree`](../NormalityChecker/PowerSumPeeling.lean#L232) [GF-14](results.md#gf-14) | For every `d ≥ 1` and `n = q - 2 ≥ 0`, `phiPoly d n` has exact `X`-degree `n`. |
+| [`PowerSumPeeling.phiPoly_leadingCoeff`](../NormalityChecker/PowerSumPeeling.lean#L242) [GF-14](results.md#gf-14) | For every `d ≥ 1` and `n = q - 2 ≥ 0`, `phiPoly d n` has exact leading `X`-coefficient `C (phiLead d n)` (which is a nonzero constant in `ℤ[B]`). |
+| [`PowerSumPeeling.dominant_loss_unique_top_coord`](../NormalityChecker/PowerSumPeeling.lean#L372) [GF-14](results.md#gf-14) | **Dominant-loss `p`-adic coincidence peeling lemma (Track C1 / C3-M1).** Let `p` be prime and `d ≥ 1`. |
+| [`PowerSumPeeling.truncMass_sub`](../NormalityChecker/PowerSumPeeling.lean#L446) [GF-14](results.md#gf-14) | Exact difference of the truncated `r`-fold mass across `(u, u']`. |
+| [`PowerSumPeeling.truncMass_jump_of_isolated`](../NormalityChecker/PowerSumPeeling.lean#L483) [GF-14](results.md#gf-14) | **Exact jump of `truncMass` at an isolated centre with distinct coordinates (Track C1.3).** If `c : Fin r → ℚ` has pairwise distinct coordinates in `coords`,… |
+
 ### PrimePowerGrid
 
 [`NormalityChecker/PrimePowerGrid.lean`](../NormalityChecker/PrimePowerGrid.lean)
@@ -530,6 +648,21 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`normal_radix_telescope_iff`](../NormalityChecker/RadixTelescoping.lean#L22) | A rational endpoint preserves normality under weighted telescoping. |
 | [`radix_plateau_regroup`](../NormalityChecker/RadixTelescoping.lean#L38) | Regroup a summable weighted sequence along the half-open power intervals. |
 | [`radix_plateau_sum`](../NormalityChecker/RadixTelescoping.lean#L66) | Coefficients constant between consecutive powers of `c` can be regrouped exactly into a lacunary series. |
+
+### RadixWidthLaw
+
+[`NormalityChecker/RadixWidthLaw.lean`](../NormalityChecker/RadixWidthLaw.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`RadixWidthLaw.dist0_le_abs_sub_int`](../NormalityChecker/RadixWidthLaw.lean#L52) |  |
+| [`RadixWidthLaw.dist0_div_pow_ge`](../NormalityChecker/RadixWidthLaw.lean#L69) [GF-12](results.md#gf-12) | **Lower-band circle-distance bound (Track A, Lemma 3.2(1)).** For any radix `b ≥ 2`, integer `C` with `b ∤ C`, perturbation `\|A\| ≤ 1/2`, and `j ≥ 1`, `dist0… |
+| [`RadixWidthLaw.dist0_div_pow_eq`](../NormalityChecker/RadixWidthLaw.lean#L102) [GF-12](results.md#gf-12) | **Upper-band exact circle distance (Track A, Lemma 3.2(2)).** If `b ≥ 2`, `\|C\| < b^u`, `j ≥ u + 1`, and `\|A\| ≤ 1/2`, then `dist0 ((C + A) / b^j) = \|C + A\| /… |
+| [`RadixWidthLaw.card_far_in_gap_ge`](../NormalityChecker/RadixWidthLaw.lean#L139) [GF-12](results.md#gf-12) | **Guaranteed far shifts per isolated source (Track A, Lemma 3.2(3)).** If `b ≥ 2`, `b ∤ C`, `1 ≤ u`, `1 ≤ lam`, `b^(u - 1) ≤ \|C\| < b^u`, `\|A\| ≤ 1/2`, and `2 *… |
+| [`RadixWidthLaw.card_large_tail_le`](../NormalityChecker/RadixWidthLaw.lean#L225) [GF-12](results.md#gf-12) | **Isolated-tail Markov bound (Track A, step E4).** If `A t = A (t + R) / b^R` on a finite set `T` with `t + R < M`, then `#{t ∈ T : \|A t\| > 1/2} ≤ (2 / b^R) *… |
+| [`RadixWidthLaw.sum_log_eq_sum_primePow`](../NormalityChecker/RadixWidthLaw.lean#L327) [GF-12](results.md#gf-12) | **Exact first-moment identity for multiplicative functions (Track A1, Lemma 2.1).** For any multiplicative `c : ℕ → ℕ` (`c 1 = 1` and `c (m * n) = c m * c n`… |
+| [`RadixWidthLaw.padicVal_succ_pos_imp`](../NormalityChecker/RadixWidthLaw.lean#L461) | Valuation mechanism of Track A1 Lemma 2.3(2): if `q` is prime and `q ∣ e + 1`, then `q - 1 ≤ e`. |
+| [`RadixWidthLaw.width_law_upper`](../NormalityChecker/RadixWidthLaw.lean#L466) [GF-12](results.md#gf-12) | **Finite sub-threshold width-law upper bound (Track A, Theorem 1 upper half).** |
 
 ### RationalOrbitCycle
 

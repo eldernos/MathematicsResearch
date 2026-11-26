@@ -140,3 +140,10 @@ public import NormalityChecker.CoefficientTransfer
 public import NormalityChecker.EulerPentagonal
 public import NormalityChecker.CharacterLambertTransfer
 public import NormalityChecker.ProtectedPole
+public import NormalityChecker.PowerSumPeeling
+public import NormalityChecker.GeneralMassTransfer
+public import NormalityChecker.AntisymmetricLambert
+public import NormalityChecker.ClassicalBarriers
+public import NormalityChecker.RadixWidthLaw
+public import NormalityChecker.DerivativeTransfer
+public import NormalityChecker.NormalReciprocalCore

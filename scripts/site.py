@@ -11,6 +11,10 @@ carry Highwire Press ``citation_*`` meta tags and schema.org ``ScholarlyArticle`
 ``--strict`` a missing ``metadata.toml`` or ``paper.pdf`` is an error; without it the page is built from the
 registry summary and marked as pending.
 
+Each manuscript page is deployed next to a byte-identical copy of its ``paper.pdf`` (checked against
+``papers/SHA256SUMS`` in ``--strict`` mode), and ``citation_pdf_url`` points to that same-directory copy, which is
+what Google Scholar's inclusion guidelines require. ``sitemap.xml`` and ``robots.txt`` are written beside the pages.
+
 Nothing here submits anything to an index. The meta tags and structured data describe the pages; whether any
 search service lists them is outside this repository's control.
 """
@@ -19,11 +23,13 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import html
 import json
 import tomllib
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 
@@ -114,8 +120,17 @@ def tag_exists(tag: str) -> bool:
     return bool(git("rev-parse", "-q", "--verify", f"refs/tags/{tag}^{{commit}}"))
 
 
+def commit_date_utc(*args) -> str:
+    """UTC calendar date of the newest commit selected by ``git log -1 ARGS`` (the %cs date is in the committer's
+    local zone, which put the 2026-11-26 01:08 UTC release on 2026-11-25)."""
+    stamp = git("log", "-1", "--format=%cI", *args)
+    if not stamp:
+        return ""
+    return datetime.datetime.fromisoformat(stamp).astimezone(datetime.timezone.utc).date().isoformat()
+
+
 def tag_date(tag: str) -> str:
-    return git("log", "-1", "--format=%cs", tag) if tag_exists(tag) else ""
+    return commit_date_utc(tag) if tag_exists(tag) else ""
 
 
 def paper_date(p) -> str:
@@ -123,7 +138,7 @@ def paper_date(p) -> str:
     meta = p.get("metadata") or {}
     if meta.get("date"):
         return str(meta["date"])
-    return git("log", "-1", "--format=%cs", "--", p["dir"]) or datetime.date.today().isoformat()
+    return commit_date_utc("--", p["dir"]) or datetime.datetime.now(datetime.timezone.utc).date().isoformat()
 
 
 def slug(p) -> str:
@@ -139,6 +154,26 @@ def pdf_urls(p, tag=None, directory=None):
     tag = tag or p["release"]
     d = directory or p["dir"]
     return f"{RAW}/{tag}/{d}/paper.pdf", f"{REPO}/blob/{DEFAULT_BRANCH}/{d}/paper.pdf"
+
+
+def pdf_path(p) -> pathlib.Path:
+    return ROOT / p["dir"] / "paper.pdf"
+
+
+def sha256_file(path) -> str:
+    return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+
+
+def recorded_sha256() -> dict:
+    """``papers/SHA256SUMS`` as {repository-relative path: hex digest}."""
+    path = ROOT / "papers" / "SHA256SUMS"
+    out = {}
+    if path.is_file():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            m = re.fullmatch(r"([0-9a-f]{64}) [ *](\S+)", line.strip())
+            if m:
+                out[m.group(2)] = m.group(1)
+    return out
 
 
 def tag_version(e, tag) -> str:
@@ -224,8 +259,9 @@ def meta_tag(name, content) -> str:
     return f'<meta name="{esc(name)}" content="{esc(content)}">'
 
 
-def highwire(p, url, date, keywords) -> list[str]:
-    pdf = pdf_urls(p)[0]
+def highwire(p, url, date, keywords, local_pdf=None) -> list[str]:
+    """``local_pdf`` is the deployed same-directory copy; without it the immutable release-tag URL is used."""
+    pdf = local_pdf or pdf_urls(p)[0]
     tags = [meta_tag("citation_title", p["title"])]
     if named_author(p):
         tags.append(meta_tag("citation_author", AUTHOR_BIB))
@@ -241,7 +277,7 @@ def highwire(p, url, date, keywords) -> list[str]:
     return tags
 
 
-def jsonld(p, url, date, keywords, abstract) -> str:
+def jsonld(p, url, date, keywords, abstract, local_pdf=None, record=None) -> str:
     data = {
         "@context": "https://schema.org",
         "@type": "ScholarlyArticle",
@@ -256,9 +292,14 @@ def jsonld(p, url, date, keywords, abstract) -> str:
         "keywords": keywords,
         "isAccessibleForFree": True,
         "creativeWorkStatus": "Preprint draft, not peer reviewed",
-        "encoding": {"@type": "MediaObject", "contentUrl": pdf_urls(p)[0], "encodingFormat": "application/pdf"},
+        "encoding": [{"@type": "MediaObject", "contentUrl": u, "encodingFormat": "application/pdf"}
+                     for u in ([local_pdf] if local_pdf else []) + [pdf_urls(p)[0]]],
         "isBasedOn": {"@type": "SoftwareSourceCode", "codeRepository": REPO, "name": SITE_TITLE},
     }
+    if record:
+        data["sameAs"] = [record]  # the alphaXiv preprint record; creativeWorkStatus keeps the review caveat
+    if (p.get("metadata") or {}).get("license") == "CC-BY-4.0":
+        data["license"] = "https://creativecommons.org/licenses/by/4.0/"
     if named_author(p):
         data["author"] = {"@type": "Person", "name": AUTHOR_NAME, "givenName": AUTHOR_GIVEN,
                           "familyName": AUTHOR_FAMILY,
@@ -378,8 +419,18 @@ def manuscript_page(p, by_dir, base, strict):
             f'<li><a href="https://zbmath.org/classification/?q=cc%3A{esc(c)}"><code>{esc(c)}</code></a>'
             f'{" (primary)" if c == primary else ""}</li>' for c in codes)
         parts.append(f"<h2>MSC2020 classification</h2><ul class=\"plain\">{items}</ul>")
+    has_pdf = pdf_path(p).is_file()
+    local_pdf = f"{url}paper.pdf" if has_pdf else None
     parts.append("<h2>Download</h2>")
-    parts.append(f'<ul class="plain"><li>{link(pdf, "PDF at release tag " + tag)}</li>'
+    dl = []
+    if has_pdf:
+        dl.append(f'<li>{link("paper.pdf", "PDF (copy served from this site)")}; SHA-256 '
+                  f'<code>{esc(sha256_file(pdf_path(p)))}</code>, the digest recorded in '
+                  f'{link(f"{REPO}/blob/{DEFAULT_BRANCH}/papers/SHA256SUMS", "papers/SHA256SUMS")}</li>')
+    dl.append(f'<li>{link(pdf, "PDF at release tag " + tag + " (immutable)")}</li>')
+    if record:
+        dl.append(f'<li>{link(record + ".pdf", "PDF on alphaXiv")} (the alphaXiv record is not peer review)</li>')
+    parts.append('<ul class="plain">' + "".join(dl) +
                  f'<li>{link(fallback, "PDF on the main branch (fallback if the release tag is not yet published)")}</li>'
                  f'<li>{link(blob + "/paper.tex", "LaTeX source")}</li>'
                  f'<li>{link(blob + "/references.bib", "References (BibTeX)")}</li></ul>')
@@ -421,8 +472,9 @@ def manuscript_page(p, by_dir, base, strict):
                  "<tbody>" + "".join(rows) + "</tbody></table></div>")
     parts.append(f'<p><a href="../../index.html#manuscripts">All manuscripts</a></p>')
 
-    head = highwire(p, url, date, keywords) + [
-        f'<script type="application/ld+json">\n{jsonld(p, url, date, keywords, " ".join(abstract.split()))}\n</script>']
+    head = highwire(p, url, date, keywords, local_pdf) + [
+        '<script type="application/ld+json">\n'
+        f'{jsonld(p, url, date, keywords, " ".join(abstract.split()), local_pdf, record)}\n</script>']
     short = " ".join(abstract.split())
     return page(f"{p['title']} · {SITE_TITLE}", "\n".join(parts), depth=2,
                 description=short[:300], head_extra=head, canonical=url)
@@ -459,9 +511,11 @@ def index_page(papers, base):
     current = sorted((p for p in papers if p["current"]), key=portal.paper_key)
     rows = []
     for p in current:
+        ax = alphaxiv_record(p.get("metadata"))
         rows.append(f'<tr><th scope="row">{esc(p["number"])}</th>'
                     f'<td><a href="papers/{esc(slug(p))}/index.html">{esc(p["title"])}</a></td>'
-                    f'<td>{esc(p["version"])}</td><td>{esc(portal.paper_label(p))}</td></tr>')
+                    f'<td>{esc(p["version"])}</td><td>{esc(portal.paper_label(p))}</td>'
+                    f'<td>{link(ax, "alphaXiv") if ax else ""}</td></tr>')
     parts = [f"<h1>{esc(SITE_TITLE)}</h1>",
              f'<p class="byline">{esc(AUTHOR_NAME)} · {esc(AFFILIATION)}</p>',
              f"<p>{esc(DESCRIPTION)}</p>",
@@ -478,8 +532,12 @@ def index_page(papers, base):
              f"<p>Release <code>{esc(portal.CANDIDATE_TAG)}</code>. Version 1.0 and 1.1 PDFs remain "
              "unchanged at their release tags.</p>",
              '<div class="scroll"><table><thead><tr><th scope="col"></th><th scope="col">Manuscript</th>'
-             '<th scope="col">Version</th><th scope="col">Status</th></tr></thead><tbody>' + "".join(rows) +
+             '<th scope="col">Version</th><th scope="col">Status</th>'
+             '<th scope="col">Preprint server</th></tr></thead><tbody>' + "".join(rows) +
              "</tbody></table></div>",
+             "<p>An alphaXiv link marks a manuscript that the owner posted there; alphaXiv screens submissions, "
+             "and screening is not peer review. Each manuscript page also serves a copy of the PDF whose SHA-256 "
+             "digest is recorded in the repository.</p>",
              '<h2 id="classical">Classical constants: what is and is not known</h2>',
              "<p>Nothing here proves normality, or an asymptotic discrepancy bound below 1, for any of these "
              "constants.</p>",
@@ -506,9 +564,26 @@ def index_page(papers, base):
 
 NOT_FOUND = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page not found · {SITE_TITLE}</title><link rel="stylesheet" href="style.css"></head>
+<title>Page not found · {SITE_TITLE}</title><meta name="robots" content="noindex"><link rel="stylesheet" href="style.css"></head>
 <body><main class="wrap"><h1>Page not found</h1><p><a href="index.html">Back to the manuscripts</a></p></main></body></html>
 """
+
+
+def sitemap_xml(papers, base) -> str:
+    """Sitemap 0.9: the landing page, each current manuscript page and each deployed PDF (no lastmod)."""
+    urls = [base]
+    for p in sorted((q for q in papers if q["current"]), key=portal.paper_key):
+        urls.append(f"{base}papers/{slug(p)}/")
+        if pdf_path(p).is_file():
+            urls.append(f"{base}papers/{slug(p)}/paper.pdf")
+    body = "".join(f"  <url><loc>{esc(u)}</loc></url>\n" for u in urls)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + "</urlset>\n")
+
+
+def robots_txt(base) -> str:
+    """Only authoritative at a host root; on a project site such as this one it is advisory (see docs/site.md)."""
+    return f"User-agent: *\nAllow: /\n\nSitemap: {base}sitemap.xml\n"
 
 
 def build_site(papers, out: pathlib.Path, base: str = BASE_URL, strict: bool = False):
@@ -523,12 +598,26 @@ def build_site(papers, out: pathlib.Path, base: str = BASE_URL, strict: bool = F
         path.write_text(text, encoding="utf-8", newline="\n")
         written.append(rel)
 
+    def copy(rel, src):
+        path = out / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src, path)
+        written.append(rel)
+
+    sums = recorded_sha256()
     write("style.css", STYLE)
     write(".nojekyll", "")
     write("404.html", NOT_FOUND)
     write("index.html", index_page(papers, base))
     for p in (q for q in papers if q["current"]):
         write(f"papers/{slug(p)}/index.html", manuscript_page(p, by_dir, base, strict))
+        if pdf_path(p).is_file():
+            key = f"{p['dir']}/paper.pdf"
+            if strict and sums.get(key) != sha256_file(pdf_path(p)):
+                raise SystemExit(f"error: {key} does not match its digest in papers/SHA256SUMS")
+            copy(f"papers/{slug(p)}/paper.pdf", pdf_path(p))
+    write("sitemap.xml", sitemap_xml(papers, base))
+    write("robots.txt", robots_txt(base))
     return written
 
 
