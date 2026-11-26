@@ -1,0 +1,32 @@
+# Citation metadata, CFF 1.2.0. Validate with: python3 scripts/check_citation.py
+# GitHub reads this file for the "Cite this repository" button; Zenodo reads it when a release is archived
+# (a .zenodo.json file, if one is ever added, takes precedence; see papers/ARCHIVING.md).
+#
+# The author is the repository owner. No ORCID, email address or institutional affiliation is recorded
+# because none has been approved. The only contact route is the GitHub issue tracker.
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below. To cite one manuscript, give its title, version and release tag; see papers/BIBLIOGRAPHY.bib. The manuscripts are preprint drafts and have not been peer reviewed."
+type: software
+title: "Normality and Discrepancy of Arithmetic Expansions"
+abstract: "AI-assisted mathematical research on normal numbers, digit discrepancy, Stoneham constants, and arithmetic expansions, with Lean 4 proofs and reproducible preprints. The Lean library is kernel-checked; the written proofs and literature comparisons have been reviewed only by AI models, which is not independent human peer review."
+authors:
+  - family-names: "Anderson"
+    given-names: "Christopher"
+    affiliation: "Independent Researcher"
+    website: "https://www.alphaxiv.org/@christopher-anderson"
+repository-code: "https://github.com/eldernos/MathematicsResearch"
+url: "https://github.com/eldernos/MathematicsResearch"
+# CANDIDATE: the tag manuscripts-v2.0.0 does not exist until the owner approves the release.
+# Until then the latest published manuscript release is manuscripts-v1.1.0.
+version: "manuscripts-v2.0.0"
+license: MIT
+keywords:
+  - "normal numbers"
+  - "digit discrepancy"
+  - "uniform distribution"
+  - "Stoneham numbers"
+  - "Lambert series"
+  - "number theory"
+  - "Lean 4"
+  - "formal verification"
+  - "AI-assisted research"

@@ -1,0 +1,9 @@
+# Announcement drafts
+
+## X (at most 280 characters)
+
+Preprint draft: for Σχ₄(m)/(2^m−1) and similar Lambert series, each word with a 1 occurs ≍H/√log N times in [N,N+H), N^a≤H≤N, a>7/12. Disjunctive, not normal, 1−D_N ≍ loglog N/√log N. One-bit asymptotic: Bailey–Borwein–Crandall–Pomerance 2004. Awaiting expert review.
+
+## Mathematics forum
+
+We have posted a preprint draft on the binary digits of Lambert series Σ f(m)/(2ᵐ−1) whose coefficients c = f∗1 are multiplicative and supported on primes of density δ < 1, for example c = r₂(n)/4 (δ = 1/2) or c(p) = 2 exactly at primes p ≡ 1 mod 5 (δ = 1/4). For a > 7/12 (and, using a theorem of Kumchev, a > 0.53) we prove that every fixed word containing a one occurs between constant multiples of H/(log N)^{1−δ} times in each window [N, N+H) with N^a ≤ H ≤ N. The number is therefore disjunctive but not simply normal, and the discrepancy gap 1 − D_N has exact order (log log N)/(log N)^{1−δ}. For the theta example 1 + 4Σχ₄(m)/(2ᵐ−1) = θ₃(1/2)², Bailey, Borwein, Crandall and Pomerance (J. Théor. Nombres Bordeaux 2004, Theorem 9.4 and the remark after it) had already obtained the asymptotic C₀M/√(log M) for the number of ones among the first M digits; our additions are short windows, all words, the discrepancy order and the general multiplicative class. The lower bounds plant a single coefficient c(bp) at the midpoint of the target cylinder and use a Selberg sieve to make neighbouring coefficients vanish, following the planted-prime approach developed for the Erdős–Borwein constant by Campbell, Captain Sude and Mira Cult. For odd characters, transcendence follows from Hamieh–Murty. Lean 4 checks the finite discrepancy inequalities only. The analytic estimates are written proofs that have been checked by AI models but not yet by a human specialist, and we would welcome corrections, especially on the sieve step and on the short-interval prime inputs.

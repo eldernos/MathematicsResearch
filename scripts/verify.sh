@@ -5,6 +5,7 @@ cd "$(dirname "$0")/.."
 python3 -B -m unittest discover -s scripts -p 'test_*.py'
 lake build
 lake env lean Audit.lean
+lake env lean scripts/test_localized_joint.lean
 for paper in papers/[0-9][0-9]-*/; do
   if [[ -x "${paper}check.sh" ]]; then
     "${paper}check.sh"
@@ -17,6 +18,10 @@ done
 NORMALITY_UPDATE_THEOREM_INDEX=0 lake env lean scripts/readme_theorems.lean
 # Registry, links, anchors, result identifiers, topics, generated pages and figures.
 python3 -B scripts/portal.py check --strict
+# Citation metadata, bibliography and the research landing site.
+python3 -B scripts/check_citation.py
+python3 -B scripts/site.py bib --check
+python3 -B scripts/site.py build --strict --out "$(mktemp -d)"
 while IFS= read -r -d '' source; do
   module=${source%.lean}
   echo "Replaying ${module//\//.}"

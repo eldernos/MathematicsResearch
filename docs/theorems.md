@@ -2,21 +2,92 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 779 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1332 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 106 declarations
-- [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 69 declarations
-- [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 180 declarations
-- [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 99 declarations
-- [Cyclotomic resonance and finite combinations](#cyclotomic-resonance-and-finite-combinations) · 54 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 319 declarations
+- [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
+- [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
+- [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
+- [Cyclotomic resonance and finite combinations](#cyclotomic-resonance-and-finite-combinations) · 55 declarations
 - [Signed expansions, exact discrepancy and symbolic spectra](#signed-expansions-exact-discrepancy-and-symbolic-spectra) · 39 declarations
 - [Rational-orbit certificates](#rational-orbit-certificates) · 44 declarations
 - [Complementary coverage, rigidity and limitations of models](#complementary-coverage-rigidity-and-limitations-of-models) · 17 declarations
-- [Classical constant arithmetic](#classical-constant-arithmetic) · 171 declarations
+- [Classical constant arithmetic](#classical-constant-arithmetic) · 251 declarations
 
 ## Normality, discrepancy and Fourier criteria
+
+### AdditionSpectrum
+
+[`NormalityChecker/AdditionSpectrum.lean`](../NormalityChecker/AdditionSpectrum.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AdditionSpectrum.mem_polytope`](../NormalityChecker/AdditionSpectrum.lean#L67) |  |
+| [`AdditionSpectrum.mem_polytope_iff`](../NormalityChecker/AdditionSpectrum.lean#L71) | The form `max(0, α+β-1) ≤ γ ≤ 1-\|α-β\|`. |
+| [`AdditionSpectrum.polytope_le_one`](../NormalityChecker/AdditionSpectrum.lean#L85) |  |
+| [`AdditionSpectrum.isClosed_polytope`](../NormalityChecker/AdditionSpectrum.lean#L90) |  |
+| [`AdditionSpectrum.convex_polytope`](../NormalityChecker/AdditionSpectrum.lean#L99) |  |
+| [`AdditionSpectrum.fiveWeights_nonneg`](../NormalityChecker/AdditionSpectrum.lean#L124) |  |
+| [`AdditionSpectrum.sum_fiveWeights`](../NormalityChecker/AdditionSpectrum.lean#L135) |  |
+| [`AdditionSpectrum.sum_fiveWeights_smul`](../NormalityChecker/AdditionSpectrum.lean#L141) | The weights reproduce the triple. |
+| [`AdditionSpectrum.fiveVertex_mem`](../NormalityChecker/AdditionSpectrum.lean#L147) |  |
+| [`AdditionSpectrum.polytope_eq_convexHull`](../NormalityChecker/AdditionSpectrum.lean#L150) |  |
+| [`AdditionSpectrum.fiveVertex_extreme`](../NormalityChecker/AdditionSpectrum.lean#L174) |  |
+| [`AdditionSpectrum.extreme_mem_fiveVertex`](../NormalityChecker/AdditionSpectrum.lean#L195) | Every extreme point of the polytope is one of the five vertices. |
+| [`AdditionSpectrum.isExtremeIn_polytope_iff`](../NormalityChecker/AdditionSpectrum.lean#L240) | **The exact five-vertex polytope.** Its extreme points are exactly the five vertices. |
+| [`AdditionSpectrum.finite_necessity`](../NormalityChecker/AdditionSpectrum.lean#L248) [OP-01](results.md#op-01) | **Finite necessity.** At every cutoff the discrepancy triple of `x`, `y`, `x+y` lies in the polytope. |
+| [`AdditionSpectrum.finite_necessity'`](../NormalityChecker/AdditionSpectrum.lean#L260) | The finite statement in the form `max(0, α+β-1) ≤ γ ≤ 1-\|α-β\|`. |
+| [`AdditionSpectrum.clusterPt_necessity`](../NormalityChecker/AdditionSpectrum.lean#L267) | Every joint cluster point of the discrepancy triples lies in the polytope. |
+| [`AdditionSpectrum.limit_necessity`](../NormalityChecker/AdditionSpectrum.lean#L275) | **Limiting necessity.** |
+| [`AdditionSpectrum.addSpectrum_subset_polytope`](../NormalityChecker/AdditionSpectrum.lean#L292) |  |
+| [`AdditionSpectrum.mixtureValue_x`](../NormalityChecker/AdditionSpectrum.lean#L311) |  |
+| [`AdditionSpectrum.mixtureValue_y`](../NormalityChecker/AdditionSpectrum.lean#L314) |  |
+| [`AdditionSpectrum.mixtureValue_xy`](../NormalityChecker/AdditionSpectrum.lean#L317) |  |
+| [`AdditionSpectrum.polytope_subset_addSpectrum_of_realizable`](../NormalityChecker/AdditionSpectrum.lean#L322) | **Realization reduction.** If the five-type mixtures with the weights `fiveWeights` are realizable, the polytope lies in the addition spectrum. |
+| [`AdditionSpectrum.sampleDisc_compare`](../NormalityChecker/AdditionSpectrum.lean#L354) | **Finite comparison.** Paired samples `q n ≡ p n + r n (mod 1)` have discrepancies within `E/N + 2ε`, where `E` counts the positions with `\|r n\| ≥ ε`. |
+| [`AdditionSpectrum.sampleDisc_mixture`](../NormalityChecker/AdditionSpectrum.lean#L390) | **Mixture of a retired and an active part.** If the retired positions carry the model value `0` and the active positions have interval counting error at most… |
+| [`AdditionSpectrum.segStart_zero`](../NormalityChecker/AdditionSpectrum.lean#L461) |  |
+| [`AdditionSpectrum.segStart_succ`](../NormalityChecker/AdditionSpectrum.lean#L463) |  |
+| [`AdditionSpectrum.segStart_mono`](../NormalityChecker/AdditionSpectrum.lean#L473) |  |
+| [`AdditionSpectrum.segStart_strictMono`](../NormalityChecker/AdditionSpectrum.lean#L476) |  |
+| [`AdditionSpectrum.locate_spec`](../NormalityChecker/AdditionSpectrum.lean#L479) |  |
+| [`AdditionSpectrum.locate_eq`](../NormalityChecker/AdditionSpectrum.lean#L493) |  |
+| [`AdditionSpectrum.sum_Ico_segStart`](../NormalityChecker/AdditionSpectrum.lean#L503) |  |
+| [`AdditionSpectrum.block_cesaro`](../NormalityChecker/AdditionSpectrum.lean#L542) | **Block Cesàro lemma.** Suppose consecutive blocks `[S k, S (k+1))` have lengths negligible against their starts, and that a family of functions bounded by… |
+| [`AdditionSpectrum.coef_mem`](../NormalityChecker/AdditionSpectrum.lean#L631) |  |
+| [`AdditionSpectrum.coef_term_summable`](../NormalityChecker/AdditionSpectrum.lean#L643) |  |
+| [`AdditionSpectrum.prefix_state`](../NormalityChecker/AdditionSpectrum.lean#L656) | Prefix sums hit the programmed states modulo one. |
+| [`AdditionSpectrum.programmed_split`](../NormalityChecker/AdditionSpectrum.lean#L680) |  |
+| [`AdditionSpectrum.tailAfter_bound`](../NormalityChecker/AdditionSpectrum.lean#L686) | The real tail after segment `σ` is at most `b/(b-1) · b^(-s (σ+1))`. |
+| [`AdditionSpectrum.form_pairing`](../NormalityChecker/AdditionSpectrum.lean#L714) | **Pairing for integer forms.** Inside segment `σ`, the radix shift of an integer form of programmed numbers is the shifted form of the states plus an integer… |
+| [`AdditionSpectrum.segment_count`](../NormalityChecker/AdditionSpectrum.lean#L767) | **Segment count.** A segment of `M p^ρ` periods of the orbit of `A / p^(v+g)`, where `A = p^ρ a'` with `a'` a unit and `ρ ≤ g`, has interval counting error at… |
+| [`AdditionSpectrum.segLen_pos`](../NormalityChecker/AdditionSpectrum.lean#L876) |  |
+| [`AdditionSpectrum.div_block`](../NormalityChecker/AdditionSpectrum.lean#L881) |  |
+| [`AdditionSpectrum.fin_block`](../NormalityChecker/AdditionSpectrum.lean#L884) |  |
+| [`AdditionSpectrum.segLen_block`](../NormalityChecker/AdditionSpectrum.lean#L889) |  |
+| [`AdditionSpectrum.blockStart_zero`](../NormalityChecker/AdditionSpectrum.lean#L893) |  |
+| [`AdditionSpectrum.blockStart_strictMono`](../NormalityChecker/AdditionSpectrum.lean#L896) |  |
+| [`AdditionSpectrum.blockStart_sum`](../NormalityChecker/AdditionSpectrum.lean#L901) | Block sums split into the `r` typed segments. |
+| [`AdditionSpectrum.blockStart_len`](../NormalityChecker/AdditionSpectrum.lean#L911) |  |
+| [`AdditionSpectrum.locate_block`](../NormalityChecker/AdditionSpectrum.lean#L921) | The block containing a position of segment `r k + i`. |
+| [`AdditionSpectrum.mult_sum_bounds`](../NormalityChecker/AdditionSpectrum.lean#L929) |  |
+| [`AdditionSpectrum.gexp_bounds`](../NormalityChecker/AdditionSpectrum.lean#L950) |  |
+| [`AdditionSpectrum.blockStart_ratio`](../NormalityChecker/AdditionSpectrum.lean#L972) | Block lengths are negligible against block starts. |
+| [`AdditionSpectrum.mixtureValue_mem`](../NormalityChecker/AdditionSpectrum.lean#L1032) |  |
+| [`AdditionSpectrum.mult_balance`](../NormalityChecker/AdditionSpectrum.lean#L1040) |  |
+| [`AdditionSpectrum.mix_pairing`](../NormalityChecker/AdditionSpectrum.lean#L1090) | The true radix samples of an integer form of the realizing reals are the model samples plus the shifted tails, modulo one. |
+| [`AdditionSpectrum.mixTail_bound`](../NormalityChecker/AdditionSpectrum.lean#L1127) | The shifted tail at position `n` is at most `C b/(b-1) b^(-(distance to the segment end)))` with `C = ∑ \|cf j\|`. |
+| [`AdditionSpectrum.mixModel_block`](../NormalityChecker/AdditionSpectrum.lean#L1156) |  |
+| [`AdditionSpectrum.mixPoint_tendsto`](../NormalityChecker/AdditionSpectrum.lean#L1171) | **Mixture realization.** Given the arithmetic period count, for every weighted family of integer type vectors the reals `mixPoint` have, for **every** integer… |
+| [`AdditionSpectrum.mixtureRealizable_of_periodCount`](../NormalityChecker/AdditionSpectrum.lean#L1430) | **Unconditional form, given a prime.** |
+| [`AdditionSpectrum.addSpectrum_eq_of_periodCount`](../NormalityChecker/AdditionSpectrum.lean#L1441) | **The exact addition spectrum, given the arithmetic period count.** |
+| [`AdditionSpectrum.periodCount_holds`](../NormalityChecker/AdditionSpectrum.lean#L1451) | The arithmetic interface holds: it is `PrimePowerGrid.primePower_period_count`. |
+| [`AdditionSpectrum.exists_period_prime`](../NormalityChecker/AdditionSpectrum.lean#L1457) | Every radix `b ≥ 2` has an odd prime `p ∤ b` with `p ∣ b^(p-1) - 1`. |
+| [`AdditionSpectrum.mixtureRealizable`](../NormalityChecker/AdditionSpectrum.lean#L1470) [OP-01](results.md#op-01) | **Realization of rank-one rational mixtures.** In every radix `b ≥ 2`, for all integer type vectors `m i ∈ ℤ^d` and convex weights `w`, there are reals `x₁,… |
+| [`AdditionSpectrum.addSpectrum_eq`](../NormalityChecker/AdditionSpectrum.lean#L1480) [OP-01](results.md#op-01) | **The exact addition spectrum.** In every radix `b ≥ 2` the triples of limiting discrepancies of `x`, `y`, `x+y` form exactly the polytope `max(0, α+β-1) ≤ γ… |
+| [`AdditionSpectrum.exact_addition_spectrum`](../NormalityChecker/AdditionSpectrum.lean#L1486) [OP-01](results.md#op-01) | **The exact three-variable theorem**, in coordinates. |
 
 ### Analysis/Weyl
 
@@ -99,6 +170,30 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`CircleDiscrepancy.disc_mixture_bound`](../NormalityChecker/CircleDiscrepancy.lean#L35) | A uniform error for interval counts transfers to the discrepancy of a mixture of Lebesgue measure and a finite sample, even at atoms. |
 | [`CircleDiscrepancy.disc_sub_tendsto`](../NormalityChecker/CircleDiscrepancy.lean#L137) | Vanishing signed differences of lifts leave the full prefix discrepancy unchanged asymptotically. |
 
+### ComputableNormalityUndecidability
+
+[`NormalityChecker/ComputableNormalityUndecidability.lean`](../NormalityChecker/ComputableNormalityUndecidability.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ComputableNormalityUndecidability.summable_binarySeries`](../NormalityChecker/ComputableNormalityUndecidability.lean#L44) |  |
+| [`ComputableNormalityUndecidability.binarySeries_finite_edit_dyadic`](../NormalityChecker/ComputableNormalityUndecidability.lean#L57) | If two binary digit sequences agree from index `t` onward, their real values differ by a dyadic rational `m / 2^t`. |
+| [`ComputableNormalityUndecidability.transcendental_add_rat`](../NormalityChecker/ComputableNormalityUndecidability.lean#L85) | Adding a rational number preserves transcendence over `ℚ`. |
+| [`ComputableNormalityUndecidability.shift_add_dyadic_eq`](../NormalityChecker/ComputableNormalityUndecidability.lean#L101) | Adding a dyadic rational `m / 2^t` leaves all binary shifts from index `t` onward unchanged. |
+| [`ComputableNormalityUndecidability.binaryDiscrepancy_sub_le_of_eventually_eq`](../NormalityChecker/ComputableNormalityUndecidability.lean#L155) | If two reals have identical binary shifts from index `t` onward, their binary discrepancies at cutoff `N` differ by at most `t / N`. |
+| [`ComputableNormalityUndecidability.binaryDiscrepancy_tendsto_iff_add_dyadic`](../NormalityChecker/ComputableNormalityUndecidability.lean#L177) | Adding a dyadic rational preserves any limiting binary discrepancy value `L`. |
+| [`ComputableNormalityUndecidability.normalIn_two_iff_add_dyadic`](../NormalityChecker/ComputableNormalityUndecidability.lean#L211) | Adding a dyadic rational preserves binary normality. |
+| [`ComputableNormalityUndecidability.switchedDigit_computable`](../NormalityChecker/ComputableNormalityUndecidability.lean#L223) | Uniform computability of the switched binary digit oracle `(c, n) ↦ switchedDigit a b c n`. |
+| [`ComputableNormalityUndecidability.switched_real_promise_and_reduction`](../NormalityChecker/ComputableNormalityUndecidability.lean#L239) [AC-11](results.md#ac-11) | Fundamental promise and halting-problem reduction for the switched real `binarySeries (switchedDigit a b c)`: for every program code `c`, the real is… |
+| [`ComputableNormalityUndecidability.reversed_switched_real_reduction`](../NormalityChecker/ComputableNormalityUndecidability.lean#L295) [AC-11](results.md#ac-11) | Reversed reduction: `switchedDigit b a c` yields a transcendental real with limiting discrepancy in `{0, 1}` that is binary normal if and only if `c` halts on… |
+| [`ComputableNormalityUndecidability.normality_not_computable`](../NormalityChecker/ComputableNormalityUndecidability.lean#L351) [AC-11](results.md#ac-11) | Binary normality is not decidable (`¬ ComputablePred`), even under the promise that the input code specifies a computable transcendental real with limiting… |
+| [`ComputableNormalityUndecidability.normality_not_re`](../NormalityChecker/ComputableNormalityUndecidability.lean#L367) [AC-11](results.md#ac-11) | Binary normality is not recursively enumerable (`¬ REPred`) on the same computable transcendental `{0, 1}`-discrepancy promise family. |
+| [`ComputableNormalityUndecidability.normality_not_co_re`](../NormalityChecker/ComputableNormalityUndecidability.lean#L380) [AC-11](results.md#ac-11) | Binary normality is not co-recursively enumerable (`¬ REPred` for its complement) on the reversed computable transcendental `{0, 1}`-discrepancy promise family. |
+| [`ComputableNormalityUndecidability.exists_switchedDigit_index_map`](../NormalityChecker/ComputableNormalityUndecidability.lean#L406) | s-m-n parameter specialization: given computable digit oracles `a` and `b`, there is a total computable map `f : Nat.Partrec.Code → Nat.Partrec.Code` sending… |
+| [`ComputableNormalityUndecidability.no_re_normality_recognizer_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L428) [AC-11](results.md#ac-11) | No recursively enumerable predicate on arbitrary digit-oracle codes `Nat.Partrec.Code` can recognize binary normality even under the promise that the named… |
+| [`ComputableNormalityUndecidability.no_re_nonnormality_recognizer_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L448) [AC-11](results.md#ac-11) | No recursively enumerable predicate on arbitrary digit-oracle codes `Nat.Partrec.Code` can recognize binary nonnormality under the same transcendental `{0,… |
+| [`ComputableNormalityUndecidability.no_computable_normality_decider_on_names`](../NormalityChecker/ComputableNormalityUndecidability.lean#L468) [AC-11](results.md#ac-11) | No computable predicate on arbitrary digit-oracle codes `Nat.Partrec.Code` can decide binary normality under the transcendental `{0, 1}`-discrepancy promise. |
+
 ### Concentration
 
 [`NormalityChecker/Concentration.lean`](../NormalityChecker/Concentration.lean)
@@ -139,6 +234,43 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`shifted_character_correlation`](../NormalityChecker/Dilation.lean#L102) | A correlation on the exact radix orbit is a single Fourier character. |
 | [`normal_of_dilated_fourier`](../NormalityChecker/Dilation.lean#L114) | To test base-b normality one may test all nonzero frequencies after a fixed positive integer dilation. |
 | [`binary_normal_of_dilated_fourier`](../NormalityChecker/Dilation.lean#L139) |  |
+
+### DiscrepancyGeometry
+
+[`NormalityChecker/DiscrepancyGeometry.lean`](../NormalityChecker/DiscrepancyGeometry.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`DiscrepancyGeometry.discDist_nonneg`](../NormalityChecker/DiscrepancyGeometry.lean#L39) |  |
+| [`DiscrepancyGeometry.discDist_le_one`](../NormalityChecker/DiscrepancyGeometry.lean#L45) |  |
+| [`DiscrepancyGeometry.discDist_self`](../NormalityChecker/DiscrepancyGeometry.lean#L51) |  |
+| [`DiscrepancyGeometry.discDist_translate`](../NormalityChecker/DiscrepancyGeometry.lean#L55) | Translation invariance. |
+| [`DiscrepancyGeometry.discDist_comm`](../NormalityChecker/DiscrepancyGeometry.lean#L68) |  |
+| [`DiscrepancyGeometry.discDist_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L78) [OP-05](results.md#op-05) | **Triangle inequality.** |
+| [`DiscrepancyGeometry.discDist_isGreatest`](../NormalityChecker/DiscrepancyGeometry.lean#L87) | `d_N(x,y)` is the largest change of `D_N` under translation by `x - y`, over all origins. |
+| [`DiscrepancyGeometry.radixDiscrepancy_lipschitz`](../NormalityChecker/DiscrepancyGeometry.lean#L93) | `D_N` is 1-Lipschitz for the discrepancy distance. |
+| [`DiscrepancyGeometry.shift_mem`](../NormalityChecker/DiscrepancyGeometry.lean#L98) |  |
+| [`DiscrepancyGeometry.shift_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L102) | The radix shifts are `ℤ`-periodic in the starting point. |
+| [`DiscrepancyGeometry.radixDiscrepancy_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L108) |  |
+| [`DiscrepancyGeometry.discDist_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L115) |  |
+| [`DiscrepancyGeometry.sampleDisc_le_one_sub`](../NormalityChecker/DiscrepancyGeometry.lean#L169) | If the first two samples are distinct points of `[0,1)`, the discrepancy stays a definite distance below one. |
+| [`DiscrepancyGeometry.sampleDisc_eq_one_of_const`](../NormalityChecker/DiscrepancyGeometry.lean#L217) | A constant sample of `[0,1)` has discrepancy one. |
+| [`DiscrepancyGeometry.discDist_eq_zero_iff`](../NormalityChecker/DiscrepancyGeometry.lean#L243) [OP-05](results.md#op-05) | **Zero set at finite cutoff.** For `N ≥ 2` the discrepancy distance vanishes exactly on the pairs for which `(b - 1)(x - y)` is an integer. |
+| [`DiscrepancyGeometry.discDist_pos_bound`](../NormalityChecker/DiscrepancyGeometry.lean#L293) | Quantitative form of the zero set: if the first two shifts of `x - y` differ, then `d_N(x,y) ≥ min (min g (1 - g)) (1/N)`, where `g` is the gap between them. |
+| [`DiscrepancyGeometry.natMul_le_of_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L306) | Any translation-invariant function satisfying the triangle inequality and `d x x = 0` is `m`-Lipschitz for multiplication by a natural number `m`. |
+| [`DiscrepancyGeometry.intMul_le_of_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L325) | Integer version of `natMul_le_of_triangle`, for symmetric `d` with `d (-x) (-y) = d x y` reflected through symmetry. |
+| [`DiscrepancyGeometry.discDist_natMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L340) | Multiplication by a natural number `m` is `m`-Lipschitz. |
+| [`DiscrepancyGeometry.discDist_intMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L346) | **Integer multipliers are Lipschitz:** `d_N(m x, m y) ≤ \|m\| d_N(x,y)`. |
+| [`DiscrepancyGeometry.asymDist_nonneg`](../NormalityChecker/DiscrepancyGeometry.lean#L368) |  |
+| [`DiscrepancyGeometry.asymDist_le_one`](../NormalityChecker/DiscrepancyGeometry.lean#L372) |  |
+| [`DiscrepancyGeometry.asymDist_self`](../NormalityChecker/DiscrepancyGeometry.lean#L375) |  |
+| [`DiscrepancyGeometry.asymDist_comm`](../NormalityChecker/DiscrepancyGeometry.lean#L378) |  |
+| [`DiscrepancyGeometry.asymDist_translate`](../NormalityChecker/DiscrepancyGeometry.lean#L381) |  |
+| [`DiscrepancyGeometry.asymDist_add_intCast`](../NormalityChecker/DiscrepancyGeometry.lean#L385) |  |
+| [`DiscrepancyGeometry.asymDist_triangle`](../NormalityChecker/DiscrepancyGeometry.lean#L390) [OP-05](results.md#op-05) | **Triangle inequality for the asymptotic distance.** |
+| [`DiscrepancyGeometry.asymDist_eq_zero_of_int`](../NormalityChecker/DiscrepancyGeometry.lean#L401) | If `(b-1)(x-y)` is an integer, the asymptotic distance vanishes. |
+| [`DiscrepancyGeometry.asymDist_eq_one_of_tendsto`](../NormalityChecker/DiscrepancyGeometry.lean#L411) | If `D_N(x - y) → 0` (for instance when `x - y` is simply normal to base `b` in the discrepancy sense), the asymptotic distance attains its maximum value one. |
+| [`DiscrepancyGeometry.asymDist_intMul_le`](../NormalityChecker/DiscrepancyGeometry.lean#L419) [OP-05](results.md#op-05) | **Integer multipliers are Lipschitz for the asymptotic distance.** |
 
 ### Distribution
 
@@ -193,6 +325,14 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`IntervalFourier.interval_count_bound`](../NormalityChecker/IntervalFourier.lean#L166) | Interval-count error from finitely many Fourier sums. |
 
+### JointWeyl
+
+[`NormalityChecker/JointWeyl.lean`](../NormalityChecker/JointWeyl.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`JointWeyl.rectangle_of_scalar_normal`](../NormalityChecker/JointWeyl.lean#L185) | Scalar normality for every nonzero integer linear combination implies convergence of the actual simultaneous rectangle frequencies in every finite dimension. |
+
 ### OrbitDifferencing
 
 [`NormalityChecker/OrbitDifferencing.lean`](../NormalityChecker/OrbitDifferencing.lean)
@@ -200,6 +340,102 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`stride_cancellation`](../NormalityChecker/OrbitDifferencing.lean#L23) | A finite van der Corput estimate with stride `v`. |
+
+### Phase17DiscrepancyBounds
+
+[`NormalityChecker/Phase17DiscrepancyBounds.lean`](../NormalityChecker/Phase17DiscrepancyBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_transition`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L28) [CC-48](results.md#cc-48) | Lower discrepancy gap in terms of adjacent binary transitions (`01` and `10`): for every real `x` and `N ≥ 1`, `min (1/3) (transitionFrequency x N) - 1/N ≤ 1… |
+| [`Phase17DiscrepancyBounds.nonzero_shift_has_one_bit`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L46) | If `shift 2 x n ≥ 2⁻ᴸ` (`L ≥ 1`), then some position `n + j` with `j ≤ L - 1` has a `1`-bit (`shift 2 x (n + j) ≥ 1/2`). |
+| [`Phase17DiscrepancyBounds.upper_freq_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L77) [CC-48](results.md#cc-48) | Frequency of shifts in `[2⁻ᴸ, 1)` is controlled by `L` times the `1`-bit frequency plus the boundary allowance `(L - 1) / N`. |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) [CC-48](results.md#cc-48) | Upper discrepancy gap in terms of the `1`-bit frequency: for every real `x`, `L ≥ 1`, and `N ≥ 1`, `1 - binaryDiscrepancy x N ≤ (1/2)^L + (L - 1)/N + L *… |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) [CC-48](results.md#cc-48) | Lower discrepancy gap from two separated positive-mass intervals `[0, ε)` and `[3ε, 1/2)`: if `0 < ε ≤ 1/6`, `Δ ≤ ε`, and both `[0, ε)` and `[3ε, 1/2)`… |
+| [`Phase17DiscrepancyBounds.general_single_shape_one_one_max`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L184) [ST-35](results.md#st-35) | Exact single-shape maximum relative length for the primary corner `(1, 1)` of `α(b, p) α(b, q)` for arbitrary real parameters `p, q > 1` and ratio `r = Q / P… |
+| [`Phase17DiscrepancyBounds.general_single_shape_one_one_attained`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L232) [ST-35](results.md#st-35) | Equality in `general_single_shape_one_one_max` is attained at `r = q(p - 1) / (p(q - 1))`. |
+| [`Phase17DiscrepancyBounds.jointUniform_of_established_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L254) [ST-33](results.md#st-33) | If `deg : Fin k → ℕ` lists distinct degrees and every nonzero integer polynomial in `α` whose degree lies in `Set.range deg` is normal in base `b`, then the… |
+| [`Phase17DiscrepancyBounds.jointUniform_of_echelon_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L311) [ST-33](results.md#st-33) | Echelon-basis multidimensional Weyl theorem (Phase 17 Track A, Theorem 8): if `P : Fin k → ℤ[X]` are nonzero integer polynomials with pairwise distinct… |
+| [`Phase17DiscrepancyBounds.carry_knapsack_le`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L375) [CC-49](results.md#cc-49) | Pointwise dual inequality of Track C Theorem 1(a): for any `D`, residue `r`, nonnegative integer carry `c`, and dual weight `lam ≥ 0`, the indicator that the… |
+| [`Phase17DiscrepancyBounds.parity_bonferroni_dual_le`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L432) [CC-49](results.md#cc-49) | Parity Bonferroni dual inequality (Phase 17 Track C, Theorem 4): for every odd `r = 2m + 1` and every nonnegative integer `n`, the truncated binomial… |
+| [`Phase17DiscrepancyBounds.descent31Check_true`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L563) [ST-33](results.md#st-33) | Kernel-checked verification of the 57-vector `(3, 31)` minimized cyclic-descent orbit. |
+| [`Phase17DiscrepancyBounds.descent31_all_words_nonzero`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L579) [ST-33](results.md#st-33) | For every finite binary word `w`, running the minimized `(3, 31)` cyclic-descent automaton from any orbit state stays inside `descent31Orbit` and ends with… |
+
+### Phase18Synthetic
+
+[`NormalityChecker/Phase18Synthetic.lean`](../NormalityChecker/Phase18Synthetic.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase18Synthetic.repunit_mul_sub_one`](../NormalityChecker/Phase18Synthetic.lean#L54) |  |
+| [`Phase18Synthetic.repunit_succ`](../NormalityChecker/Phase18Synthetic.lean#L58) |  |
+| [`Phase18Synthetic.geometric_retirement`](../NormalityChecker/Phase18Synthetic.lean#L65) | A complete group of `h` consecutive powers after position `m`, in any field. |
+| [`Phase18Synthetic.geometric_retirement_weight`](../NormalityChecker/Phase18Synthetic.lean#L76) [SY-11](results.md#sy-11) | **Geometric retirement identity.** `(b-1)/(b^h-1) · ∑_{r=1}^h b^-(m+r) = b^-(m+h)`. |
+| [`Phase18Synthetic.block_retirement`](../NormalityChecker/Phase18Synthetic.lean#L88) | One complete block `(s, s+h]` with constant raw coefficient `c·(b-1)/(b^h-1)` retires to the single term `c·b^-(s+h)`. |
+| [`Phase18Synthetic.grouped_retirement`](../NormalityChecker/Phase18Synthetic.lean#L104) | **Grouped retirement, finite form.** Along a strictly increasing schedule `n`, any raw coefficient sequence that equals `c_k (b-1)/(b^(n_(k+1)-n_k)-1)` on the… |
+| [`Phase18Synthetic.retirement_weight_mem`](../NormalityChecker/Phase18Synthetic.lean#L123) | The retirement weight of a nonempty group lies in `(0, 1]` for a real radix `b > 1`. |
+| [`Phase18Synthetic.grouped_retirement_hasSum`](../NormalityChecker/Phase18Synthetic.lean#L146) [SY-11](results.md#sy-11) | **Grouped retirement, infinite form.** For a real radix `b > 1`, a schedule starting at zero and bounded real multipliers, the dense raw series converges… |
+| [`Phase18Synthetic.retirement_weight_eq_inv_repunit`](../NormalityChecker/Phase18Synthetic.lean#L203) | The retirement weight is the reciprocal of the repunit. |
+| [`Phase18Synthetic.repunit_coprime`](../NormalityChecker/Phase18Synthetic.lean#L212) |  |
+| [`Phase18Synthetic.repunit_ge_two`](../NormalityChecker/Phase18Synthetic.lean#L218) |  |
+| [`Phase18Synthetic.raw_term_den`](../NormalityChecker/Phase18Synthetic.lean#L225) | Each raw summand `1/(R_h b^m)` has reduced denominator exactly `R_h b^m`. |
+| [`Phase18Synthetic.raw_term_not_radix`](../NormalityChecker/Phase18Synthetic.lean#L236) | A raw summand of a group of length at least two is never a `b`-adic rational: no radix shift of it is an integer. |
+| [`Phase18Synthetic.repunit_dvd_of_dvd`](../NormalityChecker/Phase18Synthetic.lean#L255) | Repunits divide repunits of multiple length. |
+| [`Phase18Synthetic.prime_dvd_repunit`](../NormalityChecker/Phase18Synthetic.lean#L267) | Every prime `r ∤ b` divides the repunit of length `r(r-1)`. |
+| [`Phase18Synthetic.raw_prime_support_infinite`](../NormalityChecker/Phase18Synthetic.lean#L290) | **Infinite raw prime support.** If for every `M > 0` some gap of the schedule is divisible by `M`, every prime not dividing `b` divides some raw denominator,… |
+| [`Phase18Synthetic.factorial_gaps`](../NormalityChecker/Phase18Synthetic.lean#L307) | Factorial schedules `t·k!` have a gap divisible by every positive integer. |
+| [`Phase18Synthetic.den_of_unit_numerator`](../NormalityChecker/Phase18Synthetic.lean#L318) | A fraction over `p^e` whose numerator is prime to `p` has reduced denominator `p^e`. |
+| [`Phase18Synthetic.retained_term_den`](../NormalityChecker/Phase18Synthetic.lean#L330) | After enough shifts a grouped term with a retained off-radix prime power keeps exactly that denominator: `b^N/(p^e b^n)` has denominator `p^e` for `N ≥ n`. |
+| [`Phase18Synthetic.programCoeff_mem`](../NormalityChecker/Phase18Synthetic.lean#L364) |  |
+| [`Phase18Synthetic.programCoeff_sub`](../NormalityChecker/Phase18Synthetic.lean#L372) | The coefficient differs from `u - b^g R` by an integer. |
+| [`Phase18Synthetic.programState_fract`](../NormalityChecker/Phase18Synthetic.lean#L383) | **Exact state programming.** Every completed state has fractional part equal to its target. |
+| [`Phase18Synthetic.programCoeff_den_dvd`](../NormalityChecker/Phase18Synthetic.lean#L396) | **Coefficient denominators.** If the previous state has fractional part `u_k`, the next coefficient has denominator dividing `den u_(k+1) · den u_k`. |
+| [`Phase18Synthetic.programCoeffs_den_dvd`](../NormalityChecker/Phase18Synthetic.lean#L416) | With `u_0 = 0` and every target in `[0,1)`, all coefficient denominators obey the bound. |
+| [`Phase18Synthetic.programCoeffs_prime_power`](../NormalityChecker/Phase18Synthetic.lean#L426) | **Off-radix programming.** If every target denominator is a power of a prime `p`, so is every coefficient denominator. |
+| [`Phase18Synthetic.programState_eq_prefix`](../NormalityChecker/Phase18Synthetic.lean#L438) | **The state is the shifted prefix.** With gaps `g_(k+1) = n_(k+1) - n_k` of a monotone schedule with `n_0 = 0`, the state `R_L` equals `b^(n_L) ∑_{k<L}… |
+| [`Phase18Synthetic.programmed_prefix_fract`](../NormalityChecker/Phase18Synthetic.lean#L459) [SY-11](results.md#sy-11) | **Programmed orbit states.** The radix shift of the `L`-th prefix by its own last insertion exponent has fractional part `u_L`. |
+| [`Phase18Synthetic.programState_den`](../NormalityChecker/Phase18Synthetic.lean#L469) | **Retained denominator.** A completed state has the same reduced denominator as its target; on an active interval with `u_k = 1/p^(e_k)` the state keeps… |
+| [`Phase18Synthetic.programState_retired`](../NormalityChecker/Phase18Synthetic.lean#L483) | **Retired states.** A zero target makes the completed state an integer, so the programmed prefix contributes nothing modulo one at that insertion. |
+| [`Phase18Synthetic.programmed_dense_hasSum`](../NormalityChecker/Phase18Synthetic.lean#L494) [SY-11](results.md#sy-11) | **Programmed dense series.** Replacing each programmed term `c_(k+1) b^-n_(k+1)` by its complete geometric group gives a dense, absolutely convergent series… |
+| [`Phase18Synthetic.radixDiscrepancy_mem`](../NormalityChecker/Phase18Synthetic.lean#L518) |  |
+| [`Phase18Synthetic.discrepancy_deficit_le`](../NormalityChecker/Phase18Synthetic.lean#L524) | Concentration near integers bounds the discrepancy deficit. |
+| [`Phase18Synthetic.discrepancy_add_le`](../NormalityChecker/Phase18Synthetic.lean#L563) | One-sided finite comparison obtained from the sharp translation law. |
+| [`Phase18Synthetic.near_neg`](../NormalityChecker/Phase18Synthetic.lean#L569) |  |
+| [`Phase18Synthetic.farCount_neg`](../NormalityChecker/Phase18Synthetic.lean#L573) |  |
+| [`Phase18Synthetic.discrepancy_transfer`](../NormalityChecker/Phase18Synthetic.lean#L583) [SY-12](results.md#sy-12) | **Discrepancy transfer theorem.** For every real `x`, `z`, every `ε ≥ 0` and `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 2ε + E_N(ε)/N`, with `D_N` the extreme interval… |
+| [`Phase18Synthetic.discrepancy_transfer_tendsto`](../NormalityChecker/Phase18Synthetic.lean#L590) | **Asymptotic transfer.** If `E_N(ε)/N → 0` for every `ε > 0`, the discrepancies of `x+z` and `x` differ by `o(1)`; in particular their upper and lower limits… |
+| [`Phase18Synthetic.shift_add_int`](../NormalityChecker/Phase18Synthetic.lean#L605) | Integer translation leaves every radix shift unchanged. |
+| [`Phase18Synthetic.shift_add_radix_rat`](../NormalityChecker/Phase18Synthetic.lean#L611) | A `b`-adic rational `A/b^K` leaves every shift from position `K` onward unchanged. |
+| [`Phase18Synthetic.farCount_le_of_eventually_int`](../NormalityChecker/Phase18Synthetic.lean#L624) | `E_N(0) ≤ K` whenever every shift `b^n z` with `n ≥ K` is an integer. |
+| [`Phase18Synthetic.discrepancy_eventually_int`](../NormalityChecker/Phase18Synthetic.lean#L642) | **Eventually integral transfer.** If `b^n z ∈ ℤ` for all `n ≥ K`, then `\|D_N(x+z) - D_N(x)\| ≤ min(1, K/N)`. |
+| [`Phase18Synthetic.farCount_radix_rat_le`](../NormalityChecker/Phase18Synthetic.lean#L657) | `E_N(0) ≤ K` for the `b`-adic rational `A/b^K`. |
+| [`Phase18Synthetic.discrepancy_radix_rat`](../NormalityChecker/Phase18Synthetic.lean#L668) [SY-12](results.md#sy-12) | **Finite `b`-adic transfer.** `\|D_N(x + A/b^K) - D_N(x)\| ≤ min(1, K/N)`. |
+| [`Phase18Synthetic.discrepancy_add_int`](../NormalityChecker/Phase18Synthetic.lean#L681) | Integer translations preserve the discrepancy at every cutoff. |
+| [`Phase18Synthetic.sparse_near`](../NormalityChecker/Phase18Synthetic.lean#L695) | **Integer head, small tail.** If the insertions with index below `K` lie at or before `n` and the next lies at `m_K > n`, then `b^n ∑ A_k b^-m_k` is within… |
+| [`Phase18Synthetic.sparse_farCount_le`](../NormalityChecker/Phase18Synthetic.lean#L768) | **Counting far positions.** If `2B b^-w ≤ ε`, every position at which a sparse perturbation is farther than `ε` from an integer lies in one of the windows of… |
+| [`Phase18Synthetic.sparse_discrepancy_transfer`](../NormalityChecker/Phase18Synthetic.lean#L811) | **Sparse discrepancy transfer.** For a sparse integer perturbation with `\|A_k\| ≤ B` and any `w` with `2B b^-w ≤ ε`, `\|D_N(x+z) - D_N(x)\| ≤ 2ε + w · #{k : m_k… |
+| [`Phase18Synthetic.quadratic_insertions_le`](../NormalityChecker/Phase18Synthetic.lean#L825) | Quadratic insertion positions `(k+1)(k+2)` below `M` number at most `⌊√M⌋`. |
+| [`Phase18Synthetic.quadratic_sparse_transfer`](../NormalityChecker/Phase18Synthetic.lean#L837) [SY-12](results.md#sy-12) | **The flagship sparse perturbation** `Z = ∑_{k≥1} 2^-(k(k+1))`. |
+
+### PositiveSummation
+
+[`NormalityChecker/PositiveSummation.lean`](../NormalityChecker/PositiveSummation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`hasSum_positive_rational_multiples`](../NormalityChecker/PositiveSummation.lean#L15) [SY-07](results.md#sy-07) | Positive rational multiples of any prescribed positive generators can sum to any prescribed positive real. |
+
+### PrimePowerGrid
+
+[`NormalityChecker/PrimePowerGrid.lean`](../NormalityChecker/PrimePowerGrid.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`PrimePowerGrid.grid_count`](../NormalityChecker/PrimePowerGrid.lean#L38) | **Rotated grid count.** For any rotation `s`, the number of the `G` points `fract (s + j / G)` in `[a, c)` differs from `G (c - a)` by at most one. |
+| [`PrimePowerGrid.primePower_periodic`](../NormalityChecker/PrimePowerGrid.lean#L156) | **Periodicity.** The prime-power Stoneham sample repeats after `t p^g` steps, for every integer numerator. |
+| [`PrimePowerGrid.stride_grid_count`](../NormalityChecker/PrimePowerGrid.lean#L179) | **Generic stride grid count.** Let `q = d G` with `1 < d`, suppose `b^t ≡ 1 (mod d)` and `b^t` has order exactly `G` modulo `q`, and let `b` and the numerator… |
+| [`PrimePowerGrid.primePower_period_count`](../NormalityChecker/PrimePowerGrid.lean#L313) | **Prime-power period count.** Over one full period `n < t p^g`, the number of samples `fract (bⁿ a' / p^(e+g))` in `[a, c)` differs from `t p^g (c - a)` by at… |
+| [`PrimePowerGrid.crt_period_count`](../NormalityChecker/PrimePowerGrid.lean#L337) [OP-08](results.md#op-08) | **CRT period count.** Let `q = p^(e+g) Q` with `Q` prime to `p` and `Q ∣ b^t - 1`, where `e` is the exact `p`-adic valuation of `b^t - 1`. |
 
 ### RadixTelescoping
 
@@ -222,6 +458,36 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SignedPhases.cycle_block_error`](../NormalityChecker/RationalOrbitCycle.lean#L59) | In a block starting anywhere after the preperiod, the error against one full period is bounded by the period length for every interval. |
 | [`SignedPhases.cycle_frequency_error`](../NormalityChecker/RationalOrbitCycle.lean#L96) | Every interval in any prefix differs from its limiting period frequency by at most the combined length of the preperiod and one period, divided by N. |
 
+### RectangleFrequency
+
+[`NormalityChecker/RectangleFrequency.lean`](../NormalityChecker/RectangleFrequency.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`JointUniform.normalIn`](../NormalityChecker/RectangleFrequency.lean#L24) | Taking a digit cylinder in one coordinate and the whole interval in the others recovers normality of that coordinate. |
+
+### RetirementDenominator
+
+[`NormalityChecker/RetirementDenominator.lean`](../NormalityChecker/RetirementDenominator.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`RetirementDenominator.shiftedPrefix_eq_div`](../NormalityChecker/RetirementDenominator.lean#L51) |  |
+| [`RetirementDenominator.maximalLayer_card`](../NormalityChecker/RetirementDenominator.lean#L67) [SY-01](results.md#sy-01) | The valuation layer of maximal depth consists of the multiples of `p^(Nat.log p K)` among the first `K` positive indices. |
+| [`RetirementDenominator.maximalLayer_count_bounds`](../NormalityChecker/RetirementDenominator.lean#L78) |  |
+| [`RetirementDenominator.scaledNumerator_mod`](../NormalityChecker/RetirementDenominator.lean#L88) | Each deepest term contributes `b^n` modulo `p`; all shallower terms vanish when `s > 0`. |
+| [`RetirementDenominator.shiftedPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L110) | Exact reduced denominator for every truncation and every shift at or beyond its last insertion. |
+| [`RetirementDenominator.lastInsertion_eq_iff`](../NormalityChecker/RetirementDenominator.lean#L142) | At the left endpoint the new insertion is included. |
+| [`RetirementDenominator.fullPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L157) [SY-01](results.md#sy-01) | The reduced denominator of the full rational prefix at every shift. |
+| [`RetirementDenominator.polynomialPrefix_den`](../NormalityChecker/RetirementDenominator.lean#L165) [SY-01](results.md#sy-01) | For the principal polynomial schedule, the formula holds after the `K`-th insertion even if the fixed truncation is shifted farther. |
+| [`RetirementDenominator.cleanBlock_error`](../NormalityChecker/RetirementDenominator.lean#L178) | Even a coefficient of size one costs at most two in total shifted real error on a whole interval ending by the next insertion. |
+| [`RetirementDenominator.fullPrefix_den_tendsto`](../NormalityChecker/RetirementDenominator.lean#L281) | Every sufficiently late full prefix has arbitrarily large reduced denominator when the valuation weight exponent is positive. |
+| [`RetirementDenominator.normal_of_positive`](../NormalityChecker/RetirementDenominator.lean#L297) | All-prefix normality for `s > 0` whenever insertion positions are strictly increasing multiples of the order and grow at least quadratically. |
+| [`RetirementDenominator.discrepancy_of_zero`](../NormalityChecker/RetirementDenominator.lean#L396) | Unit coefficients give discrepancy tending to one through every cutoff. |
+| [`RetirementDenominator.discrepancy_switch`](../NormalityChecker/RetirementDenominator.lean#L436) [SY-02](results.md#sy-02) | The full discrepancy switch for the grouped series on any strictly increasing schedule of order multiples satisfying the quadratic lower bound. |
+| [`RetirementDenominator.normal_iff_pos`](../NormalityChecker/RetirementDenominator.lean#L444) [SY-02](results.md#sy-02) |  |
+| [`RetirementDenominator.polynomial_discrepancy_switch`](../NormalityChecker/RetirementDenominator.lean#L456) [SY-02](results.md#sy-02) | In particular the principal family at `a k = ord_p(b) * k^d` realizes the discrepancy switch in every degree `d ≥ 2`, for all off-radix primes. |
+
 ### ScaleTransfer
 
 [`NormalityChecker/ScaleTransfer.lean`](../NormalityChecker/ScaleTransfer.lean)
@@ -243,7 +509,86 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`sharp_asymptotic_discrepancy`](../NormalityChecker/SharpDiscrepancy.lean#L137) [CC-04](results.md#cc-04) |  |
 | [`third_discrepancy_sharp`](../NormalityChecker/SharpDiscrepancy.lean#L157) [DS-03](results.md#ds-03) [CC-04](results.md#cc-04) | The period-two orbit attains the universal plateau in the bound. |
 
+### SharpTranslation
+
+[`NormalityChecker/SharpTranslation.lean`](../NormalityChecker/SharpTranslation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`SharpTranslation.radixDiscrepancy_eq_sampleDisc`](../NormalityChecker/SharpTranslation.lean#L31) |  |
+| [`SharpTranslation.interval_le_sampleDisc`](../NormalityChecker/SharpTranslation.lean#L41) |  |
+| [`SharpTranslation.sampleDisc_le_of`](../NormalityChecker/SharpTranslation.lean#L45) |  |
+| [`SharpTranslation.sampleDisc_nonneg`](../NormalityChecker/SharpTranslation.lean#L52) |  |
+| [`SharpTranslation.sampleDisc_le_one`](../NormalityChecker/SharpTranslation.lean#L55) |  |
+| [`SharpTranslation.interval_le_sampleDisc'`](../NormalityChecker/SharpTranslation.lean#L61) | A possibly degenerate interval. |
+| [`SharpTranslation.arc_le`](../NormalityChecker/SharpTranslation.lean#L123) | **Arc bound.** Every arc of length `l ∈ [0,1]` has centered count at most the extreme interval discrepancy. |
+| [`SharpTranslation.interval_eq_arc_excess`](../NormalityChecker/SharpTranslation.lean#L167) | **Complementation.** Every centered interval count is the positive excess of an arc. |
+| [`SharpTranslation.paired_arc_le`](../NormalityChecker/SharpTranslation.lean#L235) | **Finite arc comparison for paired samples.** If `q_n ≡ p_n + s r_n (mod 1)` with `s = ±1`, then for every arc `[α, α+l)` of length `l ≥ 0`, `D(q) ≤ D(p) + 1… |
+| [`SharpTranslation.sampleDisc_paired`](../NormalityChecker/SharpTranslation.lean#L326) | **Paired samples.** If `q_n ≡ p_n ± r_n (mod 1)` for samples in `[0,1)`, then `D_N(q) ≤ D_N(p) + 1 - D_N(r)`. |
+| [`SharpTranslation.sharp_translation`](../NormalityChecker/SharpTranslation.lean#L343) [SY-04](results.md#sy-04) | **The exact worst-case change.** For every real `x`, `z` and every `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 1 - D_N(z)`. |
+| [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
+| [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
+| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
+
+### SurvivingGrid
+
+[`NormalityChecker/SurvivingGrid.lean`](../NormalityChecker/SurvivingGrid.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`SurvivingGrid.return_iff`](../NormalityChecker/SurvivingGrid.lean#L13) [OP-08](results.md#op-08) | The exact return times for a stride `g` which fixes the complementary modulus and is one modulo the distinguished odd prime. |
+| [`SurvivingGrid.stride_order`](../NormalityChecker/SurvivingGrid.lean#L43) [OP-08](results.md#op-08) | Multiplicative order, hence the exact number of grid points, at any depth. |
+| [`SurvivingGrid.visits_every_lift`](../NormalityChecker/SurvivingGrid.lean#L56) [OP-08](results.md#op-08) | If the return period equals the number of lifts of a fixed residue, every lift is visited. |
+
 ## Stoneham polynomial images and products
+
+### AlternateBaseCoverage
+
+[`NormalityChecker/AlternateBaseCoverage.lean`](../NormalityChecker/AlternateBaseCoverage.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AlternateBase.geometric_window_shares`](../NormalityChecker/AlternateBaseCoverage.lean#L32) | For disjoint windows the two densities are attained by the windows themselves at their left and right endpoints respectively. |
+
+### AlternateBaseDilation
+
+[`NormalityChecker/AlternateBaseDilation.lean`](../NormalityChecker/AlternateBaseDilation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AlternateBase.discrepancy_dilation`](../NormalityChecker/AlternateBaseDilation.lean#L11) | Each interval in the dilated orbit lifts to D disjoint intervals. |
+
+### AlternateBaseStoneham
+
+[`NormalityChecker/AlternateBaseStoneham.lean`](../NormalityChecker/AlternateBaseStoneham.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AlternateBase.universal_gap`](../NormalityChecker/AlternateBaseStoneham.lean#L43) | A normalized gap valid in every degree at most d, including composite c. |
+| [`AlternateBase.coordinate_gap`](../NormalityChecker/AlternateBaseStoneham.lean#L56) | When the degree is smaller than c, each coordinate is either at most c^k or already at least the next power. |
+| [`AlternateBase.power_zero_windows`](../NormalityChecker/AlternateBaseStoneham.lean#L130) | The denominator c^r accounts for the standard starting index j=1. |
+| [`AlternateBase.polynomial_windows`](../NormalityChecker/AlternateBaseStoneham.lean#L265) | Any common denominator D for the coefficients gives integer windows for D times the polynomial. |
+| [`AlternateBase.polynomial_discrepancy_of_gap`](../NormalityChecker/AlternateBaseStoneham.lean#L285) | Explicit extreme discrepancy for the original rational polynomial. |
+| [`AlternateBase.polynomial_nonnormal_of_gap`](../NormalityChecker/AlternateBaseStoneham.lean#L295) | A normalized gap with positive window length suffices for rational coefficients. |
+| [`AlternateBase.polynomial_nonnormal_of_log_gap`](../NormalityChecker/AlternateBaseStoneham.lean#L309) | The exact criterion for a window of positive length with endpoints U/a and V log b / log B. |
+| [`AlternateBase.polynomial_nonnormal`](../NormalityChecker/AlternateBaseStoneham.lean#L335) [ST-17](results.md#st-17) | For a fixed degree bound, every a satisfying the displayed explicit condition works. |
+| [`AlternateBase.small_degree_polynomial_nonnormal`](../NormalityChecker/AlternateBaseStoneham.lean#L345) [ST-17](results.md#st-17) | A better sufficient bound when the degree is smaller than c. |
+| [`AlternateBase.eventually_polynomial_nonnormal`](../NormalityChecker/AlternateBaseStoneham.lean#L352) | Every sufficiently large a works simultaneously for all polynomials up to a fixed degree. |
+| [`AlternateBase.square_zero_windows`](../NormalityChecker/AlternateBaseStoneham.lean#L361) | Exact open observation window for the square, with the standard starting index one. |
+| [`AlternateBase.quadratic_nonnormal_48`](../NormalityChecker/AlternateBaseStoneham.lean#L379) [ST-17](results.md#st-17) |  |
+| [`AlternateBase.square_nonnormal_48`](../NormalityChecker/AlternateBaseStoneham.lean#L385) |  |
+| [`AlternateBase.square_discrepancy_48`](../NormalityChecker/AlternateBaseStoneham.lean#L389) [ST-17](results.md#st-17) | The lower bound at arbitrary cutoffs and the larger bound at window endpoints. |
+| [`AlternateBase.square_zero_word_liminf`](../NormalityChecker/AlternateBaseStoneham.lean#L401) [ST-17](results.md#st-17) | Every fixed all-zero word has at least the same lower limiting frequency. |
+| [`AlternateBase.square_zero_digit_excess`](../NormalityChecker/AlternateBaseStoneham.lean#L421) [ST-17](results.md#st-17) |  |
+
+### AlternateBaseWindows
+
+[`NormalityChecker/AlternateBaseWindows.lean`](../NormalityChecker/AlternateBaseWindows.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AlternateBase.not_normal_of_integerWindows`](../NormalityChecker/AlternateBaseWindows.lean#L18) |  |
+| [`AlternateBase.discrepancy_of_grid_windows`](../NormalityChecker/AlternateBaseWindows.lean#L42) | The entire union of windows contributes. |
 
 ### CellLimits
 
@@ -263,6 +608,49 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`cell_orbit_approx`](../NormalityChecker/CellModel.lean#L74) | A single modular orbit approximates the entire finite sum on a scale cell. |
 | [`cell_cancellation`](../NormalityChecker/CellModel.lean#L107) | The insertion depths are constant offsets from the scale k throughout a cell. |
 
+### CompositePolynomial
+
+[`NormalityChecker/CompositePolynomial.lean`](../NormalityChecker/CompositePolynomial.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.stablePowers_of_unitPowerLimit`](../NormalityChecker/CompositePolynomial.lean#L13) | Convergence to a p-adic unit gives eventual equality at every finite precision. |
+| [`StonehamPolynomial.stablePowers_two`](../NormalityChecker/CompositePolynomial.lean#L33) | At an even parameter, Euler's theorem makes every sufficiently late power of an odd radix equal to one modulo any prescribed power of two. |
+| [`StonehamPolynomial.composite_polynomial_normal`](../NormalityChecker/CompositePolynomial.lean#L53) | Every nonconstant rational polynomial of the positive-index series is normal when one prime divisor of the parameter has eventually constant radix powers at… |
+| [`StonehamPolynomial.unit_limit_polynomial_normal`](../NormalityChecker/CompositePolynomial.lean#L59) |  |
+| [`StonehamPolynomial.even_polynomial_normal`](../NormalityChecker/CompositePolynomial.lean#L63) [ST-11](results.md#st-11) |  |
+
+### DyadicMassCells
+
+[`NormalityChecker/DyadicMassCells.lean`](../NormalityChecker/DyadicMassCells.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`DyadicMassCells.power_expansion`](../NormalityChecker/DyadicMassCells.lean#L30) | Taking the power counts every ordered tuple with its multiplicity. |
+| [`DyadicMassCells.grid_mass`](../NormalityChecker/DyadicMassCells.lean#L49) |  |
+| [`DyadicMassCells.quartic_grid_profile`](../NormalityChecker/DyadicMassCells.lean#L151) [ST-23](results.md#st-23) | The four quartic residues on the internal grid used by the positive-index shift. |
+
+### DyadicMissingDiagonal
+
+[`NormalityChecker/DyadicMissingDiagonal.lean`](../NormalityChecker/DyadicMissingDiagonal.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoSquare.even_missing_corner_mass`](../NormalityChecker/DyadicMissingDiagonal.lean#L15) | Summing the geometric letters in a depth-`L` box and removing the origin leaves a multiple of `2^L` in every even dimension. |
+| [`ParameterTwoSquare.even_missing_corner_order`](../NormalityChecker/DyadicMissingDiagonal.lean#L26) | After clearing the odd radix and `2^(2*r*k)`, the box of positive-index tuples with just its last diagonal removed has numerator `A_k^(2*r)-1`. |
+
+### DyadicQuartic
+
+[`NormalityChecker/DyadicQuartic.lean`](../NormalityChecker/DyadicQuartic.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.retention_of_binary_grid`](../NormalityChecker/DyadicQuartic.lean#L42) [ST-24](results.md#st-24) [ST-31](results.md#st-31) | The finite grid covers a whole late shell, including the insertion at its left endpoint. |
+| [`StonehamPolynomial.binary_polynomial_normal_of_retention`](../NormalityChecker/DyadicQuartic.lean#L80) [ST-24](results.md#st-24) [ST-31](results.md#st-31) | A retained dyadic degree permits arbitrary rational lower coefficients. |
+| [`StonehamPolynomial.quartic_retains_denominator`](../NormalityChecker/DyadicQuartic.lean#L100) [ST-23](results.md#st-23) |  |
+| [`StonehamPolynomial.quartic_polynomial_normal`](../NormalityChecker/DyadicQuartic.lean#L109) [ST-23](results.md#st-23) | Every rational polynomial of degree four evaluated at the standard positive-index Stoneham number of parameter two is normal in its odd radix. |
+| [`StonehamPolynomial.fourth_power_normal`](../NormalityChecker/DyadicQuartic.lean#L116) |  |
+
 ### Insertion
 
 [`NormalityChecker/Insertion.lean`](../NormalityChecker/Insertion.lean)
@@ -272,6 +660,175 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`insertion_prefix`](../NormalityChecker/Insertion.lean#L35) | Shifted prefix of one component, modulo an integer. |
 | [`component_orbit_approx`](../NormalityChecker/Insertion.lean#L89) | Uniform through the very last starting position before the next insertion. |
 | [`finite_orbit_approx`](../NormalityChecker/Insertion.lean#L111) | Adding the one-component estimates with integer weights preserves a single integer error term even when some weights are negative. |
+
+### ParameterTwoQuadratic
+
+[`NormalityChecker/ParameterTwoQuadratic.lean`](../NormalityChecker/ParameterTwoQuadratic.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoQuadratic.linear_form`](../NormalityChecker/ParameterTwoQuadratic.lean#L24) | On any nonempty shell the reduced denominator of the linear prefix divides `2^k`. |
+| [`ParameterTwoQuadratic.prefix_dyadic`](../NormalityChecker/ParameterTwoQuadratic.lean#L33) |  |
+| [`ParameterTwoQuadratic.dyadic_den_eq_norm`](../NormalityChecker/ParameterTwoQuadratic.lean#L49) |  |
+| [`ParameterTwoQuadratic.upper_denominator`](../NormalityChecker/ParameterTwoQuadratic.lean#L136) | Exact reduced denominator on the entire closed-left upper half shell, with `k=j+1`. |
+| [`ParameterTwoQuadratic.upper_denominator_valuation`](../NormalityChecker/ParameterTwoQuadratic.lean#L187) [ST-19](results.md#st-19) | Valuation version for the natural reduced denominator. |
+| [`ParameterTwoQuadratic.lower_denominator_exact`](../NormalityChecker/ParameterTwoQuadratic.lean#L220) [ST-19](results.md#st-19) | Exact lower-half reduction, including all ties and zero numerators. |
+| [`ParameterTwoQuadratic.initial_denominator`](../NormalityChecker/ParameterTwoQuadratic.lean#L238) [ST-19](results.md#st-19) | All cutoffs preceding the first quadratic insertion. |
+| [`ParameterTwoQuadratic.linear_norm`](../NormalityChecker/ParameterTwoQuadratic.lean#L255) |  |
+| [`ParameterTwoQuadratic.lower_denominator`](../NormalityChecker/ParameterTwoQuadratic.lean#L269) | In the lower half, the square contributes the larger pole as soon as the displayed inequality holds. |
+| [`ParameterTwoQuadratic.eventually_lower_denominator`](../NormalityChecker/ParameterTwoQuadratic.lean#L298) [ST-19](results.md#st-19) | The lower-half threshold is uniform in the cutoff and in the perturbing linear and constant integer coefficients. |
+
+### ParameterTwoQuadraticHeight
+
+[`NormalityChecker/ParameterTwoQuadraticHeight.lean`](../NormalityChecker/ParameterTwoQuadraticHeight.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoQuadratic.integer_height`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L15) | A nonzero integer cannot simultaneously be small at the real and 2-adic places. |
+| [`ParameterTwoQuadratic.polynomial_root_distance`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L24) | Integral polynomials are 1-Lipschitz on the 2-adic unit ball. |
+| [`ParameterTwoQuadratic.algebraic_growth`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L58) | For any algebraic 2-adic number, the geometric denominator scale times the distance to the integer index grows without bound. |
+| [`ParameterTwoQuadratic.algebraic_upper_growth`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L90) [ST-19](results.md#st-19) | The positive reduced denominators at the actual upper midpoints grow for algebraic `kappa`; the exact profile transfers this to every upper cutoff. |
+| [`ParameterTwoQuadratic.two_power_dvd_gap`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L115) | Two ordinary indices approximating one 2-adic target to precision `m` are congruent, including when one is the target itself. |
+| [`ParameterTwoQuadratic.bounded_upper_separation`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L124) [ST-19](results.md#st-19) | If two actual upper-shell denominators are at most `Q`, the distance between their shell indices is at least `2^(i+1) * ‖2*A*slope b‖ / Q`. |
+| [`ParameterTwoQuadratic.midpoint_window_unique`](../NormalityChecker/ParameterTwoQuadraticHeight.lean#L153) | At most one upper midpoint in any sufficiently late window of `H` successive shell indices has denominator strictly smaller than `M`. |
+
+### ParameterTwoQuadraticLimit
+
+[`NormalityChecker/ParameterTwoQuadraticLimit.lean`](../NormalityChecker/ParameterTwoQuadraticLimit.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoQuadratic.delta_succ`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L22) |  |
+| [`ParameterTwoQuadratic.radix_norm`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L29) |  |
+| [`ParameterTwoQuadratic.delta_zero_norm`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L32) |  |
+| [`ParameterTwoQuadratic.delta_zero_norm_lt_one`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L43) |  |
+| [`ParameterTwoQuadratic.delta_zero_ne`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L54) |  |
+| [`ParameterTwoQuadratic.delta_norm`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L62) |  |
+| [`ParameterTwoQuadratic.delta_error_le`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L107) |  |
+| [`ParameterTwoQuadratic.correction_summable`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L113) | Convergence of the series defining the intercept. |
+| [`ParameterTwoQuadratic.delta_tendsto`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L119) |  |
+| [`ParameterTwoQuadratic.slope_norm`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L123) |  |
+| [`ParameterTwoQuadratic.slope_valuation`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L132) [ST-19](results.md#st-19) |  |
+| [`ParameterTwoQuadratic.two_le_slope_valuation`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L147) |  |
+| [`ParameterTwoQuadratic.delta_error_norm`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L170) |  |
+| [`ParameterTwoQuadratic.affine_error_norm`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L184) |  |
+| [`ParameterTwoQuadratic.affine_error_le`](../NormalityChecker/ParameterTwoQuadraticLimit.lean#L199) |  |
+
+### ParameterTwoQuadraticOrbits
+
+[`NormalityChecker/ParameterTwoQuadraticOrbits.lean`](../NormalityChecker/ParameterTwoQuadraticOrbits.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoQuadratic.normal_iff_upper_denominator`](../NormalityChecker/ParameterTwoQuadraticOrbits.lean#L16) [ST-20](results.md#st-20) | The denominator at the midpoint is constant up to the next power of two. |
+| [`ParameterTwoQuadratic.normal_of_algebraic_kappa`](../NormalityChecker/ParameterTwoQuadraticOrbits.lean#L22) [ST-20](results.md#st-20) |  |
+| [`ParameterTwoQuadratic.quadratic_discrepancy_limits`](../NormalityChecker/ParameterTwoQuadraticOrbits.lean#L33) [ST-20](results.md#st-20) | Extreme interval discrepancy at ordinary prefixes, including endpoints inside an exceptional upper half. |
+| [`ParameterTwoQuadratic.quadratic_log_equidistribution`](../NormalityChecker/ParameterTwoQuadraticOrbits.lean#L42) [ST-20](results.md#st-20) | Harmonic weights on digit positions give the correct length for every interval, without a growth or algebraicity hypothesis. |
+
+### ParameterTwoSquare
+
+[`NormalityChecker/ParameterTwoSquare.lean`](../NormalityChecker/ParameterTwoSquare.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoSquare.square_normal`](../NormalityChecker/ParameterTwoSquare.lean#L20) [ST-12](results.md#st-12) | In every odd radix at least three the parameter-two Stoneham square is normal. |
+
+### ParameterTwoSquareArithmetic
+
+[`NormalityChecker/ParameterTwoSquareArithmetic.lean`](../NormalityChecker/ParameterTwoSquareArithmetic.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoSquare.weighted_eq`](../NormalityChecker/ParameterTwoSquareArithmetic.lean#L16) |  |
+| [`ParameterTwoSquare.clear_axis`](../NormalityChecker/ParameterTwoSquareArithmetic.lean#L25) |  |
+| [`ParameterTwoSquare.weighted_congruence`](../NormalityChecker/ParameterTwoSquareArithmetic.lean#L71) | The congruence for the rational weighted sum, with its odd denominator explicitly cleared on both sides. |
+| [`ParameterTwoSquare.axis_odd`](../NormalityChecker/ParameterTwoSquareArithmetic.lean#L78) |  |
+| [`ParameterTwoSquare.diagonal_numerator`](../NormalityChecker/ParameterTwoSquareArithmetic.lean#L84) | After clearing the radix, the missing-diagonal difference contains exactly `k+1` factors of two. |
+| [`ParameterTwoSquare.diagonal_valuation`](../NormalityChecker/ParameterTwoSquareArithmetic.lean#L105) |  |
+
+### ParameterTwoSquareExpansion
+
+[`NormalityChecker/ParameterTwoSquareExpansion.lean`](../NormalityChecker/ParameterTwoSquareExpansion.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoSquare.shifted_tail`](../NormalityChecker/ParameterTwoSquareExpansion.lean#L63) [ST-12](results.md#st-12) |  |
+| [`ParameterTwoSquare.follows`](../NormalityChecker/ParameterTwoSquareExpansion.lean#L77) |  |
+| [`ParameterTwoSquare.dyadic`](../NormalityChecker/ParameterTwoSquareExpansion.lean#L87) | All shifted prefixes have a power-of-two common denominator. |
+
+### ParameterTwoSquareProfile
+
+[`NormalityChecker/ParameterTwoSquareProfile.lean`](../NormalityChecker/ParameterTwoSquareProfile.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ParameterTwoSquare.first_half_reduction`](../NormalityChecker/ParameterTwoSquareProfile.lean#L94) | Reduced numerator and denominator before the midpoint. |
+| [`ParameterTwoSquare.second_half_reduction`](../NormalityChecker/ParameterTwoSquareProfile.lean#L123) | At and after the midpoint the reduced numerator is the odd quotient of the missing diagonal, with the remaining (odd) radix power divided out. |
+| [`ParameterTwoSquare.exact_profile`](../NormalityChecker/ParameterTwoSquareProfile.lean#L155) [ST-12](results.md#st-12) | All cutoffs, including the empty prefix before the first pair at four. |
+
+### PeriodicPolynomialMass
+
+[`NormalityChecker/PeriodicPolynomialMass.lean`](../NormalityChecker/PeriodicPolynomialMass.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.periodicGeometricValue_not_isIntegral`](../NormalityChecker/PeriodicPolynomialMass.lean#L28) | For a nonempty cycle of roots of unity and `c > 2`, every complex conjugate of the geometric value has absolute value strictly between zero and one. |
+| [`StonehamPolynomial.upper_box_monic_polynomial`](../NormalityChecker/PeriodicPolynomialMass.lean#L144) | For all sufficiently large boxes, their mass is a monic polynomial in the one-dimensional partial sum. |
+| [`StonehamPolynomial.upper_box_nonzero_limit`](../NormalityChecker/PeriodicPolynomialMass.lean#L157) | If integral coordinate weights sum to a nonintegral element, every nonempty upper set has a nonzero limiting mass. |
+| [`StonehamPolynomial.periodic_upper_mass_nonzero`](../NormalityChecker/PeriodicPolynomialMass.lean#L174) | For a periodic cycle of roots of unity from a number field, the mass of every nonempty upper set has a nonzero limit in any complete normed field where `‖c‖ <… |
+
+### PeriodicPolynomialNormal
+
+[`NormalityChecker/PeriodicPolynomialNormal.lean`](../NormalityChecker/PeriodicPolynomialNormal.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.reflected_prefix_error`](../NormalityChecker/PeriodicPolynomialNormal.lean#L70) | After removing the radix unit and clearing the common denominator, the actual rational prefix agrees with the reflected box mass to the prescribed p-adic… |
+| [`StonehamPolynomial.periodic_power_retained_denominator`](../NormalityChecker/PeriodicPolynomialNormal.lean#L106) [ST-11](results.md#st-11) | For every prime divisor of the parameter, the prefix of a power of a single axis retains the full expected pole order up to a bounded loss. |
+| [`StonehamPolynomial.coprime_polynomial_normal`](../NormalityChecker/PeriodicPolynomialNormal.lean#L145) [ST-11](results.md#st-11) | Every nonconstant rational polynomial of the positive-index Stoneham number is normal in base `b` for coprime `b ≥ 2` and `c > 2`. |
+| [`StonehamPolynomial.coprime_polynomial_statement_checked`](../NormalityChecker/PeriodicPolynomialNormal.lean#L166) [ST-11](results.md#st-11) |  |
+| [`StonehamPolynomial.coprime_joint_powers`](../NormalityChecker/PeriodicPolynomialNormal.lean#L170) [ST-11](results.md#st-11) | Simultaneous rectangle frequencies for distinct powers of any generator with c > 2. |
+
+### PeriodicPolynomialPrecision
+
+[`NormalityChecker/PeriodicPolynomialPrecision.lean`](../NormalityChecker/PeriodicPolynomialPrecision.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.uniform_padic_box_precision`](../NormalityChecker/PeriodicPolynomialPrecision.lean#L40) | Nonzero limits for individual upper sets give a single precision valid for all upper sets through the anchor, at every larger box size and precision. |
+| [`StonehamPolynomial.exists_reflected_cycles`](../NormalityChecker/PeriodicPolynomialPrecision.lean#L129) | The reflected inverse radix agrees at precision `p^L` with one of finitely many periodic cycles. |
+
+### Phase16StonehamBounds
+
+[`NormalityChecker/Phase16StonehamBounds.lean`](../NormalityChecker/Phase16StonehamBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase16StonehamBounds.quadZ_closed_form`](../NormalityChecker/Phase16StonehamBounds.lean#L33) [ST-30](results.md#st-30) | Closed-form sum formula for `quadZ b j`: `Z_{j+1} = 1 - 2^(j+1) * b^(2^(j+1)) + ∑_{i=0}^j 2^(j - i) * b^(2^(j+1) - 2^(i+1))`. |
+| [`Phase16StonehamBounds.quadZ_eq_cancellation`](../NormalityChecker/Phase16StonehamBounds.lean#L68) [ST-30](results.md#st-30) | Exact 2-adic link between `quadZ b j` and Phase 14's `cancellation b j` (= `T_{j+1}`): in `ℚ_[2]`, `quadZ b j = 2^(j+1) * b^(2^(j+1)) * cancellation b j`! |
+| [`Phase16StonehamBounds.quadratic_upper_den_eq_quadZ`](../NormalityChecker/Phase16StonehamBounds.lean#L126) [ST-30](results.md#st-30) | Exact upper-shell denominator formula for `X^2 - 2X` in terms of `quadZ`: on `3 * 2^j ≤ n < 2^(j+2)`, `den(prefix b n 1 (-2) C₀) = max 1 (2^(2*j+1) * ‖quadZ b… |
+| [`Phase16StonehamBounds.single_shape_one_one_max`](../NormalityChecker/Phase16StonehamBounds.lean#L232) [ST-32](results.md#st-32) | Exact single-shape maximum relative length for the primary corner `(1, 1)` of `α_{2,3} α_{2,5}`: for every positive ratio `r = Q/P > 0`, `min(4r/5, 2/3) / (1… |
+| [`Phase16StonehamBounds.single_shape_one_one_attained`](../NormalityChecker/Phase16StonehamBounds.lean#L241) |  |
+| [`Phase16StonehamBounds.boundary_strip_piecewise_le`](../NormalityChecker/Phase16StonehamBounds.lean#L248) [ST-32](results.md#st-32) | Exact piecewise-linear boundary-strip upper bound for base `p > 1`, `0 < η < 1`, `p * η ≤ p - 1` (e.g. |
+| [`Phase16StonehamBounds.simultaneous_ultrametric_spacing`](../NormalityChecker/Phase16StonehamBounds.lean#L291) [ST-32](results.md#st-32) | Simultaneous ultrametric separation for active shells of the same nonrectangular shape: if two distinct shells `(K₁, L₁)` and `(K₂, L₂)` with `L₁ < L₂` and… |
+
+### PlateauEnvelope
+
+[`NormalityChecker/PlateauEnvelope.lean`](../NormalityChecker/PlateauEnvelope.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.plateauWeight_bounds`](../NormalityChecker/PlateauEnvelope.lean#L23) |  |
+| [`QuadraticOrbit.plateauWeight_endpoint`](../NormalityChecker/PlateauEnvelope.lean#L32) |  |
+| [`QuadraticOrbit.le_plateauEnvelope`](../NormalityChecker/PlateauEnvelope.lean#L41) |  |
+| [`QuadraticOrbit.plateauEnvelope_bounds`](../NormalityChecker/PlateauEnvelope.lean#L45) |  |
+| [`QuadraticOrbit.plateauEnvelope_limsup`](../NormalityChecker/PlateauEnvelope.lean#L52) | The peak at the right endpoint of each plateau gives the exact limsup of the maximum, even if positive orbit factors occur extremely sparsely. |
+| [`QuadraticOrbit.isolated_plateau`](../NormalityChecker/PlateauEnvelope.lean#L89) | All but one plateau meeting the recent part of a prefix have small factor. |
+| [`QuadraticOrbit.cell_index`](../NormalityChecker/PlateauEnvelope.lean#L132) |  |
+| [`QuadraticOrbit.index_of_onPlateau`](../NormalityChecker/PlateauEnvelope.lean#L140) |  |
+| [`QuadraticOrbit.sum_single_plateau`](../NormalityChecker/PlateauEnvelope.lean#L153) |  |
+| [`QuadraticOrbit.profile_mass_error`](../NormalityChecker/PlateauEnvelope.lean#L157) |  |
+| [`QuadraticOrbit.envelope_excess`](../NormalityChecker/PlateauEnvelope.lean#L179) |  |
 
 ### PolynomialInsertions
 
@@ -296,6 +853,76 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`ProductThreeFive.discrepancy`](../NormalityChecker/ProductThreeFive.lean#L77) [ST-06](results.md#st-06) | The upper limit of the binary extreme interval discrepancy of the product of the two standard Stoneham series is at most `43/45`. |
 | [`ProductThreeFive.irrational`](../NormalityChecker/ProductThreeFive.lean#L93) [ST-06](results.md#st-06) | Rational binary shifts are confined to a finite grid. |
 
+### ProductThreeFiveCount
+
+[`NormalityChecker/ProductThreeFiveCount.lean`](../NormalityChecker/ProductThreeFiveCount.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.column_cost_bound`](../NormalityChecker/ProductThreeFiveCount.lean#L92) | Finite-prefix bound for the union of all intervals on which the top quinary column cancels. |
+
+### ProductThreeFiveCoverage
+
+[`NormalityChecker/ProductThreeFiveCoverage.lean`](../NormalityChecker/ProductThreeFiveCoverage.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.joint_prefix_discrepancy`](../NormalityChecker/ProductThreeFiveCoverage.lean#L116) [ST-14](results.md#st-14) | An ordinary prefix is charged only for simultaneous failures, with vanishing uniform error. |
+| [`ProductThreeFive.column_discrepancy`](../NormalityChecker/ProductThreeFiveCoverage.lean#L176) | Counting every surviving top column gives binary discrepancy at most 27/40. |
+| [`ProductThreeFive.independent_product_discrepancy`](../NormalityChecker/ProductThreeFiveCoverage.lean#L184) [ST-14](results.md#st-14) | The strengthened bound stated solely in terms of the two defining series. |
+
+### ProductThreeFiveFlow
+
+[`NormalityChecker/ProductThreeFiveFlow.lean`](../NormalityChecker/ProductThreeFiveFlow.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.aligned_powers`](../NormalityChecker/ProductThreeFiveFlow.lean#L12) | Arbitrarily late powers have ratio between 1 and 5/4 even when both exponents must be divisible by a prescribed positive integer. |
+| [`ProductThreeFive.simultaneous_top_loss`](../NormalityChecker/ProductThreeFiveFlow.lean#L38) | Both full prime powers disappear throughout a whole interval of length comparable to its start, on arbitrarily large ternary shells. |
+
+### ProductThreeFiveInterpolation
+
+[`NormalityChecker/ProductThreeFiveInterpolation.lean`](../NormalityChecker/ProductThreeFiveInterpolation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.freeze_prime_layer`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L15) | After multiplication by a common binary unit, a term on the i-th row has the same binary weight as every other row, modulo the full shell power. |
+| [`ProductThreeFive.freeze_ternary`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L48) | Full precision reduction at three. |
+| [`ProductThreeFive.freeze_quinary`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L61) | Full precision reduction at five with the same normalization convention. |
+| [`ProductThreeFive.collapse_fibres`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L90) | Sum a full binary-weight-free fibre. |
+| [`ProductThreeFive.endpoint_num_shape`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L123) [ST-27](results.md#st-27) | The actual one-dimensional numerator has only three weights: one on complete fibres, p on unfinished interior fibres, and the endpoint power on the last fibre. |
+| [`ProductThreeFive.ternary_endpoint_num`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L168) [ST-27](results.md#st-27) | The compressed ternary numerator differs from the actual cleared prefix by an explicit unit, modulo the entire nominal denominator power of three. |
+| [`ProductThreeFive.quinary_endpoint_num`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L182) [ST-27](results.md#st-27) | The corresponding full-precision congruence at five. |
+| [`ProductThreeFive.interior_active`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L196) | The entire rectangle below both top indices is active. |
+| [`ProductThreeFive.ternary_corner_lift_two`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L282) [ST-27](results.md#st-27) | The ternary branch advances by 6 per shell-index step modulo 9 for every pair of positive deficits. |
+| [`ProductThreeFive.quinary_corner_lift_two`](../NormalityChecker/ProductThreeFiveInterpolation.lean#L289) [ST-27](results.md#st-27) | The quinary branch advances by 15 per shell-index step modulo 25 for every pair of positive deficits. |
+
+### ProductThreeFiveNonrectangular
+
+[`NormalityChecker/ProductThreeFiveNonrectangular.lean`](../NormalityChecker/ProductThreeFiveNonrectangular.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.nonrectangular_prefix_discrepancy`](../NormalityChecker/ProductThreeFiveNonrectangular.lean#L29) [ST-29](results.md#st-29) | At every sufficiently late ordinary cutoff, the true binary interval discrepancy is at most the frequency of nonrectangular joint failures plus ε. |
+
+### ProductThreeFiveNonrectangularOrdinary
+
+[`NormalityChecker/ProductThreeFiveNonrectangularOrdinary.lean`](../NormalityChecker/ProductThreeFiveNonrectangularOrdinary.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.NonrectangularOrdinary.nonrectangular_cost_bound`](../NormalityChecker/ProductThreeFiveNonrectangularOrdinary.lean#L223) [ST-29](results.md#st-29) | Every prefix of length at least 81⁵ has nonrectangular joint failure frequency at most 4631/12500, including an unfinished final shell. |
+| [`ProductThreeFive.NonrectangularOrdinary.mixed_product_discrepancy`](../NormalityChecker/ProductThreeFiveNonrectangularOrdinary.lean#L246) [ST-29](results.md#st-29) | Upper binary extreme interval discrepancy of the actual Stoneham product. |
+
+### ProductThreeFiveOrdinary
+
+[`NormalityChecker/ProductThreeFiveOrdinary.lean`](../NormalityChecker/ProductThreeFiveOrdinary.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.Ordinary.joint_cost_bound`](../NormalityChecker/ProductThreeFiveOrdinary.lean#L245) [ST-25](results.md#st-25) | Every ordinary prefix of length at least 81⁵ has simultaneous first-precision failure frequency at most 143881/250000, including an unfinished final shell. |
+| [`ProductThreeFive.Ordinary.mixed_product_discrepancy`](../NormalityChecker/ProductThreeFiveOrdinary.lean#L268) [ST-25](results.md#st-25) | Upper binary extreme interval discrepancy of the actual Stoneham product. |
+
 ### ProductThreeFivePrefix
 
 [`NormalityChecker/ProductThreeFivePrefix.lean`](../NormalityChecker/ProductThreeFivePrefix.lean)
@@ -308,6 +935,45 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`ProductThreeFive.follows`](../NormalityChecker/ProductThreeFivePrefix.lean#L104) |  |
 | [`ProductThreeFive.prefix_denominator`](../NormalityChecker/ProductThreeFivePrefix.lean#L114) | All terms through position `n` have a common 15-smooth denominator of size at most `n²` when `n` is positive. |
 
+### ProductThreeFiveRectangles
+
+[`NormalityChecker/ProductThreeFiveRectangles.lean`](../NormalityChecker/ProductThreeFiveRectangles.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.rectangle_factor`](../NormalityChecker/ProductThreeFiveRectangles.lean#L16) [ST-15](results.md#st-15) | When the whole rectangle is present, its two cleared one-axis numerators factor exactly, including the unused binary shift. |
+| [`ProductThreeFive.crossNum_dvd`](../NormalityChecker/ProductThreeFiveRectangles.lean#L69) | A complete collection of m identical blocks vanishes modulo m. |
+| [`ProductThreeFive.simultaneous_deep_loss`](../NormalityChecker/ProductThreeFiveRectangles.lean#L94) | For any fixed depth, both prime powers lose that many layers on every position in a macroscopic interval, at arbitrarily late scales. |
+| [`ProductThreeFive.mixed_prefix_persistent_loss`](../NormalityChecker/ProductThreeFiveRectangles.lean#L147) [ST-15](results.md#st-15) | Check persistence against the independently defined index-one prefix. |
+
+### ProductThreeFiveRectangleValuation
+
+[`NormalityChecker/ProductThreeFiveRectangleValuation.lean`](../NormalityChecker/ProductThreeFiveRectangleValuation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.crossNum_five_even_residue`](../NormalityChecker/ProductThreeFiveRectangleValuation.lean#L206) | The first nonzero ternary digit at even length, including its unit coefficient. |
+| [`ProductThreeFive.crossNum_five_ternary_valuation`](../NormalityChecker/ProductThreeFiveRectangleValuation.lean#L239) | The ternary cancellation depth is zero for odd lengths and one plus the ternary valuation of the length for positive even lengths. |
+| [`ProductThreeFive.opposite_quinary_ternary_valuation`](../NormalityChecker/ProductThreeFiveRectangleValuation.lean#L271) | The same valuation for the rational opposite-axis sum before clearing the binary and quinary units. |
+| [`ProductThreeFive.rectangle_ternary_retained`](../NormalityChecker/ProductThreeFiveRectangleValuation.lean#L304) | The full rectangle retains the entire ternary shell power except for the ternary valuation of the opposite quinary numerator. |
+| [`ProductThreeFive.rectangle_denominator_growth`](../NormalityChecker/ProductThreeFiveRectangleValuation.lean#L336) | Uniform denominator growth on full rectangles, including those that fail both first-precision tests. |
+
+### ProductThreeFiveResidues
+
+[`NormalityChecker/ProductThreeFiveResidues.lean`](../NormalityChecker/ProductThreeFiveResidues.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ProductThreeFive.commonNum_eq`](../NormalityChecker/ProductThreeFiveResidues.lean#L19) |  |
+| [`ProductThreeFive.ternary_layers`](../NormalityChecker/ProductThreeFiveResidues.lean#L35) | To any prescribed ternary precision, sum only the active rows within that many layers of the top. |
+| [`ProductThreeFive.quinary_layers`](../NormalityChecker/ProductThreeFiveResidues.lean#L49) | The analogous quinary test uses only the top active columns. |
+| [`ProductThreeFive.ternary_residue`](../NormalityChecker/ProductThreeFiveResidues.lean#L155) | After removing a unit, the ternary residue counts the active top row modulo two. |
+| [`ProductThreeFive.quinary_residue`](../NormalityChecker/ProductThreeFiveResidues.lean#L185) | The quinary residue on the active top column is a unit times the four-entry table 0, 4, 1, 2 indexed by the column length modulo four. |
+| [`ProductThreeFive.ternary_survival_iff`](../NormalityChecker/ProductThreeFiveResidues.lean#L216) | A positive top power of three survives in the reduced denominator precisely when its row contains an odd number of active terms. |
+| [`ProductThreeFive.quinary_survival_iff`](../NormalityChecker/ProductThreeFiveResidues.lean#L227) | The full top power of five survives exactly at column lengths outside the zero class modulo four. |
+| [`ProductThreeFive.mixedPrefix_eq`](../NormalityChecker/ProductThreeFiveResidues.lean#L239) |  |
+| [`ProductThreeFive.mixed_prefix_residues`](../NormalityChecker/ProductThreeFiveResidues.lean#L243) [ST-15](results.md#st-15) | Check the two exact endpoint tests against a separately stated prefix. |
+
 ### ProductThreeFiveWindows
 
 [`NormalityChecker/ProductThreeFiveWindows.lean`](../NormalityChecker/ProductThreeFiveWindows.lean)
@@ -316,6 +982,171 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`ProductThreeFive.surviving_window`](../NormalityChecker/ProductThreeFiveWindows.lean#L72) | On each ternary shell from `P=9` onward, a clean interval of length `⌊4P/15⌋` has a starting denominator divisible by `P`. |
 | [`ProductThreeFive.uniform_windows`](../NormalityChecker/ProductThreeFiveWindows.lean#L117) [ST-06](results.md#st-06) | The true binary orbit is uniformly distributed on one interval of the specified length in every sufficiently late ternary shell. |
+
+### QuadraticOrbitLog
+
+[`NormalityChecker/QuadraticOrbitLog.lean`](../NormalityChecker/QuadraticOrbitLog.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.log_equidistribution_of_separated`](../NormalityChecker/QuadraticOrbitLog.lean#L80) | Every good half costs at most the error supplied by its partial counts in harmonic mass. |
+
+### QuadraticOrbitModel
+
+[`NormalityChecker/QuadraticOrbitModel.lean`](../NormalityChecker/QuadraticOrbitModel.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.shifted_tail`](../NormalityChecker/QuadraticOrbitModel.lean#L25) |  |
+| [`QuadraticOrbit.shell_den`](../NormalityChecker/QuadraticOrbitModel.lean#L76) | Common denominator and a lower bound on its surviving part before the midpoint. |
+| [`QuadraticOrbit.follows`](../NormalityChecker/QuadraticOrbitModel.lean#L106) |  |
+| [`QuadraticOrbit.upper_follows`](../NormalityChecker/QuadraticOrbitModel.lean#L114) | There are no quadratic insertions in the open upper half. |
+| [`QuadraticOrbit.upper_den_constant`](../NormalityChecker/QuadraticOrbitModel.lean#L133) |  |
+| [`QuadraticOrbit.upper_den_tendsto_of_normal`](../NormalityChecker/QuadraticOrbitModel.lean#L150) | Normal prefixes force cancellation on the difference between the midpoint and the right endpoint. |
+
+### QuadraticOrbitShells
+
+[`NormalityChecker/QuadraticOrbitShells.lean`](../NormalityChecker/QuadraticOrbitShells.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.scaled_good_halves`](../NormalityChecker/QuadraticOrbitShells.lean#L53) | Multiply the true model by a fixed nonzero rational supported away from the radix in its denominator. |
+| [`QuadraticOrbit.rational_good_halves`](../NormalityChecker/QuadraticOrbitShells.lean#L172) [ST-20](results.md#st-20) | Counts for the original rational quadratic, allowing arbitrary prime divisors of its coefficient denominator. |
+
+### QuadraticOrbitTransfer
+
+[`NormalityChecker/QuadraticOrbitTransfer.lean`](../NormalityChecker/QuadraticOrbitTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.clipped_upper_quarter`](../NormalityChecker/QuadraticOrbitTransfer.lean#L122) | Any single exceptional upper half, even when the prefix ends inside it, accounts for at most one quarter of all positions before the cutoff. |
+| [`QuadraticOrbit.ordinary_limits`](../NormalityChecker/QuadraticOrbitTransfer.lean#L150) | The half-shell geometry gives both the worst ordinary upper discrepancy and arbitrarily late ordinary prefixes with vanishing discrepancy. |
+| [`QuadraticOrbit.normal_of_good_halves`](../NormalityChecker/QuadraticOrbitTransfer.lean#L220) | In the absence of repeated bounded upper denominators all late halves have the same estimate; only finitely many positions can be exceptional. |
+| [`QuadraticOrbit.normal_iff_upper_growth`](../NormalityChecker/QuadraticOrbitTransfer.lean#L240) |  |
+
+### QuadraticPlateauCycle
+
+[`NormalityChecker/QuadraticPlateauCycle.lean`](../NormalityChecker/QuadraticPlateauCycle.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.orbitFactor_eq_period`](../NormalityChecker/QuadraticPlateauCycle.lean#L25) |  |
+| [`QuadraticOrbit.orbitFactor_bounds`](../NormalityChecker/QuadraticPlateauCycle.lean#L30) |  |
+| [`QuadraticOrbit.exists_clear`](../NormalityChecker/QuadraticPlateauCycle.lean#L36) |  |
+| [`QuadraticOrbit.plateau_orbitFactor`](../NormalityChecker/QuadraticPlateauCycle.lean#L108) |  |
+| [`QuadraticOrbit.orbitFactor_advance`](../NormalityChecker/QuadraticPlateauCycle.lean#L156) | An integer part or a finite preperiod does not change the cycle measure's discrepancy. |
+| [`QuadraticOrbit.plateau_factor_decay`](../NormalityChecker/QuadraticPlateauCycle.lean#L217) | Large midpoint denominators force small discrepancy of the full eventual cycle, uniformly across the quadratic shells. |
+| [`QuadraticOrbit.cycleMass_error_le`](../NormalityChecker/QuadraticPlateauCycle.lean#L231) |  |
+| [`QuadraticOrbit.plateau_counts`](../NormalityChecker/QuadraticPlateauCycle.lean#L242) | Uniformly in the interval and in the partial length, the rational plateau counts agree with length times eventual cycle mass up to o(2^r). |
+
+### QuadraticPlateauSpectrum
+
+[`NormalityChecker/QuadraticPlateauSpectrum.lean`](../NormalityChecker/QuadraticPlateauSpectrum.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuadraticOrbit.quadratic_all_prefix`](../NormalityChecker/QuadraticPlateauSpectrum.lean#L116) [ST-21](results.md#st-21) | At every cutoff the discrepancy of the true irrational orbit differs by o(1) from the largest included plateau weight times its own eventual cycle discrepancy. |
+| [`QuadraticOrbit.quadratic_exact_limsup`](../NormalityChecker/QuadraticPlateauSpectrum.lean#L167) [ST-21](results.md#st-21) | The exact quarter law for arbitrary rational coefficients of a genuine quadratic. |
+
+### QuantitativeCompositeDenominators
+
+[`NormalityChecker/QuantitativeCompositeDenominators.lean`](../NormalityChecker/QuantitativeCompositeDenominators.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuantitativeStoneham.denominator_of_prime_losses`](../NormalityChecker/QuantitativeCompositeDenominators.lean#L17) | Combine bounded losses at every prime of `c` into one fixed power of `c`. |
+| [`QuantitativeStoneham.polynomial_prefix_denominators`](../NormalityChecker/QuantitativeCompositeDenominators.lean#L52) [ST-28](results.md#st-28) | At every late cutoff, a polynomial prefix of a single axis has the full degree as denominator slope. |
+| [`QuantitativeStoneham.square_shell_denominator`](../NormalityChecker/QuantitativeCompositeDenominators.lean#L92) [ST-28](results.md#st-28) | The two different denominator slopes on a dyadic square shell give a uniform interval from `2^(k-1)` to `2^(2*k-2)`, including the midpoint. |
+
+### QuantitativeStonehamDiscrepancy
+
+[`NormalityChecker/QuantitativeStonehamDiscrepancy.lean`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuantitativeStoneham.frequency_denominator`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L31) | Exact loss at a growing frequency. |
+| [`QuantitativeStoneham.harmonic_gcd_bound`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L39) | Summing the loss from reducing a Fourier frequency against a denominator. |
+| [`QuantitativeStoneham.harmonic_orbit_bound`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L80) | The two terms in Vandehey's majorant after harmonic averaging, with the frequency gone from the right-hand side and the actual divisor sum preserved. |
+| [`QuantitativeStoneham.divided_prefix_denominator`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L140) | Dividing a prefix by a fixed positive coefficient denominator preserves the old reduced denominator as a divisor and adds at most the fixed factor. |
+| [`QuantitativeStoneham.clean_piece_bound`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L159) | All positions in a clean piece are close in real value to one rational radix orbit. |
+| [`QuantitativeStoneham.discrepancy_of_clean_pieces`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L183) | A finite interval estimate for arbitrary cuts, including a shorter last piece. |
+| [`QuantitativeStoneham.discrepancy_of_vandehey`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L204) [ST-18](results.md#st-18) | Finite extreme discrepancy from the two external inequalities, expressed solely in the piece lengths, prefix denominators, real error and Fourier cutoff. |
+| [`QuantitativeStoneham.dyadic_prefix_bound`](../NormalityChecker/QuantitativeStonehamDiscrepancy.lean#L237) [ST-18](results.md#st-18) | Sum an estimate for every partial dyadic shell through an arbitrary final cutoff. |
+
+### QuantitativeStonehamExponents
+
+[`NormalityChecker/QuantitativeStonehamExponents.lean`](../NormalityChecker/QuantitativeStonehamExponents.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuantitativeStoneham.differencing_margin`](../NormalityChecker/QuantitativeStonehamExponents.lean#L12) [ST-18](results.md#st-18) | For Vandehey's exponents put `s k = (1-γₖ)/αₖ`. |
+
+### QuantitativeStonehamGaps
+
+[`NormalityChecker/QuantitativeStonehamGaps.lean`](../NormalityChecker/QuantitativeStonehamGaps.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuantitativeStoneham.separated_insertions`](../NormalityChecker/QuantitativeStonehamGaps.lean#L49) | Above resolution `U`, at most `m+1` different powers of `c` occur below `U*2^m`. |
+| [`QuantitativeStoneham.clean_length_moment`](../NormalityChecker/QuantitativeStonehamGaps.lean#L86) [ST-28](results.md#st-28) | Moment bound for *every* partial partition of a dyadic shell. |
+
+### QuantitativeStonehamSupport
+
+[`NormalityChecker/QuantitativeStonehamSupport.lean`](../NormalityChecker/QuantitativeStonehamSupport.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`QuantitativeStoneham.divisor_sum_le_supportFactor`](../NormalityChecker/QuantitativeStonehamSupport.lean#L17) | The uniform Euler product also covers a proper subset of the allowed primes and the empty support of `Q = 1`. |
+| [`QuantitativeStoneham.discrepancy_of_denominator_range`](../NormalityChecker/QuantitativeStonehamSupport.lean#L49) [ST-28](results.md#st-28) | Unnormalized discrepancy at every cut. |
+
+### QuantitativeStonehamTail
+
+[`NormalityChecker/QuantitativeStonehamTail.lean`](../NormalityChecker/QuantitativeStonehamTail.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.product_tail_bound`](../NormalityChecker/QuantitativeStonehamTail.lean#L104) [ST-18](results.md#st-18) | For every cutoff, the absolute real tail is at most a computable constant divided by `n+1`. |
+
+### ResonantRadix
+
+[`NormalityChecker/ResonantRadix.lean`](../NormalityChecker/ResonantRadix.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ResonantRadix.exp_isometry`](../NormalityChecker/ResonantRadix.lean#L60) |  |
+| [`ResonantRadix.exp_sub_one_bijOn`](../NormalityChecker/ResonantRadix.lean#L65) |  |
+| [`ResonantRadix.phase_hasSum`](../NormalityChecker/ResonantRadix.lean#L68) |  |
+| [`ResonantRadix.phase_doubling`](../NormalityChecker/ResonantRadix.lean#L84) | A Taylor identity whose sum over dyadic scales telescopes. |
+| [`ResonantRadix.slope_and_kappa`](../NormalityChecker/ResonantRadix.lean#L121) | The exponential of the parameter may be either sign of the inverse radix. |
+| [`ResonantRadix.radix_parameter`](../NormalityChecker/ResonantRadix.lean#L187) | The actual arithmetic slope is the logarithm of the inverse signed radix. |
+| [`ResonantRadix.radix_isometry`](../NormalityChecker/ResonantRadix.lean#L199) [ST-22](results.md#st-22) | Distances of the actual phases equal distances of the sign-normalized radices. |
+| [`ResonantRadix.radix_center`](../NormalityChecker/ResonantRadix.lean#L210) | For any integral target in the logarithmic ball, one normalized centre represents all distances of that target from the shifted arithmetic phases. |
+| [`ResonantRadix.upper_denominator_radix_center`](../NormalityChecker/ResonantRadix.lean#L226) | If `k+1` lies in 4ℤ₂, one normalized centre controls the denominator at every integer radix throughout the upper half of shell `k=j+1`. |
+
+### ResonantRadixClasses
+
+[`NormalityChecker/ResonantRadixClasses.lean`](../NormalityChecker/ResonantRadixClasses.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ResonantRadix.target_valuation_of_hit`](../NormalityChecker/ResonantRadixClasses.lean#L69) [ST-22](results.md#st-22) | If any radix on the stratum has a bounded upper denominator at precision `t > s`, the binary valuation of the target `k+1` must equal `s`. |
+| [`ResonantRadix.resonant_residue`](../NormalityChecker/ResonantRadixClasses.lean#L114) [ST-22](results.md#st-22) | The matching stratum admits precisely one normalized residue class. |
+
+### ResonantRadixSeries
+
+[`NormalityChecker/ResonantRadixSeries.lean`](../NormalityChecker/ResonantRadixSeries.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ResonantRadix.coeff_one`](../NormalityChecker/ResonantRadixSeries.lean#L19) |  |
+| [`ResonantRadix.coeff_valuation`](../NormalityChecker/ResonantRadixSeries.lean#L34) | Legendre's formula gives the binary digit sum of `m+1`, less one. |
+| [`ResonantRadix.coeff_norm_le_one`](../NormalityChecker/ResonantRadixSeries.lean#L42) |  |
+| [`ResonantRadix.tangent_summable`](../NormalityChecker/ResonantRadixSeries.lean#L60) |  |
+| [`ResonantRadix.tangent_zero`](../NormalityChecker/ResonantRadixSeries.lean#L100) |  |
+| [`ResonantRadix.tangent_isometry`](../NormalityChecker/ResonantRadixSeries.lean#L102) |  |
+| [`ResonantRadix.tangent_bijOn`](../NormalityChecker/ResonantRadixSeries.lean#L113) |  |
+| [`ResonantRadix.phase_isometry`](../NormalityChecker/ResonantRadixSeries.lean#L146) |  |
+| [`ResonantRadix.phase_bijOn`](../NormalityChecker/ResonantRadixSeries.lean#L149) [ST-22](results.md#st-22) |  |
 
 ### StonehamComponents
 
@@ -335,9 +1166,22 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`StonehamPolynomial.joint_uniform_powers`](../NormalityChecker/StonehamJoint.lean#L196) [ST-05](results.md#st-05) | All finite lists of distinct positive powers of the standard prime-power Stoneham constant visit every half-open rectangle with limiting frequency equal to… |
-| [`StonehamPolynomial.polynomial_statement_checked`](../NormalityChecker/StonehamJoint.lean#L206) | Independent public statement checks use only definitional identification of the series. |
-| [`StonehamPolynomial.joint_statement_checked`](../NormalityChecker/StonehamJoint.lean#L209) |  |
+| [`StonehamPolynomial.joint_powers_of_polynomial_normal`](../NormalityChecker/StonehamJoint.lean#L15) | Testing scalar characters by polynomials gives joint uniformity of distinct powers. |
+| [`StonehamPolynomial.joint_uniform_powers`](../NormalityChecker/StonehamJoint.lean#L39) [ST-05](results.md#st-05) | All finite lists of distinct positive powers of the standard prime-power Stoneham constant visit every half-open rectangle with limiting frequency equal to… |
+| [`StonehamPolynomial.polynomial_statement_checked`](../NormalityChecker/StonehamJoint.lean#L48) | Independent public statement checks use only definitional identification of the series. |
+| [`StonehamPolynomial.joint_statement_checked`](../NormalityChecker/StonehamJoint.lean#L51) |  |
+
+### StonehamOddDegree
+
+[`NormalityChecker/StonehamOddDegree.lean`](../NormalityChecker/StonehamOddDegree.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.binary_power_retained_denominator`](../NormalityChecker/StonehamOddDegree.lean#L23) [ST-13](results.md#st-13) | The prefix of a product of identical binary axes in odd prime-power dimension retains all but a bounded number of its expected denominator factors. |
+| [`StonehamPolynomial.odd_prime_power_degree_polynomial_normal`](../NormalityChecker/StonehamOddDegree.lean#L63) [ST-13](results.md#st-13) | Every rational polynomial of odd prime-power degree in the standard Stoneham number with denominator parameter two is normal in its odd radix. |
+| [`StonehamPolynomial.cubic_polynomial_normal`](../NormalityChecker/StonehamOddDegree.lean#L85) [ST-13](results.md#st-13) | In particular, arbitrary rational cubic polynomials are allowed. |
+| [`StonehamPolynomial.odd_prime_power_degree_power_normal`](../NormalityChecker/StonehamOddDegree.lean#L91) | The corresponding pure powers, including exponent one. |
+| [`StonehamPolynomial.cube_normal`](../NormalityChecker/StonehamOddDegree.lean#L98) | The cube of the parameter-two Stoneham number is normal in every odd radix. |
 
 ### StonehamOrbit
 
@@ -364,16 +1208,21 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`StonehamPolynomial.rational_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L12) [ST-04](results.md#st-04) | The single leading monomial criterion allows arbitrary rational coefficients. |
-| [`StonehamPolynomial.same_prime_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L70) [ST-04](results.md#st-04) | In a finite rational linear combination of products of `α(bᵐ,pᵉ)`, one nonzero monomial of positive degree strictly above every other degree suffices for… |
-| [`StonehamPolynomial.prime_power_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L87) [ST-02](results.md#st-02) | Every nonempty product of standard Stoneham numbers with parameters that are powers of the same odd prime is normal in the common radix. |
-| [`StonehamPolynomial.same_prime_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L94) [ST-02](results.md#st-02) |  |
-| [`StonehamPolynomial.binary_three_nine_product`](../NormalityChecker/StonehamPolynomial.lean#L100) [ST-02](results.md#st-02) | A mixed example with the two denominator parameters three and nine. |
-| [`StonehamPolynomial.power_normal`](../NormalityChecker/StonehamPolynomial.lean#L106) [ST-01](results.md#st-01) | Every positive integral power of the standard number is normal. |
-| [`StonehamPolynomial.prime_power_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L112) [ST-01](results.md#st-01) | Every nonconstant rational polynomial of the standard Stoneham number is normal in its radix. |
-| [`StonehamPolynomial.polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L124) [ST-01](results.md#st-01) |  |
-| [`StonehamPolynomial.binary_power_normal`](../NormalityChecker/StonehamPolynomial.lean#L129) |  |
-| [`StonehamPolynomial.binary_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L132) [ST-01](results.md#st-01) |  |
+| [`StonehamPolynomial.rational_sum_normal_of_retainsAt`](../NormalityChecker/StonehamPolynomial.lean#L12) | The single leading monomial criterion allows arbitrary rational coefficients. |
+| [`StonehamPolynomial.rational_sum_normal_at`](../NormalityChecker/StonehamPolynomial.lean#L42) | The rational leading-monomial criterion at a stabilizing prime. |
+| [`StonehamPolynomial.rational_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L52) [ST-04](results.md#st-04) | The odd-prime specialization of the rational leading-monomial criterion. |
+| [`StonehamPolynomial.Monomial.shifted_value`](../NormalityChecker/StonehamPolynomial.lean#L80) | Convert an index-zero product to the standard index-one normalization. |
+| [`StonehamPolynomial.standard_sum_normal_at`](../NormalityChecker/StonehamPolynomial.lean#L90) [ST-11](results.md#st-11) | In a finite rational linear combination of products of `α(bᵐ,pᵉ)`, one nonzero monomial of positive degree strictly above every other degree suffices for… |
+| [`StonehamPolynomial.same_prime_sum_normal`](../NormalityChecker/StonehamPolynomial.lean#L107) [ST-04](results.md#st-04) | The odd-prime specialization for products of positive-index generators. |
+| [`StonehamPolynomial.prime_power_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L116) [ST-02](results.md#st-02) | Every nonempty product of standard Stoneham numbers with parameters that are powers of the same odd prime is normal in the common radix. |
+| [`StonehamPolynomial.same_prime_product_normal`](../NormalityChecker/StonehamPolynomial.lean#L123) [ST-02](results.md#st-02) |  |
+| [`StonehamPolynomial.binary_three_nine_product`](../NormalityChecker/StonehamPolynomial.lean#L129) [ST-02](results.md#st-02) | A mixed example with the two denominator parameters three and nine. |
+| [`StonehamPolynomial.power_normal`](../NormalityChecker/StonehamPolynomial.lean#L135) [ST-01](results.md#st-01) | Every positive integral power of the standard number is normal. |
+| [`StonehamPolynomial.polynomial_normal_at`](../NormalityChecker/StonehamPolynomial.lean#L141) | Every nonconstant rational polynomial of the standard Stoneham number is normal in its radix. |
+| [`StonehamPolynomial.prime_power_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L154) [ST-01](results.md#st-01) | Rational polynomials of a generator with odd prime-power parameter. |
+| [`StonehamPolynomial.polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L159) [ST-01](results.md#st-01) |  |
+| [`StonehamPolynomial.binary_power_normal`](../NormalityChecker/StonehamPolynomial.lean#L164) |  |
+| [`StonehamPolynomial.binary_polynomial_normal`](../NormalityChecker/StonehamPolynomial.lean#L167) [ST-01](results.md#st-01) |  |
 
 ### StonehamPolynomialExpansion
 
@@ -391,8 +1240,15 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`StonehamPolynomial.retained_with_lower_terms`](../NormalityChecker/StonehamPolynomialNormal.lean#L44) | An integral leading coefficient and any rational perturbation with pole order at most `(d-1)k` leave a denominator divisible by `p^(dk-C)` at late scales. |
-| [`StonehamPolynomial.integer_sum_normal`](../NormalityChecker/StonehamPolynomialNormal.lean#L81) [ST-04](results.md#st-04) | A unique highest-degree monomial with nonzero integer coefficient survives addition of any finite sum of strictly lower-degree monomials. |
+| [`StonehamPolynomial.retained_with_lower_terms_of_retainsAt`](../NormalityChecker/StonehamPolynomialNormal.lean#L49) | An integral leading coefficient and any rational perturbation with pole order at most `v_p(q)(d-1)k` leave a pole of order at least `v_p(q)dk-C` at late scales. |
+| [`StonehamPolynomial.retained_with_lower_terms_at`](../NormalityChecker/StonehamPolynomialNormal.lean#L88) | A stabilizing prime supplies the leading denominator estimate. |
+| [`StonehamPolynomial.retained_with_lower_terms`](../NormalityChecker/StonehamPolynomialNormal.lean#L97) |  |
+| [`StonehamPolynomial.combination_denominator`](../NormalityChecker/StonehamPolynomialNormal.lean#L106) | The uniform upper bound on denominators uses only the largest degree. |
+| [`StonehamPolynomial.sum_normal_of_retained_at`](../NormalityChecker/StonehamPolynomialNormal.lean#L117) | Sparse-block normality from a surviving pole at a fixed divisor of the parameter. |
+| [`StonehamPolynomial.sum_normal_of_retained`](../NormalityChecker/StonehamPolynomialNormal.lean#L226) | With possibly tied top degrees, a uniform surviving pole suffices for the same sparse-block proof. |
+| [`StonehamPolynomial.integer_sum_normal_of_retainsAt`](../NormalityChecker/StonehamPolynomialNormal.lean#L239) | A unique highest-degree monomial with nonzero integer coefficient survives addition of any finite sum of strictly lower-degree monomials when its prefix… |
+| [`StonehamPolynomial.integer_sum_normal_at`](../NormalityChecker/StonehamPolynomialNormal.lean#L249) | The integer leading-monomial criterion at a stabilizing prime. |
+| [`StonehamPolynomial.integer_sum_normal`](../NormalityChecker/StonehamPolynomialNormal.lean#L259) [ST-04](results.md#st-04) | The odd-prime specialization of the integer sum theorem. |
 
 ### StonehamPolynomialOrthant
 
@@ -402,10 +1258,12 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`StonehamPolynomial.mem_box`](../NormalityChecker/StonehamPolynomialOrthant.lean#L20) |  |
 | [`StonehamPolynomial.le_stretched_weight`](../NormalityChecker/StonehamPolynomialOrthant.lean#L30) |  |
-| [`StonehamPolynomial.weighted_upper_set_numerator`](../NormalityChecker/StonehamPolynomialOrthant.lean#L114) | A nonempty upper set has a geometric numerator congruent to one modulo `p-1`. |
-| [`StonehamPolynomial.weighted_uniform_precision`](../NormalityChecker/StonehamPolynomialOrthant.lean#L158) | Uniform finite precision over all upper sets containing one specified point. |
-| [`StonehamPolynomial.upper_set_numerator`](../NormalityChecker/StonehamPolynomialOrthant.lean#L204) | The ordinary total-degree specialization. |
-| [`StonehamPolynomial.uniform_precision`](../NormalityChecker/StonehamPolynomialOrthant.lean#L210) |  |
+| [`StonehamPolynomial.exists_orthants_eq`](../NormalityChecker/StonehamPolynomialOrthant.lean#L114) | Dickson's lemma gives a nonempty finite orthant decomposition. |
+| [`StonehamPolynomial.weighted_upper_set_numerator`](../NormalityChecker/StonehamPolynomialOrthant.lean#L140) | A nonempty upper set has a geometric numerator congruent to one modulo `p-1`. |
+| [`StonehamPolynomial.weighted_uniform_precision_at`](../NormalityChecker/StonehamPolynomialOrthant.lean#L165) | Uniform finite precision over all upper sets containing one specified point. |
+| [`StonehamPolynomial.weighted_uniform_precision`](../NormalityChecker/StonehamPolynomialOrthant.lean#L216) | Uniform precision in the modulus given by the geometric ratio itself. |
+| [`StonehamPolynomial.upper_set_numerator`](../NormalityChecker/StonehamPolynomialOrthant.lean#L222) | The ordinary total-degree specialization. |
+| [`StonehamPolynomial.uniform_precision`](../NormalityChecker/StonehamPolynomialOrthant.lean#L228) |  |
 
 ### StonehamPolynomialPrefix
 
@@ -415,7 +1273,17 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`StonehamPolynomial.mem_active`](../NormalityChecker/StonehamPolynomialPrefix.lean#L31) |  |
 | [`StonehamPolynomial.denominator_dvd`](../NormalityChecker/StonehamPolynomialPrefix.lean#L110) |  |
-| [`StonehamPolynomial.retained_denominator`](../NormalityChecker/StonehamPolynomialPrefix.lean#L189) | On every sufficiently late scale the reduced denominator retains all but a bounded number of the `d * log_p n` powers of the denominator prime. |
+| [`StonehamPolynomial.stablePowers_prime`](../NormalityChecker/StonehamPolynomialPrefix.lean#L139) |  |
+| [`StonehamPolynomial.retained_denominator_at`](../NormalityChecker/StonehamPolynomialPrefix.lean#L223) | On every sufficiently late scale the reduced denominator retains all but a bounded number of the `v_p(c) * d * log_c n` available powers of the prime `p`. |
+| [`StonehamPolynomial.retained_denominator`](../NormalityChecker/StonehamPolynomialPrefix.lean#L262) | The single-prime denominator estimate. |
+
+### StonehamPolynomialRetention
+
+[`NormalityChecker/StonehamPolynomialRetention.lean`](../NormalityChecker/StonehamPolynomialRetention.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.rational_sum_normal_of_retention`](../NormalityChecker/StonehamPolynomialRetention.lean#L161) | A leading monomial retaining its full denominator exponent up to bounded loss survives any rational combination of strictly lower-degree monomials. |
 
 ### StonehamSquare
 
@@ -432,6 +1300,27 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`StonehamSquare.initial_profile`](../NormalityChecker/StonehamSquare.lean#L310) [ST-03](results.md#st-03) | Exact initial denominator profile, including every digit in the exceptional third scale and the empty prefixes before the first insertion. |
 | [`StonehamSquare.quadratic_denominator`](../NormalityChecker/StonehamSquare.lean#L316) [ST-03](results.md#st-03) | The reduced prefix denominators grow quadratically at every late digit. |
 | [`StonehamSquare.binary_normal`](../NormalityChecker/StonehamSquare.lean#L346) | The square of the Stoneham series starting at exponent one is binary normal. |
+
+### StonehamSymmetricMass
+
+[`NormalityChecker/StonehamSymmetricMass.lean`](../NormalityChecker/StonehamSymmetricMass.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.sum_eq_diagonal_of_prime_power`](../NormalityChecker/StonehamSymmetricMass.lean#L23) | Modulo the rotation prime, an invariant sum on words of prime-power length reduces to its constant words. |
+| [`StonehamPolynomial.symmetric_binary_mass`](../NormalityChecker/StonehamSymmetricMass.lean#L188) | In prime-power dimension, binary mass stabilizes at an integer whose residue modulo the degree prime is minus two to the first occupied diagonal index. |
+| [`StonehamPolynomial.symmetric_binary_uniform_precision`](../NormalityChecker/StonehamSymmetricMass.lean#L202) | A single binary precision works for all symmetric upper sets containing a given constant point, when their dimension is a power of an odd prime. |
+
+### StonehamTiedCoefficients
+
+[`NormalityChecker/StonehamTiedCoefficients.lean`](../NormalityChecker/StonehamTiedCoefficients.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StonehamPolynomial.tied_axis_normal`](../NormalityChecker/StonehamTiedCoefficients.lean#L29) | In the index-zero normalization the coefficient precision depends only on the distinguished monomial, uniformly over integral perturbations of no larger degree. |
+| [`StonehamPolynomial.tied_standard_normal`](../NormalityChecker/StonehamTiedCoefficients.lean#L69) [ST-16](results.md#st-16) | Fix any finite list of standard monomials of at most the top degree. |
+| [`StonehamPolynomial.radix_stride_identity`](../NormalityChecker/StonehamTiedCoefficients.lean#L96) [ST-16](results.md#st-16) | A one-step radix dilation gives an exact affine dependence between distinct standard generators. |
+| [`StonehamPolynomial.tied_coefficient_statement`](../NormalityChecker/StonehamTiedCoefficients.lean#L121) [ST-16](results.md#st-16) | Independent formulation using the standard series and positive parameters. |
 
 ## Localized logarithms and polylogarithms
 
@@ -560,6 +1449,15 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`LocalizedSupport.passes_power_denominator`](../NormalityChecker/LocalizedCertificate.lean#L236) | Success certifies the selected prime power in the reduced *shifted* denominator. |
 | [`LocalizedSupport.passes_denominator`](../NormalityChecker/LocalizedCertificate.lean#L249) |  |
 
+### LocalizedCertificateModulus
+
+[`NormalityChecker/LocalizedCertificateModulus.lean`](../NormalityChecker/LocalizedCertificateModulus.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`LocalizedSupport.exists_common_depth`](../NormalityChecker/LocalizedCertificateModulus.lean#L21) [LS-10](results.md#ls-10) | A common failed-width threshold exists for every finite family of positive orders. |
+| [`LocalizedSupport.certificateModulus_spec`](../NormalityChecker/LocalizedCertificateModulus.lean#L44) [LS-10](results.md#ls-10) | The returned depth works at every finer precision for each requested order. |
+
 ### LocalizedCertifiedNormal
 
 [`NormalityChecker/LocalizedCertifiedNormal.lean`](../NormalityChecker/LocalizedCertifiedNormal.lean)
@@ -577,6 +1475,16 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`LocalizedSupport.insertion_count`](../NormalityChecker/LocalizedClearing.lean#L17) | Count supported insertions by encoding every prime exponent in `[0,D]`. |
 | [`LocalizedSupport.cofactor_dvd`](../NormalityChecker/LocalizedClearing.lean#L34) |  |
 | [`LocalizedSupport.clean_denominator`](../NormalityChecker/LocalizedClearing.lean#L46) | Once every insertion is at least `D` shifts old, all base factors have cleared. |
+
+### LocalizedDenominatorPrimes
+
+[`NormalityChecker/LocalizedDenominatorPrimes.lean`](../NormalityChecker/LocalizedDenominatorPrimes.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`LocalizedSupport.polynomial_prime_outside_axis`](../NormalityChecker/LocalizedDenominatorPrimes.lean#L29) | A nonconstant integer polynomial with nonzero constant term acquires primes outside every finite set on arbitrarily late powers of p, at nonzero values. |
+| [`LocalizedSupport.rational_denominator_prime_outside`](../NormalityChecker/LocalizedDenominatorPrimes.lean#L124) [MW-09](results.md#mw-09) | For A(X)/(Xᵘ G(X)) with A,G coprime over the rationals, a nonconstant denominator factor G nonzero at zero forces infinitely many different primes in the… |
+| [`LocalizedSupport.finite_denominator_primes_iff`](../NormalityChecker/LocalizedDenominatorPrimes.lean#L157) [MW-09](results.md#mw-09) | A fixed finite set of reduced denominator primes exists exactly when the denominator remaining after removal of its power of X is constant. |
 
 ### LocalizedDiscrepancy
 
@@ -623,6 +1531,20 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`LocalizedFive.denominator_fives`](../NormalityChecker/LocalizedFive.lean#L117) | Exact exponent of five in the reduced denominator. |
+
+### LocalizedJoint
+
+[`NormalityChecker/LocalizedJoint.lean`](../NormalityChecker/LocalizedJoint.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`LocalizedSupport.joint_of_masked_poles`](../NormalityChecker/LocalizedJoint.lean#L72) | A scalar criterion for a shared mask lifts to a joint theorem for distinct positive pole orders and arbitrary rational polynomial numerators nonzero at zero. |
+| [`LocalizedSupport.joint_full_polynomial_orders`](../NormalityChecker/LocalizedJoint.lean#L85) [LS-09](results.md#ls-09) | Rational Laurent weights of distinct exact pole orders on a common full finite prime support give simultaneous rectangle frequencies. |
+| [`LocalizedSupport.joint_infinite_axis_orders`](../NormalityChecker/LocalizedJoint.lean#L97) | On a single off-radix prime axis the same vector theorem holds on every unbounded common mask. |
+| [`LocalizedSupport.joint_axis_orders_iff`](../NormalityChecker/LocalizedJoint.lean#L107) [MW-08](results.md#mw-08) | For a nonempty vector on a single off-radix prime axis, unboundedness of the shared mask is necessary and sufficient for joint uniformity. |
+| [`LocalizedSupport.joint_late_twos_orders`](../NormalityChecker/LocalizedJoint.lean#L118) [MW-08](results.md#mw-08) | In odd radix, on any finite prime support containing two, a common mask may vary arbitrarily away from the sufficiently late powers of two. |
+| [`LocalizedSupport.joint_full_orders`](../NormalityChecker/LocalizedJoint.lean#L158) [LS-09](results.md#ls-09) | Paper II, Corollary 1.3. |
+| [`LocalizedSupport.distinct_orders_checked`](../NormalityChecker/LocalizedJoint.lean#L167) [LS-09](results.md#ls-09) | The independent positive-index series and direct position count satisfy the corollary. |
 
 ### LocalizedLayers
 
@@ -707,6 +1629,15 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`LocalizedFive.prefix_orbit`](../NormalityChecker/LocalizedSeries.lean#L114) | On an interval with no new supported index the rational prefix evolves by doubling alone. |
 | [`LocalizedFive.clean_denominator`](../NormalityChecker/LocalizedSeries.lean#L123) | Once all inserted dyadic denominators have cleared, the whole reduced denominator is a power of five dividing the largest available power. |
 
+### LocalizedSignedAxis
+
+[`NormalityChecker/LocalizedSignedAxis.lean`](../NormalityChecker/LocalizedSignedAxis.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`LocalizedSupport.periodic_axis_normal_iff`](../NormalityChecker/LocalizedSignedAxis.lean#L32) [MW-10](results.md#mw-10) | For an arbitrary signed rational residue weight, normality at order one on a single off-radix prime axis is decided by the finite windows of its eventual… |
+| [`LocalizedSupport.periodic_axis_counterexample`](../NormalityChecker/LocalizedSignedAxis.lean#L55) [MW-10](results.md#mw-10) | Every numerator on the ternary axis is nonzero, but the weights alternate between 1 and -3. |
+
 ### LocalizedSupport
 
 [`NormalityChecker/LocalizedSupport.lean`](../NormalityChecker/LocalizedSupport.lean)
@@ -758,9 +1689,10 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`LocalizedSupport.mesh_measurable`](../NormalityChecker/PersistentRegion.lean#L17) |  |
 | [`LocalizedSupport.mesh_mass`](../NormalityChecker/PersistentRegion.lean#L20) |  |
 | [`LocalizedSupport.failed_region_inside`](../NormalityChecker/PersistentRegion.lean#L49) |  |
-| [`LocalizedSupport.region_mass_tendsto`](../NormalityChecker/PersistentRegion.lean#L69) |  |
-| [`LocalizedSupport.discrepancy_eq_persistent_max`](../NormalityChecker/PersistentRegion.lean#L124) [LS-02](results.md#ls-02) | With a single off-base prime at order one, the true extreme interval discrepancy is the maximum of the prefix score of the persistent cancellation set on… |
-| [`LocalizedSupport.normal_iff_persistent_null`](../NormalityChecker/PersistentRegion.lean#L186) [LS-02](results.md#ls-02) | Digit normality is equivalent to Lebesgue-null persistent failure. |
+| [`LocalizedSupport.failed_region_antitone`](../NormalityChecker/PersistentRegion.lean#L59) | Refining the precision can only shrink the failed subset of the phase interval. |
+| [`LocalizedSupport.region_mass_tendsto`](../NormalityChecker/PersistentRegion.lean#L70) |  |
+| [`LocalizedSupport.discrepancy_eq_persistent_max`](../NormalityChecker/PersistentRegion.lean#L125) [LS-02](results.md#ls-02) | With a single off-base prime at order one, the true extreme interval discrepancy is the maximum of the prefix score of the persistent cancellation set on… |
+| [`LocalizedSupport.normal_iff_persistent_null`](../NormalityChecker/PersistentRegion.lean#L187) [LS-02](results.md#ls-02) | Digit normality is equivalent to Lebesgue-null persistent failure. |
 
 ### Polylog
 
@@ -816,9 +1748,10 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`LocalizedSupport.Unsigned.finite_ray_fiber`](../NormalityChecker/UnsignedNormality.lean#L20) | On the fundamental interval, each fiber of a finite-ray moment is finite. |
 | [`LocalizedSupport.Unsigned.phaseMoment_empty_ne_zero`](../NormalityChecker/UnsignedNormality.lean#L97) | With no cofactor prime at all, the first row is a unit and the tail is divisible by p. |
 | [`LocalizedSupport.unsigned_persistent_null`](../NormalityChecker/UnsignedNormality.lean#L120) [LS-03](results.md#ls-03) | For *each* off-radix support prime, the infinite intersection of the checker's failed regions has Lebesgue measure zero, in every positive order. |
-| [`LocalizedSupport.unsigned_certificate_tendsTo_zero`](../NormalityChecker/UnsignedNormality.lean#L144) [LS-03](results.md#ls-03) | The computable worst-prefix certificate tends to zero for every individual off-base prime. |
-| [`LocalizedSupport.unsigned_finite_support_normal`](../NormalityChecker/UnsignedNormality.lean#L187) [LS-01](results.md#ls-01) | Every unsigned full finite-prime expansion with an off-base prime is normal in its defining radix, at every positive denominator order. |
-| [`LocalizedSupport.unsigned_discrepancy_limit`](../NormalityChecker/UnsignedNormality.lean#L194) [LS-01](results.md#ls-01) | Along every prefix, interval discrepancy tends to one for all-base supports and to zero for supports containing an off-base prime. |
+| [`LocalizedSupport.certificate_le_twice_mass`](../NormalityChecker/UnsignedNormality.lean#L143) | Twice the total failed-cell width bounds the worst-prefix score, at every order. |
+| [`LocalizedSupport.unsigned_certificate_tendsTo_zero`](../NormalityChecker/UnsignedNormality.lean#L169) [LS-03](results.md#ls-03) | The computable worst-prefix certificate tends to zero for every individual off-base prime. |
+| [`LocalizedSupport.unsigned_finite_support_normal`](../NormalityChecker/UnsignedNormality.lean#L191) [LS-01](results.md#ls-01) | Every unsigned full finite-prime expansion with an off-base prime is normal in its defining radix, at every positive denominator order. |
+| [`LocalizedSupport.unsigned_discrepancy_limit`](../NormalityChecker/UnsignedNormality.lean#L198) [LS-01](results.md#ls-01) | Along every prefix, interval discrepancy tends to one for all-base supports and to zero for supports containing an off-base prime. |
 
 ### UnsignedPhase
 
@@ -963,9 +1896,10 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`PolynomialMasks.gap_approximation`](../NormalityChecker/MaskedSeries.lean#L40) | On blocks of length B at height O(B²), a forward gap of length B makes the signed shifted tail uniformly small. |
-| [`PolynomialMasks.weights_growth`](../NormalityChecker/MaskedSeries.lean#L89) |  |
-| [`PolynomialMasks.transfer`](../NormalityChecker/MaskedSeries.lean#L119) | Transfer estimates on blocks with a forward and backward gap, charging uncontrolled positions individually up to the actual cutoff. |
+| [`PolynomialMasks.summable_weight`](../NormalityChecker/MaskedSeries.lean#L23) | Polynomial coefficient growth gives absolute summability after radix discounting. |
+| [`PolynomialMasks.gap_approximation`](../NormalityChecker/MaskedSeries.lean#L41) | On blocks of length B at height O(B²), a forward gap of length B makes the signed shifted tail uniformly small. |
+| [`PolynomialMasks.weights_growth`](../NormalityChecker/MaskedSeries.lean#L90) |  |
+| [`PolynomialMasks.transfer`](../NormalityChecker/MaskedSeries.lean#L120) | Transfer estimates on blocks with a forward and backward gap, charging uncontrolled positions individually up to the actual cutoff. |
 
 ### MaskExamples
 
@@ -1236,8 +2170,9 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 | Declaration | Summary |
 | --- | --- |
-| [`hasSum_components_logTwo`](../NormalityChecker/OrderedComponents.lean#L31) [CR-07](results.md#cr-07) | Grouping positive indices by the power of three dividing them recovers exactly log 2. |
-| [`ordered_phase_ne_zero`](../NormalityChecker/OrderedComponents.lean#L52) [CR-07](results.md#cr-07) | The arithmetic nonvanishing part of the proposed classification of ordered finite Stoneham sums. |
+| [`hasSum_prime_rays_logTwo`](../NormalityChecker/OrderedComponents.lean#L32) [SY-09](results.md#sy-09) | Grouping the Taylor terms by their prime-free part sums to log 2 for every prime. |
+| [`hasSum_components_logTwo`](../NormalityChecker/OrderedComponents.lean#L53) [CR-07](results.md#cr-07) | Grouping positive indices by the power of three dividing them recovers exactly log 2. |
+| [`ordered_phase_ne_zero`](../NormalityChecker/OrderedComponents.lean#L60) [CR-07](results.md#cr-07) | The arithmetic nonvanishing part of the proposed classification of ordered finite Stoneham sums. |
 
 ### Resonance
 
@@ -1531,6 +2466,16 @@ Declaration counts describe the size of the library, not the mathematical signif
 
 ## Classical constant arithmetic
 
+### AdaptiveLogarithmBounds
+
+[`NormalityChecker/AdaptiveLogarithmBounds.lean`](../NormalityChecker/AdaptiveLogarithmBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AdaptiveLogarithmBounds.global_cell_mass_bound`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1158) [CC-42](results.md#cc-42) | Global optimality and uniform finite-cell bound over all of `ℚ⁴`: every `(a, u, b, c) ∈ ℚ⁴` either has active prime-band mass at least `13/30` already on… |
+| [`AdaptiveLogarithmBounds.minimizer_mass71`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1210) [CC-42](results.md#cc-42) | Exact active mass on `1 ≤ v ≤ 71` for the `5/12` minimizer `(0, 0, 0, -5)` is `7/18`. |
+| [`AdaptiveLogarithmBounds.runnerup_mass71`](../NormalityChecker/AdaptiveLogarithmBounds.lean#L1220) [CC-42](results.md#cc-42) | Exact active mass on `1 ≤ v ≤ 71` for the `13/30` runner-up `(0, 0, 0, -2)` is `73/180`. |
+
 ### AdjacentShadow
 
 [`NormalityChecker/AdjacentShadow.lean`](../NormalityChecker/AdjacentShadow.lean)
@@ -1541,6 +2486,15 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`logShadow_adjacent_prime`](../NormalityChecker/AdjacentShadow.lean#L25) | All primes greater than three in `(n,2*n+1]` occur in at least one neighbor. |
 | [`logShadow_adjacent_theta`](../NormalityChecker/AdjacentShadow.lean#L36) | Joint logarithmic denominator growth, including all primes in the open overlap. |
 | [`logShadow_adjacent_growth`](../NormalityChecker/AdjacentShadow.lean#L52) | At least one model in every sufficiently large adjacent pair has an exponential denominator. |
+
+### AffineDenominator
+
+[`NormalityChecker/AffineDenominator.lean`](../NormalityChecker/AffineDenominator.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`AffineDenominator.feasible_iff_gcd`](../NormalityChecker/AffineDenominator.lean#L47) [CC-34](results.md#cc-34) | Feasibility of denominator removal in an affine integer combination. |
+| [`AffineDenominator.combined_error`](../NormalityChecker/AffineDenominator.lean#L69) [CC-34](results.md#cc-34) | The unwrapped error spent by an affine combination of approximations. |
 
 ### AggregateGaps
 
@@ -1591,6 +2545,34 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`normalizedChebyshev_eval`](../NormalityChecker/ChebyshevModels.lean#L31) |  |
 | [`normalizedChebyshev_bound`](../NormalityChecker/ChebyshevModels.lean#L35) |  |
 | [`full_degree_log_error`](../NormalityChecker/ChebyshevModels.lean#L48) | Uniform error for the actual logarithm, using one polynomial of exact degree d. |
+
+### ChebyshevPoleApproximation
+
+[`NormalityChecker/ChebyshevPoleApproximation.lean`](../NormalityChecker/ChebyshevPoleApproximation.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ChebyshevPoleApproximation.lcmRange_pos`](../NormalityChecker/ChebyshevPoleApproximation.lean#L26) |  |
+| [`ChebyshevPoleApproximation.succ_dvd_lcmRange`](../NormalityChecker/ChebyshevPoleApproximation.lean#L42) | Every `k + 1` with `k < D` divides `lcmRange D`. |
+| [`ChebyshevPoleApproximation.poly_integral_den_dvd_lcmRange`](../NormalityChecker/ChebyshevPoleApproximation.lean#L47) | The integral `∑_{k < D} Q k / (k + 1)` of an integer polynomial of degree `< D` has reduced denominator dividing `lcmRange D`. |
+| [`ChebyshevPoleApproximation.shifted_poly_integral_den_dvd`](../NormalityChecker/ChebyshevPoleApproximation.lean#L73) [CC-44](results.md#cc-44) | After dividing by `2^w`, the shifted rational `Y_N = -2^{-w} ∫_0^1 Q_D(x) dx` has reduced denominator dividing `2^w * lcmRange D`. |
+| [`ChebyshevPoleApproximation.rounding_integral_error`](../NormalityChecker/ChebyshevPoleApproximation.lean#L94) [CC-44](results.md#cc-44) | Rounding error bound on `[0, 1]`: if `\|Q k - R k\| ≤ 1/2` for all `k < D`, then `\|∑_{k < D} Q k / (k + 1) - ∑_{k < D} R k / (k + 1)\| ≤ (1/2) ∑_{k < D} 1 / (k +… |
+| [`ChebyshevPoleApproximation.chebyshev_pole_master_error`](../NormalityChecker/ChebyshevPoleApproximation.lean#L115) [CC-44](results.md#cc-44) | Master error bound for the single-pole (`1/(1+x)`) rounded Chebyshev-pole approximant: given the exact pole identity `2^e ln 2 + ∫_0^1 R_D = (2^e / T(-1))… |
+| [`ChebyshevPoleApproximation.integral_inv_one_add_eq_log_two`](../NormalityChecker/ChebyshevPoleApproximation.lean#L137) [CC-44](results.md#cc-44) | Exact integral of `1/(1+x)` over `[0, 1]` equals `Real.log 2`. |
+
+### CorrectedNumeratorIncidence
+
+[`NormalityChecker/CorrectedNumeratorIncidence.lean`](../NormalityChecker/CorrectedNumeratorIncidence.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`PhaseThirteen.corrected_step`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L14) | A fixed beta correction turns the stride displacement into one beta value. |
+| [`PhaseThirteen.six_step`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L33) [CC-17](results.md#cc-17) | Six binary positions give three positive-radix steps and two signed-radix steps. |
+| [`PhaseThirteen.six_step_strictAnti`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L58) | For even positive-stride order, the actual six-position increments decrease strictly. |
+| [`PhaseThirteen.positive_determinant`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L75) | The three-position determinant is positive for an orbit with decreasing increments. |
+| [`PhaseThirteen.six_determinant`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L115) [CC-17](results.md#cc-17) | The integer cleared in the cross-prime argument has a positive rational factor. |
+| [`PhaseThirteen.diagonal_step_ratio`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L126) [CC-17](results.md#cc-17) | The ratio used to telescope the diagonal model, as a division-free identity. |
+| [`PhaseThirteen.diagonal_three`](../NormalityChecker/CorrectedNumeratorIncidence.lean#L142) [CC-17](results.md#cc-17) | A consecutive triple lies on an affine function of the doubling progression at an upper-band prime precisely when its residual factor vanishes there. |
 
 ### CorrectedStrides
 
@@ -1671,6 +2653,26 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`DyadicRelations.strict_half_of_first_band`](../NormalityChecker/DyadicRelations.lean#L54) [CC-02](results.md#cc-02) | If the first partial sum survives, its prime band alone costs one half and a finite set of missing later bands can never exhaust the other half. |
 | [`DyadicRelations.optimal_rate`](../NormalityChecker/DyadicRelations.lean#L94) [CC-02](results.md#cc-02) | Optimality for every finite valuation-balanced dyadic identity, with the primitive divisors needed by its finite support supplied explicitly. |
 
+### ErdosBorweinArrivals
+
+[`NormalityChecker/ErdosBorweinArrivals.lean`](../NormalityChecker/ErdosBorweinArrivals.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ErdosBorweinArrivals.source_phase`](../NormalityChecker/ErdosBorweinArrivals.lean#L16) [CC-28](results.md#cc-28) [CC-29](results.md#cc-29) | A coefficient with valuation at least its raw offset contributes an integral turn. |
+| [`ErdosBorweinArrivals.arrival_sum`](../NormalityChecker/ErdosBorweinArrivals.lean#L41) [CC-28](results.md#cc-28) [CC-46](results.md#cc-46) | Averaging one denominator level counts each source exactly once when its displaced position belongs to the translated window. |
+| [`ErdosBorweinArrivals.tail_phase_bound`](../NormalityChecker/ErdosBorweinArrivals.lean#L56) [CC-29](results.md#cc-29) | Mean error after restoring discarded denominator levels. |
+| [`ErdosBorweinArrivals.one_bit_carry`](../NormalityChecker/ErdosBorweinArrivals.lean#L86) [CC-30](results.md#cc-30) | On a grid of size `2*q`, adding a carry below `s` can create a one only in the last `s` cells of the lower half. |
+
+### ErdosBorweinFourier
+
+[`NormalityChecker/ErdosBorweinFourier.lean`](../NormalityChecker/ErdosBorweinFourier.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ErdosBorweinAudit.window_fourier_deficit`](../NormalityChecker/ErdosBorweinFourier.lean#L38) [CC-20](results.md#cc-20) | A shift in the indicated cylinder makes two successive unit phases sum to at most one in norm. |
+| [`ErdosBorweinAudit.erdosBorwein_window_fourier`](../NormalityChecker/ErdosBorweinFourier.lean#L89) [CC-20](results.md#cc-20) | Applied to the actual Lambert constant, a lower count `c * length` saves `c * length / 2` against the trivial Fourier bound, up to one endpoint. |
+
 ### FactorialNumerators
 
 [`NormalityChecker/FactorialNumerators.lean`](../NormalityChecker/FactorialNumerators.lean)
@@ -1703,6 +2705,49 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`logTwo_discrepancy_of_fixed_window`](../NormalityChecker/FixedGap.lean#L52) | The fixed-window estimate gives an explicit conditional discrepancy bound. |
 | [`middle_miss_intervals`](../NormalityChecker/FixedGap.lean#L59) | Missing the closed middle third for `k+1` successive binary shifts confines the starting value to either end of the unit interval, with exact endpoint… |
 | [`middle_miss_volume`](../NormalityChecker/FixedGap.lean#L85) | Lebesgue probability of `k+1` consecutive misses, for a uniform starting point. |
+
+### FredholmOrbit
+
+[`NormalityChecker/FredholmOrbit.lean`](../NormalityChecker/FredholmOrbit.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`FredholmOrbit.summable_fredholm`](../NormalityChecker/FredholmOrbit.lean#L13) |  |
+| [`FredholmOrbit.fredholm_eq`](../NormalityChecker/FredholmOrbit.lean#L18) [CC-31](results.md#cc-31) |  |
+| [`FredholmOrbit.product_at_one`](../NormalityChecker/FredholmOrbit.lean#L25) | The finite product identity also holds at the removable point w = 1. |
+| [`FredholmOrbit.radial_cutoff`](../NormalityChecker/FredholmOrbit.lean#L60) | Replacing radial weights by a sharp cutoff incurs error at most two for any real nonnegative observable bounded by two. |
+| [`FredholmOrbit.radialDeficit_eq`](../NormalityChecker/FredholmOrbit.lean#L108) |  |
+| [`FredholmOrbit.fredholm_radial_deficit`](../NormalityChecker/FredholmOrbit.lean#L136) [CC-31](results.md#cc-31) [CC-35](results.md#cc-35) | Uniform radial correspondence with a sharp binary cutoff. |
+| [`FredholmOrbit.discrepancy_lt_one_iff_radial`](../NormalityChecker/FredholmOrbit.lean#L147) [CC-31](results.md#cc-31) | A positive normalized radial deficit is equivalent to strict asymptotic discrepancy. |
+
+### GaussianLogarithmCharacters
+
+[`NormalityChecker/GaussianLogarithmCharacters.lean`](../NormalityChecker/GaussianLogarithmCharacters.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`GaussianLogarithmCharacters.gaussian_log_identity`](../NormalityChecker/GaussianLogarithmCharacters.lean#L29) |  |
+| [`GaussianLogarithmCharacters.gaussian_series`](../NormalityChecker/GaussianLogarithmCharacters.lean#L42) [CC-14](results.md#cc-14) | All four Taylor series, with the Gaussian term taken in its real part. |
+| [`GaussianLogarithmCharacters.trace_frobenius`](../NormalityChecker/GaussianLogarithmCharacters.lean#L63) | In every characteristic p the trace gives the same first digit at j and pj. |
+| [`GaussianLogarithmCharacters.lost_bands`](../NormalityChecker/GaussianLogarithmCharacters.lean#L131) [CC-14](results.md#cc-14) | The two choices of the zero identity remove different bands from the actual denominators. |
+| [`GaussianLogarithmCharacters.common_denominator`](../NormalityChecker/GaussianLogarithmCharacters.lean#L186) [CC-14](results.md#cc-14) |  |
+| [`GaussianLogarithmCharacters.eventually_below`](../NormalityChecker/GaussianLogarithmCharacters.lean#L213) [CC-14](results.md#cc-14) | The exponent of the actual Gaussian denominator is eventually below every number strictly larger than 5/12. |
+| [`GaussianLogarithmCharacters.forcing_distance`](../NormalityChecker/GaussianLogarithmCharacters.lean#L253) [CC-16](results.md#cc-16) | The one-step forcing costs at most nine times the mean squared distance from a common phase, after summing and shifting the endpoint. |
+| [`GaussianLogarithmCharacters.forcing_sum`](../NormalityChecker/GaussianLogarithmCharacters.lean#L268) [CC-16](results.md#cc-16) | Finite interval transfer, including the endpoint cost, for an arbitrary sequence on the unit circle. |
+
+### GaussianLogarithmRelations
+
+[`NormalityChecker/GaussianLogarithmRelations.lean`](../NormalityChecker/GaussianLogarithmRelations.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`GaussianLogarithmRelations.re_pow_onePlusI`](../NormalityChecker/GaussianLogarithmRelations.lean#L25) |  |
+| [`GaussianLogarithmRelations.opposite_real_coefficients`](../NormalityChecker/GaussianLogarithmRelations.lean#L42) | The two opposite Gaussian phases cancel outside multiples of four. |
+| [`GaussianLogarithmRelations.dyadicRe_eq`](../NormalityChecker/GaussianLogarithmRelations.lean#L55) |  |
+| [`GaussianLogarithmRelations.insertion_iff`](../NormalityChecker/GaussianLogarithmRelations.lean#L66) [CC-23](results.md#cc-23) | Exact integer cutoff, also when the binary slope is half-integral. |
+| [`GaussianLogarithmRelations.gaussian_re_frobenius`](../NormalityChecker/GaussianLogarithmRelations.lean#L85) [CC-23](results.md#cc-23) | The real residue is invariant for both odd prime classes modulo four. |
+| [`GaussianLogarithmRelations.small_primitive_factors`](../NormalityChecker/GaussianLogarithmRelations.lean#L111) [CC-23](results.md#cc-23) | Both norm factors have a primitive prime in every exceptional case with odd n ≥ 7 and φ(n) < 16. |
+| [`GaussianLogarithmRelations.norm_valuation_system`](../NormalityChecker/GaussianLogarithmRelations.lean#L122) [CC-23](results.md#cc-23) | Solve the four prime-valuation equations of the surviving norm factors. |
 
 ### GoldenCongruence
 
@@ -1752,6 +2797,32 @@ Declaration counts describe the size of the library, not the mathematical signif
 | Declaration | Summary |
 | --- | --- |
 | [`LogarithmBands.denominator_rate`](../NormalityChecker/LogarithmBands.lean#L89) [CC-02](results.md#cc-02) | A finite zero list suffices: convergence of nonzero unshifted logarithm series ensures that all their positive-index zero partial sums form such a list. |
+
+### LogarithmPrimaryCharacters
+
+[`NormalityChecker/LogarithmPrimaryCharacters.lean`](../NormalityChecker/LogarithmPrimaryCharacters.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`LogarithmPrimaryCharacters.primary_correct`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L17) [CC-24](results.md#cc-24) | Removing this particular representative clears p from the true reduced denominator. |
+| [`LogarithmPrimaryCharacters.joint_remainder`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L33) [CC-24](results.md#cc-24) | Removing all selected primary terms simultaneously leaves a denominator prime to their product. |
+| [`LogarithmPrimaryCharacters.primary_character_argument`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L56) [CC-24](results.md#cc-24) |  |
+| [`LogarithmPrimaryCharacters.coefficient_coprime`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L68) [CC-24](results.md#cc-24) |  |
+| [`LogarithmPrimaryCharacters.dyadic_completion`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L89) [CC-25](results.md#cc-25) | Arbitrarily accurate real approximations can retain every odd-primary component of any prescribed rational. |
+| [`LogarithmPrimaryCharacters.gram_bound`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L120) [CC-25](results.md#cc-25) | The diagonal and off-diagonal contributions to a block of characters. |
+| [`LogarithmPrimaryCharacters.aligned_means`](../NormalityChecker/LogarithmPrimaryCharacters.lean#L145) [CC-25](results.md#cc-25) | A family of vectors with uniformly large aligned means must be small when its off-diagonal correlations are small. |
+
+### LogarithmTransitionBounds
+
+[`NormalityChecker/LogarithmTransitionBounds.lean`](../NormalityChecker/LogarithmTransitionBounds.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase13.discrepancy_of_interior`](../NormalityChecker/LogarithmTransitionBounds.lean#L13) [CC-19](results.md#cc-19) | A narrow interval meeting the central part of the orbit cannot contain two consecutive shifts. |
+| [`Phase13.interior_before_transition`](../NormalityChecker/LogarithmTransitionBounds.lean#L85) | Pull a transition back through any number of binary shifts. |
+| [`Phase13.logTwo_squared_log_gap`](../NormalityChecker/LogarithmTransitionBounds.lean#L147) [CC-19](results.md#cc-19) | For all sufficiently large k, every prefix of at least 68^(2k) shifts has discrepancy gap at least k²/N. |
+| [`Phase13.logTwo_all_prefix_gap`](../NormalityChecker/LogarithmTransitionBounds.lean#L184) [CC-19](results.md#cc-19) | All sufficiently large prefixes, with the block length chosen as a function of N. |
+| [`Phase13.logTwo_fourier_tail_stability`](../NormalityChecker/LogarithmTransitionBounds.lean#L211) | Unnormalized Fourier costs on a tail interval: their square roots differ by at most π sqrt(2/M), uniformly in the interval length. |
 
 ### LogPolynomialKernel
 
@@ -1937,6 +3008,34 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`twoStridePrefix_survival`](../NormalityChecker/StridedLogarithm.lean#L149) [CC-01](results.md#cc-01) | At these primes exactly one term of the two-stride prefix has a pole. |
 | [`cosineEscape_multiple`](../NormalityChecker/StridedLogarithm.lean#L186) | First-frequency escape at an integer multiple gives a quantitative lower bound on first-frequency escape at the original point. |
 
+### StrideResidueReturns
+
+[`NormalityChecker/StrideResidueReturns.lean`](../NormalityChecker/StrideResidueReturns.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`StrideResidueReturns.simple_fraction_fiber`](../NormalityChecker/StrideResidueReturns.lean#L26) | A weighted sum of distinct simple fractions takes any prescribed value at most as often as there are poles, provided one residue survives. |
+| [`StrideResidueReturns.regular_pairs`](../NormalityChecker/StrideResidueReturns.lean#L85) [CC-15](results.md#cc-15) | In a single residue class of the coefficient period, at most h positions in a prime block have any given ordered pair of regular residues at distance h. |
+| [`StrideResidueReturns.window_of_pairs`](../NormalityChecker/StrideResidueReturns.lean#L131) | From fixed-gap collisions to the number of hits in an arbitrary short interval. |
+| [`StrideResidueReturns.regular_window`](../NormalityChecker/StrideResidueReturns.lean#L166) | Anti-concentration in each phase class of a periodically weighted prefix. |
+| [`StrideResidueReturns.actual_split`](../NormalityChecker/StrideResidueReturns.lean#L207) |  |
+| [`StrideResidueReturns.actual_regular_digit`](../NormalityChecker/StrideResidueReturns.lean#L217) [CC-15](results.md#cc-15) | A common numerator and an invertible denominator simultaneously represent the rational prime-free sum and its finite-field value. |
+| [`StrideResidueReturns.logarithm_window`](../NormalityChecker/StrideResidueReturns.lean#L260) [CC-15](results.md#cc-15) | Any given residue occurs at most six times the one-phase bound in T positions of any p-block of the actual two-stride p-regular digits. |
+
+### TransitionWindows
+
+[`NormalityChecker/TransitionWindows.lean`](../NormalityChecker/TransitionWindows.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`TransitionWindows.logTwo_one_change_blocks`](../NormalityChecker/TransitionWindows.lean#L23) [CC-26](results.md#cc-26) | The integral for ln 2 gives a block of `T-1` consecutive starts with at least one change, for every late `B` and `2 ≤ T ≤ B`. |
+| [`TransitionWindows.logTwo_hit_of_diagonal`](../NormalityChecker/TransitionWindows.lean#L40) | The corrected numerator at `N` certifies individual true transitions through two further shell lengths by a fixed interior test on its rational orbit. |
+| [`TransitionWindows.logTwo_hit_of_crt_cells`](../NormalityChecker/TransitionWindows.lean#L70) [CC-27](results.md#cc-27) | Two four-bit CRT cells suffice to force a true transition. |
+| [`TransitionWindows.aggregate_le`](../NormalityChecker/TransitionWindows.lean#L95) | Each transition is charged at most once per internal offset. |
+| [`TransitionWindows.frequency_of_dyadic_aggregate`](../NormalityChecker/TransitionWindows.lean#L123) | For every sufficiently large dyadic shell suppose the mean number of changes per word is at least `α*T`, for any positive word length at most the shell size. |
+| [`TransitionWindows.density_discrepancy_of_dyadic_aggregate`](../NormalityChecker/TransitionWindows.lean#L168) [CC-26](results.md#cc-26) | Positive aggregate on all late dyadic shells gives a positive lower density and an explicit strict bound on the upper limiting interval discrepancy. |
+| [`TransitionWindows.logTwo_of_many_rich_windows`](../NormalityChecker/TransitionWindows.lean#L199) [CC-26](results.md#cc-26) | The requested power-length criterion for the actual binary words of ln 2. |
+
 ### TrigonometricMoments
 
 [`NormalityChecker/TrigonometricMoments.lean`](../NormalityChecker/TrigonometricMoments.lean)
@@ -1965,6 +3064,20 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`ShadowCancellations.diagonal_small_denominators_density_zero`](../NormalityChecker/TypicalShadow.lean#L157) [CC-11](results.md#cc-11) | For each `ε>0`, the fully corrected denominators exceed `exp((1-ε)n)` outside a set of indices of natural density zero. |
 | [`ShadowCancellations.missing_fraction_price`](../NormalityChecker/TypicalShadow.lean#L161) |  |
 | [`ShadowCancellations.missing_prime_fraction_density_zero`](../NormalityChecker/TypicalShadow.lean#L186) [CC-11](results.md#cc-11) | For each fixed positive fraction, the indices losing that fraction of the primes in `(n,2n]` have natural density zero. |
+
+### WeightedLambertIdentities
+
+[`NormalityChecker/WeightedLambertIdentities.lean`](../NormalityChecker/WeightedLambertIdentities.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`WeightedLambertIdentities.lambert_head_eq_taylor`](../NormalityChecker/WeightedLambertIdentities.lean#L21) [CC-45](results.md#cc-45) | Finite Lambert-to-Taylor head reindexing: for any rational weight sequence `a`, summing `a m * ∑_{r=1}^{⌊N/m⌋} 2^{N - m*r}` over `1 ≤ m ≤ N` equals the… |
+| [`WeightedLambertIdentities.lambert_prime_band_mod_one`](../NormalityChecker/WeightedLambertIdentities.lean#L100) [CC-45](results.md#cc-45) | Exact prime-band identity in the Lambert head: for every prime `p` with `N/2 < p ≤ N`, the single Lambert term `a_p * 2^{N - p}` differs from the Taylor term… |
+| [`WeightedLambertIdentities.largest_prime_not_dvd_prod_sub_one`](../NormalityChecker/WeightedLambertIdentities.lean#L110) [CC-45](results.md#cc-45) | Non-cancellation at the largest prime factor: if `p` is prime and every prime `q ∈ S` satisfies `q ≤ p`, then `p` does not divide `∏ q ∈ S, (q - 1)`. |
+| [`WeightedLambertIdentities.cleared_local_abs_lt`](../NormalityChecker/WeightedLambertIdentities.lean#L129) [CC-45](results.md#cc-45) | Local Bernoulli bound for the integer-cleared numerator `g(m) = m a_m = ∏_{p\|m}(1-p)`: for every prime `p` and exponent `e ≥ 1`, `\|1 + e * (1 - p)\| < p^e`. |
+| [`WeightedLambertIdentities.cleared_local_odd`](../NormalityChecker/WeightedLambertIdentities.lean#L149) | Parity of the local factor of `(m a_m) * 1`: for every odd prime `p` and `e ≥ 1`, `1 + e * (1 - p)` is odd (so odd primes contribute zero 2-adic valuation). |
+| [`WeightedLambertIdentities.cleared_local_two_eq_zero_iff`](../NormalityChecker/WeightedLambertIdentities.lean#L159) | At `p = 2`, the local factor `1 + e * (1 - 2) = 1 - e` vanishes iff `e = 1`, explaining the exact zero locus `n ≡ 2 (mod 4)` of `(m a_m) * 1`. |
+| [`WeightedLambertIdentities.nonneg_one_bit_count_le`](../NormalityChecker/WeightedLambertIdentities.lean#L166) [CC-46](results.md#cc-46) | Markov 1-bit upper bound for nonnegative integer Lambert series (such as `L_{chi_4}`): if each position `n ∈ window` has nonnegative unwrapped sum `S n ≥ 0`… |
 
 ### WindowShadow
 

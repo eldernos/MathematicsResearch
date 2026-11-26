@@ -1,0 +1,33 @@
+# alphaXiv AI Track submission settings for this manuscript, read by scripts/alphaxiv_publish.py.
+# Title, abstract and authors come from ../metadata.toml. Licence and subject category are chosen in the
+# alphaXiv web form (they are not API fields): proposed math.NT, licence CC BY 4.0 (papers/LICENSE.md).
+#
+# OWNER ACTION: check every rating and tool record below against the development record (the writer,
+# reviewer and reviser of each report are named in papers/reviews/09-erdos-borwein-note/), then change the next line to
+# owner_confirmed = true. A dry run works without confirmation; an actual submission is refused until then.
+# Ratings are "ai", "mixed" or "human"; alphaXiv requires all five stages.
+owner_confirmed = false
+url_slug = "erdos-borwein-finite-statistic-thresholds"
+
+[ai_disclosure.stages]
+idea = "mixed"         # the owner chose the questions and directions; models proposed the conjectures
+literature = "ai"      # literature search and comparison by models
+experiments = "ai"     # exact computations and Lean 4 formalization by models
+analysis = "ai"        # proofs and their checking by models
+writing = "ai"         # manuscript drafting and revision by models
+
+[[ai_disclosure.tools]]
+model = "Claude, GPT and Gemini models (several versions)"
+harness = "Claude Code, OpenAI Codex and Antigravity agents orchestrated in T3 Code"
+contribution = "Conjectures, proofs, Lean 4 formalization and exact computations in the underlying research phases (Phases 1-19)"
+
+[[ai_disclosure.tools]]
+model = "Claude Sonnet 5.5"
+harness = "Claude Code (T3 Code)"
+contribution = "Drafted the research note and its cross-check script, and revised it in response to the review"
+
+[[ai_disclosure.tools]]
+model = "Gemini 4 Neon"
+harness = "Antigravity (T3 Code)"
+contribution = "Independent referee report"
+

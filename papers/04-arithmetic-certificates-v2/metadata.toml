@@ -1,0 +1,25 @@
+id = "IV"   # permanent manuscript number; a revision keeps it
+title = "Arithmetic Certificates for Normality and Mathematical Limitations"
+authors = ["Christopher Anderson"]
+affiliation = "Independent Researcher"
+short_title = "Arithmetic Certificates and Limitations"
+version = "2.0"
+status = "preprint draft"
+abstract = "A radix orbit in base b >= 2 is equidistributed if, for every positive tolerance and denominator floor, almost all blocks on a prescribed geometric schedule admit rational models with mean circle error below the tolerance, reduced denominators above the floor on a fixed prime support coprime to b, and denominators bounded by a fixed power of the block length. Partial coverage gives a quantitative discrepancy bound. Conversely, accurate fixed-support models on long overlaps must agree modulo one after alignment, and a counting estimate (Theorem 4.1) shows that polynomial-denominator rational models meeting the mean circle error threshold 1/(16 b^4) on an independently prescribed geometric schedule with polynomially many starts per scale occur only finitely often for almost every real. Explicit pairs of binary streams separate odd-primary rational data and logarithmic word laws from ordinary normality, and eight obstructions isolate the information lost by specific normality-proof methods. Two uniform halting reductions show that neither normality nor nonnormality is computably enumerable on digit-program names, even when their values are transcendental and their binary discrepancy tends to zero or one. Lean 4 verifies the fixed-support estimate, uniform overlap separation, the certificate transfer step, radix-orbit partial-coverage bounds, the finite weighted word inequality underlying the counting theorem, and—under explicit endpoint hypotheses—each individual finite-edit, halting-reduction, and nonrecognizability declaration. A separate written Rosser argument establishes consistency-relative independence for the normality sentence of a theory-dependent digit program, with no implication for any named classical constant."
+keywords = [
+  "normal numbers",
+  "discrepancy",
+  "exponential sums",
+  "rational orbit approximation",
+  "overlap rigidity",
+  "computable analysis",
+  "undecidability",
+  "Rosser independence",
+  "Lean 4",
+]
+msc_primary = "11K16"
+msc_secondary = ["11K38", "03D35", "03F40", "68V20"]
+supersedes = "papers/04-arithmetic-certificates"
+lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
+registry_ids = ["AC-01", "AC-02", "AC-03", "AC-04", "AC-10", "AC-11"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

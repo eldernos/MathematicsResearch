@@ -2,6 +2,25 @@
 
 The manuscript release groups all five PDFs with their LaTeX sources, bibliographies, figures, research notes and Lean proofs. For this published GitHub release, the manual deposit below lets the project owner confirm author credits and metadata before issuing the DOI. The release tag is **manuscripts-v1.1.0**. Checkpoint 11, the mathematical baseline, is a separate tag. [Manuscripts](README.md) · [GitHub manuscript release](https://github.com/eldernos/MathematicsResearch/releases/tag/manuscripts-v1.1.0) · [Checkpoint 11](https://github.com/eldernos/MathematicsResearch/commit/a09e011720bc74396a27f4cb3ce2d8a5b3ce5035)
 
+## Release candidate manuscripts-v2.0.0
+
+The tag **manuscripts-v2.0.0** is a **candidate**. It does not exist until the owner approves the release, and no DOI has been issued. It is intended to carry eight manuscripts: revised Papers I, II, IV and V (version 2.0 in `papers/01-stoneham-polynomials-v2`, `papers/02-localized-normality-v2`, `papers/04-arithmetic-certificates-v2` and `papers/05-classical-denominators-v2`), the new papers in `papers/06-multiplicative-lambert`, `papers/07-synthetic-expansions` and `papers/08-stoneham-product-orbits`, and the research note `papers/09-erdos-borwein-note`. Paper III is retained unchanged at version 1.1. The superseded v1.1 directories and the tags `manuscripts-v1.0.0` and `manuscripts-v1.1.0` stay as they are, so the sections below remain valid for those releases. [Manuscript table](../README.md#research-papers) · [Research site](../docs/site.md)
+
+**Creator.** The v2 manuscripts name **Christopher Anderson, Independent Researcher** as author. For a Zenodo record or any other deposit, enter exactly this name and affiliation. Do not add an ORCID, email address or institutional affiliation unless the owner supplies and approves it. The issue tracker is the only contact route. The v1.0.0 and v1.1.0 archives carry no author line; a named-author edition of those papers would need a new version identifier such as v1.2.
+
+**Citation files.** [CITATION.cff](../CITATION.cff) describes the repository, with `version: "manuscripts-v2.0.0"` marked as a candidate. [BIBLIOGRAPHY.bib](BIBLIOGRAPHY.bib) has one entry for each current manuscript and one for each historical release. Both name the same author. Regenerate and check them with `python3 scripts/site.py bib` and `python3 scripts/check_citation.py`. When both CITATION.cff and a `.zenodo.json` exist, Zenodo uses `.zenodo.json`.
+
+**Before tagging**, the owner or the release assistant should confirm each of the following.
+
+1. Every manuscript directory has `paper.tex`, `references.bib`, `paper.pdf`, `metadata.toml`, `VERIFICATION.md`, `LEDGER.md` and `submission/`, and each PDF compiles with no undefined references or citations (`papers/build.sh`).
+2. `python3 scripts/portal.py build`, then `python3 scripts/portal.py check --strict`, `python3 scripts/site.py bib --check`, `python3 scripts/check_citation.py` and `python3 scripts/site.py build --strict` all pass.
+3. The Lean workflow succeeds on the commit that will be tagged. The manuscripts pin their Lean links to research-checkpoint-18 (`e4809cf561573aef588e6ffc491a35cdb79fd9ec`).
+4. The digests of the new PDFs are appended to `SHA256SUMS`. The existing entries for the five v1.1 PDFs are never edited.
+5. The owner has approved the licence of the manuscripts ([licensing proposal](../docs/licensing-proposal.md)) and the author line.
+6. The tag, release notes and any Zenodo record state that the manuscripts are preprint drafts, that cross-model review is not independent human peer review, and that the Lean kernel checks only the declarations listed in each verification map.
+
+**Archiving.** Use one route per release, as described below. Choose a software record for the repository snapshot and, if wanted, separate preprint records for individual manuscripts, each with its own licence. Verify the archive with the same checksum procedure as for v1.1, replacing the tag name, and record the issued DOI in `CITATION.cff` and `BIBLIOGRAPHY.bib` in the next revision. Never move a published tag.
+
 ## 1. Verify the files you are about to archive
 
 The simplest route is to download the eight named assets from the GitHub release into one folder. Keep the five PDFs, the named ZIP archive, `release-manifest.json` and `SHA256SUMS.txt` together. In that folder run:

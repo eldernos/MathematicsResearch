@@ -1,0 +1,15 @@
+id = "IX"   # permanent manuscript number; a revision keeps it
+title = "Finite-statistic thresholds and statistical obstructions for the binary digits of the Erdős–Borwein constant"
+short_title = "Finite statistics for Erdős–Borwein digits"
+version = "1.0"
+status = "preprint draft"
+authors = ["Christopher Anderson"]
+affiliation = "Independent Researcher"
+abstract = "Let E = sum 1/(2^n - 1) be the Erdős–Borwein constant. Whether its binary digits are normal is open, and this note proves neither normality nor nonnormality. Writing tau(m) = 2^V(m) U(m) with U(m) odd, the digits of E are governed by the integers V(n+j) and U(n+j). We compare them with an explicit random model of independent Poisson columns whose first-digit frequency lies in [0.492450290, 0.492460864] (finite certificate). Using an unconditional estimate for the mean discarded tail, we determine which finite statistics of this model would force a digit frequency below 1/2: one bounded statistic of 16 columns suffices, while for every D <= 15 there are exact countermodels with the same D-column law and tail mean whose first-digit frequency is at least 1/2. Exact joint laws of every set of at most four columns do not decide the bias. Factorial-moment information of order at most 4 never decides it, order at most 8 fails on 16 columns, and an explicit order-92 witness suffices. The parity inequality behind these statements is verified in Lean. Floating-point computations with explicit error radii (numerical evidence, not interval-arithmetic certificates) indicate that a Selberg–Vaaler majorant of degree 116 suffices, whereas no trigonometric majorant of degree at most 110 does. We list the arithmetic correlation estimates that would settle these statistics, audit the bit counts in Crandall's 2012 paper against exact digits, credit related public work of Campbell, Captain Sude and Mira Cult, and propose three concrete collaborative computations and estimates."
+keywords = ["Erdős–Borwein constant", "binary digits", "normal numbers", "divisor function", "Poisson model", "parity Bonferroni inequality", "Selberg–Vaaler majorant", "research note"]
+msc_primary = "11K16"
+msc_secondary = ["11N37", "11Y60", "11K06"]
+supersedes = ""
+lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"
+registry_ids = ["CC-49", "CC-30", "CC-28", "CC-47", "CC-20", "CC-21"]
+license = "CC-BY-4.0"   # LICENSE-MANUSCRIPTS.md

@@ -1,6 +1,6 @@
 {
  "description": "Proof-dependency map. Solid edges are checked against the import graph of NormalityChecker/**/*.lean: each source module is transitively imported by a target module (shortest path recorded) and a public declaration of the source is referenced on such a path. Dashed edges are historical; dotted edges are paper-only inputs.",
- "modules_parsed": 167,
+ "modules_parsed": 252,
  "foundation_modules": [
   "Basic",
   "Analysis.Weyl",
@@ -326,7 +326,7 @@
     "StonehamPolynomialPrefix",
     "StonehamPolynomialOrthant"
    ],
-   "declaration_used": "StonehamPolynomial.weighted_uniform_precision",
+   "declaration_used": "StonehamPolynomial.weighted_uniform_precision_at",
    "used_in": "StonehamPolynomialPrefix"
   },
   {
@@ -874,7 +874,8 @@
    "imports": "Basic",
    "import_path": [
     "StonehamJoint",
-    "StonehamStatements",
+    "JointWeyl",
+    "RectangleFrequency",
     "Basic"
    ]
   },
@@ -884,11 +885,9 @@
    "imports": "Analysis.Weyl",
    "import_path": [
     "StonehamJoint",
-    "StonehamPolynomial",
-    "StonehamPolynomialNormal",
-    "ArithmeticCertificate",
-    "SmoothOrbit",
-    "StonehamOrbit",
+    "JointWeyl",
+    "FourierTest",
+    "Dilation",
     "Correlations",
     "Analysis.Weyl"
    ]
@@ -899,11 +898,7 @@
    "imports": "FourierTest",
    "import_path": [
     "StonehamJoint",
-    "StonehamPolynomial",
-    "StonehamPolynomialNormal",
-    "ArithmeticCertificate",
-    "SmoothOrbit",
-    "CertificateBlocks",
+    "JointWeyl",
     "FourierTest"
    ]
   },
@@ -1186,6 +1181,71 @@
    "justification": "results.md, Phase 10: transcendence of signed expansions follows on paper using Roth or Ridout (notes/signed-shell-discrepancy.md). No Lean module."
   }
  ],
+ "synthetic_extension": {
+  "proof_map": "notes/phase18/dependencies.md",
+  "checked_imports": [
+   {
+    "result": "SY-02",
+    "declaration_used": "fixed_support_orbit_estimate",
+    "used_in": "RetirementDenominator",
+    "import_path": [
+     "RetirementDenominator",
+     "ArithmeticCertificate",
+     "SmoothOrbit"
+    ]
+   },
+   {
+    "result": "SY-12",
+    "declaration_used": "sharp_translation",
+    "used_in": "Phase18Synthetic",
+    "import_path": [
+     "Phase18Synthetic",
+     "SharpTranslation"
+    ]
+   }
+  ]
+ },
+ "operations_extension": {
+  "proof_map": "notes/phase19/README.md",
+  "checked_imports": [
+   {
+    "result": "OP-01",
+    "declaration_used": "sharp_translation",
+    "used_in": "AdditionSpectrum",
+    "import_path": [
+     "AdditionSpectrum",
+     "SharpTranslation"
+    ]
+   },
+   {
+    "result": "OP-01",
+    "declaration_used": "primePower_period_count",
+    "used_in": "AdditionSpectrum",
+    "import_path": [
+     "AdditionSpectrum",
+     "PrimePowerGrid"
+    ]
+   },
+   {
+    "result": "OP-05",
+    "declaration_used": "sharp_translation",
+    "used_in": "DiscrepancyGeometry",
+    "import_path": [
+     "DiscrepancyGeometry",
+     "SharpTranslation"
+    ]
+   },
+   {
+    "result": "OP-08",
+    "declaration_used": "stride_order",
+    "used_in": "PrimePowerGrid",
+    "import_path": [
+     "PrimePowerGrid",
+     "SurvivingGrid"
+    ]
+   }
+  ]
+ },
  "joint_persistent_public_declarations_unused": [
   "failedWidth",
   "fixed_deep_loss_bound",

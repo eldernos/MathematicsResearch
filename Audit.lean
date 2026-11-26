@@ -5,6 +5,16 @@ open Lean in
 run_cmd do
   let permitted := [``propext, ``Classical.choice, ``Quot.sound]
   let results := [
+    ``NormalityChecker.AdditionSpectrum.exact_addition_spectrum,
+    ``NormalityChecker.AdditionSpectrum.mixtureRealizable,
+    ``NormalityChecker.PrimePowerGrid.crt_period_count,
+    ``NormalityChecker.AdditionSpectrum.finite_necessity,
+    ``NormalityChecker.AdditionSpectrum.polytope_eq_convexHull,
+    ``NormalityChecker.PrimePowerGrid.primePower_period_count,
+    ``NormalityChecker.PrimePowerGrid.grid_count,
+    ``NormalityChecker.DiscrepancyGeometry.discDist_eq_zero_iff,
+    ``NormalityChecker.DiscrepancyGeometry.asymDist_triangle,
+    ``NormalityChecker.SurvivingGrid.stride_order,
     ``NormalityChecker.normalIn_iff_uniform_approx,
     ``NormalityChecker.not_normal_of_frequent_excess,
     ``NormalityChecker.logTwo_tail_bounds,
@@ -14,6 +24,23 @@ run_cmd do
     ``NormalityChecker.resonant_zero_block,
     ``NormalityChecker.components_not_binary_normal,
     ``NormalityChecker.hasSum_components_logTwo,
+    ``NormalityChecker.RetirementDenominator.discrepancy_switch,
+    ``NormalityChecker.RetirementDenominator.polynomial_discrepancy_switch,
+    ``NormalityChecker.RetirementDenominator.normal_iff_pos,
+    ``NormalityChecker.RetirementDenominator.polynomialPrefix_den,
+    ``NormalityChecker.RetirementDenominator.fullPrefix_den,
+    ``NormalityChecker.SharpTranslation.sharp_translation_isGreatest,
+    ``NormalityChecker.Phase18Synthetic.geometric_retirement_weight,
+    ``NormalityChecker.Phase18Synthetic.grouped_retirement_hasSum,
+    ``NormalityChecker.Phase18Synthetic.raw_prime_support_infinite,
+    ``NormalityChecker.Phase18Synthetic.factorial_gaps,
+    ``NormalityChecker.Phase18Synthetic.programmed_prefix_fract,
+    ``NormalityChecker.Phase18Synthetic.programmed_dense_hasSum,
+    ``NormalityChecker.Phase18Synthetic.discrepancy_transfer,
+    ``NormalityChecker.Phase18Synthetic.sparse_discrepancy_transfer,
+    ``NormalityChecker.Phase18Synthetic.quadratic_sparse_transfer,
+    ``NormalityChecker.hasSum_prime_rays_logTwo,
+    ``NormalityChecker.hasSum_positive_rational_multiples,
     ``NormalityChecker.ordered_phase_ne_zero,
     ``NormalityChecker.logDen_ten,
     ``NormalityChecker.logDen_dvd_lcm,
@@ -650,7 +677,17 @@ run_cmd do
     ``NormalityChecker.StonehamPolynomial.joint_uniform_powers,
     ``NormalityChecker.StonehamPolynomial.polynomial_statement_checked,
     ``NormalityChecker.StonehamPolynomial.joint_statement_checked]
-  for decl in results do
+  let env ← getEnv
+  let mut audited := results.toArray
+  let listed := Std.HashSet.ofList results
+  for (name, info) in env.constants.toList do
+    let .thmInfo _ := info | continue
+    if isPrivateName name || name.isInternal || listed.contains name then continue
+    let some idx := env.getModuleIdxFor? name | continue
+    if `NormalityChecker |>.isPrefixOf env.header.moduleNames[idx.toNat]! then
+      audited := audited.push name
+  logInfo m!"Auditing {audited.size} public theorem declarations."
+  for decl in audited do
     let axioms ← collectAxioms decl
     let unexpected := axioms.filter fun a => !permitted.contains a
     unless unexpected.isEmpty do

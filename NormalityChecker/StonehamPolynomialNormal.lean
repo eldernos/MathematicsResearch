@@ -37,22 +37,28 @@ private lemma event_mem {p k : ℕ} (hp : 2 ≤ p) (v : Vector t.degree)
 
 private lemma events_card (p k : ℕ) : (t.events p k).card ≤ (2*(k+1))^t.degree :=
   card_image_le.trans_eq (by simp [box])
+/-- The leading prefix loses only boundedly many factors of a chosen prime divisor. -/
+def RetainsAt (b q p : ℕ) : Prop :=
+  ∃ L K : ℕ, ∀ n : ℕ, K ≤ Nat.log q n → 0 < n →
+    p^(q.factorization p * (t.degree * Nat.log q n) - L) ∣ (t.model b q n).den
+
 end Monomial
 
 /-- An integral leading coefficient and any rational perturbation with pole order
-at most `(d-1)k` leave a denominator divisible by `p^(dk-C)` at late scales. -/
-theorem retained_with_lower_terms {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (cop : b.Coprime p)
-    (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
-    (lower : ∀ n, (R n).den ∣ p^((t.degree-1)*Nat.log p n)) :
-    ∃ C K : ℕ, ∀ n, K ≤ Nat.log p n → 0 < n →
-      p^(t.degree * Nat.log p n - C) ∣ ((c:ℚ)*t.model b p n + R n).den := by
-  obtain ⟨L,K,retain⟩ := retained_denominator hp odd cop t.stride t.parameter
+at most `v_p(q)(d-1)k` leave a pole of order at least `v_p(q)dk-C` at late scales. -/
+theorem retained_with_lower_terms_of_retainsAt {b q p : ℕ} (hp : p.Prime) (hq : 3 ≤ q)
+    (pq : p ∣ q)
+    (t : Monomial) (retention : t.RetainsAt b q p) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
+    (lower : ∀ n, (R n).den ∣ q^((t.degree-1)*Nat.log q n)) :
+    ∃ C K : ℕ, ∀ n, K ≤ Nat.log q n → 0 < n →
+      p^(q.factorization p * (t.degree * Nat.log q n) - C) ∣ ((c:ℚ)*t.model b q n + R n).den := by
+  obtain ⟨L,K,retain⟩ := retention
   let h := c.natAbs.factorization p
   refine ⟨L+h,max K (L+h+1),fun n late pos => ?_⟩
-  let k := Nat.log p n
-  let x := t.model b p n
+  let k := Nat.log q n
+  let x := t.model b q n
   let y := (c:ℚ)*x+R n
-  have xc : p^(t.degree*k-L) ∣ x.den := retain n ((le_max_left ..).trans late) pos
+  have xc : p^(q.factorization p*(t.degree*k)-L) ∣ x.den := retain n ((le_max_left ..).trans late) pos
   have recov : (c:ℚ)⁻¹*(y-R n) = x := by
     dsimp [y]; rw [add_sub_cancel_right,inv_mul_cancel_left₀ (by exact_mod_cast nc)]
   have xd := Rat.mul_den_dvd (c:ℚ)⁻¹ (y-R n)
@@ -63,58 +69,87 @@ theorem retained_with_lower_terms {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (co
   have le := (hp.pow_dvd_iff_le_factorization (Nat.mul_pos cp lp).ne').mp div
   rw [Nat.factorization_mul cp.ne' lp.ne', Finsupp.add_apply,
     Nat.factorization_lcm y.pos.ne' (R n).pos.ne', Finsupp.sup_apply] at le
-  have bot := (Nat.factorization_prime_le_iff_dvd (R n).pos.ne' (pow_pos hp.pos _).ne').mpr (lower n) p hp
-  rw [hp.factorization_pow,Finsupp.single_eq_same] at bot
+  have bot := (Nat.factorization_prime_le_iff_dvd (R n).pos.ne' (pow_pos (by omega : 0<q) _).ne').mpr (lower n) p hp
+  rw [Nat.factorization_pow, Finsupp.smul_apply, smul_eq_mul, mul_comm _ (q.factorization p)] at bot
   have eqdeg : t.degree*k = (t.degree-1)*k+k := by
     calc t.degree*k = ((t.degree-1)+1)*k := by rw [Nat.sub_add_cancel degree]
          _ = _ := by ring
   have bound : L+h+1 ≤ k := (le_max_right ..).trans late
   apply (hp.pow_dvd_iff_le_factorization y.pos.ne').mpr
-  change t.degree*k-L ≤ h+max _ _ at le
-  change _ ≤ (t.degree-1)*k at bot
-  change t.degree*k-(L+h) ≤ _
+  change q.factorization p*(t.degree*k)-L ≤ h+max _ _ at le
+  change _ ≤ q.factorization p*((t.degree-1)*k) at bot
+  change q.factorization p*(t.degree*k)-(L+h) ≤ _
+  have mult := Nat.le_mul_of_pos_left k (hp.factorization_pos_of_dvd (by omega : q ≠ 0) pq)
+  have split := congrArg (q.factorization p * ·) eqdeg
+  rw [Nat.mul_add] at split
   omega
 
-/-- A unique highest-degree monomial with nonzero integer coefficient survives
-addition of any finite sum of strictly lower-degree monomials. All denominator parameters are powers of one odd prime. Both the
-radix dilations and the denominator exponents can vary across factors. -/
-theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
-    (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
-    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
-    NormalIn b (c * t.value b p + ∑ i ∈ s, (a i:ℝ)*(u i).value b p) := by
+/-- A stabilizing prime supplies the leading denominator estimate. -/
+theorem retained_with_lower_terms_at {b q p : ℕ} (hp : p.Prime) (hq : 3 ≤ q)
+    (pq : p ∣ q) (cop : b.Coprime p) (stable : StablePowers b q p)
+    (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
+    (lower : ∀ n, (R n).den ∣ q^((t.degree-1)*Nat.log q n)) :
+    ∃ C K : ℕ, ∀ n, K ≤ Nat.log q n → 0 < n →
+      p^(q.factorization p * (t.degree * Nat.log q n) - C) ∣ ((c:ℚ)*t.model b q n + R n).den :=
+  retained_with_lower_terms_of_retainsAt hp hq pq t
+    (retained_denominator_at hp hq pq cop stable t.stride t.parameter) degree c nc R lower
+
+theorem retained_with_lower_terms {b p : ℕ} (hp : p.Prime) (odd : 3 ≤ p) (cop : b.Coprime p)
+    (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0) (R : ℕ → ℚ)
+    (lower : ∀ n, (R n).den ∣ p^((t.degree-1)*Nat.log p n)) :
+    ∃ C K : ℕ, ∀ n, K ≤ Nat.log p n → 0 < n →
+      p^(t.degree * Nat.log p n - C) ∣ ((c:ℚ)*t.model b p n + R n).den := by
+  simpa [hp.factorization_self] using
+    retained_with_lower_terms_at hp odd dvd_rfl cop (stablePowers_prime hp cop) t degree c nc R lower
+
+/-- The uniform upper bound on denominators uses only the largest degree. -/
+theorem combination_denominator {ι : Type*} {b p D : ℕ} (hp : 0<p)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (le : ∀ i ∈ s, (u i).degree ≤ D) (n : ℕ) :
+    (∑ i ∈ s, (a i:ℚ)*(u i).model b p n).den ∣ p^(D*Nat.log p n) := by
+  apply (Rat.den_sum_dvd_lcm_den ..).trans; apply Finset.lcm_dvd
+  intro i hi
+  have dd := Rat.mul_den_dvd (a i:ℚ) ((u i).model b p n)
+  simp only [Rat.den_intCast,one_mul] at dd
+  exact dd.trans ((denominator_dvd hp (u i).stride _).trans
+    (pow_dvd_pow _ (Nat.mul_le_mul_right _ (le i hi))))
+
+/-- Sparse-block normality from a surviving pole at a fixed divisor of the parameter. -/
+theorem sum_normal_of_retained_at {ι : Type*} {b q p : ℕ} (hb : 2 ≤ b) (hq : 2 ≤ q)
+    (hp : p.Prime) (pq : p ∣ q)
+    (cop : b.Coprime q) (t : Monomial) (degree : 0 < t.degree) (c : ℤ)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (le : ∀ i ∈ s, (u i).degree ≤ t.degree)
+    (survives : ∃ C K : ℕ, ∀ n, K ≤ Nat.log q n → 0 < n →
+      p^(q.factorization p * (t.degree * Nat.log q n) - C) ∣
+        ((c:ℚ)*t.model b q n + ∑ i ∈ s, (a i:ℚ)*(u i).model b q n).den) :
+    NormalIn b (c * t.value b q + ∑ i ∈ s, (a i:ℝ)*(u i).value b q) := by
   classical
-  let R (n : ℕ) := ∑ i ∈ s, (a i:ℚ)*(u i).model b p n
-  let P (n : ℕ) := (c:ℚ)*t.model b p n + R n
-  have lower (n : ℕ) : (R n).den ∣ p^((t.degree-1)*Nat.log p n) := by
-    apply (Rat.den_sum_dvd_lcm_den ..).trans; apply Finset.lcm_dvd
-    intro i hi
-    have dd := Rat.mul_den_dvd (a i:ℚ) ((u i).model b p n)
-    simp only [Rat.den_intCast,one_mul] at dd
-    have le := lt i hi
-    exact dd.trans ((denominator_dvd hp.pos (u i).stride _).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (by omega))))
-  have smooth (n : ℕ) : (P n).den ∣ p^(t.degree*Nat.log p n) := by
+  have hq₀ : 0 < q := by omega
+  have hq₁ : 1 < q := by omega
+  let R (n : ℕ) := ∑ i ∈ s, (a i:ℚ)*(u i).model b q n
+  let P (n : ℕ) := (c:ℚ)*t.model b q n + R n
+  have smooth (n : ℕ) : (P n).den ∣ q^(t.degree*Nat.log q n) := by
     apply (Rat.add_den_dvd_lcm ..).trans; apply Nat.lcm_dvd
-    · have dd := Rat.mul_den_dvd (c:ℚ) (t.model b p n)
+    · have dd := Rat.mul_den_dvd (c:ℚ) (t.model b q n)
       simp only [Rat.den_intCast,one_mul] at dd
-      exact dd.trans (denominator_dvd hp.pos t.stride t.parameter)
-    · exact (lower n).trans (pow_dvd_pow _ (Nat.mul_le_mul_right _ (Nat.sub_le ..)))
-  have scaled (v : Monomial) (z : ℤ) : Tendsto (fun n => (b:ℝ)^n * ((z:ℝ)*v.value b p) -
-      (((z:ℚ)*v.model b p n:ℚ):ℝ)) atTop (𝓝 0) := by
+      exact dd.trans (denominator_dvd hq₀ t.stride t.parameter)
+    · exact combination_denominator hq₀ s u a le n
+  have scaled (v : Monomial) (z : ℤ) : Tendsto (fun n => (b:ℝ)^n * ((z:ℝ)*v.value b q) -
+      (((z:ℚ)*v.model b q n:ℚ):ℝ)) atTop (𝓝 0) := by
     simpa only [Monomial.value,Monomial.model,Rat.cast_mul,Rat.cast_intCast,mul_zero,mul_sub,mul_left_comm (z:ℝ)] using
-      (product_tail (b:=b) (p:=p) (e:=v.stride) hb hp.one_lt v.positive).const_mul (z:ℝ)
+      (product_tail (b:=b) (p:=q) (e:=v.stride) hb hq₁ v.positive).const_mul (z:ℝ)
   have lowerTail := tendsto_finsetSum s (fun i _ => scaled (u i) (a i))
   have tail := (scaled t c).add lowerTail
   refine normal_of_arithmetic_certificate (B:=2) (L:=2) hb (by decide) (by decide) _ P ?_
-    (fixed_support_orbit_estimate hb hp.one_lt cop) (4*t.degree) ?_
+    (fixed_support_orbit_estimate hb hq₁ cop) (4*t.degree) ?_
   · simpa only [P,R,Rat.cast_add,Rat.cast_sum,mul_add,mul_sum,← sum_sub_distrib,
       add_sub_add_comm,sum_const_zero,add_zero] using tail
-  obtain ⟨C,K,retain⟩ := retained_with_lower_terms hp odd cop t degree c nc R lower
-  let A (k : ℕ) := t.events p k ∪ s.biUnion (fun i => (u i).events p k)
+  obtain ⟨C,K,retain⟩ := survives
+  let A (k : ℕ) := t.events q k ∪ s.biUnion (fun i => (u i).events q k)
   have count (k : ℕ) : (A k).card ≤ (s.card+1)*(2*(k+1))^t.degree := by
-    have lift (i : ι) (hi : i ∈ s) := ((u i).events_card p k).trans
-      (Nat.pow_le_pow_right (by positivity) (lt i hi).le)
+    have lift (i : ι) (hi : i ∈ s) := ((u i).events_card q k).trans
+      (Nat.pow_le_pow_right (by positivity) (le i hi))
     have small := card_biUnion_le.trans (sum_le_sum lift)
-    have h := (card_union_le ..).trans (add_le_add (t.events_card p k) small)
+    have h := (card_union_le ..).trans (add_le_add (t.events_card q k) small)
     simp only [sum_const, smul_eq_mul] at h
     exact h.trans_eq (by ring)
   intro u₀ hu M η ηpos
@@ -123,7 +158,7 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
   simp only [mul_zero] at lim
   let J := max K (M+C)
   filter_upwards [eventually_ge_atTop 1,lim.eventually_le_const ηpos,
-    (tendsto_pow_atTop_atTop_of_one_lt (by decide : 1<4)).eventually_ge_atTop (p^J)] with k hk size late
+    (tendsto_pow_atTop_atTop_of_one_lt (by decide : 1<4)).eventually_ge_atTop (q^J)] with k hk size late
   let B := 2^k
   let E := insertionBlocks (A k) B (u₀*B)
   have bp : 0 < B := pow_pos (by decide) _
@@ -149,38 +184,82 @@ theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime
            _ ≤ (4*B)*B := Nat.mul_le_mul_right _ cap
            _ = _ := by ring
     have pos : 0 < n := (pow_pos (by decide : 0<4) _).trans_le lo
-    have big : J ≤ Nat.log p n := Nat.le_log_of_pow_le hp.one_lt (late.trans lo)
-    have r := retain n ((le_max_left ..).trans big) pos
+    have big : J ≤ Nat.log q n := Nat.le_log_of_pow_le hq₁ (late.trans lo)
+    have retained := retain n ((le_max_left ..).trans big) pos
     have denlo : M ≤ (P n).den := by
-      apply le_trans _ (Nat.le_of_dvd (P n).pos r)
+      apply le_trans _ (Nat.le_of_dvd (P n).pos retained)
       have le := (le_max_right ..).trans big
-      have le' := Nat.le_mul_of_pos_left (Nat.log p n) degree
-      exact (by omega : M ≤ t.degree * Nat.log p n-C).trans (Nat.lt_pow_self hp.one_lt).le
+      have le' := Nat.le_mul_of_pos_left (Nat.log q n) degree
+      have pad := Nat.le_mul_of_pos_left (t.degree * Nat.log q n)
+        (hp.factorization_pos_of_dvd (by omega : q ≠ 0) pq)
+      exact (by omega : M ≤ q.factorization p * (t.degree * Nat.log q n)-C).trans
+        (Nat.lt_pow_self hp.one_lt).le
     have denhi : (P n).den ≤ (2^k)^(4*t.degree) := by
-      apply (Nat.le_of_dvd (pow_pos hp.pos _) (smooth n)).trans
-      rw [Nat.mul_comm t.degree,pow_mul p, pow_mul (2^k)]
+      apply (Nat.le_of_dvd (pow_pos hq₀ _) (smooth n)).trans
+      rw [Nat.mul_comm t.degree,pow_mul q, pow_mul (2^k)]
       have top : n ≤ 2^(k*4) := by
         apply (Nat.le_add_right n B).trans (hi.trans _)
         rw [show 4=2^2 by decide, ← pow_mul]
         exact Nat.pow_le_pow_right (by decide) (by omega)
       rw [← pow_mul (2:ℕ) k 4]
-      exact Nat.pow_le_pow_left ((Nat.pow_log_le_self p pos.ne').trans top) _
+      exact Nat.pow_le_pow_left ((Nat.pow_log_le_self q pos.ne').trans top) _
     refine ⟨denlo,⟨_,smooth n⟩,denhi,?_⟩
     intro j hj
     change P (n+j) = (b:ℚ)^j*P n
-    have follows (v : Monomial) (incl : v.events p k ⊆ A k) :
-        v.model b p (n+j) = (b:ℚ)^j*v.model b p n := by
-      apply prefix_follows hp.one_lt v.positive
+    have follows (v : Monomial) (incl : v.events q k ⊆ A k) :
+        v.model b q (n+j) = (b:ℚ)^j*v.model b q n := by
+      apply prefix_follows hq₁ v.positive
       intro w newer; by_contra! le
       have hpos := incl (v.event_mem (by omega) w (le.trans_lt (by change j<B at hj; omega)))
       have gap := insertionBlocks_free bp free hpos (by
-        rw [Nat.add_mul,one_mul]; change position p v.stride v.parameter w < n+B
+        rw [Nat.add_mul,one_mul]; change position q v.stride v.parameter w < n+B
         change j<B at hj; omega)
-      change position p v.stride v.parameter w+B ≤ n at gap; omega
+      change position q v.stride v.parameter w+B ≤ n at gap; omega
     dsimp only [P,R]; rw [follows t (subset_union_left),mul_add,mul_sum]
     congr 1
     · ring
     · apply sum_congr rfl; intro i hi
       rw [follows (u i) (fun _ h => mem_union_right _ (mem_biUnion.mpr ⟨i,hi,h⟩))]; ring
+
+/-- With possibly tied top degrees, a uniform surviving pole suffices for
+the same sparse-block proof. -/
+theorem sum_normal_of_retained {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime)
+    (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (le : ∀ i ∈ s, (u i).degree ≤ t.degree)
+    (survives : ∃ C K : ℕ, ∀ n, K ≤ Nat.log p n → 0<n →
+      p^(t.degree*Nat.log p n-C) ∣
+        ((c:ℚ)*t.model b p n + ∑ i ∈ s, (a i:ℚ)*(u i).model b p n).den) :
+    NormalIn b (c * t.value b p + ∑ i ∈ s, (a i:ℝ)*(u i).value b p) := by
+  apply sum_normal_of_retained_at hb hp.two_le hp dvd_rfl cop t degree c s u a le
+  simpa [hp.factorization_self] using survives
+
+/-- A unique highest-degree monomial with nonzero integer coefficient survives
+addition of any finite sum of strictly lower-degree monomials when its prefix
+retains the expected pole at a prime divisor of the common parameter. -/
+theorem integer_sum_normal_of_retainsAt {ι : Type*} {b q p : ℕ} (hb : 2 ≤ b) (hq : 3 ≤ q)
+    (hp : p.Prime) (pq : p ∣ q)
+    (cop : b.Coprime q) (t : Monomial) (retention : t.RetainsAt b q p) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+    NormalIn b (c * t.value b q + ∑ i ∈ s, (a i:ℝ)*(u i).value b q) := by
+  apply sum_normal_of_retained_at hb (by omega) hp pq cop t degree c s u a (fun i hi => (lt i hi).le)
+  apply retained_with_lower_terms_of_retainsAt hp hq pq t retention degree c nc
+  exact combination_denominator (by omega) s u a (fun i hi => by have := lt i hi; omega)
+
+/-- The integer leading-monomial criterion at a stabilizing prime. -/
+theorem integer_sum_normal_at {ι : Type*} {b q p : ℕ} (hb : 2 ≤ b) (hq : 3 ≤ q)
+    (hp : p.Prime) (pq : p ∣ q) (stable : StablePowers b q p)
+    (cop : b.Coprime q) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+    NormalIn b (c * t.value b q + ∑ i ∈ s, (a i:ℝ)*(u i).value b q) :=
+  integer_sum_normal_of_retainsAt hb hq hp pq cop t
+    (retained_denominator_at hp hq pq (cop.coprime_dvd_right pq) stable t.stride t.parameter)
+    degree c nc s u a lt
+
+/-- The odd-prime specialization of the integer sum theorem. -/
+theorem integer_sum_normal {ι : Type*} {b p : ℕ} (hb : 2 ≤ b) (hp : p.Prime) (odd : 3 ≤ p)
+    (cop : b.Coprime p) (t : Monomial) (degree : 0 < t.degree) (c : ℤ) (nc : c ≠ 0)
+    (s : Finset ι) (u : ι → Monomial) (a : ι → ℤ) (lt : ∀ i ∈ s, (u i).degree < t.degree) :
+    NormalIn b (c * t.value b p + ∑ i ∈ s, (a i:ℝ)*(u i).value b p) :=
+  integer_sum_normal_at hb odd hp dvd_rfl (stablePowers_prime hp cop) cop t degree c nc s u a lt
 
 end NormalityChecker.StonehamPolynomial

@@ -24,3 +24,5 @@ See [docs/verification.md](docs/verification.md) for the full set of checks.
 ## Scope
 
 The project does not claim institutional affiliation or external endorsement, and authorship and submission decisions for the manuscripts rest with the repository owner. See [docs/attribution.md](docs/attribution.md).
+
+Contributions to code are accepted under the MIT licence, and contributions to the manuscripts and their designated accompanying files under CC BY 4.0 ([LICENSE-MANUSCRIPTS.md](LICENSE-MANUSCRIPTS.md)).

@@ -32,13 +32,17 @@ The theorems in this repository concern different numbers, but their proofs shar
 
 A solid line is a **mathematical dependency**: the theorem's proof uses the technique, and the generator checks that the Lean module of the theorem imports the module of the technique. A dashed line is a **historical relationship**: one result suggested or preceded another, but the later proof does not rely on it. The figure caption lists the historical links shown. A dotted line marks a published theorem used on paper and not formalized.
 
+## Synthetic expansions
+
+The [Phase 18 dependency map](../notes/phase18/dependencies.md) follows the arithmetic from exact prefix denominators and positive rational state corrections through finite period estimates to full-prefix conclusions. It records which implications use a written proof or an external theorem. The infinite-prime example uses a surviving grid modulo the whole denominator.
+
 ## Strength of a conclusion
 
 The [result index](results.md) states which of the following each result establishes. Confusing them is the most common way to overstate a result in this area.
 
 - **Normality.** *D*∞ = 0, equivalently every block of digits has its expected limiting frequency. Examples: [ST-01](results.md#st-01), [LS-01](results.md#ls-01) with an off-base prime, [MW-01](results.md#mw-01).
 - **Exact asymptotic discrepancy.** The value of *D*∞ is determined exactly. Examples: [DS-01](results.md#ds-01) to [DS-04](results.md#ds-04), the value 1 in [LS-01](results.md#ls-01), the value 2/3 for two rational polynomial weights. An exact positive value proves nonnormality.
-- **Upper discrepancy bound.** *D*∞ ≤ *c* for an explicit *c* < 1. Normality may still hold or fail. Examples: 43/45 for the product of the binary Stoneham numbers with parameters 3 and 5 ([ST-06](results.md#st-06)); 1 − 1/(*p* − 1) for masked supports; 0.234 for the {2, 5, 13} support at the first precision.
+- **Upper discrepancy bound.** *D*∞ ≤ *c* for an explicit *c* < 1. Normality may still hold or fail. Examples: 0.37048 for the product of the binary Stoneham numbers with parameters 3 and 5 ([ST-29](results.md#st-29)); 1 − 1/(*p* − 1) for masked supports; 0.234 for the {2, 5, 13} support at the first precision.
 - **Positive uniform coverage.** A positive lower density of positions lies in blocks certified to be nearly uniform. A share *g* with local discrepancy at most *d* gives *D*∞ ≤ 1 − *g*(1 − *d*) ([AC-02](results.md#ac-02)). Certifying finitely many initial blocks, however many, gives no asymptotic information.
 - **Unresolved certificate region.** Positions where no available test applies. A failed sufficient certificate is not evidence of nonnormality. For ln 2, π, *e* and the golden ratio the unresolved region currently has full density: no positive coverage, and hence no bound *D*∞ < 1, is known.
 

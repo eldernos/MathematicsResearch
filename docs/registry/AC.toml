@@ -275,3 +275,30 @@ lean = ["NormalityChecker.few_symbol_words"]
 proof = ["notes/finite-support-discrepancy.md#how-far-polynomial-denominator-models-can-reach"]
 inputs = "First Borel–Cantelli lemma (standard measure theory)."
 related = ["AC-01"]
+
+[[result]]
+id = "AC-11"
+title = "Method-obstruction taxonomy, computable undecidability on digit-oracle codes and Rosser independence"
+topic = "counterexamples"
+status = "lean+paper"
+statement = '''
+Eight classes of existing normality-proof methods (fixed-support smooth models, overlapping models, nearby Taylor cutoffs, balanced algebraic trace sources, single-prime/single-band statistics, higher-rank density and fixed-width projections, complex product endpoints, and irrationality-exponent run bounds) each admit explicit obstructions and paired witnesses separating *D* = 0 from *D* = 1.
+
+Given any computable transcendental binary-normal digit oracle *a* and computable transcendental maximal-discrepancy digit oracle *b*, explicit forward and reverse halting switches prove that recognizing binary normality of arbitrary digit-oracle program codes (`Nat.Partrec.Code`) is neither computable, nor computably enumerable, nor co-computably enumerable—even under the promise that the named real is transcendental over ℚ with limiting binary discrepancy in {0, 1}. Replacing the halting switch by a consistency-only Rosser proof predicate yields an explicit computable transcendental real whose binary normality is independent of PA or ZFC assuming consistency alone.
+'''
+scope = '''
+Lean kernel-verifies finite-edit dyadic invariance, uniform computability of the switched oracle, s-m-n parameter specialization (`exists_switchedDigit_index_map`), and all six non-computability / non-c.e. / non-co-c.e. theorems both on the switched family and uniformly over arbitrary digit-oracle codes (`Names`), taking the endpoint properties of *a* and *b* as explicit inputs. The endpoint proofs for *C*₂, *L*₂ and an elementary Liouville-normal substitute, the eight-class taxonomy, Pairs A and B, and the PA/ZFC Rosser independence construction (with weak-arithmetic transfer boundaries via *I*Δ₀ + ¬Exp₂) are written deductions. Neither the undecidability reductions nor the Rosser construction implies any independence conclusion for ln 2, π or *e* in PA or ZFC.
+'''
+lean = [
+  "NormalityChecker.ComputableNormalityUndecidability.no_computable_normality_decider_on_names",
+  "NormalityChecker.ComputableNormalityUndecidability.no_re_normality_recognizer_on_names",
+  "NormalityChecker.ComputableNormalityUndecidability.no_re_nonnormality_recognizer_on_names",
+  "NormalityChecker.ComputableNormalityUndecidability.switched_real_promise_and_reduction",
+  "NormalityChecker.ComputableNormalityUndecidability.reversed_switched_real_reduction",
+  "NormalityChecker.ComputableNormalityUndecidability.normality_not_computable",
+  "NormalityChecker.ComputableNormalityUndecidability.normality_not_re",
+  "NormalityChecker.ComputableNormalityUndecidability.normality_not_co_re",
+]
+proof = ["notes/phase17/limitations-and-undecidability.md"]
+computation = ["scripts/phase17_limitations.py"]
+related = ["AC-01", "AC-03", "AC-10", "CC-42", "CC-43", "CC-48", "CC-50"]

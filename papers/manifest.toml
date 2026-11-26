@@ -1,0 +1,138 @@
+# Manuscript manifest read by papers/check_release.py and papers/release_manifest.py.
+# `archived = true` marks a directory frozen at an earlier release; its files must never change.
+# Each manuscripts-v2 entry names the reviews that must exist under papers/reviews/<dir>/.
+
+release = "manuscripts-v2.0.0"
+lean_commit = "e4809cf561573aef588e6ffc491a35cdb79fd9ec"   # research-checkpoint-18
+previous_release = "manuscripts-v1.1.0"
+
+[[paper]]
+id = "I"
+dir = "01-stoneham-polynomials"
+version = "1.1"
+archived = true
+superseded_by = "01-stoneham-polynomials-v2"
+reviews = ["gemini", "sonnet", "resolution"]
+
+[[paper]]
+id = "II"
+dir = "02-localized-normality"
+version = "1.1"
+archived = true
+superseded_by = "02-localized-normality-v2"
+reviews = ["gemini", "sonnet", "resolution"]
+
+[[paper]]
+id = "III"
+dir = "03-signed-resonance"
+version = "1.1"
+archived = true
+superseded_by = "03-signed-resonance-v1.2"
+reviews = ["gemini", "sonnet", "resolution"]
+
+[[paper]]
+id = "IV"
+dir = "04-arithmetic-certificates"
+version = "1.1"
+archived = true
+superseded_by = "04-arithmetic-certificates-v2"
+reviews = ["gemini", "sonnet", "resolution"]
+
+[[paper]]
+id = "V"
+dir = "05-classical-denominators"
+version = "1.1"
+archived = true
+superseded_by = "05-classical-denominators-v2"
+reviews = ["gemini", "sonnet", "resolution"]
+
+# ---- manuscripts-v2.0.0 candidates -------------------------------------------------
+
+[[paper]]
+id = "VI"
+dir = "06-multiplicative-lambert"
+version = "1.0"
+batch = 1
+reviews = ["review-1", "review-2", "resolution"]
+
+[[paper]]
+id = "I"
+dir = "01-stoneham-polynomials-v2"
+version = "2.0"
+batch = 1
+supersedes = "01-stoneham-polynomials"
+reviews = ["review-1", "review-2", "resolution"]
+
+[[paper]]
+id = "VII"
+dir = "07-synthetic-expansions"
+version = "1.0"
+batch = 1
+reviews = ["review-1", "review-2", "resolution"]
+
+[[paper]]
+id = "X"
+dir = "10-discrepancy-arithmetic"
+version = "1.0"
+batch = 1
+reviews = ["review-1", "review-2", "resolution"]
+
+[[paper]]
+id = "VIII"
+dir = "08-stoneham-product-orbits"
+version = "1.0"
+batch = 2
+reviews = ["review-1", "resolution"]
+
+[[paper]]
+id = "II"
+dir = "02-localized-normality-v2"
+version = "2.0"
+batch = 2
+supersedes = "02-localized-normality"
+reviews = ["review-1", "resolution"]
+
+[[paper]]
+id = "V"
+dir = "05-classical-denominators-v2"
+version = "2.0"
+batch = 2
+supersedes = "05-classical-denominators"
+reviews = ["review-1", "resolution"]
+
+[[paper]]
+id = "IV"
+dir = "04-arithmetic-certificates-v2"
+version = "2.0"
+batch = 2
+supersedes = "04-arithmetic-certificates"
+reviews = ["review-1", "resolution"]
+
+[[paper]]
+id = "III"
+dir = "03-signed-resonance-v1.2"
+version = "1.2"
+batch = 2
+supersedes = "03-signed-resonance"
+reviews = ["gemini", "sonnet", "resolution"]
+review_dir = "03-signed-resonance"   # named-author edition; the mathematics was reviewed at v1.1
+
+[[paper]]
+id = "IX"
+dir = "09-erdos-borwein-note"
+version = "1.0"
+batch = 2
+reviews = ["review-1", "resolution"]
+
+# ---- immutable earlier releases ------------------------------------------------------
+
+[[history]]
+tag = "manuscripts-v1.0.0"
+commit = "a29515ba5469a9626dfdfb699f5899aa70ad632f"
+sha256 = { "01-stoneham-polynomials" = "809c4ca940e6cf68ca0bc8d3355159049b8ebced48ce67561e994bdd5ea7b812", "02-localized-normality" = "f15a4e09bbfa072e5188117dbf4bc5d9aa194ebb4293ae0b2730fb6a23ed48df", "03-signed-resonance" = "42bab14725e2ffa4bbdc7808a7181445779856bf1100a14da2d0324487f4d207", "04-arithmetic-certificates" = "a6ca286b03bc5d880bde8d483ac272172b1197e4b7d125282be907110e6b81f9", "05-classical-denominators" = "46b4e55040d7c2e2e413d6e6ffb17fac3146bde7f58f4eeea60b112a5ed64b7f" }
+
+[[history]]
+tag = "manuscripts-v1.1.0"
+commit = "944e0c466978dc636f348552058a4ef65c9ed8be"
+archive_sha256 = "ce0823a355049333eb115039b2a5d161601a347308013df9d522881175a1fcb9"
+sha256 = { "01-stoneham-polynomials" = "a1eb39ba1d70344d1b0452b1b8e6445ff9824983841bc048f204c2512a5982e8", "02-localized-normality" = "7ef10be884b1d55ac49ebf669707e2fedb715121c5e85099a871b8dba6824c03", "03-signed-resonance" = "d68e430fb75cb6ffa67eb13adc6553160b8a8ae1de095ed29fed1f3ebcc1f598", "04-arithmetic-certificates" = "dea4c4afd1330f80bd295a96aeb9cb8e1abe7a6a86d60e4a87a51903c1618f2a", "05-classical-denominators" = "9433bc84c6a615115b957e508e8d340559f7ebd9861686dee3d0f766d3c996dc" }

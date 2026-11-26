@@ -1,0 +1,59 @@
+% Shared preamble for manuscripts-v2 papers. Load with \input{../common/preamble.tex}
+% immediately after \documentclass[11pt]{article}.
+\ifdefined\pdftrailerid\pdftrailerid{}\fi
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[letterpaper,margin=1.02in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,array,microtype,enumitem}
+\usepackage{tikz}
+\usepackage{xurl}
+\usepackage[colorlinks=true,allcolors=bluegreen]{hyperref}
+\definecolor{bluegreen}{RGB}{22,83,91}
+\usepackage[capitalize,nameinlink]{cleveref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{maintheorem}{Theorem}
+\renewcommand{\themaintheorem}{\Alph{maintheorem}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{question}[theorem]{Question}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\crefname{maintheorem}{Theorem}{Theorems}
+\crefname{conjecture}{Conjecture}{Conjectures}
+\crefname{question}{Question}{Questions}
+\crefname{example}{Example}{Examples}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\T}{\mathbb T}
+\newcommand{\C}{\mathbb C}
+\DeclareMathOperator{\den}{den}
+\newcommand{\e}{\mathrm e}
+
+% Immutable Lean source links at research-checkpoint-18.
+\newcommand{\leancommit}{e4809cf561573aef588e6ffc491a35cdb79fd9ec}
+\newcommand{\leanbase}{https://github.com/eldernos/MathematicsResearch/blob/\leancommit}
+% \lean{File}{line}{label}: link to NormalityChecker/File.lean#Lline at the pinned commit.
+\newcommand{\lean}[3]{\href{\leanbase/NormalityChecker/#1.lean\#L#2}{#3}}
+% \leanat{commit}{File}{line}{label}: Lean link at another immutable commit, for example the
+% completed Phase 19 tip c2c9da683666b3b9368e5d4b5cb858caccf528f5.
+\newcommand{\leanat}[4]{\href{https://github.com/eldernos/MathematicsResearch/blob/#1/NormalityChecker/#2.lean\#L#3}{#4}}
+\newcommand{\phaseXIXcommit}{c2c9da683666b3b9368e5d4b5cb858caccf528f5}
+% \repo{path}{label}: link to any repository path at the pinned commit.
+\newcommand{\repo}[2]{\href{https://github.com/eldernos/MathematicsResearch/tree/\leancommit/#1}{#2}}
+
+% Evidence labels (see papers/WAVE2-CONTRACT.md).
+\newcommand{\evidence}[1]{\textup{[\emph{#1}]}}
+
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom

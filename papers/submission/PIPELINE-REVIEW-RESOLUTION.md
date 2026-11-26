@@ -1,0 +1,15 @@
+# Resolution of the alphaXiv pipeline review
+
+Reviser: Claude Opus 5.5 (Claude Code), 25 November 2026. Reviewed commit: `34d16d9`; report: [PIPELINE-REVIEW.md](PIPELINE-REVIEW.md) (Gemini 4 Argon). This is an AI model review and revision, not a professional security audit.
+
+| Finding | Severity | Disposition | Change |
+| --- | --- | --- | --- |
+| 1. Redirects forward `Authorization` | High | Accepted | All requests use an opener whose redirect handler refuses every redirect, so a request carrying the key is never forwarded (`_NoRedirect`, `OPENER`). |
+| 2. Tag freezes submission state | High | Accepted | The owner's confirmation and AI disclosure (`submission/alphaxiv.toml`) and the alphaXiv records are now read from a control ref, by default `refs/remotes/origin/main`. The PDF, checksum and manuscript metadata still come from the exact release tag. A confirmation or record committed to `main` after tagging therefore takes effect, and a recorded version is refused. The dry run needs no tag: the workflow checks out the dispatching branch. |
+| 3. Inconsistent manuscript ids | High | Accepted (fixed before the report was received) | Metadata ids are the permanent manuscript numbers I–X. `check_release.py` enforces agreement with `papers/manifest.toml`, and the publisher refuses any other id. |
+| 4. Brittle upload-instruction parsing | Medium | Accepted | The parser strips Markdown fences, follows backslash continuations, reports quoting errors, keeps every plain `-F` field and identifies the file field by `@`. Headers are handled case-insensitively, and only `Content-Type` and `X-*` headers are forwarded; `Authorization` is never taken from the instructions. Field names are restricted to a safe character set. |
+| 5. Host validation gaps | Medium | Accepted | `trusted_host` requires `https`, no userinfo, the default port and valid ASCII DNS labels (no empty labels, underscores or IDN), and an exact `alphaxiv.org` suffix. |
+| 6. Response parsing resilience | Medium | Accepted | Server-sent events are parsed per event block, joining multi-line `data:` fields, and the response matching the request id is selected. HTTP errors become clean refusals. The `publish_paper` result is parsed from plain or fenced JSON. |
+| 7. Edge cases, timeouts, environment docs | Low | Accepted | `url_slug` is limited to 120 lowercase hyphenated characters. A recorded alphaXiv URL must be an `https` alphaxiv.org URL. `owner_confirmed` must be the literal boolean `true`. The jobs have timeouts of 15 and 30 minutes. The pipeline guide documents restricting the `alphaxiv` environment to the default branch. |
+
+`scripts/test_alphaxiv_publish.py` (23 tests, adapted from the reviewer's) covers host validation, redirect refusal, control-ref reading, the release guards, duplicate refusal, SSE parsing, upload parsing and credential withholding. The authenticated tool schemas and the run-time upload address remain unexercised until the owner creates a key. The first real submission should be a single, watched run after a dry run.

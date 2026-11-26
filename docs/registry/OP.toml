@@ -1,0 +1,245 @@
+[[result]]
+id = "OP-01"
+title = "Exact limiting discrepancy spectrum for addition"
+topic = "discrepancy"
+status = "lean"
+lean = ["NormalityChecker.AdditionSpectrum.exact_addition_spectrum", "NormalityChecker.AdditionSpectrum.addSpectrum_eq", "NormalityChecker.AdditionSpectrum.mixtureRealizable", "NormalityChecker.AdditionSpectrum.finite_necessity"]
+principal = true
+statement = "In every integer radix b ≥ 2, α, β, γ in [0,1] are the ordinary limiting extreme discrepancies of x, y and x+y exactly when max(0, α+β−1) ≤ γ ≤ 1−|α−β|."
+scope = "The inequalities hold at every positive finite prefix. Five rational orbit types suffice for the limiting realization. The discrepancy is unanchored."
+proof = ["notes/phase19/addition.md"]
+related = ["SY-03","SY-04"]
+
+[[result]]
+id = "OP-02"
+title = "Uniform cubic realization with algebraically independent inputs"
+topic = "discrepancy"
+status = "paper"
+statement = "Every admissible addition triple is realized with simultaneous all-prefix error O(N raised to −1/3), uniformly over triples for fixed radix and retained odd off-radix prime. The inputs may be algebraically independent and computable from computable target weights."
+scope = "Positive rational state programming supplies the types. The avoidance construction handles the countably many polynomial relations and preserves the quantitative estimate."
+proof = ["notes/phase19/addition.md"]
+related = ["OP-01"]
+computation = ["scripts/phase19_addition.py"]
+
+[[result]]
+id = "OP-03"
+title = "Spectrum of any finite family of summands and its sum"
+topic = "discrepancy"
+status = "paper"
+statement = "For d summands and their total, the d+1 limiting discrepancy deficits range over the unit cube subject to each deficit being at most the sum of the others."
+scope = "For at least two summands. The generating binary vectors have zero or at least two active coordinates. This convex polytope need not classify other prescribed collections of linear forms."
+proof = ["notes/phase19/addition.md"]
+related = ["OP-01"]
+
+[[result]]
+id = "OP-04"
+title = "Finite rational forms and approximating their joint spectra"
+topic = "discrepancy"
+status = "paper"
+statement = "For every fixed rational matrix the limiting discrepancy spectrum of its rows is the projection of the invariant joint laws under scalar discrepancy. Finite stationary block-flow polytopes give effective outer accuracy bounds and finite unions of rational polytopes approximating that image in Hausdorff distance."
+scope = "A common change of input variables clears the fixed denominators. A rank-three six-form example satisfies the separate addition-triple tests while violating a further finite-prefix inequality."
+proof = ["notes/phase19/addition.md"]
+related = ["SY-13","OP-03"]
+computation = ["scripts/phase19_addition.py"]
+
+[[result]]
+id = "OP-05"
+title = "Translation deficits form finite and asymptotic pseudometrics"
+topic = "discrepancy"
+status = "lean"
+principal = true
+statement = "One minus the extreme discrepancy of x−y is a translation-invariant pseudometric at every positive sample length. At length at least two its zero set consists exactly of differences fixed modulo one by radix multiplication. Its upper limit is again a pseudometric. Integer multiplication has Lipschitz bound equal to the absolute multiplier."
+scope = "The quotient topology and the full asymptotic kernel description are further written deductions. The distance uses unanchored interval discrepancy."
+proof = ["notes/phase19/geometry.md"]
+lean = ["NormalityChecker.DiscrepancyGeometry.discDist_eq_zero_iff","NormalityChecker.DiscrepancyGeometry.discDist_triangle","NormalityChecker.DiscrepancyGeometry.asymDist_triangle","NormalityChecker.DiscrepancyGeometry.asymDist_intMul_le"]
+related = ["SY-04"]
+
+[[result]]
+id = "OP-06"
+title = "Rational scalar ring and fixed-point lifts"
+topic = "discrepancy"
+status = "paper"
+statement = "A rational multiplier preserves the entire numerical-preserver kernel exactly when its reduced denominator divides a radix power. Membership for one scaled preserver is decided mathematically by concentration of its nearest-integer residues on a single class. For power-related radices the intersection kernel is that of the common gcd power."
+scope = "The residue-density criterion need not be computationally decidable. General independent radices need individual study."
+proof = ["notes/phase19/geometry.md"]
+related = ["OP-05"]
+
+[[result]]
+id = "OP-07"
+title = "Boundary spectrum and inverse inequality for integer dilation"
+topic = "discrepancy"
+status = "paper"
+statement = "When the discrepancy of mx tends to one, the attainable full discrepancy limits of x form the closed interval from 1/m₀ to 1, where m₀ is the largest divisor of |m| coprime to the radix. An explicit finite inverse bound also forces discrepancy of x to tend to zero when that of mx tends to zero."
+scope = "Nonzero integer m. The boundary examples are obtained by programming finite periodic cycles. The separate inverse modulus is an upper estimate, with constants depending on b and m."
+proof = ["notes/phase19/geometry.md"]
+related = ["OP-05","SY-13"]
+
+[[result]]
+id = "OP-08"
+title = "Exact prime-power grid inside a complete rational orbit"
+topic = "certificates"
+status = "lean+paper"
+principal = true
+statement = "For an odd prime p and coprime complement Q, the stride that fixes Q and the residue modulo p generates precisely a grid of size p to the positive part of e minus the valuation of b raised to the stride minus one, for modulus pᵉQ."
+scope = "Lean proves the exact stride order, exhaustive lifts and a complete-period interval count within t of its expected count on tG samples. The written deduction identifies the largest p-power grid for the minimal simultaneous stride, including the trivial-grid case."
+proof = ["notes/phase19/grids.md"]
+lean = ["NormalityChecker.SurvivingGrid.stride_order","NormalityChecker.SurvivingGrid.return_iff","NormalityChecker.SurvivingGrid.visits_every_lift","NormalityChecker.PrimePowerGrid.crt_period_count"]
+related = ["SY-06"]
+
+[[result]]
+id = "OP-09"
+title = "Normal Liouville series retaining every odd prime"
+topic = "certificates"
+status = "paper"
+principal = true
+statement = "Insert a term at position 2 raised to 4m for each odd prime power m=pʲ. Use coefficient 1/m for p different from 3 and 1/m² for p=3. The binary series is normal and Liouville, with all-prefix discrepancy O(1/log N)."
+scope = "For L=floor(log₂ n/4), the maximal ternary grid exceeds L/9, and the ratio of its size to L is unbounded along a subsequence. A subgrid of size comparable to L always suffices."
+proof = ["notes/phase19/grids.md"]
+related = ["OP-08"]
+computation = ["scripts/phase19_grids.py"]
+
+[[result]]
+id = "OP-10"
+title = "Full-support series with superpolynomial denominators"
+topic = "certificates"
+status = "paper"
+statement = "All off-radix primes can occur with selectable depths while the actual period remains subpolynomial in the shift. The accelerated schedules in the note yield normality even with superpolynomial reduced denominators."
+scope = "The sharper period bounds use an upper estimate for the lcm of shifted primes. Interval-error, real-tail and insertion costs are separate uniform hypotheses."
+proof = ["notes/phase19/grids.md"]
+related = ["OP-08","OP-09"]
+inputs = ["Ford, Luca and Pomerance, the shifted-prime least-common-multiple estimate cited in the proof."]
+
+[[result]]
+id = "OP-11"
+title = "Superpolynomial rational periods for actual Taylor prefixes"
+topic = "classical"
+status = "paper"
+statement = "For the reduced odd denominator of a shifted binary Taylor prefix of ln 2, the lower limit of log(ord(2)) divided by log N times log log N is at least 1/(2 log 2). This still holds after removing one arbitrary prime-power axis or retaining a positive proportion of the top-band primes."
+scope = "The order is that of 2 modulo the specified denominator. The same proof applies to eligible polylogarithm, BBP and Bellard prefixes. It rules out complete-period or fixed-complement grid traversals in polynomial-length windows for these models."
+proof = ["notes/phase19/taylor-periods.md"]
+related = ["SY-10","SY-21","OP-08"]
+inputs = ["Prime number theorem."]
+computation = ["scripts/test_phase19_geometry.py"]
+
+[[result]]
+id = "OP-12"
+title = "Sparse numerical preservers with visible product and sharp rates"
+topic = "counterexamples"
+status = "paper"
+statement = "Two explicit irrational numerical preservers in every radix have product bʳ/(bʳ−1) outside the numerical-preserver kernel for r ≥ 2. For missing-digit insertion sets of dimension σ as specified in the note, the exact order of the worst discrepancy change is (log N / N) raised to 1−σ."
+scope = "The Moser–de Bruijn generating-function factorization gives the product. The two-sided rate counts overlapping neighborhoods. The rational product still preserves normality."
+proof = ["notes/phase19/products-of-remainders.md"]
+related = ["OP-06","SY-04"]
+
+[[result]]
+id = "OP-13"
+title = "Numerical classification of horizontal logarithm rows"
+topic = "classical"
+status = "paper"
+statement = "For a finite rational combination of the dyadic rows Z_d at positions d·2ʲ+j indexed by distinct odd d, the combination including its rational constant is a numerical preserver precisely when every coefficient and the constant are dyadic. The original d=3 row of ln 2 has binary limiting discrepancy 2/3. Odd part five has lower discrepancy 1/5 and upper discrepancy 8/15."
+scope = "Every such finite combination preserves normality. Individual rows have a finite rational algorithm for both discrepancy extrema. No digit-frequency assertion about their infinite sum is implied."
+proof = ["notes/phase19/logarithm-rays.md"]
+related = ["OP-06","SY-04","SY-15"]
+
+[[result]]
+id = "OP-14"
+title = "Normality of the flagship square and quadratic forms"
+topic = "stoneham"
+status = "paper"
+principal = true
+statement = "For a fixed odd off-radix prime and positions t kᵈ with d ≥ 3, every nonconstant rational polynomial of total degree at most two in distinct positive valuation orders is normal. In particular the binary cubic-schedule number and its square are jointly normal."
+scope = "The limiting p-adic mass has no positive-measure level set. A derivative estimate for competing jumps and a localized second-moment argument yield all-prefix normality; the proof gives no effective discrepancy rate. The analogous persistent zero set for higher powers remains open."
+proof = ["notes/phase19/nonlinear.md","notes/phase19/reviews/nonlinear.md"]
+related = ["SY-17","SY-20"]
+supersedes = ["SY-20"]
+inputs = ["Van der Corput second-derivative estimate, Erdős–Turán inequality and Lebesgue density theorem."]
+computation = ["scripts/phase19_nonlinear.py"]
+
+[[result]]
+id = "OP-15"
+title = "Every polynomial on rapidly varying power schedules"
+topic = "stoneham"
+status = "paper"
+statement = "If n_floor(ck)/n_k tends to zero for every fixed 0<c<1 and the radix powers freeze p-adically on deeply divisible indices, every nonconstant rational polynomial of the valuation-weighted series is normal. A concrete schedule has log n_k asymptotic to (log k)² and consecutive ratios tending to one."
+scope = "The retained order is positive, the insertion positions are positive increasing multiples of the order of the radix modulo p, and p is an odd off-radix prime. Polynomial normality implies transcendence; these dense schedules are not asserted to be Liouville."
+proof = ["notes/phase19/nonlinear.md"]
+related = ["SY-17","SY-19","AC-04"]
+
+[[result]]
+id = "OP-16"
+title = "Polynomial-normal algebras with separated pole depths"
+topic = "stoneham"
+status = "paper"
+statement = "A finite collection of series with rationally independent depth-growth weights on one prime can be chosen so every nonconstant rational polynomial in the series is normal and Liouville."
+scope = "This is a simultaneous construction for all polynomials in the chosen generators. The unique leading pole is justified outside explicitly bounded exceptional windows."
+proof = ["notes/phase19/nonlinear.md"]
+related = ["OP-15"]
+
+[[result]]
+id = "OP-17"
+title = "A polynomial-normal algebra on distinct retained primes"
+topic = "stoneham"
+status = "paper"
+statement = "For any finite list of distinct off-radix primes, positive series with one dedicated coefficient-denominator prime each can be synthesized so that every nonconstant rational polynomial in the generators is normal and Liouville. In particular the generators are algebraically independent."
+scope = "Off-axis prefix limits are programmed by congruences. They keep the leading coefficient of each fixed polynomial nonzero p-adically. Counts are over all prefixes; the local depth formula permits a density-zero set of cutoff windows."
+proof = ["notes/phase19/independent-axes.md"]
+related = ["SY-18","OP-16"]
+computation = ["scripts/phase19_independent_axes.py"]
+
+[[result]]
+id = "OP-18"
+title = "Quantitative joint box distribution from an algebraic direction"
+topic = "discrepancy"
+status = "paper"
+statement = "For every fixed dimension d ≥ 2 there are computable positive rational-coefficient series on a common cubic schedule with joint box discrepancy O(N raised to −1/(3d+1) times log(2N) to the power d)."
+scope = "The reference measure is full-dimensional Haar measure. The proof uses an algebraic p-adic direction of degree d, a height bound from its norm and the multidimensional Erdős–Turán–Koksma inequality."
+proof = ["notes/phase19/joint-rate.md"]
+related = ["OP-04","OP-08"]
+computation = ["scripts/test_phase19_forms.py"]
+
+[[result]]
+id = "OP-19"
+title = "Earliest positive dyadic group containing a prime-index logarithm term"
+topic = "classical"
+principal = true
+status = "paper"
+statement = "For p ≥ 5 prime, the minimum largest original index in a positive dyadic Taylor group containing index p is exactly p times the first k<p for which a subset of the residues 1/(j 2ʲ), j ≤ k, containing j=1 sums to zero modulo p. The first k is O(√p) for every prime and at least (1−o(1))log₂ p outside a relative-density-zero set of primes."
+scope = "Remaining odd primary factors can be eliminated with positive terms by that same original cutoff. This minimizes the completion index for one group, not the denominator exponent over all groups or the simultaneous costs of an entire partition. The worst-case logarithmic upper bound remains open."
+proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical.md"]
+related = ["SY-10","SY-15"]
+inputs = ["Dias da Silva and Hamidoune, Cyclic spaces for Grassmann derivatives and additive theory (1994)."]
+computation = ["scripts/phase19_classical.py"]
+
+[[result]]
+id = "OP-20"
+title = "Mean denominator loss in the shifted binary Taylor series"
+topic = "classical"
+status = "paper"
+statement = "For n ≤ X let Qₙ be the reduced denominator of the ordinary shifted binary Taylor prefix of log 2 and Lₙ the least common multiple of 1 through n. The mean of log(Lₙ/Qₙ) is O(X raised to 3/7)."
+scope = "A polynomial bound on pairs of zero residues at a prescribed gap sharpens the split into prime bands. This is an upper bound on average cancellation, with no inference about word frequencies."
+proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical.md"]
+related = ["SY-10","OP-11"]
+computation = ["scripts/phase19_classical.py"]
+
+[[result]]
+id = "OP-21"
+title = "Wieferich bands in the actual logarithm and dilogarithm prefixes"
+topic = "classical"
+status = "paper"
+statement = "For a prime p ≥ 5, a ≥ 1 and (p−1)pᵃ ≤ n < pᵃ⁺¹, the reduced shifted logarithm denominator retains pᵃ exactly when p is not a base-2 Wieferich prime. In the same band the dilogarithm denominator retains p to the power 2a under the same condition."
+scope = "The exponent for the dilogarithm is twice a. Loss of this full power may leave smaller powers in the denominator. These are modular classifications of the indicated prefixes, using finite logarithm congruences."
+proof = ["notes/phase19/classical.md","notes/phase19/reviews/classical-final.md"]
+inputs = ["Glaisher’s congruence and its order-two analogue as specified in the proof. Rogers studied the associated weighted harmonic zero set."]
+related = ["OP-20"]
+computation = ["scripts/phase19_classical.py"]
+
+[[result]]
+id = "OP-22"
+title = "Moving-tail and period obstruction for a signed logarithm transform"
+topic = "classical"
+status = "paper"
+statement = "Euler’s dyadic product expresses log 2 as an alternating sum of sparse Mahler rows. After retaining the first K row indices, absolute shifted error tends to zero exactly when K+1+log₂(K+1)−N tends to positive infinity. At such moving cutoffs the chronological rational prefix still has a superpolynomial complementary period."
+scope = "Each fixed finite truncation is a deterministic number. For K ≥ 3 it fails numerical discrepancy preservation. The period obstruction concerns the rational prefix of the moving truncation on polynomial-length windows."
+proof = ["notes/phase19/taylor-periods.md#an-infinite-signed-mahler-transform-of-the-logarithm","notes/phase19/reviews/signed-transform.md"]
+related = ["OP-11","OP-13"]
+computation = ["scripts/test_phase19_geometry.py"]

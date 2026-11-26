@@ -1,6 +1,6 @@
 module
 
-public import NormalityChecker.Basic
+public import NormalityChecker.RectangleFrequency
 public import Mathlib.Algebra.Polynomial.Eval.Degree
 
 /-! Public mathematical statements for the polynomial and joint-orbit theorems. -/
@@ -13,10 +13,8 @@ namespace NormalityChecker.StonehamStatements
 noncomputable def stoneham (b c : ℕ) : ℝ :=
   ∑' j : ℕ, 1 / ((c : ℝ) ^ (j+1) * (b : ℝ) ^ (c ^ (j+1) : ℕ))
 
-/-- The average uses the positions 0 through N-1 simultaneously in every coordinate. -/
-noncomputable def rectangleFrequency {d : ℕ} (x : ℕ → Fin d → ℝ)
-    (a c : Fin d → ℝ) (N : ℕ) : ℝ := by
-  classical exact ((range N).filter (fun n => ∀ i, a i ≤ x n i ∧ x n i < c i)).card / (N : ℝ)
+/-- Simultaneous visits at the positions 0 through N-1. -/
+noncomputable abbrev rectangleFrequency {d : ℕ} := @NormalityChecker.rectangleFrequency d
 
 def PolynomialNormality : Prop :=
   ∀ {b p : ℕ}, 2 ≤ b → p.Prime → 3 ≤ p → b.Coprime p → ∀ (e : ℕ+) (P : ℚ[X]),
@@ -28,5 +26,10 @@ def JointPowerNormality : Prop :=
     (∀ i, 0 ≤ a i) → (∀ i, a i ≤ c i) → (∀ i, c i ≤ 1) →
       Tendsto (rectangleFrequency (fun n i => shift b (stoneham b (p^(e : ℕ)) ^ r i) n) a c)
         atTop (𝓝 (∏ i, (c i - a i)))
+
+/-- Univariate polynomial normality at every coprime parameter greater than two. -/
+def CoprimePolynomialNormality : Prop :=
+  ∀ {b c : ℕ}, 2 ≤ b → 2 < c → b.Coprime c → ∀ P : ℚ[X], 0 < P.natDegree →
+    NormalIn b (P.eval₂ (algebraMap ℚ ℝ) (stoneham b c))
 
 end NormalityChecker.StonehamStatements

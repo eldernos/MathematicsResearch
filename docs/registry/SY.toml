@@ -1,0 +1,257 @@
+[[result]]
+id = "SY-01"
+title = "Denominators of shifted valuation-scheduled prefixes"
+topic = "certificates"
+status = "lean"
+principal = true
+statement = "For an off-radix prime p, every shifted prefix on an increasing schedule of multiples of the order of b modulo p has reduced denominator p raised to s times the integer base-p logarithm of its last inserted index K. The coefficient at k is the reciprocal of p raised to s times the p-adic valuation of k."
+scope = "The empty prefix has denominator one. The polynomial specialization includes the insertion itself and the last shift before the next insertion."
+proof = ["notes/phase18/principal.md"]
+lean = ["NormalityChecker.RetirementDenominator.fullPrefix_den","NormalityChecker.RetirementDenominator.polynomialPrefix_den","NormalityChecker.RetirementDenominator.maximalLayer_card"]
+
+[[result]]
+id = "SY-02"
+title = "All-prefix normality switch for valuation-scheduled series"
+topic = "discrepancy"
+status = "lean"
+principal = true
+statement = "At the kth insertion use the reciprocal of p raised to s times the valuation of k. Let p be a prime coprime to the radix. On any strictly increasing schedule of multiples of the order of the radix modulo p, with the kth position at least k², the discrepancy tends to one at s = 0 and to zero at each positive integer order."
+scope = "The theorem applies to every prefix and has no upper bound on the growth of the schedule. Uniform normality in varying primes and explicit convergence rates are separate questions."
+lean = ["NormalityChecker.RetirementDenominator.discrepancy_switch", "NormalityChecker.RetirementDenominator.polynomial_discrepancy_switch", "NormalityChecker.RetirementDenominator.normal_iff_pos"]
+proof = ["notes/phase18/principal.md"]
+related = ["SY-01","SY-16","AC-04"]
+
+[[result]]
+id = "SY-03"
+title = "Cubic positive expansions prescribing limiting discrepancy"
+topic = "discrepancy"
+status = "paper"
+principal = true
+statement = "Every real δ in [0,1] is the ordinary limiting extreme discrepancy of a positive rational-coefficient cubic expansion. For the balanced retired-state choice the error is O(1/∛N) on all prefixes."
+scope = "The rational state after each insertion is chosen by a positive modular correction. A complete cycle estimate treats active plateaus, including incomplete final cycles. The weighted share of retired positions fixes the limit."
+proof = ["notes/phase18/programming.md"]
+related = ["DS-01","DS-04"]
+
+[[result]]
+id = "SY-04"
+title = "Worst change of finite discrepancy under translation"
+topic = "discrepancy"
+status = "lean"
+lean = ["NormalityChecker.SharpTranslation.sharp_translation_isGreatest", "NormalityChecker.SharpTranslation.sharp_translation"]
+principal = true
+statement = "For every real z, integer radix b ≥ 2 and positive N, the maximum over all x of the absolute change from the discrepancy of x to that of x + z equals one minus the discrepancy of z. Equality holds at x = 0."
+scope = "For extreme discrepancy on half-open intervals. Circular complementation and rotation allow both signs of displacement and atoms at zero. Consequently the translations that preserve both limiting discrepancies for every x are exactly those whose own discrepancy tends to one."
+proof = ["notes/phase18/translations.md#the-exact-worst-case-change"]
+computation = ["scripts/test_phase18_summation.py"]
+
+[[result]]
+id = "SY-05"
+title = "Liouville numbers with prescribed limiting discrepancy"
+topic = "discrepancy"
+status = "paper"
+statement = "For every radix b ≥ 2 and every δ in [0,1], positive programmable coefficients yield a Liouville number with full discrepancy limit δ. A computable δ gives a computable Liouville number."
+scope = "A periodic rational target approximating the desired mixture is already in place throughout each long gap. The rational denominator bound involves only the current target and insertion position."
+proof = ["notes/phase18/liouville-realization.md"]
+related = ["SY-03"]
+
+[[result]]
+id = "SY-06"
+title = "A positive sum on infinitely many denominator primes"
+topic = "certificates"
+status = "paper"
+principal = true
+statement = "In the binary sum indexed by odd prime powers m from the prime 3 and the primes congruent to 2 modulo 3, put coefficient 1/m at position 2 raised to m squared. The infinite sum has discrepancy O(1/√log N). Every nonzero finite rational combination of its prime components is binary normal."
+scope = "An increasing ternary grid survives modulo the entire reduced denominator. Complete-period lengths and the cost of each unfinished interval are bounded uniformly as the number of axes grows."
+proof = ["notes/phase18/summation.md#a-normal-positive-sum-on-infinitely-many-denominator-primes"]
+computation = ["scripts/test_phase18_summation.py"]
+
+[[result]]
+id = "SY-07"
+title = "Positive rational multiples with prescribed total"
+topic = "counterexamples"
+status = "lean"
+statement = "Every positive real is the sum of positive rational multiples of any prescribed sequence of strictly positive real numbers."
+scope = "The Lean statement concerns convergence and positivity. Applying it to independent normal generators needs the finite compatibility proof, registered separately."
+proof = ["notes/phase18/summation.md#positive-controls-and-counterexamples"]
+lean = ["NormalityChecker.hasSum_positive_rational_multiples"]
+
+[[result]]
+id = "SY-08"
+title = "Jointly normal components of logarithms, pi and rational targets"
+topic = "classical"
+status = "paper"
+statement = "There are explicit exact decompositions of ln 2 in binary and π in hexadecimal into geometric rays such that every finite collection of components is jointly uniform. There are also positive jointly normal components whose sum is any prescribed positive rational."
+scope = "The BBP rays preserve the four signed denominator classes. Normality refers to finite collections and their nontrivial rational linear forms. An absolute-tail transfer to the full classical constant requires a separate uniform estimate."
+proof = ["notes/phase18/summation.md"]
+related = ["SY-07","SY-09","AC-04"]
+inputs = ["Bailey, Borwein and Plouffe, Mathematics of Computation 66 (1997), formula (1.2)."]
+computation = ["scripts/test_phase18_summation.py"]
+
+[[result]]
+id = "SY-09"
+title = "Taylor rays of a fixed prime sum to the logarithm of two"
+topic = "classical"
+status = "lean"
+statement = "For every prime p, the binary Taylor series of ln 2 sums exactly when grouped over the p-free part of the index. Within the row for r the term of index j has value 1 divided by r times p to the power j times 2 to the power r pʲ."
+scope = "The identity also holds for p = 2. The binary normality assertion for individual rows uses odd p."
+proof = ["notes/phase18/summation.md#partitioning-the-logarithm"]
+lean = ["NormalityChecker.hasSum_prime_rays_logTwo"]
+
+[[result]]
+id = "SY-10"
+title = "Completion delay for positive dyadic Taylor groups"
+topic = "classical"
+status = "paper"
+statement = "The greatest original index M in any positive dyadic group containing the prime-index Taylor term of ln 2 satisfies lim inf M/(p log p) ≥ 1/(1 + log 2) as p ranges over the odd primes. At cutoff N at least a constant times N log log N / log N original indices belong to unfinished groups."
+scope = "This is a bound on original indices. For general groups the reduced dyadic denominator length can differ from the greatest original exponent. At every original cutoff the unfinished aggregate retains exactly the odd denominator of the ordinary Taylor prefix."
+proof = ["notes/phase18/prime-delay.md"]
+inputs = ["Prime number theorem for the logarithm of lcm(1,…,k)."]
+
+[[result]]
+id = "SY-11"
+title = "Geometric grouping and positive programmed states"
+topic = "certificates"
+status = "lean"
+statement = "A weighted finite geometric group equals its designated final inverse radix power. For bounded real multipliers, grouping preserves the infinite sum. Positive rational state corrections realize every specified rational fractional prefix."
+scope = "The rational-state recurrence and the dense representation are formalized. The sharper gcd formula for a coefficient's reduced denominator is proved in the programming note."
+proof = ["notes/phase18/principal.md","notes/phase18/programming.md"]
+lean = ["NormalityChecker.Phase18Synthetic.geometric_retirement_weight","NormalityChecker.Phase18Synthetic.grouped_retirement_hasSum","NormalityChecker.Phase18Synthetic.programmed_prefix_fract","NormalityChecker.Phase18Synthetic.programmed_dense_hasSum"]
+
+[[result]]
+id = "SY-12"
+title = "A finite circle bound for sparse translations"
+topic = "discrepancy"
+status = "lean"
+statement = "For every positive sample length, the discrepancy change under addition is at most twice the displacement tolerance plus the fraction of shifts farther than that tolerance from an integer. For binary insertions at k(k+1) the exception count is bounded using the integer square root."
+scope = "The finite square-root bound is kernel-checked for every auxiliary width. Choosing a logarithmic width gives the paper rate O(log(2N)/√N), uniformly in the translated number."
+proof = ["notes/phase18/translations.md"]
+lean = ["NormalityChecker.Phase18Synthetic.discrepancy_transfer","NormalityChecker.Phase18Synthetic.discrepancy_radix_rat","NormalityChecker.Phase18Synthetic.quadratic_sparse_transfer"]
+related = ["SY-04"]
+
+[[result]]
+id = "SY-13"
+title = "Prescribing limits of orbit measures with rational insertions"
+topic = "discrepancy"
+status = "paper"
+statement = "On the circle, precisely the nonempty compact connected sets of radix-invariant probability measures occur as sets of subsequential orbit-measure limits. These sets can be realized using positive rational coefficients on a fixed cubic schedule. Every ordered pair of lower and upper discrepancies in [0,1] can be prescribed."
+scope = "The invariant-measure realization has classical symbolic predecessors. The arithmetic conclusion programs positive coefficients and gives direct unfinished-period estimates."
+proof = ["notes/phase18/programming.md"]
+related = ["SY-03"]
+
+[[result]]
+id = "SY-14"
+title = "A limit on finite functional constructions from lacunary rays"
+topic = "counterexamples"
+status = "paper"
+statement = "The generating functions for positive-order polylogarithms, the standard four-term BBP formula, the exponential, nonintegral binomials and the alternating Apéry series lie outside the differential algebra over rational functions of any finite list of series having polylogarithmic support counts."
+scope = "This concerns functional identities and uses ordinary derivatives and polynomial combinations after clearing rational-function denominators. It imposes no obstruction on an identity valid only at a single argument."
+proof = ["notes/phase18/functional-obstruction.md"]
+
+[[result]]
+id = "SY-15"
+title = "Finite positive dyadic groups for the logarithm and factorial series"
+topic = "classical"
+status = "paper"
+statement = "All binary Taylor terms of ln 2 can be partitioned into finite groups with dyadic rational sums. For the factorial series of e, every finite subset of terms containing an index at least three has a nondyadic sum."
+scope = "The logarithm construction uses common odd parts. Its largest dyadic exponent is exact for those groups. The factorial assertion uses distinct indices with their original unit coefficients."
+proof = ["notes/phase18/classical.md"]
+related = ["SY-10"]
+computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-16"
+title = "Quantitative convergence on polynomial schedules"
+topic = "discrepancy"
+status = "paper"
+principal = true
+statement = "For fixed odd p and positive s, the complete-period proof gives exponents s/d and (d−s−1)/d in the error at degree d > s+1, with an additional logarithmic insertion-neighborhood error. In the binary cubic example with p = 3 and s = 1 this gives O(1/∛N)."
+scope = "The complete-period calculation uses the lifting exponent of the radix modulo p. It permits proper multiplicative subgroups and arbitrary final cutoffs."
+proof = ["notes/phase18/principal.md"]
+related = ["SY-01","SY-02"]
+computation = ["scripts/phase18_principal.py"]
+
+[[result]]
+id = "SY-17"
+title = "Polynomial and linear images of synthetic series"
+topic = "stoneham"
+status = "paper"
+statement = "For factorial schedules and positive valuation order, every nonconstant rational polynomial of the principal series is normal. For insertion positions t times the d-th powers, every rational polynomial image of degree r with 1 ≤ r < d and r ≤ s is normal. Distinct retained primes and distinct positive orders on the common schedule also give jointly uniform families under the stated growth hypotheses."
+scope = "The power-series proof controls the pole after tuple insertions coincide. The finite residual certificates for smaller orders give discrepancy bounds rather than a general normality theorem."
+proof = ["notes/phase18/algebra.md"]
+related = ["AC-04","SY-01"]
+computation = ["scripts/phase18_principal.py","scripts/phase18_review_algebra.py"]
+
+[[result]]
+id = "SY-18"
+title = "A positive product with a surviving prime at every cutoff"
+topic = "certificates"
+status = "paper"
+statement = "For distinct retained primes, a rational affine correction on the second axis makes every nonempty row prefix a fixed unit modulo the first prime. The product keeps the predicted first-prime pole at every insertion cutoff and is normal if the product of the two insertion counts has a power saving in N."
+scope = "For the polynomial schedules of degrees d and e this includes 1/d + 1/e < 1. The conclusion concerns the specified correction of the second factor."
+proof = ["notes/phase18/algebra.md"]
+related = ["SY-17","AC-04"]
+
+[[result]]
+id = "SY-19"
+title = "A normal Liouville family on factorial schedules"
+topic = "certificates"
+status = "paper"
+statement = "On the schedule t times k factorial, every strictly positive valuation order in the principal family gives a base-b normal Liouville number. Positive partial-sum errors and the exact prefix denominator give irrationality and Liouville approximation separately."
+scope = "The general normality switch is verified in Lean. The full Liouville and transcendence assertions are written deductions."
+proof = ["notes/phase18/principal.md"]
+related = ["SY-01","SY-02","SY-17"]
+
+[[result]]
+id = "SY-20"
+title = "A certified upper discrepancy for the binary cubic example squared"
+topic = "coverage"
+status = "paper"
+statement = "For the square of the binary example with p = 3, s = 1 and d = 3, the upper extreme discrepancy is at most 14035285166320179631 / 47872170047321719707829651794, below 2.94 times 10 to the power −10."
+scope = "A written all-prefix coverage argument converts an exact 21-layer finite computation into this asymptotic upper bound. This was the quantitative Phase 18 bound. OP-14 subsequently proves normality by a null-level argument."
+proof = ["notes/phase18/algebra.md#refining-the-failed-cells-at-smaller-orders"]
+computation = ["scripts/phase18_principal.py", "scripts/phase18_review_algebra.py"]
+related = ["SY-16","SY-17"]
+
+[[result]]
+id = "SY-21"
+title = "Reduced denominator rates for BBP and Bellard prefixes"
+topic = "classical"
+status = "paper"
+statement = "For the literal signed row sums through row M, the logarithm of the reduced shifted denominator divided by the binary shift tends to 3/2 for the hexadecimal BBP series and to 1 for Bellard’s series."
+scope = "Binary shift 4M for BBP and 10M for Bellard. Fixed-band signed residue estimates establish survival and include possible finite exceptions. These are denominator rates for the given representations."
+inputs = ["Bailey, Borwein and Plouffe (1997), Bellard’s 1997 formula and the prime number theorem in arithmetic progressions."]
+proof = ["notes/phase18/reviews/classical-sources.md#the-bbp-and-bellard-denominators-f5","notes/phase18/classical.md"]
+computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-22"
+title = "Chebyshev approximations to shifted pi from fixed arctangent identities"
+topic = "classical"
+status = "paper"
+statement = "For every positive tolerance on the exponential denominator rate there is a fixed finite arctangent identity giving rational approximants to shifted π with error O(1/N) and an upper rate below the tolerance along the specified shifts."
+scope = "For fixed minimum pole a the explicit limsup bound is log(2)/log(a + √(a² + 1)). Coefficient rounding uses rational arithmetic. The estimate does not control cancellation of exponential sums on observation blocks."
+proof = ["notes/phase18/classical.md","notes/phase18/reviews/classical-sources.md#chebyshev-bounds-and-the-other-classical-targets"]
+computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-23"
+title = "Linear shadowing windows for shifted pi on odd rational grids"
+topic = "classical"
+status = "paper"
+principal = true
+statement = "For a fixed finite integer arctangent identity for π whose smallest denominator is a ≥ 2, put ρ = a + √(a² + 1). At every sufficiently large binary shift n there is a rational model computed from the identity alone, with odd reduced denominator q. The upper limit of log(q)/n is at most log(2)/log(ρ), and the lower limit of the number of correct absolute-error bits divided by n is at least 1/log(ρ)."
+scope = "The model uses an even Legendre polynomial and rounds its entire rational integral to an odd least-common-multiple grid. These are accuracy and denominator bounds for one model throughout each window. Distribution of the grid numerators remains open."
+proof = ["notes/phase18/phase17-transfer.md#linear-windows-for-pi"]
+inputs = ["Laplace’s integral representation and Legendre orthogonality (DLMF 18.10.5 and Table 18.3.1), and the prime number theorem."]
+related = ["SY-22","CC-50"]
+computation = ["scripts/phase18_classical.py"]
+
+[[result]]
+id = "SY-24"
+title = "Sharp translation rates for the multiplicative Lambert families"
+topic = "discrepancy"
+status = "paper"
+statement = "For the Phase 17 binary multiplicative Lambert family of support parameter δ, the worst discrepancy change after translation equals its discrepancy deficit at each positive N. Its asymptotic order is log log N divided by the (1−δ)-th power of log N."
+scope = "The exponent 1−δ applies to log N alone. The two-sided bounds assume the full multiplicative and support hypotheses of CC-48. The maximum over all translated real numbers is attained at zero."
+proof = ["notes/phase18/phase17-transfer.md#an-exact-translation-rate-for-every-lambert-support-density"]
+related = ["SY-04","CC-48"]

@@ -1,0 +1,89 @@
+name: Publish to alphaXiv
+# Manual only; never triggered by a push. A dry run validates and prints the request (including unconfirmed
+# disclosure metadata). A real submission runs only from an approved release tag, in the protected `alphaxiv`
+# environment, whose required reviewer is the owner and whose secret ALPHAXIV_API_KEY holds the alphaXiv API key.
+# Inputs reach the shell only through environment variables, are validated, and are never interpolated.
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Approved release tag (for example manuscripts-v2.0.0)
+        required: true
+        default: manuscripts-v2.0.0
+      paper:
+        description: Manuscript directory under papers/
+        required: true
+        type: choice
+        options:
+          - 06-multiplicative-lambert
+          - 01-stoneham-polynomials-v2
+          - 07-synthetic-expansions
+          - 10-discrepancy-arithmetic
+          - 08-stoneham-product-orbits
+          - 02-localized-normality-v2
+          - 05-classical-denominators-v2
+          - 04-arithmetic-certificates-v2
+          - 03-signed-resonance-v1.2
+          - 09-erdos-borwein-note
+      publish:
+        description: Actually submit (unchecked = dry run)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: alphaxiv   # alphaXiv accepts one in-progress submission per account
+  cancel-in-progress: false
+jobs:
+  dry-run:
+    if: ${{ !inputs.publish }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate inputs
+        env:
+          RELEASE: ${{ inputs.release }}
+          PAPER: ${{ inputs.paper }}
+        run: |
+          [[ "$RELEASE" =~ ^manuscripts-v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "invalid release tag"; exit 1; }
+          [[ "$PAPER" =~ ^[0-9]{2}-[a-z0-9.-]+$ ]] || { echo "invalid paper directory"; exit 1; }
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: refs/tags/${{ inputs.release }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Dry run
+        env:
+          PAPER: ${{ inputs.paper }}
+        run: |
+          set -euo pipefail
+          python3 -B papers/check_release.py --require-reviews --verify-history
+          python3 -B scripts/alphaxiv_publish.py "papers/$PAPER" | tee "$RUNNER_TEMP/request.json"
+          { echo "### alphaXiv dry run: $PAPER"; echo '```json'; cat "$RUNNER_TEMP/request.json"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+  publish:
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-latest
+    environment: alphaxiv
+    steps:
+      - name: Validate inputs
+        env:
+          RELEASE: ${{ inputs.release }}
+          PAPER: ${{ inputs.paper }}
+        run: |
+          [[ "$RELEASE" =~ ^manuscripts-v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "invalid release tag"; exit 1; }
+          [[ "$PAPER" =~ ^[0-9]{2}-[a-z0-9.-]+$ ]] || { echo "invalid paper directory"; exit 1; }
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: refs/tags/${{ inputs.release }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Publish from the approved release commit
+        env:
+          RELEASE: ${{ inputs.release }}
+          PAPER: ${{ inputs.paper }}
+          ALPHAXIV_API_KEY: ${{ secrets.ALPHAXIV_API_KEY }}
+        run: |
+          set -euo pipefail
+          python3 -B papers/check_release.py --require-reviews --verify-history
+          python3 -B scripts/alphaxiv_publish.py "papers/$PAPER" --publish --release "$RELEASE" --result "$RUNNER_TEMP/alphaxiv.json"
+          { echo "### alphaXiv submission: $PAPER at $RELEASE"; echo '```json'; cat "$RUNNER_TEMP/alphaxiv.json"; echo '```';
+            echo "Record the returned URL under its manuscript id in papers/alphaxiv-records.toml."; } >> "$GITHUB_STEP_SUMMARY"
