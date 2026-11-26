@@ -8,3 +8,25 @@
 # id = "VI"
 # alphaxiv = "https://www.alphaxiv.org/abs/<id>"
 # versions = [{ version = "1.0", release = "manuscripts-v2.0.0", dir = "06-multiplicative-lambert", published = "YYYY-MM-DD" }]
+
+# Published by the owner through the alphaXiv web form on 26 November 2026 (manual submission; the pipeline was not used).
+
+[[record]]
+id = "VI"
+alphaxiv = "https://www.alphaxiv.org/abs/2611.disjunctive-nonnormal-multiplicative-lambert-series"
+versions = [{ version = "1.0", release = "manuscripts-v2.0.0", dir = "06-multiplicative-lambert", published = "2026-11-26", route = "web form" }]
+
+[[record]]
+id = "I"
+alphaxiv = "https://www.alphaxiv.org/abs/2611.polynomial-images-of-stoneham-numbers"
+versions = [{ version = "2.0", release = "manuscripts-v2.0.0", dir = "01-stoneham-polynomials-v2", published = "2026-11-26", route = "web form" }]
+
+[[record]]
+id = "VII"
+alphaxiv = "https://www.alphaxiv.org/abs/2611.synthetic-arithmetic-expansions-prescribed-discrepancy"
+versions = [{ version = "1.0", release = "manuscripts-v2.0.0", dir = "07-synthetic-expansions", published = "2026-11-26", route = "web form" }]
+
+[[record]]
+id = "X"
+alphaxiv = "https://www.alphaxiv.org/abs/2611.arithmetic-of-extreme-discrepancy"
+versions = [{ version = "1.0", release = "manuscripts-v2.0.0", dir = "10-discrepancy-arithmetic", published = "2026-11-26", route = "web form" }]

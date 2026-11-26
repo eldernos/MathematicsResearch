@@ -21,6 +21,7 @@ import argparse
 import datetime
 import html
 import json
+import tomllib
 import pathlib
 import re
 import subprocess
@@ -315,6 +316,19 @@ def link(url, text) -> str:
     return f'<a href="{esc(url)}">{esc(text)}</a>'
 
 
+def alphaxiv_record(meta):
+    """The alphaXiv URL recorded for this manuscript's permanent id, if any (papers/alphaxiv-records.toml)."""
+    path = ROOT / "papers" / "alphaxiv-records.toml"
+    if not meta or not path.is_file():
+        return None
+    manuscript = str(meta.get("id", "")).strip()
+    for record in tomllib.loads(path.read_text(encoding="utf-8")).get("record", []):
+        url = str(record.get("alphaxiv", ""))
+        if record.get("id") == manuscript and url.startswith("https://www.alphaxiv.org/"):
+            return url
+    return None
+
+
 def manuscript_page(p, by_dir, base, strict):
     meta = p["metadata"]
     if meta is None and strict and p["layout"] == "wave2":
@@ -339,6 +353,10 @@ def manuscript_page(p, by_dir, base, strict):
     if pending:
         parts.append('<p class="notice">This manuscript’s metadata file is not yet available; the text below is a '
                      "provisional registry summary, not the manuscript’s abstract.</p>")
+    record = alphaxiv_record(meta)
+    if record:
+        parts.append(f'<p>Published on alphaXiv: <a href="{esc(record)}">{esc(record)}</a> '
+                     "(alphaXiv screens submissions; screening is not peer review).</p>")
     parts.append(f'<p class="notice">{esc(REVIEW_STATEMENT)}</p>')
     parts.append("<h2>Abstract</h2>")
     parts += [f"<p>{inline(x)}</p>" for x in paragraphs(abstract)]
