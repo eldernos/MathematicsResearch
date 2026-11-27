@@ -150,3 +150,5 @@ public import NormalityChecker.NormalReciprocalCore
 public import NormalityChecker.SimpleNormalityKernel
 public import NormalityChecker.RadixPowerTower
 public import NormalityChecker.Phase22Cores
+public import NormalityChecker.HigherOrderTower
+public import NormalityChecker.Phase23Cores

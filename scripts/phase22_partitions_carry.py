@@ -558,7 +558,8 @@ def selberg_instance(A1, B1, A2, B2, X, primes, xi):
             rem += abs(lam[d1] * lam[d2] * rd)
             rem_u += abs(rd)
     bound = Fraction(X) / G + rem
-    check(S <= upper <= bound + Fraction(1, 10 ** 9), "Selberg inequality (weighted remainder)")
+    # Exact rational comparison: S, upper and bound are Fractions, so no tolerance is needed.
+    check(S <= upper <= bound, "Selberg inequality (weighted remainder), exact rationals")
     check(bound <= Fraction(X) / G + rem_u, "weighted remainder <= unweighted remainder")
     return S, float(upper), float(Fraction(X) / G), float(rem), float(G), float(rem_u)
 
@@ -568,10 +569,13 @@ sieve_primes = [p for p in primes_upto(40) if p >= 5 and p % 12 != 1]
 for (h, X) in ((6, 3000), (25, 3000), (35, 3000)):
     S, up, main, rem, G, rem_u = selberg_instance(12, 1, 12, 12 * h + 1, X, sieve_primes, 60)
     sel_rows.append((h, X, S, up, main, rem, rem_u))
-    print("  Selberg instance h=%d, X=%d, primes %s, xi=60: S=%d <= sum(sum lambda)^2=%.1f <= X/G + R_w = %.1f + %.1f;"
+    print("  Selberg instance h=%d, X=%d, primes %s, xi=60 (exact rational check; decimals are roundings):"
+          " S=%d <= sum(sum lambda)^2=%.1f <= X/G + R_w = %.1f + %.1f;"
           " unweighted remainder R = %.1f" % (h, X, sieve_primes, S, up, main, rem, rem_u))
 
 # (S5) Rankin lower bound for G(xi):  G >= sum_{n<xi} kappa(n)/n >= Pi - xi^-delta Pi_delta.
+# Numerical sample in floating point at finitely many checkpoints; the proof bounds
+# these quantities independently and this does not verify any universal constant.
 z_r = 60
 Pz = [p for p in primes_upto(z_r) if p >= 5 and p % 12 != 1]
 h_r = 7 * 11
@@ -609,22 +613,25 @@ for xi in (10 ** 3, 10 ** 4, 10 ** 5):
         sm = new
     Ksum = sum(kap / n for n, kap in sm)
     lower = Pi - xi ** (-delta) * Pid
-    check(Gxi >= Ksum - 1e-12 and Ksum >= lower - 1e-12, "Rankin chain")
-    print("  z=60, xi=%d: G(xi)=%.4f >= sum kappa(n)/n=%.4f >= Pi - xi^-delta Pi_delta=%.4f (Pi=%.4f)"
+    check(Gxi >= Ksum - 1e-12 and Ksum >= lower - 1e-12, "Rankin chain (numerical sample)")
+    print("  [numerical sample] z=60, xi=%d: G(xi)=%.4f >= sum kappa(n)/n=%.4f >= Pi - xi^-delta Pi_delta=%.4f (Pi=%.4f)"
           % (xi, Gxi, Ksum, lower, Pi))
 
 # (S6) Mertens in progressions: B(z) = (3/4) log log z - sum_{p<=z, p=5,7,11 (12)} 1/p.
+# Numerical sample (floating point, finite checkpoints); not a verification of the asymptotics.
 plist = primes_upto(12 * NN + 1)
 checkpoints = [10 ** k for k in range(2, 6)] + [600000]
 Bvals = []
 for z in checkpoints:
     s = sum(1 / p for p in plist if p <= z and p >= 5 and p % 12 != 1)
     Bvals.append((z, 0.75 * log(log(z)) - s))
-print("  B(z) = (3/4)loglog z - sum 1/p over p = 5,7,11 mod 12:", ", ".join("z=%d: %.4f" % t for t in Bvals))
+print("  [numerical sample] B(z) = (3/4)loglog z - sum 1/p over p = 5,7,11 mod 12:", ", ".join("z=%d: %.4f" % t for t in Bvals))
 mert = max(sum(log(p) / p for p in plist if p <= z) - log(z) for z in (10, 100, 1000, 10 ** 4, 10 ** 5, 600000))
-check(mert < 2, "Mertens sum log p / p <= log x + 2 at checkpoints")
+check(mert < 2, "Mertens sum log p / p <= log x + 2 at checkpoints (numerical sample)")
 
 # (S7) constants C_5 and the singular-series average.
+# Numerical samples (floating point, truncated products, H <= 10^4); the proof bounds
+# these quantities independently.
 pr = primes_upto(200000)
 zeta2 = math.pi ** 2 / 6
 prod4 = 1.0
@@ -635,7 +642,7 @@ for p in pr:
 Sg = zeta2 * prod4
 Sw = zeta2 * prod2
 C5 = Sg * Sw ** 2
-print("  sum_g (g/phi g)^4/g^2 ~ %.4f, sum_w (w/phi w)^2/w^2 ~ %.4f, C_5 ~ %.3f (Euler products truncated at 2e5)"
+print("  [numerical sample] sum_g (g/phi g)^4/g^2 ~ %.4f, sum_w (w/phi w)^2/w^2 ~ %.4f, C_5 ~ %.3f (Euler products truncated at 2e5)"
       % (Sg, Sw, C5))
 HH = 10000
 ph = phi_table(HH)
@@ -645,7 +652,7 @@ for p in primes_upto(10 ** 6):
 run = 0.0
 for H in range(1, HH + 1):
     run += H / ph[H]
-    check(run <= const_ss * H + 1e-9, "sum h/phi(h) <= 1.9436 H")
+    check(run <= const_ss * H + 1e-9, "sum h/phi(h) <= 1.9436 H (numerical sample)")
 SS50 = sum(h / ph[h] for h in range(1, 51)) / 50
 avg_prod_1p2p = 0.0
 for h in range(1, 51):
@@ -654,7 +661,7 @@ for h in range(1, 51):
         t *= 1 + 2 / p
     avg_prod_1p2p += t
 avg_prod_1p2p /= 50
-print("  sum_{h<=H} h/phi(h) <= %.5f H for all H <= 10^4; at H=50 the average is %.4f; average of prod(1+2/p) is %.4f"
+print("  [numerical sample] sum_{h<=H} h/phi(h) <= %.5f H for all H <= 10^4; at H=50 the average is %.4f; average of prod(1+2/p) is %.4f"
       % (const_ss, SS50, avg_prod_1p2p))
 
 # (S8) the large-v tail: count n <= N with v(n) > V or v(n+h) > V.

@@ -16,4 +16,4 @@
 
 # Build and Test Environment
 
-- On Windows hosts, use the remote Linux build and test server `Hail` over SSH (not WSL) for Lean 4 builds (`lake build`, `Audit.lean`, `leanchecker`, `readme_theorems.lean`), LaTeX manuscript builds, and Linux test/verification runs (`scripts/verify.sh`). Do not use WSL for builds or tests.
+- On Windows hosts, use the remote Linux build and test server `Hail` over SSH (host alias `hail` in `~/.ssh/config`, not WSL) for Lean 4 builds (`lake build`, `Audit.lean`, `leanchecker`, `readme_theorems.lean`), LaTeX manuscript builds, and Linux test/verification runs (`scripts/verify.sh`). Do not use WSL for builds or tests.

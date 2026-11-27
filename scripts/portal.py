@@ -601,6 +601,7 @@ def replace_block(text, name, body):
 # ---------------------------------------------------------------------------
 # docs/benchmarks/progress.md and benchmark checks
 
+BENCH_SCHEMA_VERSION = 2
 BENCH_CATS = (
     ("algebraic", "Algebraic irrationals"),
     ("logarithmic_and_pi", "Logarithms, π and Gelfond–Schneider values"),
@@ -619,6 +620,7 @@ BENCH_EVIDENCE_LABEL = {
     "external": "External input",
     "open": "Open",
 }
+BENCH_REPOSITORY_EVIDENCE = ("lean", "lean+paper", "paper")
 BENCH_DISPLAY = {
     "proved_normal": "normal",
     "proved_nonnormal": "nonnormal",
@@ -631,6 +633,8 @@ BENCH_DISPLAY = {
     "exact_positive": "exact *D*<sub>∞</sub> ∈ (0, 1)",
     "strict_upper_bound": "*D*⁺ < 1",
     "maximal_K_b": "*D*<sub>*N*</sub> → 1 (in *K*<sub>*b*</sub>)",
+    "exact_law": "exact law",
+    "nontrivial_bound": "nontrivial bound",
     "classified": "classified",
     "partial": "partial",
     "open": "open",
@@ -638,38 +642,81 @@ BENCH_DISPLAY = {
     "barrier_proved": "barrier proved",
     "no_barrier_recorded": "none recorded",
 }
+BENCH_PROPERTY_LABEL = {
+    "full_normality": "normality",
+    "simple_normality": "simple normality",
+    "disjunctivity": "disjunctivity",
+    "discrepancy_status": "discrepancy",
+    "digit_frequency_status": "digit frequencies",
+}
+BENCH_COHORT_LABEL = {
+    "control": "Control/reference constants",
+    "unresolved": "Initially unresolved targets",
+}
+# The cohort of every constant is fixed (SCHEMA.md, "Cohorts"); these sets are the
+# control cohort and must agree with the `cohort` field of classical-constants.toml.
+# Basis (a): a named theorem published before the research program decides the
+# scope-radix normality question.
+BENCH_CONTROL_THEOREM = frozenset({"BC-34", "BC-40", "BC-47", "BC-48", "BC-49"})
+# Basis (b): the defining series is an explicit lacunary 0–1 expansion in the scope
+# radix, so nonnormality is read directly off the digits.
+BENCH_CONTROL_EXPLICIT = frozenset({"BC-33", "BC-45", "BC-46"})
+BENCH_CONTROL_IDS = BENCH_CONTROL_THEOREM | BENCH_CONTROL_EXPLICIT
+BENCH_PROGRAM_START_YEAR = 2026
+# `control_provenance` records the pre-program classification of a control constant,
+# separately from `radix_results`, which records current per-property evidence only.
+BENCH_CP_FIELDS = ("basis", "property", "status", "source")
+BENCH_CP_BASIS = {
+    "published_theorem": ("Published theorem before the program", BENCH_CONTROL_THEOREM),
+    "explicit_digits": ("Explicit lacunary 0–1 digits", BENCH_CONTROL_EXPLICIT),
+}
+
 BENCH_C_ENUM = {
+    "cohort": set(BENCH_COHORT_LABEL),
     "full_normality": {"proved_normal", "proved_nonnormal", "open"},
     "simple_normality": {"proved_simply_normal", "proved_not_simply_normal", "radix_dependent", "open"},
     "disjunctivity": {"proved_disjunctive", "proved_non_disjunctive", "open"},
     "discrepancy_status": {"zero_normal", "exact_positive", "strict_upper_bound", "maximal_K_b", "open"},
+    "digit_frequency_status": {"exact_law", "nontrivial_bound", "open"},
     "barrier_status": {"resolved", "barrier_proved", "no_barrier_recorded"},
     "evidence": set(BENCH_EVIDENCE_LABEL),
 }
 BENCH_STATUS_FIELDS = ("full_normality", "simple_normality", "disjunctivity", "discrepancy_status")
 BENCH_F_ENUM = {
-    k: (v | {"classified", "partial"}) if k in BENCH_STATUS_FIELDS else v
-    for k, v in BENCH_C_ENUM.items()
+    k: (v | {"classified", "partial"}) if k in BENCH_STATUS_FIELDS or k == "digit_frequency_status" else v
+    for k, v in BENCH_C_ENUM.items() if k != "cohort"
 }
 BENCH_C_FIELDS = (
-    "id", "name", "formula", "category", "arithmetic_nature", "radices_scope",
+    "id", "name", "formula", "category", "cohort", "arithmetic_nature", "radices_scope",
     "full_normality", "simple_normality", "disjunctivity", "discrepancy_status",
-    "barrier_status", "evidence", "discrepancy_summary", "registry_ids",
-    "external_sources", "notes",
+    "digit_frequency_status", "barrier_status", "evidence", "discrepancy_summary",
+    "registry_ids", "external_sources", "control_provenance", "radix_results", "notes",
 )
 BENCH_F_FIELDS = (
     "id", "name", "definition", "radices_scope", "full_normality",
-    "simple_normality", "disjunctivity", "discrepancy_status", "barrier_status",
-    "evidence", "registry_ids", "external_sources", "summary", "open_frontier",
+    "simple_normality", "disjunctivity", "discrepancy_status", "digit_frequency_status",
+    "barrier_status", "evidence", "registry_ids", "external_sources", "summary", "open_frontier",
 )
+BENCH_RR_FIELDS = ("radix", "property", "status", "evidence", "source")
+BENCH_RR_PROPERTIES = BENCH_STATUS_FIELDS + ("digit_frequency_status",)
+BENCH_RR_STATUS = {p: BENCH_C_ENUM[p] - {"open", "radix_dependent"} for p in BENCH_RR_PROPERTIES}
+BENCH_RR_EVIDENCE = ("lean", "lean+paper", "paper", "external")
+# Strongest first; used to compare a per-property label with the entry-level label.
+BENCH_EVIDENCE_RANK = {ev: i for i, ev in enumerate(BENCH_RR_EVIDENCE)}
+BENCH_BASE_RE = re.compile(r"base (?:[2-9]|[1-9]\d+)")
+BENCH_ALL_BASES = "all integer bases b ≥ 2"
+BENCH_C_SCOPES = (BENCH_BASE_RE.pattern, BENCH_ALL_BASES)
+BENCH_F_SCOPES = (BENCH_BASE_RE.pattern, BENCH_ALL_BASES, r"construction radix b")
 BENCH_BAD_CHAR_RE = re.compile(r"[\\$*`|]")
-BENCH_YEAR_RE = re.compile(r"\b(1[5-9]|20)\d{2}\b")
-BENCH_ID_RE = re.compile(r"\b(?:BC|BF)-\d{2}\b")
+BENCH_YEAR_RE = re.compile(r"\b(?:1[5-9]|20)\d{2}\b")
+BENCH_ID_RE = re.compile(r"\b(?:BC|BF)-\d{2,}\b")
+BENCH_C_FILE = "docs/benchmarks/classical-constants.toml"
+BENCH_F_FILE = "docs/benchmarks/arithmetic-families.toml"
 
 
 def load_benchmarks():
-    c_path = ROOT / "docs/benchmarks/classical-constants.toml"
-    f_path = ROOT / "docs/benchmarks/arithmetic-families.toml"
+    c_path = ROOT / BENCH_C_FILE
+    f_path = ROOT / BENCH_F_FILE
     if not (c_path.exists() and f_path.exists()):
         return None, None
     return (
@@ -678,16 +725,148 @@ def load_benchmarks():
     )
 
 
+def bench_years(text: str) -> list[int]:
+    return [int(m.group(0)) for m in BENCH_YEAR_RE.finditer(text)]
+
+
+def bench_is_pre_program(text: str) -> bool:
+    """True when `text` carries a four-digit year and every such year precedes the program.
+
+    Requiring every year (not just one) to be early keeps a 2026 citation from passing on
+    an incidental four-digit number such as 1729 inside it.
+    """
+    years = bench_years(text)
+    return bool(years) and all(y < BENCH_PROGRAM_START_YEAR for y in years)
+
+
+def bench_evidence_covers(e, prop):
+    """Whether the entry-level `evidence` of a constant or family covers `prop`.
+
+    The four status fields are always covered. `digit_frequency_status` is covered for
+    families and for constants with scope "all integer bases b ≥ 2" (no single-radix record
+    can carry an all-bases bound), and for `exact_law`, which is proved together with the
+    simple normality value it decides. A single-base `nontrivial_bound` carries its evidence
+    in a scope-radix `radix_results` record instead.
+    """
+    if prop in BENCH_STATUS_FIELDS:
+        return True
+    if prop != "digit_frequency_status":
+        return False
+    if "radix_results" not in e or not BENCH_BASE_RE.fullmatch(e["radices_scope"]):
+        return True
+    return e.get(prop) == "exact_law"
+
+
+def bench_property_evidence(e, prop):
+    """Evidence label for one property of a constant (or family) in its scope.
+
+    A `radix_results` record for the property in the scope radix gives the label of that
+    property alone. Otherwise the entry-level `evidence` (the weakest label) is used when it
+    covers the property, and "open" when no evidence is recorded for it. The pre-program
+    classification of a control constant is kept in `control_provenance`, never here.
+    """
+    if e.get(prop) == "open":
+        return "open"
+    for r in e.get("radix_results", []):
+        if r["radix"] == e["radices_scope"] and r["property"] == prop:
+            return r["evidence"]
+    return e["evidence"] if bench_evidence_covers(e, prop) else "open"
+
+
+def bench_radix_consistency(props):
+    """Implications between decided values recorded for one radix (missing = undecided)."""
+    errs = []
+    fn = props.get("full_normality")
+    sn = props.get("simple_normality")
+    dj = props.get("disjunctivity")
+    ds = props.get("discrepancy_status")
+    df = props.get("digit_frequency_status")
+    if fn == "proved_normal":
+        for k, want in (("simple_normality", "proved_simply_normal"), ("disjunctivity", "proved_disjunctive"),
+                        ("discrepancy_status", "zero_normal"), ("digit_frequency_status", "exact_law")):
+            if props.get(k) not in (None, want):
+                errs.append(f"full_normality=proved_normal conflicts with {k}={props[k]}")
+    if ds == "zero_normal" and fn != "proved_normal":
+        errs.append("discrepancy_status=zero_normal requires full_normality=proved_normal in the same radix")
+    if (sn == "proved_not_simply_normal" or dj == "proved_non_disjunctive"
+            or ds in ("exact_positive", "maximal_K_b")) and fn != "proved_nonnormal":
+        errs.append("a negative simple normality, disjunctivity or discrepancy value requires "
+                    "full_normality=proved_nonnormal in the same radix")
+    if sn == "proved_simply_normal" and df not in (None, "exact_law"):
+        errs.append("simple_normality=proved_simply_normal requires digit_frequency_status=exact_law")
+    if df == "exact_law" and sn is None:
+        errs.append("digit_frequency_status=exact_law requires a simple_normality record in the same radix")
+    return errs
+
+
+def bench_cohort_counts(constants):
+    """Per-objective counts for the two cohorts (used by the generated progress table)."""
+    def obj1(e):
+        return [p for p, v in (("full_normality", "proved_normal"), ("simple_normality", "proved_simply_normal"))
+                if e[p] == v]
+
+    def obj2(e):
+        hits = []
+        if e["full_normality"] == "proved_nonnormal":
+            hits.append("full_normality")
+        if e["simple_normality"] == "proved_not_simply_normal":
+            hits.append("simple_normality")
+        if e["disjunctivity"] == "proved_non_disjunctive":
+            hits.append("disjunctivity")
+        if e["discrepancy_status"] == "maximal_K_b":
+            hits.append("discrepancy_status")
+        return hits
+
+    def obj3(e):
+        return ["discrepancy_status"] if e["discrepancy_status"] != "open" else []
+
+    def obj3f(e):
+        return ["digit_frequency_status"] if e["digit_frequency_status"] != "open" else []
+
+    rows = []
+    for label, fn in (
+        ("Objective 1 (normality / simple normality)", obj1),
+        ("Objective 2 (nonnormality)", obj2),
+        ("Objective 3 (discrepancy)", obj3),
+        ("Objective 3 (digit-frequency law or bound)", obj3f),
+    ):
+        ctrl = [e for e in constants if e["cohort"] == "control" and fn(e)]
+        unres = [e for e in constants if e["cohort"] == "unresolved" and fn(e)]
+        repo, ext = [], []
+        for e in unres:
+            labels = {p: bench_property_evidence(e, p) for p in fn(e)}
+            if any(v in BENCH_REPOSITORY_EVIDENCE for v in labels.values()):
+                repo.append(e)
+            elif all(v == "external" for v in labels.values()):
+                ext.append(e)
+            else:
+                # Never credit a property without recorded evidence to external input.
+                missing = sorted(p for p, v in labels.items() if v not in BENCH_RR_EVIDENCE)
+                raise ValueError(f"{e['id']}: no evidence recorded for {', '.join(missing)} ({label})")
+        rows.append((label, ctrl, unres, repo, ext))
+    ctrl = [e for e in constants if e["cohort"] == "control" and e["barrier_status"] == "barrier_proved"]
+    unres = [e for e in constants if e["cohort"] == "unresolved" and e["barrier_status"] == "barrier_proved"]
+    rows.append(("Objective 4 (rigorous limitations)", ctrl, unres, list(unres), []))
+    return rows
+
+
 def build_benchmarks_progress(c_data, f_data):
     frm = "docs/benchmarks/progress.md"
     constants = c_data.get("constant", [])
     families = f_data.get("family", [])
     status_as_of = c_data.get("meta", {}).get("status_as_of", "")
+    results_md = rel("docs/results.md", frm)
 
     def reg_links(rids):
         if not rids:
             return "—"
-        return " ".join(f"[{rid}]({rel('docs/results.md', frm)}#{anchor(rid)})" for rid in rids)
+        return " ".join(f"[{rid}]({results_md}#{anchor(rid)})" for rid in rids)
+
+    def link_ids(text):
+        return ID_RE.sub(lambda m: f"[{m.group(0)}]({results_md}#{anchor(m.group(0))})", text)
+
+    def ids_of(entries):
+        return ", ".join(e["id"] for e in entries) if entries else "—"
 
     obj1 = sum(1 for e in constants if e["full_normality"] == "proved_normal" or e["simple_normality"] == "proved_simply_normal")
     obj2 = sum(1 for e in constants if e["full_normality"] == "proved_nonnormal"
@@ -695,8 +874,11 @@ def build_benchmarks_progress(c_data, f_data):
                or e["disjunctivity"] == "proved_non_disjunctive"
                or e["discrepancy_status"] == "maximal_K_b")
     obj3 = sum(1 for e in constants if e["discrepancy_status"] != "open")
+    obj3f = sum(1 for e in constants if e["digit_frequency_status"] != "open")
     obj4 = sum(1 for e in constants if e["barrier_status"] == "barrier_proved")
-    all_open = sum(1 for e in constants if all(e[k] == "open" for k in BENCH_STATUS_FIELDS))
+    all_open = sum(1 for e in constants if all(e[k] == "open" for k in BENCH_RR_PROPERTIES))
+    control = [e for e in constants if e["cohort"] == "control"]
+    unresolved = [e for e in constants if e["cohort"] == "unresolved"]
 
     out = [
         GENERATED_NOTE.format(src="docs/benchmarks/classical-constants.toml and docs/benchmarks/arithmetic-families.toml"),
@@ -712,60 +894,267 @@ def build_benchmarks_progress(c_data, f_data):
         f"| Objective 1 (Establish normality / simple normality) | {obj1} | `full_normality = proved_normal` or `simple_normality = proved_simply_normal` |",
         f"| Objective 2 (Establish nonnormality) | {obj2} | `proved_nonnormal`, `proved_not_simply_normal`, `proved_non_disjunctive`, or `maximal_K_b` |",
         f"| Objective 3 (Quantify digit distribution) | {obj3} | `discrepancy_status` other than `open` |",
+        f"| Objective 3 (Digit-frequency law or bound) | {obj3f} | `digit_frequency_status` other than `open` |",
         f"| Objective 4 (Rigorous mathematical limitations) | {obj4} | `barrier_status = barrier_proved` |",
-        f"| All four distributional fields open | {all_open} | `full_normality`, `simple_normality`, `disjunctivity`, `discrepancy_status` all `open` |\n",
-        "## Counts by category\n",
-        "| Category | Total | Normal | Nonnormal | In *K*<sub>*b*</sub> | Barrier proved | All open |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        f"| All five distributional fields open | {all_open} | `full_normality`, `simple_normality`, `disjunctivity`, `discrepancy_status`, `digit_frequency_status` all `open` |\n",
+        "## Control constants and initially unresolved targets\n",
+        f"The roster has two fixed cohorts (see [SCHEMA.md](SCHEMA.md#cohorts)). The {len(control)} "
+        "**control/reference constants** had their normality or nonnormality in the scope radix settled in the "
+        "published literature before this research program; they test the methods and do not measure progress "
+        f"on open questions. The {len(unresolved)} **initially unresolved targets** were open in the scope radix "
+        "when the roster was fixed; counts there measure progress. For a target, a count is credited to a "
+        "repository registry result when some qualifying property has evidence `lean`, `lean+paper` or `paper` "
+        "(per-property labels from `radix_results` where recorded), and to external input when every qualifying "
+        "property rests on a published theorem (`external`). A property without recorded evidence is never "
+        "counted; the schema check rejects it.\n",
+        f"| Objective | Control/reference / {len(control)} | Initially unresolved / {len(unresolved)} | "
+        "Unresolved: repository registry result | Unresolved: external input |\n"
+        "| --- | ---: | ---: | ---: | ---: |",
     ]
+    for label, ctrl, unres, repo, ext in bench_cohort_counts(constants):
+        out.append(f"| {label} | {len(ctrl)} | {len(unres)} | {len(repo)} | {len(ext)} |")
+    out.append("")
+    reproved = [e for e in control
+                if bench_property_evidence(e, "full_normality") in BENCH_REPOSITORY_EVIDENCE]
+    out.append("| Cohort | Constants | Classification source |\n| --- | --- | --- |")
+    out.append(f"| Control: published theorem before the program | {ids_of([e for e in control if e['id'] in BENCH_CONTROL_THEOREM])} "
+               "| External input dated before 2026 (named in `external_sources` and in `control_provenance`) |")
+    out.append(f"| Control: explicit lacunary 0–1 digits | {ids_of([e for e in control if e['id'] in BENCH_CONTROL_EXPLICIT])} "
+               "| Read off the defining series in the scope radix (`control_provenance`) |")
+    out.append(f"| Control: also proved in the repository | {ids_of(reproved)} "
+               "| Registry entries: normality has evidence `lean`, `lean+paper` or `paper` |")
+    unres_decided = [e for e in unresolved if e["full_normality"] != "open"]
+    unres_repo = [e for e in unres_decided
+                  if bench_property_evidence(e, "full_normality") in BENCH_REPOSITORY_EVIDENCE]
+    unres_ext = [e for e in unres_decided if e not in unres_repo]
+    out.append(f"| Unresolved: normality now decided in the scope radix by the repository | {ids_of(unres_repo)} "
+               "| Registry entries (see the constant table) |")
+    if unres_ext:
+        out.append(f"| Unresolved: normality now decided in the scope radix by external input | {ids_of(unres_ext)} "
+                   "| Published theorems named in `external_sources` |")
+    out.append("")
+    out.append("### Pre-program classification of the control constants\n")
+    out.append("The classification that places each control constant in its cohort, from `control_provenance`. "
+               "It records history, not current evidence: the last column gives the evidence label of the same "
+               "property in the repository, as shown in the constant and per-radix tables.\n")
+    out.append("| ID | Constant | Basis | Property | Status | Pre-program source | Repository evidence for this property |\n"
+               "| --- | --- | --- | --- | --- | --- | --- |")
+    for e in control:
+        cp = e["control_provenance"]
+        repo_ev = bench_property_evidence(e, cp["property"])
+        repo_label = (BENCH_EVIDENCE_LABEL[repo_ev] if repo_ev in BENCH_REPOSITORY_EVIDENCE
+                      else "— (not proved in the repository)")
+        basis_label = BENCH_CP_BASIS[cp["basis"]][0]
+        if cp["basis"] == "published_theorem":
+            basis_label += " (External input)"
+        out.append(f"| {e['id']} | {e['name']} | {basis_label} | {BENCH_PROPERTY_LABEL[cp['property']]} | "
+                   f"{BENCH_DISPLAY[cp['status']]} | {cp['source']} | {repo_label} |")
+    out.append("")
+    out.append("## Counts by category\n")
+    out.append("| Category | Total | Control | Normal | Nonnormal | In *K*<sub>*b*</sub> | Digit law or bound | Barrier proved | All five fields open |\n"
+               "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
     for key, label in BENCH_CATS:
         mine = [e for e in constants if e["category"] == key]
+        n_ctrl = sum(1 for e in mine if e["cohort"] == "control")
         n_norm = sum(1 for e in mine if e["full_normality"] == "proved_normal")
         n_non = sum(1 for e in mine if e["full_normality"] == "proved_nonnormal")
         n_kb = sum(1 for e in mine if e["discrepancy_status"] == "maximal_K_b")
+        n_df = sum(1 for e in mine if e["digit_frequency_status"] != "open")
         n_bar = sum(1 for e in mine if e["barrier_status"] == "barrier_proved")
-        n_open = sum(1 for e in mine if all(e[k] == "open" for k in BENCH_STATUS_FIELDS))
-        out.append(f"| {label} | {len(mine)} | {n_norm} | {n_non} | {n_kb} | {n_bar} | {n_open} |")
+        n_open = sum(1 for e in mine if all(e[k] == "open" for k in BENCH_RR_PROPERTIES))
+        out.append(f"| {label} | {len(mine)} | {n_ctrl} | {n_norm} | {n_non} | {n_kb} | {n_df} | {n_bar} | {n_open} |")
     out.append("")
     out.append("## Classical constants (`BC-01` … `BC-50`)\n")
-    out.append("| ID | Constant | Scope | Normality | Simple normality | Disjunctivity | Discrepancy | Barrier | Evidence | Registry |\n"
-               "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    out.append("| ID | Constant | Cohort | Scope | Normality | Simple normality | Disjunctivity | Discrepancy | Digit frequencies | Barrier | Evidence | Registry |\n"
+               "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
     for e in constants:
         out.append(
-            f"| {e['id']} | {e['name']} | {e['radices_scope']} | {BENCH_DISPLAY[e['full_normality']]} | "
+            f"| {e['id']} | {e['name']} | {e['cohort']} | {e['radices_scope']} | {BENCH_DISPLAY[e['full_normality']]} | "
             f"{BENCH_DISPLAY[e['simple_normality']]} | {BENCH_DISPLAY[e['disjunctivity']]} | "
-            f"{BENCH_DISPLAY[e['discrepancy_status']]} | {BENCH_DISPLAY[e['barrier_status']]} | "
-            f"{BENCH_EVIDENCE_LABEL[e['evidence']]} | {reg_links(e['registry_ids'])} |"
+            f"{BENCH_DISPLAY[e['discrepancy_status']]} | {BENCH_DISPLAY[e['digit_frequency_status']]} | "
+            f"{BENCH_DISPLAY[e['barrier_status']]} | {BENCH_EVIDENCE_LABEL[e['evidence']]} | {reg_links(e['registry_ids'])} |"
         )
     out.append("")
+    out.append("## Per-radix and per-property results\n")
+    out.append("Each row is one `radix_results` record: a property settled in a single radix, with the current evidence "
+               "label of that property alone. Records in the scope radix repeat the status shown above and give its own "
+               "evidence, never weaker than the entry-level label for a covered property; records in another radix do "
+               "not change the scope-level status. Pre-program control classifications are listed separately above.\n")
+    out.append("| ID | Constant | Radix | Property | Status | Evidence | Source |\n| --- | --- | --- | --- | --- | --- | --- |")
+    n_records = 0
+    for e in constants:
+        for r in e["radix_results"]:
+            n_records += 1
+            out.append(f"| {e['id']} | {e['name']} | {r['radix']} | {BENCH_PROPERTY_LABEL[r['property']]} | "
+                       f"{BENCH_DISPLAY[r['status']]} | {BENCH_EVIDENCE_LABEL[r['evidence']]} | {link_ids(r['source'])} |")
+    if not n_records:
+        out.append("| — | — | — | — | — | — | — |")
+    out.append("")
     out.append("## Arithmetic families (`BF-01` …)\n")
-    out.append("| ID | Family | Scope | Normality | Simple normality | Disjunctivity | Discrepancy | Barrier | Evidence | Registry | Open frontier |\n"
-               "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    out.append("| ID | Family | Scope | Normality | Simple normality | Disjunctivity | Discrepancy | Digit frequencies | Barrier | Evidence | Registry | Open frontier |\n"
+               "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
     for e in families:
         out.append(
             f"| {e['id']} | {e['name']} | {e['radices_scope']} | {BENCH_DISPLAY[e['full_normality']]} | "
             f"{BENCH_DISPLAY[e['simple_normality']]} | {BENCH_DISPLAY[e['disjunctivity']]} | "
-            f"{BENCH_DISPLAY[e['discrepancy_status']]} | {BENCH_DISPLAY[e['barrier_status']]} | "
-            f"{BENCH_EVIDENCE_LABEL[e['evidence']]} | {reg_links(e['registry_ids'])} | {e['open_frontier']} |"
+            f"{BENCH_DISPLAY[e['discrepancy_status']]} | {BENCH_DISPLAY[e['digit_frequency_status']]} | "
+            f"{BENCH_DISPLAY[e['barrier_status']]} | {BENCH_EVIDENCE_LABEL[e['evidence']]} | "
+            f"{reg_links(e['registry_ids'])} | {e['open_frontier']} |"
         )
     return "\n".join(out).rstrip() + "\n"
 
 
-def check_benchmarks(ids, errors):
-    c_data, f_data = load_benchmarks()
+def check_benchmarks(ids, errors, c_data=None, f_data=None):
+    """Mechanical checks of docs/benchmarks/SCHEMA.md. Data may be passed in for tests."""
+    if c_data is None or f_data is None:
+        c_data, f_data = load_benchmarks()
     if c_data is None:
         return
     reg = {rid: r["status"] for rid, r in ids.items()}
     c_meta = c_data.get("meta")
     f_meta = f_data.get("meta")
-    if set(c_data) != {"meta", "constant"} or not isinstance(c_meta, dict) or set(c_meta) != {"schema_version", "status_as_of", "roster_size"} or c_meta.get("schema_version") != 1 or c_meta.get("roster_size") != 50 or not isinstance(c_meta.get("status_as_of"), str):
-        errors.append("docs/benchmarks/classical-constants.toml: invalid [meta] or top-level keys")
-    if set(f_data) != {"meta", "family"} or not isinstance(f_meta, dict) or set(f_meta) != {"schema_version", "status_as_of"} or f_meta.get("schema_version") != 1 or not isinstance(f_meta.get("status_as_of"), str):
-        errors.append("docs/benchmarks/arithmetic-families.toml: invalid [meta] or top-level keys")
+    if (set(c_data) != {"meta", "constant"} or not isinstance(c_meta, dict)
+            or set(c_meta) != {"schema_version", "status_as_of", "roster_size"}
+            or c_meta.get("schema_version") != BENCH_SCHEMA_VERSION or c_meta.get("roster_size") != 50
+            or not isinstance(c_meta.get("status_as_of"), str)):
+        errors.append(f"{BENCH_C_FILE}: invalid [meta] or top-level keys")
+    if (set(f_data) != {"meta", "family"} or not isinstance(f_meta, dict)
+            or set(f_meta) != {"schema_version", "status_as_of"}
+            or f_meta.get("schema_version") != BENCH_SCHEMA_VERSION
+            or not isinstance(f_meta.get("status_as_of"), str)):
+        errors.append(f"{BENCH_F_FILE}: invalid [meta] or top-level keys")
     constants = c_data.get("constant", [])
     families = f_data.get("family", [])
     if len(constants) != 50:
-        errors.append(f"docs/benchmarks/classical-constants.toml: expected 50 constants, found {len(constants)}")
-    bench_ids = {e.get("id") for e in constants if isinstance(e, dict)} | {e.get("id") for e in families if isinstance(e, dict)}
+        errors.append(f"{BENCH_C_FILE}: expected 50 constants, found {len(constants)}")
+    bench_ids = ({e.get("id") for e in constants if isinstance(e, dict)}
+                 | {e.get("id") for e in families if isinstance(e, dict)})
+
+    def check_strings(where, k, strs):
+        for s in strs:
+            if BENCH_BAD_CHAR_RE.search(s):
+                errors.append(f"{where}: forbidden character in {k}")
+            for tok in ID_RE.findall(s):
+                rid = f"{tok[0]}-{tok[1]}"
+                if rid not in reg:
+                    errors.append(f"{where}: unknown inline registry id {rid} in {k}")
+            for bid in BENCH_ID_RE.findall(s):
+                if bid not in bench_ids:
+                    errors.append(f"{where}: unknown inline benchmark id {bid} in {k}")
+
+    def check_radix_results(where, e):
+        """Validate the `radix_results` records of a constant; returns False on a type error."""
+        records = e["radix_results"]
+        if not isinstance(records, list) or not all(isinstance(r, dict) for r in records):
+            errors.append(f"{where}: radix_results must be a list of inline tables")
+            return False
+        ok = True
+        seen = set()
+        scope = e["radices_scope"]
+        by_radix = defaultdict(dict)
+        for j, r in enumerate(records, 1):
+            rw = f"{where}: radix_results[{j}]"
+            if set(r) != set(BENCH_RR_FIELDS):
+                errors.append(f"{rw}: field mismatch {sorted(set(r) ^ set(BENCH_RR_FIELDS))}")
+                ok = False
+                continue
+            if not all(isinstance(r[k], str) for k in BENCH_RR_FIELDS):
+                errors.append(f"{rw}: every field must be a string")
+                ok = False
+                continue
+            check_strings(rw, "source", [r["source"]])
+            if not BENCH_BASE_RE.fullmatch(r["radix"]):
+                errors.append(f"{rw}: radix must be 'base B' for one integer B ≥ 2, got {r['radix']!r}")
+                continue
+            prop, status, ev, src = r["property"], r["status"], r["evidence"], r["source"]
+            if prop not in BENCH_RR_PROPERTIES:
+                errors.append(f"{rw}: invalid property {prop!r}")
+                continue
+            if status not in BENCH_RR_STATUS[prop]:
+                errors.append(f"{rw}: invalid status {status!r} for {prop} (open and radix_dependent are not recorded)")
+                continue
+            if ev not in BENCH_RR_EVIDENCE:
+                errors.append(f"{rw}: invalid evidence {ev!r}")
+                continue
+            if not src.strip():
+                errors.append(f"{rw}: empty source")
+            if (r["radix"], prop) in seen:
+                errors.append(f"{rw}: duplicate record for {prop} in {r['radix']}")
+            seen.add((r["radix"], prop))
+            by_radix[r["radix"]][prop] = status
+            named = [f"{a}-{b}" for a, b in ID_RE.findall(src)]
+            for rid in named:
+                if rid not in e["registry_ids"]:
+                    errors.append(f"{rw}: source names {rid}, which is not in registry_ids")
+                elif reg.get(rid) in ("withdrawn", "computation"):
+                    errors.append(f"{rw}: source names {rid} of disallowed status {reg.get(rid)}")
+            named_status = {reg.get(rid) for rid in named}
+            if ev in BENCH_REPOSITORY_EVIDENCE and not named:
+                errors.append(f"{rw}: evidence={ev} requires a registry identifier in source")
+            if ev == "lean" and named_status != {"lean"}:
+                errors.append(f"{rw}: evidence=lean requires every named registry entry to have status lean")
+            if ev == "lean+paper" and (not named_status <= {"lean", "lean+paper"} or "lean+paper" not in named_status):
+                errors.append(f"{rw}: evidence=lean+paper requires named entries of status lean or lean+paper, "
+                              "at least one lean+paper")
+            if ev == "external" and not BENCH_YEAR_RE.search(src):
+                errors.append(f"{rw}: evidence=external requires a four-digit year in source")
+            if r["radix"] == scope and status != e[prop]:
+                errors.append(f"{rw}: status {status!r} in the scope radix differs from {prop}={e[prop]!r}")
+            if (r["radix"] == scope and e["evidence"] in BENCH_EVIDENCE_RANK and bench_evidence_covers(e, prop)
+                    and BENCH_EVIDENCE_RANK[ev] > BENCH_EVIDENCE_RANK[e["evidence"]]):
+                errors.append(f"{rw}: evidence={ev} for {prop} in the scope radix is weaker than the entry-level "
+                              f"evidence={e['evidence']}, which is the weakest needed label (a pre-program control "
+                              "classification belongs in control_provenance)")
+            if scope == BENCH_ALL_BASES and e[prop] not in ("open", "radix_dependent") and status != e[prop]:
+                errors.append(f"{rw}: status {status!r} contradicts the all-bases value {prop}={e[prop]!r}")
+        for radix, props in by_radix.items():
+            if radix == scope:
+                continue
+            for msg in bench_radix_consistency(props):
+                errors.append(f"{where}: radix_results in {radix}: {msg}")
+        return ok
+
+    def check_control_provenance(where, e):
+        """Rule 12: the pre-program classification of a control constant (`control_provenance`)."""
+        cp = e["control_provenance"]
+        if not isinstance(cp, dict):
+            errors.append(f"{where}: control_provenance must be an inline table")
+            return
+        if e["cohort"] != "control":
+            if cp:
+                errors.append(f"{where}: control_provenance must be {{}} for an unresolved constant")
+            return
+        if set(cp) != set(BENCH_CP_FIELDS) or not all(isinstance(cp[k], str) for k in BENCH_CP_FIELDS):
+            errors.append(f"{where}: control_provenance needs exactly the string keys {', '.join(BENCH_CP_FIELDS)}")
+            return
+        cpw = f"{where}: control_provenance"
+        check_strings(cpw, "source", [cp["source"]])
+        basis, prop, status, src = cp["basis"], cp["property"], cp["status"], cp["source"]
+        if basis not in BENCH_CP_BASIS:
+            errors.append(f"{cpw}: invalid basis {basis!r}")
+            return
+        if e["id"] not in BENCH_CP_BASIS[basis][1]:
+            errors.append(f"{cpw}: basis {basis!r} differs from the fixed basis of {e['id']}")
+        # Only a decision of full normality, or a negative decision of simple normality,
+        # settles the normality question; positive simple normality does not.
+        if not (prop == "full_normality" and status in ("proved_normal", "proved_nonnormal")
+                or prop == "simple_normality" and status == "proved_not_simply_normal"):
+            errors.append(f"{cpw}: must decide full_normality or record "
+                          f"simple_normality=proved_not_simply_normal, got {prop}={status!r}")
+        elif e[prop] != status:
+            errors.append(f"{cpw}: status {status!r} differs from {prop}={e[prop]!r}")
+        if not src.strip():
+            errors.append(f"{cpw}: empty source")
+        if basis == "published_theorem":
+            if ID_RE.search(src):
+                errors.append(f"{cpw}: a published-theorem source names no registry entry")
+            if not bench_is_pre_program(src):
+                errors.append(f"{cpw}: source needs a four-digit year, and every year in it must precede "
+                              f"{BENCH_PROGRAM_START_YEAR}")
+            cited = {y for x in e["external_sources"] if bench_is_pre_program(x) for y in bench_years(x)}
+            if not set(bench_years(src)) <= cited:
+                errors.append(f"{cpw}: every cited year must belong to a pre-{BENCH_PROGRAM_START_YEAR} "
+                              "entry of external_sources")
 
     def validate_list(entries, fields, enum, prefix, scopes, is_const, fname):
         seen_names = set()
@@ -781,41 +1170,46 @@ def check_benchmarks(ids, errors):
             if set(e) != set(fields):
                 errors.append(f"{where}: field mismatch {sorted(set(e) ^ set(fields))}")
                 continue
+            types_ok = True
             for k, v in e.items():
+                if k in ("radix_results", "control_provenance"):
+                    continue
                 if k in ("registry_ids", "external_sources"):
                     if not isinstance(v, list) or not all(isinstance(x, str) for x in v):
                         errors.append(f"{where}: {k} must be a list of strings")
+                        types_ok = False
                         continue
                     strs = v
                 else:
                     if not isinstance(v, str):
                         errors.append(f"{where}: {k} must be a string")
+                        types_ok = False
                         continue
                     strs = [v]
-                for s in strs:
-                    if BENCH_BAD_CHAR_RE.search(s):
-                        errors.append(f"{where}: forbidden character in {k}")
-                    for tok in ID_RE.findall(s):
-                        rid = f"{tok[0]}-{tok[1]}"
-                        if rid not in reg:
-                            errors.append(f"{where}: unknown inline registry id {rid} in {k}")
-                    for bid in BENCH_ID_RE.findall(s):
-                        if bid not in bench_ids:
-                            errors.append(f"{where}: unknown inline benchmark id {bid} in {k}")
+                check_strings(where, k, strs)
+            if not types_ok:
+                continue
+            enum_ok = True
             for k, allowed in enum.items():
                 if e[k] not in allowed:
                     errors.append(f"{where}: invalid {k}={e[k]!r}")
+                    enum_ok = False
+            if not enum_ok:
+                continue
             if is_const and e["category"] not in BENCH_CAT_MAP:
                 errors.append(f"{where}: unknown category {e['category']!r}")
             if not any(re.fullmatch(p, e["radices_scope"]) for p in scopes):
                 errors.append(f"{where}: invalid radices_scope {e['radices_scope']!r}")
+                continue
             for rid in e["registry_ids"]:
                 if rid not in reg:
                     errors.append(f"{where}: unknown registry id {rid}")
                 elif reg[rid] in ("withdrawn", "computation"):
                     errors.append(f"{where}: registry id {rid} has disallowed status {reg[rid]}")
             fn, sn, dj, ds = (e[k] for k in BENCH_STATUS_FIELDS)
+            df = e["digit_frequency_status"]
             bs, ev = e["barrier_status"], e["evidence"]
+            # Rule 6: implications between status values.
             if (fn == "proved_normal") != (ds == "zero_normal"):
                 errors.append(f"{where}: proved_normal <-> zero_normal violated")
             if fn == "proved_normal" and (sn != "proved_simply_normal" or dj != "proved_disjunctive"):
@@ -824,14 +1218,35 @@ def check_benchmarks(ids, errors):
                 errors.append(f"{where}: discrepancy_status={ds} implies proved_nonnormal")
             if (sn == "proved_not_simply_normal" or dj == "proved_non_disjunctive") and fn != "proved_nonnormal":
                 errors.append(f"{where}: negative simple_normality/disjunctivity implies proved_nonnormal")
-            if is_const and sn == "radix_dependent" and e["radices_scope"] != "all integer bases b ≥ 2":
+            if is_const and sn == "radix_dependent" and e["radices_scope"] != BENCH_ALL_BASES:
                 errors.append(f"{where}: radix_dependent requires all integer bases scope")
             if bs == "resolved" and (fn not in ("proved_normal", "proved_nonnormal", "classified") or ds in ("open", "partial")):
                 errors.append(f"{where}: resolved requires decided normality and non-open/non-partial discrepancy")
-            if (ev == "open") != all(e[k] == "open" for k in BENCH_STATUS_FIELDS):
-                errors.append(f"{where}: evidence=open iff all four status fields are open")
+            # Rule 7: digit-frequency consistency.
+            if sn == "proved_simply_normal" and df != "exact_law":
+                errors.append(f"{where}: proved_simply_normal requires digit_frequency_status=exact_law")
+            if sn == "proved_not_simply_normal" and df not in ("exact_law", "nontrivial_bound", "classified"):
+                errors.append(f"{where}: proved_not_simply_normal requires digit_frequency_status "
+                              "exact_law or nontrivial_bound")
+            if sn in ("radix_dependent", "classified") and df in ("open", "partial"):
+                errors.append(f"{where}: simple_normality={sn} requires digit_frequency_status "
+                              "exact_law, nontrivial_bound or classified")
+            if sn == "partial" and df == "open":
+                errors.append(f"{where}: simple_normality=partial requires digit_frequency_status other than open")
+            if df == "exact_law" and sn in ("open", "partial"):
+                errors.append(f"{where}: digit_frequency_status=exact_law requires decided simple_normality")
+            # Rule 8: evidence consistency. The entry-level evidence covers digit_frequency_status
+            # for families and all-bases constants; a single-base nontrivial_bound carries its
+            # evidence in a scope-radix record instead (rule 11).
+            covered = tuple(k for k in BENCH_RR_PROPERTIES if bench_evidence_covers(e, k) or e[k] == "open")
+            if (ev == "open") != all(e[k] == "open" for k in covered):
+                if len(covered) == len(BENCH_RR_PROPERTIES):
+                    errors.append(f"{where}: evidence=open iff all five distributional fields "
+                                  "(including digit_frequency_status) are open")
+                else:
+                    errors.append(f"{where}: evidence=open iff all four status fields are open")
             reg_statuses = {reg.get(rid) for rid in e["registry_ids"]}
-            if ev in ("lean", "lean+paper", "paper") and not e["registry_ids"]:
+            if ev in BENCH_REPOSITORY_EVIDENCE and not e["registry_ids"]:
                 errors.append(f"{where}: evidence={ev} requires nonempty registry_ids")
             if ev == "lean" and "lean" not in reg_statuses:
                 errors.append(f"{where}: evidence=lean requires a listed lean registry entry")
@@ -841,18 +1256,40 @@ def check_benchmarks(ids, errors):
                 errors.append(f"{where}: evidence=external requires nonempty external_sources")
             if bs == "barrier_proved" and not e["registry_ids"]:
                 errors.append(f"{where}: barrier_proved requires nonempty registry_ids")
+            # Rule 9: sources.
             if is_const and not e["external_sources"]:
                 errors.append(f"{where}: constant requires nonempty external_sources")
             for src in e["external_sources"]:
                 if not BENCH_YEAR_RE.search(src):
                     errors.append(f"{where}: external_sources entry missing 4-digit year: {src[:50]}")
+            if not is_const:
+                continue
+            # Rule 11: per-radix records.
+            if not check_radix_results(where, e):
+                continue
+            recs = {(r["radix"], r["property"]): r for r in e["radix_results"]}
+            single = BENCH_BASE_RE.fullmatch(e["radices_scope"]) is not None
+            if single and df == "nontrivial_bound" and (e["radices_scope"], "digit_frequency_status") not in recs:
+                errors.append(f"{where}: digit_frequency_status=nontrivial_bound requires a radix_results record "
+                              "for digit_frequency_status in the scope radix")
+            if sn == "radix_dependent":
+                vals = {r["status"] for r in e["radix_results"] if r["property"] == "simple_normality"}
+                if not {"proved_simply_normal", "proved_not_simply_normal"} <= vals:
+                    errors.append(f"{where}: radix_dependent requires radix_results records proving and "
+                                  "disproving simple normality in two bases")
+            # Rule 12: cohorts.
+            if (e["cohort"] == "control") != (eid in BENCH_CONTROL_IDS):
+                errors.append(f"{where}: cohort={e['cohort']!r} differs from the fixed control cohort "
+                              f"{', '.join(sorted(BENCH_CONTROL_IDS))}")
+            if e["cohort"] == "control":
+                if fn not in ("proved_normal", "proved_nonnormal"):
+                    errors.append(f"{where}: a control constant has full_normality decided")
+                if not single:
+                    errors.append(f"{where}: a control constant has a single-base radices_scope")
+            check_control_provenance(where, e)
 
-    validate_list(constants, BENCH_C_FIELDS, BENCH_C_ENUM, "BC",
-                  (r"base [2-9]|base [1-9]\d+", r"all integer bases b ≥ 2"),
-                  True, "docs/benchmarks/classical-constants.toml")
-    validate_list(families, BENCH_F_FIELDS, BENCH_F_ENUM, "BF",
-                  (r"base [2-9]|base [1-9]\d+", r"all integer bases b ≥ 2", r"construction radix b"),
-                  False, "docs/benchmarks/arithmetic-families.toml")
+    validate_list(constants, BENCH_C_FIELDS, BENCH_C_ENUM, "BC", BENCH_C_SCOPES, True, BENCH_C_FILE)
+    validate_list(families, BENCH_F_FIELDS, BENCH_F_ENUM, "BF", BENCH_F_SCOPES, False, BENCH_F_FILE)
 
 
 # ---------------------------------------------------------------------------

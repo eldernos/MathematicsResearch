@@ -470,6 +470,7 @@ def section_b2_identities():
         return lucas[j] if j >= 0 else (-1) ** (-j) * lucas[-j]
 
     rng = random.Random(5)
+    n_restricted = 0
     for _ in range(3000):
         m0, m1, m2 = rng.randint(0, 12), rng.randint(0, 14), rng.randint(0, 14)
         X = G.basis_elem(G.zero, 2 ** m0)
@@ -483,15 +484,34 @@ def section_b2_identities():
         check(5 * X[G.zero] == 2 ** r + sgn * 2 ** (m0 + 1) * L(j), "Z/5 principal Lucas formula")
         check(5 * X[G.idx[(1, 0)]] == 2 ** r - sgn * 2 ** m0 * L(j + 1), "Z/5 class +-1 Lucas formula")
         check(5 * X[G.idx[(2, 0)]] == 2 ** r + sgn * 2 ** m0 * L(j - 1), "Z/5 class +-2 Lucas formula")
-        if m1 + m2 >= 1 and r - m0 >= 4:
+        # The deterministic Lucas bound needs at least four nonprincipal exact
+        # (squarefree) divisors: m1 + m2 = r - m0 >= 4.
+        if m1 + m2 >= 4:
+            n_restricted += 1
             for g in range(5):
                 ex = v_p(X[g], 2) - m0
                 check(0 <= ex <= 3, f"Z/5 excess out of range: {ex}")
+    check(n_restricted > 0, "Z/5 restricted excess test is nonempty")
     for n in range(0, 120):
         check(v_p(L(n), 2) == (0 if n % 3 else (2 if n % 6 == 3 else 1)), "v_2 of Lucas numbers")
     print("  Z/5: 5 a_0 = 2^r + (-1)^{m1} 2^{m0+1} L_j, 5 a_{+-1} = 2^r - (-1)^{m1} 2^{m0} L_{j+1},")
     print("       5 a_{+-2} = 2^r + (-1)^{m1} 2^{m0} L_{j-1}  (j = m1 - m2);")
-    print("       v_2(L_n) in {0,1,2}, so v_2(a_C) - m_0 in {0,...,3}")
+    print(f"       v_2(L_n) in {{0,1,2}}, so v_2(a_C) - m_0 in {{0,...,3}} for squarefree products with"
+          f" m1 + m2 >= 4 ({n_restricted} of 3000 random products tested)")
+    # Counterfamily: no uniform excess bound without the four-exact-divisor hypothesis.
+    # One split prime p in a generator class of Z/5, n = p^e with e = 5(2^j - 1): every
+    # nontrivial character survives (5 does not divide e + 1), m_0 = 0, the Lemma 2.5
+    # lower bound is 0, and the principal coefficient is exactly (e + 5)/5 = 2^j.
+    for jj in range(1, 9):
+        e = 5 * (2 ** jj - 1)
+        check((e + 1) % 5 != 0, "Z/5 counterfamily: nontrivial characters survive")
+        X = G.local_split(G.idx[(1, 0)], e)
+        check(X[G.zero] == (e + 5) // 5 == 2 ** jj, "Z/5 counterfamily principal coefficient 2^j")
+        # Lemma 2.5 lower bound: min over survivors; the nontrivial characters have valuation 0
+        lb = min(v_p(e + 1, 2), 0)
+        check(v_p(X[G.zero], 2) - lb == jj, "Z/5 counterfamily excess = j")
+    print("  Z/5 counterfamily n = p^(5(2^j-1)), one generator-class split prime: principal coefficient"
+          " 2^j, excess j for j = 1..8 (no uniform bound)")
 
     # nilpotency of the augmentation ideal of F_2[G_2]
     for (n1, n2) in ((4, 1), (8, 1), (2, 4), (4, 4)):
@@ -967,8 +987,9 @@ def section_b2_excess(spf):
         tot = sum(hist.values())
         top = sorted(hist.items())[:4]
         print(f"  D={D} ({name}, |G_2^2|={hsq}): " + ", ".join(f"P(excess={k})={v / tot:.3f}" for k, v in top)
-              + f", max={max(hist)}")
-        print(f"     odd valuations (printed only): mean v_3(a_C)={vq[3][1] / vq[3][0]:.4f}, "
+              + f", max={max(hist)} (excess >= 0 asserted; the upper tail is measured, not bounded)")
+        print(f"     odd valuations (printed only; pooled over all forms with a_C > 0, n in [2, {N}] with a split"
+              f" prime factor): mean v_3(a_C)={vq[3][1] / vq[3][0]:.4f}, "
               f"P(v_3>=3)={vq[3][2] / vq[3][0]:.4f}; mean v_5(a_C)={vq[5][1] / vq[5][0]:.4f}, "
               f"P(v_5>=3)={vq[5][2] / vq[5][0]:.4f}")
 
@@ -1001,6 +1022,116 @@ def section_b2_constants():
     return out
 
 
+def rep_count(f, n):
+    """number of (x, y) in Z^2 with a x^2 + b x y + c y^2 = n (positive definite)"""
+    a, b, c = f
+    D = b * b - 4 * a * c
+    ymax = math.isqrt(4 * a * n // (-D)) + 1
+    cnt = 0
+    for y in range(-ymax, ymax + 1):
+        disc = b * b * y * y - 4 * a * (c * y * y - n)
+        if disc < 0:
+            continue
+        s = math.isqrt(disc)
+        if s * s != disc:
+            continue
+        for x2a in {-b * y + s, -b * y - s}:
+            if x2a % (2 * a) == 0:
+                x = x2a // (2 * a)
+                if a * x * x + b * x * y + c * y * y == n:
+                    cnt += 1
+    return cnt
+
+
+def section_b2_noncyclic():
+    print("== B2.6 non-cyclic G_odd = Z/3 x Z/3 (Delta = -4027): regression case and four-line law of d ==")
+    D = -4027
+    forms, G, f2e, fid = class_group(D)
+    check((G.n1, G.n2) == (3, 3), "Cl(-4027) = Z/3 x Z/3")
+    w = 2
+
+    def line_of(g):
+        return min(g, G.power(g, 2))
+
+    lines = sorted({line_of(g) for g in range(G.h) if g != G.zero})
+    check(len(lines) == 4, "Z/3 x Z/3 has four lines")
+
+    # Regression: n = (13*17)^2 = 48841, two square factors in distinct directions.
+    n = (13 * 17) ** 2
+    check(n == 48841, "n = 48841")
+    cl = {}
+    for p in (13, 17):
+        check(kron(D, p) == 1, f"{p} splits in Q(sqrt(-4027))")
+        cl[p] = f2e[fid[prime_form(D, p)]]
+        check(cl[p] != G.zero, f"prime ideal above {p} is nonprincipal")
+    check(line_of(cl[13]) != line_of(cl[17]), "13 and 17 lie in distinct directions")
+    # least split primes in each of the four directions
+    least = {}
+    for p in primes_upto(200):
+        if kron(D, p) == 1:
+            g = f2e[fid[prime_form(D, p)]]
+            if g != G.zero:
+                least.setdefault(line_of(g), p)
+    check(sorted(least.values()) == [13, 17, 19, 29], "least primes in the four directions")
+    X = G.ring_mul(G.local_split(cl[13], 2), G.local_split(cl[17], 2))
+    surv = [k for k in range(G.h)
+            if not any(G.val_order(k, g) > 1 and 3 % G.val_order(k, g) == 0 for g in (cl[13], cl[17]))]
+    check(surv == [G.zero], "all 8 nontrivial characters killed at n = 48841")
+    dn = max(G.char_order(k) for k in surv)
+    check(dn == 1, "d(48841) = 1")
+    check(all(cf == 1 for cf in X), "X_n contains each class exactly once")
+    for f in forms:
+        check(rep_count(f, n) == w * X[f2e[fid[f]]] == 2, f"r_Q(48841) = 2 for Q = {f}")
+    print(f"  n = (13*17)^2 = {n}: least split primes in the four directions {sorted(least.values())};"
+          f" survivors = trivial only, d(n) = {dn}; a_C = 1 and r_Q = 2 for all {len(forms)} forms")
+
+    # Exact four-line inclusion-exclusion: a bad prime in direction L kills exactly the
+    # characters nontrivial on L.  For every set B of bad directions compute d(B) from the
+    # characters, and compare the resulting probability with
+    #   Pr(d = 3) = sum_L prod_{J != L} A_J - 3 prod_J A_J
+    # as an identity in exact rationals for random A_J.
+    from fractions import Fraction
+    rng = random.Random(4027)
+    dB = {}
+    for mask in range(16):
+        B = [lines[i] for i in range(4) if mask >> i & 1]
+        sv = [k for k in range(G.h) if all(G.val_order(k, gL) == 1 for gL in B)]
+        dB[mask] = max(G.char_order(k) for k in sv)
+        check(dB[mask] == (3 if len(B) <= 1 else 1), "d(B) = 3 iff at most one bad direction")
+    for _ in range(50):
+        A = [Fraction(rng.randint(1, 999), 1000) for _ in range(4)]
+        lhs = Fraction(0)
+        for mask in range(16):
+            pr = Fraction(1)
+            for i in range(4):
+                pr *= (1 - A[i]) if mask >> i & 1 else A[i]
+            if dB[mask] == 3:
+                lhs += pr
+        prodA = A[0] * A[1] * A[2] * A[3]
+        rhs = sum(prodA / A[i] for i in range(4)) - 3 * prodA
+        check(lhs == rhs, "four-line inclusion-exclusion identity (exact)")
+    # Euler products A_L (no bad prime in direction L), truncated at P = 2e5.
+    P = 200000
+    Aval = {L: 1.0 for L in lines}
+    for p in primes_upto(P):
+        if kron(D, p) != 1:
+            continue
+        g = f2e[fid[prime_form(D, p)]]
+        if g == G.zero:
+            continue
+        Pp = (1 - 1 / p) * p ** (-2) / (1 - p ** (-3))
+        Aval[line_of(g)] *= 1 - Pp
+    Av = [Aval[L] for L in lines]
+    prodA = Av[0] * Av[1] * Av[2] * Av[3]
+    pd3 = sum(prodA / a for a in Av) - 3 * prodA
+    const = 1 + log(2) * (2 / 3) * pd3
+    print("  four-line law (exact identity checked on all 16 bad-direction sets and 50 random rational A_J):")
+    print("     A_L = " + ", ".join(f"{a:.6f}" for a in sorted(Av, reverse=True))
+          + f"; Pr(d=3) = {pd3:.6f}, E[1-1/d] = {2 * pd3 / 3:.6f}, radix-2^k constant = {const:.6f}"
+          f" (Euler products truncated at p <= {P})")
+    return pd3, const
+
+
 def main():
     section_b1_lambert()
     section_b1_runs()
@@ -1012,6 +1143,7 @@ def main():
     summary, spf = section_b2_forms()
     section_b2_excess(spf)
     section_b2_constants()
+    section_b2_noncyclic()
     print(f"OK: {CHECKS} checks passed in {time.time() - T0:.1f} s")
     return 0
 

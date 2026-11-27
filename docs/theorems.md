@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1594 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1657 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 581 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 644 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -466,6 +466,37 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`GeneralMassTransfer.qDigamma_term_eq_lambert`](../NormalityChecker/GeneralMassTransfer.lean#L962) | Termwise identity relating `q^(k + r/M) / (1 - q^(k + r/M))` at `q = b^(-M)` to `1 / (b^(k*M + r) - 1)`. |
 | [`GeneralMassTransfer.qDigamma_reflection_eq_residueLambert`](../NormalityChecker/GeneralMassTransfer.lean#L991) [GF-13](results.md#gf-13) | **Exact `q`-digamma reflection identity at `q = b^(-M)` (Track B4).** For every integer radix `b ≥ 2`, modulus `M ≥ 2`, and `1 ≤ r < M`, `(qDigamma (b^(-M))… |
 
+### HigherOrderTower
+
+[`NormalityChecker/HigherOrderTower.lean`](../NormalityChecker/HigherOrderTower.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`HigherOrderTower.wordCount_eq_sum_extensions`](../NormalityChecker/HigherOrderTower.lean#L109) | Counting a length-`L'` word equals the sum of counts of its `b^(L - L')` length-`L` extensions. |
+| [`HigherOrderTower.orderNormal_of_le`](../NormalityChecker/HigherOrderTower.lean#L156) | `L`-normality implies `L'`-normality for every lower order `L' ≤ L`. |
+| [`HigherOrderTower.farCount_div_le_circMean`](../NormalityChecker/HigherOrderTower.lean#L189) | Markov's inequality for `farCount`: `farCount b u ε N / N ≤ circMean b u N / ε`. |
+| [`HigherOrderTower.farCount_div_tendsto_zero_of_mem_zeroOrbit`](../NormalityChecker/HigherOrderTower.lean#L213) | If `u ∈ zeroOrbitSubgroup b`, then `farCount b u ε N / N → 0` for every `ε > 0`. |
+| [`HigherOrderTower.zeroOrbit_subset_kernel`](../NormalityChecker/HigherOrderTower.lean#L222) | Every element of the zero-orbit subgroup `M_b` belongs to the discrepancy kernel `K_b`. |
+| [`HigherOrderTower.fixedPoint_add_zeroOrbit_mem_kernel`](../NormalityChecker/HigherOrderTower.lean#L235) | Every fixed-point translate `m / (b - 1) + u` with `u ∈ M_b` belongs to `K_b`. |
+| [`HigherOrderTower.intCast_mem_zeroOrbit`](../NormalityChecker/HigherOrderTower.lean#L261) | Integer shifts belong to `zeroOrbitSubgroup b`. |
+| [`HigherOrderTower.mem_kernel_iff_exists_fixedPoint_add_zeroOrbit`](../NormalityChecker/HigherOrderTower.lean#L331) | **Kernel decomposition with fixed-center stabilization (`K_b = F_b + M_b`):** for every `b ≥ 2`, `x ∈ K_b` if and only if `x = m / (b - 1) + u` for some `m :… |
+| [`HigherOrderTower.kernel_eq_fixedPoint_add_zeroOrbit`](../NormalityChecker/HigherOrderTower.lean#L522) [GF-29](results.md#gf-29) | Subgroup-sum form of the kernel decomposition: `K_b = F_b + M_b`. |
+| [`HigherOrderTower.rat_add_zeroOrbit_mem_pow_kernel`](../NormalityChecker/HigherOrderTower.lean#L537) | Every element `r / (b^k - 1) + u` with `u ∈ M_b` lies in `K_{b^k}`. |
+| [`HigherOrderTower.mem_pow_kernel_decomp`](../NormalityChecker/HigherOrderTower.lean#L548) | **Exact kernel decomposition at level `k`:** every `x ∈ K_{b^k}` has a UNIQUE representation `x = r / (b^k - 1) + u` with `0 ≤ r < b^k - 1` and `u ∈ M_b`, and… |
+| [`HigherOrderTower.wordFreq_tower_limit`](../NormalityChecker/HigherOrderTower.lean#L715) [GF-29](results.md#gf-29) | **Coprime-rational cylinder word-frequency transfer:** for `b ≥ 2`, `k ≥ 2`, `L ≥ 1`, `0 < r < b^k - 1`, and `u ∈ zeroOrbitSubgroup b`, every length-`L` word… |
+| [`HigherOrderTower.exists_euler_circuit`](../NormalityChecker/HigherOrderTower.lean#L1122) [GF-29](results.md#gf-29) | **Hierholzer's Theorem (directed Euler circuit):** every finite balanced directed multigraph in which every vertex is reachable from every vertex by a… |
+| [`HigherOrderTower.exists_balanced_block`](../NormalityChecker/HigherOrderTower.lean#L1378) [GF-29](results.md#gf-29) | **Existence of balanced de Bruijn blocks:** for every `b ≥ 2` and `L ≥ 1`, there exists `0 < r < b^(b^L) - 1` such that `r / (b^(b^L) - 1)` hits every… |
+| [`HigherOrderTower.sparseQuadPerturb_mem_zeroOrbit`](../NormalityChecker/HigherOrderTower.lean#L1846) | `sparseQuadPerturb b` belongs to `zeroOrbitSubgroup b` for every `b ≥ 2`. |
+| [`HigherOrderTower.sparseQuadPerturb_irrational`](../NormalityChecker/HigherOrderTower.lean#L1940) | `sparseQuadPerturb b` is irrational for every base `b ≥ 2`. |
+| [`HigherOrderTower.tower_irrational_exact_iff`](../NormalityChecker/HigherOrderTower.lean#L2065) [GF-29](results.md#gf-29) | **Main Higher-Order Tower Classification (irrational exact-order form):** for `b ≥ 2`, `k ≥ 2`, and `L ≥ 1`, there exists an irrational `x ∈ K_{b^k} \ K_b`… |
+| [`HigherOrderTower.tower_iff`](../NormalityChecker/HigherOrderTower.lean#L2228) [GF-29](results.md#gf-29) | **Main Higher-Order Tower Classification (`K_{b^k} \ K_b`):** for `b ≥ 2`, `k ≥ 2`, and `L ≥ 1`, there exists an `L`-normal element of `K_{b^k} \ K_b` if and… |
+| [`HigherOrderTower.altRuns_mem_zeroOrbit`](../NormalityChecker/HigherOrderTower.lean#L2398) | `altRunsValue ∈ zeroOrbitSubgroup 2 ⊆ Kernel 2`. |
+| [`HigherOrderTower.altRuns_orderNormal_one`](../NormalityChecker/HigherOrderTower.lean#L2623) | `altRunsValue` is simply normal (`1`-normal) in base `2`. |
+| [`HigherOrderTower.all_kernel_pow_iff`](../NormalityChecker/HigherOrderTower.lean#L2779) [GF-29](results.md#gf-29) | **Complete Higher-Order Tower Classification (including the smaller kernel `K_b`):** for `b ≥ 2`, `k ≥ 2`, and `L ≥ 1`, there exists an `L`-normal element of… |
+| [`HigherOrderTower.radixDiscrepancy_le_grid_add`](../NormalityChecker/HigherOrderTower.lean#L2854) | **Universal grid-approximation discrepancy bound:** for every `b ≥ 1`, `L : ℕ`, `x : ℝ`, and `N : ℕ`, `D_N(x; b) ≤ 2 / b^L + ∑_{v < b^L} \|wordFreq b L x v N -… |
+| [`HigherOrderTower.eventually_radixDiscrepancy_le_of_orderNormal`](../NormalityChecker/HigherOrderTower.lean#L2966) | **Asymptotic universal discrepancy bound for `L`-normal reals:** every `L`-normal real satisfies `D_N(x; b) ≤ 2 / b^L + ε` eventually for every `ε > 0`. |
+| [`HigherOrderTower.limsup_radixDiscrepancy_le_of_orderNormal`](../NormalityChecker/HigherOrderTower.lean#L2983) [GF-29](results.md#gf-29) | **`limsup` form of the universal `L`-normal discrepancy bound:** every `L`-normal real satisfies `D^+(x; b) ≤ 2 / b^L`. |
+
 ### IndexedExpansion
 
 [`NormalityChecker/IndexedExpansion.lean`](../NormalityChecker/IndexedExpansion.lean)
@@ -629,6 +660,52 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Phase22Cores.erdosBorweinPlusCoeff_odd_iff`](../NormalityChecker/Phase22Cores.lean#L1310) [GF-28](results.md#gf-28) | **Proposition 1.1 parity criterion (Track E1):** For every `n ≥ 1`, `Odd (erdosBorweinPlusCoeff n) ↔ IsSquare n`. |
 | [`Phase22Cores.erdosBorweinPlus_term_identity`](../NormalityChecker/Phase22Cores.lean#L1335) | Exact termwise algebraic identity `1 / (x + 1) = 1 / (x - 1) - 2 / (x^2 - 1)` for `1 < x`. |
 | [`Phase22Cores.erdosBorweinPlus_eq_sub`](../NormalityChecker/Phase22Cores.lean#L1345) [GF-28](results.md#gf-28) | **Proposition 1.1 series identity (Track E1):** For every integer base `b ≥ 2`, `E_+(b) = E(b) - 2 E(b^2)`. |
+
+### Phase23Cores
+
+[`NormalityChecker/Phase23Cores.lean`](../NormalityChecker/Phase23Cores.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase23Cores.ratDet_lower_of_approx`](../NormalityChecker/Phase23Cores.lean#L87) | Integer determinant form of a lower bound `B` on `l² \|a/q - h/l\|`: for any nonzero integers `l, L` with `q ∣ a * l - L`, we have `B ≤ \|l\| * \|L\| / q`. |
+| [`Phase23Cores.inv_le_ratBadness`](../NormalityChecker/Phase23Cores.lean#L152) | For every rational `a / q` (`q ≥ 1`), `1 / q ≤ ratBadness (a / q)`. |
+| [`Phase23Cores.ratBadness_pos`](../NormalityChecker/Phase23Cores.lean#L187) | Positivity of `ratBadness (a / q)` for `q ≥ 1`. |
+| [`Phase23Cores.ratBadness_le_one`](../NormalityChecker/Phase23Cores.lean#L193) | Universal upper bound `ratBadness u ≤ 1` for every real `u`. |
+| [`Phase23Cores.rat_det_folding_step`](../NormalityChecker/Phase23Cores.lean#L220) [GF-33](results.md#gf-33) | **Track C4, Lemma 5 (rational determinant folding inequality):** For reduced `u = a / q` (`q ≥ 1`, `gcd(a, q) = 1`), nonzero `z = c / d` (`d ≥ 1`, `c ≠ 0`),… |
+| [`Phase23Cores.ratBadness_folding_step`](../NormalityChecker/Phase23Cores.lean#L362) [GF-33](results.md#gf-33) | **Track C4, Lemma 5 (`ratBadness` form):** `min (\|c\|/d) (B(a/q) / (2 c²)) ≤ B(a/q + (c/d)/q²)`. |
+| [`Phase23Cores.sum_digit_cylinder_min_even_nat`](../NormalityChecker/Phase23Cores.lean#L387) [GF-31](results.md#gf-31) | Exact integer digit-cylinder minimum sum for even radix `b = 2 m`: `4 ∑_{d < 2m} min(d, 2m - 1 - d) = (2m)(2m - 2)`. |
+| [`Phase23Cores.sum_digit_cylinder_min_even`](../NormalityChecker/Phase23Cores.lean#L418) [GF-31](results.md#gf-31) | **Track B1, Theorem 4A (digit-cylinder minimum sum):** For even radix `b = 2 m` (`m ≥ 1`), `∑_{d < 2m} min(d, 2m - 1 - d) / (2m)² = 1/4 - 1/(2 · 2m)`. |
+| [`Phase23Cores.split_prime_local_factor_eq`](../NormalityChecker/Phase23Cores.lean#L447) [GF-31](results.md#gf-31) | **Track B1, §6 (split-prime local-factor identity):** For every `p ≥ 2` with `x = 1 / p`, `(1 - x)(1 + x) + x²(3 - 2x)/(1 - x) = 1 + (2p - 1)/(p²(p - 1))`. |
+| [`Phase23Cores.split_prime_local_factor_le`](../NormalityChecker/Phase23Cores.lean#L471) [GF-31](results.md#gf-31) | **Track B1, §6 (split-prime local-factor upper bound):** For every `p ≥ 2` with `x = 1 / p`, `(1 - x)(1 + x) + x²(3 - 2x)/(1 - x) ≤ 1 + 3 / p²`. |
+| [`Phase23Cores.binPart_zero`](../NormalityChecker/Phase23Cores.lean#L495) |  |
+| [`Phase23Cores.binPart_two_mul_add_one`](../NormalityChecker/Phase23Cores.lean#L497) |  |
+| [`Phase23Cores.binPart_two_mul_succ`](../NormalityChecker/Phase23Cores.lean#L502) |  |
+| [`Phase23Cores.binPart_two_mul`](../NormalityChecker/Phase23Cores.lean#L512) | Exact partial-sum recurrence for Mahler's binary partition function: `β(2 n) = ∑_{j = 0}^{n} β(j)`. |
+| [`Phase23Cores.binPart_even`](../NormalityChecker/Phase23Cores.lean#L520) [GF-32](results.md#gf-32) | Parity of Mahler's binary partition function: `β(n)` is even for every `n ≥ 2`. |
+| [`Phase23Cores.binPart_mahler_finite`](../NormalityChecker/Phase23Cores.lean#L542) [GF-32](results.md#gf-32) | **Track D3 (finite Mahler functional equation):** For every integer `b` and cutoff `M : ℕ`, `(b - 1) ∑_{n = 0}^M β(n) b^(M - n) = b ∑_{k = 0}^{⌊M/2⌋} β(k)… |
+| [`Phase23Cores.thueMorseSign_zero`](../NormalityChecker/Phase23Cores.lean#L602) |  |
+| [`Phase23Cores.thueMorseSign_two_mul`](../NormalityChecker/Phase23Cores.lean#L605) |  |
+| [`Phase23Cores.thueMorseSign_two_mul_add_one`](../NormalityChecker/Phase23Cores.lean#L614) |  |
+| [`Phase23Cores.thueMorseSign_add_pow_two`](../NormalityChecker/Phase23Cores.lean#L623) | Adding `2^r` to `n < 2^r` flips the Thue–Morse sign. |
+| [`Phase23Cores.prod_one_sub_pow_two_pow`](../NormalityChecker/Phase23Cores.lean#L644) [GF-32](results.md#gf-32) | **Track D3, Theorem 3.1 (signed Thue–Morse product identity):** For every commutative ring `R`, `q : R`, and `r : ℕ`, `∏_{j < r} (1 - q^(2^j)) = ∑_{n < 2^r}… |
+| [`Phase23Cores.radix_coboundary_sum_int`](../NormalityChecker/Phase23Cores.lean#L665) | **Track B3, Lemma 5.1 (finite integer coboundary telescoping):** `∑_{m=1}^M (b Δ(m) - Δ(m + 1)) b^(M - m) = Δ(1) b^M - Δ(M + 1)`. |
+| [`Phase23Cores.carry_gauge_telescoping`](../NormalityChecker/Phase23Cores.lean#L688) [GF-32](results.md#gf-32) | **Track B3, Theorem 5.2 (finite telescoping gauge identity, 0-indexed carry `δ`):** For `b ≥ 2` and any `a, δ : ℕ → ℤ` with `δ 0 = 0`, setting `a'(m) = a(m) +… |
+| [`Phase23Cores.carry_gauge_telescoping_shift`](../NormalityChecker/Phase23Cores.lean#L710) [GF-32](results.md#gf-32) | **Track B3, Lemma 5.1 (real telescoping gauge identity, shifted carry `Δ`):** For `b ≥ 2` and any `a, Δ : ℕ → ℤ`, setting `a'(m) = a(m) + b Δ(m) - Δ(m + 1)`… |
+| [`Phase23Cores.carry_kernel_iff`](../NormalityChecker/Phase23Cores.lean#L740) [GF-32](results.md#gf-32) | **Track B3, carry-kernel characterization (0-indexed):** `δ m - b * δ (m - 1) = 0` for all `m ≥ 1` iff `δ m = δ 0 * b^m` for all `m`. |
+| [`Phase23Cores.carry_kernel_eq_zero_of_tendsto`](../NormalityChecker/Phase23Cores.lean#L761) [GF-32](results.md#gf-32) | **Track B3, vanishing of `o(b^m)` zero-gauge carries (0-indexed):** If `δ m - b * δ (m - 1) = 0` for all `m ≥ 1` and `δ m / b^m → 0`, then `δ` is identically… |
+| [`Phase23Cores.carry_kernel_shift_iff`](../NormalityChecker/Phase23Cores.lean#L780) | **Track B3, carry-kernel characterization (shifted index `Δ`):** `b * Δ m - Δ (m + 1) = 0` for all `m ≥ 1` iff `Δ m = Δ 1 * b^(m - 1)` for all `m ≥ 1`. |
+| [`Phase23Cores.carry_kernel_shift_eq_zero_of_tendsto`](../NormalityChecker/Phase23Cores.lean#L806) | **Track B3, vanishing of `o(b^m)` zero-gauge carries (shifted index `Δ`):** If `b * Δ m - Δ (m + 1) = 0` for all `m ≥ 1` and `Δ m / b^m → 0`, then `Δ m = 0`… |
+| [`Phase23Cores.carry_zero_transition`](../NormalityChecker/Phase23Cores.lean#L832) | **Track B3, Theorem 5.5(b) (three-state zero-cost carry transitions):** For `b ≥ 2`, `δ, δ' ∈ {-1, 0, 1}`, and `0 ≤ d < b`, the cost-free transitions `d + b δ… |
+| [`Phase23Cores.erdosBorweinPlusCoeff_mul_add_odd_nonpos`](../NormalityChecker/Phase23Cores.lean#L845) [GF-35](results.md#gf-35) | **Track E1.2, Theorem 2.2(1) (pointwise odd-shift anticorrelation of `a_+`):** For every `n ≥ 1` and every odd `h`, `erdosBorweinPlusCoeff n *… |
+| [`Phase23Cores.erdosBorweinPlusCoeff_four_consec_eq_zero`](../NormalityChecker/Phase23Cores.lean#L868) [GF-35](results.md#gf-35) | **Track E1.2, §2.3 (four-point consecutive vanishing of `a_+`):** For every `n ≥ 1`, one of `n, n + 1, n + 2, n + 3` is `2 (mod 4)`, so `a_+(n) * a_+(n + 1) *… |
+| [`Phase23Cores.erdosBorweinPlusCoeff_emod_two`](../NormalityChecker/Phase23Cores.lean#L888) | **Track E1.1, Proposition 1.1 (exact mod-2 reduction of `a_+`):** For every `n ≥ 1`, `erdosBorweinPlusCoeff n % 2 = if IsSquare n then 1 else 0`. |
+| [`Phase23Cores.erdosBorweinPlusCoeff_peel_one`](../NormalityChecker/Phase23Cores.lean#L903) [GF-35](results.md#gf-35) | **Track E1.1, Theorem 1.5 (`j = 1` theta peeling identity):** For every `n ≥ 1`, `erdosBorweinPlusCoeff n = (if IsSquare n then 1 else 0) + 2 *… |
+| [`Phase23Cores.floor_half_tau_sub_floor_half_plus`](../NormalityChecker/Phase23Cores.lean#L911) | **Track E1.1, §1.4 (peel difference identity):** `⌊τ(n)/2⌋ - ⌊a_+(n)/2⌋ = [2 ∣ n] τ(n / 2)` for every `n : ℕ`. |
+| [`Phase23Cores.three_dvd_triNum_pow_mul_odd`](../NormalityChecker/Phase23Cores.lean#L921) [GF-30](results.md#gf-30) | **Track A3, §6 (exact content 3 of `D^j E^3`):** For every `k : ℕ` and every `j ≥ 1`, `3 ∣ (k * (k + 1) / 2) ^ j * (2 * k + 1)`. |
+| [`Phase23Cores.glaisher_wieferich_zmod`](../NormalityChecker/Phase23Cores.lean#L1018) [GF-35](results.md#gf-35) | **Track E2, Proposition 5.4 (Glaisher–Wieferich congruence in `ZMod p`):** For every odd prime `p`, `∑_{k = 1}^{p - 1} 2^(p - 1 - k) · k⁻¹ = ((2^(p - 1) - 1)… |
+| [`Phase23Cores.glaisher_wieferich_alt_zmod`](../NormalityChecker/Phase23Cores.lean#L1109) | Alternate reversed form of the Glaisher–Wieferich congruence: `((2^(p - 1) - 1) / p : ZMod p) = - ∑_{k = 1}^{p - 1} 2^(k - 1) · k⁻¹`. |
+| [`Phase23Cores.glaisher_wieferich_zero_iff`](../NormalityChecker/Phase23Cores.lean#L1135) [GF-35](results.md#gf-35) | **Track E2, Proposition 5.4 (Wieferich criterion in `ZMod p`):** For an odd prime `p`, the `ZMod p` BBP sum vanishes iff `p² ∣ 2^(p - 1) - 1`. |
+| [`Phase23Cores.ln2Prefix_num_dvd_iff_wieferich`](../NormalityChecker/Phase23Cores.lean#L1157) [GF-35](results.md#gf-35) | **Track E2, Proposition 5.4 (exact reduced numerator criterion for `ln 2`):** For every odd prime `p`, `p ∣ A_{p - 1} ↔ p² ∣ 2^(p - 1) - 1`, where `A_{p - 1}`… |
 
 ### PositiveSummation
 

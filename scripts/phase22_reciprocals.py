@@ -23,9 +23,16 @@ Sections:
      concrete 0+/1- sign mixing in base 2, and consecutive-k prescribed-alpha
      approximation.
 
-Standard library only. Orbit values use 40-bit (48-bit in Section 2) truncations
-of exact rational expansions; they are finite-scale measurements, not interval
-certificates.
+Standard library only. Evidence types (see the note, Section 7):
+  * exact checks: integer/modular arithmetic, Z[q] polynomial identities, exact Fraction
+    arithmetic (the divisor sums of Lemma 2.2, the grid discrepancies of Lemma 2.4(1),
+    the band and tail identities of Lemma 5.2, and the bias recursion (5.5));
+  * finite numerical samples: floating-point comparisons with tolerances (the logarithmic
+    divisor bounds, circular W_1, Weyl/Koksma samples for the rational R_4, orbit
+    statistics, the 13/22 mixing example, the prescribed-alpha approximations).
+Orbit values use 40-bit (48-bit in Section 2) truncations of exact rational expansions;
+they are finite-scale measurements of rational numbers, not interval certificates, and
+they do not prove any asymptotic statement.
 
 Run from the repository root:  python -B scripts/phase22_reciprocals.py
 """
@@ -187,9 +194,22 @@ def orbit_from_fraction_fast(
     return xs, digs
 
 
+def discrepancy_exact(values: list[Fraction]) -> Fraction:
+    """Extreme interval discrepancy of a finite point set in [0, 1), in exact rationals."""
+    ordered = sorted(values)
+    n = len(ordered)
+    high = Fraction(0)
+    low = Fraction(0)
+    for i, y in enumerate(ordered):
+        high = max(high, Fraction(i + 1, n) - y)
+        low = min(low, Fraction(i, n) - y)
+    return high - low
+
+
 def wasserstein1_empirical_to_lambda(xs: list[float]) -> float:
-    """Exact circular W_1 distance on R/Z between the empirical measure of xs and
-    Lebesgue measure: inf_{c in R} int_0^1 |F_n(t) - t - c| dt."""
+    """Circular W_1 distance on R/Z between the empirical measure of xs and Lebesgue
+    measure, inf_{c in R} int_0^1 |F_n(t) - t - c| dt, evaluated in floating point
+    (bisection for the median c): a finite numerical value, not an exact certificate."""
     ordered = sorted(xs)
     n = len(ordered)
     segs: list[tuple[float, float, float]] = []
@@ -327,25 +347,27 @@ def section_improved_rates() -> None:
                     pb_checks += 1
     print(f"  Sharpened partial-band inequality (constant 3 -> 1) verified on {pb_checks} tuples: ok")
 
-    # 2b. Exact divisor-sum bound (Lemma 2.2):
-    harm = [0.0] * 5005
-    for n in range(1, len(harm)):
-        harm[n] = harm[n - 1] + 1.0 / n
+    # 2b. Divisor-sum bound (Lemma 2.2).  The first inequality compares two rationals exactly
+    #     (common denominator lcm(1..H)); the comparison with tau_{<=H}(D)(1 + log H) is in
+    #     floating point (tolerance 1e-12), and tau_{<=H}(D) <= tau(D) is an integer comparison.
     test_Ds = [1, 3, 12, 45, 60, 120, 360, 720, 2520, 4095, 5040]
     for D in test_Ds:
         divs = divisors(D)
         tD = len(divs)
         for H in (10, 50, 200, min(D, 2000), 2000):
-            exact = sum(gcd(h, D) / h for h in range(1, H + 1))
-            sharp_div = sum(harm[H // d] for d in divs if d <= H)
+            Lc = math.lcm(*range(1, H + 1))
+            exact_num = sum(gcd(h, D) * (Lc // h) for h in range(1, H + 1))
+            harm_num = [0] * (H + 1)
+            for n in range(1, H + 1):
+                harm_num[n] = harm_num[n - 1] + Lc // n
+            sharp_num = sum(harm_num[H // d] for d in divs if d <= H)
             tau_le_H = sum(1 for d in divs if d <= H)
             bound_log = tau_le_H * (1.0 + math.log(H))
-            bound_tau = tD * (1.0 + math.log(H))
-            check(exact <= sharp_div + 1e-12, f"exact <= sharp_div failed D={D}, H={H}")
-            check(sharp_div <= bound_log + 1e-12, f"sharp_div <= bound_log failed D={D}, H={H}")
-            check(bound_log <= bound_tau + 1e-12, f"bound_log <= bound_tau failed D={D}, H={H}")
-    print(f"  Divisor-sum bound sum_{{h<=H}} gcd(h,D)/h <= sum_{{d|D, d<=H}} H_{{floor(H/d)}} "
-          f"<= tau(D)(1 + log H) verified on {len(test_Ds)} moduli: ok")
+            check(exact_num <= sharp_num, f"exact <= sharp_div failed D={D}, H={H}")
+            check(float(Fraction(sharp_num, Lc)) <= bound_log + 1e-12, f"sharp_div <= bound_log failed D={D}, H={H}")
+            check(tau_le_H <= tD, f"bound_log <= bound_tau failed D={D}, H={H}")
+    print(f"  Divisor-sum bound sum_{{h<=H}} gcd(h,D)/h <= sum_{{d|D, d<=H}} H_{{floor(H/d)}} (exact rationals) "
+          f"<= tau(D)(1 + log H) (floating point) on {len(test_Ds)} moduli: ok")
 
     # 2c. Quantitative comparison of main (D_{K-2} and omega_{K-1}) Erdos-Turan terms
     #     at omega_{K-1} = D_{K-2} (omitting the smaller c_b(H)/m_K term):
@@ -370,9 +392,10 @@ def section_improved_rates() -> None:
         check(b22 < b21, f"Phase 22 bound should beat Phase 21 at D={D}")
         print(f"    {label:>14} {D:18d} {tD:7d} {b21:18.4e} {b22:18.4e} {b21/b22:8.1f}x")
 
-    # 2d. Exact complete-period discrepancy D(mu_K) <= 1 / D_{K-1} and circular W_1 <= 1 / (4*D_{K-1}):
+    # 2d. Complete-period discrepancy D(mu_K) <= 1 / D_{K-1} (exact rationals) and circular
+    #     W_1 <= 1 / (4*D_{K-1}) (floating point, tolerance 1e-9):
     print()
-    print("  Exact complete-period discrepancy D(mu_K) <= 1/D_{K-1} and W_1(mu_K, lambda) <= 1/(4*D_{K-1}):")
+    print("  Complete-period discrepancy D(mu_K) <= 1/D_{K-1} (exact) and W_1(mu_K, lambda) <= 1/(4*D_{K-1}) (float):")
     for b, ms in [(2, [2, 4, 48]), (3, [2, 4]), (5, [1, 2])]:
         R = Fraction(1)
         D_prev = 1
@@ -383,20 +406,24 @@ def section_improved_rates() -> None:
             if T <= 5000:
                 A = R.numerator % D
                 x = A
-                pts = []
+                pts_exact = []
                 for _ in range(T):
-                    pts.append(x / D)
+                    pts_exact.append(Fraction(x, D))
                     x = (x * b) % D
-                dm = discrepancy(pts)
+                pts = [float(z) for z in pts_exact]
+                dm_exact = discrepancy_exact(pts_exact)
+                dm = float(dm_exact)
                 w1 = wasserstein1_empirical_to_lambda(pts)
-                check(dm <= 1.0 / D_prev + 1e-12, f"D(mu_K) > 1/D_{{K-1}} for b={b}, k={k}")
+                check(dm_exact <= Fraction(1, D_prev), f"D(mu_K) > 1/D_{{K-1}} for b={b}, k={k}")
                 check(w1 <= 1.0 / (4 * D_prev) + 1e-9, f"W_1(mu_K, lambda) > 1/(4*D_{{K-1}}) for b={b}, k={k}")
                 print(f"    b={b}, k={k}, m_k={m:2d}, D_{{k-1}}={D_prev:3d}, T_k={T:4d}: "
                       f"D(mu_k)={dm:.6f} <= {1/D_prev:.6f},  W1={w1:.6f} <= {1/(4*D_prev):.6f}")
             D_prev = D
 
     # 2e. Sharpened Weyl bound (Theorem 2(1)) on BOTH complete-band and partial-band prefixes
-    #     plus Koksma lower bound on b = 2, m = (2, 4, 48, 43200):
+    #     plus Koksma lower bound on b = 2, m = (2, 4, 48, 43200).  Finite numerical samples:
+    #     the orbit is that of the rational R_4 (not of y), truncated to 48 bits, and the
+    #     comparisons are in floating point with tolerance 1e-9.
     R3 = Fraction(4, 3) * Fraction(16, 15) * Fraction(2**48, 2**48 - 1)
     R4 = R3 * Fraction(2**43200, 2**43200 - 1)
     D2 = 45
@@ -421,7 +448,8 @@ def section_improved_rates() -> None:
     worst_ratio = 0.0
     worst_info = (0, 0, 0.0, 0.0, 0.0)
     print()
-    print("  Partial-band Weyl check (Theorem 2(1)) on b=2, m=(2,4,48,43200), D_2=45, T_3=2160:")
+    print("  Partial-band Weyl samples (Theorem 2(1)) for the rational R_4, b=2, m=(2,4,48,43200), D_2=45, T_3=2160")
+    print("  (48-bit truncation, floating point; finite numerical samples):")
     for N in prefixes:
         DN = discrepancy(xs4[:N])
         for h in hs:
@@ -453,7 +481,8 @@ def section_improved_rates() -> None:
     print(f"    At N=3*m_4-1={3*m4-1}, h=15: |W_15|={W15_3m:.4f} <= new bound {b22_15:.4f} (P21={b21_15:.4f})")
     print(f"    At N=m_4={m4}: |W_45(m_4)|={W45_m4:.5f}, Koksma LB={koksma_lb:.5f} <= D_{{m_4}}={DN_m4:.5f}: ok")
 
-    # 2f. Balanced log-tower audit for omega_k = D_{k-1} (m_{k+1} = m_k * D_{k-1}^2) in base 2:
+    # 2f. Balanced log-tower audit for omega_k = D_{k-1} (m_{k+1} = m_k * D_{k-1}^2) in base 2
+    #     (floating-point logarithms; a finite numerical illustration):
     lm = [0.0, math.log2(2), math.log2(4)]
     lD = [0.0, math.log2(3), math.log2(45)]
     for k in range(3, 8):
@@ -791,7 +820,8 @@ def section_cyclotomic_simple_normality() -> None:
     #     Applying P_4 at m = 256 (T_mix = 198*256 = 50688) predicts
     #     Delta_new = (2*0.5 + 1)/11 = 2/11, f_0 = 13/22 = 0.5909.
     print()
-    print("  [5c] Concrete 0+/1- sign mixing in base 2 (high D while f_0 drops to exact 13/22):")
+    print("  [5c] Concrete 0+/1- sign mixing in base 2 (high D while f_0 drops near the predicted 13/22;")
+    print("       40-bit numerical measurement, tolerance 0.01):")
     R_init = Fraction(2**32, 2**32 + 1) * Fraction(2**128, 2**128 + 1)
     T_init = 256
     xs_init, digs_init = orbit_from_fraction_fast(R_init, 2, T_init, W=40)
@@ -818,19 +848,24 @@ def section_cyclotomic_simple_normality() -> None:
     print(f"    After  P_4 (m={m_p4}, T={T_mix:5d}): D={D_mix:.4f}, f_0={f0_mix:.4f} (pred {pred_f0_mix:.4f}), "
           f"0+={near0_p:.4f}, 1-={near1_m:.4f}, f_00={f00_mix:.4f}, f_11={f11_mix:.4f}")
 
-    delta = 0.0
-    w_rem = 1.0
+    # Ideal stratum-model bias B_j = (1 + 2 B_{j-1})/(2j + 3), B_0 = 0, in exact rationals.
+    # B_j ~ 1/(2j) (so 2 j B_j -> 1); this is distinct from the empirical O(J^(-1/4)) bound.
+    delta = Fraction(0)
+    w_rem = Fraction(1)
     for j in range(1, 501):
-        w_rem *= 1.0 - 1.0 / (2 * j + 3)
-        delta = (2.0 * delta + 1.0) / (2 * j + 3)
-        check(abs(delta) <= 3.0 / (2 * j + 3) + 1e-15, "bias contraction bound failed")
-    check(w_rem < 0.08 and delta < 0.002, "asymptotic convergence of (w_rem, delta)")
-    print(f"    Exact recursion at J=500: remaining old weight={w_rem:.5f} -> 0, "
-          f"bias B_500={delta:.6f} <= 3/1003")
+        w_rem *= 1 - Fraction(1, 2 * j + 3)
+        delta = (2 * delta + 1) / (2 * j + 3)
+        check(0 <= delta <= Fraction(3, 2 * j + 3), "bias contraction bound failed")
+    two_j_B = 2 * 500 * delta
+    check(w_rem < Fraction(8, 100) and delta < Fraction(2, 1000) and abs(two_j_B - 1) < Fraction(1, 500),
+          "asymptotic behaviour of (w_rem, B_j): w_rem -> 0 and 2 j B_j -> 1")
+    print(f"    Exact rational recursion at J=500: remaining old weight={float(w_rem):.5f} -> 0, "
+          f"bias B_500={float(delta):.6f} <= 3/1003, 2*500*B_500={float(two_j_B):.6f} (B_j ~ 1/(2j))")
 
     # 5d. Consecutive-k prescribed discrepancy approximation for arbitrary alpha in (0, 1):
     print()
-    print("  [5d] Consecutive-k prescribed discrepancy prod_{k=s}^{s+t_s-1} (1 - 1/(2k+3)) -> 1 - alpha:")
+    print("  [5d] Consecutive-k prescribed discrepancy prod_{k=s}^{s+t_s-1} (1 - 1/(2k+3)) -> 1 - alpha")
+    print("       (floating point; five interior targets, finite numerical samples):")
     targets = [
         ("1/pi", 1.0 / math.pi),
         ("sqrt(2)/2", math.sqrt(2.0) / 2.0),
@@ -868,6 +903,7 @@ def main() -> None:
     for name, count in SECTION_CHECKS.items():
         print(f"  {name:42s}: {count:6d}")
     print(f"Total: {total} checks passed in {perf_counter() - t0:.2f} s")
+    print("(Checks mix exact identities and finite numerical comparisons with tolerances; see note Section 7.)")
 
 
 if __name__ == "__main__":

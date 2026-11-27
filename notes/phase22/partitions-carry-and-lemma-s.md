@@ -2,7 +2,7 @@
 
 Phase 22, Track D (sub-tracks D3 and D4) and Track G1, Correction C. Fix an integer radix $b\ge2$. Notation follows [Phase 21, partitions-and-higher-modular](../phase21/partitions-and-higher-modular.md) and [Phase 21, euler-scalings-and-reciprocals](../phase21/euler-scalings-and-reciprocals.md): $x_n=\{b^nx\}$, $D_N(x)$ is the extreme (interval) discrepancy of $x_0,\dots,x_{N-1}$, $\|\cdot\|$ is the distance to the nearest integer, $K_b=\{z:D_N(z)\to1\}$, $F_b=\{c:(b-1)c\in\mathbb Z\}$, and $M_N(w)=N^{-1}\sum_{n<N}\|b^nw\|$. By [Phase 19](../phase19/geometry.md#asymptotic-kernel-and-arithmetic-operations), $K_b=F_b+\{w:M_N(w)\to0\}$. For an integer sequence $a$ we write $F_b(a)=\sum_{m\ge0}a(m)b^{-m}$, $S_a(X)=\#\{1\le m\le X:a(m)\neq0\}$, and $A_a(X)=\sum_{1\le m\le X}|a(m)|$. $E(q)=\prod_{k\ge1}(1-q^k)$, $E_b=E(1/b)$, $E(q)^2=\sum_na_2(n)q^n$, and $\varphi$ is Euler's function.
 
-**Scope and evidence.** "Paper proof" means proved here from the cited published inputs. The only non-elementary input in §1 is Phase 20 Theorem 6(a), which rests on the cited identification of $\eta(12\tau)^2$ as a CM eigenform (see [euler-product §5](../phase20/euler-product.md#5-the-square-of-eulers-product)). The other inputs to §1 are classical: Mertens, Dirichlet–Mertens in progressions (Apostol, Thm. 7.3), and Wirsing. All finite statements are checked by [`scripts/phase22_partitions_carry.py`](../../scripts/phase22_partitions_carry.py) (standard library, about 6 s, 1,256,966 checks, exit 0; §4). Every discrepancy, frequency, density and ratio quoted from it is a **finite measurement** and is not evidence for any asymptotic statement.
+**Scope and evidence.** "Paper proof" means proved here from the cited published inputs. The only non-elementary input in §1 is Phase 20 Theorem 6(a), which rests on the cited identification of $\eta(12\tau)^2$ as a CM eigenform (see [euler-product §5](../phase20/euler-product.md#5-the-square-of-eulers-product)). The other inputs to §1 are classical: Mertens, Dirichlet–Mertens in progressions (Apostol, Thm. 7.3), and Wirsing. All finite statements are checked by [`scripts/phase22_partitions_carry.py`](../../scripts/phase22_partitions_carry.py) (standard library, about 6 s, 1,256,966 checks, exit 0; §4). The Selberg instances of §1.6 are compared as exact rationals; the Rankin, Mertens and average-factor experiments are floating-point **numerical samples** at finitely many checkpoints, which neither verify a universal constant nor test an asymptotic estimate (the proofs bound those quantities independently). Every discrepancy, frequency, density and ratio quoted from it is a **finite measurement** and is not evidence for any asymptotic statement.
 
 | § | Result | Status |
 | --- | --- | --- |
@@ -224,7 +224,7 @@ The identity $h/\varphi(h)=\sum_{d\mid h}\mu(d)^2/\varphi(d)$ holds because both
 
 For $N\ge N_1$, Proposition S′ gives Theorem S with constant $1.9436\,C_1$. For $2\le N<N_1$ the trivial bound $HN\le(\log N_1)^{3/2}HN/(\log N)^{3/2}$ applies. Take $C_0=\max(1.9436\,C_1,(\log N_1)^{3/2})$. $\square$
 
-The script checks $\sum_{h\le H}h/\varphi(h)\le1.94360\,H$ for every $H\le10^4$.
+The script samples $\sum_{h\le H}h/\varphi(h)\le1.94360\,H$ numerically (floating point) for every $H\le10^4$; the proof above does not use this sample.
 
 ### 1.6 Comparison with the Phase 21 sketch
 
@@ -241,7 +241,7 @@ The script checks $\sum_{h\le H}h/\varphi(h)\le1.94360\,H$ for every $H\le10^4$.
 \sum_{h\le50}P_h(50000)=326{,}704,\qquad \frac{326704\,(\log N)^{3/2}}{HN}=4.651 .
 ```
 
-The per-shift ratio $P_h(N)(\log N)^{3/2}/((h/\varphi(h))N)$ lies in $[1.356,4.390]$, with mean $2.846$ and maximum at $h=1$. The Selberg inequality of Lemma S.1 holds, with $|\lambda_d|\le1$, in three exact instances; for $h=6$, $X=3000$, sifting primes in $\mathcal P_0\cap[5,31]$ and $\xi=60$, the values are $S=662\le\sum_m(\sum_{d\mid F(m)}\lambda_d)^2=939.9\le939.6+21.0$. Here $21.0$ is the $\lambda$-weighted remainder $\sum|\lambda_{d_1}\lambda_{d_2}r_{[d_1,d_2]}|$ from the proof of Lemma S.1; the unweighted remainder $\sum|r_{[d_1,d_2]}|$ displayed in Lemma S.1 is $77.1$ (and $67.7$, $81.1$ for $h=25,35$), and the script checks $|r_d|\le\rho(d)$ exactly. The Rankin chain $G(\xi)\ge\sum_{n<\xi}\kappa(n)/n\ge\Pi-\xi^{-\delta}\Pi_\delta$ of Lemma S.2 is verified at $z=60$ for $\xi=10^3,10^4,10^5$. These are finite checks of the inequalities used, not estimates of $C_0$.
+The per-shift ratio $P_h(N)(\log N)^{3/2}/((h/\varphi(h))N)$ lies in $[1.356,4.390]$, with mean $2.846$ and maximum at $h=1$. The Selberg inequality of Lemma S.1 holds, with $|\lambda_d|\le1$, in three exact instances (the script compares the rational quantities directly, with no tolerance; the decimals below are roundings); for $h=6$, $X=3000$, sifting primes in $\mathcal P_0\cap[5,31]$ and $\xi=60$, the values are $S=662\le\sum_m(\sum_{d\mid F(m)}\lambda_d)^2=939.9\le939.6+21.0$. Here $21.0$ is the $\lambda$-weighted remainder $\sum|\lambda_{d_1}\lambda_{d_2}r_{[d_1,d_2]}|$ from the proof of Lemma S.1; the unweighted remainder $\sum|r_{[d_1,d_2]}|$ displayed in Lemma S.1 is $77.1$ (and $67.7$, $81.1$ for $h=25,35$), and the script checks $|r_d|\le\rho(d)$ exactly. The Rankin chain $G(\xi)\ge\sum_{n<\xi}\kappa(n)/n\ge\Pi-\xi^{-\delta}\Pi_\delta$ of Lemma S.2 is sampled numerically (floating point) at $z=60$ for $\xi=10^3,10^4,10^5$. These are finite checks of the inequalities used, not estimates of $C_0$.
 
 ### 1.7 Completion of Theorem D1.5
 
@@ -255,7 +255,7 @@ The inputs are Phase 20 Theorem 6(a) (cited eigenform identification), Wirsing's
 
 *(iii) Counting.* Let $S'$ be the set of $n$ with $12n+1=uv^2$, $u$ squarefree and composed of primes $\equiv1\pmod{12}$, and $v$ composed of primes in $\mathcal P_0$. By Theorem 6(a), $|a_2(n)|=2^{\omega(u)}$ on $S'$, so $S'\subseteq S_\ell$. The indicator of $\{uv^2\}$ is multiplicative, equals $1$ at primes $\equiv1\pmod{12}$ (prime density $\tfrac14$) and $0$ at the other primes, and is bounded on prime powers. Every such $m=uv^2$ is $\equiv1\pmod{12}$. Wirsing's theorem gives $\#\{m\le x\}\sim c\,x(\log x)^{-3/4}$ with $c>0$, hence $|S'\cap(N/2,N]|\ge\kappa N(\log N)^{-3/4}$ for $N\ge N_2$, with some $\kappa>0$.
 
-By Theorem S applied twice (to $n$ and to $n-h$), at most $2C_0HN(\log N)^{-3/2}$ elements of $(N/2,N]$ have another point of $\operatorname{supp}a_2\supseteq S_\ell$ within distance $H$. Take $H=\lfloor\kappa(\log N)^{3/4}/(4C_0)\rfloor$, so this is at most $\tfrac12\kappa N(\log N)^{-3/4}$. Then at least $\tfrac12\kappa N(\log N)^{-3/4}$ points $n_i\in S_\ell\cap(N/2,N]$ have both neighbouring gaps at least $H$. At each of them, by (ii), $[n_i-H,n_i)$ or $[n_i,n_i+H)$ lies in a run that avoids $c$. The left stretches are pairwise disjoint, and so are the right ones, so each $n$ lies in at most two stretches. Hence
+By Theorem S applied twice (to $n$ and to $n-h$), at most $2C_0HN(\log N)^{-3/2}$ supported elements of $(N/2,N]$ (elements of $\operatorname{supp}a_2$) have another point of $\operatorname{supp}a_2\supseteq S_\ell$ within distance $H$. Take $H=\lfloor\kappa(\log N)^{3/4}/(4C_0)\rfloor$, so this is at most $\tfrac12\kappa N(\log N)^{-3/4}$. Then at least $\tfrac12\kappa N(\log N)^{-3/4}$ points $n_i\in S_\ell\cap(N/2,N]$ have both neighbouring gaps at least $H$. At each of them, by (ii), $[n_i-H,n_i)$ or $[n_i,n_i+H)$ lies in a run that avoids $c$. The left stretches are pairwise disjoint, and so are the right ones, so each $n$ lies in at most two stretches. Hence
 
 ```math
 \#\{n<N+H:\ I_n\not\equiv c\pmod\ell\}\ \ge\ \frac H2\cdot\frac{\kappa N}{2(\log N)^{3/4}}\ \ge\ \frac{\kappa^2}{20\,C_0}\,N
@@ -325,7 +325,7 @@ For the admissible example $m=(2,4,48,43200)$ of Phase 21, (b) gives $T=(2,12,21
 
 The hypothesis $b^{m_{K+1}}\ge64$ cannot be dropped: for $b=2$, $M=\{1,2,4,5,6,8,9\}$ and $K=1$, $R_1=2$ while $P_2(M)=3.00036\ldots$, and the fractional parts agree in 11 binary digits although $m_2=2$ (script).
 
-So on $[0,m_{K+1}-O(\log m_{K+1}))$ the orbit of $P_b(M)$ is the orbit of $R_K$. That orbit is purely periodic with period $T_K$.
+So on $[0,m_{K+1}-O(\log m_{K+1}))$ the orbit of $P_b(M)$ tracks the orbit of $R_K$: the two orbits are close, with $\|b^nP_b(M)-b^nR_K\|\le32\,b^{n-m_{K+1}}$, but they are not identical. The orbit of $R_K$ is purely periodic with period $T_K$.
 
 ### 2.4 Distribution along tetration steps, with arbitrary filling
 
@@ -337,7 +337,7 @@ D_N\bigl(P_b(M)\bigr)\ \le\ \frac6{D_{K-1}}+\frac{T_K}N+\frac LN+64\,b^{-L},\qqu
 
 Consequently, if infinitely many $K$ satisfy $T_{K-1}\mid m_K$ and $m_{K+1}/(m_KD_{K-1})\to\infty$ along them, then $\liminf_ND_N(P_b(M))=0$. In particular $P_b(M)\notin K_b$. Nothing is assumed about the other elements of $M$.
 
-*Proof.* Phase 21, Lemma D2.2, uses only $T_{K-1}\mid m_K$, $\gcd(b,D_{K-1})=1$ and reducedness of $R_{K-1}$. It gives that the cycle Fourier coefficients $\widehat C_K(h)$ of $R_K$ vanish unless $D_{K-1}\mid h$. The Erdős–Turán inequality with $H=D_{K-1}-1$ bounds the full-period discrepancy by $6/D_{K-1}$. Writing $N=qT_K+r$ gives $ND_N(R_K)\le qT_KD_{T_K}(R_K)+r$, so $D_N(R_K)\le6/D_{K-1}+T_K/N$.
+*Proof.* Phase 21, Lemma D2.2, uses only $T_{K-1}\mid m_K$, $\gcd(b,D_{K-1})=1$ and reducedness of $R_{K-1}$. It gives that the cycle Fourier coefficients $\widehat C_K(h)$ of $R_K$ vanish unless $D_{K-1}\mid h$. The Erdős–Turán inequality with $H=D_{K-1}-1$ bounds the full-period discrepancy by $6/D_{K-1}$. (If $D_{K-1}=1$, which happens only for $b=2$, $K=2$, $m_1=1$, the bound $6/D_{K-1}\ge1$ is trivial and Erdős–Turán with cutoff zero is not needed.) Writing $N=qT_K+r$ gives $ND_N(R_K)\le qT_KD_{T_K}(R_K)+r$, so $D_N(R_K)\le6/D_{K-1}+T_K/N$.
 
 By Lemma D3.10, for $n<\min(N,m_{K+1}-L)$ we have $\|b^nP_b(M)-b^nR_K\|\le32b^{-L}$, and at most $L$ indices $n<N$ remain. If $\|y_n-x_n\|\le\eta$ off a set of $B$ indices, then for every arc $J$, $\#\{x_n\in J\}\le\#\{y_n\in J^\eta\}+B$ and $\#\{x_n\in J\}\ge\#\{y_n\in J^{-\eta}\}-B$, so $|D_N(x)-D_N(y)|\le2\eta+B/N$. This gives the bound. For the consequence, take $N=m_{K+1}$ and $L=\lceil\log_bm_{K+1}\rceil$, and use $D_{K-1}\ge b^{m_{K-1}}-1\to\infty$ and Proposition D3.9(b). $\square$
 
@@ -356,14 +356,14 @@ The reciprocal mechanism of Phases 20–21 needs **(R1)**: the tracked prefix, o
 | schedule $M$ | period $T_K$ | (R1): $m_{K+1}/T_K$ | (R2) | carry window at $N$ |
 | --- | --- | --- | --- | --- |
 | polynomial $\{k^d\}$ ($d=1$: $P_b$) | $\ge\operatorname{lcm}(1,\dots,K)^d=e^{dK(1+o(1))}$ | $\to0$ exponentially | — | $\asymp N^{1/(d+1)}$ |
-| chains: $\{c^k\}$, $\{k!\}$, $\{2^{k^2}\}$, $\{2^{2^k}\}$ ($k\ge1$) | $=m_KD_{K-1}$ under the parity condition of D3.9(c); always $\ge m_KD_{K-1}/2^{\max(0,\,v_2(b+1)-1)}$ (D3.9(c′)) | $\le2^{v_2(b+1)}m_{K+1}/(m_K(b^{m_{K-1}}-1))$, so $\to0$ unless $m_{K+1}/(m_Kb^{m_{K-1}})\to\infty$ | — | $\{2^k:k\ge0\}$: $\log_b\beta(N)+O(\log N)$ |
+| chains: $\{c^k\}$, $\{k!\}$, $\{2^{k^2}\}$, $\{2^{2^k}\}$ ($k\ge1$) | $=m_KD_{K-1}$ under the parity condition of D3.9(c); always $\ge m_KD_{K-1}/2^{\max(0,\,v_2(b+1)-1)}$ (D3.9(c′)) | $=2^{\epsilon_K}m_{K+1}/(m_KD_{K-1})$ with $\epsilon_K=0$ under D3.9(c) and $\epsilon_K=\min(K-2,\,v_2(b+1)-1)$ under D3.9(c′); $\to0$ for the four named chains | — | $\{2^k:k\ge0\}$: $\log_b\beta(N)+O(\log N)$ |
 | pairwise coprime, $b=2$ | $=\prod_{j\le K}m_j$ | $\to\infty$ iff $m_{K+1}/\prod_{j\le K}m_j\to\infty$ | convolution law, **unknown** | — |
 | admissible (A1)–(A2) | $=m_KD_{K-1}$, $T_K\mid m_{K+1}$ | $=\omega_K\to\infty$ | Fourier vanishing (Lemma D2.2) | normal (Phase 21 D2) |
 | tetration steps along a subsequence | $=m_KD_{K-1}$ at those $K$ | $\to\infty$ along them | Fourier vanishing | $\liminf D_N=0$ (Thm D3.11) |
 
 The window column for $\{k^d\}$ uses $\log p_M(n)\asymp n^{1/(d+1)}$ (Hardy–Ramanujan for $d=1$; Wright, Acta Math. 63 (1934), for $d\ge2$) and the window transfer of Phase 20, Lemma D1.1. Here $\operatorname{lcm}(k^d:k\le K)=\operatorname{lcm}(1,\dots,K)^d$, and the prime number theorem gives the exponential growth.
 
-**Conclusion.** Polynomial growth, geometric growth, and every super-exponential *divisibility chain* ($k!$, $2^{k^2}$, $2^{2^k}$) fall far below the tetration threshold: their periods are $m_KD_{K-1}$ under the parity condition of Proposition D3.9(c), and in every case at least $m_KD_{K-1}/2^{\max(0,\,v_2(b+1)-1)}$ by (c′), so $m_{K+1}/T_K\to0$ for all of them. The only regime below tetration where (R1) holds is the coprime one, where the period is a product rather than a tower. There (R2) fails, because the component numerators $c_j^{(K)}$ depend on every earlier $m_i$ and no vanishing is forced. For $M=\{2^k:k\ge1\}$, the case $K=2$ of Proposition D3.9(c) gives $T_2=4(b^2-1)$ in every base.
+**Conclusion.** Polynomial growth, geometric growth, and the named super-exponential *divisibility chains* ($k!$, $2^{k^2}$, $2^{2^k}$) fall far below the tetration threshold: their periods are $m_KD_{K-1}$ under the parity condition of Proposition D3.9(c), and in every case at least $m_KD_{K-1}/2^{\max(0,\,v_2(b+1)-1)}$ by (c′), so $m_{K+1}/T_K\to0$ for all of them. Among the schedules in the table, the only regime below tetration where (R1) holds is the coprime one, where the period is a product rather than a tower. For a general chain the exact ratio in the table can be unbounded along one subsequence and tend to $0$ along another, so no dichotomy is claimed beyond the named schedules. Outside the table, (R1) can hold without pairwise coprimality. In base 2 take $m_j=2p_j$ with distinct primes $p_j>3$ in $[\exp(3^j),2\exp(3^j)]$. The numbers $(4^{p_j}-1)/3$ are pairwise coprime and prime to $3$, the order of $2$ modulo each divides $2p_j$, and the remaining factor of $D_K$ is $3^K$. So $T_K\mid2\cdot3^{K-1}\prod_{j\le K}p_j$ and $m_{K+1}/T_K\to\infty$. This side observation plays no role in Theorem S or Theorem D1.5. There (R2) fails, because the component numerators $c_j^{(K)}$ depend on every earlier $m_i$ and no vanishing is forced. For $M=\{2^k:k\ge1\}$, the case $K=2$ of Proposition D3.9(c) gives $T_2=4(b^2-1)$ in every base.
 
 Finite table (base 2, exact orders; the script prints it):
 
@@ -428,9 +428,9 @@ The script checks $\beta(2n)=\sum_{j\le n}\beta(j)$ for $n\le2000$, the bound in
 
 (c) $1/Q_b=E_b/E_{b^2}=\prod_{k\ge1}(1-b^{-(2k-1)})=\sum_n(-1)^n\,\mathrm{sc}(n)\,b^{-n}$, where $\mathrm{sc}(n)$ is the number of partitions of $n$ into distinct odd parts, equivalently the number of self-conjugate partitions. There is no cancellation, and $\log\mathrm{sc}(n)\sim\pi\sqrt{n/6}$.
 
-*Proof.* (a) Group the factors by residue. (b) Euler's identity $\prod(1+q^m)=\prod_{m\text{ odd}}(1-q^m)^{-1}$, and $\prod_{m\text{ even}}(1-q^m)^{-1}=P(q^2)$. (c) $\prod(1+q^m)^{-1}=\prod(1-q^m)/\prod(1-q^{2m})$. In $\prod_{k}(1-q^{2k-1})$, a partition of $n$ into $j$ distinct odd parts contributes $(-1)^j$, and $j\equiv n\pmod2$. The asymptotic is the standard Meinardus-type estimate for $\prod(1+q^{2k-1})$. $\square$
+*Proof.* All identities hold as formal power series in $q$ and, by absolute convergence, at $q=1/b$. (a) Group the factors by residue. (b) Euler's identity (the even factors cancel) $\prod(1+q^m)=\prod_{m\text{ odd}}(1-q^m)^{-1}$, and $\prod_{m\text{ even}}(1-q^m)^{-1}=P(q^2)$. (c) $\prod(1+q^m)^{-1}=\prod(1-q^m)/\prod(1-q^{2m})$. In $\prod_{k}(1-q^{2k-1})$, a partition of $n$ into $j$ distinct odd parts contributes $(-1)^j$, and $j\equiv n\pmod2$. The asymptotic is the standard Meinardus-type estimate for $\prod(1+q^{2k-1})$. $\square$
 
-Each factor in (a)–(c) is again a dense-coefficient constant, with support density one and sub-exponential growth. Neither $K_b$ nor the set of normal numbers is closed under multiplication (Phase 20, §4.2), so these splittings replace one open problem by products of others. The script verifies (b) and (c) through $q^{800}$ ($\mathrm{sc}(200)=312{,}928$).
+Each factor in (a)–(c) is again a dense-coefficient constant with sub-exponential growth. Its support has density one after rescaling. In the common series variable $q=1/b$, a factor $P_{b,r,d}$ with $g=\gcd(r,d)>1$ (including $r=0$, where $g=d$) is supported on multiples of $g$; for example $P_{b^2}=P(q^2)$ has support of density $\tfrac12$. After the substitution of Proposition D3.8(a) its support is cofinite. The factors with $\gcd(r,d)=1$, and $Q_b$ and $1/Q_b$, have cofinite support directly. Neither $K_b$ nor the set of normal numbers is closed under multiplication (Phase 20, §4.2), so these splittings replace one open problem by products of others. The script verifies (b) and (c) through $q^{800}$ ($\mathrm{sc}(200)=312{,}928$).
 
 ### 2.8 Finite measurements (not evidence)
 
@@ -607,7 +607,7 @@ python -B scripts/phase22_partitions_carry.py
 
 Standard library only. The run takes about 6 s, performs 1,256,966 checks and exits 0. It checks the following.
 
-- **Lemma S.** Theorem 6(a) and the $uv^2$ split for every $n\le50{,}250$; exact pair counts for $h\le50$, $n\le50{,}000$; $g^2\mid h$ on all 326,704 pairs; the CRT class, the determinant $144h/g^2$ and $u=A_1m+B_1$ on 10,719 classes; $\rho(p)\in\{1,2\}$ as in S.4(d); three exact Selberg instances ($\lambda_1=1$, $|\lambda_d|\le1$, $|r_d|\le\rho(d)$, $S\le\sum(\sum\lambda)^2\le X/G+R_\lambda\le X/G+R$, with $R_\lambda$ the weighted and $R$ the unweighted remainder); the Rankin chain of S.2; the Mertens constant of S.3; the constants in $C_5$; $\sum_{h\le H}h/\varphi(h)\le1.9436H$ for $H\le10^4$; the class (i) bound.
+- **Lemma S.** Theorem 6(a) and the $uv^2$ split for every $n\le50{,}250$; exact pair counts for $h\le50$, $n\le50{,}000$; $g^2\mid h$ on all 326,704 pairs; the CRT class, the determinant $144h/g^2$ and $u=A_1m+B_1$ on 10,719 classes; $\rho(p)\in\{1,2\}$ as in S.4(d); three exact Selberg instances ($\lambda_1=1$, $|\lambda_d|\le1$, $|r_d|\le\rho(d)$, $S\le\sum(\sum\lambda)^2\le X/G+R_\lambda\le X/G+R$, with $R_\lambda$ the weighted and $R$ the unweighted remainder; exact rational comparisons with no tolerance); as floating-point numerical samples only, the Rankin chain of S.2, the Mertens constant of S.3, the constants in $C_5$ and $\sum_{h\le H}h/\varphi(h)\le1.9436H$ for $H\le10^4$; the class (i) bound.
 - **D3.** Binary partitions: recurrence, product form, the sum identity, the upper bound and the parity; the finite Mahler identity; exact windows; Euler's identities through $q^{800}$; exact periods by order tests in base 2 for $\mathbb Z_{\ge1}$, squares, the chains $2^k,3^k,k!,2^{k^2}$ ($k\ge1$), the coprime primes and the admissible schedule, including $T_K=m_KD_{K-1}$ wherever $T_{K-1}\mid m_K$ and on every base-2 chain tested; the odd-chain formula (c′) in bases 3, 7, 11; the digit bound of Lemma D3.10 under $b^{m_{K+1}}\ge64$ and the $K=1$ counterexample without it; the coprime convolution law; full-period discrepancy and Fourier vanishing for $M=\{1,2,3,6,252\}$; the finite discrepancy table.
 - **D4.** The NAF formula, NAF minimality and the base-$b$ minimal-weight dynamic program; Lemmas D4.10–D4.12; multiplicities; the width table; the net sequences of (E1) and (E2); the canonical representation in bases 2 and 3.
 
@@ -615,7 +615,7 @@ Standard library only. The run takes about 6 s, performs 1,256,966 checks and ex
 
 1. $P_b$, Mahler's $X_b$, and $P_b(\{k^2\})$: any distributional statement in any base.
 2. Is there an infinite $M$ with $P_b(M)\in K_b$? Is there one with $\limsup D_N(P_b(M))=1$?
-3. The full-period law of $R_K$ for coprime schedules, the only sub-tetration regime satisfying (R1).
+3. The full-period law of $R_K$ for coprime schedules (among the schedules in the table of §2.5, the only sub-tetration regime satisfying (R1)).
 4. A decomposition-free lower bound for the canonical net density of $E_b^4$; by Theorem D4.9, this is equivalent to $E_b^4\notin K_b$.
 5. The limit law of $\tfrac adE_b^2$ for odd $d>1$ (Phase 21, open problem 1). Lemma S now holds, but it gives non-membership, not the law.
 

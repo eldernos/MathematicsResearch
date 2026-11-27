@@ -1,0 +1,937 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\hypersetup{pdftitle={The Radix-Power Discrepancy Kernel Tower and Reciprocals of Extreme-Discrepancy Numbers}}
+\newcommand{\dist}[1]{\lVert #1\rVert}
+\newcommand{\fr}[1]{\{#1\}}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\phaseXXIcommit}{347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8}
+\newcommand{\phaseXXIIcommit}{8ca43095887858bf9697b6a8332c6a6dd0b0cda3}
+\newcommand{\leanR}[3]{\leanat{\phaseXXIcommit}{#1}{#2}{#3}}
+\newcommand{\leanT}[3]{\leanat{\phaseXXIIcommit}{#1}{#2}{#3}}
+\renewcommand{\ReleaseLabel}{candidate draft, not yet released}
+\setlength{\emergencystretch}{3em}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries The Radix-Power Discrepancy Kernel Tower\\[3pt] and Reciprocals of Extreme-Discrepancy Numbers\par}
+\vspace{10pt}
+\makebyline{1.0 (preprint draft)}{27 November 2026}
+\end{center}
+
+\begin{abstract}
+Fix an integer radix $b\ge2$. The \emph{discrepancy kernel} $K_b=\{x\in\R:D_N(x;b)\to1\}$ is the additive subgroup of reals whose base-$b$ shift orbits have maximal extreme interval discrepancy. We establish two structural theories concerning $K_b$: the complete arithmetic of its radix-power tower $K_{b^k}/K_b$, and the distributional behavior of reciprocals $1/x$ for $x\in K_b$.
+
+First, we decompose $K_b=F_b+M_b$ into the fixed-point subgroup $F_b=(b-1)^{-1}\Z$ and the zero-orbit subgroup $M_b=\{u:N^{-1}\sum_{n<N}\dist{b^nu}\to0\}$, prove $M_b=M_{b^k}$ and $K_{b^k}/K_b\cong\Z/((b^k-1)/(b-1))\Z$, and classify finite-order normality across the tower: for $b,k\ge2$ and $L\ge1$, $K_{b^k}\setminus K_b$ contains a base-$b$ $L$-normal real---and indeed an irrational of exact order $L$---if and only if $b^L\mid k$, while $K_{b^k}$ contains one if and only if $b^L\mid k$ or $(b,L)=(2,1)$. Every $L$-normal real satisfies the sharp bound $D^+(x;b)\le 2/b^L$, all values in $[0,2/b^L]$ occur as exact limiting discrepancies of $L$-normal reals, and tower witnesses are dense in $[0,2/b^L]$. The kernel decomposition, quotient, tower classification, and universal bound $D^+\le 2/b^L$ are kernel-verified in Lean~4.
+
+Second, we analyze reciprocals $y=1/x$ of extreme-discrepancy elements $x\in K_b$. For signed infinite products $x(\varepsilon)=\prod_{k\ge1}(1+\varepsilon_kb^{-m_k})\in K_b$, we prove exact period-lifting identities $\ord_{D(b^m-1)}(b)=mD$ under Hull--Dobell divisibility $\rad^*(D)\mid(b^m-1)$ and $\ord_{D(b^m+1)}(b)=2m$ under $D\mid(b^m-1)$ (both kernel-verified under $D\mid(b^m-1)$), sharpened Erd\H{o}s--Tur\'an rates at balanced multipliers $\omega_k=D_{k-1}$, a matching Koksma lower barrier, and Bang--Zsigmondy rigidity $\rad^*(b^m-1)\mid(b^n-1)\iff m\mid n$ extending both normality and the barrier to relaxed Hull--Dobell schedules. We obtain a complete sign classification of $D^-(y(\varepsilon);b)$ and $D^+(y(\varepsilon);b)$, prove that simple normality collapses to full normality within $y(\varepsilon)$, and introduce a cyclotomic family $P_k(q)$ realizing every $\alpha\in[0,1]$ as $D^+(1/x;b)=\alpha$ with simultaneous base-$2$ simple normality. Inverting rational seeds via $+1$-products and base-$b$ repunits $Q_b(q)=(1-q^b)/(1-q)$ yields a dense set of exact convergent reciprocal discrepancies in base~$2$, arbitrarily localized oscillation intervals in every base, and---through a refined Markov digraph $\mathcal{G}_{b,M}$ on $M=\lcm(1,\dots,b-1)\,b^L$ vertices---unconditional $L$-normal nonnormal reciprocals of $K_b$ elements for every $b\ge2$ and $L\ge1$. Finally, we break the tetration growth of divisible schedules via anchored coprime schedules in every base $b\ge2$ (achieving doubly exponential growth and all-prefix rate $O_{b,A}((\ln N)^{-A})$ for every $A>0$), prove all-prefix normality and complete-period sub-exponential equidistribution for fully coprime base-$2$ products via CRT convolution squaring, and establish complete-period equidistribution for the prime-exponent product and exponential complete-period equidistribution for the ordinary partition partial products $\prod_{j=1}^k(1-b^{-j})^{-1}$ in every base.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Throughout, $b\ge2$ is an integer radix, $\T=\R/\Z$, $\fr{y}=y-\lfloor y\rfloor\in[0,1)$ is the fractional part, $\dist{y}=\min(\fr{y},1-\fr{y})\in[0,1/2]$ is the distance to the nearest integer, and $e(\theta)=\exp(2\pi i\theta)$. For a real number $x$ and integer $N\ge1$, let
+\[
+\mu_N^{\mathrm{emp}}(x;b)=\frac1N\sum_{n=0}^{N-1}\delta_{\fr{b^nx}}, \qquad
+D_N(x;b)=\sup_{0\le a<c\le 1}\left|\mu_N^{\mathrm{emp}}(x;b)\bigl([a,c)\bigr)-(c-a)\right|
+\]
+be the empirical orbit measure on $\T$ (or $[0,1)$) and the \emph{extreme interval discrepancy} of the base-$b$ radix orbit. Write $D^-(x;b)=\liminf_{N\to\infty}D_N(x;b)$, $D^+(x;b)=\limsup_{N\to\infty}D_N(x;b)$, and $D_\infty(x;b)=\lim_{N\to\infty}D_N(x;b)$ when the limit exists. Let $\lambda$ denote Lebesgue measure on $\T$ and $W_1(\mu,\nu)=\inf_{(X,Y)}\mathbb E[\dist{X-Y}]$ the circular $1$-Wasserstein distance on $\T$. For $L\ge1$ and a base-$b$ word $w\in\{0,\dots,b-1\}^L$ of integer value $v=\sum_{j=1}^L w_j b^{L-j}\in\{0,\dots,b^L-1\}$ with cylinder $C_w=[v/b^L,(v+1)/b^L)$, let
+\[
+f_w(N;x,b)=\frac1N\#\{0\le n<N:\fr{b^nx}\in C_w\}
+\]
+be its empirical frequency. A real number $x$ is \emph{$L$-normal in base $b$} if $f_w(N;x,b)\to b^{-L}$ for every $w\in\{0,\dots,b-1\}^L$, of \emph{exact order $L$} if it is $L$-normal and not $(L+1)$-normal, \emph{simply normal} if it is $1$-normal, and \emph{normal} if it is $L$-normal for all $L\ge1$ (equivalently $D_N(x;b)\to0$ \cite[Chapter~1, Theorem~8.1]{KN}). We write $v_p$ for the $p$-adic valuation, $\ord_m(b)$ for the multiplicative order of $b$ modulo $m$, $\tau(D)=\#\{d\ge1:d\mid D\}$, and $\rad^*(D)=2^{\mathbf 1[4\mid D]}\prod_{p\mid D}p$ for the Hull--Dobell radical.
+
+The \emph{discrepancy kernel} (or numerical translation kernel) in base $b$ is
+\[
+K_b=\left\{x\in\R:\lim_{N\to\infty}D_N(x;b)=1\right\},
+\]
+and its \emph{zero-orbit subgroup} and \emph{fixed-point subgroup} are
+\[
+M_b=\left\{u\in\R:\lim_{N\to\infty}m_N(u;b)=0\right\},\qquad m_N(u;b)=\frac1N\sum_{n=0}^{N-1}\dist{b^nu},\qquad F_b=\frac1{b-1}\Z.
+\]
+Elements of $K_b$ represent the opposite extreme from normality: their orbits concentrate around fixed points of the base-$b$ shift, and adding an element of $K_b$ (in particular of $M_b$) preserves the discrepancy of any input. This paper studies two complementary questions about $K_b$: how the kernels grow under passing to radix powers $b\mapsto b^k$, and how far the nonlinear operation of reciprocation $x\mapsto 1/x$ can scatter elements of $K_b$ across the entire spectrum of base-$b$ normality, finite-order normality, and discrepancy.
+
+\begin{maintheorem}[The radix-power kernel tower and higher-order normality]\label{thm:A}
+Let $b,k\ge2$ and $L\ge1$ be integers, and set $R=(b^k-1)/(b-1)$ and $M=b^L$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Kernel-verified} The zero-orbit subgroup is invariant under radix powers, $M_{b^k}=M_b$, with the sharp two-sided bounds $m_N(u;b^k)\le k\,m_{kN}(u;b)$ and $m_{kN}(u;b)\le\frac{R}{k}\,m_N(u;b^k)$. Moreover, $K_b=F_b+M_b$, $F_{b^k}\cap M_b=\Z$, $K_b\subsetneq K_{b^k}$, and every $x\in K_{b^k}$ has a unique representation $x=r/(b^k-1)+u$ with $0\le r<b^k-1$ and $u\in M_b$, satisfying $x\in K_b\iff(b^k-1)\mid(b-1)r$; in particular $K_{b^k}/K_b\cong\Z/R\Z$.
+\item \evidence{Kernel-verified} The difference $K_{b^k}\setminus K_b$ contains a base-$b$ $L$-normal real number---and indeed an irrational real number of exact order $L$---if and only if $b^L\mid k$. The full kernel $K_{b^k}$ contains a base-$b$ $L$-normal real number if and only if $b^L\mid k$ or $(b,L)=(2,1)$.
+\item \evidence{Kernel-verified} Every base-$b$ $L$-normal real number $x$ satisfies the universal discrepancy bound $D^+(x;b)\le 2/b^L$.
+\item \evidence{Paper proof} Over all base-$b$ $L$-normal reals, the exact set of limiting discrepancies $D_\infty(x;b)$ is $[0,2/b^L]$, and over exact-order-$L$ reals it is $(0,2/b^L]$. At each fixed level $k$ with $b^L\mid k$, the exact finite spectrum $\mathcal S_{b,L,k}$ of limiting discrepancies in $K_{b^k}\setminus K_b$ is computed by a finite integer tour formula \eqref{eq:finite-spectrum}, and the union of these exact-order-$L$ tower spectra over all levels $k$ is dense in $[0,2/b^L]$.
+\end{enumerate}
+\end{maintheorem}
+
+Parts (i)--(iii) are proved in \Cref{sec:tower} and formalized in Lean~4 in \ttt{RadixPowerTower.lean} (pinned at commit \ttt{\phaseXXIIcommit}) and \ttt{HigherOrderTower.lean} (built and verified in the Phase~23 working tree, pending commit pinning); part (iv) is \Cref{prop:deBruijn-envelope,prop:finite-spectrum,thm:real-spectrum}.
+
+Turning from the additive structure of $K_b$ to its multiplicative inverse, consider signed infinite products
+\begin{equation}\label{eq:signed-prod}
+x(\varepsilon)=\prod_{k=1}^\infty\bigl(1+\varepsilon_k b^{-m_k}\bigr),\qquad
+y(\varepsilon)=\frac1{x(\varepsilon)}=\lim_{k\to\infty}R_k(\varepsilon),\qquad
+R_k(\varepsilon)=\prod_{j=1}^k\frac{b^{m_j}}{b^{m_j}+\varepsilon_j},
+\end{equation}
+with $\varepsilon=(\varepsilon_k)\in\{-1,+1\}^{\N}$, strictly increasing positive integers $m_1<m_2<\cdots$, exact reduced denominators $D_k(\varepsilon)=\prod_{j=1}^k(b^{m_j}+\varepsilon_j)$, and periods $T_k(\varepsilon)=\ord_{D_k(\varepsilon)}(b)$ ($D_0=T_0=1$). Call $(m_k)$ \emph{sign-admissible} for $\varepsilon$ if
+\begin{equation}\label{eq:admissible}
+\textup{(A1)}\quad T_{k-1}(\varepsilon)\mid m_k\quad(k\ge1),\qquad\qquad
+\textup{(A2)}\quad \omega_k:=\frac{m_{k+1}}{T_k(\varepsilon)}\to\infty.
+\end{equation}
+For $\varepsilon\equiv-1$, we also consider the relaxed \emph{Hull--Dobell} conditions
+\begin{equation}\label{eq:HD}
+\textup{(HD1)}\quad \rad^*(D_{k-1})\mid(b^{m_k}-1)\quad(k\ge2),\qquad\qquad
+\textup{(HD2)}\quad \frac{T_{k-1}}{m_k}\to0.
+\end{equation}
+
+\begin{maintheorem}[Exact reciprocal periods, balanced rates, and Hull--Dobell rigidity]\label{thm:B}
+Let $b\ge2$ be an integer radix.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Lean-supported paper proof} Let $m,D\ge1$ with $\gcd(b,D)=1$. If $\rad^*(D)\mid(b^m-1)$, then $D\mid(b^{sm}-1)/(b^m-1)\iff D\mid s$ for every $s\ge1$, hence $\ord_{D(b^m-1)}(b)=mD$, and the partial geometric sums $S_i(b^m)=\sum_{j=0}^i b^{jm}\bmod D$ ($0\le i<D$) permute $\Z/D\Z$. If $D\mid(b^m-1)$, then $\ord_{D(b^m+1)}(b)=2m$. Under $D\mid(b^m-1)$, both order formulas are kernel-verified (\ttt{RadixPowerTower.orderOf\_mul\_pow\_sub\_one}, \ttt{orderOf\_mul\_pow\_add\_one}). Consequently, under \textup{(A1)}, $T_k(\varepsilon)=m_k D_{k-1}(\varepsilon)$ when $\varepsilon_k=-1$ and $T_k(\varepsilon)=2m_k$ when $\varepsilon_k=+1$.
+\item \evidence{Lean-supported paper proof (normality); Paper proof (rate and barrier)} For $\varepsilon\equiv-1$ under \textup{(A1)}--\textup{(A2)}, $x=\prod_{k\ge1}(1-b^{-m_k})\in M_b\subset K_b$ is irrational and $y=1/x$ is base-$b$ normal. Choosing balanced multipliers $\omega_k=D_{k-1}$ ($k\ge2$) yields, for every fixed integer $r\ge1$ and real $A>0$,
+\[
+D_N(y;b)\le\frac1{\exp^{(r)}\bigl((\ln^{(r+1)}N)^A\bigr)}
+\]
+for all sufficiently large $N$. Conversely, for \emph{every} admissible sequence satisfying \textup{(A1)}--\textup{(A2)}, every integer $r\ge1$, and every $\delta>0$,
+\[
+D_N(y;b)>\frac1{\exp^{(r)}\bigl((\ln^{(r)}N)^\delta\bigr)}
+\]
+holds for infinitely many $N$.
+\item \evidence{Paper proof using External input} For every $b\ge2$ and all $m,n\ge1$, $\rad^*(b^m-1)\mid(b^n-1)\iff m\mid n$ with zero exceptions (using the Bang--Zsigmondy primitive-divisor theorem \cite{Bang1886,Zsigmondy1892}). Under the relaxed Hull--Dobell conditions \textup{(HD1)}--\textup{(HD2)}, $T_k=m_k D_{k-1}$, $x\in M_b\subset K_b$, $y=1/x$ is still base-$b$ normal (elementary), and the lower barrier of \textup{(ii)} still holds (via Bang--Zsigmondy), while \textup{(HD1)}--\textup{(HD2)} enforce eventual tetration growth $m_k>T_{k-1}\ge\frac12 b^{m_{k-2}}$.
+\end{enumerate}
+\end{maintheorem}
+
+These are \Cref{thm:periods,thm:sharpened-weyl,thm:balanced-barrier,thm:HD-rigidity} in \Cref{sec:periods}. Varying the signs $\varepsilon_k$, introducing cyclotomic factors, or inverting rational seeds produces a rich landscape of nonnormal reciprocals of $K_b$ elements.
+
+\begin{maintheorem}[Sign classification, cyclotomic realizations, and convergent inversion]\label{thm:C}
+Let $b\ge2$ be an integer radix.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof} Let $\varepsilon\in\{-1,+1\}^{\N}$ and let $(m_k)$ be sign-admissible for $\varepsilon$. Then $x(\varepsilon)\in K_b$ with $1-D_N(x(\varepsilon);b)\le N^{-1+o(1)}$. Let $r_k$ be the trailing $+1$-run length ending at $k$ and $R_{\max}(\varepsilon)=\limsup_{k\to\infty}r_k\in\{0,1,\dots,\infty\}$ (with $2^{-\infty}=0$). Then: if $\varepsilon$ is eventually $-1$, $y(\varepsilon)$ is normal; if $\varepsilon$ is eventually $+1$, $y(\varepsilon)\in K_b$ with $f_{0^L}(N;y(\varepsilon),b)\to1$; if both signs occur infinitely often, $D^-(y(\varepsilon);b)=0$, $D^+(y(\varepsilon);b)=1-2^{-R_{\max}(\varepsilon)}$, the discrepancy limit set is $[0,1-2^{-R_{\max}(\varepsilon)}]$, and the weak$^*$ limit set on $\T$ is $\{(1-\alpha)\lambda+\alpha\delta_0:0\le\alpha\le 1-2^{-R_{\max}(\varepsilon)}\}$. Moreover, every $\delta_0$-concentration arrives strictly from above ($0^+$), so within the family $y(\varepsilon)$ simple normality in base~$b$ is equivalent to full normality.
+\item \evidence{Paper proof} Using the palindromic cyclotomic family $P_k(q)=\frac{1+q^{2k+1}}{1+q}\cdot\frac{1+q^{2k+3}}{1+q}$, there exists an irrational $x\in K_b$ whose reciprocal $y=1/x\in K_b$ satisfies $f_{0^L}(N;y,b)\to\frac12$ and $f_{(b-1)^L}(N;y,b)\to\frac12$ for every $L\ge1$ (in particular, base-$2$ simply normal yet in $K_2$). Furthermore, for every $\alpha\in[0,1]$, there exists an irrational $x\in K_b$ whose reciprocal $y=1/x$ has $D^-(y;b)=0$, $D^+(y;b)=\alpha$, discrepancy limit set $[0,\alpha]$, weak$^*$ limit set $\{(1-\gamma)\lambda+\gamma\delta_0:0\le\gamma\le\alpha\}$, and (when $b=2$) is simultaneously simply normal in base~$2$.
+\item \evidence{Paper proof} For any reduced rational $r=A/D>0$ with $\gcd(b,AD)=1$ and $2\in\langle b\rangle\pmod D$, taking $x=\frac1r\prod_{j\ge1}(1+b^{-m_j})^{-1}$ with $\lcm(\ord_A(b),\ord_D(b))\mid m_1$, $2m_j\mid m_{j+1}$, and $m_{j+1}/(2m_j)\to\infty$ yields an irrational $x\in M_b\subset K_b$ whose reciprocal $1/x$ converges along all $N$ to the periodic orbit $\mu(r;b)$ with $\lim_{N\to\infty}D_N(1/x;b)=D(\mu(r;b))$. In base~$2$, the set $\mathcal A_{\mathrm{conv}}(2)$ of exact convergent reciprocal discrepancies of $K_2$ elements is dense in $[0,1]$. In every base $b\ge2$, replacing $1+q$ by the repunit $Q_b(q)=(1-q^b)/(1-q)$ yields for every $\alpha\in(0,1)$ and $\varepsilon>0$ an irrational $x\in M_b\subset K_b$ with $[D^-(1/x;b),D^+(1/x;b)]\subseteq[\alpha-\varepsilon,\alpha+\varepsilon]$.
+\end{enumerate}
+\end{maintheorem}
+
+Parts (i)--(ii) are \Cref{thm:sign-class,thm:oriented-digits,thm:cyclotomic-realization} in \Cref{sec:signs}; part (iii) is \Cref{thm:plus1-inversion,cor:dense-Aconv2,prop:repunit-inversion} in \Cref{sec:convergent}. For $(b,L)\neq(2,1)$, no pure $R_0=1$ product with a limit point $(1-\gamma)\lambda+\gamma\delta_0$ ($\gamma>0$) can be $L$-normal because $f_{0^L}+f_{(b-1)^L}\ge 2b^{-L}+\gamma(1-2b^{-L})>2b^{-L}$. Rational-seed inversion overcomes this obstruction completely across all bases and all word lengths.
+
+\begin{maintheorem}[Sharp $L$-normal discrepancy ceiling and all-base $L$-normal nonnormal reciprocals]\label{thm:D}
+Let $b\ge2$ and $L\ge1$ be integers.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof} The sharp maximum of $D^+(y;b)$ over all base-$b$ $L$-normal reals is $D_{\max}(b,L)=2b^{-L}$, attained as an exact limit $D_\infty(y;b)=2b^{-L}$ via Eulerian circuits of the loop-deleted de Bruijn digraph $G_{b,L}^*$, and every $\alpha\in[0,2b^{-L}]$ is realized as $D_\infty(y;b)=\alpha$ for an $L$-normal real $y$.
+\item \evidence{Paper proof} In base $b=2$, the set of exact convergent discrepancies $D_\infty(1/x;2)$ attained by irrational $x\in M_2\subset K_2$ with $L$-normal reciprocal $1/x$ is dense in $[0,2^{1-L}]$. Likewise, every rational flow-consistent length-$L$ word probability distribution $\mathbf p$ on $\{0,1\}^L$ with connected support digraph assigning positive mass to both digits occurs as the exact limiting word distribution of $1/x$ for an irrational $x\in M_2\subset K_2$.
+\item \evidence{Paper proof} For \emph{every} base $b\ge2$ and \emph{every} $L\ge1$, the refined Markov digraph $\mathcal G_{b,M}$ on $M=\lcm(1,\dots,b-1)\,b^L$ vertices produces an explicit rational seed $r=A/(b^P-1)$ ($\gcd(A,b)=1$) whose multiples $sr$ ($1\le s\le b-1$) are simultaneously $L$-normal (with exact cyclic $L$-word counts, and in fact $(L+1)$-normal) while sharing a common deficit interval $I_R$. Universal repunit inversion applied to $r$ yields an irrational $x\in M_b\subset K_b$ whose reciprocal $1/x$ is $L$-normal (indeed $(L+1)$-normal) in base~$b$ along all $N$ yet nonnormal, with $0<D^-(1/x;b)\le D^+(1/x;b)\le 2b^{-L}$.
+\end{enumerate}
+\end{maintheorem}
+
+This is \Cref{thm:Dmax-attain,thm:Lnormal-reciprocals} in \Cref{sec:Lnormal}, resolving unconditionally in every base the open problem of constructing simply normal (and $L$-normal) nonnormal reciprocals of $K_b$ elements; \Cref{prop:primroot-QR,prop:R0-obstruction} contrast this with the primitive-root $2/p$ realization (obstructed by quadratic reciprocity whenever $b\equiv0,1\pmod4$ or $b\equiv2\pmod4$, $L\ge3$) and the $R_0=1$ obstruction.
+
+Finally, Theorem~\ref{thm:B}(ii)--(iii) showed that any admissible or Hull--Dobell product satisfying $T_{k-1}/m_k\to0$ is trapped in tetration growth and iterated-logarithm discrepancy. Dropping full divisibility by $D_{k-1}$ breaks both barriers.
+
+\begin{maintheorem}[Breaking tetration: non-tetration normal reciprocals, coprime CRT convolution, and $R_k^{(E)}$]\label{thm:E}
+Let $b\ge2$ be an integer radix.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof} Set $s_b=1$ if $b\ge4$ and $b\not\equiv3\pmod4$, and $s_b=2$ otherwise. For any positive multiple $s$ of $s_b$, set $M=b^s-1\ge3$ and define anchored coprime exponents $m_k=sq_k=\omega_{k-1}T_{k-1}+s$ recursively with $q_1\ge5$, $\gcd(q_1,sM)=1$, $T_k=sM^{k-1}\prod_{j=1}^k q_j$, and $\omega_k=sM^k$. Then $\ord_{D_k}(b)=T_k$ with $\ln T_k=(c_*+o(1))2^k$ (doubly exponential, no tetration), $x=\prod_{k\ge1}(1-b^{-m_k})\in M_b\subset K_b$ satisfies $1-D_N(x;b)=O_{b,s}(N^{-1/2})$, and $y=1/x$ is base-$b$ normal with
+\[
+D_N(y;b)=O_{b,s}\!\left(\frac{(\ln\ln N)^{\omega(M)+1}}{(\ln N)^{\log_2 M}}\right).
+\]
+In particular, choosing $s$ so that $\log_2(b^s-1)>A$ yields non-tetration normal reciprocals of $K_b$ elements with $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$ for every fixed $A>0$.
+\item \evidence{Paper proof} For any pairwise coprime exponents $m_j\ge2$ in base~$2$, the CRT convolution $\mu(R_k;2)=\nu_1^{(k)}*\cdots*\nu_k^{(k)}$ obeys the universal $01$-transition bound $|\widehat{\nu_j^{(k)}}(h)|\le 1-(2-\sqrt2)/m_j$ whenever $(2^{m_j}-1)\nmid h$. For the prime-exponent product $R_k^{(\mathrm{prime})}=\prod_{j=1}^k(1-2^{-p_j})^{-1}$, $D(\mu(R_k^{(\mathrm{prime})};2))\to0$. For the fully coprime base-$2$ schedule $m_1=2$, $m_k=\omega_{k-1}T_{k-1}+1$ ($\omega_1\ge2$, $\omega_k\to\infty$), squaring inequalities for $|\widehat C_k(h)|$ and the band $L^2$ energy $E_k(h)$ imply $x\in M_2\subset K_2$ and base-$2$ normality of $y=1/x$ along all $N$; at $\omega_k=2^k$, the complete-period discrepancy satisfies $D(\mu(R_k;2))=O(\exp(-c_0(\ln T_k)^{1/4}))$.
+\item \evidence{Paper proof} For the ordinary partition partial products $R_k^{(E)}=\prod_{j=1}^k(1-b^{-j})^{-1}$ in every base $b\ge2$, choosing an anchor prime $p$ with $s_b=\ord_p(b)$ (odd $p$) or $\ord_4(b)$ ($p=2$) and $e_0=v_p(b^{s_b}-1)$ gives the complete-period exponential equidistribution bound
+\[
+D\bigl(\mu(R_k^{(E)};b)\bigr)\le p^{-r_k}\le C_b\,k\,p^{-e_0 k/s_b}\longrightarrow0.
+\]
+\end{enumerate}
+\end{maintheorem}
+
+These are \Cref{thm:anchored-coprime,lem:01-transition,cor:prime-product,thm:fully-coprime,thm:partition-partial} in \Cref{sec:nontetration}. Sections~\ref{sec:questions}--\ref{sec:formal} record open problems, formal verification details, exact computational certificates, and the disclosure of AI tool use.
+
+\section{The radix-power kernel tower and higher-order normality}\label{sec:tower}
+
+\subsection{Zero-orbit invariance, kernel decomposition, and the quotient $K_{b^k}/K_b$}
+
+For $b\ge2$ and $k\ge1$, write $R=(b^k-1)/(b-1)$ and $Q=b^k-1$. Recall the Ces\`aro circular mean $m_N(u;b)=N^{-1}\sum_{n=0}^{N-1}\dist{b^nu}$, the zero-orbit subgroup $M_b=\{u\in\R:m_N(u;b)\to0\}$, and the fixed-point subgroup $F_b=(b-1)^{-1}\Z$.
+
+\begin{theorem}[Zero-orbit invariance and fixed-point quotient]\label{thm:zero-orbit-quotient}\evidence{Kernel-verified}
+For all integers $b\ge2$, $k\ge1$, $N\ge1$, $0\le r<k$, and every $u\in\R$:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $m_N(u;b^k)\le k\,m_{kN}(u;b)$, $m_{kN}(u;b)\le\frac{b^k-1}{k(b-1)}\,m_N(u;b^k)$, and $m_{kN+r}(u;b)\le\frac{b^k-1}{b-1}\frac{N+1}{kN+r}\,m_{N+1}(u;b^k)$. Consequently $M_{b^k}=M_b$ as additive subgroups of $\R$, and the constant $\frac{b^k-1}{k(b-1)}$ is sharp (attained at $u=b^{-k}\in M_b$ for all $b\ge2$, and at $u=1/(b^k-1)$ for all $b\ge3$).
+\item $F_{b^k}\cap M_b=\Z$, and the map $m\mapsto \frac{m}{b^k-1}+F_b$ induces an additive group isomorphism $\Z/R\Z\xrightarrow{\;\sim\;} F_{b^k}/F_b$.
+\item If $k\ge2$, then $1/(b^k-1)\in K_{b^k}\setminus K_b$, so $K_b\subsetneq K_{b^k}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Every inequality and algebraic statement above is kernel-verified in \ttt{RadixPowerTower.lean} (the sharpness attainment remark in (i) is a direct one-line check, \evidence{Paper proof}):
+(i) \leanT{RadixPowerTower}{467}{\ttt{circMean\_pow\_le}},
+\leanT{RadixPowerTower}{531}{\ttt{circMean\_le\_circMean\_pow}},
+\leanT{RadixPowerTower}{553}{\ttt{circMean\_le\_circMean\_pow\_add}}, and
+\leanT{RadixPowerTower}{694}{\ttt{zeroOrbitSubgroup\_pow\_eq}}.
+In brief, the indices $kn$ ($0\le n<N$) form a subset of $\{0,\dots,kN-1\}$, giving the first inequality; subadditivity $\dist{m\theta}\le m\dist{\theta}$ gives $\sum_{j=0}^{k-1}\dist{b^{kn+j}u}\le\frac{b^k-1}{b-1}\dist{b^{kn}u}$, and summing over $n<N$ (or $n\le N$) gives the second and third inequalities, whence $M_{b^k}=M_b$. Equality in the second inequality holds directly at $N=1$, $u=b^{-k}$ (since $b^{j-k}\le\frac12$ for $0\le j<k$ gives $m_k(b^{-k};b)=\frac{b^k-1}{k(b-1)}b^{-k}=\frac{b^k-1}{k(b-1)}m_1(b^{-k};b^k)$ for all $b\ge2$), and for all $N\ge1$ at $u=1/(b^k-1)$ whenever $b\ge3$.
+
+(ii) \leanT{RadixPowerTower}{817}{\ttt{fixedPoint\_quotient\_equiv}},
+\leanT{RadixPowerTower}{828}{\ttt{fixedPoint\_quotient\_equiv\_gen}},
+\leanT{RadixPowerTower}{846}{\ttt{fixedPoint\_quotient\_card}}, and
+\leanT{RadixPowerTower}{896}{\ttt{fixedPointSubgroup\_inter\_zeroOrbitSubgroup}}.
+If $y\in F_{b^k}$, then $b^{kn}y\equiv y\pmod1$ for all $n$, so $m_N(y;b^k)=\dist{y}$; hence $y\in M_{b^k}=M_b$ forces $\dist{y}=0$, i.e., $y\in\Z$. The map $x\mapsto (b^k-1)x\bmod R$ is a surjective homomorphism $F_{b^k}\to\Z/R\Z$ with kernel $F_b$.
+
+(iii) \leanT{RadixPowerTower}{106}{\ttt{inv\_pow\_sub\_one\_mem\_pow\_kernel}},
+\leanT{RadixPowerTower}{307}{\ttt{inv\_pow\_sub\_one\_not\_mem\_kernel}}, and
+\leanT{RadixPowerTower}{347}{\ttt{strict\_kernel\_inclusion}}.
+The rational $c=1/(b^k-1)$ is fixed under multiplication by $b^k$ modulo~$1$, so $D_N(c;b^k)=1$ for all $N\ge1$; in base~$b$, its orbit takes $k\ge2$ distinct values including $p_0=1/(b^k-1)$ and $p_1=b/(b^k-1)$, keeping $D_{kM}(c;b)\le 1-\min(g,1-g,1/k)<1$ where $g=(b-1)/(b^k-1)$.
+\end{proof}
+
+Combining fixed-center localization for deficits $1-D_N(x;b)<1/(4b)$ (from \ttt{SimpleNormalityKernel}) with adjacent-step center stabilization yields the exact decomposition of $K_b$ and the tower quotient $K_{b^k}/K_b$.
+
+\begin{theorem}[Kernel decomposition and tower quotient]\label{thm:kernel-decomp}\evidence{Kernel-verified}
+For every integer $b\ge2$:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $K_b=F_b+M_b$: a real number $x$ lies in $K_b$ if and only if $x=m/(b-1)+u$ for some $m\in\Z$ and $u\in M_b$.
+\item For every integer $k\ge2$, every $x\in K_{b^k}$ has a unique representation
+\begin{equation}\label{eq:tower-decomp}
+x=\frac{r}{b^k-1}+u,\qquad 0\le r<b^k-1,\qquad u\in M_b,
+\end{equation}
+and $x\in K_b\iff (b^k-1)\mid(b-1)r$ (equivalently $R\mid r$). In particular, $K_{b^k}/K_b\cong F_{b^k}/F_b\cong\Z/R\Z$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+This is kernel-verified in \ttt{HigherOrderTower.mem\_kernel\_iff\_exists\_fixedPoint\_add\_zeroOrbit}, \ttt{kernel\_eq\_fixedPoint\_add\_zeroOrbit}, and \ttt{mem\_pow\_kernel\_decomp}. For (i), if $x=m/(b-1)+u$ with $u\in M_b$, then $D_N(m/(b-1);b)=1$ for $N\ge2$ and Markov's inequality for $m_N(u;b)\to0$ transfers $D_N(x;b)\to1$. Conversely, if $x\in K_b$, choose $N_0\ge4$ so that $\delta_N:=1-D_N(x;b)<1/(4b)$ for all $N\ge N_0$. At each $N\ge N_0$, fixed-center localization supplies $j_N\in\{0,\dots,b-2\}$ such that at most $\delta_N N$ shifts $n<N$ fail $\dist{b^nx-j_N/(b-1)}\le b\delta_N/(b-1)$. Since distinct fixed points $j_1/(b-1),j_2/(b-1)$ are separated by at least $1/(b-1)$ while $2b\delta_N/(b-1)<1/(2(b-1))$ and $\delta_N N+\delta_{N+1}(N+1)<N$, adjacent indices $N$ and $N+1$ must share a good shift $n<N$, forcing $j_N=j_{N+1}$. By induction a single center $j_0$ works for all $N\ge N_0$, giving $m_N(x-j_0/(b-1);b)\le(\frac{b}{b-1}+\frac12)\delta_N\to0$, so $x-j_0/(b-1)\in M_b$.
+
+For (ii), apply (i) in radix $b^k$, substitute $M_{b^k}=M_b$, and reduce the integer numerator modulo $Q=b^k-1$ by absorbing the quotient into $M_b$. Uniqueness and the membership test $x\in K_b\iff Q\mid(b-1)r$ follow directly from $F_{b^k}\cap M_b=\Z$ (\Cref{thm:zero-orbit-quotient}(ii)).
+\end{proof}
+
+\subsection{Word-frequency transfer, de Bruijn blocks, and the higher-order tower theorem}
+
+For $b,k\ge2$, $L\ge1$, $0<r<Q:=b^k-1$, and $v\in\{0,\dots,b^L-1\}$, define the periodic word count
+\[
+\mathrm{cyclicCount}(b,k,L,r,v)=\#\left\{0\le j<k:\left\lfloor\frac{b^L(b^jr\bmod Q)}{Q}\right\rfloor=v\right\}.
+\]
+
+\begin{lemma}[Coprime-rational cylinder transfer]\label{lem:wordfreq-transfer}\evidence{Kernel-verified}
+Let $b,k\ge2$, $L\ge1$, $0<r<Q=b^k-1$, and $u\in M_b$. Then for every $v\in\{0,\dots,b^L-1\}$,
+\[
+\lim_{N\to\infty}f_v\Bigl(N;\frac{r}{Q}+u,b\Bigr)=\frac{\mathrm{cyclicCount}(b,k,L,r,v)}{k}.
+\]
+\end{lemma}
+
+\begin{proof}
+Kernel-verified in \ttt{HigherOrderTower.wordFreq\_tower\_limit}, building on \leanT{RadixPowerTower}{928}{\ttt{coprime\_rat\_cylinder\_margin}} and \leanT{RadixPowerTower}{1012}{\ttt{coprime\_rat\_cylinder\_stable}}. Put $c=r/Q$. Since $\gcd(b,Q)=1$ and $0<r<Q$, every shift $r_n=b^nr\bmod Q$ satisfies $1\le r_n<Q$, so $r_n/Q$ stays at distance at least $1/(Qb^L)$ from every $b$-adic grid point $j/b^L$. Whenever $\dist{b^nu}<\eta:=1/(2Qb^L)$, the signed nearest-integer representative of $b^nu$ keeps $\fr{b^n(c+u)}$ inside the same length-$L$ cylinder as $r_n/Q$. By Markov's inequality, the fraction of shifts $n<N$ violating $\dist{b^nu}<\eta$ is at most $m_N(u;b)/\eta\to0$. Since $n\mapsto r_n$ has period dividing $k$, dividing $N$ into $k$-blocks yields the limit $\mathrm{cyclicCount}(b,k,L,r,v)/k$.
+\end{proof}
+
+\begin{theorem}[Higher-order normality in $K_{b^k}\setminus K_b$ and $K_{b^k}$]\label{thm:tower-classification}\evidence{Kernel-verified}
+Let $b,k\ge2$ and $L\ge1$ be integers.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item There exists a base-$b$ $L$-normal real number $x\in K_{b^k}\setminus K_b$ if and only if $b^L\mid k$.
+\item There exists an \emph{irrational} real number $x\in K_{b^k}\setminus K_b$ of exact order $L$ (i.e., $L$-normal and not $(L+1)$-normal in base~$b$) if and only if $b^L\mid k$.
+\item There exists a base-$b$ $L$-normal real number $x\in K_{b^k}$ if and only if $b^L\mid k$ or $(b,L)=(2,1)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Kernel-verified in \ttt{HigherOrderTower.tower\_iff}, \ttt{tower\_irrational\_exact\_iff}, and \ttt{all\_kernel\_pow\_iff} (together with \ttt{exists\_euler\_circuit}, \ttt{exists\_balanced\_block}, \ttt{sparseQuadPerturb\_mem\_zeroOrbit}, \ttt{sparseQuadPerturb\_irrational}, \ttt{altRuns\_mem\_zeroOrbit}, and \ttt{altRuns\_orderNormal\_one}).
+
+\emph{Necessity in \textup{(i)}--\textup{(ii)}.} Suppose $x\in K_{b^k}\setminus K_b$ is $L$-normal. By \Cref{thm:kernel-decomp}(ii), $x=r/Q+u$ with $0<r<Q$ and $u\in M_b$ (since $r=0$ gives $x\in M_b\subset K_b$). By \Cref{lem:wordfreq-transfer}, $\mathrm{cyclicCount}(b,k,L,r,v)/k=1/b^L$ for every $v<b^L$, so $b^L\cdot\mathrm{cyclicCount}(b,k,L,r,v)=k$, hence $b^L\mid k$.
+
+\emph{Sufficiency in \textup{(i)}--\textup{(ii)}.} Form the de Bruijn directed graph $G_{b,L}$ (cf.\ \cite{deBruijn46} for $b=2$) with vertex set $\{0,\dots,b-1\}^{L-1}$ (a single vertex for $L=1$) and $b^L$ labelled directed edges corresponding to length-$L$ words from prefix to suffix. Every vertex has in-degree and out-degree $b$, and the graph is strongly connected, so Hierholzer's theorem yields an Euler circuit of length $M=b^L$. Reading its edge labels gives a cyclic word $W$ of length $M$ hitting every length-$L$ word once (and hence every length-$(L+1)$ word at most once, so at least $b^L(b-1)$ length-$(L+1)$ words have count $0$). Repeating $W$ exactly $k/M$ times yields an integer $r\in(0,Q)$ with $\mathrm{cyclicCount}(b,k,L,r,v)=k/M$ for all $v<M$ and $\mathrm{cyclicCount}(b,k,L+1,r,v)\in\{0,k/M\}$. In particular $r/Q$ has period $M\ge2$, so $Q\nmid(b-1)r$ and $r/Q+u\in K_{b^k}\setminus K_b$ for every $u\in M_b$. Choosing the explicit irrational zero-orbit perturbation $u=\sum_{j\ge1}b^{-(j+1)(j+2)}\in M_b$ (or $\sum_{j\ge1}b^{-2^j}$) yields an irrational $x=r/Q+u\in K_{b^k}\setminus K_b$ that is $L$-normal and not $(L+1)$-normal by \Cref{lem:wordfreq-transfer}.
+
+\emph{Part \textup{(iii)}.} Summing extension frequencies shows $L$-normality implies $L'$-normality for all $1\le L'\le L$ (\ttt{HigherOrderTower.orderNormal\_of\_le}). For $b\ge3$, no element of $K_b$ is simply normal (\ttt{SimpleNormalityKernel.not\_simply\_normal\_of\_mem\_kernel}); for $b=2$, no element of $K_2$ is $2$-normal (\ttt{not\_two\_normal\_of\_mem\_binary\_kernel}). Thus $x\in K_b$ can be $L$-normal only when $(b,L)=(2,1)$, in which case the binary number with alternating runs of $0$ and $1$ of lengths $1,2,3,\dots$ lies in $M_2\subset K_2\subset K_{2^k}$ and is $1$-normal.
+\end{proof}
+
+\subsection{Universal bound, fixed-level spectra, and the full real spectrum}
+
+\begin{theorem}[Universal $L$-normal discrepancy ceiling]\label{thm:universal-ceiling}\evidence{Kernel-verified}
+For every integer $b\ge1$, $L\ge0$, $x\in\R$, and $N\ge1$,
+\[
+D_N(x;b)\le\frac2{b^L}+\sum_{v=0}^{b^L-1}\left|f_v(N;x,b)-\frac1{b^L}\right|.
+\]
+In particular, every base-$b$ $L$-normal real number $x$ satisfies $D^+(x;b)\le 2/b^L$.
+\end{theorem}
+
+\begin{proof}
+Kernel-verified in \ttt{HigherOrderTower.radixDiscrepancy\_le\_grid\_add}, \ttt{eventually\_radixDiscrepancy\_le\_of\_orderNormal}, and \ttt{limsup\_radixDiscrepancy\_le\_of\_orderNormal}. Put $M=b^L$ and $E=\sum_{v<M}|f_v(N;x,b)-1/M|$. Any $M$-grid interval $[k_1/M,k_2/M)$ has frequency sum $\sum_{v=k_1}^{k_2-1}f_v(N;x,b)$, which differs from $(k_2-k_1)/M$ by at most $E$. For an arbitrary interval $[a,c)\subseteq[0,1]$, outward rounding to $[\lfloor Ma\rfloor/M,\min(M,\lfloor Mc\rfloor+1)/M)$ enlarges the length by at most $2/M$ and bounds the excess by $2/M+E$; inward rounding to $[(\lfloor Ma\rfloor+1)/M,\lfloor Mc\rfloor/M)$ (or directly noting $c-a\le 2/M$ when the inward interval is empty) bounds the deficit by $2/M+E$. Letting $N\to\infty$ for $L$-normal $x$ sends $E\to0$, giving $D^+(x;b)\le 2/M$.
+\end{proof}
+
+We now compute the exact limiting discrepancies in the tower and across all reals. For $d$ sorted points $0\le y_0\le y_1\le\cdots\le y_{d-1}<1$ with equal mass $1/d$, the extreme interval discrepancy of $\mu=\frac1d\sum_{i=0}^{d-1}\delta_{y_i}$ equals the oscillation of the cumulative distribution function minus the identity,
+\begin{equation}\label{eq:equal-atoms}
+D(\mu)=\frac1d+\max_{0\le i<d}\Bigl(y_i-\frac id\Bigr)-\min_{0\le i<d}\Bigl(y_i-\frac id\Bigr),
+\end{equation}
+including ties (where the first and last ranks of a tie give the pre- and post-jump extrema). For $z=c+u$ in \eqref{eq:tower-decomp}, the sharp translation inequality $|D_N(z;b)-D_N(c;b)|\le 1-D_N(u;b)\to0$ and $|D_N(c;b)-D(\mu_c)|\le k/N$ show that $D_\infty(z;b)=D(\mu_c)$ depends only on the periodic rational $c=r/Q$.
+
+\begin{proposition}[De Bruijn cycle discrepancy envelope]\label{prop:deBruijn-envelope}\evidence{Paper proof}
+Let $b\ge2$, $L\ge1$, $M=b^L$, and let $c=r/(b^M-1)$ correspond to an order-$L$ base-$b$ de Bruijn cycle, with sorted orbit points $y_0<\cdots<y_{M-1}$. Then
+\begin{equation}\label{eq:deBruijn-envelope}
+D_\infty(c;b)=\frac{1+y_{M-1}-y_0}{M},\qquad
+\frac2{M+1}\le D_\infty(c;b)\le\frac2M\left(1-\frac1{bM-1}\right).
+\end{equation}
+In particular, $M D_\infty(c;b)\to2$ uniformly over all de Bruijn cycles as $L\to\infty$ for fixed $b$.
+\end{proposition}
+
+\begin{proof}
+Each cell $[j/M,(j+1)/M)$ contains a unique orbit point $y_j=(j+t_j)/M$, where $t_j=\fr{b^L y_j}$ permutes $\{y_0,\dots,y_{M-1}\}$. Hence $y_j-j/M=t_j/M$ has maximum $y_{M-1}/M$ and minimum $y_0/M$, and \eqref{eq:equal-atoms} gives $D_\infty=(1+y_{M-1}-y_0)/M=(2-x-z)/M$, where $x=y_0$ and $z=1-y_{M-1}$. The shift starting at $0^L$ maps $x$ to $Mx\le y_{M-1}=1-z$, and complementing all digits gives $Mz\le 1-x$, so $(M+1)(x+z)\le2$, yielding the lower bound $2/(M+1)$. On the other hand, the digit following the unique block $0^L$ must be nonzero (else $0^L$ repeats cyclically), so $bMx\ge 1+x$, i.e., $x\ge 1/(bM-1)$; by digit complementation $z\ge 1/(bM-1)$, giving the upper bound.
+\end{proof}
+
+\begin{proposition}[Exact finite-level tower spectrum]\label{prop:finite-spectrum}\evidence{Paper proof}
+Fix $b,k\ge2$ and $L\ge1$, and set $M=b^L$ and $Q=b^k-1$. If $M\nmid k$, the set $\mathcal S_{b,L,k}$ of limiting discrepancies of base-$b$ $L$-normal elements of $K_{b^k}\setminus K_b$ is empty. If $M\mid k$, put $t=k/M$ and form the directed multigraph obtained by taking $t$ copies of each edge of $G_{b,L}$. For each closed Eulerian tour of length $k$ starting at $0^{L-1}$, let $r\in(0,Q)$ be the integer formed by its $k$ base-$b$ digits, sort the multiset $(b^jr\bmod Q)_{0\le j<k}$ as $v_0\le\cdots\le v_{k-1}$, and put $h_i=kv_i-iQ$. Then
+\begin{equation}\label{eq:finite-spectrum}
+\mathcal S_{b,L,k}=\left\{\frac{Q+\max_i h_i-\min_i h_i}{kQ}:\text{closed tours of length }k\text{ as above}\right\},
+\end{equation}
+every element of $\mathcal S_{b,L,k}$ is attained by an irrational in $K_{b^k}\setminus K_b$, and every element satisfies $D_\infty\le\frac2M-\frac2{MQ}<\frac2M$. Restricting to exact order~$L$ removes precisely those tours in which every length-$(L+1)$ word occurs $k/(bM)$ times.
+\end{proposition}
+
+\begin{proof}
+Every $L$-balanced cyclic block of length $k$ starts at some visit to $0^{L-1}$ and yields a closed Eulerian tour of the $t$-fold multigraph, and conversely. Applying \eqref{eq:equal-atoms} to the sorted multiset $y_i=v_i/Q$ ($0\le i<k$) gives \eqref{eq:finite-spectrum}, and adding $u=\sum_{j\ge1}b^{-(j+1)(j+2)}\in M_b$ preserves $D_\infty$ while ensuring irrationality. Since each of the $t$ points in cell $[j/M,(j+1)/M)$ lies in $[j/M+1/(MQ),(j+1)/M-1/(MQ)]$ (by coprimality of $b$ and $Q$), inserting $i=jt+s$ ($0\le s<t$) into $1/k+\operatorname{osc}_i(v_i/Q-i/k)$ gives $D_\infty\le 2/M-2/(MQ)$.
+\end{proof}
+
+\begin{theorem}[Exact real spectrum and density of tower witnesses]\label{thm:real-spectrum}\evidence{Paper proof}
+Fix $b\ge2$ and $L\ge1$, and put $M=b^L$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item The set of limiting discrepancies $D_\infty(x;b)$ over all base-$b$ $L$-normal reals is $[0,2/M]$, and over all exact-order-$L$ reals is $(0,2/M]$.
+\item The union $\bigcup_{k\ge2,\ M\mid k}\mathcal S_{b,L,k}^{\mathrm{exact}}$ of exact-order-$L$ tower spectra across all levels $k$ is dense in $[0,2/M]$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) The upper bound $D_\infty\le 2/M$ is \Cref{thm:universal-ceiling}, and $D_\infty=0$ forces normality of all orders, excluding exact order~$L$. Let $\nu$ be the shift-invariant probability measure on $\{0,\dots,b-1\}^{\N}$ that selects an $L$-word $w$ uniformly and repeats $w^\infty$, and let $\lambda_{\mathrm{sym}}$ be the uniform i.i.d.\ digit measure. For $t\in(0,1)$, build a digit string in stages $j=1,2,\dots$: append $w^j$ for each of the $M$ length-$L$ words $w$ in lexicographic order, followed by the next $\lfloor jML(1-t)/t\rfloor$ digits of a fixed base-$b$ normal expansion (omitting normal pieces at $t=1$, using the normal expansion at $t=0$). Through stage $J$, total length is $\Theta(J^2)$ while junction and incomplete-stage errors are $O_{b,L,\ell,t}(J)$, so every length-$\ell$ word frequency converges to that of $(1-t)\lambda_{\mathrm{sym}}+t\nu$.
+
+On the grid of $B=b^\ell$ cells ($\ell\ge L$), the uniform component cancels in grid discrepancy, and rounding to the $M$-grid bounds the grid discrepancy of $\nu$ by $2/M$, so every grid-interval discrepancy is at most $2t/M$. Conversely, the interval $[1/B,1-1/B)$ has deficit $2t(1/M-1/B)$, because only the two constant $L$-words $0^L$ and $(b-1)^L$ generate the outermost length-$\ell$ cells under $\nu$. Letting $N\to\infty$ at fixed $\ell$ and then $\ell\to\infty$ (using the $2/B$ grid-rounding bound of \Cref{thm:universal-ceiling}) yields $D_N\to 2t/M$ for every $t\in[0,1]$. Moreover, $f_{0^{L+1}}\to(1-t)/(bM)+t/M$, which differs from $1/(bM)$ whenever $t>0$, giving exact order~$L$ for all $t\in(0,1]$.
+
+(ii) Fix $J\ge L+1$ and $t\in(0,1]$. Start with $P$ copies of an order-$J$ de Bruijn cycle as a closed walk in $G_{b,L}$ (traversing each $L$-edge $Pb^{J-L}$ times). Partition the $M$ length-$L$ words into cyclic rotation orbits; each orbit of size $d$ is a closed walk of $d$ edges in $G_{b,L}$. Splice $q$ laps of each orbit walk at one occurrence of its base vertex on the main walk. Every $L$-edge now occurs exactly $Pb^{J-L}+q$ times (giving an element of $\mathcal S_{b,L,k}$ with $k=M(Pb^{J-L}+q)$), while at most $2M(J-1)=O(JM)$ length-$J$ windows cross a splice junction independently of $P,q$. Choosing $P,q\to\infty$ so that $q/(Pb^{J-L}+q)\to t$ makes the $J$-word law converge to $(1-t)\lambda_{\mathrm{sym}}+t\nu$ on the $b^J$-grid, whence the same grid bounds as in (i) give discrepancies converging to $2t/M$ as $J\to\infty$. For $t>0$ the $0^{L+1}$-excess is strictly positive for large $J$, ensuring exact order~$L$; letting $t\downarrow0$ captures $0$ in the closure.
+\end{proof}
+
+\section{Exact reciprocal periods, sharpened rates, and Hull--Dobell rigidity}\label{sec:periods}
+
+We now turn to reciprocals of $K_b$ elements via the signed infinite products \eqref{eq:signed-prod}. Recall the Lifting-the-Exponent (LTE) identity: if $p$ is prime and $q\ge2$ satisfies $p\mid(q-1)$, with $4\mid(q-1)$ when $p=2$, then $v_p((q^s-1)/(q-1))=v_p(s)$ for every integer $s\ge1$.
+
+\subsection{Exact period identities and Hull--Dobell lifting}
+
+\begin{theorem}[Exact period lifting and Hull--Dobell bijection]\label{thm:periods}\evidence{Lean-supported paper proof}
+Let $b\ge2$ and $m,D\ge1$ be integers with $\gcd(b,D)=1$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \emph{(Minus sign, Hull--Dobell lifting.)} If $\rad^*(D)\mid(b^m-1)$ (in particular whenever $D\mid(b^m-1)$, i.e., $\ord_D(b)\mid m$), then for every integer $s\ge1$,
+\[
+D\mid\frac{b^{sm}-1}{b^m-1}\iff D\mid s,
+\]
+and hence $\ord_{D(b^m-1)}(b)=mD$. Moreover, the partial geometric sums $S_i(b^m)=\sum_{j=0}^i b^{jm}\bmod D$ ($0\le i<D$) form a bijection onto $\Z/D\Z$.
+\item \emph{(Plus sign, linear collapse.)} If $D\mid(b^m-1)$, then $\ord_{D(b^m+1)}(b)=2m$.
+\item \emph{(Signed products.)} For every $\varepsilon\in\{-1,+1\}^{\N}$ and every $k\ge1$ with $T_{k-1}(\varepsilon)\mid m_k$,
+\[
+T_k(\varepsilon)=\begin{cases} m_k D_{k-1}(\varepsilon) & \text{if }\varepsilon_k=-1,\\ 2m_k & \text{if }\varepsilon_k=+1. \end{cases}
+\]
+In particular $T_k(\varepsilon)\ge m_k$, so \textup{(A1)}--\textup{(A2)} automatically imply $m_{k+1}/m_k\to\infty$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Under the stronger hypothesis $D\mid(b^m-1)$, parts (i) and (ii) are kernel-verified in \leanT{RadixPowerTower}{1247}{\ttt{orderOf\_mul\_pow\_sub\_one}} and \leanT{RadixPowerTower}{1272}{\ttt{orderOf\_mul\_pow\_add\_one}} (via \leanT{RadixPowerTower}{1069}{\ttt{pow\_sub\_one\_dvd\_pow\_sub\_one\_iff}} and \leanT{RadixPowerTower}{1209}{\ttt{mul\_pow\_sub\_one\_dvd\_pow\_sub\_one\_iff}}). For the wider Hull--Dobell hypothesis $\rad^*(D)\mid(b^m-1)$ in (i), put $q=b^m$. First $(b^m-1)\mid(b^M-1)\iff m\mid M$ (by Euclidean division of $M$ by $m$). Writing $M=sm$, $D(b^m-1)\mid(b^M-1)\iff D\mid(q^s-1)/(q-1)$. For each prime power $p^e\parallel D$: if $p$ is odd, or if $p=2$ and $e\ge2$, then $\rad^*(D)\mid(q-1)$ supplies the LTE hypothesis, so $v_p((q^s-1)/(q-1))=v_p(s)$; if $p=2$ and $e=1$, then $q$ is odd so $(q^s-1)/(q-1)=\sum_{j<s}q^j\equiv s\pmod2$. Multiplying over all prime powers gives $D\mid(q^s-1)/(q-1)\iff D\mid s$, whence $\ord_{D(b^m-1)}(b)=mD$. For $0\le i_1<i_2<D$, $S_{i_2}(q)-S_{i_1}(q)=q^{i_1+1}(q^{i_2-i_1}-1)/(q-1)$ is divisible by $D$ iff $D\mid(i_2-i_1)$, impossible; hence $i\mapsto S_i(q)\bmod D$ is a bijection onto $\Z/D\Z$ (the Hull--Dobell full-period condition \cite{HullDobell62}).
+
+For (ii), $D(b^m+1)\mid(b^m-1)(b^m+1)=b^{2m}-1$, so $\ord_{D(b^m+1)}(b)\mid 2m$. Conversely, if $(b^m+1)\mid(b^M-1)$, reducing $M$ modulo $2m$ leaves $r\in[0,2m)$ with $(b^m+1)\mid(b^r-1)$, which is impossible for $0<r<m$ ($0<b^r-1<b^m+1$), for $r=m$ ($b^m-1\equiv-2$, and $b^m+1\ge3$), and for $m<r<2m$ ($b^r-1\equiv-(b^{r-m}+1)$ with $0<b^{r-m}+1<b^m+1$); thus $2m\mid M$. Part (iii) follows immediately from (i) and (ii) since $\gcd(b,D_k(\varepsilon))=1$.
+\end{proof}
+
+\subsection{Sharpened all-prefix Weyl and Erd\H{o}s--Tur\'an bounds}
+
+Throughout this subsection and the next, take $\varepsilon\equiv-1$, so $R_k=\prod_{j=1}^k(1-b^{-m_j})^{-1}<4$, $D_k=\prod_{j=1}^k(b^{m_j}-1)$, $T_k=m_k D_{k-1}$, and $y=\prod_{k\ge1}(1-b^{-m_k})^{-1}$ with $|y-R_K|\le 32b^{-m_{K+1}}$. Let $W_h(N)=\frac1N\sum_{n=0}^{N-1}e(hb^ny)$ and $\widehat C_k(h)=\frac1{T_k}\sum_{t=0}^{T_k-1}e(hb^t R_k)$.
+
+\begin{lemma}[Four finite inequalities]\label{lem:four-finite}\evidence{Paper proof}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \emph{(Partial-band inequality.)} For integers $d',I,m\ge1$ and $0\le r_0<m$, $m\lfloor I/d'\rfloor+r_0\mathbf 1[d'\mid(I+1)]\le(Im+r_0)/d'$.
+\item \emph{(Divisor-sum bound.)} For integers $D,H\ge1$, $\sum_{h=1}^H\frac{\gcd(h,D)}{h}\le\tau(D)(1+\ln H)$.
+\item \emph{(Shifted uniform grid.)} For $D\ge1$ and $\alpha\in\T$, the uniform $D$-point grid $U_D(\alpha)=\frac1D\sum_{j=0}^{D-1}\delta_{\fr{\alpha+j/D}}$ has $D(U_D(\alpha))=1/D$ and $W_1(U_D(\alpha),\lambda)=1/(4D)$.
+\item \emph{(Elementary Koksma lower bound.)} Any $x_0,\dots,x_{N-1}\in[0,1)$ with extreme discrepancy $D_N$ and Weyl sums $W_h(N)$ satisfy $|W_h(N)|\le\pi h\,D_N$ for every $h\ge1$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) If $d'\nmid(I+1)$ this is immediate; if $I+1=qd'$, then $d'(m(q-1)+r_0)-(Im+r_0)=(d'-1)(r_0-m)\le0$.
+(ii) Group $h=dj$ by $d=\gcd(h,D)$ and drop $\gcd(j,D/d)=1$: $\sum_{h\le H}\gcd(h,D)/h\le\sum_{d\mid D,\,d\le H}\sum_{j\le H/d}1/j\le\tau(D)(1+\ln H)$.
+(iii) Any half-open arc of length $\ell$ contains $\lfloor D\ell\rfloor$ or $\lceil D\ell\rceil$ grid points, giving discrepancy $1/D$ (approached by empty arcs of length $\ell\uparrow 1/D$); midpoint transport achieves the lower bound $\int_{\T}\operatorname{dist}(x,\alpha+D^{-1}\Z)\,dx=1/(4D)$.
+(iv) Integration by parts gives $W_h(N)=-2\pi ih\int_0^1(F_N(t)-t-c)e(ht)\,dt$ for any constant $c$, where $F_N(t)=N^{-1}\#\{n<N:x_n<t\}$. Choosing $c$ as the midpoint of $[\inf(F_N(t)-t),\sup(F_N(t)-t)]$ gives $|F_N(t)-t-c|\le D_N/2$, hence $|W_h(N)|\le\pi h D_N$.
+\end{proof}
+
+\begin{theorem}[Sharpened all-prefix discrepancy for all-minus reciprocals]\label{thm:sharpened-weyl}\evidence{Lean-supported paper proof}
+Suppose $\varepsilon\equiv-1$ and $(m_k)$ satisfies \textup{(A1)}--\textup{(A2)}. Let $K\ge3$, $m_K\le N\le m_{K+1}$, $h\ge1$, and $c_b(h)=2\log_b(64\pi h)+8$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $|W_h(N)|\le\frac{\gcd(h,D_{K-2})}{D_{K-2}}+\frac{T_{K-1}+3c_b(h)}{m_K}$.
+\item With $H=\min(D_{K-2},\omega_{K-1})\ge1$,
+\[
+D_N(y;b)\le\frac6{H+1}+\frac4\pi\frac{\tau(D_{K-2})(1+\ln H)}{D_{K-2}}+\frac4\pi\frac{1+\ln H}{\omega_{K-1}}+\frac{12}{\pi}\frac{c_b(H)(1+\ln H)}{m_K}.
+\]
+In particular, when $\omega_{K-1}\ge D_{K-2}$, $D_N(y;b)\le D_{K-2}^{-1}\exp\bigl((1+o(1))\frac{\ln 2\cdot\ln D_{K-2}}{\ln\ln D_{K-2}}\bigr)$.
+\item At every period multiple $N=JT_K\le m_{K+1}$, $D_N(y;b)\le D_{K-1}^{-1}+O_b((\ln N)/N)$. Conversely, $W_{D_{K-2}}(m_K)\to1$ and $D_{m_K}(y;b)\ge\frac{1-o(1)}{\pi D_{K-2}}$ as $K\to\infty$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The rational band identity $b^{im_K+r}R_K\equiv (i+1)b^rR_{K-1}+\eta_r^{(K)}\pmod1$ with $\eta_r^{(K)}=b^rR_{K-1}/(b^{m_K}-1)\in(0,8b^{r-m_K}]$ (for $T_{K-1}\mid m_K$) is kernel-verified in \leanR{NormalReciprocalCore}{74}{\ttt{band\_identity}}, and complete residue character cancellation is kernel-verified in \leanR{NormalReciprocalCore}{255}{\ttt{sum\_residues\_cexp\_eq\_zero}}, showing that $\widehat C_{K-1}(k)=0$ unless $D_{K-2}\mid k$.
+
+(i) Write $N=Im_K+r_0$ ($I\ge1$, $0\le r_0<m_K$). Passing from $y$ to $R_K$ costs at most $c_b(h)$ in the unnormalized exponential sum, and dropping $\eta_r^{(K)}$ costs at most $c_b(h)$ per band. Using $T_{K-1}\mid m_K$,
+\[
+\sum_{n=0}^{N-1}e(hb^ny)=\sum_{a=1}^I m_K\widehat C_{K-1}(ha)+\Bigl\lfloor\frac{r_0}{T_{K-1}}\Bigr\rfloor T_{K-1}\widehat C_{K-1}(h(I+1))+O^*\bigl(T_{K-1}+(I+2)c_b(h)\bigr),
+\]
+where $O^*(B)$ denotes a quantity of modulus at most $B$. Only terms with $d':=D_{K-2}/\gcd(h,D_{K-2})$ dividing $a$ (or $I+1$) survive. Applying \Cref{lem:four-finite}(i) and dividing by $N\ge Im_K$ yields (i).
+
+(ii) Insert (i) into the Erd\H{o}s--Tur\'an inequality $D_N\le\frac6{H+1}+\frac4\pi\sum_{h=1}^H|W_h(N)|/h$ \cite[Chapter~2, Theorem~2.5]{KN} and apply \Cref{lem:four-finite}(ii). When $\omega_{K-1}\ge D_{K-2}$, $H=D_{K-2}$ and $m_K\ge m_{K-1}D_{K-2}^2$, and Wigert's divisor bound $\tau(D)\le\exp\bigl((1+o(1))\frac{\ln 2\cdot\ln D}{\ln\ln D}\bigr)$ \cite[Theorem~317]{HW08} yields the second assertion.
+
+(iii) By \ttt{band\_identity} and $T_K=m_KD_{K-1}$, the complete-period measure $\mu_K$ of $R_K$ equals $\frac1{m_K}\sum_{r=0}^{m_K-1}U_{D_{K-1}}(\eta_r^{(K)})$, so $D(\mu_K)\le 1/D_{K-1}$ by \Cref{lem:four-finite}(iii). For $N=JT_K\le m_{K+1}$, $|b^ny-b^nR_K|\le 32b^{n-N}$ is at most $1/(2N)$ for all $n<N-\lceil\log_b(64N)\rceil$, giving $D_{JT_K}(y;b)\le 1/D_{K-1}+O_b((\ln N)/N)$ by pointwise perturbation (\Cref{lem:W1-cont}(i)). For the lower bound at $N=m_K$, $D_{K-2}R_{K-2}\in\Z$ yields $D_{K-2}b^{jm_{K-1}+s}R_{K-1}\equiv D_{K-2}\eta_s^{(K-1)}\pmod1$, whence $|\widehat C_{K-1}(D_{K-2})-1|\le c_b(D_{K-2})/m_{K-1}\to0$ since $\log_b D_{K-2}=(1+o(1))m_{K-2}=o(m_{K-1})$. Thus $W_{D_{K-2}}(m_K)\to1$, and \Cref{lem:four-finite}(iv) gives $D_{m_K}(y;b)\ge(1-o(1))/(\pi D_{K-2})$.
+\end{proof}
+
+\subsection{Balanced-multiplier rate, universal lower barrier, and Hull--Dobell rigidity}
+
+\begin{theorem}[Balanced rate and universal barrier for admissible reciprocals]\label{thm:balanced-barrier}\evidence{Paper proof}
+Let $\varepsilon\equiv-1$ and $y=\prod_{k\ge1}(1-b^{-m_k})^{-1}$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \emph{(Balanced rate.)} Fix $m_1\ge2$, $m_2=\omega_1m_1$ ($\omega_1\ge2$), and set $\omega_k=D_{k-1}$, $m_{k+1}=\omega_kT_k=m_kD_{k-1}^2$ for $k\ge2$. Then for every fixed integer $r\ge1$ and every real $A>0$,
+\[
+D_N(y;b)\le\frac1{\exp^{(r)}\bigl((\ln^{(r+1)}N)^A\bigr)}
+\]
+for all sufficiently large $N$.
+\item \emph{(Universal lower barrier.)} For \emph{every} sequence $(m_k)$ satisfying \textup{(A1)}--\textup{(A2)}, every integer $r\ge1$, and every $\delta>0$,
+\[
+D_N(y;b)>\frac1{\exp^{(r)}\bigl((\ln^{(r)}N)^\delta\bigr)}
+\]
+holds for infinitely many $N$. In particular, neither $D_N(y;b)=O(N^{-c})$ nor $D_N(y;b)=O(\exp(-(\ln N)^c))$ can hold for any $c>0$ within the admissible family.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) Here $m_{k+1}/m_k=D_{k-1}^2\to\infty$, so $\log_b D_k=(1+o(1))m_k$ and $a_k:=\log_b m_k$ satisfies $a_{k+1}=a_k+2\log_b D_{k-1}=(2+o(1))m_{k-1}$. Iterating natural logarithms gives $\ln D_{K-2}=(\ln b+o(1))m_{K-2}$ and $\ln^{(r)}D_{K-2}=(2\ln b+o(1))m_{K-2r}$ ($r\ge2$), while for $N\in[m_K,m_{K+1}]$ we have $\ln^{(r+1)}N\le\ln^{(r+1)}m_{K+1}=(2\ln b+o(1))m_{K-2r-1}$ ($r\ge1$). Since $\log_b(m_j/m_{j-1}^A)=a_j-Aa_{j-1}=(2+o(1))m_{j-2}-A(2+o(1))m_{j-3}\to+\infty$, we obtain $\ln^{(r)}D_{K-2}/(\ln^{(r+1)}N)^A\to+\infty$ uniformly on $[m_K,m_{K+1}]$. By \Cref{thm:sharpened-weyl}(ii), $D_N(y;b)\le D_{K-2}^{-1+o(1)}$, yielding (i).
+
+(ii) For any sequence satisfying \textup{(A1)}--\textup{(A2)}, put $I_K=\lfloor b^{m_{K-1}/8}/(96 D_{K-2})\rfloor$ and $N_K=I_K m_K$. For large $K$, $D_{K-2}<b^{2m_{K-2}}$ and $m_{K-1}/m_{K-2}\to\infty$, so $b^{m_{K-1}/9}\le I_K<D_{K-1}$ and $m_K\le N_K<T_K\le m_{K+1}$. Since $N_K$ consists of $I_K$ complete bands of $R_K$,
+\[
+W_{D_{K-2}}(N_K)=\frac1{I_K}\sum_{a=1}^{I_K}\widehat C_{K-1}(aD_{K-2})+O^*\!\Bigl(\frac{2c_b(D_{K-2})}{m_K}\Bigr).
+\]
+For each $1\le a\le I_K$, $aD_{K-2}b^{jm_{K-1}+s}R_{K-1}\equiv aD_{K-2}\eta_s^{(K-1)}\pmod1$ with $8\pi I_K D_{K-2}<b^{m_{K-1}/8}$, so splitting $s$ at $m_{K-1}-\lceil\log_b(8\pi aD_{K-2})\rceil$ gives $|\widehat C_{K-1}(aD_{K-2})-1|<\frac14+\frac6{m_{K-1}}<\frac13$ uniformly in $a\le I_K$. Hence $|W_{D_{K-2}}(N_K)|>\frac12$, and \Cref{lem:four-finite}(iv) yields $D_{N_K}(y;b)>1/(2\pi D_{K-2})\ge b^{-2m_{K-2}}$ while $\ln N_K\ge\frac{\ln b}{9}m_{K-1}$.
+
+If $D_N(y;b)\le(\exp^{(r)}((\ln^{(r)}N)^\delta))^{-1}$ held for all large $N$, then at $N=N_K$ we would obtain $m_{K-1}\le C m_{K-2}^{1/\delta}$ (for $r=1$) or $u_{K-1}\le C' u_{K-2}^{1/\delta}$ where $u_k=\ln^{(r-1)}m_k$ (for $r\ge2$). Iterating twice forces $m_K\le C'' m_{K-2}^{1/\delta^2}$ (resp.\ $u_K\le C'' u_{K-2}^{1/\delta^2}$), contradicting the mandatory two-step growth $m_K\ge m_{K-1}D_{K-2}\ge b^{m_{K-2}}-1$.
+\end{proof}
+
+We next resolve the relaxed Hull--Dobell family \eqref{eq:HD}, where $D_{k-1}\nmid(b^{m_k}-1)$ is permitted.
+
+\begin{lemma}[Bang--Zsigmondy rigidity]\label{lem:BZ-rigidity}\evidence{Paper proof using External input}
+For every integer $b\ge2$ and all integers $m,n\ge1$,
+\[
+\rad^*(b^m-1)\mid(b^n-1)\iff m\mid n,
+\]
+with zero exceptions.
+\end{lemma}
+
+\begin{proof}
+The reverse implication is immediate. Conversely, suppose $\rad^*(b^m-1)\mid(b^n-1)$. By the Bang--Zsigmondy theorem \cite{Bang1886,Zsigmondy1892} (External input), $b^m-1$ has a primitive prime divisor $p$ with $\ord_p(b)=m$---forcing $p\mid\rad^*(b^m-1)\mid(b^n-1)$ and hence $m\mid n$---except in three cases, which we verify directly: (1) $m=1$: $1\mid n$ trivially; (2) $m=2$ with $b+1=2^t$ ($t\ge2$): then $b\equiv3\pmod4$ and $8\mid(b^2-1)$, so $4\mid\rad^*(b^2-1)\mid(b^n-1)$, forcing $2\mid n$; (3) $(b,m)=(2,6)$: $\rad^*(2^6-1)=\rad^*(63)=21$, and $21\mid(2^n-1)$ forces $\lcm(\ord_3(2),\ord_7(2))=\lcm(2,3)=6\mid n$.
+\end{proof}
+
+\begin{theorem}[Relaxed Hull--Dobell characterization, normality, and barrier]\label{thm:HD-rigidity}\evidence{Paper proof using External input}
+Let $b\ge2$, $\varepsilon\equiv-1$, and $y=\prod_{k\ge1}(1-b^{-m_k})^{-1}$ with $x=1/y$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \textup{(HD1)} holds if and only if $m_{k-1}\mid m_k$ for all $k\ge2$, together with $2\mid m_k$ for all $k\ge3$ whenever $b\equiv3\pmod4$ and $m_1,m_2$ are odd.
+\item \emph{(Elementary normality.)} Under \textup{(HD1)}--\textup{(HD2)}, $T_k=m_k D_{k-1}$ for all $k\ge1$, $x\in M_b\subset K_b$, and $y$ is base-$b$ normal with all-prefix Weyl bound
+\[
+|W_h(N)|\le\frac{\gcd(h,D_{K-2})}{D_{K-2}}+\frac{2T_{K-1}+3c_b(h)}{m_K}\qquad(N\in[m_K,m_{K+1})).
+\]
+\item \emph{(Barrier and forced growth under \textup{(HD1)}--\textup{(HD2)}.)} Under \textup{(HD1)}--\textup{(HD2)}, the universal lower barrier of \Cref{thm:balanced-barrier}(ii) holds verbatim, and the sufficient conditions \textup{(HD1)}--\textup{(HD2)} enforce eventual tetration growth $m_k>T_{k-1}\ge\frac12 b^{m_{k-2}}$ for all large $k$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) Follows from \Cref{lem:BZ-rigidity}: $\rad^*(b^{m_j}-1)\mid(b^{m_k}-1)$ for all $j<k$ is equivalent to $m_{k-1}\mid m_k$, and the sole extra $2$-adic constraint arises when $4\mid D_{k-1}$ while $4\nmid(b^{m_j}-1)$ for each $j<k$, i.e., $b\equiv3\pmod4$ with $m_1,m_2$ odd, forcing $4\mid(b^{m_3}-1)$ and hence $2\mid m_3$.
+
+(ii) By \Cref{thm:periods}(i), \textup{(HD1)} implies $T_k=m_k D_{k-1}$ for all $k\ge1$ and shows that the complete-period measure of $R_{K-1}$ is an average of shifted $D_{K-2}$-point grids, so $\widehat C_{K-1}(h')=0$ unless $D_{K-2}\mid h'$. Without assuming $T_{K-1}\mid m_K$, the exact geometric expansion of $R_K=R_{K-1}\frac{b^{m_K}}{b^{m_K}-1}$ is
+\begin{equation}\label{eq:exact-geom-band}
+b^{im_K+r}R_K\equiv S_i(b^{m_K})\,b^r R_{K-1}+\frac{b^r R_{K-1}}{b^{m_K}-1}\pmod1,\qquad S_i(q)=\sum_{j=0}^i q^j.
+\end{equation}
+For $d'=D_{K-2}/\gcd(h,D_{K-2})$, we have $d'\mid D_{K-1}$, hence $\rad^*(d')\mid\rad^*(D_{K-1})\mid(b^{m_K}-1)$, and \Cref{thm:periods}(i) applied to $D=d'$ gives $d'\mid S_i(b^{m_K})\iff d'\mid(i+1)$. Dividing each complete band of length $m_K$ and the partial band of length $r_0$ into complete $T_{K-1}$-periods leaves at most $T_{K-1}$ extra steps per complete band (total $\le IT_{K-1}/N\le T_{K-1}/m_K$) and at most $T_{K-1}$ extra steps in the partial band (total $\le T_{K-1}/m_K$). Combining these with \Cref{lem:four-finite}(i) and the tail bounds gives the displayed Weyl estimate, which vanishes under \textup{(HD2)} ($T_{K-1}/m_K\to0$), proving normality of $y$ by Weyl's criterion.
+
+To prove $x\in M_b\subset K_b$ in the full-limit sense for \emph{any} product $x=\prod_{j\ge1}(1-b^{-m_j})$ with $m_{j+1}/m_j\to\infty$ (used again in \Cref{sec:nontetration}), put $X_k=\prod_{j=1}^k(1-b^{-m_j})$ and $S_k=\sum_{j=1}^k m_j=o(m_{k+1})$. Since $b^n X_k\in\Z$ for all $n\ge S_k$ and $0<X_k-x\le 2b^{-m_{k+1}}$, partitioning $[0,N)$ ($N\in[m_{k+1},m_{k+2})$) into $[0,S_k)$, $[S_k,m_{k+1})$, $[m_{k+1},\min(N,S_{k+1}))$, and $[S_{k+1},N)$ gives
+\begin{equation}\label{eq:all-minus-Mb}
+m_N(x;b)=\frac1N\sum_{n=0}^{N-1}\dist{b^nx}\le\frac{S_k+4}{N}\le\frac{S_k+4}{m_{k+1}}\longrightarrow0,
+\end{equation}
+whence $x\in M_b\subset K_b$ (and $D_N(x;b)\ge 1-\sqrt{8m_N(x;b)}\to1$).
+
+(iii) By (i), $m_{K-1}\mid m_K$ for all $K\ge2$, so $B:=b^{m_{K-1}}-1$ divides $b^{m_K}-1$ and $S_i(b^{m_K})\equiv i+1\pmod B$. At the harmonic $h=D_{K-2}$, $hR_{K-1}$ has denominator dividing $B$, so $hS_i(b^{m_K})b^rR_{K-1}\equiv h(i+1)b^rR_{K-1}\pmod1$ is \emph{exact}. Multiplying \eqref{eq:exact-geom-band} at level $K-1$ by $aD_{K-2}$ annihilates $R_{K-2}$, leaving the identical small tail as in \Cref{thm:balanced-barrier}(ii), with the sole additional error $O(T_{K-1}/m_K)=o(1)$ from incomplete $T_{K-1}$-cycles. Hence $|W_{D_{K-2}}(N_K)|>\frac12$, and the contradiction argument of \Cref{thm:balanced-barrier}(ii) applies verbatim using $m_k>T_{k-1}=m_{k-1}D_{k-2}\ge\frac12 b^{m_{k-2}}$ (for large $k$ under \textup{(HD2)}).
+\end{proof}
+
+Note that part (iii) restricts the proof method of \Cref{thm:HD-rigidity} (the sufficient conditions \textup{(HD1)}--\textup{(HD2)}); normality of slower-growing Hull--Dobell products violating \textup{(HD2)} is not excluded here.
+
+\section{Complete sign classification and cyclotomic realizations}\label{sec:signs}
+
+\subsection{Circular $W_1$ perturbation and complete sign classification}
+
+We begin with elementary continuity properties of extreme discrepancy under pointwise and $W_1$ perturbations on $\T$.
+
+\begin{lemma}[Perturbation and $W_1$-continuity of discrepancy]\label{lem:W1-cont}\evidence{Paper proof}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item If $\mu_x=\frac1N\sum_{n<N}\delta_{x_n}$ and $\mu_y=\frac1N\sum_{n<N}\delta_{y_n}$ on $\T$ satisfy $\dist{x_n-y_n}\le\eta$ for all $n\in G\subseteq\{0,\dots,N-1\}$ with $|G|\ge(1-\beta)N$, then $|D(\mu_x)-D(\mu_y)|\le\beta+2\eta$.
+\item For any Borel probability measures $\mu,\nu$ on $\T$, $|D(\mu)-D(\nu)|\le 2\sqrt{2\,W_1(\mu,\nu)}$.
+\item For every $\alpha\in[0,1]$ and Borel probability measure $\sigma$ on $\T$, $\alpha\le D((1-\alpha)\sigma+\alpha\delta_0)\le\alpha+(1-\alpha)D(\sigma)$; in particular $D((1-\alpha)\lambda+\alpha\delta_0)=\alpha$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) For any circle arc $J$ of length $\ell$: if $\ell+2\eta\ge1$ then $\mu_x(J)-\ell\le 1-\ell\le 2\eta$; otherwise enlarging $J$ by $\eta$ on both sides yields an arc $J_\eta$ with $\mu_x(J)-\ell\le\mu_y(J_\eta)+\beta-(|J_\eta|-2\eta)\le D(\mu_y)+\beta+2\eta$. Symmetry gives the reverse inequality. (ii) Apply (i) with Markov's inequality $\mathbb P(\dist{X-Y}>\eta)\le W_1(\mu,\nu)/\eta$ and optimize at $\eta=\sqrt{W_1(\mu,\nu)/2}$. (iii) Arcs $(-\varepsilon,\varepsilon)$ with $\varepsilon\downarrow0$ give the lower bound; the triangle inequality gives the upper bound.
+\end{proof}
+
+Now let $\varepsilon\in\{-1,+1\}^{\N}$ be arbitrary and let $(m_k)$ be sign-admissible for $\varepsilon$ (\eqref{eq:admissible}). Then $\frac13<R_k(\varepsilon)<4$, $|y(\varepsilon)-R_K(\varepsilon)|\le 16b^{-m_{K+1}}$ ($m_{K+1}\ge3$), and $m_{k+1}/m_k\to\infty$ (\Cref{thm:periods}(iii)), which gives $1-D_N(x(\varepsilon);b)\le N^{-1+o(1)}$ and $x(\varepsilon)\in K_b$. Let $\mu_K$ be the complete-period empirical measure of $R_K(\varepsilon)$.
+
+\begin{proposition}[Complete-period $W_1$ recursion and shell trajectories]\label{prop:shell-trajectories}\evidence{Lean-supported paper proof}
+Assume \textup{(A1)}--\textup{(A2)} for $\varepsilon$, let $r_K$ be the trailing $+1$-run length ending at $K$, and put $K_0=K-r_K$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item If $\varepsilon_K=-1$, then $W_1(\mu_K,\lambda)\le 1/(4D_{K-1}(\varepsilon))$. If $\varepsilon_K=+1$, then $W_1(\mu_K,\frac12\mu_{K-1}+\frac12\delta_0)\le 4/m_K$. Unrolling this contraction gives
+\[
+W_1\bigl(\mu_K,\,2^{-r_K}\lambda+(1-2^{-r_K})\delta_0\bigr)\le\min\Bigl(\frac{2^{-r_K}}{4D_{K_0-1}(\varepsilon)},\frac{2^{-r_K}}{2}\Bigr)+\sum_{j=0}^{r_K-1}\frac{2^{-j}\cdot4}{m_{K-j}}
+\]
+when $K_0\ge1$, and $W_1(\mu_K,\delta_0)\le 2^{-K-1}+\sum_{j=0}^{K-1}2^{-j}\cdot 4/m_{K-j}$ when $K_0=0$.
+\item \emph{($+1$ shell.)} If $\varepsilon_K=+1$ and $N\in[m_K,m_{K+1}]$, let $\theta_K(N)=\frac1N\#\{0\le n<N:\lfloor n/m_K\rfloor\text{ is even}\}\in[\frac12,1]$. Then
+\[
+W_1\Bigl(\mu_N^{\mathrm{emp}}(y(\varepsilon);b),\,\theta_K(N)\mu_{K-1}+\bigl(1-\theta_K(N)\bigr)\delta_0\Bigr)\le\frac{24}{m_K}+\frac1{2\omega_{K-1}}.
+\]
+\item \emph{($-1$ transition shell, Kronecker melting.)} If $\varepsilon_K=-1$ and $K_0=K-1-r_{K-1}\ge2$, then for $N=Im_K+r_0\in[m_K,m_{K+1}]$, setting $\beta_u(I)=\min(1,\max(0,(\log_b I)/m_u))$ and $\alpha_K(N)=\sum_{u=K_0+1}^{K-1}2^{-(K-u)}(1-\beta_u(I))\in[0,1-2^{-r_{K-1}}]$, we have uniformly over $N\in[m_K,m_{K+1}]$ as $K_0\to\infty$:
+\[
+W_1\Bigl(\mu_N^{\mathrm{emp}}(y(\varepsilon);b),\,\bigl(1-\alpha_K(N)\bigr)\lambda+\alpha_K(N)\delta_0\Bigr)\longrightarrow0.
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) For $\varepsilon_K=-1$, $\mu_K$ is an average of shifted $D_{K-1}(\varepsilon)$-point grids (\Cref{thm:sharpened-weyl}(iii)). For $\varepsilon_K=+1$, $T_K(\varepsilon)=2m_K$, and \leanR{NormalReciprocalCore}{139}{\ttt{signed\_band\_identity}} gives for $0\le r<m_K$
+\[
+b^rR_K(\varepsilon)\equiv b^rR_{K-1}(\varepsilon)-\eta_r^+\pmod1,\qquad
+b^{m_K+r}R_K(\varepsilon)\equiv+\eta_r^+\pmod1,
+\]
+with $0<\eta_r^+=b^rR_{K-1}(\varepsilon)/(b^{m_K}+1)\le 4b^{r-m_K}$. Coupling band~$0$ to $\mu_{K-1}$ and band~$1$ to $\delta_0$ costs at most $\frac1{m_K}\sum_{r<m_K}4b^{r-m_K}\le 4/m_K$. Unrolling by convexity of $W_1$ gives the displayed inequality.
+
+(ii) Passing from $y(\varepsilon)$ to $R_K(\varepsilon)$ costs $\le 16/m_K$ in $W_1$. Complete even bands couple to $\mu_{K-1}$ and odd bands to $\delta_0$ within $4/m_K$; in the partial band $i=I$, the incomplete $T_{K-1}(\varepsilon)$-cycle has weight $<1/\omega_{K-1}$ (cost $\le 1/(2\omega_{K-1})$).
+
+(iii) Dropping $\eta_r^{(K)}$ and the incomplete cycle in band $I$ leaves $\widetilde\mu_N=\frac{m_K}{M}\sum_{a=1}^I a_*\mu_{K-1}+\frac{r_0'}{M}(I+1)_*\mu_{K-1}$ with $r_0'=\lfloor r_0/T_{K-1}\rfloor T_{K-1}$ and $M=Im_K+r_0'$. Partition $\{0,\dots,T_{K-1}(\varepsilon)-1\}$ by the highest level $u\in\{K_0+1,\dots,K-1\}$ at which $\lfloor t/m_u\rfloor$ is odd: the all-even stratum $E_2$ has exact density $2^{-r_{K-1}}$, and each stratum $E^{(u)}$ has exact density $2^{-(K-u)}$, decomposing $\widetilde\mu_N=2^{-r_{K-1}}\sigma^{(2)}+\sum_{u=K_0+1}^{K-1}2^{-(K-u)}\sigma^{(u)}$.
+
+On $E_2$, telescoping \ttt{signed\_band\_identity} from $K-1$ down to $K_0+1$ yields $b^tR_{K-1}(\varepsilon)\equiv b^tR_{K_0}(\varepsilon)-\sum_{u=K_0+1}^{K-1}b^{t\bmod m_u}R_{u-1}(\varepsilon)/(b^{m_u}+1)\pmod1$. Setting $H=\min(D_{K_0-1}(\varepsilon),\lfloor m_{K_0+1}/m_{K_0}\rfloor)\to\infty$ and fixing $1\le h\le H$: for $I\le D_{K_0}(\varepsilon)^2$, replacing $R_{K-1}$ by $R_{K_0}$ costs $O_b(m_{K_0}/m_{K_0+1})$ and \Cref{lem:four-finite}(i) gives $|\widehat\sigma^{(2)}(h)|\le\gcd(h,D_{K_0-1}(\varepsilon))/D_{K_0-1}(\varepsilon)+O_b(m_{K_0}/m_{K_0+1})$; for $I>D_{K_0}(\varepsilon)^2$, outside an edge set of proportion $O(m_{K_0}/m_{K_0+1})$, $\dist{hb^tR_{K-1}}\ge 3/(4D_{K_0}(\varepsilon))$, and reversing the $a$-sum via $|\frac1I\sum_{a=1}^Ie(a\theta)|\le 1/(2I\dist{\theta})$ gives $|\widehat\sigma^{(2)}(h)|\le 2/D_{K_0}(\varepsilon)+O_b(m_{K_0}/m_{K_0+1})$. Erd\H{o}s--Tur\'an yields $W_1(\sigma^{(2)},\lambda)\to0$ uniformly in $I$.
+
+On $E^{(u)}$, telescoping from $K-1$ down to $u$ yields
+\begin{equation}\label{eq:stratum-Eu}
+b^tR_{K-1}(\varepsilon)\equiv +\frac{b^{r_u}R_{u-1}(\varepsilon)}{b^{m_u}+1}-\sum_{v=u+1}^{K-1}\frac{b^{r_v}R_{v-1}(\varepsilon)}{b^{m_v}+1}\pmod1,
+\end{equation}
+where $r_s=t\bmod m_s$ and $r_u$ is exactly uniform on $\{0,\dots,m_u-1\}$. Put $z_v=m_v-r_v$. For every $u<v<K-1$, $t$ lies in an even band at level $v$ and $m_{v+1}/m_v$ is even, so $\lfloor r_{v+1}/m_v\rfloor\le m_{v+1}/m_v-2$, giving $z_{v+1}\ge z_v+m_v$. Excluding the edge set $\{z_{u+1}\le 2m_u+6\}$ (of proportion $O(1/\omega_u)$ in $E^{(u)}$, empty if $u=K-1$), we have $z_v\ge z_{u+1}+(v-u-1)$ for all $v>u$, so the entire higher tail sum in \eqref{eq:stratum-Eu} is at most $8b^{-2m_u-6}\ll\frac14b^{-m_u}$ uniformly in the number of levels. Thus $x_t=\fr{b^tR_{K-1}(\varepsilon)}\in(\frac14b^{r_u-m_u},4b^{r_u-m_u})$ for all $r_u<m_u-3$. Set $\Delta_u=\lceil\sqrt{m_u}\rceil$, $r_*=m_u-\lfloor\log_b I\rfloor$, and $\kappa_I(x)=\frac1I\sum_{a=1}^I\delta_{\fr{ax}}$. For $0\le r_u<r_*-\Delta_u$, $Ix_t\le 4b^{-\Delta_u}$ so $W_1(\kappa_I(x_t),\delta_0)\le 4b^{-\Delta_u}$; for $r_*+\Delta_u<r_u<m_u-\Delta_u$, Erd\H{o}s--Tur\'an with cutoff $H_u=\lfloor b^{\Delta_u/2}/16\rfloor$ gives $D(\kappa_I(x_t))=O(b^{-\Delta_u/2})\to0$; the buffer zones have proportion $O(m_u^{-1/2})$; and the partial band $a=I+1$ has weight $\le 1/I$ (negligible when $I\ge\sqrt{m_u}$, matching $\delta_0$ when $I<\sqrt{m_u}$). Averaging over all strata yields (iii).
+\end{proof}
+
+\begin{theorem}[Complete sign classification of $y(\varepsilon)$]\label{thm:sign-class}\evidence{Paper proof}
+Under \textup{(A1)}--\textup{(A2)}, $x(\varepsilon)\in K_b$ with $1-D_N(x(\varepsilon);b)\le N^{-1+o(1)}$, and:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item if $\varepsilon$ is eventually $-1$ ($R_{\max}(\varepsilon)=0$), then $D_N(y(\varepsilon);b)\to0$ and $\mu_N^{\mathrm{emp}}(y(\varepsilon);b)\Rightarrow\lambda$;
+\item if $\varepsilon$ is eventually $+1$, then $D_N(y(\varepsilon);b)\to1$ ($y(\varepsilon)\in K_b$) and $\mu_N^{\mathrm{emp}}(y(\varepsilon);b)\Rightarrow\delta_0$ (for $\varepsilon\equiv+1$, sign-admissibility reduces to $2m_k\mid m_{k+1}$ and $m_{k+1}/(2m_k)\to\infty$, e.g.\ $m_k=2^k k!$, requiring no tetration);
+\item if both $-1$ and $+1$ occur infinitely often ($1\le R_{\max}(\varepsilon)\le\infty$), then $D^-(y(\varepsilon);b)=0$, $D^+(y(\varepsilon);b)=1-2^{-R_{\max}(\varepsilon)}$, the discrepancy limit set is $[0,1-2^{-R_{\max}(\varepsilon)}]$, and the weak$^*$ limit set on $\T$ is $\{(1-\alpha)\lambda+\alpha\delta_0:0\le\alpha\le 1-2^{-R_{\max}(\varepsilon)}\}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Immediate from \Cref{prop:shell-trajectories} and \Cref{lem:W1-cont}(ii)--(iii): in (iii), across every $+1$-run of length $r\le R_{\max}(\varepsilon)$, \Cref{prop:shell-trajectories}(ii) sweeps $\alpha_N=1-\theta_K(N)2^{-r_{K-1}}$ in steps of $O(1/m_K)$ across $[1-2^{-(j-1)},1-2^{-j}]$ for $1\le j\le r$, while $-1$ resets return to $\alpha_N=0$.
+\end{proof}
+
+\begin{theorem}[Oriented digit frequencies and collapse of simple normality]\label{thm:oriented-digits}\evidence{Paper proof}
+Under the hypotheses of \Cref{thm:sign-class}, every concentration of $\mu_N^{\mathrm{emp}}(y(\varepsilon);b)$ near $0\in\T$ arrives strictly from above ($0^+$): $\lim_{L\to\infty}\limsup_{N\to\infty}\mu_N^{\mathrm{emp}}(y(\varepsilon);b)([1-b^{-L},1))=0$. Consequently, for every $L\ge1$:
+\begin{itemize}[nosep]
+\item if $\varepsilon$ is eventually $+1$, then $f_{0^L}(N;y(\varepsilon),b)\to1$ and $f_w(N;y(\varepsilon),b)\to0$ for all $w\neq 0^L$;
+\item if both signs occur infinitely often, then $\liminf_N f_0(N;y(\varepsilon),b)=\frac1b$ and $\limsup_N f_0(N;y(\varepsilon),b)=1-\frac{b-1}{b}2^{-R_{\max}(\varepsilon)}>\frac1b$, while every digit $d\neq0$ has $\liminf f_d=\frac1b 2^{-R_{\max}(\varepsilon)}$ and $\limsup f_d=\frac1b$.
+\end{itemize}
+In particular, within the signed product family $y(\varepsilon)$, simple normality in base~$b$ is equivalent to full normality in base~$b$ (even for $b=2$), holding if and only if $\varepsilon_k=-1$ eventually.
+\end{theorem}
+
+\begin{proof}
+On a $+1$ shell $K$, odd bands have $b^nR_K(\varepsilon)\equiv+\eta_r^+>0$, and on even bands every point in stratum $E^{(u)}$ ($u>K_0$) satisfies \eqref{eq:stratum-Eu} with $-\eta_r^+$ appended; by the uniform geometric tail bound in \Cref{prop:shell-trajectories}(iii) (discarding levels $u\le c$ first when $K_0$ is fixed, then letting $c\to\infty$), all retained points lie strictly in $(0,b^{-L})$. On a $-1$ transition shell $K$, every unmelted point $ax_t$ is strictly positive and the reset tail $+\eta_r^{(K)}$ is also strictly positive (and $o(1)$ off $r>m_K-\sqrt{m_K}$). Passing from $R_K(\varepsilon)$ to $y(\varepsilon)$ shifts by $\le 16b^{n-m_{K+1}}\ll\frac14b^{-m_K}$ outside a density-zero buffer near $m_{K+1}$. Thus all $\delta_0$-mass lands in $C_{0^L}$ while the $(1-\alpha_N)\lambda$ component contributes $(1-\alpha_N)b^{-L}+o(1)$ to every length-$L$ cylinder, giving $f_{0^L}(N)=\alpha_N+(1-\alpha_N)b^{-L}+o(1)$ and $f_w(N)=(1-\alpha_N)b^{-L}+o(1)$ for $w\neq 0^L$.
+\end{proof}
+
+\subsection{The cyclotomic band family $P_k(q)$ and base-$2$ simple normality}
+
+To escape the $0^+$ orientation lock of \Cref{thm:oriented-digits} while remaining inside $R_0=1$ products, define for each integer $k\ge1$ with $p=2k+1$, $r=2k+3$, and $L_k=2pr=2(2k+1)(2k+3)$:
+\begin{equation}\label{eq:Pk-def}
+P_k(q)=\frac{1+q^p}{1+q}\cdot\frac{1+q^r}{1+q}\in 1+q\Z[q].
+\end{equation}
+
+\begin{proposition}[Closed-form band structure of $P_k(q)$]\label{prop:Pk-structure}\evidence{Paper proof}
+For every integer $k\ge1$:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $P_k(q)$ is palindromic of degree $2p=4k+2$, satisfies $P_k(1)=1$, and divides $(1-q^{L_k})/(1-q)$ in $\Z[q]$.
+\item Write $A_k(q)=\frac{1-q^{L_k}}{(1-q)P_k(q)}=\sum_{i=0}^{L_k-1}S_i^{(k)}q^i$ and $1/P_k(q)=\sum_{s=0}^\infty c_s^{(k)}q^s$. Then $c_s^{(k)}$ and $S_i^{(k)}=\sum_{s=0}^i c_s^{(k)}$ are purely periodic of period $L_k$, with:
+\begin{itemize}[nosep]
+\item $S_i^{(k)}\neq0$ for all $0\le i<L_k-2p$, and $S_i^{(k)}=0$ for all $L_k-2p\le i<L_k$ (exact zero-band density $\rho_k=\frac1{2k+3}$, and every prefix $1\le I\le L_k$ has zero-band proportion at most $\rho_k$);
+\item exactly $2(k+2)(2k+1)$ bands with $S_i^{(k)}>0$ and $2k(2k+1)$ bands with $S_i^{(k)}<0$, giving $\mathbb E[\sgn(S_i^{(k)})\mid S_i^{(k)}\neq0]=\frac1{k+1}$;
+\item $-2k\le S_i^{(k)}\le 2k+2$ and $|c_s^{(k)}|\le2$ for all $i,s\ge0$;
+\item on every trailing zero-band $i=L_k-d$ ($1\le d\le 2p$), the tail $\tau_i^{(k)}(q)=\sum_{u=1}^\infty c_{i+u}^{(k)}q^u$ equals $q^d/P_k(q)$ identically, satisfying $\frac12 q^d\le\tau_{L_k-d}^{(k)}(q)\le 2q^d$ for $0<q\le\frac18$.
+\end{itemize}
+\item \emph{(Generalized band identity.)} If $R\in\Q$ has $\gcd(b,\den(R))=1$ and $\ord_{\den(R)}(b)\mid m$, then $R'=R/P_k(b^{-m})$ satisfies $\ord_{\den(R')}(b)\mid L_k m$ and, for all $i\ge0$ and $0\le r_0<m$,
+\[
+b^{im+r_0}R'\equiv S_{i\bmod L_k}^{(k)}\,b^{r_0}R+b^{r_0}R\,\tau_{i\bmod L_k}^{(k)}(b^{-m})\pmod1.
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Since $\gcd(p,r)=1$ and $p,r$ are odd, $G_k(q):=\frac{(1+q)(1+q^{pr})}{(1+q^p)(1+q^r)}=\sum_{n=0}^{p^2-1}g_nq^n\in\Z[q]$ is palindromic of degree $p^2-1$, $P_k(1)=1$, and $A_k(q)=(1-q^{pr})\frac{1+q}{1-q}G_k(q)\in\Z[q]$, proving (i). Substituting $x=-q$, the semigroup $\mathcal S_{p,r}=\{ap+br:a,b\ge0\}$ has unique representations below $pr$, giving explicit alternating blocks of $g_n\in\{-1,0,+1\}$: for $0\le m<k$, $g_n=(-1)^m$ on $[mp,mr+1]$ and $g_n=0$ on $[mr+2,(m+1)p-1]$; $g_n=(-1)^k$ on the center block $[kp,kr]$; and $g_{p^2-1-n}=g_n$. Letting $s_n=\sum_{j=0}^n g_j$ and $t_n=s_n+s_{n-1}=2s_{n-1}+g_n$, the partial sums after block $m<k$ satisfy $|s_n|\ge2$, so $t_n$ is odd on nonzero blocks and $|t_n|\ge4$ on zero gaps, excluding $t_n\in\{0,2\}$ on $[0,p^2/2)$. Palindromicity gives $t_{p^2-1-n}=2-t_n$, so $t_n\neq0$ on all of $[0,p^2)$ and $-2k\le t_n\le 2k+2$. Evaluating $S_i^{(k)}=t_i-t_{i-pr}$ (using $pr=p^2+2p$) gives $S_i^{(k)}=t_i\neq0$ on $[0,p^2)$, $S_i^{(k)}=+2$ on $[p^2,pr)$, $S_i^{(k)}=2-t_{i-pr}\neq0$ on $[pr,L_k-2p)$, and $S_i^{(k)}=0$ on $[L_k-2p,L_k)$. Since $s_n$ crosses between $\le0$ and $\ge1$ exactly once in each of the $p$ nonzero blocks of $G_k$, $t_n=1$ occurs $p$ times in $[0,p^2)$, yielding $\frac{p(p+1)}{2}$ positive and $\frac{p(p-1)}{2}$ negative values on $[0,p^2)$; doubling and adding the $2p$ values $+2$ gives $p(p+3)=2(k+2)(2k+1)$ positive and $p(p-1)=2k(2k+1)$ negative bands. Within one period $c_s^{(k)}=(g_s+g_{s-1})-(g_{s-pr}+g_{s-1-pr})$ has $|c_s^{(k)}|\le2$ because $[0,p^2]$ and $[pr,pr+p^2]$ are disjoint, and periodic extension gives $|c_s^{(k)}|\le2$ everywhere. On $i=L_k-d$, $c_{i+1}^{(k)}=\cdots=c_{L_k-1}^{(k)}=0$ gives $\tau_{L_k-d}^{(k)}(q)=q^d/P_k(q)\in[\frac12q^d,2q^d]$ for $q\le\frac18$. Part (iii) follows by evaluating $(X-1)P_k(X)\mid(X^{L_k}-1)$ at $X=b^m$ and expanding $b^{im+r_0}R'=\sum_{s\ge0}c_s^{(k)}b^{(i-s)m+r_0}R$.
+\end{proof}
+
+\begin{theorem}[Cyclotomic realization of $K_2$ simple normality and prescribed $D^+=\alpha$]\label{thm:cyclotomic-realization}\evidence{Paper proof}
+Fix an integer radix $b\ge2$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item With $m_1=8$ and $m_{j+1}=b^{(j+1)^3}L_jm_j$, the irrational product $x=\prod_{j=1}^\infty P_j(b^{-m_j})$ satisfies $x\in K_b$ ($1-D_N(x;b)\le N^{-1+o(1)}$), and its reciprocal $y=1/x$ satisfies $y\in K_b$ together with
+\[
+\lim_{N\to\infty}f_{0^L}(N;y,b)=\lim_{N\to\infty}f_{(b-1)^L}(N;y,b)=\frac12,\qquad
+\lim_{N\to\infty}f_w(N;y,b)=0\quad(w\notin\{0^L,(b-1)^L\})
+\]
+for every $L\ge1$. In particular, for $b=2$, $y=1/x$ is simply normal in base~$2$ yet lies in $K_2$.
+\item For every real $\alpha\in[0,1]$, there exists an irrational $x\in K_b$ ($1-D_N(x;b)\le N^{-1+o(1)}$) whose reciprocal $y=1/x$ satisfies $D^-(y;b)=0$, $D^+(y;b)=\alpha$, discrepancy limit set $[0,\alpha]$, weak$^*$ limit set $\{(1-\gamma)\lambda+\gamma\delta_0:0\le\gamma\le\alpha\}$, and (when $b=2$) is simultaneously simply normal in base~$2$ along all $N$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) For $m_J\le N<m_{J+1}$, $J\le(\log_b N)^{1/3}$, so the support and coefficient sizes of $x$ up to $N+O(\ln N)$ are $N^{o(1)}$, placing $x\in K_b$ with deficit $N^{-1+o(1)}$. By \Cref{prop:Pk-structure}(iii), $T_j\mid L_jm_j$ for all $j\ge1$. On a uniformly random $t\in\{0,\dots,L_Jm_J-1\}$, the mixed-radix coordinates $i_j(t)\in\{0,\dots,L_j-1\}$ and $q_j(t)\in\{0,\dots,b^{j^3}-1\}$ are independent and uniform. Letting $U(t)=\max(\{0\}\cup\{1\le j\le J:S_{i_j(t)}^{(j)}=0\})$ and $u_0=\lfloor\sqrt J\rfloor$, we have $\mathbb P(U(t)\le u_0)=\prod_{j=u_0+1}^J(1-\frac1{2j+3})=O(J^{-1/4})\to0$. When $U(t)=u>u_0$, telescoping \Cref{prop:Pk-structure}(iii) down to $u$ yields a dominant term $\Lambda_u(t)=(\prod_{v=u+1}^J S_{i_v}^{(v)})b^{r_u}R_{u-1}\tau_{i_u}^{(u)}(b^{-m_u})$ plus higher tails $E_u(t)$. Outside the two independent edge events $\{r_u\ge m_u-L_J^*\}$ and $\bigcup_{v>u}\{q_v(t)=b^{v^3}-1\}$ (combined probability $O(J\log J\cdot b^{-J^{3/2}})$), $|\Lambda_u(t)|\in[\frac38 b^{-(4u+2)m_u},3b^{-J-L}]$ dominates $|E_u(t)|$, so $b^tR_J\bmod1$ lies in $(-b^{-L},b^{-L})\setminus\{0\}$ with sign $\sigma_{u,J}(t)=\prod_{v=u+1}^J\sgn(S_{i_v}^{(v)})$. Conditioned on $U=u\le J-1$, $\mathbb E[\sigma_{u,J}\mid U=u]=\prod_{v=u+1}^J\frac1{v+1}\le\frac1{J+1}$ (\Cref{prop:Pk-structure}(ii)), while $\mathbb P(U=J)=\frac1{2J+3}$, so the complete-period digit bias is $O(J^{-1/4})$. Passing to arbitrary prefixes $N\in[m_J,m_{J+1}]$: trailing zero-bands of $P_J$ form proportion at most $\frac1{2J+3}$, while each nonzero band multiplies the prior $O(J^{-1/4})$ bias by $\sgn(S_{i\bmod L_J}^{(J)})$ and preserves $(-b^{-L},b^{-L})$ off a $O(J/b^{J^3})$ edge set. Hence $f_{0^L}(N;y,b)=\frac12+O(J^{-1/4})$, $f_{(b-1)^L}(N;y,b)=\frac12+O(J^{-1/4})$, and $D_N(y;b)=1-O(J^{-1/4})\to1$. Irrationality follows because no eventually periodic expansion has $f_{0^L}\to\frac12$ for all $L$.
+
+(ii) For $\alpha=0$, \Cref{thm:sharpened-weyl} suffices. Fix $\alpha\in(0,1]$ and put $f_s(t)=\prod_{k=s}^{s+t-1}(1-\frac1{2k+3})$. If $\alpha<1$, take $s_0=\lceil1/\alpha\rceil+1$ and $t_s=\max\{t\ge0:f_s(t)\ge 1-\alpha\}$; if $\alpha=1$, take $s_0=1$ and $t_s=s^2$. Then $\alpha_s:=1-f_s(t_s)\in(0,\alpha]$ satisfies $\alpha_s\to\alpha$. Build factors $(Q_n)_{n\ge1}$ in rounds $s\ge s_0$: two reset factors $Q_{n_s}(q)=Q_{n_s+1}(q)=1-q$, followed by $t_s$ cyclotomic factors $P_s,\dots,P_{s+t_s-1}$. Choose $(m_n)$ recursively as multiples of the step period modulus $\widetilde T_{n-1}$ satisfying $m_n\ge b^{n^3}\widetilde T_{n-1}C_n^n(d_n+1)$ (where $C_n=\prod_{j\le n}\#(Q_j)\|Q_j\|_1$) and $b^{m_{n_s}}-1\ge 2^s M_s^2$ (where $M_s=\prod_{k=s}^{s+t_s-1}(2k+2)$). Then $x=\prod Q_n(b^{-m_n})\in K_b$ with deficit $N^{-1+o(1)}$, and $|y-R_n|\le 16b^{-m_{n+1}}$ uniformly.
+
+Across each round $s$, let $n_0=n_s+1$ be the second reset and $m^{(j)}=m_{n_0+j}$ ($1\le j\le t_s$). Four steps complete the proof:
+\emph{Step~1 (complete periods):} partition $\{0,\dots,\widetilde T^{(j)}-1\}$ into the all-nonzero stratum $E_2^{(j)}$ (density $f_s(j)$) and depth-indexed zero-band strata $E_{u,d}^{(j)}$ ($1\le u\le j$, $1\le d\le 4k_u+2$, density $w_{u,d}^{(j)}$). On $E_2^{(j)}$, multiplying the reset grid $\mu_{n_0}$ by $S_{\mathrm{tot}}=\prod_{v\le j}S_{i_v}^{(k_v)}$ ($|S_{\mathrm{tot}}|\le M_s$) leaves discrepancy $\le M_s/D_{n_s}\le 2^{-s}M_s^{-1}$, giving $W_1(\mu_{E_2}^{(j)},\lambda)\le 2^{-s}$. On $E_{u,d}^{(j)}$, the signed sign product $\sigma_{u,j}$ is independent of $(r_u,d)$ with expectation $\frac{(s+u)!}{(s+j)!}\ge0$, so the total signed bias satisfies $B^{(j)}=(2B^{(j-1)}+1)/(2k_j+3)\le 3/(2s+3)$.
+\emph{Step~2 (all prefixes in cyclotomic shell $j$):} fix an outer nonzero band index $i$ ($|S|\le 2k_j+2$), drop at most one incomplete old period and one terminal outer quotient block per band (total share $\le 4b^{-n_0^3}$ of $N$), and apply the full product bound $|S\cdot S_{\mathrm{tot}}^{(j-1)}|\le M_s$ directly before separating the outer multiplier. Thus every nonzero outer band preserves $\lambda$ within $2^{-s}+o(1)$ on $E_2^{(j-1)}$, preserves $\delta_0$ on $E_{u,d}^{(j-1)}$, and multiplies the signed bias by $\sgn(S)$. Hence $\mu_N^{\mathrm{emp}}(y;b)$ tracks $(1-\gamma_N)\lambda+\gamma_N\delta_0$ with $\gamma_N\in[1-f_s(j-1),1-f_s(j)]\subseteq[0,\alpha_s]$, and in base~$2$, $|f_0(N;y,2)-\frac12|\le\frac12(B^{(j-1)}+\rho_j)+o(1)\le\frac2{2s+3}+o(1)$.
+\emph{Step~3 (first $-1$ reset shell $K=n_{s+1}$):} on $E_2^{(t_s)}$, splitting at $I\le D_{n_0}^2$ versus $I>D_{n_0}^2$ with cutoff $H_s=\min(2^{\lfloor s/2\rfloor},\lfloor m^{(1)}/(sm_{n_0})\rfloor)$ proves $W_1(\sigma^{(2)},\lambda)\to0$ uniformly in $I$. On $E_{u,d}^{(t_s)}$, working with the signed lift $x_t\in(-\frac12,\frac12]$ gives depth-shifted melting fraction $\beta_{u,d}(I)=\min(1,\max(0,(\log_b I-(d-1)m^{(u)})/m^{(u)}))$: unmelted points stay strictly on their original $0^+$ or $1^-$ side (including under the positive reset tail $\eta_r^{(K)}$ and real tail outside an $O(b^{-K^3})$ edge set), while melted points equidistribute to $\lambda$. Since $\sigma_{u,t_s}$ is independent of $(r_u,d)$ and every stratum bias is nonnegative, $0\le f_0(N;y,2)-f_1(N;y,2)+o(1)\le B^{(t_s)}\le 3/(2s+3)$ across all $N\in[m_K,m_{K+1}]$, while $\gamma_K(m_K)=\alpha_s$ and $\gamma_K(m_{K+1})=0$ (since $I=m_{K+1}/m_K\ge D_{K-1}\ge D_{K-2}\,b^{(4k_{t_s}+2)m^{(t_s)}}P_{k_{t_s}}(b^{-m^{(t_s)}})\ge b^{(4k_{t_s}+2)m^{(t_s)}}$, using $D_{K-2}\ge2$ and $P_k(b^{-m})>\frac12$).
+\emph{Step~4 (second $-1$ reset shell $n_{s+1}+1$):} \Cref{thm:sharpened-weyl} resets $D_N(y;b)\to0$. Since $|D_{N+1}-D_N|\le 1/(N+1)$ and $W_1(\mu_{N+1}^{\mathrm{emp}},\mu_N^{\mathrm{emp}})\le 1/(N+1)$, the limit sets are connected intervals $[0,\alpha]$ and $\{(1-\gamma)\lambda+\gamma\delta_0:0\le\gamma\le\alpha\}$, and $D^-=0<\alpha=D^+$ forces irrationality.
+\end{proof}
+
+\section{Convergent rational-orbit inversion and universal repunit localization}\label{sec:convergent}
+
+In \Cref{thm:cyclotomic-realization}(ii), periodic $-1$ resets always pull $D^-(1/x;b)$ back to~$0$. To obtain \emph{convergent} intermediate limits $D_\infty(1/x;b)=\alpha\in(0,1)$ with $x\in K_b$, we invert the construction: start from a rational seed $r=A/D$ carrying a target periodic orbit $\mu(r;b)$ (the uniform probability measure on $\{b^t r\bmod1:0\le t<\ord_D(b)\}$) and dress $1/r$ by inverse $+1$-factors or repunit factors.
+
+\begin{lemma}[Discrepancy stability for interior $W_\infty$-perturbations]\label{lem:Winf-stability}\evidence{Paper proof}
+Let $\mu,\nu$ be Borel probability measures on $[0,1)$. Suppose $\nu=(1-\eta)\tilde\nu+\eta\nu_{\mathrm{err}}$ ($\eta\in[0,1]$) where $(\mu,\tilde\nu)$ admits a coupling supported on $\{(u,v)\in[0,1)^2:|u-v|\le\delta\}$. Then $|D(\nu)-D(\mu)|\le 2\delta+\eta$.
+\end{lemma}
+
+\begin{proof}
+For any $I=[u,v)\subseteq[0,1)$, set $I^+=[\max(0,u-\delta),\min(1,v+\delta))$ and $I^-=(u+\delta,v-\delta)$ (empty if $v-u\le 2\delta$). Then $\mu(I^-)\le\tilde\nu(I)\le\mu(I^+)$ with $|I^+|\le|I|+2\delta$ and $|I^-|\ge|I|-2\delta$. Approximating open intervals from inside by half-open intervals gives $|\nu(I)-|I||\le D(\mu)+2\delta+\eta$; reversing $\mu$ and $\tilde\nu$ in the same coupling gives the symmetric bound.
+\end{proof}
+
+\begin{theorem}[Rational-orbit $+1$-inversion]\label{thm:plus1-inversion}\evidence{Paper proof}
+Fix $b\ge2$ and let $r=A/D\in\Q_{>0}$ be reduced with $\gcd(b,AD)=1$ and $2\in\langle b\rangle\pmod D$ (which forces $D$ odd, and holds for every odd $D\ge1$ when $b=2$). Set $P=\lcm(\ord_A(b),\ord_D(b))$, and choose $(m_j)_{j\ge1}$ with $P\mid m_1$, $2m_j\mid m_{j+1}$, and $m_{j+1}/(2m_j)\to\infty$ (for example $m_j=2^j j! P$). Then
+\[
+x=\frac1r\prod_{j=1}^\infty(1+b^{-m_j})^{-1},\qquad y=\frac1x=r\prod_{j=1}^\infty(1+b^{-m_j})
+\]
+are irrational, $x\in M_b\subset K_b$ (with $m_N(x;b)\to0$ and $D_N(x;b)\to1$), and along \emph{all} $N$,
+\[
+\mu_N^{\mathrm{emp}}(1/x;b)\xrightarrow{W_1}\mu(r;b),\qquad \lim_{N\to\infty}D_N(1/x;b)=D(\mu(r;b)),\qquad \lim_{N\to\infty}f_w(N;1/x,b)=\mu(r;b)(C_w)
+\]
+for every word $w\in\{0,\dots,b-1\}^L$ ($L\ge1$).
+\end{theorem}
+
+\begin{proof}
+Put $X_k=\frac1r\prod_{j=1}^k(1+b^{-m_j})^{-1}$ and $Y_k=1/X_k=r\prod_{j=1}^k(1+b^{-m_j})$.
+
+\emph{Step~1 ($x\in M_b\subset K_b$).} We check $\den(X_k)\mid(b^{2m_k}-1)$ by induction on $k\ge0$ (with $2m_0:=P$): $\den(X_0)=A\mid(b^P-1)$, and at step $k\ge1$, $\den(X_{k-1})\mid(b^{m_k}-1)$ gives $v_p(\den(X_k))\le v_p(\den(X_{k-1}))+v_p(b^{m_k}+1)\le v_p(b^{m_k}-1)+v_p(b^{m_k}+1)=v_p(b^{2m_k}-1)$ for every prime $p$ (odd or $2$). The exact band identities for $0\le r_0<m_k$ are
+\[
+b^{r_0}X_k=b^{r_0}X_{k-1}-\frac{b^{r_0}X_{k-1}}{b^{m_k}+1},\qquad
+b^{m_k+r_0}X_k=b^{r_0}(b^{m_k}-1)X_{k-1}+\frac{b^{r_0}X_{k-1}}{b^{m_k}+1}.
+\]
+Since $\den(X_{k-1})\mid(b^{m_k}-1)$, the integer term drops on band~$1$, leaving $\fr{b^{m_k+r_0}X_k}=\fr{b^{r_0}X_{k-1}/(b^{m_k}+1)}$, whose average circular distance to $0$ is at most $C_1/m_k$ ($C_1=1+(\lceil\log_b(2X_0)\rceil+1)/2$). Band~$0$ traverses exact full periods of $X_{k-1}$ up to the same tail $C_1/m_k$, yielding the contraction $W_1(\mu(X_k;b),\delta_0)\le\frac12 W_1(\mu(X_{k-1};b),\delta_0)+C_1/m_k\to0$. For all $N\in[2m_k,2m_{k+1})$, $|x-X_{k+1}|\le 2X_0 b^{-m_{k+2}}$ is negligible on $[0,N)$; splitting $N\le m_{k+1}$ (bounded by $q+1$ full periods of $X_k$, hence $\le 2W_1(\mu(X_k;b),\delta_0)+C_1/N$) versus $m_{k+1}<N<2m_{k+1}$ (full periods of $X_k$ on $[0,m_{k+1})$ plus band~$1$ of $X_{k+1}$) gives $m_N(x;b)\to0$, so $x\in M_b\subset K_b$.
+
+\emph{Step~2 (exact orbit lock for $y=1/x$).} Put $S_k=\sum_{j=1}^k m_j=o(m_{k+1})$, $\Delta_k=\lfloor\sqrt{m_{k+1}}\rfloor$, $T_r=\ord_D(b)$, and pick $s_0\ge0$ with $2\equiv b^{s_0}\pmod D$. For $n\in[S_k,m_{k+1}-\Delta_k)$, expanding $Y_k=\sum_{I\subseteq\{1,\dots,k\}}b^{-\sum_{j\in I}m_j}r$ has all exponents $n-\sum_{j\in I}m_j\ge0$, and since $T_r\mid m_j$ each term equals $b^nr\pmod1$, yielding the exact subset-sum lock
+\[
+b^nY_k\equiv 2^k b^n r\equiv b^{n+ks_0}r\pmod1\qquad(n\ge S_k),
+\]
+while $0<b^n(y-Y_k)\le 2yb^{-\Delta_k}=:\delta_k\to0$. Since every orbit point of $r$ lies in $[1/D,1-1/D]$ (when $D\ge2$; or equals $0$ with positive tail $\in(0,\delta_k]$ when $D=1$), no wrap-around occurs across $0$ or $1$ once $\delta_k<1/(2D)$. For $N\in[m_k,m_{k+1})$, $[0,N)$ splits into the clean windows $[S_{k-1},m_k-\Delta_{k-1})$ and $[S_k,\min(N,m_{k+1}-\Delta_k))$ plus an exceptional set of size $O(S_{k-1}+\Delta_{k-1}+\Delta_k+T_r)=o(N)$. \Cref{lem:Winf-stability} gives $|D_N(y;b)-D(\mu(r;b))|\to0$, and \leanT{RadixPowerTower}{928}{\ttt{coprime\_rat\_cylinder\_margin}} gives $f_w(N;y,b)\to\mu(r;b)(C_w)$ once $\delta_{k-1}<1/(Db^L)$.
+
+\emph{Step~3 (irrationality).} For large $k$, $Dy=A\prod_{j\ge1}(1+b^{-m_j})$ has non-overlapping shifted copies of $A\prod_{j<k}(1+b^{-m_j})$ separated by zero-runs of length $m_k-S_{k-1}-\lceil\log_b A\rceil-k\to\infty$, precluding eventual periodicity.
+\end{proof}
+
+\begin{corollary}[Dense exact convergent reciprocal discrepancies in base~$2$]\label{cor:dense-Aconv2}\evidence{Paper proof}
+The set $\mathcal A_{\mathrm{conv}}(2)=\{\alpha\in[0,1]:\exists\,x\in K_2\setminus\Q,\ \lim_{N\to\infty}D_N(1/x;2)=\alpha\}$ is dense in $[0,1]$.
+\end{corollary}
+
+\begin{proof}
+In base~$2$, $2\in\langle 2\rangle\pmod D$ holds for every odd $D\ge1$. For any $z\ge0$ and order-$m$ binary de Bruijn word $w_{\mathrm{dB},m}$ rotated to end in $1$, put $w=0^z w_{\mathrm{dB},m}$ and $r=v(w)/(2^{z+2^m}-1)=A/D$ in lowest terms (so $A,D$ are odd). By \Cref{thm:plus1-inversion}, $D(\mu(r;2))\in\mathcal A_{\mathrm{conv}}(2)$, and $\mu(r;2)$ approximates $\frac{z}{z+2^m}\delta_0+\frac{2^m}{z+2^m}\lambda$ in discrepancy within $O(m/(z+2^m)+2^{-m})$ (using \Cref{thm:universal-ceiling}). Letting $m\to\infty$ with $z/(z+2^m)\to\alpha$ approximates any $\alpha\in[0,1]$.
+\end{proof}
+
+\begin{proposition}[Universal repunit inversion and all-base localization]\label{prop:repunit-inversion}\evidence{Paper proof}
+Fix any radix $b\ge2$, any reduced $r=A/D\in\Q_{>0}$ with $\gcd(b,AD)=1$, and any schedule $(m_j)_{j\ge1}$ with $P=\lcm(\ord_A(b),\ord_D(b))\mid m_1$, $bm_j\mid m_{j+1}$, and $m_{j+1}/(bm_j)\to\infty$. Let $Q_b(q)=(1-q^b)/(1-q)=\sum_{s=0}^{b-1}q^s$ and
+\[
+x=\frac1r\prod_{j=1}^\infty Q_b(b^{-m_j})^{-1},\qquad y=\frac1x=r\prod_{j=1}^\infty\bigl(1+b^{-m_j}+\cdots+b^{-(b-1)m_j}\bigr).
+\]
+Then $x,y$ are irrational, $x\in M_b\subset K_b$, and every weak$^*$ limit point of $\mu_N^{\mathrm{emp}}(1/x;b)$ is a convex combination of $\mu(r;b),\mu(2r;b),\dots,\mu((b-1)r;b)$, with clean-block $W_\infty^{[0,1)}$-approximation on each block $[sm_k+(b-1)S_{k-1},(s+1)m_k-\Delta'_k)$ ($0\le s\le b-2$) and $[(b-1)m_k+(b-1)S_{k-1},m_{k+1}-\Delta_k)$ ($\Delta'_k=\lfloor\sqrt{m_k}\rfloor$, $\Delta_k=\lfloor\sqrt{m_{k+1}}\rfloor$). Consequently, for every $b\ge2$, $\alpha\in(0,1)$, and $\varepsilon>0$, there exists an irrational $x\in M_b\subset K_b$ with $[D^-(1/x;b),D^+(1/x;b)]\subseteq[\alpha-\varepsilon,\alpha+\varepsilon]$.
+\end{proposition}
+
+\begin{proof}
+Inductively $\den(X_k)\mid(b^{bm_k}-1)$ because $X_k=X_{k-1}\frac{b^{(b-1)m_k}(b^{m_k}-1)}{b^{bm_k}-1}$ and $\den(X_{k-1})\mid(b^{m_k}-1)$. Expanding $(1-q)/(1-q^b)$ gives $S_0=1$ and $S_1=\cdots=S_{b-1}=0$ on the $b$ bands of length $m_k$, yielding the $1/b$-contraction $W_1(\mu(X_k;b),\delta_0)\le\frac1b W_1(\mu(X_{k-1};b),\delta_0)+C_1/m_k\to0$; splitting $N\in[bm_k,bm_{k+1})$ at $m_{k+1}$ exactly as in \Cref{thm:plus1-inversion} proves $m_N(x;b)\to0$ and $x\in M_b\subset K_b$.
+
+For $y=1/x$, expanding $Y_k=Y_{k-1}\sum_{u=0}^{b-1}b^{-um_k}$ shows that on the $s$-th clean block ($0\le s\le b-2$) the $b^{k-1}$ terms of $Y_{k-1}$ sum modulo~$1$ to $b^{k-1}b^nr$ and the $s+1$ active terms $u\le s$ give $b^ny\equiv(s+1)b^{n+k-1}r+O(yb^{-\Delta'_k})\pmod1$ (tracking $\mu((s+1)r;b)$); on the final block $s=b-1$, the $b$ active terms give $b\cdot b^{n+k-1}r=b^{n+k}r\pmod1$ (returning to $\mu(r;b)$ without needing $2\in\langle b\rangle\pmod D$). Transition zones have density $o(1)$, so every weak$^*$ limit point is $\nu=\sum_{s=1}^{b-1}\theta_s\mu(sr;b)$. Finally, choose $r$ from $0^z w_{\mathrm{dB},m}$ so that $W_1(\mu(r;b),\mu_\alpha)<\varepsilon^2/(32b)$, where $\mu_\alpha=(1-\alpha)\lambda+\alpha\delta_0$. Since $t\mapsto st\bmod1$ fixes $\mu_\alpha$ and is $s$-Lipschitz on $\T$, $W_1(\mu(sr;b),\mu_\alpha)<\varepsilon^2/32$ for every $1\le s<b$, hence $W_1(\nu,\mu_\alpha)<\varepsilon^2/32$ and $|D(\nu)-\alpha|\le 4\sqrt{W_1(\nu,\mu_\alpha)}<\varepsilon$ (\Cref{lem:W1-cont}(ii)--(iii)). Irrationality follows as in \Cref{thm:plus1-inversion}.
+\end{proof}
+
+We also record an elementary polynomial identity explaining why pure $R_0=1$ cyclotomic products with $Q(1)=1$ (such as $P_k(q)$ in \Cref{sec:signs}) inevitably carry band multipliers $S_i\ge2$.
+
+\begin{proposition}[$Q(1)=1$ coefficient excess identity]\label{prop:Q1-excess}\evidence{Paper proof}
+Let $L\ge2$ and let $Q\in\Z[q]$ divide $(1-q^L)/(1-q)$ with $Q(0)=Q(1)=1$ and $\deg Q\ge1$. Writing $\frac{1-q^L}{(1-q)Q(q)}=\sum_{i=0}^{L-1}S_iq^i$ ($S_i=0$ for $i>L-1-\deg Q$),
+\[
+\sum_{i:\,S_i\ge2}(S_i-1)=\#\{i<L:S_i=0\}+\sum_{i:\,S_i\le-1}(1-S_i)\ge\deg Q\ge1.
+\]
+In particular, $\max_{0\le i<L}S_i\ge2$.
+\end{proposition}
+
+\begin{proof}
+Evaluating $A(q)=\frac{1-q^L}{(1-q)Q(q)}$ at $q=1$ gives $\sum_{i=0}^{L-1}(S_i-1)=A(1)-L=L/Q(1)-L=0$; splitting by the sign of $S_i-1$ and noting that the last $\deg Q$ coefficients vanish gives the identity.
+\end{proof}
+
+\begin{remark}[Heuristic motivation for rational-seed inversion]\label{rem:Q1-motivation}
+In a pure $R_0=1$ cyclotomic product $x=\prod Q_k(b^{-m_k})$, \Cref{prop:Q1-excess} shows that $Q_k(1)=1$ necessarily creates multipliers $S_i\ge2$ alongside zero-bands, whereas an exhaustive finite check over all $1050$ cyclotomic divisors $Q\mid(1-q^L)/(1-q)$ with $L\le50$, $|Q(1)|\ge2$, and $|S_i|\le1$ (\ttt{scripts/phase23\_reciprocals\_v2.py}, \evidence{Finite certificate}) found zero-band density at least $1/2$ in every case. Neither observation is a general impossibility theorem for pure $R_0=1$ products, but together they motivate using an explicit rational seed $r$ in \Cref{thm:plus1-inversion} and \Cref{prop:repunit-inversion}.
+\end{remark}
+
+\section{$L$-normal nonnormal reciprocals in all bases}\label{sec:Lnormal}
+
+\subsection{Sharp ceiling $D_{\max}(b,L)=2b^{-L}$ via loop-deleted de Bruijn digraphs}
+
+\Cref{thm:universal-ceiling} gave the universal upper bound $D^+(y;b)\le 2b^{-L}$ for every base-$b$ $L$-normal real (an elementary cylinder-cover consequence, cf.\ \cite[Chapter~4]{Bugeaud12}; in contrast to constructions of low-discrepancy full normal numbers via nested perfect necklaces \cite{BecherCarton19} or arithmetic generators \cite{BC02}, here the finite order $L$ is fixed while discrepancy is measured over all intervals), and \Cref{thm:real-spectrum} realized $[0,2b^{-L}]$ via periodic-mixture digit strings. A second, purely periodic-orbit construction via the loop-deleted de Bruijn digraph $G_{b,L}^*$ produces $L$-normal \emph{rational seeds} (with exact cyclic $L$-word counts) approaching $2b^{-L}$, which we then feed into reciprocal inversion.
+
+\begin{theorem}[Sharp ceiling $D_{\max}(b,L)=2b^{-L}$ and periodic-seed attainment]\label{thm:Dmax-attain}\evidence{Paper proof}
+For every radix $b\ge2$ and word length $L\ge1$, let $G_{b,L}^*$ be obtained from the de Bruijn digraph $G_{b,L}$ by deleting the two extreme self-loops $0^L$ and $(b-1)^L$. For each integer $R\ge1$, traversing $R$ copies of an Eulerian circuit $C^*$ of $G_{b,L}^*$ and splicing $R$ consecutive $0$-loops at $0^{L-1}$ and $R$ consecutive $(b-1)$-loops at $(b-1)^{L-1}$ (for $L=1$: $W_R^{\mathrm{exact}}=0^R(b-1)^R(12\cdots(b-2))^R$) gives a cyclic word of length $P_R=Rb^L$ whose rational $r_R=v(W_R^{\mathrm{exact}})/(b^{P_R}-1)$ has exact cyclic $L$-word counts (hence is $L$-normal) and satisfies
+\[
+2b^{-L}-O_b\Bigl(\frac{\log_b R}{R}\Bigr)\le D(\mu(r_R;b))\le 2b^{-L}.
+\]
+Concatenating blocks of $W_{R_j}^{\mathrm{exact}}$ (all rotated to begin with $0^{L-1}$) yields an $L$-normal real with $D_\infty(y;b)=2b^{-L}$; interleaving with full de Bruijn words of growing order realizes every $\alpha\in[0,2b^{-L}]$ via the affine identity $D((1-t)\lambda+t\sigma)=tD(\sigma)$.
+\end{theorem}
+
+\begin{proof}
+For $L\ge2$, $G_{b,L}$ is strongly connected and shortest paths between distinct vertices use no self-loops, so $G_{b,L}^*$ remains balanced and strongly connected and admits an Eulerian circuit $C^*$ of length $b^L-2$ visiting $0^{L-1}$ and $(b-1)^{L-1}$ (for $L=1$, $G_{b,1}^*$ has $b-2$ loops on a single vertex). Every length-$L$ word occurs $R$ times cyclically in $W_R^{\mathrm{exact}}$. Put $k_R=\lceil\log_b R\rceil$, $\delta_R=b^{-k_R}\le 1/R$, and $I_R=[\delta_R,1-\delta_R)$. The first $R-k_R$ shifts of the $0^R$-block satisfy $\fr{b^n r_R}<\delta_R$, and the first $R-k_R$ shifts of the $(b-1)^R$-block satisfy $\fr{b^n r_R}>1-\delta_R$, so $|I_R|-\mu(r_R;b)(I_R)\ge(1-2\delta_R)-(1-\frac{2(R-k_R)}{Rb^L})=2b^{-L}-O_b((\log_b R)/R)$. The upper bound is \Cref{thm:universal-ceiling}, and concatenating/interleaving rotated blocks (with $P_{R_{j+1}}=o(\sum_{i\le j}c_i P_{R_i})$) gives exact attainment of $2b^{-L}$ and every $\alpha\in[0,2b^{-L}]$.
+\end{proof}
+
+\subsection{The refined Markov digraph $\mathcal G_{b,M}$ and all-base $L$-normal reciprocals}
+
+In base $b\ge3$, universal repunit inversion (\Cref{prop:repunit-inversion}) mixes all orbits $\mu(sr;b)$ ($1\le s\le b-1$). To force \emph{every} multiple $sr$ to be simultaneously $L$-normal while retaining positive discrepancy, set
+\[
+Q=\lcm(1,2,\dots,b-1),\qquad M=Qb^L,\qquad J_u=\Bigl[\frac{u}{M},\frac{u+1}{M}\Bigr)\quad(0\le u<M),
+\]
+and define the \emph{refined Markov digraph} $\mathcal G_{b,M}$ on vertex set $V_M=\{0,1,\dots,M-1\}$ with $bM$ directed edges $u\xrightarrow{\;d\;}(bu+d)\bmod M$ ($u\in V_M$, $d\in\{0,\dots,b-1\}$).
+
+\begin{lemma}[Strict cell interiority and simultaneous $L$-normality on $\mathcal G_{b,M}$]\label{lem:refined-markov}\evidence{Paper proof}
+Let $(u_0\xrightarrow{d_0}u_1\xrightarrow{d_1}\cdots\xrightarrow{d_{P-1}}u_0)$ be a closed walk in $\mathcal G_{b,M}$ whose edge digit labels $(d_n)_{n=0}^{P-1}$ are neither identically $0$ nor identically $b-1$. Put $\alpha_n=\lfloor bu_n/M\rfloor\in\{0,\dots,b-1\}$, $A=\sum_{n=0}^{P-1}\alpha_n b^{P-1-n}$, and $r=A/(b^P-1)$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every $n\in\{0,\dots,P-1\}$, $\frac{u_n}{M}<\fr{b^nr}<\frac{u_n+1}{M}$.
+\item If the walk visits every vertex $u\in V_M$ exactly $P/M$ times, then for \emph{every} $s\in\{1,\dots,b-1\}$, the orbit $\mu(sr;b)$ is $L$-normal: every length-$L$ word $w\in\{0,\dots,b-1\}^L$ occurs exactly $P/b^L$ times.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) Since $b\mid M$, write $M=bM'$. For every $u_n\in V_M$ and $d_n\in\{0,\dots,b-1\}$, $\frac{u_n}{M'}=\frac{bu_n}{M}\le\frac{bu_n+d_n}{M}<\frac{u_n+1}{M'}$, so $\lfloor(bu_n+d_n)/M\rfloor=\lfloor bu_n/M\rfloor=\alpha_n$ and hence $bu_n+d_n=\alpha_n M+u_{n+1}$ ($n\bmod P$). Writing $x_n=\fr{b^nr}$ (so $bx_n=\alpha_n+x_{n+1}$), the offset $\Delta_n:=Mx_n-u_n$ obeys $\Delta_{n+1}=b\Delta_n-d_n$, whose unique $P$-periodic solution is
+\[
+\Delta_n=\frac1{b^P-1}\sum_{j=0}^{P-1}d_{n+j}b^{P-1-j}\in[0,1].
+\]
+Since $(d_j)$ is neither all $0$ nor all $b-1$, we have $0<\Delta_n<1$ for every $n$, proving (i). (Note: requiring $(d_n)$ not all $0$ and not all $b-1$ is essential because $\mathcal G_{b,M}$ has additional interior boundary self-loops whenever $\gcd(b-1,M)>1$, e.g.\ $3\xrightarrow{0}3$ and $2\xrightarrow{2}2$ in $\mathcal G_{3,6}$, both yielding $r=1/2$.)
+
+(ii) Fix $1\le s<b$ and a cylinder $C_w=[k/b^L,(k+1)/b^L)$. Its preimage under $x\mapsto\fr{sx}$ is $\bigsqcup_{j=0}^{s-1}[(jb^L+k)/(sb^L),(jb^L+k+1)/(sb^L))$. Since $s\mid Q$, $M/(sb^L)=Q/s\in\Z_{\ge1}$, so every endpoint is an integer multiple of $1/M$, and this preimage is an exact disjoint union of $Q$ cells $J_u$. By (i), $x_n\in\operatorname{int}(J_{u_n})$, so $\fr{sx_n}\in C_w$ iff $u_n$ lies in those $Q$ vertices, occurring $Q\cdot(P/M)=P/b^L$ times.
+\end{proof}
+
+\begin{theorem}[Unconditional $L$-normal nonnormal reciprocals in all bases]\label{thm:Lnormal-reciprocals}\evidence{Paper proof}
+Fix $b\ge2$ and $L\ge1$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \emph{(Base~$2$: dense $L$-normal spectrum and prescribed rational word laws.)} When $b=2$, the set of exact convergent discrepancies $D_\infty(1/x;2)$ attained by irrational $x\in M_2\subset K_2$ with base-$2$ $L$-normal reciprocal $1/x$ is dense in $[0,2^{1-L}]$. Moreover, for any rational flow-consistent length-$L$ word probability distribution $\mathbf p$ on $\{0,1\}^L$ with connected support digraph on $\{0,1\}^{L-1}$ assigning positive mass to both digits $0$ and $1$, there exists an irrational $x\in M_2\subset K_2$ whose reciprocal $1/x$ has exact limiting word frequencies $\mathbf p$ and exact convergent discrepancy $D_\infty(1/x;2)\in(0,1)$.
+\item \emph{(All bases $b\ge2$, all $L\ge1$.)} There exists an irrational $x\in M_b\subset K_b$ whose reciprocal $1/x$ is $L$-normal in base~$b$ along all $N$ (in fact $(L+1)$-normal, since the walk traverses every edge of $\mathcal G_{b,M}$ equally often) yet nonnormal, with
+\[
+0<\frac{2}{bM}-O_{b,L}\Bigl(\frac{\log_b R}{R}\Bigr)\le D^-(1/x;b)\le D^+(1/x;b)\le 2b^{-L}
+\]
+for any sufficiently large integer $R$ (with $M=\lcm(1,\dots,b-1)\,b^L$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) Concatenate $c_{\mathrm{ext}}$ copies of $W_R^{\mathrm{exact}}$ (\Cref{thm:Dmax-attain}) and $c_{\mathrm{dB}}$ copies of an order-$m$ binary de Bruijn word ($m\ge L$), both rotated to start with $0^{L-1}$ and end with $1$; the combined cyclic word has exact cyclic $L$-word counts, and \Cref{thm:plus1-inversion} transfers both $L$-normality and $D(\mu(r;2))$ to $1/x$, sweeping dense values in $[0,2^{1-L}]$ as $R,m\to\infty$. For a rational flow-consistent $\mathbf p$, Euler's theorem gives a cyclic word with exact frequencies $\mathbf p$; rotating to end in $1$ and applying \Cref{thm:plus1-inversion} yields the claim.
+
+(ii) Delete the two extreme self-loops $0\xrightarrow{0}0$ and $(M-1)\xrightarrow{b-1}(M-1)$ from $\mathcal G_{b,M}$ to form $\mathcal G_{b,M}^*$. Every vertex has $\deg^+=\deg^-\ge b-1\ge1$, and $\mathcal G_{b,M}^*$ is strongly connected (taking a first step away from $0$ or $M-1$, the base-$b$ map $u\mapsto(b^tu+\sum d_jb^{t-1-j})\bmod M$ surjects onto $V_M$ once $b^t\ge M$), so $\mathcal G_{b,M}^*$ has an Eulerian circuit $C_M^*$ of length $bM-2$ visiting $0$ and $M-1$. Traverse $R$ copies of $C_M^*$ with $R$ consecutive $0$-loops spliced at $0$ and $R$ consecutive $(b-1)$-loops spliced at $M-1$, producing a closed walk of length $P=RbM$ traversing every edge of $\mathcal G_{b,M}$ exactly $R$ times (so every digit $0,\dots,b-1$ appears and every vertex is visited $Rb=P/M$ times). Rotate the walk so $\alpha_{P-1}=\lfloor bu_{P-1}/M\rfloor=1$; then $A\equiv1\pmod b$, so $\gcd(b,A_{\mathrm{red}}D_{\mathrm{red}})=1$ for $r=A/(b^P-1)$.
+
+Feed $r$ into universal repunit inversion (\Cref{prop:repunit-inversion}) to obtain irrational $x\in M_b\subset K_b$ and $y=1/x$. By \Cref{lem:refined-markov}(ii) and \leanT{RadixPowerTower}{928}{\ttt{coprime\_rat\_cylinder\_margin}}, every clean block tracks $\mu(sr;b)$ ($1\le s<b$) inside exact cylinders, so $f_w(N;y,b)\to b^{-L}$ along all $N$ (moreover, $\Delta_{n+1}=b\Delta_n-d_n$ places $x_n$ inside the interior of cell $bu_n+d_n$ at resolution $bM=Qb^{L+1}$, so traversing each edge of $\mathcal G_{b,M}$ exactly $R$ times makes every $\mu(sr;b)$, and hence $1/x$, $(L+1)$-normal as well). Finally, put $k_R=\lceil\log_b R\rceil$ and $\eta_R=b\cdot b^{-k_R}$. Inside the $R$ consecutive $0$-loops, the first $R-k_R$ shifts satisfy $0<\fr{b^nr}<b^{-k_R}$, hence $0<\fr{b^n(sr)}=s\fr{b^nr}<\eta_R$ for \emph{all} $1\le s<b$; similarly, the first $R-k_R$ shifts of the $(M-1)$-loop block satisfy $1-\eta_R<\fr{b^n(sr)}<1$ for all $1\le s<b$. Thus the single interval $I_R=[\eta_R,1-\eta_R)$ simultaneously misses at least $2(R-k_R)$ out of $RbM$ points in every $\mu(sr;b)$, so every convex combination $\nu=\sum_{s=1}^{b-1}\theta_s\mu(sr;b)$ satisfies
+\[
+D(\nu)\ge |I_R|-\nu(I_R)\ge(1-2\eta_R)-\Bigl(1-\frac{2(R-k_R)}{RbM}\Bigr)=\frac{2}{bM}-\frac{2k_R}{RbM}-\frac{2b}{R},
+\]
+strictly positive for large $R$.
+\end{proof}
+
+\subsection{Primitive-root $2/p$ realization and two obstructions}
+
+\begin{proposition}[Primitive-root convergent $L$-normal reciprocals and quadratic-reciprocity obstruction]\label{prop:primroot-QR}\evidence{Paper proof}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item If $p=kb^L+1$ is an odd prime with $\ord_p(b)=p-1$, then applying \Cref{thm:plus1-inversion} to $r=1/p$ yields an irrational $x\in M_b\subset K_b$ whose reciprocal $1/x$ is $L$-normal with exact convergent discrepancy $D_\infty(1/x;b)=2/p$.
+\item Conversely, no such prime $p=kb^L+1$ with $\ord_p(b)=p-1$ can exist whenever $b\equiv0,1\pmod4$ (for any $L\ge1$) or $b\equiv2\pmod4$ with $L\ge3$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Since $b$ is a primitive root modulo $p$, $2\in\langle b\rangle\pmod p$ holds automatically and the orbit of $1/p$ visits $\{a/p:1\le a\le p-1\}$ once each. Each cylinder $[m/b^L,(m+1)/b^L)$ contains precisely the $k$ values $mk+1\le a\le (m+1)k$ (classic repeating-fraction property, cf.\ \cite[\S9.12]{HW08}), and \eqref{eq:equal-atoms} gives $D(\mu(1/p;b))=2/p$.
+(ii) Write $b=2^eb_{\mathrm{odd}}$. If $b\equiv1\pmod4$, then $p\equiv1\pmod b$ gives $\bigl(\frac bp\bigr)=\bigl(\frac pb\bigr)=+1$ by quadratic reciprocity. If $b\equiv0\pmod4$, then $p\equiv1\pmod{4b_{\mathrm{odd}}}$ (and $8\mid(p-1)$ if $e\ge3$ is odd), so $\bigl(\frac bp\bigr)=+1$. If $b\equiv2\pmod4$ and $L\ge3$, then $8b_{\mathrm{odd}}\mid(p-1)$, so $\bigl(\frac2p\bigr)=\bigl(\frac{b_{\mathrm{odd}}}{p}\bigr)=+1$. In all three regimes $b$ is a quadratic residue modulo $p$ and cannot be a primitive root.
+\end{proof}
+
+\begin{proposition}[$R_0=1$ obstruction for $(b,L)\neq(2,1)$]\label{prop:R0-obstruction}\evidence{Paper proof}
+No real number $y$ having a weak$^*$ limit point of the form $\nu=(1-\gamma)\lambda+\gamma\delta_0$ with $\gamma>0$ on $\T$ can be $L$-normal in base~$b$ whenever $(b,L)\neq(2,1)$.
+\end{proposition}
+
+\begin{proof}
+Since $\delta_0$ puts mass~$1$ on the open arc $(1-b^{-L},b^{-L})\subset C_{0^L}\cup C_{(b-1)^L}$ around $0\in\T$, the portmanteau theorem gives $\liminf_j(f_{0^L}(N_j)+f_{(b-1)^L}(N_j))\ge 2b^{-L}+\gamma(1-2b^{-L})>2b^{-L}$ along any subsequence $\mu_{N_j}^{\mathrm{emp}}(y;b)\Rightarrow\nu$, because $b^L\ge3$.
+\end{proof}
+
+\section{Non-tetration normal reciprocals, coprime CRT convolution, and $R_k^{(E)}$}\label{sec:nontetration}
+
+\subsection{Anchored coprime schedules in every base $b\ge2$}
+
+To escape the tetration growth forced by \textup{(HD1)}--\textup{(HD2)} (\Cref{thm:HD-rigidity}(iii)), we anchor every exponent $m_k=sq_k$ to a single fixed period $s$ (generating powers $M^{k-1}$ of a fixed anchor modulus $M=b^s-1\ge3$) while keeping the cofactors $q_k$ pairwise coprime.
+
+\begin{theorem}[Anchored coprime non-tetration normal reciprocals]\label{thm:anchored-coprime}\evidence{Paper proof}
+Fix any integer radix $b\ge2$. Put $s_b=1$ if $b\ge4$ and $b\not\equiv3\pmod4$, and $s_b=2$ otherwise. Fix a positive multiple $s$ of $s_b$, set $M=b^s-1\ge3$, pick $q_1\ge5$ with $\gcd(q_1,sM)=1$, and define recursively for $k\ge2$:
+\[
+q_k=\omega_{k-1}\frac{T_{k-1}}{s}+1,\qquad m_k=sq_k=\omega_{k-1}T_{k-1}+s,\qquad T_k=sM^{k-1}\prod_{j=1}^k q_j,
+\]
+where integer parameters $\omega_k\ge1$ satisfy $sM\mid\omega_1$, $s\mid\omega_{k-1}$ ($k\ge3$), and $\omega_k\to\infty$. Let $x=\prod_{k\ge1}(1-b^{-m_k})$ and $y=1/x=\lim R_k$. Then:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item $D_k=M^k\prod_{j=1}^k\widetilde d_j$ where $\widetilde d_j=(b^{m_j}-1)/M$ are pairwise coprime and coprime to $M$, $\ord_{D_k}(b)=T_k$, $\widehat C_k(h)=0$ whenever $M^{k-1}\nmid h$, and $D(\mu(R_k;b))\le M^{-(k-1)}$.
+\item $x\in M_b\subset K_b$ and $y=1/x$ is base-$b$ normal with all-prefix Weyl bound
+\[
+|W_h(N)|\le\frac{\gcd(h,M^{K-2})}{M^{K-2}}+\frac{T_{K-1}+s+3c_b(h)}{m_K}\qquad(N\in[m_K,m_{K+1})).
+\]
+\item At the balanced choice $\omega_k=sM^k$, $\ln T_k=(c_*+o(1))2^k$ and $\ln m_k=(\frac{c_*}{2}+o(1))2^k$ for an explicit constant $c_*=c_*(b,s,q_1)>0$ (doubly exponential, no tetration), $1-D_N(x;b)=O_{b,s}(N^{-1/2})$ uniformly for all $N\ge2$, and
+\[
+D_N(y;b)=O_{b,s}\!\left(\frac{(\ln\ln N)^{\omega(M)+1}}{(\ln N)^{\log_2 M}}\right).
+\]
+Choosing $s$ with $\log_2(b^s-1)>A$ gives $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$ for every fixed $A>0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By choice of $s_b$, $M=b^s-1\ge3$ and $4\mid M$ whenever $2\mid M$, so $\rad^*(M)\mid M$ and LTE gives $v_p(b^{sn}-1)=v_p(M)+v_p(n)$ for every $p\mid M$ and $n\ge1$, whence $\ord_{M^k}(b)=sM^{k-1}$.
+
+(i) By construction, $q_2=\omega_1q_1+1\equiv1\pmod{sMq_1}$ (since $sM\mid\omega_1$) and for $k\ge3$, $q_k\equiv1\pmod{sM\prod_{j<k}q_j}$ (since $M\prod_{j<k}q_j\mid T_{k-1}/s$ and $s\mid\omega_{k-1}$). Thus $(q_k)$ are pairwise coprime and coprime to $sM$. For every $p\mid M$, $v_p(b^{sq_k}-1)=v_p(M)+v_p(q_k)=v_p(M)$, so $\gcd(\widetilde d_k,M)=1$. For $j<k$, $\gcd(b^{sq_j}-1,b^{sq_k}-1)=b^s-1=M$, so $\gcd(\widetilde d_j,\widetilde d_k)=1$. Also $\lcm(s,\ord_{\widetilde d_k}(b))=\ord_{b^{sq_k}-1}(b)=sq_k$ with $\gcd(s,q_k)=1$, forcing $q_k\mid\ord_{\widetilde d_k}(b)\mid sq_k$, whence $\ord_{D_k}(b)=\lcm(sM^{k-1},\ord_{\widetilde d_1}(b),\dots,\ord_{\widetilde d_k}(b))=T_k$.
+
+Put $U_k=\prod_{j=1}^k\widetilde d_j$ and $L_k=s\prod_{j=1}^k q_j$, so $T_k=M^{k-1}L_k$, $b^{L_k}\equiv1\pmod{U_k}$, and $b^{L_k}=1+u_kM$ with $\gcd(u_k,M)=1$ (by LTE since $\gcd(L_k/s,M)=1$). As $t$ runs over $\{0,\dots,M^{k-1}-1\}$, $b^{tL_k}\bmod M^k$ runs bijectively over $1+M\Z/M^k\Z$ while fixing the $U_k$-component of $R_k$. Thus each coset $\{b^{n_0+tL_k}R_k\bmod1:0\le t<M^{k-1}\}$ is an exact shifted $M^{k-1}$-point uniform grid, proving $\widehat C_k(h)=0$ whenever $M^{k-1}\nmid h$ and $D(\mu(R_k;b))\le M^{-(k-1)}$.
+
+(ii) Since $m_K=\omega_{K-1}T_{K-1}+s$, we have $b^{m_K}\equiv b^s\pmod{D_{K-1}}$, so the exact band identity is
+\[
+b^{im_K+r}R_K\equiv S_i(b^s)\,b^rR_{K-1}+\frac{b^rR_{K-1}}{b^{m_K}-1}\pmod1,
+\]
+where $S_i(b^s)=(b^{(i+1)s}-1)/(b^s-1)$. By LTE, $v_p(S_i(b^s))=v_p(i+1)$ for every $p\mid M$, so setting $d'=M^{K-2}/\gcd(h,M^{K-2})$ gives $M^{K-2}\mid hS_i(b^s)\iff d'\mid(i+1)$. Averaging over $N=Im_K+r_0\in[m_K,m_{K+1})$: the $s$ extra steps per complete band beyond $\omega_{K-1}T_{K-1}$ cost $\le s/m_K$, the incomplete cycle in the partial band costs $\le T_{K-1}/m_K$, the band and real tails cost $\le 3c_b(h)/m_K$, and \Cref{lem:four-finite}(i) bounds the surviving complete-period bands by $1/d'$, yielding the displayed Weyl bound and base-$b$ normality of $y$. Since $m_{k+1}/m_k>\omega_k\to\infty$, \eqref{eq:all-minus-Mb} gives $x\in M_b\subset K_b$.
+
+(iii) At $\omega_k=sM^k$, $T_k=M^k T_{k-1}^2+M T_{k-1}$; dividing $\ln T_k=2\ln T_{k-1}+k\ln M+O(T_{k-1}^{-1})$ by $2^k$ and summing yields $\ln T_k=(c_*+o(1))2^k$ and $\ln m_k=(\frac{c_*}{2}+o(1))2^k$. Consequently $m_{k+1}\asymp (M^2/s)m_k^2$, so $S_k=O_{b,s}(m_{k+1}^{1/2})$; on $[m_{k+1},m_{k+2})$, setting $\Delta=\lceil\log_b N\rceil$ shows that $[0,1-2b^{-\Delta})$ contains at most $2S_k+2\Delta$ points of $\{b^nx:n<N\}$, giving $1-D_N(x;b)\le(2S_k+2\Delta+2)/N=O_{b,s}(N^{-1/2})$. For $y$, $N<m_{K+1}$ gives $K\ge\log_2\ln N-O_{b,s}(1)$, hence $H:=M^{K-2}\ge c_1(\ln N)^{\log_2 M}$, while $T_{K-1}/m_K<1/(sM^{K-1})\le 1/H$. Since $H=M^{K-2}$ has fixed prime support of size $\omega(M)$, $\tau(H)=O_M(K^{\omega(M)})=O_M((\ln\ln N)^{\omega(M)})$. Inserting (ii) into Erd\H{o}s--Tur\'an with cutoff $H$ and \Cref{lem:four-finite}(ii) yields $D_N(y;b)=O_{b,s}((\tau(H)\ln H)/H)=O_{b,s}((\ln\ln N)^{\omega(M)+1}/(\ln N)^{\log_2 M})$.
+\end{proof}
+
+\subsection{Fully coprime base-$2$ CRT convolution and prime-exponent products}
+
+Now drop the fixed anchor $s$ completely and work in base~$2$ with pairwise coprime exponents $m_j\ge2$.
+
+\begin{lemma}[Universal $01$-transition Fourier bound]\label{lem:01-transition}\evidence{Paper proof}
+For all integers $m\ge2$ and $1\le u\le 2^m-2$,
+\[
+|S(u,m)|:=\left|\frac1m\sum_{r=0}^{m-1}e\!\left(\frac{2^r u}{2^m-1}\right)\right|\le 1-\frac{2-\sqrt2}{m}.
+\]
+\end{lemma}
+
+\begin{proof}
+Since $1\le u\le 2^m-2$, the cyclic $m$-bit binary expansion of $u$ contains both $0$ and $1$, hence contains a $2$-bit window $01$ at some index $r_0$. Put $x=\fr{2^{r_0}u/(2^m-1)}\in[\frac14,\frac12)$ and $y=\fr{2x}=2x\in[\frac12,1)$. Then $y-x=x\in[\frac14,\frac12)$, so $\cos(2\pi(y-x))\le0$ and $|e(x)+e(y)|=\sqrt{2+2\cos(2\pi(y-x))}\le\sqrt2$. Pairing $r_0,r_0+1$ and bounding the other $m-2$ terms by~$1$ gives $|S(u,m)|\le(m-2+\sqrt2)/m$.
+\end{proof}
+
+\begin{corollary}[Complete-period equidistribution of the prime-exponent product]\label{cor:prime-product}\evidence{Paper proof}
+Let $p_1<p_2<\cdots$ be the primes ($p_1=2$) and $R_k^{(\mathrm{prime})}=\prod_{j=1}^k(1-2^{-p_j})^{-1}$. Then $\ord_{D_k}(2)=\prod_{j=1}^k p_j$ and $D(\mu(R_k^{(\mathrm{prime})};2))\to0$ as $k\to\infty$.
+\end{corollary}
+
+\begin{proof}
+Since $\gcd(2^{p_i}-1,2^{p_j}-1)=2^{\gcd(p_i,p_j)}-1=1$ for $i\neq j$, we have $T_k=\prod_{j=1}^k p_j$ and CRT decomposes $\mu(R_k^{(\mathrm{prime})};2)=\nu_1^{(k)}*\cdots*\nu_k^{(k)}$, where $\nu_j^{(k)}$ is the uniform $\times2$-orbit of $a_j^{(k)}/(2^{p_j}-1)$ with $\gcd(a_j^{(k)},2^{p_j}-1)=1$. For any fixed $h\neq0$, once $2^{p_j}-1>|h|$, \Cref{lem:01-transition} gives $|\widehat{\nu_j^{(k)}}(h)|\le 1-(2-\sqrt2)/p_j$, so $|\widehat C_k(h)|\le\exp(-(2-\sqrt2)\sum_{j\le k,\,2^{p_j}-1>|h|}1/p_j)\to0$ by divergence of $\sum_p 1/p$. Weyl's criterion gives $\mu(R_k^{(\mathrm{prime})};2)\Rightarrow\lambda$, hence $D(\mu(R_k^{(\mathrm{prime})};2))\to0$.
+\end{proof}
+
+\begin{theorem}[Fully coprime base-$2$ normality and complete-period sub-exponential rate]\label{thm:fully-coprime}\evidence{Paper proof}
+Set $m_1=2$, $T_k=\prod_{j=1}^k m_j$, and $m_k=\omega_{k-1}T_{k-1}+1$ ($k\ge2$) with integers $\omega_1\ge2$ and $\omega_k\to\infty$. Let $x=\prod_{k\ge1}(1-2^{-m_k})$ and $y=1/x=\lim R_k$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item The moduli $2^{m_j}-1$ are pairwise coprime, $\ord_{D_k}(2)=T_k$, the CRT orbit measures $\nu_j$ are independent of $k\ge j$, and for $k\ge2$ the partial-fraction residue satisfies the exact real identity $a_k^{(k)}/(2^{m_k}-1)=\fr{-R_{k-1}}+R_{k-1}/(2^{m_k}-1)$.
+\item With $c_2(h)=4+2\lceil\log_2(4\pi|h|)\rceil$ and band $L^2$ energy $E_k(h)=\frac1{T_k}\sum_{a=0}^{T_k-1}|\widehat C_k(h(2^a-1))|^2$, both $|\widehat C_k(h)|$ and $E_k(h)$ are monotone nonincreasing in $k$ and satisfy the squaring inequalities
+\[
+|\widehat C_k(h)|\le|\widehat C_{k-1}(h)|^2+\frac{c_2(h)}{m_k},\qquad
+E_k(h)\le E_{k-1}(h)^2+\frac{7}{\omega_{k-1}}+\frac{4c_2(h)}{m_k}.
+\]
+\item $x\in M_2\subset K_2$ and $y=1/x$ is base-$2$ normal along all $N$. Moreover, for $\omega_k=2^k$, the complete-period discrepancies satisfy $D(\mu(R_k;2))=O(\exp(-c_0(\ln T_k)^{1/4}))$ for an absolute constant $c_0>0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) Since $m_j\mid T_{k-1}$ for all $j<k$, $\gcd(m_j,m_k)=1$, giving pairwise coprime denominators and $\ord_{D_k}(2)=T_k$. For $j<k$, $m_k\equiv1\pmod{m_j}$ implies $2^{m_k}/(2^{m_k}-1)\equiv2\pmod{2^{m_j}-1}$, so $a_j^{(k)}\equiv 2^{k-j}a_j^{(j)}\pmod{2^{m_j}-1}$; multiplication by $2$ only shifts the $\times2$-orbit, making $\nu_j$ independent of $k\ge j$ and $\widehat C_k(h)=\prod_{j=1}^k\widehat\nu_j(h)$. Comparing $R_k=R_{k-1}+R_{k-1}/(2^{m_k}-1)$ with $R_k\equiv 2R_{k-1}+a_k^{(k)}/(2^{m_k}-1)\pmod1$ gives $a_k^{(k)}/(2^{m_k}-1)\equiv -R_{k-1}+R_{k-1}/(2^{m_k}-1)\pmod1$, and since $1<R_{k-1}<2$ and $2^{m_k}-1>4D_{k-1}$ ($k\ge2$), the right-hand side lies in $(0,1)$, yielding exact equality.
+
+(ii) Put $w_r=e(-h\cdot 2^r R_{k-1})$ and $z_r^{(k)}=e(h\cdot 2^r a_k^{(k)}/(2^{m_k}-1))$. By (i), splitting $r<m_k$ at $m_k-\lceil\log_2(4\pi|h|)\rceil$ gives $\sum_{r<m_k}|z_r^{(k)}-w_r|\le c_2(h)-2$. Since $m_k=\omega_{k-1}T_{k-1}+1$, $|\widehat\nu_k(h)-\overline{\widehat C_{k-1}(h)}|\le c_2(h)/m_k$, and multiplying by $|\widehat C_{k-1}(h)|$ yields the $|\widehat C_k(h)|$ squaring inequality. By CRT, $E_k(h)=\prod_{j=1}^k e_j(h)$ where $e_j(h)=\frac1{m_j}\sum_{s=0}^{m_j-1}|\widehat\nu_j(h(2^s-1))|^2$. Using the autocorrelation identity $\widehat\nu_j(h(2^s-1))=\frac1{m_j}\sum_{r<m_j}z_{(r+s)\bmod m_j}^{(j)}\overline{z_r^{(j)}}$, replacing $z^{(j)}$ by $w$ costs at most $2c_2(h)/m_j$ uniformly in $s$. Writing $s=q_sT_{j-1}+a$ ($0\le a<T_{j-1}$) and $\theta_s=s/m_j$, splitting $r<m_j-s$ (shift $a$) and $r\ge m_j-s$ (shift $a-1\pmod{T_{j-1}}$), bounding incomplete $T_{j-1}$-cycles by $2/\omega_{j-1}$, squaring via convexity, and averaging over $s<m_j$ yields $e_j(h)\le E_{j-1}(h)+7/\omega_{j-1}+4c_2(h)/m_j$, hence the $E_k(h)$ squaring inequality.
+
+(iii) Fix $h\neq0$. Once $2^{m_{j_1}/2}+1>|h|$, every $1\le s<m_{j_1}$ has $(2^{m_{j_1}}-1)\nmid h(2^s-1)$, so \Cref{lem:01-transition} gives $E_{j_1}(h)<1$; monotonicity yields a limit $\ell:=\lim_{k\to\infty}E_k(h)\in[0,E_{j_1}(h)]\subset[0,1)$, and $\ell\le\ell^2$ forces $\ell=0$ (and the same argument gives $|\widehat C_k(h)|\to0$). Since $2^{m_K}\equiv2\pmod{D_{K-1}}$, the exact band identity is $2^{im_K+r}R_K\equiv(2^{i+1}-1)2^rR_{K-1}+2^rR_{K-1}/(2^{m_K}-1)\pmod1$. For $N=Im_K+r_0\in[m_K,m_{K+1})$,
+\[
+|W_h(N)|\le\frac1{I+r_0/m_K}\Bigl(\sum_{i=0}^{I-1}|\widehat C_{K-1}(h(2^{i+1}-1))|+\frac{r_0}{m_K}|\widehat C_{K-1}(h(2^{I+1}-1))|\Bigr)+\frac1{\omega_{K-1}}+\frac{c_2(h)+\lceil\log_2 m_K\rceil}{m_K}.
+\]
+Given $\varepsilon>0$, choose $r_*$ with $E_{r_*}(h)<\varepsilon^2/16$, then $K_0>r_*$ so that $\max_{0\le i<T_{r_*}}|\widehat C_{K-1}(h(2^{i+1}-1))|<\varepsilon/4$ and the tail error is $<\varepsilon/4$ for all $K\ge K_0$. If $I<T_{r_*}$ then $|W_h(N)|<\varepsilon/2$; if $I\ge T_{r_*}$, monotonicity $|\widehat C_{K-1}|\le|\widehat C_{r_*}|$, $T_{r_*}$-periodicity, and Cauchy--Schwarz bound the band average by $2\sqrt{E_{r_*}(h)}<\varepsilon/2$, giving $|W_h(N)|<\varepsilon$. Thus $y$ is base-$2$ normal, and \eqref{eq:all-minus-Mb} gives $x\in M_2\subset K_2$.
+
+Finally, at $\omega_k=2^k$ we have $m_{k+1}=2m_k(m_k-1)+1\in[m_k^2,2m_k^2]$ and $\ln T_k=(c_*+o(1))2^k$. For $1\le h\le H$, let $j_0=\min\{j:2^{m_j}-1>h\}$, so $m_{j_0}\le 2(\log_2(H+1))^2$ and $2^{j_0}=O(\ln\ln H)$. Starting from $\delta_{j_0+1}=1-|\widehat C_{j_0+1}(h)|\ge(2-\sqrt2)/m_{j_0}$ (\Cref{lem:01-transition}), the squaring inequality multiplies $\delta_k$ by at least $7/4$ while $\delta_k\le1/8$, reaching $|\widehat C_{k_2}(h)|\le 3/8$ at $2^{k_2}=O((\ln H)^{2.5})$. Thereafter induction yields $|\widehat C_{k_2+t}(h)|\le\frac12(3/4)^{2^t}$, and Erd\H{o}s--Tur\'an with $H=\lfloor\exp(c'(\ln T_k)^{1/4})\rfloor$ gives $D(\mu(R_k;2))=O(\exp(-c_0(\ln T_k)^{1/4}))$.
+\end{proof}
+
+\subsection{Complete-period exponential equidistribution of $R_k^{(E)}$ and the schedule bridge}
+
+\begin{theorem}[Complete-period exponential equidistribution of $R_k^{(E)}$]\label{thm:partition-partial}\evidence{Paper proof}
+Fix any integer radix $b\ge2$, and let $R_k^{(E)}=\prod_{j=1}^k(1-b^{-j})^{-1}$ be the $k$-th partial product of the partition generating function $P_b=1/E_b$. Choose an anchor prime $p$ and parameters $(s_b,e_0)$ as follows:
+\begin{itemize}[nosep]
+\item $b=2$: $p=3$, $s_2=2$, $e_0=1$;
+\item $b\ge3$ odd, $b\equiv1\pmod4$: $p=2$, $s_b=1$, $e_0=v_2(b-1)\ge2$;
+\item $b\ge3$ odd, $b\equiv3\pmod4$: $p=2$, $s_b=2$, $e_0=v_2(b^2-1)\ge3$;
+\item $b\ge4$ even: any odd prime $p\mid(b-1)$, $s_b=1$, $e_0=v_p(b-1)\ge1$.
+\end{itemize}
+Factor $D_k=\prod_{j=1}^k(b^j-1)=p^{e_k}D'_k$ ($p\nmid D'_k$), and put $T_p=\ord_{p^{e_k}}(b)$ and $T'_k=\ord_{D'_k}(b)$. Set $r_k=\max(0,v_p(T_p)-v_p(T'_k))$, except when $p=2$ and $b\equiv3\pmod4$, where $r_k=\max(0,v_2(T_p)-\max(1,v_2(T'_k)))$. Then
+\[
+D\bigl(\mu(R_k^{(E)};b)\bigr)\le p^{-r_k}\le C_b\,k\,p^{-e_0 k/s_b}\longrightarrow0\qquad(k\to\infty).
+\]
+\end{theorem}
+
+\begin{proof}
+Every $j\in\{1,\dots,k\}$ divisible by $s_b$ contributes $v_p(b^j-1)=e_0+v_p(j/s_b)\ge e_0$ to $e_k$, so $e_k\ge e_0\lfloor k/s_b\rfloor$. Conversely, every prime $q\neq p$ dividing $D'_k$ divides $b^j-1$ for some $1\le j\le k$, so $\ord_q(b)\mid j$ and $v_p(\ord_{q^a}(b))=v_p(\ord_q(b))\le v_p(j)\le\lfloor\log_p k\rfloor$; taking $\lcm$ over $q\mid D'_k$ gives $v_p(T'_k)\le\lfloor\log_p k\rfloor$ unconditionally. Put $m_*=\lcm(s_b,T'_k)$, so $b^{m_*}\equiv1\pmod{D'_k}$. By LTE, $v_p(b^{m_*}-1)=e_0+v_p(T'_k)$ when $p$ is odd or $b\equiv1\pmod4$, whereas when $p=2$ and $b\equiv3\pmod4$ we have $s_b=2$, $4\mid(b^2-1)$, and $v_2(b^{m_*}-1)=v_2((b^2)^{m_*/2}-1)=e_0+\max(0,v_2(T'_k)-1)$ (removing the $\pm1$ sign coset in $(\Z/2^e\Z)^\times\cong\{\pm1\}\times\Z/2^{e-2}\Z$). Thus in every case $b^{m_*}=1+up^{e_k-r_k}$ with $p\nmid u$ (and $p^{e_k-r_k}\ge4$ when $p=2$), so $\langle b^{m_*}\rangle$ partitions the complete orbit of $R_k^{(E)}$ into shifted uniform $p^{r_k}$-point grids while fixing the $D'_k$-component. Averaging over cosets gives $D(\mu(R_k^{(E)};b))\le p^{-r_k}\le p^{e_0+\lfloor\log_p k\rfloor-e_0\lfloor k/s_b\rfloor}\le C_b k p^{-e_0 k/s_b}$.
+\end{proof}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Rung & Schedule $(m_k)$ & Growth of $m_k$ & Complete-period $D(\mu(R_k))$ & All-prefix normality \\
+\midrule
+1. Divisible / HD & $\rad^*(D_{k-1})\mid(b^{m_k}-1)$ & Tetration under (HD2) & $\le D_{k-1}^{-1}$ & Proved (\Cref{thm:sharpened-weyl,thm:HD-rigidity}) \\
+2. Anchored coprime & $m_k=\omega_{k-1}T_{k-1}+s$ & $\ln m_k\sim\frac{c_*}{2}2^k$ & $\le M^{-(k-1)}$ & Proved, $O((\ln N)^{-A})$ (\Cref{thm:anchored-coprime}) \\
+3. Fully coprime ($b=2$) & $m_k=\omega_{k-1}T_{k-1}+1$ & $\ln m_k\sim\frac{c_*}{2}2^k$ & $O(\e^{-c_0(\ln T_k)^{1/4}})$ & Proved (\Cref{thm:fully-coprime}) \\
+4. Prime / Partition & $m_k=p_k$ or $m_k=k$ & $k\ln k$ or linear & $\to0$ / $O(kp^{-e_0k/s_b})$ & \textbf{Open} (short-orbit gap) \\
+\bottomrule
+\end{tabular}
+\caption{The four-rung schedule bridge from divisible normal reciprocals to $P_b=1/E_b$.}\label{tab:bridge}
+\end{table}
+
+\Cref{tab:bridge} summarizes the remaining gap toward $P_b=1/E_b$: complete-period equidistribution already holds exponentially on Rung~4, and Rungs~2--3 eliminate both full divisibility and tetration growth, isolating the \emph{short-orbit gap} $N\approx m_{k+1}=k+1\ll T_k$ (where $k\log^2 k\ll\ln T_k\ll k^2$).
+
+\section{Questions}\label{sec:questions}
+
+\begin{question}\label{q:gap}
+What is the optimal all-prefix discrepancy rate inside the admissible family \textup{(A1)}--\textup{(A2)} of \Cref{thm:balanced-barrier}, and does the balanced schedule $\omega_k=D_{k-1}$ attain it? (There remains a gap of one iterated logarithm between $\ln^{(r+1)}N$ in \Cref{thm:balanced-barrier}(i) and $\ln^{(r)}N$ in \Cref{thm:balanced-barrier}(ii).)
+\end{question}
+
+\begin{question}\label{q:convergent-irrational}
+Does every $\alpha\in(0,1)$---including irrational $\alpha$---occur as an exact convergent limit $D_\infty(1/x;b)=\alpha$ for an irrational $x\in K_b$? Moreover, is the set $\mathcal A_{\mathrm{conv}}(b)$ of exact convergent reciprocal discrepancies dense in $[0,1]$ (and its $L$-normal subset dense in $[0,2b^{-L}]$) for every base $b\ge3$? (Any single rational seed in \Cref{thm:plus1-inversion} yields only rational limits, and in base $b\ge3$ the condition $2\in\langle b\rangle\pmod D$ restricts the denominator $D$.)
+\end{question}
+
+\begin{question}\label{q:poly-rate}
+Does there exist an irrational $x\in K_b$ whose reciprocal $1/x$ satisfies an all-prefix polynomial discrepancy rate $D_N(1/x;b)=O(N^{-c})$ ($c>0$), or even an all-prefix sub-exponential rate $O(\exp(-c(\ln N)^\theta))$ ($\theta>0$)? \Cref{thm:anchored-coprime} achieves $O_{b,A}((\ln N)^{-A})$ for every $A>0$, and \Cref{thm:fully-coprime}(iii) achieves $O(\exp(-c_0(\ln T_k)^{1/4}))$ along complete periods.
+\end{question}
+
+\begin{question}\label{q:partition-short-orbit}
+Can the short-orbit gap $N\approx m_{k+1}\ll T_k$ be bridged to prove normality, simple normality, or $D^+<1$ for the partition generating function $P_b=1/E_b=\prod_{j\ge1}(1-b^{-j})^{-1}$ or the prime-exponent product $\prod_p(1-2^{-p})^{-1}$? Likewise, are slower-growing Hull--Dobell products satisfying \textup{(HD1)} but violating \textup{(HD2)} normal in base~$b$?
+\end{question}
+
+\section{Formal verification and data availability}\label{sec:formal}
+
+The Lean~4 \cite{Lean4} modules cited above, built with Mathlib \cite{Mathlib}, live in the repository \url{https://github.com/eldernos/MathematicsResearch}:
+\begin{itemize}[nosep]
+\item \ttt{NormalityChecker/NormalReciprocalCore.lean}, pinned at commit \ttt{\phaseXXIcommit} (\ttt{band\_identity}, \ttt{signed\_band\_identity}, \ttt{sum\_residues\_cexp\_eq\_zero});
+\item \ttt{NormalityChecker/RadixPowerTower.lean}, pinned at commit \ttt{\phaseXXIIcommit} (\ttt{strict\_kernel\_inclusion}, \ttt{zeroOrbitSubgroup\_pow\_eq}, \ttt{fixedPoint\_quotient\_equiv\_gen}, \ttt{fixedPointSubgroup\_inter\_zeroOrbitSubgroup}, \ttt{coprime\_rat\_cylinder\_margin}, \ttt{coprime\_rat\_cylinder\_stable}, \ttt{orderOf\_mul\_pow\_sub\_one}, \ttt{orderOf\_mul\_pow\_add\_one});
+\item \ttt{NormalityChecker/HigherOrderTower.lean}, built and verified on the Linux build server \ttt{hail} in the Phase~23 working tree (pending commit pinning before release: \ttt{orderNormal\_of\_le}, \ttt{kernel\_eq\_fixedPoint\_add\_zeroOrbit}, \ttt{mem\_pow\_kernel\_decomp}, \ttt{wordFreq\_tower\_limit}, \ttt{exists\_euler\_circuit}, \ttt{exists\_balanced\_block}, \ttt{tower\_iff}, \ttt{tower\_irrational\_exact\_iff}, \ttt{all\_kernel\_pow\_iff}, \ttt{radixDiscrepancy\_le\_grid\_add}, \ttt{limsup\_radixDiscrepancy\_le\_of\_orderNormal}).
+\end{itemize}
+On \ttt{hail}, \ttt{lake build} completed with zero warnings and zero \ttt{sorry}, and the axiom audit accepted only the standard axioms \ttt{propext}, \ttt{Classical.choice}, and \ttt{Quot.sound}. Strictly separating evidence scopes: \Cref{thm:zero-orbit-quotient,thm:kernel-decomp,lem:wordfreq-transfer,thm:tower-classification,thm:universal-ceiling} (and hence \Cref{thm:A}(i)--(iii), aside from the one-line sharpness attainment remark in \Cref{thm:zero-orbit-quotient}(i)) are \emph{Kernel-verified} in full; \Cref{thm:periods,thm:sharpened-weyl,prop:shell-trajectories} (and \Cref{thm:B}(i) together with the normality statement in \Cref{thm:B}(ii)) are \emph{Lean-supported paper proofs} whose named algebraic, periodicity, and character-sum cores are kernel-verified while the analytic extensions and asymptotic conclusions are written proofs; all remaining results (including the balanced-multiplier rate and Koksma lower barrier in \Cref{thm:B}(ii)) are \emph{Paper proofs} (with \Cref{lem:BZ-rigidity,thm:HD-rigidity} using the Bang--Zsigmondy theorem \cite{Bang1886,Zsigmondy1892} as \emph{External input}).
+
+Exact integer and rational verification scripts accompany this draft in the same repository:
+\ttt{scripts/phase22\_characters\_quotient.py} (pinned at \ttt{\phaseXXIIcommit}; finite checks of \Cref{thm:zero-orbit-quotient,thm:kernel-decomp});
+\ttt{scripts/phase22\_reciprocals.py} ($21{,}443$ checks covering \Cref{sec:periods,sec:signs}, with Audit~2 evidence-label repairs in the working tree);
+\ttt{scripts/phase23\_euler\_tower.py} (untracked working-tree script; exact integer spectra \eqref{eq:finite-spectrum} for $(2,1,2)$, $(2,1,4)$, $(2,2,4)$, $(2,3,8)$, and $(3,2,9)$ compared against brute enumeration); and
+\ttt{scripts/phase23\_reciprocals\_v2.py} (untracked working-tree script; $12{,}193$ substantive exact \ttt{int}/\ttt{Fraction} checks plus $510$ separate floating-point finite measurements across \Cref{sec:periods,sec:convergent,sec:Lnormal,sec:nontetration}).
+Exact checks are \emph{Finite certificates} on their tested ranges, and floating-point orbit values are \emph{finite measurements}, never proofs of asymptotic statements. The complete statement-by-statement verification map and novelty ledger are \ttt{VERIFICATION.md} and \ttt{LEDGER.md} alongside this source in \ttt{papers/13-reciprocals-and-kernel-tower/}.
+
+\section{Use of AI tools}\label{sec:ai}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed proof strategies, drafted the proofs and text, implemented the exact Python verifiers and Lean~4 formalizations, and conducted cross-provider audits of the underlying source notes. The repository owner directed the project and is responsible for any release. The Lean kernel checked the declarations listed in \ttt{VERIFICATION.md}. The written proofs and literature comparisons have been checked only by AI models from different providers: each source note received a cross-provider review whose findings were repaired, and this assembled candidate manuscript has not been reviewed as a whole. No independent human expert has checked the proofs. Cross-model review is not independent human peer review. This draft is unreleased, and \ttt{pdflatex}/\ttt{bibtex} compilation is pending before release.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+\end{document}

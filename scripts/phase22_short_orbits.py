@@ -11,6 +11,9 @@ C3  Short orbits on growing moduli.
       T_Q = ord_Q(2), the identities v_3(2^L - 1) = v_3(2^(t T_Q) - 1) = a_0 + v_3(T_Q)
       with L = lcm(t, T_Q), and the exact CRT factorization of the orbit sum.
     * The exponent budget theta, n_theta, delta for the gap range.
+    * Even auxiliary support: the counterexample ord_16(7) = 2 to the former lower bound
+      ord_(Lambda^r)(b) >= Lambda^(r-1)/2, the exact 2-adic order of odd b, and the corrected
+      divisibility Lambda_o^(r-1) 2^(e_2(b, r)) | ord_(Lambda^r)(b).
 C4  Irrationality exponents and geometric schedules.
     * Base-(r+1) weights: distinct r-fold sums (true) against the size of the resulting
       denominators (fatal for the digit half).
@@ -34,7 +37,7 @@ summaries and in the numerical exponential-sum comparisons (tolerance 1e-8).
 from cmath import exp as cexp
 from fractions import Fraction
 from itertools import combinations_with_replacement, product
-from math import ceil, exp, factorial, gcd, lcm, log, log2, pi
+from math import ceil, cos, exp, factorial, gcd, lcm, log, log2, pi, sin
 import random
 
 random.seed(22)
@@ -167,13 +170,25 @@ def lemma_a_ingredients():
         assert S * S <= (M + (H - 1) * w) / H * rhs_inner + 1e-6
     print("  stride van der Corput inequality and differenced phases: 3 instances")
 
-    # 4. Sharpness: A = e/2 and M = p^A/10 gives no cancellation.
+    # 4. Sharpness: A = e/2 and M = floor(p^A/10) gives no cancellation.  The normalized
+    #    modulus is the geometric-sum value sin(pi M/p^a)/(M sin(pi/p^a)), which is at least
+    #    sin(pi/10)/(pi/10) > 0.983 because 0 < M/p^a <= 1/10 (the arc bound alone gives only
+    #    cos(pi/10) > 0.95).
+    floor_bound = sin(pi / 10) / (pi / 10)
+    assert floor_bound > 0.983 and cos(pi / 10) < 0.983
+    worst = 1.0
     for p, a in ((3, 6), (5, 4), (7, 3)):
         e, G, mod = 2 * a, 1 + p ** a, p ** (2 * a)
         M = p ** a // 10
+        assert M >= 1 and 10 * M <= p ** a < 10 * (M + 1) and M * p ** 3 >= p ** a
+        assert all(pow(G, m, mod) == (1 + m * p ** a) % mod for m in range(M))
         S = sum(cexp(1j * TAU * pow(G, m, mod) / mod) for m in range(M))
-        assert abs(S) / M > 0.98
-    print("  sharpness: v_p(G-1) = e/2, M = p^(e/2)/10 gives |S|/M > 0.98 (3 cases)")
+        geo = sin(pi * M / p ** a) / (M * sin(pi / p ** a))
+        assert abs(abs(S) / M - geo) < 1e-9
+        assert geo >= floor_bound > 0.983
+        worst = min(worst, geo)
+    print(f"  sharpness: v_p(G-1) = e/2, M = floor(p^(e/2)/10): |S|/M = sin(pi M/p^a)/(M sin(pi/p^a)) "
+          f">= {worst:.5f} >= sin(pi/10)/(pi/10) = {floor_bound:.5f} > 0.983 (3 cases)")
 
     # 5. Evidence only: a long orbit of length p^(theta e).
     p, e, G = 3, 30, 4
@@ -294,6 +309,65 @@ def theorem_h_prefixes():
         ndiv += 1
     print(f"  LTE v_3(2^L - 1) = v_3(2^(2 T_Q) - 1) = 1 + v_3(T_Q) on all {ndiv} divisors Q of "
           f"prod l^2; v_3(T_Q) takes the values {sorted(seen)}")
+
+
+# ============================================= C3: even auxiliary support (2-adic order)
+
+
+def two_adic_order(b, r):
+    """Closed form of ord_(2^r)(b) for odd b (odd-prime LTE does not apply at 2)."""
+    assert b % 2 == 1 and r >= 1
+    if b % 4 == 1:
+        return 2 ** max(0, r - val(b - 1, 2))
+    if r == 1:
+        return 1
+    return 2 ** max(1, r - val(b + 1, 2))
+
+
+def even_support_orders():
+    print("C3. Even auxiliary support: exact 2-adic order (correction to the Section 4 lower bound)")
+    # Counterexample to the former claim ord_(Lambda^r)(b) >= Lambda^(r-1)/2 for even Lambda.
+    b, p, Lam, r = 7, 3, 2, 4
+    assert b % p and Lam % p and b % Lam and (b - 1) % 4 != 0  # 2 is non-Wieferich: 4 does not divide 7 - 1
+    o = order(b, Lam ** r)
+    assert o == 2 == two_adic_order(b, r) and pow(b, 2, 16) == 1
+    assert 2 * o < Lam ** (r - 1)  # o < Lambda^(r-1)/2 = 4
+    print(f"  b=7, p=3, Lambda=2, r=4: 4 does not divide 7-1, yet ord_16(7) = {o} < Lambda^(r-1)/2 = 4")
+    print("    ord_(2^r)(7) for r=1..8: " + ", ".join(str(order(7, 2 ** rr)) for rr in range(1, 9)))
+    # Closed form of the 2-adic order.
+    cases = 0
+    for bb in range(3, 400, 2):
+        for rr in range(1, 16):
+            assert order(bb, 2 ** rr) == two_adic_order(bb, rr)
+            cases += 1
+    print(f"  ord_(2^r)(b) = 2^max(0, r - v_2(b-1)) (b = 1 mod 4), 2^max(1, r - v_2(b+1)) (b = 3 mod 4, r >= 2): "
+          f"{cases} cases (odd b < 400, r <= 15)")
+    # Lambda = 2 Lambda_o squarefree, odd primes non-Wieferich and prime to p b:
+    # Lambda_o^(r-1) * 2^(e_2(b, r)) divides ord_(Lambda^r)(b).
+    checked, min_ratio = 0, None
+    for bb in (3, 5, 7, 11, 17, 31, 127):
+        odd = [l for l in (5, 7, 11, 13, 17, 19, 23) if bb % l and l != p]
+        odd = [l for l in odd if pow(bb, order_prime_power(bb, l, 1), l * l) != 1]  # non-Wieferich
+        for size in range(0, 4):
+            for subset in combinations_with_replacement(odd, size):
+                if len(set(subset)) < size:
+                    continue
+                Lo = 1
+                for l in subset:
+                    Lo *= l
+                for rr in range(1, 5):
+                    parts = [order_prime_power(bb, 2, rr)] + [order_prime_power(bb, l, rr) for l in subset]
+                    for l in subset:
+                        assert parts[1 + subset.index(l)] == l ** (rr - 1) * order_prime_power(bb, l, 1)
+                    ordL = lcm(*parts)
+                    assert pow(bb, ordL, (2 * Lo) ** rr) == 1
+                    assert ordL % (Lo ** (rr - 1) * two_adic_order(bb, rr)) == 0
+                    ratio = Fraction(ordL, (2 * Lo) ** (rr - 1))
+                    min_ratio = ratio if min_ratio is None else min(min_ratio, ratio)
+                    checked += 1
+    print(f"  Lambda_o^(r-1) 2^(e_2(b,r)) | ord_(Lambda^r)(b) for {checked} even squarefree Lambda, r <= 4; "
+          f"min ord/Lambda^(r-1) seen = {min_ratio} (the factor 1/2 is not a lower bound)")
+    assert min_ratio < Fraction(1, 2)
 
 
 # ================================================================ C4: base-(r+1) weights
@@ -664,6 +738,7 @@ def main():
     lemma_a_ingredients()
     lemma_a_budget()
     theorem_h_prefixes()
+    even_support_orders()
     base_r1_weights()
     theorem_g_checks()
     theorem_g_irrationality()

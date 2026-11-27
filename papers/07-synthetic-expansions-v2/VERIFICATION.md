@@ -1,154 +1,137 @@
 # Verification map: Synthetic Arithmetic Expansions and Prescribed Discrepancy (v2.0, candidate draft)
 
-This file maps every numbered statement of version 2.0 to one evidence label: **Kernel-verified**, **Lean-supported paper proof**, **Paper proof**, **Finite certificate** or **External input**. A Lean-supported label means only that the named finite step is a Lean declaration; every exponential-sum estimate, every measure-theoretic step, every normality conclusion, every rate and every Diophantine statement in this paper is a written proof. Finite computations quoted as illustrations are measurements, not evidence for asymptotic statements.
+This file maps every numbered statement of version 2.0 to one evidence label: **Kernel-verified**, **Lean-supported paper proof**, **Paper proof**, **Finite certificate** or **External input**. Two further labels qualify statements: **Conditional** (a proved implication whose hypothesis is open) and **Open**. A Lean-supported label means only that the named finite step is a Lean declaration. Every exponential-sum estimate, every measure-theoretic step, every normality conclusion, every rate and every Diophantine statement in this paper is a written proof. Finite computations quoted as illustrations are finite measurements, not evidence for asymptotic statements.
 
 **Cross-model review is not independent human peer review.** The written proofs of this version, and the arguments in the repository notes they come from, have been checked only by AI models from different providers. No human specialist has read them.
 
-Version 1.0 is archived unchanged in [`papers/07-synthetic-expansions/`](../07-synthetic-expansions/), with its own [verification map](../07-synthetic-expansions/VERIFICATION.md). The changes are listed in [CHANGES.md](CHANGES.md) and the literature comparison in [LEDGER.md](LEDGER.md).
+Version 1.0 is archived unchanged in [`papers/07-synthetic-expansions/`](../07-synthetic-expansions/), with its own [verification map](../07-synthetic-expansions/VERIFICATION.md). The changes are listed in [CHANGES.md](CHANGES.md) and the literature comparison is in [LEDGER.md](LEDGER.md).
+
+**Split (27 November 2026).** The former §9 (all-prime polynomial normality and irrationality exponents) is now the companion candidate draft [Paper XII](../12-all-prime-normality-exponents/), whose own [verification map](../12-all-prime-normality-exponents/VERIFICATION.md) covers it. The boundary section is now §9, the questions §10, formal verification §11 and the AI disclosure §12. **PDF compilation with `pdflatex` and `bibtex` is pending before release.** Neither tool is installed on the local Windows host or on the Linux build server `hail`, so the current draft has not been typeset. The statement numbers below come from a structural count of `paper.tex`.
 
 ## Pinned commits
 
 Lean links in the manuscript use three commits:
 
-- **E** = `e4809cf561573aef588e6ffc491a35cdb79fd9ec` (research checkpoint 18): `RetirementDenominator`, `Phase18Synthetic`, `SharpTranslation`, `SmoothOrbit`, `PositiveSummation`. Base `https://github.com/eldernos/MathematicsResearch/blob/e4809cf561573aef588e6ffc491a35cdb79fd9ec/NormalityChecker`.
+- **E** = `e4809cf561573aef588e6ffc491a35cdb79fd9ec` (research checkpoint 18): `RetirementDenominator`, `Phase18Synthetic`, `SharpTranslation`, `SmoothOrbit`, `PositiveSummation`.
 - **P** = `c2c9da683666b3b9368e5d4b5cb858caccf528f5` (Phase 19): `SurvivingGrid`, `PrimePowerGrid`.
-- **R** = `347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8` (Phase 21 commit, the tip of this branch when the draft was written): `ProtectedPole`, `PowerSumPeeling`. Neither file is modified in the working tree. The line numbers below were read from the files at this commit on 26 November 2026; each is the declaration line of the named theorem.
+- **R** = `347ec3fe631a3e7ab2ae25d53508a3a4c9ea9fa8` (Phase 21): `PowerSumPeeling`. After the split, `ProtectedPole` (also at R) is cited only by Paper XII. The line numbers below were read from the files at R on 26 November 2026; each is the declaration line of the named theorem.
 
-Build records at the pinned commits: E and P as in the [v1.0 map](../07-synthetic-expansions/VERIFICATION.md); R as in [`notes/phase21/verification.md`](../../notes/phase21/verification.md) (Lean 4.36.0, `lake build` 8,776 jobs with zero warnings and zero `sorry`, axiom audit of 1,873 public declarations accepting only `propext`, `Classical.choice`, `Quot.sound`, and `leanchecker` replay of `ProtectedPole` and `PowerSumPeeling`). This draft did not rerun `lake build`.
+Build records at the pinned commits:
 
-## Exact scope of the two new Lean modules
+- E and P: as in the [v1.0 map](../07-synthetic-expansions/VERIFICATION.md).
+- R: as in [`notes/phase21/verification.md`](../../notes/phase21/verification.md). Lean 4.36.0; `lake build` of 8,776 jobs with zero warnings and zero `sorry`; an axiom audit of 1,873 public declarations accepting only `propext`, `Classical.choice` and `Quot.sound`; a `leanchecker` replay of `ProtectedPole` and `PowerSumPeeling`.
 
-### `ProtectedPole.lean` (at R)
+This draft did not rerun `lake build` and adds no Lean declaration.
 
-| Declaration | Line | What it states | What it does **not** state |
-| --- | --- | --- | --- |
-| `shifted_prefix_protected_prime_pow_dvd_den` | 245 | For the prefix $U_k=\sum_{j\le k}1/(p^{e_j}\ell_jb^{n_j})$, if $p$ is prime, $p\nmid b$, $p\nmid\ell_j$, $e_j<e_k$ for $j<k$ and $n_j\le N$: $p^{e_k}$ divides the reduced denominator of $b^NU_k$ and $p^{e_k+1}$ does not. | Nothing about polynomials in $W$; $p$ need not be odd. |
-| `shifted_prefix_aux_prime_dvd_den` | 143 | If $\ell_k$ is prime, $\ell_k\nmid b$, $\ell_k\nmid p$, $\ell_k\nmid\ell_j$ for $j<k$ and $n_j\le N$: $\ell_k$ divides the reduced denominator of $b^NU_k$. | **Only the newest prime** $\ell_k$ at its own truncation. Persistence of earlier $\ell_i$ in later prefixes and the exact formula $p^{k^2}\ell_1\cdots\ell_k$ (Theorem 9.2(i)) are written. |
-| `truncated_poly_pole_dvd_den` | 347 | For $U=u/(p^{e_1}Q_1)$, $V=v/(p^{e_2}Q_2)$ with $p\nmid uvQ_1Q_2$, an integer polynomial with $a_r\ne0$, $1\le l\le r$ and $g=v_p(\lvert a_r\rvert\binom rl)<\min(e_1,e_2-e_1)$: $p^{le_2+(r-l)e_1-g}$ divides the denominator of the truncated expansion $F_l(U,V)$. | A **lower bound** on the depth of a rational expression, not the exact valuation of Lemma 9.1, and not a statement about the shifted prefixes of $P(W)$. The bridge $b^{-n}R_n=F_l(U_{k-1},V_k)$ (window rule) is written. |
-| `SurvivingGrid.stride_order` (at P) | 43 | The order of $g$ modulo $p^eQ$ is $p^{e-v_p(g-1)}$ when $p$ is odd, $p\nmid Q$, $p\mid g-1$, $Q\mid g-1$. | The arc count (2.4)/(4) for arbitrary lengths is written. |
-
-### `PowerSumPeeling.lean` (at R)
+## Exact scope of `PowerSumPeeling.lean` (at R)
 
 | Declaration | Line | What it states | Used in |
 | --- | --- | --- | --- |
-| `card_pow_diff_eq_le_divisors` | 79 | For $d\ge2$, $M>0$: the pairs $(a,c)$ with $c<a$ and $a^d-c^d=M$ number at most the number of divisors of $M$. | Lemma 7.16 (rows with $B=0$), Theorem 7.20 (bounded numerators, peeling) |
-| `phiPoly_natDegree`, `phiPoly_leadingCoeff`, `phiPoly_ne_zero` | 232, 242, 222 | The recurrence polynomial $\Phi_q\in(\mathbb Z[B])[X]$ has $X$-degree $q-2$ and leading coefficient $(-1)^q\prod_{j=1}^{q-2}(d+j)\ne0$ ($d\ge1$). | Lemma 7.14 |
-| `dominant_loss_unique_top_coord` | 372 | If $\sum y_i^d=\sum w_i^d$ (rationals $a_i/p^{h_i}$, $c_i/p^{g_i}$), the $y$ have a unique top loss $h_{\rm top}\ge1$ with $p\nmid a_{\rm top}$, and $\sum g_i<2h_{\rm top}$, then exactly one $w_i$ has loss $h_{\rm top}$ and the others have smaller loss. | Lemma 7.16, Theorem 7.20 (peeling steps) |
-| `truncMass_sub`, `truncMass_jump_of_isolated` | 446, 483 | For a finite coordinate set and a centre $c$ with pairwise distinct coordinates, total loss $H\le\Lambda$, such that every tuple of loss $\le\Lambda$ within $\delta$ of $\sum c_i^d$ is a permutation of $c$: the truncated mass jumps by exactly $r!\,p^{sH}$ across $(\sum c_i^d-\delta/2,\sum c_i^d+\delta/2]$. | Lemma 7.12 |
+| `card_pow_diff_eq_le_divisors` | 79 | For $d\ge2$, $M>0$: the pairs $(a,c)$ with $c<a$ and $a^d-c^d=M$ number at most the number of divisors of $M$. | Lemma 7.16 (rows with $B=0$), Theorem 7.20 and Lemma 7.23 (peeling) |
+| `phiPoly_natDegree`, `phiPoly_leadingCoeff`, `phiPoly_ne_zero` | 232, 242, 222 | $\Phi_q\in(\mathbb Z[B])[X]$ has $X$-degree $q-2$ and leading coefficient $(-1)^q\prod_{j=1}^{q-2}(d+j)\ne0$. | Lemma 7.14 |
+| `dominant_loss_unique_top_coord` | 372 | For equal sums of $d$-th powers of rationals with a unique top loss $h_{\rm top}\ge1$, a unit top numerator and $\sum g_i<2h_{\rm top}$, exactly one $w_i$ has loss $h_{\rm top}$. | Lemma 7.16, Theorem 7.20, Lemma 7.23 (peeling steps) |
+| `truncMass_sub`, `truncMass_jump_of_isolated` | 446, 483 | The truncated mass jumps by exactly $r!\,p^{sH}$ across an isolated centre with distinct coordinates. | Lemma 7.12 (one order only; the weighted jump of Lemma 7.23 is written) |
 
-Not in Lean: the derivative identity for $f_B^{(q)}$ (Lemma 7.14; checked exactly against Taylor coefficients for $4\le d\le7$, $2\le q\le6$ by `scripts/phase20_normality.py`), the homogeneity of $\Phi_q$, Titchmarsh's test, the Erdős–Turán inequality, the isolation counts, the small-ball recursion, the measure theory, and every rate.
+`SurvivingGrid.stride_order` (P L43) and `PrimePowerGrid.crt_period_count` (P L337) are used in Lemma 2.4. The following are **not** in Lean: the derivative identity for $f_B^{(q)}$ (checked exactly by `scripts/phase20_normality.py`), Titchmarsh's test, the Erdős–Turán inequality, the isolation counts, the small-ball recursions, the measure theory, every rate, and everything in §9 beyond the sharp translation identity.
 
 ## Statement map
-
-Numbering is that of a scratch build of this candidate draft (48 pages after the revision below, built with the repository's TinyTeX toolchain in WSL on 26 November 2026 from `paper.tex` and `references.bib` with `../common/`; no undefined references or citations, no overfull boxes). No `paper.pdf` is committed in this directory yet. Introduction theorems restate later results as listed.
 
 | No. | Statement (short) | Evidence | Lean declarations | External inputs | Reproduction / finite checks |
 | --- | --- | --- | --- | --- | --- |
 | A | Normality switch on schedules $n_k\ge k^2$ | Kernel-verified (= 4.5) | see 4.5 | — | `lake build` at E |
 | B | Rate for $d\ge s+2$; $D_N(\xi)\le200N^{-1/3}$ | Lean-supported paper proof (= 4.7, 3.1) | see 4.2 | — | v1.0 `checks/xi_discrepancy.py` |
-| C | Prescribed limits, pairs, limit sets | Lean-supported paper proof (= 5.3, 6.1, 6.4) | see 5.1 | Colebrook, Sigmund (comparison only, Remark 6.5) | `scripts/phase18_programming.py` at E |
-| D | Total degree $r<d$ in distinct orders normal; one order: $(\log\log N)^{-d/(d-1)}$ ($r\ge2$), $N^{-\eta}$ ($r=1$); $\xi^2$ rate $(\log\log N)^{-3/2}$ | Lean-supported paper proof (= 7.1, 7.19, 7.20, 7.21, 7.22) | see 7.12, 7.14, 7.16 | see 7.13, 7.16 | see 7.16–7.21 |
+| C | Prescribed limits, pairs, limit sets | Lean-supported paper proof (= 5.3, 6.1, 6.4) | see 5.1 | Colebrook, Sigmund (comparison only) | `scripts/phase18_programming.py` at E |
+| D | Total degree $r<d$ in distinct orders normal, with rate $(\log\log N)^{-d/(d-1)}$; $N^{-\eta}$ for a single linear maximizer; $\xi^2$ rate $(\log\log N)^{-3/2}$ | Lean-supported paper proof (= 7.1, 7.19, 7.20; rates 7.21, 7.22, 7.24 are paper proofs) | see 7.12, 7.14, 7.16, 7.23 | see 7.13, 7.16 | see 7.16–7.24 |
 | E | All-odd-prime normal Liouville sum; finite joint normality; rational totals | Lean-supported paper proof (= 8.2–8.4) | see 2.4, 8.4 | KN Ch. 1 Thms 2.1, 6.2 | `scripts/phase19_grids.py` at P |
-| F | All-prime polynomial normality: (i) Liouville $W$; (ii) polynomial schedules; (iii) $\mu=\lambda$, degree $\le r$; (iv) $\mu=p$, all degrees. Finiteness of $\mu(W_H)$ **open** | (i) Lean-supported paper proof (= 9.2); (ii)–(iv) Paper proof (= 9.7, 9.10, 9.11) | see 9.1, 9.2 | see 9.2, 9.11 | see 9.2–9.11 |
-| G | Boundary $d=r$: depth tight; barrier; retirement at $d=2$; cubic conditional | Paper proof, with External inputs (= 10.1–10.10) | (sharp translation via 10.8) | Landau, Hooley, Bambah–Chowla, Selberg–Delange, Wooley, DHL | `scripts/phase22_nonlinear_boundary.py` |
-| 2.1 | Arcs; $D=\sup$ excess | Paper proof | — | — | — |
-| 2.2 | Finite comparison | Paper proof (orbit case kernel-verified as `discrepancy_transfer`, E/Phase18Synthetic.lean L583) | `Phase18Synthetic.discrepancy_transfer` | — | — |
-| 2.3 | Block certificate | Paper proof | — | — | — |
-| 2.4 | Grids for $q=p^eQ$ | Lean-supported paper proof | `SurvivingGrid.stride_order` (P L43), `PrimePowerGrid.crt_period_count` (P L337) | — | `phase19_grids.py` |
-| 2.5 | Prime-power orbits | Paper proof | — | — | `phase18_programming.py` |
-| 2.6 | Sharp translation identity, quoted from manuscript H | Kernel-verified (proved there) | `SharpTranslation.sharp_translation` (E L343), `sharp_translation_isGreatest` (E L386) | Manuscript H, Thm 3.1 | `lake build` at E |
-| 2.7 | **New.** Uniform short orbits: $\lvert S(G,e,c;M)\rvert\le9M_0^{1-\delta}$ for principal units, uniform in $G$ with $A(G)\le\frac3{16}\log_pM_0-1$ | Paper proof | — | — | `scripts/phase22_short_orbits.py`: LTE (31,840 cases), complete-orbit vanishing (41), stride van der Corput identity, sharpness example $\lvert S\rvert/M>0.98$ for $(p,a)=(3,6),(5,4),(7,3)$ |
-| 2.8 | **New.** Splitting off a coprime modulus; $A(b^\tau)=a_0+v_p(\operatorname{ord}_Qb)$ | Paper proof | — | — | same script: CRT factorization on 53 prefixes, identity on all 243 divisors |
-| 2.9 | **New.** Largest auxiliary prime via $A_b(x)$ | Paper proof | — | divisor bound (Hardy–Wright Thm 317); prime number theorem | — |
-| 3.1 | $D_N(\xi;2)\le200N^{-1/3}$ | Paper proof | — | — | v1.0 finite certificate (unchanged) |
-| 4.1 | Geometric grouping and repunit primes | Kernel-verified | as v1.0 | — | `lake build` at E |
-| 4.2 | Exact reduced denominators | Kernel-verified | `RetirementDenominator.shiftedPrefix_den` (E L110), `fullPrefix_den` (E L157), `maximalLayer_card` (E L67) | — | `phase18_principal.py` |
-| 4.3 | Fixed-support short orbits | Kernel-verified | `SmoothOrbit.fixed_support_orbit_estimate` (E L207) | — | `lake build` at E |
-| 4.4 | All-prefix criterion | Lean-supported paper proof (step 4.3) | as 4.3 | KN Ch. 1 Thms 2.1, 8.1 | — |
-| 4.5 | Normality switch | Kernel-verified | `discrepancy_switch` (E L436), `normal_iff_pos` (E L444), `polynomial_discrepancy_switch` (E L456) | — | `lake build` at E |
-| 4.6 | Normal Liouville family on $t(k+1)!$ | Lean-supported paper proof | as 4.5 | Liouville's theorem | — |
-| 4.7 | Complete-period rate, $d\ge s+2$ | Lean-supported paper proof (step 4.2) | as 4.2 | — | `phase18_principal.py` |
-| 4.8 (Remark) | **Revised.** Power saving for every $d\ge2$ is the case $r=1$ of 7.21 | Remark | — | — | — |
-| 5.1–5.3 | Programming, modelled discrepancy, every $\delta$ | as v1.0 (5.1 Kernel-verified; 5.2 Paper proof; 5.3 Lean-supported) | as v1.0 | — | `phase18_programming.py` |
-| 6.1–6.5 | Pairs, necessity, weak continuity, limit sets, qualitative remark | as v1.0 (6.1, 6.4 Lean-supported; 6.2, 6.3 Paper proof; 6.5 Remark with External input) | as v1.0 | Colebrook, Sigmund, DGS, Riesz | — |
-| 7.1–7.9 | Quadratic images (model case), freezing, primitive jumps, third derivatives, isolated centres, null level sets | as v1.0 (Paper proof; 7.3 historical finite bound; 7.9 Remark, **revised**) | none | GK91 Lemma 2.5, Thm 2.2; KN Ch. 2 Thm 2.5 | `phase19_nonlinear.py` at P |
-| 7.10 | **New.** Freezing in degree $r$ | Paper proof | — | — | `phase21_nonlinear.py`: actual prefix of $C(2,3,1,4)^3$ vs $M_3\bmod27$ at $J=4$, six shifts |
-| 7.11 | **New.** Reduction to the mass ($d\ge r+1$) | Lean-supported paper proof (step 4.3 via 4.4) | as 4.3 | — | — |
-| 7.12 | **New.** Jumps at isolated centres, $r!p^{sH}$ | Lean-supported paper proof | `PowerSumPeeling.truncMass_jump_of_isolated` (R L483), `truncMass_sub` (R L446) | — | `phase20_normality.py` (flank residues) |
-| 7.13 | **New.** $q$-th derivative test | External input | — | Titchmarsh, Thm 5.13 | — |
-| 7.14 | **New.** Derivatives of $f_B$; $\Phi_q$ degree and leading coefficient | Lean-supported paper proof | `phiPoly_natDegree` (R L232), `phiPoly_leadingCoeff` (R L242), `phiPoly_ne_zero` (R L222) | — | `phase20_normality.py` (exact Taylor check, $4\le d\le7$, $2\le q\le6$) |
-| 7.15 | **New.** Exponent margins $\sigma_2=1/12$, $\sigma_r=1/(r(2^{r+1}-2))$ | Paper proof | — | — | `phase20_normality.py` asserts $\sigma_r$ for $r=3,\dots,8$; `phase21_nonlinear.py` asserts $1/12$ and capped cases |
-| 7.16 | **New.** Averaged isolation on unions of intervals | Lean-supported paper proof | `dominant_loss_unique_top_coord` (R L372), `card_pow_diff_eq_le_divisors` (R L79) | Titchmarsh 5.13; Erdős–Turán (KN Ch. 2 Thm 2.5); divisor bound | `phase20_normality.py`, `phase21_nonlinear.py` (illustrations only) |
-| 7.17 | **New.** Uniform isolation fails ($p=3$, $d=4$, $r=3$) | Paper proof; **finite certificate** (stated for $H\ge6$; analytic argument for $H\ge5$) | — | — | `phase21_nonlinear.py` certifies the net for $H\in\{6,10,100,1000,4000\}$ and $R_{4000}^{126}<3^{4000}$; a scratch exact check also confirmed the net for $4\le H\le12$ (see below) |
-| 7.18 | **New.** Small balls: $\lvert\{M_r\equiv w\bmod p^L\}\rvert\le C_*(\log L)^{-d/(d-1)}$, all $r,d\ge2$ | Lean-supported paper proof (via 7.12 and 7.16) | as 7.12, 7.16 | Lebesgue density (implicit in "null") | — |
-| 7.19 | **New.** One order, every degree $r<d$ (GF-11) | Lean-supported paper proof | via 7.12, 7.14, 7.16 and 4.3 | as 7.16 | — |
-| 7.20 | **New.** Several orders (Theorem M of the source) | Lean-supported paper proof | `dominant_loss_unique_top_coord`, `card_pow_diff_eq_le_divisors`, via 7.14 | as 7.16; Lebesgue differentiation; reverse Fatou | `phase21_nonlinear.py`: exact jumps at eight tied centres, loss-0 cancellation example |
-| 7.21 | **New.** Effective rates for every $d\ge r+1$ | Paper proof | — | Erdős–Turán | `phase22_short_orbits.py` ($\delta$ table) |
-| 7.22 | **New.** $D_N(\xi^2)\ll(\log\log N)^{-3/2}$; $C(2,3,1,4)^{1,2,3}$ jointly normal; rate for the cube | Paper proof | — | — | — |
-| 8.1–8.5 | Infinite sums | as v1.0 | as v1.0 | as v1.0 | `phase19_grids.py` at P |
-| 9.1 | **New.** Pole dominance in a truncated Taylor expansion | Lean-supported paper proof | `ProtectedPole.truncated_poly_pole_dvd_den` (R L347) — lower bound only | — | `phase20_normality.py` (exact pole formula at 222 prefixes) |
-| 9.2 | **New.** Universal all-prime $W$: exact denominators, every $P(W)$ normal and Liouville, rate $\exp(-c(\log N)^{2/3})$ | Lean-supported paper proof | `shifted_prefix_protected_prime_pow_dvd_den` (R L245), `shifted_prefix_aux_prime_dvd_den` (R L143, newest prime only), `truncated_poly_pole_dvd_den` (R L347), `SurvivingGrid.stride_order` (P L43) | Chebyshev's bound; $\prod_{\ell\le x}\ell<4^x$ (proved in §8) | `phase20_normality.py` (270 prefixes, five radix/prime pairs, $q_n=p^{k^2}\ell_1\cdots\ell_k$) |
-| 9.3 | **New.** General protected poles (one generator) | Lean-supported paper proof | as 9.1 | — | `phase20_normality.py` |
-| 9.4 | **New.** $\log\operatorname{lcm}_{\ell\le x}(\ell-1)\ll x\log\log x/\log x$ | Paper proof using an **External input** | — | Selberg upper-bound sieve (Halberstam–Richert) | `phase21_nonlinear.py` (primorial vs lcm table, illustration) |
-| 9.5 | **New.** Denser all-prime schedules (GF-15 part 1) | Paper proof | — | prime number theorem; 9.4 | — |
-| 9.6 (Remark) | Several generators (not used) | Remark | — | — | `phase20_normality.py` (Variant 1 and 2 checks) |
-| 9.7 | **New.** All-prime polynomial schedules for every $d\ge r+1$ (Theorem H′ of the source) | Paper proof | — | as 7.21; 2.9 | `phase21_nonlinear.py` (exact denominators, residue pollution at $k=27$); `phase22_short_orbits.py` (CRT split on prefixes) |
-| 9.8 | **New.** Truncation separation | Paper proof | — | — | — |
-| 9.9 | **New.** Ratio-one schedules: only $\lvert W_H-A/Q\rvert\ge Q^{-\psi(Q)}$, $\psi\to\infty$; **finiteness of $\mu(W_H)$ and non-Liouville status open** | Paper proof | — | — | `phase22_short_orbits.py` ($\rho_k$ table) |
-| 9.10 | **New.** Geometric schedules: degree $\le r$, $D_N\ll N^{-\eta}$, $\mu(W_G)=\lambda$ ($\lambda\ge3$) | Paper proof | — | Roth's theorem (transcendence only) | `phase22_short_orbits.py`: exact valuation at 145 insertion positions, exact $\operatorname{den}U_k$, convergent exponents (finite evidence only) |
-| 9.11 | **New.** Stoneham schedule: all degrees, $\mu(W_S)=p$ | Paper proof using an **External input** | — | Pole retention for $\alpha_{b,p}$: Paper I v2.0, Lemmas 2.2–2.4 (Paper proofs there; only Lemma 2.5 and Theorem A of that paper are Lean-supported or kernel-verified) | `phase22_short_orbits.py`: bounded depth defects $d=2,\dots,5$; congruence with $\alpha_{2,3}$ modulo $3^l$ at 42 and 121 positions |
-| 9.12 (Remark) | Quasi-polynomial schedule: all-degree normality recorded **without proof**; finiteness of the exponent and non-Liouville status **open** | Remark (not a claim of this paper) | — | Phase 19 plateau estimate (not reproduced) | `phase21_nonlinear.py` (budget table) |
-| 10.1 | **New.** Depth tight in density at $d\le r$ | Paper proof | — | — | `phase21_nonlinear.py` (exact 3-adic depth up to $4\cdot10^5$, illustration) |
-| 10.2 | **New.** Denominators do not determine digits | Paper proof | — | — | `phase21_nonlinear.py` ($q=3^e$, $e\le9$) |
-| 10.3 | **New.** No uniform cancellation below $\log_b(\epsilon q)$ | Paper proof | — | — | `phase22_nonlinear_boundary.py` ($q=3^{20},3^{40},3^{80}$) |
-| 10.4 | **New.** Level filtration $p^{sH}C^r=X_H+Z_H$, mass bound, prefix identity | Paper proof | — | — | `phase22_nonlinear_boundary.py` (coefficientwise identity, $m\le2\cdot10^4$ and $3\cdot10^4$) |
-| 10.5 | **New.** Sparse integer series transfer (self-contained, non-sharp constant) | Paper proof | — | — | — |
-| 10.6 | **New.** Absorption of the integer part at $d=r=2$, uniform in $H$ | Paper proof using an **External input** | — | Landau's theorem | — |
-| 10.7 | **New.** Integer dilation inequalities (and the normality converse in the text) | Paper proof | — | ergodicity of Lebesgue measure under $T$ (standard) | `phase22_nonlinear_boundary.py` (1,200 point sets) |
-| 10.8 | **New.** Fixed-depth retirement: $C^2$ normal iff $Z_H$ normal | Lean-supported paper proof (step 2.6) | as 2.6 | — | `phase22_nonlinear_boundary.py` ((2.1) on actual orbits, illustration) |
-| 10.9 | **New.** Runs after retirement (support runs) | Paper proof using **External inputs** | — | Landau; Hooley (1971) gap moments; Bambah–Chowla | `phase22_nonlinear_boundary.py` (coverage table, finite only) |
-| 10.10 | **New.** Fractional jumps for $p\equiv3\pmod4$ | Paper proof using an **External input** | — | Selberg–Delange (Tenenbaum II.5) | `phase22_nonlinear_boundary.py` ($9^{k_H}\mathcal F_3\subseteq\mathcal P_H^{\rm frac}$ for $H\le3$) |
-| 10.11 (Remark) | Finite digit statistics of $C(2,3,1,2)^2$, $C(2,3,2,2)^2$, $\xi^3$ | Finite measurement (not a claim) | — | — | `phase22_nonlinear_boundary.py` |
-| §10.4 text | Cubic boundary: absorption conditional on density zero of sums of three cubes | External input / conditional; no claim | — | Wooley (2015); DHL (2006) model | `phase22_nonlinear_boundary.py` (counts to $10^6$) |
+| F | Boundary $d=r$: depth tight; barrier; retirement at $d=2$; cubic conditional; (v) irrational squares; (vi) innovation law; (vii) packet barrier | Paper proof, with External inputs (= 9.1–9.18) | (sharp translation via 9.8) | Landau, Hooley, Bambah–Chowla, Selberg–Delange, Wooley, DHL, **DEKKM Thm 1**, Ghidelli | `scripts/phase22_nonlinear_boundary.py`, `scripts/phase23_nonlinear_short_orbits.py` |
+| 2.1–2.6 | Arcs; finite comparison; block certificate; grids; prime-power orbits; sharp translation (quoted) | as in the 26 Nov map: 2.1–2.3, 2.5 Paper proof; 2.4 Lean-supported; 2.6 Kernel-verified (proved in manuscript H) | `discrepancy_transfer` (E L583); `stride_order` (P L43); `crt_period_count` (P L337); `sharp_translation` (E L343), `sharp_translation_isGreatest` (E L386) | Manuscript H, Thm 3.1 | `phase19_grids.py`, `phase18_programming.py` |
+| 2.7 | Uniform short orbits; sharpness $\lvert S\rvert/M\ge\sin(\pi/10)/(\pi/10)>0.983$ (**Audit 2 repair**) | Paper proof | — | — | `scripts/phase22_short_orbits.py`: LTE (31,840 cases); complete-orbit vanishing (41); stride identity; sharpness example. The complex sums and the sine bound are floating-point checks. |
+| 2.8 | Splitting off a coprime modulus; standing bound via $\ord_{M'}b\le M'$ (**weak** inequality, Audit 2) | Paper proof | — | — | same script: CRT factorization on 53 prefixes; identity on all 243 divisors |
+| 3.1 | $D_N(\xi;2)\le200N^{-1/3}$ | Paper proof | — | — | v1.0 finite certificate |
+| 4.1–4.7, 4.8 (Remark) | as in v1.0; Remark 4.8 points to 7.21 | as in v1.0 | as in v1.0 | as in v1.0 | as in v1.0 |
+| 5.1–5.3, 6.1–6.5 | as in v1.0 | as in v1.0 | as in v1.0 | as in v1.0 | `phase18_programming.py` |
+| 7.1–7.9 | Quadratic images (model case) | as in v1.0 (Paper proof; 7.9 Remark) | none | GK91; KN | `phase19_nonlinear.py` at P |
+| 7.10–7.11 | Freezing in degree $r$; reduction to the mass | Paper proof; Lean-supported paper proof (via 4.3) | as 4.3 | — | `phase21_nonlinear.py` |
+| 7.12–7.16 | Jumps; $q$-th derivative test; derivatives of $f_B$; margins; averaged isolation | 7.12, 7.14, 7.16 Lean-supported; 7.13 External input; 7.15 Paper proof | see the table above | Titchmarsh Thm 5.13; Erdős–Turán | `phase20_normality.py`, `phase21_nonlinear.py` |
+| 7.17 | Uniform isolation fails ($p=3$, $d=4$, $r=3$, $H\ge6$) | Paper proof; **finite certificate** | — | — | `phase21_nonlinear.py` ($H\in\{6,10,100,1000,4000\}$) |
+| 7.18 | Small balls | Lean-supported paper proof (via 7.12, 7.16) | as 7.12, 7.16 | — | — |
+| 7.19 | One order, every degree $r<d$ | Lean-supported paper proof | via 7.12, 7.14, 7.16, 4.3 | as 7.16 | — |
+| 7.20 | Several orders; freezing threshold $J_1(L)=\max(L,\lceil L/s_1\rceil+\lceil L/d\rceil)$ (**Phase 23 fix**) | Lean-supported paper proof | `dominant_loss_unique_top_coord`, `card_pow_diff_eq_le_divisors` | as 7.16; Lebesgue differentiation | `phase21_nonlinear.py`; `phase23_nonlinear_short_orbits.py`: weight-gap fixture $L=2$, $J=1$, $u=1$; full freezing window |
+| 7.21 | Effective rates for every $d\ge r+1$ (one order); run conventions as repaired in Audit 2 | Paper proof | — | Erdős–Turán | `phase22_short_orbits.py` ($\delta$ table) |
+| 7.22 | $D_N(\xi^2)\ll(\log\log N)^{-3/2}$; $C(2,3,1,4)^{1,2,3}$ | Paper proof | — | — | — |
+| 7.23 | **New.** Weighted averaged isolation for several orders, explicit parameter order | Lean-supported paper proof (peeling and divisor-bound steps only) | `dominant_loss_unique_top_coord` (R L372), `card_pow_diff_eq_le_divisors` (R L79) | Titchmarsh Thm 5.13 and the margins of 7.15 (via 7.16); divisor bound | `phase23_nonlinear_short_orbits.py`: tied-order residues $2,41,15,15,60\bmod81$; 5,042 regular-row bounds (illustrations only) |
+| 7.24 | **New.** Rates for several orders: $(\log\log N)^{-d/(d-1)}$; $N^{-\eta}$ for a single linear maximizer | Paper proof | — | Erdős–Turán | — |
+| 8.1–8.5 | Infinite sums | as in v1.0 | as in v1.0 | as in v1.0 | `phase19_grids.py` at P |
+| 9.1–9.10 | Former 10.1–10.10 (depth tight; barrier; no uniform cancellation; level filtration; sparse integer series; absorption; integer dilation; fixed-depth retirement; runs; fractional jumps) | unchanged from the 26 Nov map: Paper proofs, with External inputs Landau (9.6, 9.9), Hooley and Bambah–Chowla (9.9), Selberg–Delange (9.10); 9.8 Lean-supported (step 2.6) | as 2.6 for 9.8 | as listed | `phase21_nonlinear.py`, `phase22_nonlinear_boundary.py` |
+| 9.11 | **New.** Long gaps between sums of two squares, $\limsup(\sigma_{n+1}-\sigma_n)/\log\sigma_n\ge390/449$ | **External input** | — | Dietmann–Elsholtz–Kalmynin–Konyagin–Maynard, **Theorem 1** (accepted manuscript; typeset numbering to be confirmed) | — |
+| 9.12 | **New.** $C(b,p,s,2)^2$ irrational for $s<(390/449)t\log b$, including every $s=1$ | Paper proof using an **External input** (9.11) | — | 9.11 | — |
+| 9.13 | **New.** Innovation law, both residue classes of $p$ modulo 4 | Paper proof using an **External input** | — | Selberg–Delange (Tenenbaum II.5); Landau | `phase23_nonlinear_short_orbits.py`: innovation counts for $n\le400$, $H=1$ (finite measurement, far from the limit law, **not** evidence for it); independent recount of ordered representations including retired levels |
+| 9.14 | **New.** Aggregate denominator law | Paper proof | — | Landau; 7.18 | same script: 643 / 479 / 164 arrivals; 1,871 / 1,200 / 427 packets with surviving pole, exact recurrence and denominators (finite measurement) |
+| 9.15 | **New.** Packet lemma | Paper proof | — | — | same script: $q=81$, $b=2$ realizes all 32 words of length 5 (**finite certificate** of the example) |
+| 9.16 | **New.** Eligible packets at density one, $d=r\ge2$ | Paper proof | — | — | — |
+| 9.17 | **New.** The cube modulo 9 | Paper proof | — | — | same script (cubic residues) |
+| 9.18 | **New.** Conditional cubic irrationality criterion (threshold $2/(3\log2)$) | Paper proof; **Conditional** (the hypothesis is open) | — | Ghidelli Thm 1.1 (shown insufficient) | — |
+| 9.19 (Remark) | Finite measurements | Finite measurement (not a claim) | — | — | `phase22_nonlinear_boundary.py`, `phase23_nonlinear_short_orbits.py` |
+| §9.6 text | Cubic boundary: absorption conditional on density zero of sums of three cubes | Conditional; no claim | — | Wooley (2015); DHL (2006) | `phase22_nonlinear_boundary.py` |
+| 10.1–10.4 | Questions | **Open** | — | — | — |
 
-Registry correspondence: Theorems A–C, E and Sections 2–8 carry the v1.0 identifiers [SY-01](../../docs/results.md#sy-01), [SY-02](../../docs/results.md#sy-02), [SY-03](../../docs/results.md#sy-03), SY-06, SY-07, SY-11, SY-13, SY-16, SY-19, [OP-08](../../docs/results.md#op-08), [OP-09](../../docs/results.md#op-09) and [OP-14](../../docs/results.md#op-14). The new material corresponds to [GF-10](../../docs/results.md#gf-10) (Theorems 9.2–9.3, Remark 9.6), [GF-11](../../docs/results.md#gf-11) (Theorem 7.19), [GF-14](../../docs/results.md#gf-14) (Proposition 7.17, Lemma 7.16, Theorems 7.18, 7.20, Proposition 10.1, Lemma 10.2) and [GF-15](../../docs/results.md#gf-15) (Corollary 9.5, Theorem 9.7 in its $d>r(s+1)$ form, Remark 9.12). Lemma 2.7–2.9, Theorem 7.21 in the range $r+1\le d\le r(s+1)$, Theorem 9.7 in that range, Lemma 9.8, Proposition 9.9, Theorems 9.10–9.11 and Section 10 beyond Proposition 10.1 and Lemma 10.2 come from the notes [`short-orbits-and-irrationality.md`](../../notes/phase22/short-orbits-and-irrationality.md) and [`nonlinear-equality-boundary.md`](../../notes/phase22/nonlinear-equality-boundary.md), which are now registered as [GF-25](../../docs/results.md#gf-25) (short orbits, rates for every $d\ge r+1$, Theorems H′, G, S of the source) and [GF-24](../../docs/results.md#gf-24) (the equality boundary). The registry text of GF-25 calls Theorems 9.10–9.11 "the first explicit non-Liouville all-prime polynomial normal numbers"; the manuscript does **not** adopt that priority claim (see [LEDGER.md](LEDGER.md)).
+**Moved to Paper XII:** former Theorem F and statements 2.9 and 9.1–9.12 of the 26 November draft. See the [Paper XII map](../12-all-prime-normality-exponents/VERIFICATION.md) and the correspondence in [CHANGES.md](CHANGES.md).
 
-**Untracked Lean module.** GF-24 lists declarations of `NormalityChecker/Phase22Cores.lean`: `one_sub_radixDiscrepancy_natMul_le` and `one_sub_radixDiscrepancy_intMul_le` (the orbit form of the second inequality of Lemma 10.7), `fixed_depth_transfer_deficit_le` (the inequality of Corollary 10.8 combined with the sharp translation identity) and `total_depth_split_sum`, `total_depth_split_sum_zpow` (the finite form of the split in Proposition 10.4). The module is untracked in this worktree, so it has no pinned commit and the manuscript does not link it; Lemma 10.7 and Proposition 10.4 keep the label *Paper proof*. Once the module is committed and kernel-replayed, those statements can be relabelled *Lean-supported paper proof* with links at that commit.
+**Registry correspondence.**
+
+- Theorems A–C, E and Sections 2–8 carry the v1.0 identifiers [SY-01](../../docs/results.md#sy-01), [SY-02](../../docs/results.md#sy-02), [SY-03](../../docs/results.md#sy-03), SY-06, SY-07, SY-11, SY-13, SY-16, SY-19, [OP-08](../../docs/results.md#op-08), [OP-09](../../docs/results.md#op-09) and [OP-14](../../docs/results.md#op-14).
+- [GF-11](../../docs/results.md#gf-11) is Theorem 7.19. [GF-14](../../docs/results.md#gf-14) covers Proposition 7.17, Lemma 7.16, Theorems 7.18 and 7.20, Proposition 9.1 and Lemma 9.2. [GF-25](../../docs/results.md#gf-25) covers Lemma 2.7, Corollary 2.8 and Theorem 7.21. [GF-24](../../docs/results.md#gf-24) covers 9.3–9.10.
+- The Phase 23 material (Lemma 7.23, Theorem 7.24, Theorems 9.11–9.13, Propositions 9.14, 9.16–9.18, Lemma 9.15) comes from [`notes/phase23/nonlinear-multivariate-and-denser-mu.md`](../../notes/phase23/nonlinear-multivariate-and-denser-mu.md), which has **no registry entry yet**.
+
+**Untracked or uncommitted files.**
+
+- `NormalityChecker/Phase22Cores.lean` is now tracked (commit `8ca4309`). The manuscript still does not link it, so Lemma 9.7 and Proposition 9.4 keep the label *Paper proof*.
+- `scripts/phase23_nonlinear_short_orbits.py` is untracked.
+- `scripts/phase22_short_orbits.py` has its Audit 2 repair (`even_support_orders()`) as an uncommitted working-tree change; that check concerns Paper XII.
+- Both scripts must be committed before release.
 
 ## Sources and model reviews
 
 | Material | Source note | Model review (not human peer review) |
 | --- | --- | --- |
-| 7.10–7.19 (one order) | [`cubic-power-schedule.md`](../../notes/phase20/cubic-power-schedule.md), [`nonlinear-boundary.md`](../../notes/phase21/nonlinear-boundary.md) §§1–4 | [Phase 20 Track C](../../notes/phase20/reviews/track-c-review.md) (three Major findings, repaired); [Phase 21 Track C](../../notes/phase21/reviews/track-c-review.md) (re-audit, findings repaired, post-repair ACCEPT) |
-| 7.20 (several orders) | [`multivariate-and-dense-allprime.md`](../../notes/phase21/multivariate-and-dense-allprime.md) §§1–3 | Phase 21 Track C (two Critical findings on localization, repaired by the $L^1$ argument; post-repair ACCEPT) |
-| 7.21, 2.7–2.9, 9.7–9.11 | [`short-orbits-and-irrationality.md`](../../notes/phase22/short-orbits-and-irrationality.md) | [Phase 22 Track C3–C4](../../notes/phase22/reviews/track-c34-review.md) (five Major findings, including the freezing constraint in 7.21 and the bound on $A(G)$, repaired; post-repair Accept) |
-| 9.1–9.6 | [`all-prime-polynomials.md`](../../notes/phase20/all-prime-polynomials.md), [`multivariate-and-dense-allprime.md`](../../notes/phase21/multivariate-and-dense-allprime.md) §5 | Phase 20 Track C (ACCEPT for C1; one Major quantifier fix in C2b); Phase 21 Track C (Proposition 5.1 part 3 needed (S), repaired) |
-| 10.1–10.2 | [`nonlinear-boundary.md`](../../notes/phase21/nonlinear-boundary.md) §7 | Phase 21 Track C (Major quantifier swap in Proposition D, repaired to tightness in density) |
-| 10.3–10.11, §10.4 | [`nonlinear-equality-boundary.md`](../../notes/phase22/nonlinear-equality-boundary.md) | [Phase 22 Track C1–C2](../../notes/phase22/reviews/track-c12-review.md) (three Major findings, repaired; post-repair ACCEPT) |
+| 7.10–7.19 | Phase 20 `cubic-power-schedule.md`, Phase 21 `nonlinear-boundary.md` §§1–4 | Phase 20 and Phase 21 Track C reviews (repaired; post-repair ACCEPT) |
+| 7.20 | Phase 21 `multivariate-and-dense-allprime.md` §§1–3; freezing fix from Phase 23 Track C3 | Phase 21 Track C; [Phase 23 Track C](../../notes/phase23/reviews/track-c-review.md) (m6 erratum, closed) |
+| 2.7–2.8, 7.21 | [`short-orbits-and-irrationality.md`](../../notes/phase22/short-orbits-and-irrationality.md) | [Phase 22 Track C3–C4](../../notes/phase22/reviews/track-c34-review.md); [Phase 23 Audit 2](../../notes/phase23/reviews/phase22-analytic-audit-shortorbits-reciprocals.md), **SOUND / ACCEPT** after repair (sharpness constant, weak inequality, run conventions) |
+| 7.23–7.24 | [`nonlinear-multivariate-and-denser-mu.md`](../../notes/phase23/nonlinear-multivariate-and-denser-mu.md) §§3–4 | Phase 23 Track C: C3 **ACCEPT**. The review's m7 asked for a standalone multivariate Lemma I with explicit parameters, which Lemma 7.23 supplies. The Titchmarsh 5.13 row exponents are imported from Lemmas 7.15–7.16 and were not re-derived by that review. |
+| 9.1–9.10 | Phase 21 `nonlinear-boundary.md` §7; Phase 22 `nonlinear-equality-boundary.md` | Phase 21 Track C; [Phase 22 Track C1–C2](../../notes/phase22/reviews/track-c12-review.md) |
+| 9.11–9.18 | [`nonlinear-multivariate-and-denser-mu.md`](../../notes/phase23/nonlinear-multivariate-and-denser-mu.md) §§1–2 | Phase 23 Track C: C1 and C2 **ACCEPT** after repair. Major M1 (wrong DEKKM theorem number) is closed: the manuscript cites **Theorem 1**. |
 
-Changes made in writing the manuscript, relative to the source notes: (1) the qualitative Theorem 7.19 is deduced from the small-ball Theorem 7.18 instead of from the constant-measure route of the Phase 20 note; the anchor family of Lemma 7.16 uses $h_2\ge\max(2h_1+1,\lambda H)$ throughout. (2) The $K_b$-absorption Theorem 10.6 is proved from the self-contained Lemma 10.5 (Markov averaging of the tail) instead of citing the sharp coefficient transfer of the generating-function notes; the constant is worse and the order is the same. (3) Process language of the notes was removed. No statement was strengthened beyond its source.
+Changes made in writing the manuscript, relative to the sources:
 
-## Exact checks run for this draft (26 November 2026)
+1. Lemma 7.23 packages the weighted isolation estimate of Track C3 as a standalone lemma, with the parameter order in its statement. Its free-loss boxes use the concrete scale $\beta_j=\lambda H(24s_m)^{j-1}$ in place of the note's unspecified boxes.
+2. Proposition 9.16 is stated for every $d=r\ge2$; the note uses $d\in\{2,3\}$, and its counting argument is general.
+3. Proposition 9.17(iv) is stated for every $s\ge1$; the note states $s=1$, and the same argument gives $9\mid3^{1+s(3a-\ell)}$.
+4. The conditional packet-discrepancy statement of the note appears as a sentence, not as a numbered result.
 
-From the repository root, in this worktree (standard library Python):
+No statement was strengthened in its hypotheses or conclusions beyond what the source proves.
 
-| Command | Exit | Time |
+## Exact checks run for this draft (27 November 2026)
+
+From the repository root, native Windows Python 3.13 with bytecode disabled:
+
+| Command | Exit | Notes |
 | --- | --- | --- |
-| `python -B scripts/phase20_normality.py` | 0 | 70 s |
-| `python -B scripts/phase21_nonlinear.py` | 0 | 3 s |
-| `python -B scripts/phase22_short_orbits.py` | 0 | 7 s |
-| `python -B scripts/phase22_nonlinear_boundary.py` | 0 | 5 s |
+| `python -B scripts/phase23_nonlinear_short_orbits.py` | 0 | about 1 s; "All exact checks passed."; every number quoted in Remark 9.19 and above matches the output |
+| `python -B scripts/phase22_short_orbits.py` | 0 | "All Phase 22 C3-C4 checks passed." |
 
-The two Phase 22 scripts are untracked in this worktree at the time of writing; **they must be committed before this version is released** (§12 of the manuscript says they accompany this version). The Phase 18–19 scripts and the v1.0 certificate `checks/xi_discrepancy.py` were not rerun; their v1.0 records stand.
-
-**Supplementary check for Proposition 7.17.** After review the proposition is stated for $H\ge6$, where the target interval is nonempty ($\rho_H>2\delta_H$) and which is consistent with the repository certificate for $H\in\{6,10,100,1000,4000\}$; for $H=4,5$ the net property holds but the interval $(2+\rho_H+\delta_H,2+2\rho_H-\delta_H)$ is empty. For this draft a direct exact computation with Python `fractions` verified, for each $4\le H\le12$, that consecutive points $(a/3^H)^4$ with $3\nmid a$ covering $(\rho_H,2\rho_H]$ are at most $2\delta_H$ apart and that the first lies below $\rho_H$ (so $(2+\rho_H,2+2\rho_H]$ is covered); all nine cases passed ($R_4=8193,\ldots,R_{12}=153362$). This scratch file is not in the repository and is not cited by the manuscript; the referee independently confirmed the net for $4\le H\le14$.
-
-## Revision after cross-model review (26 November 2026)
-
-An independent model review from a different provider, [`paper-vii-v2-review.md`](../../notes/phase22/reviews/paper-vii-v2-review.md) (verdict ACCEPT AFTER REVISION; 0 Critical, 6 Major, 12 Minor), was answered in full. Cross-model review is not independent human peer review. The resulting label changes in this map: Theorem 7.18 is now *Lean-supported paper proof* (via Lemmas 7.12 and 7.16); Proposition 7.17 carries *Paper proof; finite certificate* and is stated for $H\ge6$; the input to Theorem 9.11 from Paper I v2.0 is recorded as paper proofs there; §12 of the manuscript now separates the paper proofs (7.1, 7.2, 7.21, 7.22) from the Lean-supported paper proofs (7.18–7.20). The full list of repairs is in [CHANGES.md](CHANGES.md).
+The checks of 26 November 2026 (`phase20_normality.py`, `phase21_nonlinear.py`, `phase22_nonlinear_boundary.py`, all exit 0) were not rerun. The supplementary check for Proposition 7.17 ($4\le H\le12$) stands as recorded in the previous version of this file.
 
 ## Manuscript checks run for this draft
 
-- Python check of `paper.tex` and `references.bib` (26 November 2026): all `\begin`/`\end` environments matched; braces balanced in both files; inline `$` balanced in every paragraph; every `\cite` key present in `references.bib`, every bibliography entry cited, no duplicate keys; every referenced label defined, no duplicate labels; no process language from the source notes. Rerun after the revision below.
-- Scratch LaTeX build (three `pdflatex` passes and `bibtex`, TinyTeX in WSL, outside the repository): exit 0, no errors, no undefined references or citations, no overfull boxes, 48 pages, PDF author metadata `Christopher Anderson`, statement numbering unchanged by the revision. Pages 1, 4, 26, 27 and 34 were rendered and inspected. No `paper.pdf` was written into the repository.
-- `PYTHONUTF8=1 python scripts/portal.py check --strict --skip-figures`: **passed** ("198 registered results, 252 Markdown files, links, anchors, identifiers, topics and figures"), so every link, anchor and registry identifier in these three Markdown files resolves. Without `--skip-figures` the strict check reports one unrelated pre-existing error, a stale `assets/figures/data/proof-dependency-map.json`, which this draft does not touch.
+- **Structural check** (scratch Python script, 27 November 2026) of `paper.tex` against `references.bib`. **PASS.**
+  - `\begin`/`\end` environments match; braces are balanced in both files; inline `$` is balanced in every paragraph.
+  - All 107 labels are distinct. Every one of the 96 distinct `\ref`/`\cref`/`\Cref`/`\eqref` targets is defined.
+  - Every one of the 36 `\cite` keys is in `references.bib`. All 36 entries are cited, and there are no duplicate keys.
+  - **Zero** occurrences remain of the 18 labels removed with the split: `sec:allprime`, `eq:gridcount`, `lem:poledom`, `thm:allprime`, `thm:protected`, `lem:Ax`, `cor:dense`, `rem:algebras`, `thm:hybrid`, `lem:truncation`, `eq:separation`, `prop:ratioone`, `thm:geometric`, `thm:stoneham`, `rem:quasipoly`, `thm:F`, `thm:G`, `lem:largestprime`.
+  - Every control sequence used is standard LaTeX/AMS or is defined in `../common/preamble.tex` or the paper preamble.
+- **Pending before release:**
+  - three `pdflatex` passes and `bibtex`, with inspection of numbering, overfull boxes and the new statements;
+  - `python3 scripts/portal.py check` after any registry update;
+  - committing the two scripts.
+
+  The 26 November scratch build (48 pages, TinyTeX) predates the split and the Phase 23 additions, and does not describe this draft.

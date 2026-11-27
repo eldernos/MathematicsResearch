@@ -252,7 +252,7 @@ For $b\ge3$ no element of $K_b$ is simply normal in base $b$, and no element of
 $K_b$ is normal in base $b$.
 \item Every series $F_b(a)$ with integers $a\ge0$ that satisfies one of the three
 hypotheses of \cref{thm:A}(iii) has $f_{0^L}(N)\to1$ for every $L$; this applies to $\Theta_Q(1/b)$ and $L_\chi(b)$ for real
-nonprincipal $\chi$, which are therefore not simply normal in any base.
+nonprincipal $\chi$, which are therefore not simply normal in base~$b$.
 \item With $D=q\,d/dq$, the numbers $D^jE_b$, $D^jE_b^3$ $(j\ge0)$ and $E_b^2DE_b$
 have $f_{0^L},f_{(b-1)^L}\to\frac12$ with error $O_{b,j}((L+\log N)/\sqrt N)$; they
 are simply normal in base $2$ and not simply normal in base $b\ge3$; and
@@ -1606,45 +1606,55 @@ $\sum(\log_br_Q(n))^2\ll S_Q(N)(LL)^2$, and Cauchy--Schwarz gives
 $\sum_{n\in\mathcal E_N}u(n)\le|\mathcal E_N|+(|\mathcal E_N|\sum(\log_br_Q)^2)^{1/2}
 \ll S_Q(N)LL(\log N)^{-c/2}$.
 
-(a) Off $\mathcal E_N$, fix a local pattern $\pi$ at the primes $\le P_0$ (outside probability
-$\varepsilon$) and a genus. With $\eta_c=c+c^{-1}$ for $c\in G_{\rm odd}$, so that
-$\psi(\eta_c)=\psi(c)+\psi(c)^{-1}$ is $2$ or a cyclotomic unit, \cref{lem:annihilation} and
-Fourier inversion on $G_{\rm odd}$ give, after pairing $\psi$ with $\bar\psi$,
+(a) Off $\mathcal E_N$, fix $P_0\ge\max_{p\mid\Delta}p$ (so that every ramified prime is recorded
+in the local pattern), a local pattern $\pi$ at the primes $\le P_0$ (outside probability
+$\varepsilon$) and a genus $\gamma$, restricting to $n$ with no split $p>P_0$ having $p^2\mid n$.
+With $\eta_c=c+c^{-1}$ for $c\in G_{\rm odd}$, so that $\psi(\eta_c)=\psi(c)+\psi(c)^{-1}$ is
+$2$ or a cyclotomic unit, \cref{lem:annihilation} and Fourier inversion on $G_{\rm odd}$ give,
+after pairing $\psi$ with $\bar\psi$,
 \[
-h_0a_C(n)=\sum_{\{\psi,\bar\psi\}}\epsilon_\psi\,\psi(\eta_{C_{\rm o}})\,w_\psi(\pi)\prod_{c\in G_{\rm odd}/\pm}\psi(\eta_c)^{m^{\rm o}_c(n)},
+h_0a_C(n)=\sum_{\{\psi,\bar\psi\}}\epsilon_\psi\,\psi(\eta_{C_{\rm o}})\,w_\psi(\pi)\prod_{g}\psi(\eta_{g_{\rm o}})^{m_g(n)},
 \]
 over the pairs of characters surviving $\pi$, where $\epsilon_1=\frac12$, $\epsilon_\psi=1$
-otherwise, $w_\psi(\pi)\ne0$ collects the primes $\le P_0$ and the ramified primes, and
-$m^{\rm o}_c(n)$ counts split $p\|n$, $p>P_0$, with $[\mathfrak p]_{\rm o}\in\{c,c^{-1}\}$.
-Split $m^{\rm o}_c=m_{(1,c)}+m^{\rm rest}_c$, where $m_{(1,c)}$ counts the primes whose class is
-$(1,c^{\pm1})$, which lies in $G^2$, and $m^{\rm rest}_c$ the primes with nontrivial
-$2$-component. Condition on all $m^{\rm rest}_c$: their factors are units at every prime above
-an odd $q_0$, so they are absorbed into coefficients ranging over a compact set with nonzero
-coordinates, and moving the coordinates $m_{(1,c)}$ does not change the genus. By
-Selberg--Delange for Hecke $L$-functions of class-group characters, these coordinates are
-asymptotically uniform modulo every $M$, given the conditioned data. If
+otherwise, $w_\psi(\pi)\ne0$ collects the primes $\le P_0$ (including all ramified primes), and
+$m_g(n)$ counts split $p\|n$, $p>P_0$, with $[\mathfrak p]\in g=\{c,c^{-1}\}\subset G$.
+Every base $\psi(\eta_{g_{\rm o}})$ is a unit in the valuation ring $\mathcal O$ of the completion
+of $\Q(\zeta_{|G_{\rm odd}|})^+$ at a prime above the odd prime $q_0$. If
 $\{\psi,\bar\psi\}\ne\{\psi',\bar\psi'\}$, some $\psi(\eta_c)/\psi'(\eta_c)$ is not a root of
-unity (squaring is a bijection of $G_{\rm odd}$, and characters are linearly independent), and a
-lattice direction $\mathbf w$ with first coordinate $1$ separates all pairs simultaneously.
-Along the lines $(0,\mathbf u)+j\mathbf w$ the sum is $f_A(j)$ of \cref{lem:strassmann} over the
-completion of $\Q(\zeta_{|G_{\rm odd}|})^+$ at a prime above $q_0$, so
-$\mathbb P(v_{q_0}(h_0a_C(n))\ge H)\le2\varepsilon$ for $H\ge H(\varepsilon)$. Hence
-$V_b\le v_{q_0}(r_Q)$ is tight. With fact (ii)--(iii), $u_b(n)/\lambda_N\to\log2$ in
-probability, and fact (i) with $a_C\le a$ gives $W(N)\le(\log2+o(1))S_Q(N)\lambda_N$; the
-constant is $1+\log2$.
+unity (squaring is a bijection of $G_{\rm odd}$, and characters are linearly independent), so a
+lattice direction $\mathbf w\in\Z^{\{g\}}$ supported on class pairs contained in $G^2$, with
+$w_{g_1}=1$ for some $g_1$, separates all pairs simultaneously. Along any line
+$\mathbf m+j\mathbf w$, the sum is $f_A(j)$ of \cref{lem:strassmann} with $A$ in a compact set of
+nonzero-coordinate vectors, so for $H\ge H(\varepsilon)$ there is $T_0=T q_0^{a(H)}$ such that
+$v(f_A(j))\ge H$ depends only on $j\bmod T_0$ and holds for at most $\varepsilon T_0$ residues
+$j\bmod T_0$, uniformly in $\mathbf m$. Now fix a single even modulus $M$ divisible by $T_0$, by
+$2$, and by the orders in $(\mathcal O/\mathfrak m^t)^\times$ (where $v(x)\ge H\iff x\in\mathfrak m^t$)
+of \emph{all} unit bases $\psi(\eta_{g_{\rm o}})$ across all coordinates $g$. Then the event
+$v_{q_0}(h_0a_C(n))\ge H$ depends only on the finite residue vector $\mathbf m(n)\bmod M$. Because
+$P_0\ge\max_{p\mid\Delta}p$, the genus of $n$ is fixed by $\pi$ and the parities of
+$(m_g\bmod2)_g$, and Selberg--Delange for Hecke $L$-functions of class-group characters shows that
+$\mathbf m(n)\bmod M$ is asymptotically uniform on the genus-compatible coset $R_\gamma$ of
+$(\Z/M\Z)^{\{g\}}$. Since $\mathbf w$ is supported on $G^2$ and $w_{g_1}=1$, the lines
+$\mathbf r+j\mathbf w$ ($j\in\Z/M\Z$) partition $R_\gamma$ into lines of exactly $M$ elements,
+each having at most $\varepsilon M$ bad residues; summing over fibres gives
+$\limsup_{N\to\infty}\mathbb P(v_{q_0}(h_0a_C(n))\ge H\mid\pi,\gamma)\le\varepsilon$ without
+conditioning on exact counts. Hence $V_b\le v_{q_0}(r_Q)$ is tight. With facts (ii)--(iii),
+$u_b(n)/\lambda_N\to\log2$ in probability, and fact (i) with $a_C\le a$ gives
+$W(N)\le(\log2+o(1))S_Q(N)\lambda_N$; the constant is $1+\log2$.
 
 (b) For a surviving character $\psi$ of order $d\ge3$, the same expansion shows that the
 $2$-adic valuation of the $\psi$-component equals the number $m_{\ker\psi}(n)$ of split $p\|n$
 with $[\mathfrak p]_{\rm o}\in\ker\psi$, up to a bounded term; these primes form a proportion $1/d$
 of the split primes (Chebotarev in the Hilbert class field), so $m_{\ker\psi}(n)=(\frac1{2d}+o(1))LL$
 in probability. On the annihilated set $v_2(a_C(n))\ge\min_{\psi}m_{\ker\psi}(n)-v_2(h_0)$ over
-the survivors, always. For the matching upper bound, all constants are fixed first and the
-minimizing kernel is selected last: \cref{lem:strassmann} ($2$-adically, along the
-coordinate of a class pair in $G^2$) bounds the probability of cancellation within each fixed
-kernel, the uniformity modulo $M$ bounds the probability that two kernels tie within a fixed
-margin, and a union bound over the finitely many kernels gives
-$v_2(a_C(n))=(\frac1{2d(n)}+o(1))LL$ in probability. With facts (ii)--(iii) this gives
-$u_{2^k}(n)/\lambda_N\to(1-1/d(n))\log2$ in probability. The survivors are determined by local
+the survivors, always. For the matching upper bound, all constants (including $P_0\ge\max_{p\mid\Delta}p$)
+are fixed first and the minimizing kernel is selected last: within each fixed kernel $K$, removing
+the common power $2^{m_K^>}$ leaves only $2$-adic unit bases, so \cref{lem:strassmann}
+($2$-adically, along a class pair in $G^2\setminus K$) combined with the same common finite
+modulus $M$ bounds the probability of cancellation within $K$, the uniformity modulo $M$ bounds
+the probability that two kernels tie within a fixed margin, and a union bound over the finitely
+many kernels gives $v_2(a_C(n))=(\frac1{2d(n)}+o(1))LL$ in probability. With facts (ii)--(iii) this
+gives $u_{2^k}(n)/\lambda_N\to(1-1/d(n))\log2$ in probability. The survivors are determined by local
 events at split $p^e\|n$ with $e\ge2$ (a nontrivial $\psi$ with $\psi(\mathfrak p)$ of order $o$
 dies exactly when $o\mid e+1$), and on the support the exponents at finitely many split primes
 are asymptotically independent with $\mathbb P(v_p=e)=(1-\frac1p)p^{-e}$; this gives the law of
@@ -2023,8 +2033,8 @@ $1-f_{0^L}(N)\le R(\sqrt{N+R}+1)/N$ for every
 $R\ge L+\lceil\log_b(2C_{b,\gamma}(N+R)^\gamma)\rceil+1$, where
 $C_{b,\gamma}=\sum_{k\ge1}(1+k)^\gamma b^{-k}$.
 \end{enumerate}
-In each case, if $a$ has infinitely many nonzero terms, $z$ is not simply normal in any base,
-and in base $2$ its digit $0$ has frequency $1$.
+In each case, if $a$ has infinitely many nonzero terms, $z$ is not simply normal in base~$b$,
+and in base~$2$ (for $b=2$) its digit~$0$ has frequency~$1$.
 \end{theorem}
 
 \begin{proof}
