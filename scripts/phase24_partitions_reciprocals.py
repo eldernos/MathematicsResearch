@@ -885,8 +885,8 @@ def verify_C4():
             if k in [6, 12, 20]:
                 shadow_table.append((b, k, float(P_lo - R_k), float(lb), float(ub)))
 
-    # 4c. Exact p-adic valuations v_p(D_k^(E)) and v_p(T_k^(E)), plus elementary primitive-order
-    #     factorization Phi_d(b) / d <= R(d) <= Phi_d(b).
+    # 4c. Exact p-adic valuations v_p(D_k^(E)) and elementary primitive-order factorization
+    #     Phi_d(b) / R(d) | d (excluding the stated d = 2, b = 3 mod 4 exception).
     phi_tab = cyclotomic_table(26)
     for b in [2, 3, 5]:
         for d in range(2, 25):

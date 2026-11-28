@@ -716,6 +716,8 @@ def section4(primes):
     print(f"  C      = prod_p sum_j p/(p^(2^j)+1)          in {fmt_iv(res['C'], 7)}")
     check(C_hi < Fraction(29, 20), "C < 29/20")
     check(C_hi < Fraction(14036, 10000), "C < 1.4036")
+    check(C_lo >= Fraction(14035953, 10000000), "C >= 1.4035953")
+    check(C_hi <= Fraction(14035958, 10000000), "C <= 1.4035958")
     # H = sum |h(n)|/n for the squarefull convolution of g = prod s_2(e+1)
     # l_H(p) = 1 + sum_{e>=2} |h(p^e)| p^-e ; write as (1-1/p) sum G(p^e) p^-e with G cumulative
     Gcum = lambda e: 1 + sum(abs(sb(i + 1, 2) - sb(i, 2)) for i in range(2, e + 1))
@@ -729,6 +731,8 @@ def section4(primes):
     res["C_true"] = Ct
     print(f"  C_true = lim mean s_2(tau(n))                in {fmt_iv(Ct)}")
     check(Ct[1] < C_lo, "C_true < C strictly")
+    check(Ct[0] >= Fraction(1339103, 1000000), "C_true >= 1.339103")
+    check(Ct[1] <= Fraction(1339116, 1000000), "C_true <= 1.339116")
     # --- E_odd
     epO = make_ep("C_odd", s2e, primes, Y, (1, 1), odd_p, keep=y)
     res["C_odd"] = epO.bounds()

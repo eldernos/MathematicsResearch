@@ -46,7 +46,7 @@ a kernel-verified identity ([GF-05](results.md#gf-05)). So *z* ∈ *K*<sub>*b*</
 
 **Limit measures.** The orbit measures of *x* are the averages of the point masses at {*b*ⁿ*x*}, 0 ≤ *n* < *N*. Their weak limits along subsequences are the **limit measures** of *x*; *x* is normal exactly when Lebesgue measure is the only one.
 
-Every statement is about one radix, and the radix is always named. Normality in base *b* is equivalent to normality in every base *b*<sup>*k*</sup> (Maxfield 1953). Between multiplicatively independent bases no general implication holds (Schmidt 1960), and no explicit constant studied here is known to be normal in two multiplicatively independent bases.
+Every statement is about one radix, and the radix is always named. Normality in base *b* is equivalent to normality in every base *b*<sup>*k*</sup> (Maxfield 1953). Between multiplicatively independent bases no general implication holds (Schmidt 1960), and no classical constant studied here is known to be normal in two multiplicatively independent bases (computable synthetic constructions normal — together with all their nonconstant rational polynomials — in every integer base are established in [GF-39](results.md#gf-39)).
 
 ## Logical hierarchy
 

@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1751 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1861 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 738 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 848 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -591,6 +591,123 @@ Declaration counts describe the size of the library, not the mathematical signif
 | --- | --- |
 | [`JointWeyl.rectangle_of_scalar_normal`](../NormalityChecker/JointWeyl.lean#L185) | Scalar normality for every nonzero integer linear combination implies convergence of the actual simultaneous rectangle frequencies in every finite dimension. |
 
+### NafGeometricTransfer
+
+[`NormalityChecker/NafGeometricTransfer.lean`](../NormalityChecker/NafGeometricTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`NafGeometricTransfer.abs_signedWeight_succ_sub_le`](../NormalityChecker/NafGeometricTransfer.lean#L72) | `\|w_±(n + 1) - w_±(n)\| ≤ 1`. |
+| [`NafGeometricTransfer.signedWeight_le_self`](../NormalityChecker/NafGeometricTransfer.lean#L81) | `w_±(n) ≤ n`. |
+| [`NafGeometricTransfer.signedWeight_parity_mono`](../NormalityChecker/NafGeometricTransfer.lean#L85) | **Parity monotonicity:** `w_±(2q) ≤ w_±(2q + 1)` and `w_±(2q + 2) ≤ w_±(2q + 1)`. |
+| [`NafGeometricTransfer.signedWeight_natAbs_add_le`](../NormalityChecker/NafGeometricTransfer.lean#L94) | Subadditivity of `w_±(\|·\|)` on `ℤ`. |
+| [`NafGeometricTransfer.signedWeight_natAbs_mul_two_pow`](../NormalityChecker/NafGeometricTransfer.lean#L119) |  |
+| [`NafGeometricTransfer.signedWeight_natAbs_sum_le`](../NormalityChecker/NafGeometricTransfer.lean#L125) | Finite signed sums: `w_±(\|∑_{i ∈ S} c_i 2^{e_i}\|) ≤ ∑_{i ∈ S} w_±(\|c_i\|)`. |
+| [`NafGeometricTransfer.signedWeight_natAbs_le_card_of_signed_sum`](../NormalityChecker/NafGeometricTransfer.lean#L137) | **Lemma A.1 (`w_rec ≤ w_min`).** If `A = ∑_{i ∈ S} ε_i 2^{m_i}` with every `ε_i ∈ {1, -1}` (repeated exponents allowed), then `w_±(\|A\|) ≤ #S`. |
+| [`NafGeometricTransfer.signedWeight_natAbs_le_card_support`](../NormalityChecker/NafGeometricTransfer.lean#L146) | Digit representations: if `\|c_i\| ≤ 1`, then `w_±(\|∑_{i<K} c_i 2^i\|) ≤ #{i < K : c_i ≠ 0}`. |
+| [`NafGeometricTransfer.nafDigit_zero`](../NormalityChecker/NafGeometricTransfer.lean#L175) |  |
+| [`NafGeometricTransfer.nafDigit_succ`](../NormalityChecker/NafGeometricTransfer.lean#L177) |  |
+| [`NafGeometricTransfer.nafRest_zero`](../NormalityChecker/NafGeometricTransfer.lean#L180) |  |
+| [`NafGeometricTransfer.nafRest_succ`](../NormalityChecker/NafGeometricTransfer.lean#L182) |  |
+| [`NafGeometricTransfer.nafHead_cases`](../NormalityChecker/NafGeometricTransfer.lean#L184) |  |
+| [`NafGeometricTransfer.abs_nafHead_le`](../NormalityChecker/NafGeometricTransfer.lean#L188) |  |
+| [`NafGeometricTransfer.nafHead_eq_zero_iff`](../NormalityChecker/NafGeometricTransfer.lean#L191) |  |
+| [`NafGeometricTransfer.two_mul_nafTail_add`](../NormalityChecker/NafGeometricTransfer.lean#L203) |  |
+| [`NafGeometricTransfer.nafHead_mul_nafHead_nafTail`](../NormalityChecker/NafGeometricTransfer.lean#L207) |  |
+| [`NafGeometricTransfer.nafDigit_eq_nafHead_nafRest`](../NormalityChecker/NafGeometricTransfer.lean#L216) |  |
+| [`NafGeometricTransfer.nafDigit_cases`](../NormalityChecker/NafGeometricTransfer.lean#L222) | **Lemma A.1:** every canonical NAF digit lies in `{0, 1, -1}`. |
+| [`NafGeometricTransfer.abs_nafDigit_le`](../NormalityChecker/NafGeometricTransfer.lean#L227) |  |
+| [`NafGeometricTransfer.nafDigit_mul_nafDigit_succ`](../NormalityChecker/NafGeometricTransfer.lean#L232) | **Lemma A.1 (non-adjacency):** `e_i(A) e_{i+1}(A) = 0`. |
+| [`NafGeometricTransfer.nafDigit_sum_add_nafRest`](../NormalityChecker/NafGeometricTransfer.lean#L238) | **Lemma A.1 (value reconstruction):** `∑_{i < K} e_i(A) 2^i + 2^K rest_K(A) = A`. |
+| [`NafGeometricTransfer.natAbs_nafTail_le`](../NormalityChecker/NafGeometricTransfer.lean#L255) |  |
+| [`NafGeometricTransfer.natAbs_nafRest_le`](../NormalityChecker/NafGeometricTransfer.lean#L259) |  |
+| [`NafGeometricTransfer.nafRest_eq_zero`](../NormalityChecker/NafGeometricTransfer.lean#L269) | **Lemma A.1 (termination):** `rest_K(A) = 0` once `K ≥ \|A\|`. |
+| [`NafGeometricTransfer.nafDigit_eq_zero_of_le`](../NormalityChecker/NafGeometricTransfer.lean#L274) | **Lemma A.1 (finite support):** `e_i(A) = 0` for `i ≥ \|A\|`. |
+| [`NafGeometricTransfer.nafDigit_sum_eq`](../NormalityChecker/NafGeometricTransfer.lean#L279) | **Lemma A.1 (existence):** `A = ∑_{i < K} e_i(A) 2^i` for every `K ≥ \|A\|`. |
+| [`NafGeometricTransfer.signedWeight_natAbs_nafTail_add_le`](../NormalityChecker/NafGeometricTransfer.lean#L288) | One canonical NAF step: `w_±(\|tail(A)\|) + \|e₀(A)\| ≤ w_±(\|A\|)`. |
+| [`NafGeometricTransfer.card_nafDigit_ne_zero_eq_sum`](../NormalityChecker/NafGeometricTransfer.lean#L321) | The number of nonzero canonical NAF digits below `K`, as `∑_{i<K} \|e_i(A)\|`. |
+| [`NafGeometricTransfer.sum_natAbs_nafDigit_le`](../NormalityChecker/NafGeometricTransfer.lean#L327) |  |
+| [`NafGeometricTransfer.card_nafDigit_ne_zero_le`](../NormalityChecker/NafGeometricTransfer.lean#L340) | **Lemma A.1 (`w_NAF ≤ w_rec`):** for every `K`, the canonical NAF has at most `w_±(\|A\|)` nonzero digits below position `K`. |
+| [`NafGeometricTransfer.nafWeight_eq_card_range`](../NormalityChecker/NafGeometricTransfer.lean#L345) |  |
+| [`NafGeometricTransfer.nafWeight_eq_signedWeight`](../NormalityChecker/NafGeometricTransfer.lean#L360) [GF-44](results.md#gf-44) | **Lemma A.1 (exact equivalence):** `W(naf(A)) = w_±(\|A\|) = signedWeight \|A\|`. |
+| [`NafGeometricTransfer.exists_naf`](../NormalityChecker/NafGeometricTransfer.lean#L367) [GF-44](results.md#gf-44) | **Lemma A.1 (packaged):** every integer has a finitely supported non-adjacent signed binary representation with exactly `w_±(\|A\|)` nonzero digits. |
+| [`NafGeometricTransfer.nafWeight_le_card_support`](../NormalityChecker/NafGeometricTransfer.lean#L376) [GF-44](results.md#gf-44) | **Lemma A.1 (minimality):** every signed binary representation `A = ∑_{i<K} c_i 2^i` with `\|c_i\| ≤ 1` has at least `W(naf(A)) = w_±(\|A\|)` nonzero digits. |
+| [`NafGeometricTransfer.three_mul_abs_sum_add_one_le`](../NormalityChecker/NafGeometricTransfer.lean#L386) | Non-adjacent digit sums: `3 \|∑_{i<K} d_i 2^i\| + 1 ≤ 2^{K+1}` whenever `\|d_i\| ≤ 1` and `d_i d_{i+1} = 0`. |
+| [`NafGeometricTransfer.two_pow_mul_div_eq`](../NormalityChecker/NafGeometricTransfer.lean#L428) | Dyadic shift: `2^j (A / 2^M) = rest_{M-j}(A) + low_{M-j}(A) / 2^{M-j}` for `j ≤ M`. |
+| [`NafGeometricTransfer.abs_nafLow_div_lt`](../NormalityChecker/NafGeometricTransfer.lean#L442) [GF-44](results.md#gf-44) | **Theorem A.2(1), strict geometric tail:** if the `ℓ` NAF digits just below position `r` vanish, then `\|low_r(A) / 2^r\| < (2/3) 2^{-ℓ}`. |
+| [`NafGeometricTransfer.fract_lt_or_gt_of_abs_lt`](../NormalityChecker/NafGeometricTransfer.lean#L472) | A real number within `c ≤ 1/2` of `0` has fractional part in `[0, c) ∪ (1 - c, 1)`. |
+| [`NafGeometricTransfer.exists_nafDigit_ne_zero_of_fract_mem`](../NormalityChecker/NafGeometricTransfer.lean#L491) | **Theorem A.2(1), contrapositive form:** if `{2^j A / 2^M} ∈ [c_ℓ, 1 - c_ℓ]`, `c_ℓ = 2/(3 · 2^ℓ)`, then some NAF digit `e_u(A) ≠ 0` with `M - j - ℓ ≤ u < M -… |
+| [`NafGeometricTransfer.naf_dyadic_count_le`](../NormalityChecker/NafGeometricTransfer.lean#L541) [GF-44](results.md#gf-44) | **Theorem A.2(1), orbit covering:** for every `A : ℤ`, `s, r ≥ 1` and `sN ≤ M`, at most `r · w_±(\|A\|)` of the shifts `{2^{sm} A / 2^M}`, `0 ≤ m < N`, lie in… |
+| [`NafGeometricTransfer.naf_orbit_count_le`](../NormalityChecker/NafGeometricTransfer.lean#L579) [GF-44](results.md#gf-44) | **Theorem A.2(1), binary orbit covering:** for every `A : ℤ`, `ℓ ≥ 1` and `N ≤ M`, at most `ℓ · w_±(\|A\|)` of the shifts `{2^n A / 2^M}`, `0 ≤ n < N`, lie in… |
+| [`NafGeometricTransfer.frequency_naf_interval_le`](../NormalityChecker/NafGeometricTransfer.lean#L594) | **Theorem A.2(2), finite form.** For every real `x`, `s, r ≥ 1`, `R` and `N`, `F_N([c + 2^{-R}, 1 - c); x, 2^s) ≤ r · w_±(⌊2^{sN + R} x⌋) / N`, `c = 2/(3 ·… |
+| [`NafGeometricTransfer.nafDensityLE_of_limsup_le`](../NormalityChecker/NafGeometricTransfer.lean#L666) | The `limsup` form: `limsup_M w_±(⌊2^M x⌋)/M ≤ ρ` implies `NafDensityLE x ρ`. |
+| [`NafGeometricTransfer.eventually_frequency_le_of_nafDensity`](../NormalityChecker/NafGeometricTransfer.lean#L680) | **Theorem A.2(2), asymptotic frequency bound:** `F_N([c + 2^{-R}, 1 - c); x, 2^s) ≤ rsρ + ε` eventually. |
+| [`NafGeometricTransfer.radixDiscrepancy_eventually_ge_of_nafDensity`](../NormalityChecker/NafGeometricTransfer.lean#L716) | **Theorem A.2(2), discrepancy form in base `2^s`:** `D_N(x; 2^s) ≥ 1 - (4/3) 2^{-sr} - rsρ - ε` eventually. |
+| [`NafGeometricTransfer.binary_radixDiscrepancy_eventually_ge_of_nafDensity`](../NormalityChecker/NafGeometricTransfer.lean#L745) [GF-44](results.md#gf-44) | **Theorem A.2(2), base `2`:** `D_N(x; 2) ≥ 1 - (4/3) 2^{-ℓ} - ℓρ - ε` eventually. |
+| [`NafGeometricTransfer.binary_radixDiscrepancy_eventually_ge_two_thirds`](../NormalityChecker/NafGeometricTransfer.lean#L753) | **`ℓ = 2` in base `2`:** `D_N(x; 2) ≥ 2/3 - 2ρ - ε` eventually. |
+| [`NafGeometricTransfer.base4_radixDiscrepancy_eventually_ge_two_thirds`](../NormalityChecker/NafGeometricTransfer.lean#L762) | **`r = 1` in base `4`:** `D_N(x; 4) ≥ 2/3 - 2ρ - ε` eventually (no radix-descent loss). |
+| [`NafGeometricTransfer.frequency_mono_interval`](../NormalityChecker/NafGeometricTransfer.lean#L771) | Frequencies of half-open intervals are monotone under enlargement. |
+| [`NafGeometricTransfer.sum_wordFreq_eq_frequency`](../NormalityChecker/NafGeometricTransfer.lean#L780) | Unions of adjacent length-`L` cylinders: `∑_{v₁ ≤ v < v₂} f_N(v) = F_N([v₁/b^L, v₂/b^L))`. |
+| [`NafGeometricTransfer.not_orderNormal_of_frequency_le`](../NormalityChecker/NafGeometricTransfer.lean#L828) | A uniform frequency gap on a union of cylinders excludes `L`-normality in base `b`. |
+| [`NafGeometricTransfer.not_orderNormal_two_four_of_nafDensity`](../NormalityChecker/NafGeometricTransfer.lean#L847) [GF-44](results.md#gf-44) | **Theorem B.1(2) mechanism:** `ρ < 5/16` excludes `4`-normality in base `2` (ten binary cylinders `[3/16, 13/16) ⊂ (1/6, 5/6)`, total length `5/8`). |
+| [`NafGeometricTransfer.not_orderNormal_four_two_of_nafDensity`](../NormalityChecker/NafGeometricTransfer.lean#L863) [GF-44](results.md#gf-44) | **Theorem B.1(2) mechanism in base `4`:** `ρ < 5/16` excludes `2`-normality in base `4`. |
+| [`NafGeometricTransfer.orderNormal_of_normalIn`](../NormalityChecker/NafGeometricTransfer.lean#L879) | Normality in base `b` implies `L`-normality for every `L ≥ 1`. |
+| [`NafGeometricTransfer.signedWeight_le_log`](../NormalityChecker/NafGeometricTransfer.lean#L902) | `w_±(T) ≤ ⌊log₂ T⌋ + 1`. |
+| [`NafGeometricTransfer.nafDensityLE_of_series`](../NormalityChecker/NafGeometricTransfer.lean#L1026) [GF-44](results.md#gf-44) | **Theorem A.2(3), signed series transfer.** If `\|a(n)\| ≤ C₀ n^B` and the mean signed weight of `a` is at most `C`, then `x = ∑_{n ≥ 1} a(n) 2^{-kn}` has upper… |
+| [`NafGeometricTransfer.aPlus_eq_erdosBorweinPlusCoeff`](../NormalityChecker/NafGeometricTransfer.lean#L1129) | `a_+` coincides with `Phase22Cores.erdosBorweinPlusCoeff` (`τ(n) - 2 [2 ∣ n] τ(n/2)`). |
+| [`NafGeometricTransfer.erdosBorweinPlusPow_eq_signed_series`](../NormalityChecker/NafGeometricTransfer.lean#L1148) [GF-44](results.md#gf-44) | **Lambert expansion:** `E_+(2^k) = ∑_{n ≥ 1} a_+(n) 2^{-kn}`. |
+| [`NafGeometricTransfer.multOfPrimePowAt_apply`](../NormalityChecker/NafGeometricTransfer.lean#L1213) |  |
+| [`NafGeometricTransfer.multOfPrimePowAt_isMultiplicative`](../NormalityChecker/NafGeometricTransfer.lean#L1217) |  |
+| [`NafGeometricTransfer.multOfPrimePowAt_prime_pow`](../NormalityChecker/NafGeometricTransfer.lean#L1228) |  |
+| [`NafGeometricTransfer.multOfPrimePowAt_nonneg`](../NormalityChecker/NafGeometricTransfer.lean#L1233) |  |
+| [`NafGeometricTransfer.ePlusLocal_zero`](../NormalityChecker/NafGeometricTransfer.lean#L1257) |  |
+| [`NafGeometricTransfer.ePlusLocal_nonneg`](../NormalityChecker/NafGeometricTransfer.lean#L1261) |  |
+| [`NafGeometricTransfer.abs_ePlusLocal_le`](../NormalityChecker/NafGeometricTransfer.lean#L1265) |  |
+| [`NafGeometricTransfer.ePlusKernelLocal_zero`](../NormalityChecker/NafGeometricTransfer.lean#L1274) |  |
+| [`NafGeometricTransfer.ePlusKernelLocal_of_ne_two`](../NormalityChecker/NafGeometricTransfer.lean#L1277) |  |
+| [`NafGeometricTransfer.ePlusKernelLocal_one_of_ne_two`](../NormalityChecker/NafGeometricTransfer.lean#L1284) |  |
+| [`NafGeometricTransfer.ePlusKernelLocal_two_one`](../NormalityChecker/NafGeometricTransfer.lean#L1288) |  |
+| [`NafGeometricTransfer.abs_ePlusKernelLocal_le`](../NormalityChecker/NafGeometricTransfer.lean#L1291) |  |
+| [`NafGeometricTransfer.ePlusMajorant_isMultiplicative`](../NormalityChecker/NafGeometricTransfer.lean#L1308) |  |
+| [`NafGeometricTransfer.ePlusKernel_isMultiplicative`](../NormalityChecker/NafGeometricTransfer.lean#L1311) |  |
+| [`NafGeometricTransfer.ePlusMajorant_prime_pow`](../NormalityChecker/NafGeometricTransfer.lean#L1314) |  |
+| [`NafGeometricTransfer.ePlusKernel_prime_pow`](../NormalityChecker/NafGeometricTransfer.lean#L1318) |  |
+| [`NafGeometricTransfer.ePlusMajorant_nonneg`](../NormalityChecker/NafGeometricTransfer.lean#L1322) |  |
+| [`NafGeometricTransfer.ePlusKernel_mul_zeta`](../NormalityChecker/NafGeometricTransfer.lean#L1325) |  |
+| [`NafGeometricTransfer.ePlusMajorant_mul_moebius`](../NormalityChecker/NafGeometricTransfer.lean#L1343) | The kernel identity `G₀ * μ = h₀`. |
+| [`NafGeometricTransfer.aPlus_two_pow`](../NormalityChecker/NafGeometricTransfer.lean#L1349) |  |
+| [`NafGeometricTransfer.aPlus_prime_pow_of_ne_two`](../NormalityChecker/NafGeometricTransfer.lean#L1366) |  |
+| [`NafGeometricTransfer.aPlus_mul_of_coprime`](../NormalityChecker/NafGeometricTransfer.lean#L1381) |  |
+| [`NafGeometricTransfer.abs_aPlus_le`](../NormalityChecker/NafGeometricTransfer.lean#L1421) | `\|a_+(n)\| ≤ τ(n) ≤ n`. |
+| [`NafGeometricTransfer.signedWeight_aPlus_le`](../NormalityChecker/NafGeometricTransfer.lean#L1439) | **Theorem B.2(1):** `w_±(\|a_+(n)\|) ≤ G₀(n)` for every `n`. |
+| [`NafGeometricTransfer.ePlusKernel_div_prime_pow`](../NormalityChecker/NafGeometricTransfer.lean#L1533) |  |
+| [`NafGeometricTransfer.abs_ePlusKernel_div_prime_pow`](../NormalityChecker/NafGeometricTransfer.lean#L1537) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_nonneg`](../NormalityChecker/NafGeometricTransfer.lean#L1545) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_le_head`](../NormalityChecker/NafGeometricTransfer.lean#L1552) |  |
+| [`NafGeometricTransfer.summable_abs_ePlusKernel_div`](../NormalityChecker/NafGeometricTransfer.lean#L1591) | **Summability hypothesis of L13 for `G₀`:** `∑ \|h₀(n)\|/n < ∞`. |
+| [`NafGeometricTransfer.tendsto_average_ePlusMajorant`](../NormalityChecker/NafGeometricTransfer.lean#L1661) | `(1/X) ∑_{n ≤ X} G₀(n) → W_+^{maj}`. |
+| [`NafGeometricTransfer.ePlusMean_nonneg`](../NormalityChecker/NafGeometricTransfer.lean#L1668) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_two_le`](../NormalityChecker/NafGeometricTransfer.lean#L1687) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_le_upper15`](../NormalityChecker/NafGeometricTransfer.lean#L1694) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_le_upper5`](../NormalityChecker/NafGeometricTransfer.lean#L1702) |  |
+| [`NafGeometricTransfer.nafKernelUpper5_le`](../NormalityChecker/NafGeometricTransfer.lean#L1710) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_le_upper`](../NormalityChecker/NafGeometricTransfer.lean#L1724) |  |
+| [`NafGeometricTransfer.ePlusLocalFactor_le_one_add_sq`](../NormalityChecker/NafGeometricTransfer.lean#L1732) |  |
+| [`NafGeometricTransfer.prod_ePlusUpper_le`](../NormalityChecker/NafGeometricTransfer.lean#L1747) | **Finite certificate:** `(∏_{p < 361} U(p)) · 1074/1073 ≤ 93694/100000` (exact rationals). |
+| [`NafGeometricTransfer.ePlusMean_le`](../NormalityChecker/NafGeometricTransfer.lean#L1836) [GF-44](results.md#gf-44) | **Theorem B.2(1), Euler-product certificate:** `W_+^{maj} = ∑ h₀(n)/n ≤ 93694/100000`. |
+| [`NafGeometricTransfer.erdosBorweinPlusPow_nafDensityLE`](../NormalityChecker/NafGeometricTransfer.lean#L1916) | `E_+(2^k)` has upper prefix NAF density at most `W_+^{maj}/k`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_radixDiscrepancy_eventually_ge`](../NormalityChecker/NafGeometricTransfer.lean#L1945) [GF-44](results.md#gf-44) | **Theorem B.1, base `2`:** for every `k ≥ 1` and `ε > 0`, eventually `D_N(E_+(2^k); 2) ≥ 2/3 - 2 · (937/1000)/k - ε`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_radixDiscrepancy_base4_eventually_ge`](../NormalityChecker/NafGeometricTransfer.lean#L1962) | **Theorem B.1, base `4`:** for every `k ≥ 1` and `ε > 0`, eventually `D_N(E_+(2^k); 4) ≥ 2/3 - 2 · (937/1000)/k - ε`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_lowerDiscrepancy_ge`](../NormalityChecker/NafGeometricTransfer.lean#L1978) [GF-44](results.md#gf-44) | **Theorem B.1(1):** for every `k ≥ 3`, `D_N(E_+(2^k); 2) ≥ 21/500` for all large `N`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_lowerDiscrepancy_pos`](../NormalityChecker/NafGeometricTransfer.lean#L1988) [GF-44](results.md#gf-44) | **Theorem B.1(1):** for every `k ≥ 3`, `E_+(2^k)` has positive lower discrepancy in base `2`: `∃ c > 0` (explicitly `c = 21/500`) with `c ≤ D_N(E_+(2^k); 2)`… |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_lowerDiscrepancy_base4_ge`](../NormalityChecker/NafGeometricTransfer.lean#L1993) | **Theorem B.1(1), base `4`:** for every `k ≥ 3`, `D_N(E_+(2^k); 4) ≥ 21/500` eventually. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_not_orderNormal_four`](../NormalityChecker/NafGeometricTransfer.lean#L2003) [GF-44](results.md#gf-44) | **Theorem B.1(2):** for every `k ≥ 3` (in particular `E_+(8)`), `E_+(2^k)` is **not** `4`-normal in base `2`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_not_orderNormal_base4_two`](../NormalityChecker/NafGeometricTransfer.lean#L2010) [GF-44](results.md#gf-44) | **Theorem B.1(2):** for every `k ≥ 3` (in particular `E_+(8)`), `E_+(2^k)` is **not** `2`-normal in base `4`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_not_normalIn_two`](../NormalityChecker/NafGeometricTransfer.lean#L2016) | For every `k ≥ 3`, `E_+(2^k)` is not normal in base `2`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_two_pow_not_normalIn_four`](../NormalityChecker/NafGeometricTransfer.lean#L2021) | For every `k ≥ 3`, `E_+(2^k)` is not normal in base `4`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_eight_not_orderNormal_four`](../NormalityChecker/NafGeometricTransfer.lean#L2026) [GF-44](results.md#gf-44) | **`E_+(8)`:** not `4`-normal in base `2`. |
+| [`NafGeometricTransfer.erdosBorweinPlus_eight_not_orderNormal_base4_two`](../NormalityChecker/NafGeometricTransfer.lean#L2030) [GF-44](results.md#gf-44) | **`E_+(8)`:** not `2`-normal in base `4`. |
+
 ### NormalReciprocalCore
 
 [`NormalityChecker/NormalReciprocalCore.lean`](../NormalityChecker/NormalReciprocalCore.lean)
@@ -621,8 +738,8 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_transition`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L28) [CC-48](results.md#cc-48) | Lower discrepancy gap in terms of adjacent binary transitions (`01` and `10`): for every real `x` and `N ≥ 1`, `min (1/3) (transitionFrequency x N) - 1/N ≤ 1… |
 | [`Phase17DiscrepancyBounds.nonzero_shift_has_one_bit`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L46) | If `shift 2 x n ≥ 2⁻ᴸ` (`L ≥ 1`), then some position `n + j` with `j ≤ L - 1` has a `1`-bit (`shift 2 x (n + j) ≥ 1/2`). |
 | [`Phase17DiscrepancyBounds.upper_freq_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L77) [CC-48](results.md#cc-48) | Frequency of shifts in `[2⁻ᴸ, 1)` is controlled by `L` times the `1`-bit frequency plus the boundary allowance `(L - 1) / N`. |
-| [`Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) [CC-48](results.md#cc-48) | Upper discrepancy gap in terms of the `1`-bit frequency: for every real `x`, `L ≥ 1`, and `N ≥ 1`, `1 - binaryDiscrepancy x N ≤ (1/2)^L + (L - 1)/N + L *… |
-| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) [CC-48](results.md#cc-48) | Lower discrepancy gap from two separated positive-mass intervals `[0, ε)` and `[3ε, 1/2)`: if `0 < ε ≤ 1/6`, `Δ ≤ ε`, and both `[0, ε)` and `[3ε, 1/2)`… |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) [CC-48](results.md#cc-48) [GF-48](results.md#gf-48) | Upper discrepancy gap in terms of the `1`-bit frequency: for every real `x`, `L ≥ 1`, and `N ≥ 1`, `1 - binaryDiscrepancy x N ≤ (1/2)^L + (L - 1)/N + L *… |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) [CC-48](results.md#cc-48) [GF-48](results.md#gf-48) | Lower discrepancy gap from two separated positive-mass intervals `[0, ε)` and `[3ε, 1/2)`: if `0 < ε ≤ 1/6`, `Δ ≤ ε`, and both `[0, ε)` and `[3ε, 1/2)`… |
 | [`Phase17DiscrepancyBounds.general_single_shape_one_one_max`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L184) [ST-35](results.md#st-35) | Exact single-shape maximum relative length for the primary corner `(1, 1)` of `α(b, p) α(b, q)` for arbitrary real parameters `p, q > 1` and ratio `r = Q / P… |
 | [`Phase17DiscrepancyBounds.general_single_shape_one_one_attained`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L232) [ST-35](results.md#st-35) | Equality in `general_single_shape_one_one_max` is attained at `r = q(p - 1) / (p(q - 1))`. |
 | [`Phase17DiscrepancyBounds.jointUniform_of_established_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L254) [ST-33](results.md#st-33) | If `deg : Fin k → ℕ` lists distinct degrees and every nonzero integer polynomial in `α` whose degree lies in `Set.range deg` is normal in base `b`, then the… |
@@ -1018,7 +1135,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SharpTranslation.sharp_translation`](../NormalityChecker/SharpTranslation.lean#L343) [SY-04](results.md#sy-04) | **The exact worst-case change.** For every real `x`, `z` and every `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 1 - D_N(z)`. |
 | [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
 | [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
-| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) [GF-05](results.md#gf-05) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
+| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) [GF-05](results.md#gf-05) [GF-48](results.md#gf-48) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
 
 ### SimpleNormalityKernel
 

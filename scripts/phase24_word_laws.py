@@ -534,6 +534,8 @@ def verify_B1() -> None:
           f"K_* < 3.178808: {ceil_decimal_str(K_star_upper, 6)}")
     check(8 * K_star_upper < Fraction(25431, 1000),
           f"8*K_* < 25.431: {ceil_decimal_str(8 * K_star_upper, 4)}")
+    check(8 * K_star_upper < Fraction(254305, 10000),
+          f"8*K_* < 25.4305: {ceil_decimal_str(8 * K_star_upper, 4)}")
     check(8 * K_star_upper < 26, f"8*K_* < 26: {ceil_decimal_str(8 * K_star_upper, 4)}")
     check(Fraction(1, 8) / K_star_upper > Fraction(1, 26), "kappa > 1/26")
     print(

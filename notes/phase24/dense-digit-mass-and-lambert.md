@@ -7,7 +7,7 @@ Phase 24, Track A. Companion script: `scripts/phase24_digit_mass.py` (3,095,904 
 | Item | Statement | Evidence |
 | --- | --- | --- |
 | A1.1 | Kummer's identity for two and for many summands in every base $b$. Subadditivity of $s_b$ and $w_b$, $s_b(ac)\le s_b(a)s_b(c)$, and the sharp bound $w_b(ac)\le\min\{s_b(a)w_b(c),\,2w_b(a)w_b(c)\}$. The inequality $w_b(ac)\le w_b(a)w_b(c)$ fails in every base $b\ge3$ (§1) | Paper proof; exhaustive Finite certificate |
-| A1.2 | **Truncation and carry-tail transfer.** An exact prefix identity, with a carry tail of size $O(\log N)$. The brief's "+1" claim is false: for $E(8)$ at $N=35$ the prefix digit sum exceeds the coefficient mass by $2$. The growth hypothesis cannot be dropped (§2) | Paper proof; Finite certificate for the counterexample |
+| A1.2 | **Truncation and carry-tail transfer.** An exact prefix identity, with a floored carry-tail digit contribution of size $O(\log N)$ under polynomial coefficient growth. The brief's "+1" claim is false: for $E(8)$ at $N=35$ the prefix digit sum exceeds the coefficient mass by $2$. The growth hypothesis cannot be dropped (§2) | Paper proof; Finite certificate for the counterexample |
 | A1.3 | Frequency criteria for $D^-$, a zero-run bound, a transition-window bound, and **radix descent** $D_{kN}(x;b)\le\frac{b^k-1}{k(b-1)}D_N(x;b^k)$ (§2) | Paper proof |
 | A1.4 | **Elementary mean values.** The squarefull convolution lemma and the independent-exponent model, with $h(p^e)=1-v_2(e+1)$ and $\sum_n\lvert h(n)\rvert/n<1.90385$. No Tauberian input is needed (§3) | Paper proof; Finite certificate for $H$ |
 | A1.5 | **$E(2^k)=\sum_n 1/(2^{kn}-1)$ for every $k\ge3$.** It satisfies $\limsup f_1\le C_{\rm true}/k\le 0.44638$ in base 2. It is simply nonnormal in every base $2^j$, with explicit $D^->0$ in base 2 and in base $2^k$, and $D^-(E(2^k);2)\to1$ (§4) | Paper proof; Finite certificate for the constants |
@@ -30,7 +30,7 @@ Phase 24, Track A. Companion script: `scripts/phase24_digit_mass.py` (3,095,904 
 | --- | --- |
 | $\sum_n\lvert h(n)\rvert/n<\infty$ for $h=g*\mu$, $g(n)=\prod s_2(e+1)$, makes the mean value elementary | **Confirmed.** $h(p^e)=1-v_2(e+1)$ is supported on squarefull $n$, and $H<1.90385$ (Lemma 3.1, Corollary 3.3) |
 | Beat $C\le29/20$ | **Confirmed.** $C<1.403596$, and the true mean $C_{\rm true}<1.33912$ is strictly smaller |
-| The carry tail adds at most $+1$ to $s_b$ and $w_b$ | **False in general.** For $E(8)$ at $N=35$, $\lfloor\tau_N\rfloor=3$, and the prefix exceeds the coefficient mass by $2$. The correct bound is $(b-1)\ell_b(\tau_N)\le(b-1)(1+\log_b(1+\tau_N))=O(\log N)$. The carry tail itself is at most $+1$ whenever $\tau_N<2$ (Theorem 2.2) |
+| The carry tail adds at most $+1$ to $s_b$ and $w_b$ | **False in general.** For $E(8)$ at $N=35$, $\lfloor\tau_N\rfloor=3$, and the prefix exceeds the coefficient mass by $2$. The correct bound on the digit contribution $s_b(\lfloor\tau_N\rfloor)$ is $(b-1)\ell_b(\tau_N)\le(b-1)(1+\log_b(1+\tau_N))=O(\log N)$ under polynomial coefficient growth (note that the unrounded tail $\tau_N$ itself can grow polynomially, e.g. $\sum_{j\ge1}(N+j)2^{-j}=N+2$ for $a(n)=n,b=2,k=1$). The digit contribution is at most $+1$ whenever $\tau_N<2$ (Theorem 2.2) |
 | $w_b(ac)\le w_b(a)w_b(c)$, hence $w_b(\tau(n))\le\prod w_b(e+1)$ | **False for every $b\ge3$.** $w_b((b-1)^2)=2$, and $w_3(\tau(pq))=w_3(4)=2>1$ (Lemma 1.2(c)) |
 | $E(b^2)$ is provably simply nonnormal in base $b$ for every $b\ge3$ (e.g. $E(9)_3$, $E(100)_{10}$) | **Not proved.** The method is provably vacuous unless $b$ is a power of 2 (Theorem 5.1). $E(16)$ in base 4 is proved. The others remain **Open** |
 | $\tau_r$ dichotomy at $r=2^m$; $w_b$ variant $r\in\{1,\dots,b-1\}b^m$ | **Confirmed in corrected form** (Theorem 6.2). The $w_b$ variant fails |
@@ -132,7 +132,7 @@ The **carry tail** obeys $s_b(\lfloor\tau_N\rfloor)\le(b-1)\,\ell_b(\tau_N)$ and
 \textbf{(H)}\qquad \log(1+\Theta_M)=o(M),
 ```
 
-which holds whenever $\log(1+\lvert a(n)\rvert)=o(n)$ and in particular when $\lvert a(n)\rvert\le Cn^A$. Then the carry tail is $o(N)$, and it is $O(\log N)$ under polynomial growth. Consequently
+which holds whenever $\log(1+\lvert a(n)\rvert)=o(n)$ and in particular when $\lvert a(n)\rvert\le Cn^A$. Then the carry-tail digit contribution $s_b(\lfloor\tau_N\rfloor)$ (and $w_b(\lfloor\tau_N\rfloor)$) is $o(N)$, and it is $O(\log N)$ under polynomial growth. Consequently
 
 ```math
 \limsup_{N\to\infty}\frac1N\sum_{j\le N}d_j\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}s_b(a(n)),\qquad
@@ -413,9 +413,9 @@ At $X=6\cdot10^5$, $\frac1X\sum_{n\le X}s_2(\tau(n))=1.338943$ and $\frac1X\sum 
 4. $E(b^k)$ for $b$ not a power of 2, including $E(9)_3$ and $E(100)_{10}$: needs a non-mass method (Theorem 5.1).
 5. $D^+<1$ and $K_2$-membership for $E(2^k)$, $k\ge3$. The results here bound $D^-$ from below only. By the kernel-verified `discrepancy_lt_one_iff_transitions`, $D^+(x;2)<1$ is equivalent to a positive lower transition density $\liminf(f_{01}+f_{10})>0$. That requires a *lower* bound on the 1-bits that survive carries and do not merge into long runs, which digit mass does not supply. A lower bound $\liminf f_1>0$ alone does not suffice, because the orbit could still concentrate at $0$ from both sides.
 
-## 13. Lean-ready statements (for `NormalityChecker/DigitMassTransfer.lean`)
+## 13. Historical Lean blueprint (superseded by compiled `NormalityChecker/DigitMassTransfer.lean`)
 
-These are statements only and have not been compiled. Names follow `Basic.lean` (`shift`, `frequency`), `BinaryDiscrepancy.lean` (`radixDiscrepancy`, `transitionFrequency`) and `Phase22Cores.lean` (`erdosBorweinPlusCoeff`). The first group (L1–L9) is finite combinatorics. L10–L12 connect to the existing discrepancy API. L13–L15 carry the analytic content.
+The snippet below is the historical pre-formalization blueprint written before Stage 3 compilation. It has been **superseded** by the compiled, kernel-verified unconditional declarations in [`NormalityChecker/DigitMassTransfer.lean`](../../NormalityChecker/DigitMassTransfer.lean) (specifically `tsum_tauDigitKernel_div_le` at lines 1663–1751 proving $\le 29/20$, `erdosBorwein_two_pow_digitFreq_limsup_le` at lines 2143–2157 proving $\limsup f_1 \le 29/(20k)$ **unconditionally without any `hmean` premise**, and `erdosBorwein_two_pow_not_simplyNormal` / `erdosBorwein_two_pow_not_simplyNormal_pow` at lines 2277–2337; the sharper $C_{\rm true}/k \le 1.339116/k$ bound in Theorem 4.1 remains a Paper proof + Finite certificate). Names below follow `Basic.lean` (`shift`, `frequency`), `BinaryDiscrepancy.lean` (`radixDiscrepancy`, `transitionFrequency`) and `Phase22Cores.lean` (`erdosBorweinPlusCoeff`). The first group (L1–L9) is finite combinatorics. L10–L12 connect to the existing discrepancy API. L13–L15 carry the analytic content.
 
 ```lean
 namespace NormalityChecker.DigitMassTransfer
@@ -535,7 +535,8 @@ theorem local_factor_digitSum_two (p : ℕ) (hp : 2 ≤ p) :
     (1 - (p : ℝ)⁻¹) * ∑' e : ℕ, (digitSum 2 (e + 1) : ℝ) / (p : ℝ) ^ e =
       ∑' j : ℕ, (p : ℝ) / ((p : ℝ) ^ (2 ^ j) + 1)
 
--- L15 headline (Theorem 4.1(1)), with the mean bound (from L13 + L14, C < 1.4036) as input
+-- L15 headline (SUPERSEDED blueprint signature; compiled unconditional declaration in
+-- `NormalityChecker/DigitMassTransfer.lean` lines 2143-2157 drops `hmean` and proves `≤ 29 / (20 * k)`)
 theorem erdosBorwein_two_pow_digitFreq_limsup_le (k : ℕ) (hk : 1 ≤ k)
     (hmean : ∀ᶠ X in Filter.atTop,
       (∑ n ∈ Icc 1 X, (digitSum 2 (Nat.divisors n).card : ℝ)) / X ≤ 1.4036) :

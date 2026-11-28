@@ -3,7 +3,7 @@
 
 [meta]
 schema_version = 2
-status_as_of = "Phase 24"
+status_as_of = "Phase 25"
 
 # ------------------------------------------------------------ Stoneham-type numbers
 
@@ -145,14 +145,14 @@ discrepancy_status = "partial"
 digit_frequency_status = "partial"
 barrier_status = "barrier_proved"
 evidence = "lean+paper"
-registry_ids = ["GF-03", "GF-04", "GF-06", "GF-08", "GF-12", "GF-17", "GF-19", "GF-20", "GF-27", "GF-29", "GF-37"]
+registry_ids = ["GF-03", "GF-04", "GF-06", "GF-08", "GF-12", "GF-17", "GF-19", "GF-20", "GF-27", "GF-29", "GF-37", "GF-43"]
 external_sources = [
   "Euler 1750 (published 1760): pentagonal number theorem",
   "Jacobi 1829: the cube of Euler's product",
   "Nesterenko 1996: transcendence of E_b, hence of every E_b^r",
   "Serre 1985: lacunarity of the even powers η^r for r ∈ {2, 4, 6, 8, 10, 14, 26}",
 ]
-summary = "r = 1: E_b ∈ K_b with exact gap √(2/3) (log_b N)/√N, simply normal only for b = 2, never disjunctive (GF-03). r = 3: E_b³ ∈ K_b with exact gap √2 (log_b N)/√N, disjunctive, simply normal only for b = 2 (GF-04). Iterated derivatives D^j E_b, D^j E_b³ (j ≥ 1) and E_b² · DE_b are disjunctive, base-2 simply normal and not simply normal for b ≥ 3 (GF-19, GF-20). r = 2: E_b² ∈ K_b with exact radix-dependent constants of order (log log N)/(log N)^{3/4} (GF-04, GF-12), non-congruence prime sign rule x² + 36y² versus 4x² + 9y², positive lower frequencies for both 0^L and (b − 1)^L (GF-20, GF-27), and explicit lower binary digit frequency 1/26 for both digits 0 and 1 and constant words 0^L, 1^L on E_2² (tightening GF-29's 1/40000 by more than 1,538×, GF-37). For r ≥ 4, coefficient transfer fails (GF-06), CM width W_U(N) ≍ N √(log N) blocks sparse and width transfers (GF-17), and the NAF entropy–multiplicity wall blocks signed-digit sparse transfers (GF-27)."
+summary = "r = 1: E_b ∈ K_b with exact gap √(2/3) (log_b N)/√N, simply normal only for b = 2, never disjunctive (GF-03). r = 3: E_b³ ∈ K_b with exact gap √2 (log_b N)/√N, disjunctive, simply normal only for b = 2 (GF-04). Iterated derivatives D^j E_b, D^j E_b³ (j ≥ 1) and E_b² · DE_b are disjunctive, base-2 simply normal and not simply normal for b ≥ 3 (GF-19, GF-20). r = 2: E_b² ∈ K_b with exact radix-dependent constants of order (log log N)/(log N)^{3/4} (GF-04, GF-12), non-congruence prime sign rule x² + 36y² versus 4x² + 9y², positive lower frequencies for both 0^L and (b − 1)^L (GF-20, GF-27), and unconditional lower binary digit frequency 1/(3π) ≈ 0.106103 > 1/10 (upper at most 1 − 1/(3π)) for both digits 0 and 1 and constant words 0^L, 1^L on E_2² via sign-conditioned single-endpoint equidistribution (tightening GF-37's 1/26 by > 2.75× and GF-29's 1/40000 by > 4,244×, GF-43). For r ≥ 4, coefficient transfer fails (GF-06), CM width W_U(N) ≍ N √(log N) blocks sparse and width transfers (GF-17), the NAF entropy–multiplicity wall blocks signed-digit sparse transfers (GF-27), while prime subseries of CM η⁴, η⁶, η⁸ are binary 2-nonnormal (GF-43)."
 open_frontier = "Any distributional property of E_b^r for r ≥ 4; simple normality and disjunctivity of E_b²."
 
 [[family]]
@@ -184,10 +184,10 @@ discrepancy_status = "partial"
 digit_frequency_status = "partial"
 barrier_status = "barrier_proved"
 evidence = "lean+paper"
-registry_ids = ["GF-08", "GF-16", "GF-26", "GF-34", "GF-38"]
+registry_ids = ["GF-08", "GF-16", "GF-26", "GF-34", "GF-38", "GF-45"]
 external_sources = []
-summary = "Exact multiplicative-order period identities are kernel-verified for both signs under D ∣ b^m − 1, with Hull–Dobell rad∗(D) lifting and relaxed divisibility resolved in GF-26. With every ε_k = −1, x is irrational and deep in K_b while 1/x is normal along all N with improved balanced-multiplier rate at ω_k = D_{k−1} (GF-16, GF-26). In general 1/x is normal iff ε_k = −1 eventually, else lim sup D_N ≥ 1/2 with exact limits for periodic sign patterns; cyclotomic factors P_k(q) realize every D⁺(1/x; b) = α ∈ [0, 1] with base-2 simple normality (GF-26). GF-34 further establishes dense convergent reciprocal discrepancies in [0, 1] via +1-inversion, unconditional all-base L-normal nonnormal reciprocals for every b ≥ 2 and L ≥ 1 (resolving Phase 22 Open Problem 5), and anchored coprime non-tetration normal reciprocals with doubly exponential growth and rate O_{b,A}((ln N)^{−A}) for every A > 0. GF-38 extends density of A_conv(2^e) to every power of two and proves the universal doubly-exponential period-growth barrier liminf (ln ln T_k)/k ≥ ln(1 + θ) under m_k ≥ T_{k−1}^θ (showing GF-34's growth is optimal at θ = 1)."
-open_frontier = "Realizing arbitrary irrational α ∈ (0, 1) as an exact convergent reciprocal limit; non-dyadic density of A_conv(b); reciprocals of other kernel elements, notably P_b = 1/E_b (BF-14)."
+summary = "Exact multiplicative-order period identities are kernel-verified for both signs under D ∣ b^m − 1, with Hull–Dobell rad∗(D) lifting and relaxed divisibility resolved in GF-26. With every ε_k = −1, x is irrational and deep in K_b while 1/x is normal along all N with improved balanced-multiplier rate at ω_k = D_{k−1} (GF-16, GF-26). In general 1/x is normal iff ε_k = −1 eventually, else lim sup D_N ≥ 1/2 with exact limits for periodic sign patterns; cyclotomic factors P_k(q) realize every D⁺(1/x; b) = α ∈ [0, 1] with base-2 simple normality (GF-26). GF-34 further establishes unconditional all-base L-normal nonnormal reciprocals for every b ≥ 2 and L ≥ 1, and anchored coprime non-tetration normal reciprocals with doubly exponential growth and rate O_{b,A}((ln N)^{−A}) for every A > 0; GF-38 proves the universal doubly-exponential period-growth barrier liminf (ln ln T_k)/k ≥ ln(1 + θ) under m_k ≥ T_{k−1}^θ (sharp at θ = 1). GF-45 completely resolves the convergent reciprocal discrepancy spectrum in EVERY integer radix b ≥ 2: A_conv(b) = [0, 1] identically, realizing every real α ∈ [0, 1] (including every irrational α) via irrational x ∈ M_b ⊂ K_b with empirical orbit measures of 1/x converging along ALL prefixes to α δ_0 + (1 − α) λ."
+open_frontier = "Reciprocals of other kernel elements, notably P_b = 1/E_b (BF-14); multi-radix simultaneous reciprocal spectra."
 
 [[family]]
 id = "BF-11"
@@ -238,11 +238,11 @@ discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
-registry_ids = ["GF-06", "GF-08", "GF-17", "GF-27"]
+registry_ids = ["GF-06", "GF-08", "GF-17", "GF-27", "GF-43"]
 external_sources = [
   "Nesterenko 1996: P(q), Q(q), R(q) are algebraically independent at every algebraic q with 0 < q < 1",
 ]
-summary = "Open in every radix: normality, simple normality, D⁺ < 1, and membership or non-membership in K_b. Exact kernel transfers give Θ_3(1/b)⁴ ≡ 16 L_{χ_4}(b)² and Θ_3(1/b)³ ≡ 4 Θ_3(1/b) L_{χ_4}(b) modulo K_b, and K_b is not closed under squaring (GF-08). For CM newforms of weight k ≥ 2 the b-coprime coefficient factors force W_U(N) ≍ N √(log N) in every radix (GF-17), and the signed-digit NAF entropy–multiplicity wall blocks signed-digit sparse transfers for D(Θ_3²), D(E_b²), E_b⁴, E_b⁶, E_b⁸ (GF-27)."
+summary = "Open in every radix for full values: normality, simple normality, D⁺ < 1, and membership or non-membership in K_b. Exact kernel transfers give Θ_3(1/b)⁴ ≡ 16 L_{χ_4}(b)² and Θ_3(1/b)³ ≡ 4 Θ_3(1/b) L_{χ_4}(b) modulo K_b, and K_b is not closed under squaring (GF-08). For CM newforms of weight k ≥ 2 the b-coprime coefficient factors force W_U(N) ≍ N √(log N) in every radix (GF-17), the signed-digit NAF entropy–multiplicity wall blocks signed-digit sparse transfers (GF-27), and GF-43 proves mean NAF weight divergence for r_3(n) → ∞ and r_4(n) ≍ log N (blocking fixed-stretch digit-mass transfer for Θ_3(2^{−k})³ and Θ_3(2^{−k})⁴), while fixed low-bit truncations lie in M_2 ⊂ K_2 and prime subseries of CM η⁴, η⁶, η⁸ and D(Θ_3²) are binary nonnormal."
 open_frontier = "Any distributional property of any member; a transfer method for coefficient supports of positive density or radix-digit width of order N √(log N)."
 
 [[family]]
@@ -257,12 +257,12 @@ discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
-registry_ids = ["GF-08", "GF-17", "GF-27", "GF-32", "GF-34", "GF-38"]
+registry_ids = ["GF-08", "GF-17", "GF-27", "GF-32", "GF-34", "GF-38", "GF-45"]
 external_sources = [
   "Nesterenko 1996: transcendence of E_b, hence of P_b",
   "Ramanujan 1919: congruences for p(n)",
 ]
-summary = "Open in every radix, including both P_b ∈ K_b and P_b ∉ K_b. Carry windows are sharp to log_b N + O(1) digits, or (3/4) log_b N + O(1) with the η-refinement; the pentagonal recurrence admits both the zero orbit and equidistributed orbits; rational approximants 1/E_b^{(K)} track P_b for only Θ(√m_K) digits against periods at least m_K − O(1) (GF-17). Intermediate partition products P_b(M) can achieve lim inf D_N = 0 even for sets M of upper density 1 (GF-27); for Mahler's m-ary partition series X_{b,m}, K_b-membership transfers up the 2-power tower, (b_m(n) mod m^L) is m-automatic with a sharp (1/2 − ε)(log_m k)² perturbation barrier, 1/X_b is the signed Thue–Morse series Y_b ∉ K_b while 1/X_{b,m} ∈ K_b for m ≥ 3 (see BF-27), and gauge complexity is governed by a 3-state automaton (GF-32, GF-38). Partial products R_k^{(E)} = ∏_{j=1}^k (1 − b^{−j})^{−1} enjoy complete-period exponential equidistribution (GF-34) and exact quadratic period asymptotic ln T_k^{(E)} = (1/2 − 3/π²)(ln b) k² + O_b(k ln² k), with a short-orbit Weyl characterization of D⁺(P_b; b) < 1 (GF-38). Ramanujan congruences wash out of the digits (GF-08)."
+summary = "Open in every radix, including both P_b ∈ K_b and P_b ∉ K_b. Carry windows are sharp to log_b N + O(1) digits, or (3/4) log_b N + O(1) with the η-refinement; the pentagonal recurrence admits both the zero orbit and equidistributed orbits; rational approximants 1/E_b^{(K)} track P_b for only Θ(√m_K) digits against periods at least m_K − O(1) (GF-17). Intermediate partition products P_b(M) can achieve lim inf D_N = 0 even for sets M of upper density 1 (GF-27); for Mahler's m-ary partition series X_{b,m}, K_b-membership transfers up the 2-power tower, (b_m(n) mod m^L) is m-automatic with a sharp (1/2 − ε)(log_m k)² perturbation barrier, 1/X_b is the signed Thue–Morse series Y_b ∉ K_b while 1/X_{b,m} ∈ K_b for m ≥ 3 (see BF-27), gauge complexity is governed by a 3-state automaton (GF-32, GF-38), and GF-45 proves ≫ log N transitions and 1 − D_N ≫ (log N)/N for X_{b,m} (m ≥ 3). Partial products R_k^{(E)} = ∏_{j=1}^k (1 − b^{−j})^{−1} enjoy complete-period exponential equidistribution (GF-34), exact quadratic period asymptotic ln T_k^{(E)} = (1/2 − 3/π²)(ln b) k² + O_b(k ln² k) with short-orbit Weyl characterization of D⁺(P_b; b) < 1 (GF-38), and unconditional ≫ log log N transitions plus 1 − D_k(R_k^{(E)}; b) ≫_b (log log k)/k on the actual initial orbit (GF-45). Ramanujan congruences wash out of the digits (GF-08)."
 open_frontier = "Any distributional property of P_b or Mahler's X_{b,m}; bridging the short-orbit gap from R_k^{(E)} to P_b."
 
 # ------------------------------------------------------- Lambert and divisor series
@@ -279,14 +279,14 @@ discrepancy_status = "maximal_K_b"
 digit_frequency_status = "exact_law"
 barrier_status = "resolved"
 evidence = "lean+paper"
-registry_ids = ["CC-46", "CC-48", "GF-05", "GF-12", "GF-20", "GF-21", "SY-24"]
+registry_ids = ["CC-46", "CC-48", "GF-05", "GF-12", "GF-20", "GF-21", "SY-24", "GF-48"]
 external_sources = [
   "Shiu 1980: Brun–Titchmarsh theorem for multiplicative functions",
   "Wirsing 1961: mean values of multiplicative functions",
   "Perelli–Pintz–Salerno 1985: short-interval Bombieri–Vinogradov theorem",
   "Hamieh–Murty 2016: transcendence of Lambert series with odd character coefficients",
 ]
-summary = "Every fixed word w ≠ 0^k occurs ≍ H/(log N)^{1−δ} times in late windows [N, N + H) with N^a ≤ H ≤ N, a > 7/12; hence L_f is irrational and disjunctive, its digit 0 has frequency 1, it lies in K_2, and 1 − D_N ≍ (log log N)/(log N)^{1−δ} (CC-48). For real characters 1 − D_N ∼ (C_χ/(2 log 2)) (log log N)/√(log N) (GF-05), with f_{0^L} → 1 and exact radix-dependent constants in every radix (GF-12, GF-20), plus even-composite threshold jumps δ_b∗ = β_b/(β_b + log 2) (GF-21); L_χ is transcendental for odd χ (CC-48)."
+summary = "Every fixed word w ≠ 0^k occurs ≍ H/(log N)^{1−δ} times in late windows [N, N + H) with N^a ≤ H ≤ N, a > 7/12 (and a > 0.53 via Kumchev 2002); hence L_f is irrational and disjunctive, its digit 0 has frequency 1, it lies in K_2, and 1 − D_N ≍ (log log N)/(log N)^{1−δ} (CC-48), upgraded in GF-48 to the unconditional window discrepancy gap 1 − D_{N,H}(L_f) ≍_a (log log N)/(log N)^{1−δ} for a > 0.53 (and conditionally for every a > 1/2 under GRH(q_0)). For real characters 1 − D_N ∼ (C_χ/(2 log 2)) (log log N)/√(log N) (GF-05), with f_{0^L} → 1 and exact radix-dependent constants in every radix (GF-12, GF-20), plus even-composite threshold jumps δ_b∗ = β_b/(β_b + log 2) (GF-21); L_χ is transcendental for odd χ (CC-48)."
 open_frontier = "Transcendence for even characters and for non-character multiplicative coefficients; exact constants above the critical density threshold δ_b∗ without the hypothesis (R_b) of GF-12."
 
 [[family]]
@@ -318,10 +318,10 @@ discrepancy_status = "partial"
 digit_frequency_status = "partial"
 barrier_status = "barrier_proved"
 evidence = "lean+paper"
-registry_ids = ["GF-13", "GF-18", "GF-22", "GF-31", "GF-36"]
+registry_ids = ["GF-13", "GF-18", "GF-22", "GF-31", "GF-36", "GF-42", "GF-44", "GF-48"]
 external_sources = []
-summary = "Single-character integer-valued series F_b(Φ ∘ (1 ∗ χ)), including L_+(b) and L_−(b) for the cubic character modulo 7, are unconditionally base-b disjunctive and irrational in every radix b ≥ 2 with at least X exp(−C log log X log log log X) occurrences per word (GF-22). In dyadic construction radices b = 2^k, GF-31 proves simple nonnormality (hence full nonnormality), D⁻ > 0, and an explicit weighted digit-frequency upper bound excluding uniform digit frequencies for L_+(2^k) (every k ≥ 4) and L_−(2^k) (every k ≥ 3) across cubic characters modulo 7, 9, and 13, and more generally lim_{k→∞} D⁻(F_{2^k}(a); 2^k) = 1 for every nonzero cubic projection (with kernel-verified digit-cylinder identity and local-factor bound in Phase23Cores.lean); GF-36 adds unconditional base-2 2-nonnormality and D⁻ > 0 for L_±(2^k) (k ≥ 4) via signed transition-count transfer. Membership in K_b, D⁺ < 1, and simple normality in remaining dyadic (b = 2, 4, 8 for L_+; b = 2, 4 for L_−) and all non-dyadic radices remain open; positive support density and complementary coverage block sparse and aligned K_b transfers (GF-13, GF-18)."
-open_frontier = "Membership or non-membership of L_±(b) in K_b; D⁺ < 1; simple normality in b ∈ {2, 4, 8} (L_+), b ∈ {2, 4} (L_−), and all non-dyadic radices; higher odd orders h ≥ 5 and multi-character combinations."
+summary = "Single-character integer-valued series F_b(Φ ∘ (1 ∗ χ)) for nonzero additive Φ : ℤ[ζ_h] → ℤ (additivity is necessary by GF-48), including L_+(b) and L_−(b) for the cubic character modulo 7, are unconditionally base-b disjunctive and irrational in every radix b ≥ 2 with at least X exp(−C log log X log log log X) occurrences per word (GF-22; extended unconditionally to near-full moving windows H ≥ N exp(−c_3 √(log N)) and conditionally under Dirichlet GRH to H ≥ N^a for all a > 1/2 in GF-48). In dyadic construction radices b = 2^k, GF-31 proves simple nonnormality (hence full nonnormality) and D⁻ > 0 for L_+(2^k) (k ≥ 4) and L_−(2^k) (k ≥ 3) mod 7, 9, 13; GF-36 adds base-2 2-nonnormality for k ≥ 4; GF-42 proves unconditional double-sided 0 < D⁻ ≤ D⁺ < 1 and non-K_2 membership for L_±(2^k) (k ≥ 3); and GF-44 (via NAF geometric transfer and the Elementary Twisted Squarefull Convolution Lemma without Selberg–Delange) proves the first unconditional nonnormality (D⁻ > 0, binary and base-4 order-2) of L_−(4) (k = 2, moduli 7, 9, 13, 19, 37) and L_+(8) (k = 3). Membership in K_b (for k = 1, 2), base-4 simple normality of L_−(4), and nonnormality of L_+(2), L_−(2), L_+(4) and all non-dyadic radices remain open."
+open_frontier = "Nonnormality of L_+(2), L_−(2), L_+(4), and non-dyadic radices; base-4 simple normality of L_−(4); K_b-membership and D⁺ < 1 at k = 1, 2; higher odd orders h ≥ 5 and multi-character combinations."
 
 [[family]]
 id = "BF-18"
@@ -335,14 +335,14 @@ discrepancy_status = "partial"
 digit_frequency_status = "partial"
 barrier_status = "barrier_proved"
 evidence = "lean+paper"
-registry_ids = ["CC-20", "CC-21", "CC-49", "GF-07", "GF-18", "GF-28", "GF-35", "GF-36", "GF-40"]
+registry_ids = ["CC-20", "CC-21", "CC-49", "GF-07", "GF-18", "GF-28", "GF-35", "GF-36", "GF-40", "GF-41", "GF-42", "GF-44", "GF-47"]
 external_sources = [
   "Erdős 1948: irrationality of E(2)",
   "Borwein 1991: irrationality of Σ 1/(qⁿ + r) for integers q ≥ 2 and rational r ≠ 0 with r ≠ −qⁿ",
   "Captain Sude 2026, release erdos-borwein-disjunctivity-elementary (8 September 2026, commit d51e93e): base-2 disjunctivity of E(2)",
 ]
-summary = "Kernel-verified dense digit-mass transfer (GF-36, DigitMassTransfer.lean) proves unconditionally that E(2^k) is not simply normal (hence not normal) in base 2 and every base 2^j (j ≥ 1) with limsup f_1(E(2^k); 2) ≤ 29/(20k) < 1/2 and D⁻(E(2^k); 2) ≥ 1/2 − 29/(20k) > 0 for every k ≥ 3 (and similarly E_odd(2^k) for k ≥ 3 on paper), while for E_+(2^k) = E(2^k) − 2 E(2^{2k}) signed transition-count transfer (GF-36, k ≥ 4) and a 4-state transducer (GF-40, k ≥ 3, D⁻(E_+(8); 2) ≥ 2.34 × 10^{−7}) prove unconditional nonnormality in base 2. Only E(2) is known to be disjunctive (external input). The four residue-class sums modulo 8 and E_odd(2) have identical D⁻, D⁺ and limit sets, and for 2-elementary quotients all coset differences lie in K_b in every radix (GF-07). For E(2), sixteen columns is the sharp minimal truncation, low-order moment and trigonometric certificates fail (CC-49), and an outward-rounded order-6 certificate establishes 7 ≤ r_min(D) ≤ 92 for every D ≥ 16 (GF-28); complementary coverage blocks additive K_b-cancellation (GF-18), and the Senge–Straus infinite-mass barrier blocks direct digit-mass transfer in non-power-of-2 bases (GF-36). For E_+(2), GF-28, GF-35, and GF-40 prove exact kernel-verified coefficient and peeling laws, tail mean-square ratio 1/3, and unconditional elimination of (H2) via Topacogullari (2017) Theorem 1.2."
-open_frontier = "Simple non-normality of E(2) and E(4); nonnormality of E_+(2) and E_+(4) and simple nonnormality of E_+(8); non-power-of-2 bases such as E(9)_3, E(25)_5, E(100)_{10}; D⁺(E; 2) < 1 independently of CC-21; K_b status of any member; lattice-scale r-point divisor correlations with r ≥ 7."
+summary = "Kernel-verified dense digit-mass transfer (GF-36, DigitMassTransfer.lean) proves unconditionally that E(2^k) is not simply normal (hence not normal) in base 2 and every base 2^j (j ≥ 1) with limsup f_1(E(2^k); 2) ≤ 29/(20k) < 1/2 and D⁻(E(2^k); 2) ≥ 1/2 − 29/(20k) > 0 for every k ≥ 3 (and E_odd(2^k) for k ≥ 3 on paper); GF-42 adds unconditional double-sided 0 < D⁻ ≤ D⁺ < 1 and non-K_2 membership for E(2^k), E_odd(2^k), E_+(2^k) (k ≥ 3) and already D⁺ < 1, ∉ K_2 at k = 2 for E_odd(4) and E∗(4), plus 1 − D⁻(F_{b^k}(a); b^k) ≪ (log k)/k → 0 in construction radices and Fermat-product extensions of GF-07. For E_+(2^k) = E(2^k) − 2 E(2^{2k}), GF-44 kernel-verifies in Lean 4 (NafGeometricTransfer.lean) binary order-4 and base-4 order-2 nonnormality with D_N(E_+(2^k); 2) ≥ 21/500 = 0.042 eventually for every k ≥ 3 (≥ 0.061210 on paper, within 1.8% of the 0.059108 LP ceiling). Only E(2) is known to be disjunctive (external input). For E(4) and E(2), GF-41 proves shift-invariant column criteria (3 columns for E(4); 8 columns for E(2), halving CC-49's 16-column single-window threshold), locality barriers, and exact base-4 identities; GF-47 proves fixed-distance collision density o(N) and a bounded-perturbation barrier in [−3, 3] for E(2) and E_+(2); GF-42 proves the fixed-window signed carry-cancellation barrier for E_+(4); and the Senge–Straus infinite-mass barrier blocks direct digit-mass transfer in non-power-of-2 bases (GF-36)."
+open_frontier = "Simple non-normality of E(2) and E(4); nonnormality of E_+(2) and E_+(4) and simple nonnormality of E_+(8); non-power-of-2 bases such as E(9)_3, E(25)_5, E(100)_{10}; D⁺ < 1 for E(2), E(4), E_+(2), E_+(4); lattice-scale r-point divisor correlations."
 
 # --------------------------------------------------------- valuation and pole schedules
 
@@ -358,9 +358,9 @@ discrepancy_status = "partial"
 digit_frequency_status = "partial"
 barrier_status = "barrier_proved"
 evidence = "paper"
-registry_ids = ["SY-02", "OP-14", "GF-11", "GF-14", "GF-24", "GF-25", "GF-33", "GF-39"]
+registry_ids = ["SY-02", "OP-14", "GF-11", "GF-14", "GF-24", "GF-25", "GF-33", "GF-39", "GF-46"]
 external_sources = []
-summary = "For s ≥ 1, every nonconstant rational polynomial of total degree r < d in one or several C(b, p, s_a, d) is normal (GF-11, GF-14) with the explicit rate D_N ≪ (log log N)^{−d/(d − 1)} across the entire range d ≥ r + 1 — both univariate (GF-25) and multivariate with tied maximal weighted degrees (GF-33, with N^{−η} for a single linear top-weight term). For s = 0 the discrepancy tends to 1 (SY-02). At the boundary d = r, total-depth retirement splits p^{sH} C^r = X_H + Z_H with X_H ∈ K_b at d = 2 (GF-24), GF-33 proves C_s(2)² is irrational whenever s < (390/449) ord_p(b) log b (covering all s = 1) with a density-one logarithmic-window packet barrier across d = r ∈ {2, 3}, and GF-39 proves exact low numerator-residue and scaled-phase equidistribution laws along boundary arrivals."
+summary = "For s ≥ 1, every nonconstant rational polynomial of total degree r < d in one or several C(b, p, s_a, d) is normal (GF-11, GF-14) with the explicit rate D_N ≪ (log log N)^{−d/(d − 1)} across the entire range d ≥ r + 1 — both univariate (GF-25) and multivariate with tied maximal weighted degrees (GF-33, with N^{−η} for a single linear top-weight term). For s = 0 the discrepancy tends to 1 (SY-02). At the boundary d = r, total-depth retirement splits p^{sH} C^r = X_H + Z_H with X_H ∈ K_b at d = 2 (GF-24), GF-33 proves C_s(2)² is irrational whenever s < (390/449) ord_p(b) log b (covering all s = 1) with a density-one logarithmic-window packet barrier across d = r ∈ {2, 3}, GF-39 proves exact low numerator-residue and scaled-phase equidistribution laws along boundary arrivals, and GF-46 proves the local single-packet limitation and exact IFF gap threshold r_min/(Q′ p^e) separating integer hits from exclusions."
 open_frontier = "Normality and D⁺ < 1 at the equality boundary d = r (notably C(2, 3, 1, 3)³ and C(b, p, s, 2)²), irrationality of C_1(3)³, and power-saving discrepancy rates for r ≥ 2."
 
 [[family]]
@@ -375,10 +375,10 @@ discrepancy_status = "zero_normal"
 digit_frequency_status = "exact_law"
 barrier_status = "resolved"
 evidence = "lean+paper"
-registry_ids = ["GF-10", "GF-15", "GF-25", "GF-33", "GF-39", "OP-09", "OP-10", "OP-16", "OP-17"]
+registry_ids = ["GF-10", "GF-15", "GF-25", "GF-33", "GF-39", "GF-46", "OP-09", "OP-10", "OP-16", "OP-17"]
 external_sources = []
-summary = "Every nonconstant rational polynomial P(W) is normal and Liouville with D_N ≪ exp(−c (log N)^{2/3}), and every prime coprime to b divides the shifted prefix denominators of W from some point on (GF-10). Normality persists on exp(k (log log k)²), on polynomial schedules t k^d across the entire range d ≥ r + 1 (univariate and multivariate) with explicit rate O_P((log log N)^{−d/(d − 1)}), and for every degree on quasi-polynomial schedules (GF-15, GF-25, GF-33). Non-Liouville all-prime constructions achieve μ = λ for degree ≤ r and μ = p across all degrees on the Stoneham schedule (GF-25); via a kernel-verified rational determinant folding lemma (Phase23Cores.ratBadness_folding_step), GF-33 achieves optimal irrationality exponent μ = 2 simultaneously with all-prime support and power-saving polynomial normality in every degree, including on a positive series V with n_j ≍ j √(log j); GF-39 further constructs a computable all-base all-degree polynomially normal real with q ‖q x‖ ≫ 1/(1 + log log(3q)) and new persistent primes, an occupied-density-1 μ = 2 family via geometric regrouping, and (via Hochman–Shmerkin plus kernel-verified cf_one_two_badly_approx) proves almost every {1, 2} continued fraction satisfies q ‖q x‖ > 1/4 and all-base all-degree polynomial normality."
-open_frontier = "Finiteness of the irrationality exponent on the polynomial and quasi-polynomial schedules W_H and Theorem U; computable badly approximable (bounded partial quotients) all-base polynomial normality without Hochman–Shmerkin."
+summary = "Every nonconstant rational polynomial P(W) is normal and Liouville with D_N ≪ exp(−c (log N)^{2/3}), and every prime coprime to b divides the shifted prefix denominators of W from some point on (GF-10). Normality persists on exp(k (log log k)²), on polynomial schedules t k^d across the entire range d ≥ r + 1 (univariate and multivariate) with explicit rate O_P((log log N)^{−d/(d − 1)}), and for every degree on quasi-polynomial schedules (GF-15, GF-25, GF-33). Non-Liouville all-prime constructions achieve μ = λ for degree ≤ r and μ = p across all degrees on the Stoneham schedule (GF-25); via a kernel-verified rational determinant folding lemma (Phase23Cores.ratBadness_folding_step), GF-33 achieves optimal irrationality exponent μ = 2 simultaneously with all-prime support and power-saving polynomial normality in every degree, including on a positive series V with n_j ≍ j √(log j); GF-39 constructs a computable log-log all-base polynomial-normal real and proves almost every {1, 2} continued fraction is polynomially absolutely normal via Hochman–Shmerkin; and GF-46 completely resolves the computable badly approximable frontier WITHOUT Hochman–Shmerkin, constructing explicit computable reals x ∈ F_M (bounded partial quotients a_n ≤ M, with M = 100 purely analytic, M = 42 elementary Kloosterman certificate, M = 14 Weil + certificate) whose every nonconstant rational polynomial P(x) is normal in every integer base b ≥ 2, alongside exact zero-loss c = 1 CF folding and locally varying all-prime series."
+open_frontier = "Finiteness of the irrationality exponent on the polynomial and quasi-polynomial schedules W_H and Theorem U; lowering the computable badly approximable polynomial-normal cap from M = 14 down to M = 2."
 
 [[family]]
 id = "BF-21"
@@ -415,13 +415,13 @@ discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
-registry_ids = ["CC-04", "CC-07", "CC-50", "GF-18", "GF-40"]
+registry_ids = ["CC-04", "CC-07", "CC-50", "GF-18", "GF-40", "GF-47"]
 external_sources = [
   "Borel 1950: conjectured normality of every algebraic irrational in every integer base",
   "Bailey–Borwein–Crandall–Pomerance 2004: at least a constant times N^{1/d} ones among the first N binary digits",
   "Adamczewski–Bugeaud 2007: superlinear subword complexity in every integer base",
 ]
-summary = "Open in every base: normality, simple normality, disjunctivity and D⁺ < 1. Binary D⁺ < 1 is equivalent to a positive lower density of digit transitions (CC-04), and for φ to a bounded least Zeckendorf index on a set of positive lower density (CC-07). The window–denominator barrier (CC-50), transfer-barrier map (GF-18), and GF-40's exact squaring carry lower bounds with signed-digit neutralization and exponential-carry deficit barriers show where rational-model and carry-complexity methods stop."
+summary = "Open in every base: normality, simple normality, disjunctivity and D⁺ < 1. Binary D⁺ < 1 is equivalent to a positive lower density of digit transitions (CC-04), and for φ to a bounded least Zeckendorf index on a set of positive lower density (CC-07). The window–denominator barrier (CC-50), transfer-barrier map (GF-18), GF-40's exact squaring carry lower bounds with signed-digit neutralization and exponential-carry deficit barriers, and GF-47's signed-digit complexity equivalence σ ≤ χ for √2 show where rational-model and carry-complexity methods stop."
 open_frontier = "For a single algebraic irrational, any of: disjunctivity, a positive density of binary digit transitions, D⁺ < 1, simple normality."
 
 [[family]]
@@ -436,11 +436,11 @@ discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
-registry_ids = ["CC-01", "CC-02", "CC-06", "CC-42", "CC-43", "CC-50", "OP-11", "GF-09", "GF-35", "GF-40", "LS-01"]
+registry_ids = ["CC-01", "CC-02", "CC-06", "CC-42", "CC-43", "CC-50", "OP-11", "GF-09", "GF-35", "GF-40", "GF-47", "LS-01"]
 external_sources = [
   "Lindemann 1882: Hermite–Lindemann theorem; the logarithm of an algebraic number other than 0 and 1 is transcendental",
 ]
-summary = "Open in every base. For ln 2 the denominator rate 1/2 is optimal among finite dyadic logarithm identities (CC-02); every balanced algebraic trace source has rate at least 5/12 (CC-43); the window–denominator barrier excludes the incomplete-orbit hypothesis at every positive denominator rate (CC-50); the actual Taylor prefixes have superpolynomial rational periods (OP-11); the logarithmic Euler-product representation collapses to the Taylor prefixes (GF-09); GF-35 proves the exact BBP prime-band law (p ∣ Q_N iff p ∤ A_{⌊N/p⌋}), the kernel-verified Glaisher–Wieferich congruence, and D⁺(x; 2) = 1 iff lim sup ∣S_N(1)∣ = 1; and GF-40 proves the unconditional dropped-prime bound Σ_{p ∈ D_n} log p ≤ 4 n^{2/3}, top-band decomposition, and two sharp joint-BBP barriers. The dyadic logarithms have denominator rate 1/k (CC-06). Restricting the logarithmic series to finitely many primes gives normal numbers (LS-01), which does not pass to the full series."
+summary = "Open in every base. For ln 2 the denominator rate 1/2 is optimal among finite dyadic logarithm identities (CC-02); every balanced algebraic trace source has rate at least 5/12 (CC-43); the window–denominator barrier excludes the incomplete-orbit hypothesis at every positive denominator rate (CC-50); the actual Taylor prefixes have superpolynomial rational periods (OP-11); the logarithmic Euler-product representation collapses to the Taylor prefixes (GF-09); GF-35 proves the exact BBP prime-band law (p ∣ Q_N iff p ∤ A_{⌊N/p⌋}), the kernel-verified Glaisher–Wieferich congruence, and D⁺(x; 2) = 1 iff lim sup ∣S_N(1)∣ = 1; GF-40 proves the unconditional dropped-prime bound Σ_{p ∈ D_n} log p ≤ 4 n^{2/3}, top-band decomposition, and two sharp joint-BBP barriers; and GF-47 generalizes the BBP band law all-p-adically, quantifies recurrence rigidity, and proves a geometric O(log N)-reset barrier. The dyadic logarithms have denominator rate 1/k (CC-06). Restricting the logarithmic series to finitely many primes gives normal numbers (LS-01), which does not pass to the full series."
 open_frontier = "D⁺(ln 2; 2) < 1, for example D⁺ ≤ 0.9999; normality of the logarithm of any rational a/c ≠ 1."
 
 [[family]]
@@ -494,12 +494,12 @@ discrepancy_status = "partial"
 digit_frequency_status = "partial"
 barrier_status = "barrier_proved"
 evidence = "lean+paper"
-registry_ids = ["GF-36", "GF-40"]
+registry_ids = ["GF-36", "GF-40", "GF-41", "GF-42", "GF-44"]
 external_sources = [
   "Senge–Straus 1973 and Stewart 1980: finiteness of integers with bounded digit sums in two multiplicatively independent bases (non-dyadic infinite-mass barrier)",
 ]
-summary = "Kernel-verified dense digit-mass transfer (GF-36, DigitMassTransfer.lean) proves unconditionally that E(2^k) is not simply normal in base 2 or any base 2^j (j ≥ 1) for every k ≥ 3, with limsup f_1(E(2^k); 2) ≤ 29/(20k) < 1/2 (sharp limit C_true/k, C_true ∈ [1.339103, 1.339116]) and D⁻(E(2^k); 2) → 1. Paper proofs extend simple nonnormality and D⁻ > 0 to E_odd(2^k) (k ≥ 3), τ_4 and τ_8 (k ≥ 4), τ_{16} (k ≥ 5), unitary Σ μ²(m)/(2^{km} − 1) (k ≥ 3), and base-b τ_{b−1} and unitary b^{ω(n)}; signed transition-count transfer proves 2-nonnormality of E_+(2^k) for k ≥ 4 (D⁻(E_+(16); 2) ≥ 0.0459, GF-36), and a 4-state minimal-support transducer proves unconditional nonnormality of E_+(2^k) already at k = 3 with D⁻(E_+(8); 2) ≥ 2.34 × 10^{−7} (GF-40). Conversely, the Senge–Straus infinite-mass barrier blocks direct digit-mass transfer for E(b^k) whenever b is not a power of 2."
-open_frontier = "Simple nonnormality of E(4), E_+(8), E_+(4), and E(b^k) in non-power-of-2 bases (such as E(9)_3, E(25)_5, E(100)_{10}); K_b-membership and disjunctivity across the family."
+summary = "Kernel-verified dense digit-mass transfer (GF-36, DigitMassTransfer.lean) proves unconditionally that E(2^k) is not simply normal (hence not normal) in base 2 and every base 2^j (j ≥ 1) for every k ≥ 3, with complete kernel-verified bounds limsup f_1(E(2^k); 2) ≤ 29/(20k) < 1/2 and D⁻(E(2^k); 2) ≥ 1/2 − 29/(20k) > 0 (and D⁻(E(2^k); 2) → 1 as k → ∞, not D_N → 1 for fixed k; sharper paper mean C_true ∈ [1.339103, 1.339116]). Kernel-verified NAF geometric transfer (GF-44, NafGeometricTransfer.lean) proves unconditionally in Lean 4 that E_+(2^k) is not 4-normal in base 2 and not 2-normal in base 4 with D_N(E_+(2^k); 2) ≥ 21/500 = 0.042 eventually for every k ≥ 3 (including E_+(8), where simple normality of E_+(8) remains open; ≥ 0.061210 on paper, within 1.8% of the 0.059108 LP ceiling; base-4 and base-8 simple nonnormality for k ≥ 4). Paper proofs (GF-42) further establish unconditional double-sided 0 < D⁻ ≤ D⁺ < 1 and non-K_2 membership for E(2^k), E_odd(2^k), E∗(2^k), E_+(2^k) (k ≥ 3), unconditional D⁺ < 1 and non-K_2 membership already at k = 2 for E_odd(4), E∗(4), and E_b∗(b^2), and construction-radix convergence 1 − D⁻(F_{b^k}(a); b^k) ≪ (log k)/k → 0 as k → ∞. Conversely, the Senge–Straus barrier blocks direct digit-mass transfer for non-power-of-2 bases (GF-36), locality and fixed-window carry barriers separate E(4), E∗(4), and E_+(4) (GF-41, GF-42), and the order-3 NAF barrier (ḡ_3 = 1/4, ḡ_4 = 5/16) proves order 4 is sharp for E_+(8) (GF-44)."
+open_frontier = "Exact limiting digit frequencies and exact discrepancy of E(2^k) and E_+(2^k) for fixed k ≥ 3; simple nonnormality of E(4), E∗(4), E_+(8), E_+(4), and E(b^k) in non-power-of-2 bases (E(9)_3, E(25)_5, E(100)_{10}); D⁺ < 1 for E(4) and E_+(4); disjunctivity across the family."
 
 [[family]]
 id = "BF-27"
