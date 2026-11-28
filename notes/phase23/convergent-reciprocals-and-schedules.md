@@ -52,9 +52,9 @@ This note executes **Phase 23 Track D (sub-tracks D1, D2, and D4)**, advancing t
    - *(Exact coprime period and CRT grid.)* $D_k = M^k \prod_{j=1}^k \widetilde{d}_j$ where $\widetilde{d}_j := (b^{m_j} - 1) / M$ are pairwise coprime and coprime to $M$, $\operatorname{ord}_{D_k}(b) = T_k$, $\widehat{C}_k(h) = 0$ whenever $M^{k-1} \nmid h$, and $D(\mu(R_k; b)) \le M^{-(k-1)}$.
    - *(Normality and all-prefix Weyl bound.)* $x = \prod_{k \ge 1} (1 - b^{-m_k}) \in M_b \subset K_b$ (in the full-limit sense: $\frac{1}{N} \sum_{n < N} \|b^n x\|_{\mathbb{T}} \to 0$ and $\lim_{N\to\infty} D_N(x; b) = 1$) and $y = 1/x$ is **base-$b$ normal** with
      $$|W_h(N)| \le \frac{\gcd(h, M^{K-2})}{M^{K-2}} + \frac{T_{K-1} + s + 3 c_b(h)}{m_K} \qquad (N \in [m_K, m_{K+1})).$$
-   - *(Non-tetration doubly-exponential growth and arbitrary polylogarithmic discrepancy.)* With the balanced choice $\omega_k = s M^k$, the schedule is **doubly exponential (no tetration)**: $\ln T_k = (c_* + o(1)) 2^k$ for a constant $c_* = c_*(b, s, q_1) > 0$, $x$ satisfies $1 - D_N(x; b) = O_{b,s}(N^{-1/2})$ uniformly for all $N \ge 2$, and $y = 1/x$ achieves
-     $$D_N(y; b) = O_{b, s}\!\left(\frac{(\ln\ln N)^{\omega(M) + 1}}{(\ln N)^{\log_2 M}}\right).$$
-     Choosing $s$ large enough so $\log_2(b^s - 1) > A$ yields **non-tetration normal reciprocals of $x \in K_b$ with $D_N(1/x; b) = O_{b, A}((\ln N)^{-A})$ for every fixed $A > 0$**.
+   - *(Non-tetration doubly-exponential growth and arbitrary polylogarithmic discrepancy.)* With the balanced choice $\omega_k = s M^k$, the schedule is **doubly exponential (no tetration)**: $\ln T_k = (c_* + o(1)) 2^k$ for a constant $c_* = c_*(b, s, q_1) > 0$, $x$ satisfies $1 - D_N(x; b) = O_{b,s}(N^{-1/2})$ uniformly for all $N \ge 2$, and for each fixed admissible seed $q_1$, $y = 1/x$ achieves
+     $$D_N(y; b) = O_{b, s, q_1}\!\left(\frac{(\ln\ln N)^{\omega(M) + 1}}{(\ln N)^{\log_2 M}}\right).$$
+     For each fixed base $b \ge 2$ and $A > 0$, choosing the least multiple $s$ of $s_b$ with $\log_2(b^s - 1) > A$ and the least admissible seed $q_1 \ge 5$ ($\gcd(q_1, s M) = 1$) yields a base-specific non-tetration normal reciprocal $1/x$ ($x = x(b, A) \in M_b \subset K_b$) with $D_N(1/x; b) = O_{b, A}((\ln N)^{-A})$.
 
 6. **Theorem 6 (Sub-track D4 — Fully coprime base-$2$ CRT convolution, prime-exponent products, and complete-period exponential equidistribution of the partial products $R_k^{(E)}$).**
    - *(Universal $01$-transition bound and prime-exponent product.)* For any pairwise coprime sequence $(m_j)_{j \ge 1}$ of integers $\ge 2$ in base $2$, $T_k = \prod_{j=1}^k m_j$ and $\mu(R_k; 2) = \nu_1^{(k)} * \cdots * \nu_k^{(k)}$, where every non-trivial character satisfies $|\widehat{\nu_j^{(k)}}(h)| \le 1 - (2 - \sqrt{2}) / m_j$ whenever $(2^{m_j} - 1) \nmid h$. For the prime-exponent product $R_k^{(\mathrm{prime})} = \prod_{j=1}^k (1 - 2^{-p_j})^{-1}$, divergence of $\sum 1/p_j$ immediately implies $\mu(R_k^{(\mathrm{prime})}; 2) \Rightarrow \lambda$ and $D(\mu(R_k^{(\mathrm{prime})}; 2)) \to 0$.
@@ -504,9 +504,9 @@ We read off the resulting quantitative rates for $x$ and $y = 1/x$:
    1 - D_N(x; b) \le 1 - \big(|I| - \mu_N^{\mathrm{emp}}(x; b)(I)\big) \le 2 b^{-\Delta} + \frac{2 S_k + 2\Delta}{N} \le \frac{2 S_k + 2 \lceil \log_b N \rceil + 2}{N} = O_{b, s}\!\left(N^{-1/2}\right)
    ```
    uniformly for all $N \ge 2$ (using $S_k = O_{b,s}(m_{k+1}^{1/2}) = O_{b,s}(N^{1/2})$).
-2. **All-prefix discrepancy rate for $y = 1/x$:** For $N \in [m_K, m_{K+1})$, we have $\ln N \le \ln m_{K+1} \le (c_* + o(1)) 2^K$, so $2^K \ge (\frac{1}{c_*} - o(1)) \ln N$, which implies
+2. **All-prefix discrepancy rate for $y = 1/x$ (fixed seed $q_1$):** For $N \in [m_K, m_{K+1})$, we have $\ln N \le \ln m_{K+1} \le (c_* + o(1)) 2^K$ (with $c_* = c_*(b, s, q_1) > 0$), so $2^K \ge (\frac{1}{c_*} - o(1)) \ln N$, which implies
    ```math
-   K \ge \log_2 \ln N - O_{b,s}(1) \implies M^{K-2} \ge c_1 (\ln N)^{\log_2 M}.
+   K \ge \log_2 \ln N - O_{b,s,q_1}(1) \implies M^{K-2} \ge c_1(b,s,q_1) (\ln N)^{\log_2 M}.
    ```
    Also $T_{K-1} / m_K < 1 / \omega_{K-1} = 1 / (s M^{K-1}) \le M^{-(K-2)}$. Plugging the Weyl bound into the Erdős–Turán inequality with cutoff $H := M^{K-2}$ gives
    ```math
@@ -516,11 +516,11 @@ We read off the resulting quantitative rates for $x$ and $y = 1/x$:
    $$\sum_{h=1}^H \frac{\gcd(h, H)}{h} = \sum_{d \mid H} d \sum_{\substack{1 \le u \le H/d \\ \gcd(u, H/d) = 1}} \frac{1}{d u} \le \sum_{d \mid H} (1 + \ln(H / d)) \le \tau(H) (1 + \ln H).$$
    Because $H = M^{K-2}$ is supported on the fixed finite set of $\omega(M)$ prime factors of $M$, its divisor count is only
    $$\tau(M^{K-2}) = \prod_{p \mid M} \big((K - 2) v_p(M) + 1\big) = O_M\!\left(K^{\omega(M)}\right) = O_M\!\left((\ln\ln N)^{\omega(M)}\right),$$
-   while $\ln H = O_M(K) = O_M(\ln\ln N)$ and $\sum_{h=1}^H \frac{c_b(h)}{h m_K} = O_b\left(\frac{(\ln H)^2}{m_K}\right) \ll \frac{1}{H}$. Therefore
+   while $\ln H = O_M(K) = O_M(\ln\ln N)$ and $\sum_{h=1}^H \frac{c_b(h)}{h m_K} = O_b\left(\frac{(\ln H)^2}{m_K}\right) \ll \frac{1}{H}$. Therefore, with implied constant and onset depending on $b, s, q_1$,
    ```math
-   D_N(y; b) = O_{b, s}\!\left(\frac{\tau(H) \ln H}{H}\right) = O_{b, s}\!\left(\frac{(\ln\ln N)^{\omega(M) + 1}}{(\ln N)^{\log_2 M}}\right).
+   D_N(y; b) = O_{b, s, q_1}\!\left(\frac{\tau(H) \ln H}{H}\right) = O_{b, s, q_1}\!\left(\frac{(\ln\ln N)^{\omega(M) + 1}}{(\ln N)^{\log_2 M}}\right).
    ```
-   Choosing $s$ as a multiple of $s_b$ large enough that $\log_2(b^s - 1) > A$ achieves $D_N(1/x; b) = O_{b, A}((\ln N)^{-A})$ for **every** fixed $A > 0$, simultaneously in every base $b \ge 2$. $\square$
+   For each fixed base $b \ge 2$ and real $A > 0$, fixing $s$ to be the least multiple of $s_b$ with $\log_2(b^s - 1) > A$ and $q_1 \ge 5$ to be the least integer coprime to $s M$ produces a base-specific $x = x(b, A) \in M_b \subset K_b$ satisfying $D_N(1/x; b) = O_{b, A}((\ln N)^{-A})$. $\square$
 
 *(Remark: Whereas Phase 22 required $D_{k-1} \mid (b^{m_k} - 1)$ and incurred tetration growth, anchoring on $M = b^s - 1$ in Theorem 5 reduces schedule growth from tetration to doubly exponential $\ln m_k \sim \frac{c_*}{2} 2^k$ while achieving arbitrarily high polylogarithmic discrepancy $(\ln N)^{-A}$.)*
 

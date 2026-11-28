@@ -458,11 +458,12 @@ def check_dense_regrouping():
         aux_prod = 1
         for k, n, ell in endpoints:
             stride = 1 << ((k.bit_length() - 1) // 2)
-            max_stride = stride
             w = Fraction(1, b**stride - 1)
             regrouped_terms.append((n, (core[n] + w - prev_w) / b**n))
             prev_w = w
-            aux_prod *= ell
+            if n <= 511:
+                max_stride = stride
+                aux_prod *= ell
         comp_bound_base = (b**max_stride - 1) * aux_prod
         for degree in (2, 3):
             conv = {0: Fraction(1)}

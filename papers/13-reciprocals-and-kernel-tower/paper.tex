@@ -130,11 +130,11 @@ Finally, Theorem~\ref{thm:B}(ii)--(iii) showed that any admissible or Hull--Dobe
 \begin{maintheorem}[Breaking tetration: non-tetration normal reciprocals, coprime CRT convolution, and $R_k^{(E)}$]\label{thm:E}
 Let $b\ge2$ be an integer radix.
 \begin{enumerate}[label=\textup{(\roman*)},nosep]
-\item \evidence{Paper proof} Set $s_b=1$ if $b\ge4$ and $b\not\equiv3\pmod4$, and $s_b=2$ otherwise. For any positive multiple $s$ of $s_b$, set $M=b^s-1\ge3$ and define anchored coprime exponents $m_k=sq_k=\omega_{k-1}T_{k-1}+s$ recursively with $q_1\ge5$, $\gcd(q_1,sM)=1$, $T_k=sM^{k-1}\prod_{j=1}^k q_j$, and $\omega_k=sM^k$. Then $\ord_{D_k}(b)=T_k$ with $\ln T_k=(c_*+o(1))2^k$ (doubly exponential, no tetration), $x=\prod_{k\ge1}(1-b^{-m_k})\in M_b\subset K_b$ satisfies $1-D_N(x;b)=O_{b,s}(N^{-1/2})$, and $y=1/x$ is base-$b$ normal with
+\item \evidence{Paper proof} Set $s_b=1$ if $b\ge4$ and $b\not\equiv3\pmod4$, and $s_b=2$ otherwise. For any positive multiple $s$ of $s_b$, set $M=b^s-1\ge3$ and define anchored coprime exponents $m_k=sq_k=\omega_{k-1}T_{k-1}+s$ recursively with fixed seed $q_1\ge5$, $\gcd(q_1,sM)=1$, $T_k=sM^{k-1}\prod_{j=1}^k q_j$, and $\omega_k=sM^k$. Then $\ord_{D_k}(b)=T_k$ with $\ln T_k=(c_*+o(1))2^k$ (doubly exponential, no tetration), $x=\prod_{k\ge1}(1-b^{-m_k})\in M_b\subset K_b$ satisfies $1-D_N(x;b)=O_{b,s}(N^{-1/2})$, and $y=1/x$ is base-$b$ normal with
 \[
-D_N(y;b)=O_{b,s}\!\left(\frac{(\ln\ln N)^{\omega(M)+1}}{(\ln N)^{\log_2 M}}\right).
+D_N(y;b)=O_{b,s,q_1}\!\left(\frac{(\ln\ln N)^{\omega(M)+1}}{(\ln N)^{\log_2 M}}\right).
 \]
-In particular, choosing $s$ so that $\log_2(b^s-1)>A$ yields non-tetration normal reciprocals of $K_b$ elements with $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$ for every fixed $A>0$.
+In particular, for each fixed $b\ge2$ and $A>0$, choosing the least multiple $s$ of $s_b$ with $\log_2(b^s-1)>A$ and the least admissible seed $q_1\ge5$ yields a base-specific non-tetration normal reciprocal $1/x$ ($x=x(b,A)\in M_b\subset K_b$) with $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$.
 \item \evidence{Paper proof} For any pairwise coprime exponents $m_j\ge2$ in base~$2$, the CRT convolution $\mu(R_k;2)=\nu_1^{(k)}*\cdots*\nu_k^{(k)}$ obeys the universal $01$-transition bound $|\widehat{\nu_j^{(k)}}(h)|\le 1-(2-\sqrt2)/m_j$ whenever $(2^{m_j}-1)\nmid h$. For the prime-exponent product $R_k^{(\mathrm{prime})}=\prod_{j=1}^k(1-2^{-p_j})^{-1}$, $D(\mu(R_k^{(\mathrm{prime})};2))\to0$. For the fully coprime base-$2$ schedule $m_1=2$, $m_k=\omega_{k-1}T_{k-1}+1$ ($\omega_1\ge2$, $\omega_k\to\infty$), squaring inequalities for $|\widehat C_k(h)|$ and the band $L^2$ energy $E_k(h)$ imply $x\in M_2\subset K_2$ and base-$2$ normality of $y=1/x$ along all $N$; at $\omega_k=2^k$, the complete-period discrepancy satisfies $D(\mu(R_k;2))=O(\exp(-c_0(\ln T_k)^{1/4}))$.
 \item \evidence{Paper proof} For the ordinary partition partial products $R_k^{(E)}=\prod_{j=1}^k(1-b^{-j})^{-1}$ in every base $b\ge2$, choosing an anchor prime $p$ with $s_b=\ord_p(b)$ (odd $p$) or $\ord_4(b)$ ($p=2$) and $e_0=v_p(b^{s_b}-1)$ gives the complete-period exponential equidistribution bound
 \[
@@ -781,11 +781,11 @@ where integer parameters $\omega_k\ge1$ satisfy $sM\mid\omega_1$, $s\mid\omega_{
 \[
 |W_h(N)|\le\frac{\gcd(h,M^{K-2})}{M^{K-2}}+\frac{T_{K-1}+s+3c_b(h)}{m_K}\qquad(N\in[m_K,m_{K+1})).
 \]
-\item At the balanced choice $\omega_k=sM^k$, $\ln T_k=(c_*+o(1))2^k$ and $\ln m_k=(\frac{c_*}{2}+o(1))2^k$ for an explicit constant $c_*=c_*(b,s,q_1)>0$ (doubly exponential, no tetration), $1-D_N(x;b)=O_{b,s}(N^{-1/2})$ uniformly for all $N\ge2$, and
+\item At the balanced choice $\omega_k=sM^k$, $\ln T_k=(c_*+o(1))2^k$ and $\ln m_k=(\frac{c_*}{2}+o(1))2^k$ for an explicit constant $c_*=c_*(b,s,q_1)>0$ (doubly exponential, no tetration), $1-D_N(x;b)=O_{b,s}(N^{-1/2})$ uniformly for all $N\ge2$, and for each fixed admissible seed $q_1$,
 \[
-D_N(y;b)=O_{b,s}\!\left(\frac{(\ln\ln N)^{\omega(M)+1}}{(\ln N)^{\log_2 M}}\right).
+D_N(y;b)=O_{b,s,q_1}\!\left(\frac{(\ln\ln N)^{\omega(M)+1}}{(\ln N)^{\log_2 M}}\right).
 \]
-Choosing $s$ with $\log_2(b^s-1)>A$ gives $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$ for every fixed $A>0$.
+For each fixed $b\ge2$ and $A>0$, choosing the least multiple $s$ of $s_b$ with $\log_2(b^s-1)>A$ and the least admissible seed $q_1\ge5$ gives a base-specific $x=x(b,A)\in M_b\subset K_b$ with $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$.
 \end{enumerate}
 \end{theorem}
 
@@ -802,7 +802,7 @@ b^{im_K+r}R_K\equiv S_i(b^s)\,b^rR_{K-1}+\frac{b^rR_{K-1}}{b^{m_K}-1}\pmod1,
 \]
 where $S_i(b^s)=(b^{(i+1)s}-1)/(b^s-1)$. By LTE, $v_p(S_i(b^s))=v_p(i+1)$ for every $p\mid M$, so setting $d'=M^{K-2}/\gcd(h,M^{K-2})$ gives $M^{K-2}\mid hS_i(b^s)\iff d'\mid(i+1)$. Averaging over $N=Im_K+r_0\in[m_K,m_{K+1})$: the $s$ extra steps per complete band beyond $\omega_{K-1}T_{K-1}$ cost $\le s/m_K$, the incomplete cycle in the partial band costs $\le T_{K-1}/m_K$, the band and real tails cost $\le 3c_b(h)/m_K$, and \Cref{lem:four-finite}(i) bounds the surviving complete-period bands by $1/d'$, yielding the displayed Weyl bound and base-$b$ normality of $y$. Since $m_{k+1}/m_k>\omega_k\to\infty$, \eqref{eq:all-minus-Mb} gives $x\in M_b\subset K_b$.
 
-(iii) At $\omega_k=sM^k$, $T_k=M^k T_{k-1}^2+M T_{k-1}$; dividing $\ln T_k=2\ln T_{k-1}+k\ln M+O(T_{k-1}^{-1})$ by $2^k$ and summing yields $\ln T_k=(c_*+o(1))2^k$ and $\ln m_k=(\frac{c_*}{2}+o(1))2^k$. Consequently $m_{k+1}\asymp (M^2/s)m_k^2$, so $S_k=O_{b,s}(m_{k+1}^{1/2})$; on $[m_{k+1},m_{k+2})$, setting $\Delta=\lceil\log_b N\rceil$ shows that $[0,1-2b^{-\Delta})$ contains at most $2S_k+2\Delta$ points of $\{b^nx:n<N\}$, giving $1-D_N(x;b)\le(2S_k+2\Delta+2)/N=O_{b,s}(N^{-1/2})$. For $y$, $N<m_{K+1}$ gives $K\ge\log_2\ln N-O_{b,s}(1)$, hence $H:=M^{K-2}\ge c_1(\ln N)^{\log_2 M}$, while $T_{K-1}/m_K<1/(sM^{K-1})\le 1/H$. Since $H=M^{K-2}$ has fixed prime support of size $\omega(M)$, $\tau(H)=O_M(K^{\omega(M)})=O_M((\ln\ln N)^{\omega(M)})$. Inserting (ii) into Erd\H{o}s--Tur\'an with cutoff $H$ and \Cref{lem:four-finite}(ii) yields $D_N(y;b)=O_{b,s}((\tau(H)\ln H)/H)=O_{b,s}((\ln\ln N)^{\omega(M)+1}/(\ln N)^{\log_2 M})$.
+(iii) At $\omega_k=sM^k$, $T_k=M^k T_{k-1}^2+M T_{k-1}$; dividing $\ln T_k=2\ln T_{k-1}+k\ln M+O(T_{k-1}^{-1})$ by $2^k$ and summing yields $\ln T_k=(c_*+o(1))2^k$ and $\ln m_k=(\frac{c_*}{2}+o(1))2^k$. Consequently $m_{k+1}\asymp (M^2/s)m_k^2$, so $S_k=O_{b,s}(m_{k+1}^{1/2})$; on $[m_{k+1},m_{k+2})$, setting $\Delta=\lceil\log_b N\rceil$ shows that $[0,1-2b^{-\Delta})$ contains at most $2S_k+2\Delta$ points of $\{b^nx:n<N\}$, giving $1-D_N(x;b)\le(2S_k+2\Delta+2)/N=O_{b,s}(N^{-1/2})$. For $y$, $N<m_{K+1}$ gives $K\ge\log_2\ln N-O_{b,s,q_1}(1)$, hence $H:=M^{K-2}\ge c_1(b,s,q_1)(\ln N)^{\log_2 M}$, while $T_{K-1}/m_K<1/(sM^{K-1})\le 1/H$. Since $H=M^{K-2}$ has fixed prime support of size $\omega(M)$, $\tau(H)=O_M(K^{\omega(M)})=O_M((\ln\ln N)^{\omega(M)})$. Inserting (ii) into Erd\H{o}s--Tur\'an with cutoff $H$ and \Cref{lem:four-finite}(ii) yields $D_N(y;b)=O_{b,s,q_1}((\tau(H)\ln H)/H)=O_{b,s,q_1}((\ln\ln N)^{\omega(M)+1}/(\ln N)^{\log_2 M})$.
 \end{proof}
 
 \subsection{Fully coprime base-$2$ CRT convolution and prime-exponent products}

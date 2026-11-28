@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1657 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 1751 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 644 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 738 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -324,6 +324,75 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`DerivativeTransfer.coprimePart_le_natAbs_radixUnit_mul`](../NormalityChecker/DerivativeTransfer.lean#L409) [GF-17](results.md#gf-17) | **Lemma W.1 (`b`-coprime parts survive in the displaced radix unit).** For any integer radix `b ≥ 2`, nonzero integers `x, y`, and any natural divisor `d ∣… |
 | [`DerivativeTransfer.carryWindow_succ_eq`](../NormalityChecker/DerivativeTransfer.lean#L440) | **Exact carry-window shift register (Proposition D3.5(1)).** For every `a : ℕ → ℤ` and `b, n, L : ℕ`, `R̂_{n+1, L} = b * R̂_{n, L} + a(n + L + 1) - a(n + 1) *… |
 | [`DerivativeTransfer.carryWindow_succ_modEq`](../NormalityChecker/DerivativeTransfer.lean#L478) [GF-17](results.md#gf-17) |  |
+
+### DigitMassTransfer
+
+[`NormalityChecker/DigitMassTransfer.lean`](../NormalityChecker/DigitMassTransfer.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`DigitMassTransfer.digitSum_zero`](../NormalityChecker/DigitMassTransfer.lean#L71) |  |
+| [`DigitMassTransfer.nonzeroDigits_zero`](../NormalityChecker/DigitMassTransfer.lean#L73) |  |
+| [`DigitMassTransfer.digitSum_eq`](../NormalityChecker/DigitMassTransfer.lean#L76) | The defining digit recursion `s_b(n) = (n mod b) + s_b(⌊n / b⌋)`. |
+| [`DigitMassTransfer.nonzeroDigits_eq`](../NormalityChecker/DigitMassTransfer.lean#L83) | The defining digit recursion `w_b(n) = [n mod b ≠ 0] + w_b(⌊n / b⌋)`. |
+| [`DigitMassTransfer.digitSum_mul_add`](../NormalityChecker/DigitMassTransfer.lean#L96) |  |
+| [`DigitMassTransfer.nonzeroDigits_mul_add`](../NormalityChecker/DigitMassTransfer.lean#L101) |  |
+| [`DigitMassTransfer.digitSum_mul_base`](../NormalityChecker/DigitMassTransfer.lean#L106) |  |
+| [`DigitMassTransfer.nonzeroDigits_mul_base`](../NormalityChecker/DigitMassTransfer.lean#L109) |  |
+| [`DigitMassTransfer.digitSum_of_lt`](../NormalityChecker/DigitMassTransfer.lean#L113) |  |
+| [`DigitMassTransfer.digitSum_le_self`](../NormalityChecker/DigitMassTransfer.lean#L116) |  |
+| [`DigitMassTransfer.digitSum_add_add_carries`](../NormalityChecker/DigitMassTransfer.lean#L191) [GF-36](results.md#gf-36) | **L1 (Kummer).** `s_b(a + c) + (b - 1) · κ_b(a, c) = s_b(a) + s_b(c)`, where `κ_b(a, c)` is the number of carries in the base-`b` addition of `a` and `c`. |
+| [`DigitMassTransfer.digitSum_add_le`](../NormalityChecker/DigitMassTransfer.lean#L196) | **L2.** Subadditivity of the digit sum. |
+| [`DigitMassTransfer.digitSum_mul_pow`](../NormalityChecker/DigitMassTransfer.lean#L202) | **L2.** Shifting by a power of the radix preserves the digit sum. |
+| [`DigitMassTransfer.digitSum_mul_le`](../NormalityChecker/DigitMassTransfer.lean#L216) | **L2.** Submultiplicativity of the digit sum. |
+| [`DigitMassTransfer.nonzeroDigits_add_le`](../NormalityChecker/DigitMassTransfer.lean#L258) [GF-36](results.md#gf-36) | **L2.** Subadditivity of the number of nonzero digits. |
+| [`DigitMassTransfer.nonzeroDigits_mul_le`](../NormalityChecker/DigitMassTransfer.lean#L338) | **L2.** `w_b(ac) ≤ min(s_b(a) w_b(c), 2 w_b(a) w_b(c))`. |
+| [`DigitMassTransfer.nonzeroDigits_pred_sq`](../NormalityChecker/DigitMassTransfer.lean#L387) [GF-36](results.md#gf-36) | **L3.** Naive submultiplicativity of `w_b` fails for every `b ≥ 3`: `w_b((b - 1)²) = 2 > 1 = w_b(b - 1)²`. |
+| [`DigitMassTransfer.digitSum_two_succ`](../NormalityChecker/DigitMassTransfer.lean#L405) | **L4.** Binary successor law `s₂(m + 1) + v₂(m + 1) = s₂(m) + 1`, i.e. |
+| [`DigitMassTransfer.signedWeight_zero`](../NormalityChecker/DigitMassTransfer.lean#L434) |  |
+| [`DigitMassTransfer.signedWeight_one`](../NormalityChecker/DigitMassTransfer.lean#L436) |  |
+| [`DigitMassTransfer.signedWeight_two_mul`](../NormalityChecker/DigitMassTransfer.lean#L444) | **L5.** `w_±(2n) = w_±(n)`. |
+| [`DigitMassTransfer.signedWeight_two_mul_add_one`](../NormalityChecker/DigitMassTransfer.lean#L451) | The odd-step recursion `w_±(2n + 1) = 1 + min(w_±(n), w_±(n + 1))`. |
+| [`DigitMassTransfer.signedWeight_mul_two_pow`](../NormalityChecker/DigitMassTransfer.lean#L459) |  |
+| [`DigitMassTransfer.signedWeight_le_digitSum`](../NormalityChecker/DigitMassTransfer.lean#L465) | **L5.** The signed weight never exceeds the binary digit sum. |
+| [`DigitMassTransfer.signedWeight_add_le`](../NormalityChecker/DigitMassTransfer.lean#L538) | **L5.** Subadditivity of the signed weight. |
+| [`DigitMassTransfer.signedWeight_sub_le`](../NormalityChecker/DigitMassTransfer.lean#L543) | **L5.** `w_±(m - n) ≤ w_±(m) + w_±(n)` for `n ≤ m`. |
+| [`DigitMassTransfer.signedWeight_mul_le`](../NormalityChecker/DigitMassTransfer.lean#L549) | **L5.** Submultiplicativity of the signed weight. |
+| [`DigitMassTransfer.transitions_rec`](../NormalityChecker/DigitMassTransfer.lean#L610) | The transition count obeys `T(A) = [A₀ ≠ A₁] + T(⌊A / 2⌋)` on two's-complement bits. |
+| [`DigitMassTransfer.transitions_zero`](../NormalityChecker/DigitMassTransfer.lean#L625) |  |
+| [`DigitMassTransfer.transitions_neg_one`](../NormalityChecker/DigitMassTransfer.lean#L627) |  |
+| [`DigitMassTransfer.transitions_add_two_pow`](../NormalityChecker/DigitMassTransfer.lean#L682) | **L6.** Adding a signed power of two changes the transition count by at most `2`. |
+| [`DigitMassTransfer.transitions_add_le`](../NormalityChecker/DigitMassTransfer.lean#L738) [GF-36](results.md#gf-36) | **L6.** `T(A + c) ≤ T(A) + 2 w_±(\|c\|)`. |
+| [`DigitMassTransfer.floor_pow_mul_eq_head_add_floor_tail`](../NormalityChecker/DigitMassTransfer.lean#L756) | **L7 (Theorem 2.1).** Exact prefix decomposition of `x = ∑_{n ≥ 1} a(n) b^{-kn}`: `⌊b^N x⌋ = ∑_{1 ≤ n ≤ N/k} a(n) b^{N - kn} + ⌊τ_N⌋`. |
+| [`DigitMassTransfer.digitSum_prefix_le`](../NormalityChecker/DigitMassTransfer.lean#L798) | **L8 (Theorem 2.2).** Unsigned prefix digit-sum bound for the integer prefix. |
+| [`DigitMassTransfer.transitions_prefix_le`](../NormalityChecker/DigitMassTransfer.lean#L819) | **L9 (Theorem 7.1).** Signed prefix transition bound. |
+| [`DigitMassTransfer.interval_le_radixDiscrepancy`](../NormalityChecker/DigitMassTransfer.lean#L827) | Every interval deviation is bounded by the extreme radix discrepancy. |
+| [`DigitMassTransfer.radixDiscrepancy_ge_nonzero_freq`](../NormalityChecker/DigitMassTransfer.lean#L863) | **L10 (Proposition 2.4(2)).** `D_N(x; b) ≥ (b - 1)/b - f_{≠0}(N)`, where the frequency of nonzero leading digits is the frequency of `[1/b, 1)`. |
+| [`DigitMassTransfer.binaryDiscrepancy_ge_half_sub_transition`](../NormalityChecker/DigitMassTransfer.lean#L883) [GF-36](results.md#gf-36) | **L10 (Proposition 2.4(4)).** `D_N(x; 2) ≥ 1/2 - (f₀₁ + f₁₀)(N)`. |
+| [`DigitMassTransfer.radixDiscrepancy_ge_zero_run`](../NormalityChecker/DigitMassTransfer.lean#L959) | **L12 (Proposition 2.4(3)).** Zero-run bound in base `2`: `D_N(x; 2) ≥ 1 - m ((N + m)/N) f₁(N + m) - 2^{-m}`. |
+| [`DigitMassTransfer.tendsto_average_of_summable_conv_mobius`](../NormalityChecker/DigitMassTransfer.lean#L1021) [GF-36](results.md#gf-36) | **L13 (Lemma 3.1).** Elementary Dirichlet-convolution mean value: if the squarefull kernel `h = G * μ` satisfies `∑ \|h(n)\|/n < ∞`, then `X⁻¹ ∑_{n ≤ X} G(n) →… |
+| [`DigitMassTransfer.local_factor_digitSum_two`](../NormalityChecker/DigitMassTransfer.lean#L1142) [GF-36](results.md#gf-36) | **L14 (Corollary 3.3(3)).** Exact local Euler factor of the digit-sum majorant: `(1 - p⁻¹) ∑_{e ≥ 0} s₂(e + 1) / p^e = ∑_{j ≥ 0} p / (p^{2^j} + 1)`. |
+| [`DigitMassTransfer.multOfPrimePow_apply`](../NormalityChecker/DigitMassTransfer.lean#L1223) |  |
+| [`DigitMassTransfer.multOfPrimePow_isMultiplicative`](../NormalityChecker/DigitMassTransfer.lean#L1227) |  |
+| [`DigitMassTransfer.multOfPrimePow_prime_pow`](../NormalityChecker/DigitMassTransfer.lean#L1238) |  |
+| [`DigitMassTransfer.multOfPrimePow_nonneg`](../NormalityChecker/DigitMassTransfer.lean#L1243) |  |
+| [`DigitMassTransfer.tauDigitMajorant_isMultiplicative`](../NormalityChecker/DigitMassTransfer.lean#L1272) |  |
+| [`DigitMassTransfer.tauDigitKernel_isMultiplicative`](../NormalityChecker/DigitMassTransfer.lean#L1275) |  |
+| [`DigitMassTransfer.tauDigitMajorant_prime_pow`](../NormalityChecker/DigitMassTransfer.lean#L1278) |  |
+| [`DigitMassTransfer.tauDigitKernel_prime_pow`](../NormalityChecker/DigitMassTransfer.lean#L1283) |  |
+| [`DigitMassTransfer.tauDigitMajorant_nonneg`](../NormalityChecker/DigitMassTransfer.lean#L1288) |  |
+| [`DigitMassTransfer.tauDigitKernel_mul_zeta`](../NormalityChecker/DigitMassTransfer.lean#L1291) |  |
+| [`DigitMassTransfer.tauDigitMajorant_mul_moebius`](../NormalityChecker/DigitMassTransfer.lean#L1308) | The kernel identity `G * μ = h`. |
+| [`DigitMassTransfer.digitSum_card_divisors_le`](../NormalityChecker/DigitMassTransfer.lean#L1313) | `s₂(τ(n)) ≤ G(n)`, from the submultiplicativity of `s₂` (L2). |
+| [`DigitMassTransfer.summable_abs_tauDigitKernel_div`](../NormalityChecker/DigitMassTransfer.lean#L1517) | **Summability hypothesis of L13 for the digit-sum majorant:** `∑ \|h(n)\|/n < ∞`. |
+| [`DigitMassTransfer.tsum_tauDigitKernel_div_le`](../NormalityChecker/DigitMassTransfer.lean#L1663) [GF-36](results.md#gf-36) | **The mean of the majorant:** `C = ∑ h(n)/n ≤ 29/20`, from the Euler product `C = ∏_p L(p)`, the local bounds `0 ≤ L(p) ≤ (1 - p⁻²)⁻¹ - p⁻³ - 2p⁻⁷` and `∑_{n… |
+| [`DigitMassTransfer.erdosBorweinPow_eq_divisor_series`](../NormalityChecker/DigitMassTransfer.lean#L1770) | Lambert-to-divisor expansion `E(2^k) = ∑_{n ≥ 1} τ(n) 2^{-kn}`. |
+| [`DigitMassTransfer.erdosBorwein_two_pow_digitFreq_limsup_le`](../NormalityChecker/DigitMassTransfer.lean#L2143) [GF-36](results.md#gf-36) | **L15 (Theorem 4.1(1)), unconditional.** For every `k ≥ 1`, `limsup_N f₁(N; E(2^k), 2) ≤ 29/(20k)`, where `E(2^k) = ∑_{m ≥ 1} 1/(2^{km} - 1)`. |
+| [`DigitMassTransfer.erdosBorwein_two_pow_radixDiscrepancy_eventually_ge`](../NormalityChecker/DigitMassTransfer.lean#L2161) | Eventual lower bound for the binary discrepancy: `D_N(E(2^k); 2) ≥ 1/2 - 29/(20k) - ε` for all large `N`. |
+| [`DigitMassTransfer.erdosBorwein_two_pow_lowerDiscrepancy_pos`](../NormalityChecker/DigitMassTransfer.lean#L2194) [GF-36](results.md#gf-36) | **L15′.** For every `k ≥ 3`, `E(2^k)` has positive lower discrepancy in base `2`: `D_N(E(2^k); 2) ≥ 1/120` for all large `N`. |
+| [`DigitMassTransfer.erdosBorwein_two_pow_not_simplyNormal_pow`](../NormalityChecker/DigitMassTransfer.lean#L2277) [GF-36](results.md#gf-36) | **L15′ (descent to every base `2^j`).** For every `k ≥ 3` and `j ≥ 1`, `E(2^k) = ∑_{m ≥ 1} 1/(2^{km} - 1)` is not simply normal in base `2^j`. |
+| [`DigitMassTransfer.erdosBorwein_two_pow_not_simplyNormal`](../NormalityChecker/DigitMassTransfer.lean#L2334) [GF-36](results.md#gf-36) | **L15′.** For every `k ≥ 3`, `E(2^k) = ∑_{m ≥ 1} 1/(2^{km} - 1)` is not simply normal in base `2`. |
+| [`DigitMassTransfer.radixDiscrepancy_descent`](../NormalityChecker/DigitMassTransfer.lean#L2417) | **L11 (Proposition 2.4(5)).** Radix descent: `D_{kN}(x; b) ≤ (b^k - 1)/(k (b - 1)) · D_N(x; b^k)`. |
 
 ### Dilation
 
@@ -706,6 +775,45 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Phase23Cores.glaisher_wieferich_alt_zmod`](../NormalityChecker/Phase23Cores.lean#L1109) | Alternate reversed form of the Glaisher–Wieferich congruence: `((2^(p - 1) - 1) / p : ZMod p) = - ∑_{k = 1}^{p - 1} 2^(k - 1) · k⁻¹`. |
 | [`Phase23Cores.glaisher_wieferich_zero_iff`](../NormalityChecker/Phase23Cores.lean#L1135) [GF-35](results.md#gf-35) | **Track E2, Proposition 5.4 (Wieferich criterion in `ZMod p`):** For an odd prime `p`, the `ZMod p` BBP sum vanishes iff `p² ∣ 2^(p - 1) - 1`. |
 | [`Phase23Cores.ln2Prefix_num_dvd_iff_wieferich`](../NormalityChecker/Phase23Cores.lean#L1157) [GF-35](results.md#gf-35) | **Track E2, Proposition 5.4 (exact reduced numerator criterion for `ln 2`):** For every odd prime `p`, `p ∣ A_{p - 1} ↔ p² ∣ 2^(p - 1) - 1`, where `A_{p - 1}`… |
+
+### Phase24Cores
+
+[`NormalityChecker/Phase24Cores.lean`](../NormalityChecker/Phase24Cores.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`Phase24Cores.binToBaseM_zero`](../NormalityChecker/Phase24Cores.lean#L75) |  |
+| [`Phase24Cores.binToBaseM_two_mul`](../NormalityChecker/Phase24Cores.lean#L78) |  |
+| [`Phase24Cores.binToBaseM_two_mul_add_one`](../NormalityChecker/Phase24Cores.lean#L87) |  |
+| [`Phase24Cores.binToBaseM_two_pow`](../NormalityChecker/Phase24Cores.lean#L95) | Exact evaluation on powers of two: `u_m(2^k) = m^k`. |
+| [`Phase24Cores.binToBaseM_add_two_pow`](../NormalityChecker/Phase24Cores.lean#L103) | Bit-splitting identity: for `n < 2^r`, `u_m(2^r + n) = m^r + u_m(n)`. |
+| [`Phase24Cores.binToBaseM_lt_succ`](../NormalityChecker/Phase24Cores.lean#L122) | Consecutive strict monotonicity of `binToBaseM m` for `m ≥ 2`. |
+| [`Phase24Cores.binToBaseM_strictMono`](../NormalityChecker/Phase24Cores.lean#L136) | Global strict monotonicity of `binToBaseM m` for `m ≥ 2`. |
+| [`Phase24Cores.binToBaseM_gap`](../NormalityChecker/Phase24Cores.lean#L142) [GF-37](results.md#gf-37) | **Sub-track B2, Theorem 1.1 (exact support-gap law):** for `m ≥ 2` and every `i : ℕ`, `(m - 1) * (u_m(i + 1) - u_m(i)) = (m - 2) * m^(v_2(i + 1)) + 1`. |
+| [`Phase24Cores.thueMorse_signed_even_gap_sum_mul`](../NormalityChecker/Phase24Cores.lean#L179) | **Sub-track B2, Theorem 1.5(1) (exact signed even-gap cancellation, multiplied form):** for `m ≥ 3` and `k ≥ 2`, all `1 ≤ r ≤ k - 2` layers cancel pairwise,… |
+| [`Phase24Cores.thueMorse_signed_even_gap_sum`](../NormalityChecker/Phase24Cores.lean#L268) [GF-37](results.md#gf-37) | **Sub-track B2, Theorem 1.5(1) (exact signed even-gap sum at `N = m^k`):** for `m ≥ 3` and `k ≥ 2`, `∑_{j=1}^{2^{k-1}} (-1)^{s_2(2j)} (u_m(2j) - u_m(2j - 1))… |
+| [`Phase24Cores.selberg_prime_switch_ineq`](../NormalityChecker/Phase24Cores.lean#L290) [GF-37](results.md#gf-37) | **Sub-track B1, Lemma 2.2 (prime-by-prime Selberg sieve switch inequality):** for `0 ≤ B ≤ A` and `0 ≤ β ≤ α`, `(A + α B)(1 + β) ≤ (A + β B)(1 + α)`. |
+| [`Phase24Cores.eulerSq_local_factor_identity`](../NormalityChecker/Phase24Cores.lean#L300) [GF-37](results.md#gf-37) | **Sub-track B1, Theorem 2.3 (exact local Euler-factor collapse):** exact rational identity collapsing the four local Euler factors into `1 + 2 / ((p - 1)(p^2… |
+| [`Phase24Cores.weighted_linear_sum_le`](../NormalityChecker/Phase24Cores.lean#L318) [GF-37](results.md#gf-37) | **Sub-track B1, Theorem 2.3 (weighted triangular sum inequality, integer form):** `2 D (K H) ≤ H^2 + D^2 K (K + 1)`, equivalently `(H - D K)^2 + D^2 K ≥ 0`. |
+| [`Phase24Cores.weighted_linear_finset_sum_le`](../NormalityChecker/Phase24Cores.lean#L325) | Real `Finset.Icc` sum form of `weighted_linear_sum_le`: `2 D ∑_{m=1}^K (H - D m) ≤ H^2`. |
+| [`Phase24Cores.b2_add_b_add_one_odd_and_order`](../NormalityChecker/Phase24Cores.lean#L353) | **Sub-track B3, Theorem 3.2:** for every `b : ℕ`, `b^2 + b + 1` is odd and divides `b^3 - 1`. |
+| [`Phase24Cores.b2_add_b_add_one_orderOf`](../NormalityChecker/Phase24Cores.lean#L369) [GF-37](results.md#gf-37) | Exact multiplicative order for the universal family: for `b ≥ 2`, `orderOf (b : ZMod (b^2 + b + 1)) = 3`. |
+| [`Phase24Cores.coprime_rat_complement_wordAt`](../NormalityChecker/Phase24Cores.lean#L420) | **Sub-track B3, Theorem 3.1 (digitwise `(b - 1)`-complement law for coprime rationals):** if `b ≥ 2`, `d ≥ 2`, `Nat.Coprime d b`, and `1 ≤ a < d`, then at… |
+| [`Phase24Cores.coprime_rat_complement_digitFreq`](../NormalityChecker/Phase24Cores.lean#L489) | **Sub-track B3, Theorem 3.1 (base-`b` complement digit-frequency identity):** for every `b ≥ 2`, `d ≥ 2`, `Nat.Coprime d b`, `1 ≤ a < d`, `e < b`, and cutoff… |
+| [`Phase24Cores.base2_complement_digit_sum`](../NormalityChecker/Phase24Cores.lean#L509) [GF-37](results.md#gf-37) | **Sub-track B3, Theorem 3.1(1) (base-2 complement digit-frequency sum):** for every odd `d ≥ 2` (`Nat.Coprime d 2`), `1 ≤ a < d`, binary digit `e < 2`, and `N… |
+| [`Phase24Cores.gcd_pow_sub_one`](../NormalityChecker/Phase24Cores.lean#L550) | Exact divisibility gcd identity: `gcd(b^{k₁} - 1, b^{k₂} - 1) = b^{gcd(k₁, k₂)} - 1` for every `b ≥ 2` and `k₁, k₂ : ℕ`. |
+| [`Phase24Cores.kernel_pow_inter_eq_gcd`](../NormalityChecker/Phase24Cores.lean#L585) [GF-37](results.md#gf-37) | **Sub-track B4, Theorem 4.3(1) (multi-radix kernel intersection law):** for every `b ≥ 2` and `k₁, k₂ ≥ 1`, `Kernel (b ^ k₁) ∩ Kernel (b ^ k₂) = Kernel (b ^… |
+| [`Phase24Cores.orderNormal_of_pow_orderNormal`](../NormalityChecker/Phase24Cores.lean#L752) [GF-37](results.md#gf-37) | **Sub-track B4, Theorem 4.1(1) (exact cross-radix order implication):** for `b ≥ 2`, `k ≥ 2`, and `L₂ ≥ 1`, every real that is `L₂`-normal in base `b^k` is… |
+| [`Phase24Cores.unimodular_best_approx`](../NormalityChecker/Phase24Cores.lean#L1063) | **Sub-track D3 (§3 unimodular best-approximation inequality):** if `(p_i, q_i)` and `(p_{i+1}, q_{i+1})` form a unimodular pair (`p_{i+1} q_i - p_i q_{i+1} =… |
+| [`Phase24Cores.cf_det`](../NormalityChecker/Phase24Cores.lean#L1150) | Exact continued-fraction unimodular determinant identity: `p_{n+1} q_n - p_n q_{n+1} = (-1)^(n + 1)`. |
+| [`Phase24Cores.cfDen_pos`](../NormalityChecker/Phase24Cores.lean#L1161) |  |
+| [`Phase24Cores.cfDen_le_succ`](../NormalityChecker/Phase24Cores.lean#L1169) |  |
+| [`Phase24Cores.cfDen_ge_index`](../NormalityChecker/Phase24Cores.lean#L1177) |  |
+| [`Phase24Cores.cf_complete_quotient_eq`](../NormalityChecker/Phase24Cores.lean#L1190) | Complete-quotient representation: if `x = 1 / α 0` and `α n = a n + 1 / α (n + 1)` with `1 ≤ a n` and `α n > 0` for all `n`, then `x = (α n * p_{n+1} + p_n) /… |
+| [`Phase24Cores.cf_approx_error`](../NormalityChecker/Phase24Cores.lean#L1227) | Exact signed convergent error identity: `q_{n+1} * x - p_{n+1} = (-1)^n / (α n * q_{n+1} + q_n)`. |
+| [`Phase24Cores.cf_convergent_gap`](../NormalityChecker/Phase24Cores.lean#L1247) | Exact convergent gap identity (`nonlinear-boundaries-and-approximation.md`, §3): `q_{n+1} \|q_{n+1} x - p_{n+1}\| = 1 / (α n + q_n / q_{n+1})`. |
+| [`Phase24Cores.cf_badly_approx_bound`](../NormalityChecker/Phase24Cores.lean#L1266) [GF-39](results.md#gf-39) | **Sub-track D3 (§3 general bounded-partial-quotient gap):** if `x = [0; a 0, a 1, ...]` has partial quotients `1 ≤ a n ≤ A`, then for every integer `q ≥ 1`… |
+| [`Phase24Cores.cf_one_two_badly_approx`](../NormalityChecker/Phase24Cores.lean#L1354) [GF-39](results.md#gf-39) | **Sub-track D3 (§3 `{1, 2}`-continued-fraction bad-approximation bound):** every continued fraction `x = [0; a 0, a 1, ...]` with partial quotients `a n ∈ {1,… |
 
 ### PositiveSummation
 

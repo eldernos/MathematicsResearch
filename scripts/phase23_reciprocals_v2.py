@@ -674,7 +674,14 @@ def section_d2_all_bases_L_normal() -> None:
         check(rem == A, "cycle closure failed")
         # Exact L-normality check & exact proven-interval bound for EVERY s = 1, ..., b - 1!
         bL = b**L
-        k_R = math.ceil(math.log(R, b))
+        # Exact integer ceiling k_R = min{k >= 0 : b^k >= R} (avoid floating-point log in exact checks).
+        k_R = 0
+        bk = 1
+        while bk < R:
+            k_R += 1
+            bk *= b
+        if k_R >= 1:
+            check(b ** (k_R - 1) < R <= b ** k_R, f"exact k_R bracket failed for b={b}, R={R}")
         # Common interval I_R = [eta_R, 1 - eta_R) with eta_R = b * b^{-k_R} = b^{1 - k_R}
         eta_num = 1
         eta_den = b ** (k_R - 1) if k_R >= 1 else 1

@@ -212,6 +212,59 @@ def check_dense():
                 rem = raw % denom
                 envelope = sum(value*b**(last-t) for t, value in absolute.items() if t > j)
                 assert min(rem, denom-rem) <= envelope
+        # Threshold-displacement regressions (Phase 24 Audit 1): exercise actual
+        # left-shifts at k=4 (plus, base 16) and signed collision cancellation at
+        # k=3 (minus, base 8) on short shifted windows mod 7.
+        def _cubic_proj_at(n_val, is_plus):
+            loc = (1, 0, 0)
+            for p, e in factor(n_val).items():
+                t = exponents.get(p % modulus)
+                if t is None:
+                    continue
+                vec = [0, 0, 0]
+                for jj in range(e + 1):
+                    vec[jj * t % 3] += 1
+                loc = multiply(loc, vec)
+            xx, yy, _ = loc
+            return (2 * xx - yy) if is_plus else yy
+
+        if modulus == 7:
+            for is_plus, k_thr, win_start, win_end in (
+                (True, 4, 15450, 15465),
+                (False, 3, 46365, 46378),
+            ):
+                b_thr = 2**k_thr
+                win_vals = {n_val: _cubic_proj_at(n_val, is_plus)
+                            for n_val in range(win_start, win_end + 1)}
+                if is_plus:
+                    assert win_vals[15457] == 16
+                else:
+                    assert win_vals[46370] == -1 and win_vals[46371] == 8
+                arr_w = Counter()
+                abs_w = Counter()
+                moved = False
+                for n_val, val in win_vals.items():
+                    if val:
+                        od = odd_part(abs(val))
+                        v2 = (abs(val) // od).bit_length() - 1
+                        vv, rr = divmod(v2, k_thr)
+                        if vv > 0:
+                            moved = True
+                        red = val // b_thr**vv
+                        assert abs(red) == od * 2**rr
+                        arr_w[n_val - vv] += red
+                        abs_w[n_val - vv] += abs(red)
+                assert moved
+                if not is_plus:
+                    # Exact signed cancellation at 46370 (-1 + 8/8 = 0).
+                    assert arr_w[46370] == 0 and abs_w[46370] >= 2
+                raw_w = sum(val * b_thr**(win_end - n_val) for n_val, val in win_vals.items())
+                assert raw_w == sum(val * b_thr**(win_end - t_val) for t_val, val in arr_w.items())
+                for j_val in range(win_start, win_end):
+                    den_w = b_thr**(win_end - j_val)
+                    rem_w = raw_w % den_w
+                    env_w = sum(val * b_thr**(win_end - t_val) for t_val, val in abs_w.items() if t_val > j_val)
+                    assert min(rem_w, den_w - rem_w) <= env_w
         for b in (2, 3, 10):
             # An exact finite signed tail checks orientation, signs and the scale b^d.
             tail = [Fraction(0)] * 81

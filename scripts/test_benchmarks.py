@@ -52,7 +52,7 @@ class RealDataTests(BenchmarkCase):
     def test_roster_is_fixed(self):
         c, f = self.data()
         self.assertEqual([e["id"] for e in c["constant"]], [f"BC-{i:02d}" for i in range(1, 51)])
-        self.assertEqual([e["id"] for e in f["family"]], [f"BF-{i:02d}" for i in range(1, 26)])
+        self.assertEqual([e["id"] for e in f["family"]], [f"BF-{i:02d}" for i in range(1, 28)])
         self.assertEqual(c["meta"]["schema_version"], 2)
         self.assertEqual(f["meta"]["schema_version"], 2)
 

@@ -1,0 +1,759 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\hypersetup{pdftitle={Digit-Mass Transfer and Nonnormality of Dense Arithmetic Lambert Series}}
+\DeclareMathOperator{\odd}{odd}
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\Ctrue}{C_{\mathrm{true}}}
+\newcommand{\wpm}{w_{\pm}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\sfree}{\sigma_{\mathrm{free}}}
+\newcommand{\Ex}{\mathbb E}
+% Immutable commits for the Lean definitions this paper depends on.
+\newcommand{\phaseXXIIcommit}{8ca43095887858bf9697b6a8332c6a6dd0b0cda3}
+\newcommand{\phaseXXIIIcommit}{cb395159c6e343c60c1413719cdfc8429e15af2c}
+\newcommand{\leanT}[3]{\leanat{\phaseXXIIcommit}{#1}{#2}{#3}}
+\newcommand{\leanU}[3]{\leanat{\phaseXXIIIcommit}{#1}{#2}{#3}}
+% \leanW{declaration}{line}: NormalityChecker/DigitMassTransfer.lean in the Phase 24 working tree
+% (uncommitted; line numbers refer to that working tree and are pending commit pinning).
+\newcommand{\leanW}[2]{\ttt{#1}~[W\,L#2]}
+\renewcommand{\ReleaseLabel}{candidate draft, not yet released}
+\setlength{\emergencystretch}{3em}
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Digit-Mass Transfer and Nonnormality\\[3pt] of Dense Arithmetic Lambert Series\par}
+\vspace{10pt}
+\makebyline{1.0 (candidate draft)}{28 November 2026}
+\end{center}
+
+\begin{abstract}
+For an integer radix $b\ge2$, an integer $k\ge1$ and a slowly growing coefficient sequence $a(n)\ge0$, the base-$b$ digits of $x=\sum_{n\ge1}a(n)b^{-kn}$ arise by adding the shifted base-$b$ expansions of the coefficients. Carries can only destroy digit mass. We make this \emph{digit-mass transfer} exact and apply it to dense arithmetic Lambert series such as the generalized Erd\H{o}s--Borwein constants $E(2^k)=\sum_{m\ge1}1/(2^{km}-1)=\sum_{n\ge1}\tau(n)2^{-kn}$.
+
+The base-$b$ Kummer identity, subadditivity of digit sums and nonzero-digit counts, the exact prefix decomposition, an elementary Dirichlet-convolution mean-value theorem, a local binary digit-sum identity and the bound $C\le 29/20$ for the multiplicative majorant of $s_2(\tau(n))$ are kernel-verified in Lean~4. So is the resulting classification: for every $k\ge3$, $\limsup_N f_1(N;E(2^k))\le 29/(20k)<1/2$, the lower extreme discrepancy satisfies $D^-(E(2^k);2)\ge 1/120$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$. Written proofs with outward-rounded finite certificates sharpen this. The exact mean of $s_2(\tau(n))$ is $\Ctrue\in[1.339103,1.339116]$, and $D^-(E(2^k);2)\to1$. Odd-divisor, higher-divisor, unitary and base-$b$ divisor families are shown to be simply nonnormal in the same way. For radices $b$ that are not powers of $2$, the Senge--Straus theorem shows that the mean base-$b$ digit mass of $\tau(n)$ is infinite. More generally, the mean base-$b$ digit mass of $\tau_r(n)$ is bounded if and only if $r$ and $b$ are multiplicatively dependent.
+
+For the signed series $E_+(2^k)=\sum 1/(2^{kn}+1)$, a transfer of two's-complement transitions through the non-adjacent-form weight proves that $E_+(2^k)$ is not $2$-normal in base $2$ for $k\ge4$. The same transfer applies to cubic-character Lambert series. A minimal four-state transducer computes the free-boundary signed-digit weight $A_L=\frac13-\frac{7-(-1/2)^{L-1}}{18L}$ of uniform words and gets below the transition-count threshold: $E_+(8)$ is not normal in base $2$, with $D^-(E_+(8);2)\ge 2.34\times10^{-7}$. Exact carry-density criteria describe the thresholds $E(4)$ and $E^*(4)=\sum\mu^2(m)/(4^m-1)$. Normality questions for $E(2)$, $E(4)$, $E_+(2)$ and $E_+(4)$ remain open.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Throughout, $b\ge2$ is an integer radix. For $x\in\R$ let $d_j=d_j(x;b)\in\{0,\dots,b-1\}$ ($j\ge1$) be the base-$b$ digits of the fractional part $\{x\}=x-\lfloor x\rfloor$. We choose the expansion that does not end in $(b-1)^\infty$, so that
+\begin{equation}\label{eq:digits}
+\lfloor b^Nx\rfloor=\lfloor x\rfloor b^N+\sum_{j=1}^N d_j\,b^{N-j}\qquad(N\ge0).
+\end{equation}
+For an interval $I\subseteq[0,1)$ and $N\ge1$ let $F_N(I;x,b)=N^{-1}\#\{0\le n<N:\{b^nx\}\in I\}$. The \emph{extreme discrepancy} of the radix orbit is
+\[
+D_N(x;b)=\sup_{0\le a<c\le1}\bigl|F_N([a,c);x,b)-(c-a)\bigr|,
+\]
+and we write $D^-(x;b)=\liminf_N D_N(x;b)$ and $D^+(x;b)=\limsup_N D_N(x;b)$. The point $\{b^nx\}$ lies in the cylinder of a word $u\in\{0,\dots,b-1\}^L$ exactly when $d_{n+1}\cdots d_{n+L}=u$. A real number is \emph{simply normal} in base $b$ if every digit has asymptotic frequency $1/b$, \emph{$L$-normal} if every word of length $L$ has frequency $b^{-L}$, and \emph{normal} if it is $L$-normal for every $L$; normality is equivalent to $D_N(x;b)\to0$ \cite[Chapter~1]{KN}. In base $2$ we write
+\[
+f_1(N;x)=F_N([1/2,1);x,2)=\frac1N\#\{1\le j\le N:d_j=1\},\qquad \tr_N(x)=\#\{1\le j<N:d_j\ne d_{j+1}\},
+\]
+so that $F_N([1/4,3/4);x,2)=\tr_{N+1}(x)/N$ is the empirical frequency $f_{01}+f_{10}$ of the words $01$ and $10$.
+
+For an integer $a\ge0$, $s_b(a)$ denotes its base-$b$ digit sum and $w_b(a)$ its number of nonzero base-$b$ digits; $s_2=w_2$. For $c\in\Z$ the \emph{signed weight} $\wpm(c)$ is the least number of terms in a representation $c=\sum_i\varepsilon_i2^{m_i}$ with $\varepsilon_i=\pm1$ and $m_i\in\Z_{\ge0}$; it is the weight of the non-adjacent form \cite{Reitwiesner1960}. For $A\in\Z$ with two's-complement bits $A_0,A_1,\dots$ (eventually constant) let $T(A)=\#\{i\ge0:A_i\ne A_{i+1}\}$. We write $\tau_r(n)$ for the number of ordered factorizations $n=d_1\cdots d_r$, so $\tau_r(p^e)=\binom{e+r-1}{r-1}$, and $\tau=\tau_2$. Further, $\tau_{\mathrm{odd}}(n)$ is the number of odd divisors, $\omega(n)$ the number of distinct prime factors, $\mu$ the M\"obius function, $v_p$ the $p$-adic valuation, $e_p(n)=v_p(n)$, and $\odd(m)=m\,2^{-v_2(m)}$.
+
+For an integer $q\ge2$ consider the Lambert series
+\begin{equation}\label{eq:lambert}
+\begin{aligned}
+E(q)&=\sum_{n\ge1}\frac1{q^n-1}=\sum_{n\ge1}\tau(n)q^{-n}, &
+E_+(q)&=\sum_{n\ge1}\frac1{q^n+1}=\sum_{n\ge1}a_+(n)q^{-n},\\
+E_{\mathrm{odd}}(q)&=\sum_{m\ \mathrm{odd}}\frac1{q^m-1}=\sum_{n\ge1}\tau_{\mathrm{odd}}(n)q^{-n}, &
+E^*(q)&=\sum_{m\ge1}\frac{\mu^2(m)}{q^m-1}=\sum_{n\ge1}2^{\omega(n)}q^{-n},
+\end{aligned}
+\end{equation}
+where $a_+(n)=\sum_{d\mid n}(-1)^{d-1}=(1-v_2(n))\,\tau_{\mathrm{odd}}(n)$ (kernel-verified as \leanT{Phase22Cores}{1052}{\ttt{Phase22Cores.erdosBorweinPlusCoeff\_eq}}). The number $E=E(2)$ is the Erd\H{o}s--Borwein constant. Its irrationality is due to Erd\H{o}s \cite{erdos1948}; irrationality results for the more general series are due to P.~Borwein \cite{borwein1991,borwein1992}. Whether $E(2)$, $E_{\mathrm{odd}}(2)$ or $E_+(2)$ is normal, or even simply normal, in base $2$ is open; finite-statistic obstructions for $E(2)$ are studied in \cite{PaperIX}. We take $q=b^k$ and call $k$ the \emph{construction exponent}: in base $b$ the $n$-th coefficient enters at digit position $kn$. The results below concern $q=2^k$ with $k\ge3$ and certain base-$b$ families. They do not decide any of the three constants $E(2)$, $E_{\mathrm{odd}}(2)$, $E_+(2)$.
+
+The principle is simple. If $a(n)\ge0$ grows slowly, the base-$b$ expansion of $\lfloor b^Nx\rfloor$ for $x=\sum a(n)b^{-kn}$ is obtained by adding the shifted expansions $a(n)b^{N-kn}$ ($n\le N/k$) and a short tail. By Kummer's carry identity \cite{Kummer1852}, carries only remove digit mass. So the digit average of $x$ is at most $1/k$ times the mean digit mass of $a(n)$, and simple nonnormality follows once this is below $(b-1)/2$. For $a=\tau$ and $b=2$ the mean of $s_2(\tau(n))$ is $\Ctrue\approx1.339$, so $k\ge3$ suffices. The analytic input is elementary: $s_2(\tau(n))$ is dominated by a multiplicative function whose Dirichlet-convolution kernel is supported on squarefull integers. No Tauberian theorem is needed.
+
+\begin{maintheorem}[Kernel-verified digit-mass transfer and the classification of $E(2^k)$]\label{thm:A}
+Let $b\ge2$ and $k\ge1$ be integers.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Kernel-verified} For all integers $a,c,t\ge0$, Kummer's identity $s_b(a+c)+(b-1)\kappa_b(a,c)=s_b(a)+s_b(c)$ holds, where $\kappa_b(a,c)$ is the number of carries in the base-$b$ addition of $a$ and $c$. Moreover $s_b(a+c)\le s_b(a)+s_b(c)$, $s_b(ac)\le s_b(a)s_b(c)$, $s_b(ab^t)=s_b(a)$, $w_b(a+c)\le w_b(a)+w_b(c)$ and $w_b(ac)\le\min\{s_b(a)w_b(c),\,2w_b(a)w_b(c)\}$. For $b\ge3$, $w_b((b-1)^2)=2>1=w_b(b-1)^2$. In base $2$, $s_2(m+1)+v_2(m+1)=s_2(m)+1$.
+\item \evidence{Kernel-verified} Let $a:\N\to\Z$ satisfy $\sum_n|a(n)|b^{-kn}<\infty$ and put $x=\sum_{n\ge1}a(n)b^{-kn}$. For every $N\ge0$,
+\[
+\lfloor b^Nx\rfloor=A_N+\lfloor\tau_N\rfloor,\qquad A_N=\sum_{1\le n\le N/k}a(n)\,b^{N-kn}\in\Z,\qquad \tau_N=\sum_{n>N/k}a(n)\,b^{N-kn}.
+\]
+If $a\ge0$, then $s_b(A_N+t)\le\sum_{n\le N/k}s_b(a(n))+s_b(t)$ for every integer $t\ge0$. For $a=\tau$ and $b=2$ the carry tail satisfies $0\le\tau_N\le N+2$, so $s_2(\lfloor\tau_N\rfloor)\le\log_2(N+2)+1$.
+\item \evidence{Kernel-verified} If $G:\N\to\R$ and $h=G*\mu$ satisfy $\sum_n|h(n)|/n<\infty$, then $X^{-1}\sum_{n\le X}G(n)\to\sum_{n\ge1}h(n)/n$. For the multiplicative function $G(n)=\prod_{p^e\parallel n}s_2(e+1)$ one has $s_2(\tau(n))\le G(n)$, $h(p^e)=s_2(e+1)-s_2(e)$, $\sum_n|h(n)|/n<\infty$, the local identity
+\[
+\Bigl(1-\frac1p\Bigr)\sum_{e\ge0}\frac{s_2(e+1)}{p^e}=\sum_{j\ge0}\frac{p}{p^{2^j}+1}\qquad(p\ge2),
+\]
+and $C:=\sum_{n\ge1}h(n)/n\le 29/20$.
+\item \evidence{Kernel-verified} For every $k\ge1$, $E(2^k)=\sum_{n\ge1}\tau(n)2^{-kn}$ and
+\[
+\limsup_{N\to\infty}f_1\bigl(N;E(2^k)\bigr)\le\frac{29}{20k}.
+\]
+Consequently, for every $k\ge3$, $D_N(E(2^k);2)\ge 1/120$ for all sufficiently large $N$, so $D^-(E(2^k);2)\ge1/120>0$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$. In particular it is not simply normal in base $2$ or in its construction radix $2^k$.
+\item \evidence{Kernel-verified} For every real $x$ and $N\ge1$: $D_N(x;b)\ge\frac{b-1}b-F_N([1/b,1);x,b)$; $D_N(x;2)\ge\frac12-F_N([1/4,3/4);x,2)$; $D_N(x;2)\ge1-m\frac{N+m}{N}f_1(N+m;x)-2^{-m}$ for every $m\ge0$; and $D_{kN}(x;b)\le\frac{b^k-1}{k(b-1)}D_N(x;b^k)$ for every $N\ge0$.
+\end{enumerate}
+\end{maintheorem}
+
+All five parts are kernel-verified in \ttt{NormalityChecker/DigitMassTransfer.lean} (\Cref{sec:transfer,sec:mean,sec:EB,sec:formal}). This module was built and checked on the Linux build server \ttt{hail} in the Phase~24 working tree and is pending commit pinning before release. We cite its declarations as \leanW{name}{line}, where the line refers to that working tree. The kernel-verified bound $29/(20k)$ comes from a crude Euler-product estimate. Written proofs with finite certificates give the sharp constant.
+
+\begin{maintheorem}[Sharp constants and dense divisor-type families]\label{thm:B}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof + Finite certificate} The limit $\Ctrue=\lim_{X\to\infty}X^{-1}\sum_{n\le X}s_2(\tau(n))$ exists. It equals $\Ex\,s_2\bigl(\prod_p\odd(\varepsilon_p+1)\bigr)$ for independent $\varepsilon_p$ with $\Pr(\varepsilon_p=e)=(1-1/p)p^{-e}$, and
+\[
+1.339103\le\Ctrue\le1.339116<1.4035953\le C\le1.4035958<\tfrac{29}{20}.
+\]
+For every $k\ge1$, $\limsup_Nf_1(N;E(2^k))\le\Ctrue/k$; in particular $\limsup_Nf_1(N;E(8))\le0.44638$.
+\item \evidence{Paper proof + Finite certificate} For every $k\ge3$,
+\[
+D^-(E(2^k);2)\ge\max\Bigl\{\frac12-\frac{\Ctrue}k,\ \max_{m\ge1}\Bigl(1-\frac{m\Ctrue}k-2^{-m}\Bigr)\Bigr\},\qquad 1-D^-(E(2^k);2)\le\frac{\Ctrue\lceil\log_2k\rceil+1}k,
+\]
+so $D^-(E(2^k);2)\to1$ as $k\to\infty$. Moreover $D^-(E(2^k);2^j)\ge\frac{j}{2^j-1}D^-(E(2^k);2)$ for every $j\ge1$, and $D^-(E(2^k);2^k)\ge\bigl(1-\frac{\Ctrue}2-\frac{k+1}{2^k}\bigr)/(k-1)$ for $k\ge4$.
+\item \evidence{Paper proof + Finite certificate} Each of the following numbers is simply nonnormal in base $2$ and in every base $2^j$ ($j\ge1$), with an explicit positive lower bound for $D^-(\,\cdot\,;2)$: $E_{\mathrm{odd}}(2^k)$ for $k\ge3$; $\sum_{n}\tau_r(n)2^{-kn}=\sum_m\tau_{r-1}(m)/(2^{km}-1)$ for $r\in\{4,8\}$, $k\ge4$, and for $r=16$, $k\ge5$; and $E^*(2^k)=\sum_m\mu^2(m)/(2^{km}-1)$ for $k\ge3$.
+\item \evidence{Paper proof + Finite certificate} Let $b\ge3$. The unitary series $\sum_m\mu^2(m)(b-1)^{\omega(m)}/(b^{km}-1)=\sum_nb^{\omega(n)}b^{-kn}$ is simply nonnormal in base $b$ for every $k\ge1$ if $b\ge4$, and for every $k\ge2$ if $b=3$. For $3\le b\le10$ the series $\sum_m\tau_{b-1}(m)/(b^{km}-1)=\sum_n\tau_b(n)b^{-kn}$ is simply nonnormal in base $b$ and in every base $b^j$ for every $k\ge k_0(b)$, where $k_0(b)=1$ for $b\in\{7,9,10\}$ and $k_0(b)=2$ for $b\in\{3,4,5,6,8\}$.
+\end{enumerate}
+\end{maintheorem}
+
+Parts (i)--(ii) are \Cref{thm:EB-sharp}; parts (iii)--(iv) are \Cref{thm:dichotomy,thm:odd-unitary,thm:base-b}. The method needs the mean digit mass of the coefficients to be finite. This fails whenever the radix and the coefficient structure are arithmetically independent.
+
+\begin{maintheorem}[Base-dependence barrier and multiplicative dependence]\label{thm:C}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof using External input} If $b\ge2$ is not a power of $2$, then $X^{-1}\sum_{n\le X}w_b(\tau(n))\to\infty$ and $X^{-1}\sum_{n\le X}s_b(\tau(n))\to\infty$, and the same holds with $\tau_{\mathrm{odd}}$ in place of $\tau$. Hence the digit-mass bound is vacuous for $E(b^k)$ and $E_{\mathrm{odd}}(b^k)$ in base $b$ for every $k\ge1$. In particular $E(9)$ in base $3$, $E(25)$ in base $5$ and $E(100)$ in base $10$ are not decided. For $b=2^j$, $E(b^k)$ is simply nonnormal in base $b$ whenever $jk\ge3$.
+\item \evidence{Paper proof using External input} Let $r,b\ge2$. Then $\limsup_XX^{-1}\sum_{n\le X}s_b(\tau_r(n))<\infty$ if and only if $r$ and $b$ are multiplicatively dependent, that is, $r^u=b^v$ for some integers $u,v\ge1$. Otherwise $X^{-1}\sum_{n\le X}w_b(\tau_r(n))\to\infty$.
+\item \evidence{Kernel-verified} The inequality $w_b(ac)\le w_b(a)w_b(c)$ fails in every base $b\ge3$, for example $w_3(\tau(pq))=w_3(4)=2>1=w_3(\tau(p))\,w_3(\tau(q))$ for distinct primes $p,q$. The valid replacement $w_b(ac)\le\min\{s_b(a)w_b(c),2w_b(a)w_b(c)\}$ of \Cref{thm:A}(i) attains its factor $2$.
+\end{enumerate}
+The external inputs are the Senge--Straus theorem \cite{SengeStraus73} (with Stewart's effective form \cite{Stewart80}) and the fact that $\omega(n)\to\infty$ on a set of density $1$ \cite{Tenenbaum}.
+\end{maintheorem}
+
+These are \Cref{thm:barrier,thm:dichotomy} and \Cref{lem:digit-ineq}(c).
+
+For signed coefficients, carries can create as well as destroy digits, and the digit sum is no longer subadditive. The non-adjacent-form weight $\wpm$ and the two's-complement transition count $T$ replace $s_2$.
+
+\begin{maintheorem}[Signed transfer, $E_+(2^k)$ for $k\ge3$, and cubic-character series]\label{thm:D}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Lean-supported paper proof} Let $a:\N\to\Z$ satisfy $\log(1+|a(n)|)=o(n)$ and put $x=\sum_{n\ge1}a(n)2^{-kn}$. Then $\tr_N(x)\le T(\lfloor2^Nx\rfloor)\le2\sum_{n\le N/k}\wpm(a(n))+2\wpm(\lfloor\tau_N\rfloor)$ and $\limsup_NF_N([1/4,3/4);x,2)\le2W/k$, where $W=\limsup_XX^{-1}\sum_{n\le X}\wpm(a(n))$. If $2W/k<1/2$, then $x$ is not $2$-normal in base $2$, $D^-(x;2)\ge\max_{m\ge2}\bigl(1-2^{1-m}-(m-1)\frac{2W}k\bigr)>0$, and $x$ is not normal in any base $2^j$.
+\item \evidence{Paper proof + Finite certificate} The limit $W_+=\lim_XX^{-1}\sum_{n\le X}\wpm(a_+(n))$ exists and $0.908174\le W_+\le0.908184$. For every $k\ge4$, $E_+(2^k)$ is not $2$-normal in base $2$ and not normal in any base $2^j$, and $D^-(E_+(16);2)\ge0.0459$. The transition-count method cannot reach $k\le3$, since $W_+\ge3/4$. For the cubic characters modulo $7$, $9$ and $13$ and every $k\ge4$, the cubic-character Lambert series $L_\pm(2^k)$ (defined before \Cref{prop:cubic}) are not $2$-normal in base $2$, with $D^-(L_\pm(16);2)\ge0.1215$, $0.0977$ and $0.1053$ respectively.
+\item \evidence{Paper proof + Finite certificate} The free-boundary minimal signed-digit weight $\sfree$ of binary words of length $L$ is computed by a four-state transducer with stationary law $(\frac16,\frac13,\frac13,\frac16)$, and its uniform average per bit is
+\[
+A_L=\frac13-\frac{7-(-1/2)^{L-1}}{18L}\qquad(L\ge1).
+\]
+Every real $x$ satisfies $\limsup_N\sigma_1(x;N)/N\ge A_L\bigl(1-2^LD^-(x;2)\bigr)$, where $\sigma_1(x;N)$ is the minimal number of nonzero signed binary digits on positions $1,\dots,N$. Moreover $\limsup_N\sigma_1(E_+(2^k);N)/N\le W_+/k$. Hence, for every $k\ge3$, \emph{including $k=3$}, $E_+(2^k)$ is not normal in base $2$ or in any base $2^j$, and
+\[
+D^-(E_+(2^k);2)\ge2.34\times10^{-7}.
+\]
+Whether $E_+(8)$ is simply normal in base $2$ is open.
+\end{enumerate}
+\end{maintheorem}
+
+Part (i) is \Cref{thm:signed-transfer}, part (ii) is \Cref{thm:Eplus-k4,prop:cubic}, and part (iii) is \Cref{thm:transducer,thm:floor,lem:Eplus-support,thm:Eplus-k3}. Part (iii) needs no bound on the frequency of the digit $1$ or of transitions. It compares the signed-digit complexity of $E_+(2^k)$ with that of a typical word. Signed-digit complexity is a full-normality statistic rather than a simple-normality statistic, so the conclusion is nonnormality with $D^->0$ but not simple nonnormality. Part (ii) also complements the result in the repository register (\ttt{GF-31}) that $L_\pm(2^k)$ is simply nonnormal in its construction radix $2^k$; here the conclusion is in base $2$.
+
+The construction exponents $k=1,2$ lie below every threshold above. Here the transfer becomes an exact carry balance.
+
+\begin{maintheorem}[Exact carry-density thresholds]\label{thm:E}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof} For every $k\ge1$, $f_1(N;E(2^k))=\Ctrue/k-\kappa_k(N)/N+o(1)$, where $\kappa_k(N)\ge0$ is the total column carry in the binary addition of the integers $\tau(n)2^{N-kn}$ ($n\le N/k$) and $\lfloor\tau_N\rfloor$. Thus $E(4)$ is simply normal in base $2$ if and only if $\kappa_2(N)/N\to(\Ctrue-1)/2\in[0.169551,0.169558]$, and $\limsup_Nf_1(N;E(4))<\frac12$ if and only if $\liminf_N\kappa_2(N)/N>(\Ctrue-1)/2$. Since $\Ctrue>1$, no argument that bounds the carries below by $0$ can decide $E(4)$. For $E(2)$ the threshold carry density is $\Ctrue-\frac12\in[0.839103,0.839116]$.
+\item \evidence{Paper proof using External input} Direct transfer in base $4$ also fails for $E(4)$: $\liminf_XX^{-1}\sum_{n\le X}s_4(\tau(n))>1.59>\frac32$. The proof uses Wirsing's mean-value theorem \cite{Wirsing1967}.
+\item \evidence{Paper proof; Conditional} For $E^*(4)=\sum_n2^{-(2n-\omega(n))}$, $f_1(N;E^*(4))=\frac12-\kappa^*(N)/N+O(\log N/N)$, where $\kappa^*(N)\ge0$ is the corresponding carry count. Hence $\limsup_Nf_1(N;E^*(4))\le\frac12$, and $E^*(4)$ is simply normal in base $2$ if and only if $\kappa^*(N)=o(N)$. \emph{Conditionally} on the collision set $\mathcal C=\{n:\exists\,n'>n,\ \omega(n')-\omega(n)=2(n'-n)\}$ having positive upper density, $E^*(4)$ is not simply normal in base $2$.
+\item \evidence{Open} The normality, simple normality, $D^+<1$ and $K_2$-membership of $E(2)$, $E(4)$, $E_+(2)$ and $E_+(4)$ in base $2$ are open, as is the simple normality of $E(9)$, $E(25)$ and $E(100)$ in bases $3$, $5$ and $10$.
+\end{enumerate}
+\end{maintheorem}
+
+Parts (i)--(iii) are \Cref{thm:E4,prop:base4,thm:Estar4,prop:collisions}.
+
+\Cref{sec:transfer} proves the digit inequalities and the transfer theorems. \Cref{sec:mean} develops the elementary mean values, and \Cref{sec:EB} treats $E(2^k)$. \Cref{sec:families} covers the arithmetic families and the barrier, \Cref{sec:signed} the signed series, and \Cref{sec:boundary} the threshold cases. \Cref{sec:questions,sec:formal,sec:ai} record open questions, the formal verification and data, and the use of AI tools. Finite digit statistics appear only in \Cref{tab:measure}. They are finite measurements, and no asymptotic statement rests on them.
+
+\paragraph{Scope.} No result here changes the status of any entry of the repository's fixed $50$-constant benchmark roster. In particular, the entries for $E(2)$, $E_{\mathrm{odd}}(2)$ and $E_+(2)$ (\ttt{BC-37}--\ttt{BC-39}) are unchanged. The nonnormality results concern $q=2^k$ with $k\ge3$ and the base-$b$ families of \Cref{thm:B}(iv).
+
+\section{Digit inequalities and the carry transfer}\label{sec:transfer}
+
+\subsection{Digit sums, carries and signed weights}
+
+\begin{lemma}[Kummer's identity for many summands]\label{lem:kummer}\evidence{Paper proof; two-summand case Kernel-verified}
+Let $a_1,\dots,a_m\ge0$ be integers with base-$b$ digits $a_{i,j}$. Add them column by column with incoming carry $c_{-1}=0$, writing $\sum_ia_{i,j}+c_{j-1}=r_j+bc_j$ with $0\le r_j<b$. Then $r_j$ is the $j$-th digit of $\sum_ia_i$, and
+\[
+\sum_{i=1}^ms_b(a_i)-s_b\Bigl(\sum_{i=1}^ma_i\Bigr)=(b-1)\sum_{j\ge0}c_j\ \ge0.
+\]
+For $m=2$ the carries are $0$ or $1$, and this is $s_b(a+c)+(b-1)\kappa_b(a,c)=s_b(a)+s_b(c)$.
+\end{lemma}
+
+\begin{proof}
+Telescoping gives $\sum_jr_jb^j=\sum_ia_i+\sum_jc_{j-1}b^j-\sum_jc_jb^{j+1}=\sum_ia_i$, so the $r_j$ are the digits of the sum. Summing the column equations over $j$ gives $\sum_is_b(a_i)+\sum_jc_{j-1}=s_b(\sum_ia_i)+b\sum_jc_j$, and $\sum_jc_{j-1}=\sum_jc_j$. The two-summand identity is \leanW{digitSum\_add\_add\_carries}{191}, with the carry count \ttt{carries b 0 a c} defined by the column recursion.
+\end{proof}
+
+\begin{lemma}[Digit inequalities]\label{lem:digit-ineq}\evidence{Kernel-verified}
+For integers $a,c,t\ge0$:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item $s_b(a+c)\le s_b(a)+s_b(c)$, $s_b(ab^t)=s_b(a)$ and $s_b(ac)\le s_b(a)s_b(c)$;
+\item $w_b(a+c)\le w_b(a)+w_b(c)$;
+\item $w_b(ac)\le\min\{s_b(a)w_b(c),\,2w_b(a)w_b(c)\}$, while for every $b\ge3$, $w_b((b-1)^2)=2$ and $w_b(b-1)=1$;
+\item $s_2(m+1)+v_2(m+1)=s_2(m)+1$ for every $m\ge0$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+These are \leanW{digitSum\_add\_le}{196}, \leanW{digitSum\_mul\_pow}{202}, \leanW{digitSum\_mul\_le}{216}, \leanW{nonzeroDigits\_add\_le}{258}, \leanW{nonzeroDigits\_mul\_le}{338}, \leanW{nonzeroDigits\_pred\_sq}{387} and \leanW{digitSum\_two\_succ}{405}. We sketch the arguments. (a) Subadditivity is \Cref{lem:kummer}, and $ac=\sum_jc_j\,ab^j$ is a sum of $s_b(c)$ shifted copies of $a$. (b) Let $S_a,S_c$ be the digit supports and $\varepsilon_i\in\{0,1\}$ the carry into position $i$. The nonzero digits of $a+c$ lie in $S_a\cup S_c\cup Z$ with $Z=\{i\notin S_a\cup S_c:\varepsilon_i=1\}$. For $i\in Z$ let $j<i$ be maximal with $\varepsilon_j=0$. Position $j$ emits a carry without receiving one, so $a_j+c_j\ge b$ and $j\in S_a\cap S_c$. Distinct elements of $Z$ end distinct maximal carry runs, so $i\mapsto j$ is injective and $w_b(a+c)\le|S_a\cup S_c|+|S_a\cap S_c|$. (c) $ac$ is a sum of $s_b(a)$ shifted copies of $c$; alternatively $ac=\sum_{i,j}a_ic_jb^{i+j}$ with $a_ic_j<b^2$. Finally $(b-1)^2=(b-2)b+1$ has the two nonzero digits $b-2\ge1$ and $1$. (d) Adding $1$ to $m$ turns its $v_2(m+1)$ trailing ones into zeros and one zero into a one.
+\end{proof}
+
+\begin{lemma}[Signed weight]\label{lem:signed}\evidence{Kernel-verified for the recursion; Paper proof + Finite certificate for its identification with $\wpm$}
+The signed weight satisfies $\wpm(-c)=\wpm(c)=\wpm(2c)$, $\wpm(c+c')\le\wpm(c)+\wpm(c')$, $\wpm(cc')\le\wpm(c)\wpm(c')$, $\wpm(c)\le s_2(|c|)$, and $\wpm(c)\le\lfloor\log_2|c|\rfloor+1$ for $c\ne0$. On $\Z_{\ge0}$ it is given by the recursion $\wpm(0)=0$, $\wpm(1)=1$, $\wpm(2c)=\wpm(c)$, and $\wpm(c)=1+\min\{\wpm(\frac{c-1}2),\wpm(\frac{c+1}2)\}$ for odd $c\ge3$.
+\end{lemma}
+
+\begin{proof}
+For $\wpm(2c)\ge\wpm(c)$, take a minimal representation of $2c$. Two terms with exponent $0$ would either cancel or merge into $2^1$, so at most one has exponent $0$, and parity excludes exactly one. Halving all exponents gives a representation of $c$. The same parity argument gives the recursion, and concatenating or multiplying representations gives subadditivity and submultiplicativity. The script \ttt{scripts/phase24\_digit\_mass.py} checks that the recursion agrees with the non-adjacent-form algorithm for $|c|\le4096$. In Lean, \ttt{signedWeight} is defined by this recursion. For it, \leanW{signedWeight\_two\_mul}{444}, \leanW{signedWeight\_le\_digitSum}{465}, \leanW{signedWeight\_add\_le}{538}, \leanW{signedWeight\_sub\_le}{543}, \leanW{signedWeight\_mul\_le}{549} and \leanW{signedWeight\_mul\_two\_pow}{459} are kernel-verified. Kernel-verified statements below that involve $\wpm$ refer to this recursion.
+\end{proof}
+
+\begin{lemma}[Transition increments]\label{lem:transitions}\evidence{Kernel-verified}
+For every $A\in\Z$ and $m\ge0$, $|T(A\pm2^m)-T(A)|\le2$. Consequently $T(A+c)\le T(A)+2\wpm(c)$ for all $A,c\in\Z$, and $T(c)\le2\wpm(c)$.
+\end{lemma}
+
+\begin{proof}
+Kernel-verified as \leanW{transitions\_add\_two\_pow}{682} and \leanW{transitions\_add\_le}{738}. Here \ttt{transitions} computes $T(A)$ as the popcount of $B\oplus\lfloor B/2\rfloor$ for the two's-complement magnitude $B$ of $A$, and satisfies $T(A)=\mathbf 1[A_0\ne A_1]+T(\lfloor A/2\rfloor)$ (\leanW{transitions\_rec}{610}). Adding $2^m$ leaves the bits below $m$ unchanged. Let $j\ge m$ be minimal with $A_j=0$. If there is no such $j$, every bit from $m$ upward becomes $0$ and only the pair $(m-1,m)$ can change. If $j=m$, only bit $m$ flips, so only the pairs $(m-1,m)$ and $(m,m+1)$ can change. If $j>m$, bits $m,\dots,j-1$ flip from $1$ to $0$ and bit $j$ from $0$ to $1$. Pairs inside $\{m,\dots,j-1\}$ keep their status, the pair $(j-1,j)$ changes from $(1,0)$ to $(0,1)$ and remains a transition, and only $(m-1,m)$ and $(j,j+1)$ can change. When $m=0$ the pair $(m-1,m)$ is absent. Subtraction is the inverse operation.
+\end{proof}
+
+\subsection{Exact prefix decomposition and carry-tail transfer}
+
+Let $k\ge1$ and $a:\N\to\Z$ with $\sum_n|a(n)|b^{-kn}<\infty$, and put $x=\sum_{n\ge1}a(n)b^{-kn}$. For $N\ge0$ let $M=\lfloor N/k\rfloor$ and define $A_N$, $\tau_N$ as in \Cref{thm:A}(ii) and $\Theta_M=\sum_{m\ge1}|a(M+m)|b^{-km}$.
+
+\begin{theorem}[Exact prefix decomposition]\label{thm:prefix}\evidence{Kernel-verified for the identity; Paper proof for the tail bound}
+For every $N\ge0$, $\lfloor b^Nx\rfloor=A_N+\lfloor\tau_N\rfloor$ and $|\tau_N|\le b^{k-1}\Theta_M$.
+\end{theorem}
+
+\begin{proof}
+The identity is \leanW{floor\_pow\_mul\_eq\_head\_add\_floor\_tail}{756}: $b^Nx=A_N+\tau_N$ with $A_N\in\Z$. For $n=M+m$ the exponent satisfies $N-kn=(N-kM)-km\le k-1-km$, which gives the bound on $\tau_N$.
+\end{proof}
+
+\begin{theorem}[Unsigned transfer]\label{thm:unsigned}\evidence{Paper proof; prefix inequality Kernel-verified}
+Let $a(n)\ge0$. Then $\tau_N\ge0$, and for every $N$,
+\begin{equation}\label{eq:exact-transfer}
+\sum_{j=1}^Nd_j(x;b)=\sum_{n\le M}s_b(a(n))+s_b(\lfloor\tau_N\rfloor)-s_b(\lfloor x\rfloor)-(b-1)\kappa(N),
+\end{equation}
+where $\kappa(N)\ge0$ is the total column carry of the addition of the $M+1$ integers $a(n)b^{N-kn}$ ($n\le M$) and $\lfloor\tau_N\rfloor$. Likewise $\#\{j\le N:d_j\ne0\}\le\sum_{n\le M}w_b(a(n))+w_b(\lfloor\tau_N\rfloor)-w_b(\lfloor x\rfloor)$. The carry tail obeys $s_b(\lfloor\tau_N\rfloor)\le(b-1)\ell_b(\tau_N)$ and $w_b(\lfloor\tau_N\rfloor)\le\ell_b(\tau_N)$, where $\ell_b(t)=0$ for $t<1$ and $\ell_b(t)=\lfloor\log_bt\rfloor+1$ otherwise. It contributes at most $+1$ to both sums exactly when $\lfloor\tau_N\rfloor\in\{0\}\cup\{b^r:r\ge0\}$, for instance when $\tau_N<2$.
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:digits} the base-$b$ digits of $\lfloor x\rfloor b^N$ and of $\sum_jd_jb^{N-j}$ occupy disjoint positions, so $s_b(\lfloor b^Nx\rfloor)=s_b(\lfloor x\rfloor)+\sum_{j\le N}d_j$, and similarly for $w_b$. Apply \Cref{thm:prefix}, \Cref{lem:kummer} with $s_b(ab^t)=s_b(a)$, and \Cref{lem:digit-ineq}(b). The inequality $s_b(A_N+t)\le\sum_{n\le M}s_b(a(n))+s_b(t)$ is \leanW{digitSum\_prefix\_le}{798}. Finally, $s_b(T)\le1$ exactly when $T=0$ or $T$ is a power of $b$.
+\end{proof}
+
+\begin{example}[The carry tail is not bounded by $1$]\label{ex:plus-one}\evidence{Finite certificate}
+For $E(8)$ ($b=2$, $k=3$, $a=\tau$) and $N=35$ we have $M=11$ and $\tau_{35}=\tau(12)/2+\tau(13)/16+\tau(14)/128+\cdots\in[3,4)$. The shifted summands of $A_{35}$ and $\lfloor\tau_{35}\rfloor=3$ occupy distinct bit positions, so $\kappa(35)=0$ and the prefix digit sum exceeds the coefficient mass $\sum_{n\le11}s_2(\tau(n))$ by $s_2(3)=2$. Over $N\le3000$, $s_2(\lfloor\tau_N\rfloor)$ reaches $4$ for $E(2)$, $E(4)$ and $E(8)$.
+\end{example}
+
+\begin{corollary}[Asymptotic transfer]\label{cor:asymptotic}\evidence{Paper proof}
+Suppose $\log(1+\Theta_M)=o(M)$, which holds whenever $\log(1+|a(n)|)=o(n)$, in particular when $|a(n)|\le Cn^A$. Then the carry tail is $o(N)$, and it is $O(\log N)$ under polynomial growth. Consequently, for $a\ge0$,
+\[
+\limsup_{N\to\infty}\frac1N\sum_{j\le N}d_j\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}s_b(a(n)),\qquad
+\limsup_{N\to\infty}\frac{\#\{j\le N:d_j\ne0\}}N\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}w_b(a(n)).
+\]
+\end{corollary}
+
+\begin{proof}
+If $\log_b(1+|a(n)|)\le\varepsilon n$ for $n\ge n_\varepsilon$, then $\Theta_M\le O_\varepsilon(1)+b^{\varepsilon M}/(b^{k-\varepsilon}-1)$, so $\ell_b(\tau_N)=O(\varepsilon N)+O_\varepsilon(1)$. Moreover $N^{-1}\sum_{n\le M}s_b(a(n))\le(M/N)\cdot M^{-1}\sum_{n\le M}s_b(a(n))$ with $M/N\le1/k$. Insert both facts into \Cref{thm:unsigned}.
+\end{proof}
+
+\begin{example}[The growth hypothesis cannot be dropped]\label{ex:growth}\evidence{Paper proof}
+Let $k\ge3$, or $k=2$ and $b\ge3$, and let $a(n)=b^{\lfloor kn/2\rfloor}$. Then $s_b(a(n))=1$, but $x=\sum_nb^{-\lceil kn/2\rceil}$ has digit $1$ exactly at the strictly increasing positions $\lceil kn/2\rceil$. This expansion does not end in $(b-1)^\infty$: for $k\ge3$ infinitely many positions carry $0$, and for $k=2$, $b\ge3$ every digit is $1<b-1$. So the digit average tends to $2/k$, twice the bound of \Cref{cor:asymptotic}. Here $\log\Theta_M\asymp kM/2$. The case $(b,k)=(2,2)$ is excluded because there $x=\sum_n2^{-n}=1$ has all fractional digits $0$.
+\end{example}
+
+\subsection{Frequency criteria and radix descent}
+
+\begin{proposition}[Frequency criteria]\label{prop:criteria}\evidence{Kernel-verified for the finite inequalities in (2), in (3) at $b=2$, in (4) at $m=2$, and the descent inequality in (5); Paper proof otherwise}
+Let $\beta_s=\limsup_NN^{-1}\sum_{j\le N}d_j$ and $\beta_w=\limsup_NN^{-1}\#\{j\le N:d_j\ne0\}$, and in base $2$ let $\beta_T=\limsup_N\tr_N(x)/N$.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item If $\beta_s<\frac{b-1}2$, then $x$ is not simply normal in base $b$ and $D^-(x;b)\ge\bigl(\frac{b-1}2-\beta_s\bigr)/(b-1)$.
+\item If $\beta_w<\frac{b-1}b$, then $x$ is not simply normal in base $b$ and $D^-(x;b)\ge\frac{b-1}b-\beta_w$.
+\item \textup{(Zero runs.)} For every $m\ge1$, $D^-(x;b)\ge1-m\beta_w-b^{-m}$.
+\item \textup{(Transition windows, base $2$.)} For every $m\ge2$, $D^-(x;2)\ge1-2^{1-m}-(m-1)\beta_T$. At $m=2$ this reads $D^-(x;2)\ge\frac12-\beta_T$, and $\beta_T<\frac12$ implies that $x$ is not $2$-normal in base $2$.
+\item \textup{(Radix descent.)} For all $k\ge1$ and $N\ge0$, $D_{kN}(x;b)\le\frac{b^k-1}{k(b-1)}D_N(x;b^k)$. Hence $D^-(x;b^k)\ge\frac{k(b-1)}{b^k-1}D^-(x;b)$. Simple normality in base $b^k$ implies simple normality in base $b$, so simple nonnormality descends from base $b$ to every base $b^k$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) $N^{-1}\sum_{j\le N}d_j=\sum_{t=1}^{b-1}F_N([t/b,1))$, and each term is at least $(b-t)/b-D_N$. (2) $F_N([1/b,1))$ is the frequency of nonzero digits; the finite inequality $D_N\ge\frac{b-1}b-F_N([1/b,1))$ is \leanW{radixDiscrepancy\_ge\_nonzero\_freq}{863}. (3) $\{b^nx\}\in[0,b^{-m})$ exactly when $d_{n+1}=\dots=d_{n+m}=0$. A nonzero digit spoils at most $m$ starts, so $F_N([0,b^{-m}))\ge1-\frac mN\#\{j<N+m:d_j\ne0\}$. In base $2$ the finite form $D_N\ge1-m\frac{N+m}Nf_1(N+m)-2^{-m}$ is \leanW{radixDiscrepancy\_ge\_zero\_run}{959}. (4) The window $d_{n+1}\cdots d_{n+m}$ is constant exactly when $\{2^nx\}\notin[2^{-m},1-2^{-m})$, an interval of length $1-2^{1-m}$, and a transition spoils at most $m-1$ windows. If $x$ were $2$-normal, $F_N([1/4,3/4))\to\frac12$. The finite form at $m=2$ is \leanW{binaryDiscrepancy\_ge\_half\_sub\_transition}{883}. (5) The inequality is \leanW{radixDiscrepancy\_descent}{2417}. For $0\le n<kN$ write $n=kn'+r$ with $0\le r<k$. Then $\{b^nx\}\in I$ exactly when $\{b^{kn'}x\}$ lies in the preimage of $I$ under $y\mapsto\{b^ry\}$, a union of $b^r$ intervals of total length $|I|$; summing the errors $b^rND_N(x;b^k)$ over $r$ gives the bound. If the base-$b^k$ digits are uniform, each base-$b$ digit is uniform at each of the $k$ phases, because $b^{k-1}$ block values carry a given digit at a given phase.
+\end{proof}
+
+\section{Elementary mean values}\label{sec:mean}
+
+\begin{lemma}[Dirichlet-convolution mean value]\label{lem:conv}\evidence{Kernel-verified for the limit; Paper proof for the Euler product and the majorant bound}
+Let $G:\N\to\R$, $h=G*\mu$, and assume $H:=\sum_n|h(n)|/n<\infty$. Then
+\[
+\frac1X\sum_{n\le X}G(n)\longrightarrow\sum_{n\ge1}\frac{h(n)}n.
+\]
+If $G\ge0$, then $\sum_{n\le Y}G(n)\le HY$ for all $Y$. If $G$ is multiplicative, the limit equals $\prod_p(1-\frac1p)\sum_{e\ge0}G(p^e)p^{-e}$. The hypothesis holds when $G$ is multiplicative, $G(p)=1$ for all but finitely many $p$, and $|G(p^e)|\le B(e+1)^A$.
+\end{lemma}
+
+\begin{proof}
+The limit is \leanW{tendsto\_average\_of\_summable\_conv\_mobius}{1021}, proved by dominated convergence without multiplicativity. In elementary terms, $\sum_{n\le X}G(n)=\sum_{d\le X}h(d)\lfloor X/d\rfloor=X\sum_{d\le X}h(d)/d-\sum_{d\le X}h(d)\{X/d\}$, and the last sum is at most $\sum_{d\le X}|h(d)|\le\sqrt X\,H+X\sum_{d>\sqrt X}|h(d)|/d=o(X)$. The same expansion gives $\sum_{n\le Y}G(n)\le Y\sum_d|h(d)|/d$ for $G\ge0$. For multiplicative $G$, absolute convergence gives the Euler product, using $\sum_e(G(p^e)-G(p^{e-1}))y^e=(1-y)\sum_eG(p^e)y^e$. Under the growth hypothesis, $\sum_p\sum_{e\ge2}|G(p^e)-G(p^{e-1})|p^{-e}\ll\sum_pp^{-2}$, and the finitely many primes with $G(p)\ne1$ contribute finitely.
+\end{proof}
+
+\begin{lemma}[Independent-exponent model]\label{lem:model}\evidence{Paper proof}
+Let $F:\Z\to[0,\infty)$ be submultiplicative with $F(1)=1$; examples are $\wpm$ and $s_b$, extended to $\Z$ by $s_b(c):=s_b(|c|)$. For each prime $p$ let $u_p:\Z_{\ge0}\to\Z$ with $u_p(0)=1$ and $u_p(1)=1$ for $p>p_0$, and put $\Phi(n)=F\bigl(\prod_pu_p(e_p(n))\bigr)$. Suppose the multiplicative majorant $G(n)=\prod_pF(u_p(e_p(n)))$ satisfies the hypothesis of \Cref{lem:conv}. Let $(\varepsilon_p)$ be independent with $\Pr(\varepsilon_p=e)=(1-1/p)p^{-e}$. Then almost surely only finitely many $u_p(\varepsilon_p)$ differ from $1$, and
+\[
+\lim_{X\to\infty}\frac1X\sum_{n\le X}\Phi(n)=\Ex\,F\Bigl(\prod_pu_p(\varepsilon_p)\Bigr).
+\]
+With $U_{\le y}=\prod_{p\le y}u_p(\varepsilon_p)$, the limit lies between $\Ex F(U_{\le y})\cdot\Pr(u_p(\varepsilon_p)=1\ \forall p>y)$ and $\Ex F(U_{\le y})\cdot\prod_{p>y}\Ex F(u_p(\varepsilon_p))$ for every $y$.
+\end{lemma}
+
+\begin{proof}
+Fix $y>p_0$ and let $\mathcal A_p=\{e:u_p(e)=1\}\ni0,1$ for $p>y$. Call $n$ \emph{good} if $e_p(n)\in\mathcal A_p$ for every $p>y$; then $\Phi(n)=\Phi(n_y)$ with $n_y=\prod_{p\le y}p^{e_p(n)}$. Since $0\le\Phi\le G$ and $\sum_{n\le Y}G(n)\le HY$, the bad $n\le X$ contribute at most $HX\eta_y$, where $\eta_y=\sum_{p>y}\sum_{e\ge2}G(p^e)p^{-e}\to0$. The good $n$ with $n_y=m$ are $n=mr$ with $r$ in the support of the multiplicative indicator $\rho$ that vanishes at $p^e$ for $p\le y$, $e\ge1$, and equals $\mathbf 1_{\mathcal A_p}(e)$ for $p>y$. \Cref{lem:conv} applies to $\rho$, so their number is $\delta X/m+o(X)$ with $\delta=\prod_{p\le y}(1-\frac1p)\prod_{p>y}\Pr(\varepsilon_p\in\mathcal A_p)$. Truncating $e_p(m)\le E_0$ for $p\le y$ costs at most $HX\sum_{p\le y}\sum_{e>E_0}G(p^e)p^{-e}$, uniformly in $X$. Hence the lower and upper limits of the mean lie in $[\Ex F(U_{\le y})\Pi_y,\ \Ex F(U_{\le y})\Pi_y+H\eta_y]$ with $\Pi_y=\prod_{p>y}\Pr(\varepsilon_p\in\mathcal A_p)\to1$. Letting $y\to\infty$ shows that the limit exists. It equals $\Ex F(U)$ by Borel--Cantelli and the same majorant. The lower bound is the good event, and the upper bound follows from $F(U)\le F(U_{\le y})\prod_{p>y}F(u_p(\varepsilon_p))$, independence and Fatou's lemma.
+\end{proof}
+
+\begin{corollary}[The binary divisor kernel]\label{cor:kernel}\evidence{Kernel-verified for (1) and (3); Finite certificate for (2)}
+Let $g(n)=\prod_{p^e\parallel n}s_2(e+1)$ and $h=g*\mu$.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item $h$ is multiplicative with $h(p^e)=s_2(e+1)-s_2(e)=1-v_2(e+1)$. It vanishes at primes, is supported on squarefull integers, and $|h(p^e)|\le\log_2(e+1)$. Moreover $s_2(\tau(n))\le g(n)$.
+\item $H=\sum_n|h(n)|/n=\prod_p\bigl(1+\sum_{e\ge2}|1-v_2(e+1)|p^{-e}\bigr)\in[1.903838,\,1.903848]$.
+\item For every integer $p\ge2$, $(1-\frac1p)\sum_{e\ge0}s_2(e+1)p^{-e}=\sum_{e\ge0}(1-v_2(e+1))p^{-e}=\sum_{j\ge0}p/(p^{2^j}+1)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+In Lean, $g$ is \ttt{tauDigitMajorant} and $h$ is \ttt{tauDigitKernel}. Item (1) is \leanW{tauDigitKernel\_prime\_pow}{1283}, \leanW{tauDigitMajorant\_mul\_moebius}{1308}, \leanW{digitSum\_card\_divisors\_le}{1313} and \Cref{lem:digit-ineq}(d). The bound $s_2(\tau(n))\le g(n)$ follows from submultiplicativity of $s_2$ on coprime factors. Summability $\sum_n|h(n)|/n<\infty$ is \leanW{summable\_abs\_tauDigitKernel\_div}{1517}. Item (3) is \leanW{local\_factor\_digitSum\_two}{1142}. By hand, $\sum_{m\ge1}s_2(m)y^m=\frac1{1-y}\sum_jy^{2^j}/(1+y^{2^j})$, because bit $j$ is set on $2^j$ consecutive residues modulo $2^{j+1}$; put $y=1/p$ and divide by $y$. The enclosure in (2) is computed in \ttt{scripts/phase24\_digit\_mass.py}, which also verifies the power-series identity through $y^{2047}$ exactly and the squarefull support of $h$ for $n\le2\cdot10^5$.
+\end{proof}
+
+\begin{proposition}[The majorant mean]\label{prop:C}\evidence{Kernel-verified for $C\le29/20$; Finite certificate for the enclosure}
+The mean $C=\sum_nh(n)/n=\prod_pL(p)$, $L(p)=\sum_{j\ge0}p/(p^{2^j}+1)$, of the majorant $g$ satisfies $C\le29/20$, and $1.4035953\le C\le1.4035958$.
+\end{proposition}
+
+\begin{proof}
+The bound $C\le29/20$ is \leanW{tsum\_tauDigitKernel\_div\_le}{1663}. Since $h(p^e)=1$ for even $e$, $h(p^e)\le0$ for odd $e$, $h(p^3)=-1$ and $h(p^7)=-2$, one has $0\le L(p)\le B(p):=(1-p^{-2})^{-1}-p^{-3}-2p^{-7}$, and $1\le B(p)\le1+p^{-2}$ for every prime $p$. Mathlib's Euler product theorem gives $C=\lim_P\prod_{p<P}L(p)$. An exact rational evaluation gives $\prod_{p<37}B(p)\le1.3958$. For $p\ge37$, $\prod(1+p^{-2})\le(1-\sum_{p\ge37}p^{-2})^{-1}\le(1-\frac1{36})^{-1}=\frac{36}{35}$, using $\prod_i(1+a_i)(1-\sum_ia_i)\le1$ and $\sum_{n\ge37}n^{-2}\le\frac1{36}$. Hence $C\le1.3958\cdot\frac{36}{35}<1.4357\le\frac{29}{20}$. The enclosure is computed over $p\le3\cdot10^5$ in integer arithmetic at scale $2^{-192}$ with directed rounding. Each local factor is bracketed by a finite sum and an explicit geometric tail, and the prime tail uses $L(p)\le1+A/p^2$ with an exact bound for $\sum_{p>Y}p^{-2}$.
+\end{proof}
+
+\section{Generalized Erd\H{o}s--Borwein constants $E(2^k)$}\label{sec:EB}
+
+\begin{theorem}[Kernel-verified classification]\label{thm:EB-lean}\evidence{Kernel-verified}
+For every $k\ge1$, $E(2^k)=\sum_{n\ge1}\tau(n)2^{-kn}$ and $\limsup_Nf_1(N;E(2^k))\le29/(20k)$. For every $\varepsilon>0$, $D_N(E(2^k);2)\ge\frac12-\frac{29}{20k}-\varepsilon$ for all large $N$. For every $k\ge3$, $D_N(E(2^k);2)\ge\frac1{120}$ for all large $N$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$.
+\end{theorem}
+
+\begin{proof}
+The statements are \leanW{erdosBorweinPow\_eq\_divisor\_series}{1770}, \leanW{erdosBorwein\_two\_pow\_digitFreq\_limsup\_le}{2143}, \leanW{erdosBorwein\_two\_pow\_radixDiscrepancy\_eventually\_ge}{2161}, \leanW{erdosBorwein\_two\_pow\_lowerDiscrepancy\_pos}{2194}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal\_pow}{2277} and \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal}{2334}. Simple normality in base $2^j$ is the Lean predicate \leanU{HigherOrderTower}{69}{\ttt{OrderNormal}}~$(2^j)\,1$, whose word frequencies are \leanU{SimpleNormalityKernel}{73}{\ttt{wordFreq}}; $D_N$ is \leanU{BinaryDiscrepancy}{11}{\ttt{radixDiscrepancy}} and $F_N$ is \leanU{Basic}{18}{\ttt{frequency}} applied to \leanU{Basic}{15}{\ttt{shift}}.
+
+The formal proof follows the paper argument. Expanding $1/(2^{km}-1)=\sum_{j\ge1}2^{-kmj}$ and collecting terms gives the divisor series. \Cref{thm:prefix} with $a=\tau$ gives $\lfloor2^NE(2^k)\rfloor=A_N+\lfloor\tau_N\rfloor$. Since $\tau(n)\le n$ and $N+m+1\le k(M+1+m)$,
+\[
+0\le\tau_N\le\sum_{m\ge0}(M+1+m)2^{-(m+1)}=M+2\le N+2.
+\]
+By \eqref{eq:digits}, $Nf_1(N)\le s_2(\lfloor2^NE(2^k)\rfloor)$, and \Cref{thm:unsigned}, \Cref{cor:kernel}(1) give
+\[
+f_1(N;E(2^k))\le\frac1k\cdot\frac1{\lfloor N/k\rfloor}\sum_{n\le N/k}g(n)+\frac{\lfloor\log_2(N+2)\rfloor+1}N.
+\]
+By \Cref{lem:conv} and \Cref{cor:kernel}, the right side tends to $C/k$, and $C\le29/20$ by \Cref{prop:C}. For $k\ge3$, $C/k\le29/60<59/120$, so eventually $f_1(N)<59/120$, and the first inequality of \Cref{thm:A}(v) gives $D_N\ge\frac12-\frac{59}{120}=\frac1{120}$.
+
+For base $2^j$, the base-$2^j$ digits are the aligned $j$-bit blocks, and the popcount identity $\sum_{v<2^j}s_2(v)\cdot\#\{n<M:\text{digit }n=v\}=\#\{t<jM:d_{t+1}=1\}$ holds. Simple normality in base $2^j$ would therefore force $f_1(jM)\to2^{-j}\sum_{v<2^j}s_2(v)/j=\frac12$, contradicting $f_1<59/120$ eventually.
+\end{proof}
+
+\begin{theorem}[Sharp constants for $E(2^k)$]\label{thm:EB-sharp}\evidence{Paper proof + Finite certificate}
+The limit $\Ctrue=\lim_XX^{-1}\sum_{n\le X}s_2(\tau(n))$ exists, equals $\Ex\,s_2\bigl(\prod_p\odd(\varepsilon_p+1)\bigr)$ in the model of \Cref{lem:model}, and $1.339103\le\Ctrue\le1.339116$. For every $k\ge1$, $\limsup_Nf_1(N;E(2^k))\le\Ctrue/k$, and the conclusions of \Cref{thm:B}(i)--(ii) hold, with the values of \Cref{tab:EB}.
+\end{theorem}
+
+\begin{proof}
+Since $\tau(n)=2^{\sum_pv_2(e_p+1)}\prod_p\odd(e_p+1)$ and $s_2(2^tm)=s_2(m)$, we have $s_2(\tau(n))=s_2\bigl(\prod_p\odd(e_p+1)\bigr)$. This is the setting of \Cref{lem:model} with $F=s_2$, $u_p(e)=\odd(e+1)$ (so $u_p(0)=u_p(1)=1$ for every $p$), and majorant $g$, which satisfies \Cref{lem:conv} by \Cref{cor:kernel}. \Cref{cor:asymptotic} applies with $a=\tau\le2\sqrt n$, so $\limsup f_1\le\Ctrue/k$. For $k\ge3$, \Cref{prop:criteria}(1)--(3) in base $2$, where $\beta_s=\beta_w=\limsup f_1$, give the two lower bounds for $D^-(E(2^k);2)$. Taking $m=\lceil\log_2k\rceil$ in (3) gives $1-D^-\le(\Ctrue\lceil\log_2k\rceil+1)/k$. Radix descent gives the bound in base $2^j$.
+
+For the bound in base $2^k$, the mean popcount of the base-$2^k$ digits is asymptotically at most $\Ctrue$, by \Cref{thm:unsigned} with $kN$ bits. So the digits of popcount at most $1$ have lower frequency at least $1-\Ctrue/2$. These $k+1$ digits form the $k-1$ runs $\{0,1,2\},\{4\},\dots,\{2^{k-1}\}$ of total length $(k+1)/2^k$, and each run is an interval for the base-$2^k$ orbit. Hence $(k-1)D_N(\,\cdot\,;2^k)\ge F_N-\frac{k+1}{2^k}$.
+
+The certificate is a dynamic program over $p\le20000$. Its states are the values of $\prod_{p\le y}\odd(\varepsilon_p+1)$ with probability intervals. States of probability below $2^{-64}$ are frozen with a majorant bound, and the two bounds of \Cref{lem:model} close the computation.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}rcccc@{}}
+\toprule
+$k$ & $\limsup f_1\le\Ctrue/k$ & $D^-(\cdot;2)\ge$ & $D^-(\cdot;2^k)\ge$ (descent) & $D^-(\cdot;2^k)\ge$ (popcount) \\
+\midrule
+3 & 0.44638 & 0.05362 & 0.02298 & --- \\
+4 & 0.33478 & 0.16522 & 0.04405 & 0.00598 \\
+5 & 0.26783 & 0.23217 & 0.03744 & 0.03573 \\
+6 & 0.22319 & 0.30362 & 0.02891 & 0.04421 \\
+8 & 0.16739 & 0.41522 & 0.01302 & 0.04218 \\
+10 & 0.13392 & 0.48217 & 0.00471 & 0.03552 \\
+16 & 0.08370 & 0.62391 & 0.00015 & 0.02201 \\
+64 & 0.02093 & 0.86413 & $2.9\times10^{-18}$ & 0.00524 \\
+\bottomrule
+\end{tabular}
+\caption{Certified bounds for $E(2^k)$ from \Cref{thm:EB-sharp}, computed from the certified upper end of $\Ctrue$ and rounded toward the weaker side (\emph{Finite certificate}).}\label{tab:EB}
+\end{table}
+
+\begin{remark}\label{rem:own-radix}
+At $k=3$ the construction exponent in the construction radix $8$ is $1$, and $E(8)$ is simply nonnormal in base $8$. Likewise $E(16)$ is simply nonnormal in base $4$. An independent enclosure, computed by finite CRT truncation in \ttt{scripts/phase24\_classical.py}, gives $\Ctrue\in[1.337765,1.346123]$ and $D^-(E(2^k);2)\ge0.05129$ for $k\ge3$; it is consistent with \Cref{thm:EB-sharp}.
+\end{remark}
+
+\section{Arithmetic families and the base-dependence barrier}\label{sec:families}
+
+\begin{theorem}[Barrier]\label{thm:barrier}\evidence{Paper proof using External input}
+Let $b\ge2$ not be a power of $2$. Then $X^{-1}\sum_{n\le X}w_b(\tau(n))\to\infty$ and $X^{-1}\sum_{n\le X}s_b(\tau(n))\to\infty$, and the same holds for $\tau_{\mathrm{odd}}$. The bound of \Cref{cor:asymptotic} is therefore $+\infty$ for $E(b^k)$ and $E_{\mathrm{odd}}(b^k)$ in base $b$ for every $k$. For $b=2^j$, $E(b^k)=E(2^{jk})$ is simply nonnormal in base $b$ whenever $jk\ge3$, so the threshold of the method is $k_0(2^j)=\lceil3/j\rceil$.
+\end{theorem}
+
+\begin{proof}
+Since $\log2/\log b$ is irrational, the Senge--Straus theorem \cite{SengeStraus73} (effective form by Stewart \cite{Stewart80}) shows that only finitely many integers have both $s_2$ and $s_b$ bounded. As $s_2(2^r)=1$, $s_b(2^r)\to\infty$ and hence $w_b(2^r)\ge s_b(2^r)/(b-1)\to\infty$. Squarefree $n$ satisfy $\tau(n)=2^{\omega(n)}$, and for each fixed $r_0$, $\#\{n\le X:\omega(n)<r_0\}=o(X)$ (by the Tur\'an--Kubilius inequality \cite{Tenenbaum}). Given $c>0$, choose $r_0$ with $w_b(2^r)\ge c$ for $r\ge r_0$. Then the mean is at least $(6/\pi^2)c-o(1)$. For $\tau_{\mathrm{odd}}$ use odd squarefree $n$, of density $4/\pi^2$. The last statement is \Cref{thm:EB-lean} with radix descent.
+\end{proof}
+
+The heuristic picture, which is not evidence, is that for $b$ not a power of $2$ a typical $\tau(n)$ has about $(\log2/\log b)\log\log n$ base-$b$ digits, so the coefficient expansions eventually overlap over unboundedly many blocks. Finite prefixes, in which $\tau(n)$ is still short, can nevertheless look strongly nonuniform (see the base-$10$ example after \Cref{tab:measure}).
+
+\begin{theorem}[Multiplicative-dependence dichotomy]\label{thm:dichotomy}\evidence{Paper proof using External input; Finite certificate for the constants}
+Let $r,b\ge2$.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item If $r=t^v$ and $b=t^u$ for an integer $t\ge2$, then $\limsup_XX^{-1}\sum_{n\le X}s_b(\tau_r(n))<\infty$.
+\item If $r$ and $b$ are multiplicatively independent, then $X^{-1}\sum_{n\le X}w_b(\tau_r(n))\to\infty$.
+\end{enumerate}
+In base $2$ the mean is bounded if and only if $r=2^m$. The certified true means $C_{\tau_4}\in[1.55633,1.55674]$, $C_{\tau_8}\in[1.84104,1.84151]$ and $C_{\tau_{16}}\in[2.00910,2.00962]$ show that $\sum_n\tau_r(n)2^{-kn}=\sum_m\tau_{r-1}(m)/(2^{km}-1)$ is simply nonnormal in base $2$ and every base $2^j$ for $k\ge4$ when $r\in\{4,8\}$, and for $k\ge5$ when $r=16$. The method fails one step lower, since $C_{\tau_4}/3,\,C_{\tau_8}/3,\,C_{\tau_{16}}/4>\frac12$.
+\end{theorem}
+
+\begin{proof}
+(1) Each nonzero base-$b$ digit contains a nonzero base-$t$ digit, so $s_b(m)\le(b-1)w_b(m)\le(b-1)w_t(m)\le(b-1)s_t(m)$. By \Cref{lem:digit-ineq}(a), $s_t(\tau_r(n))\le\prod_ps_t(\tau_r(p^{e_p}))$, a multiplicative majorant with value $s_t(r)=s_t(t^v)=1$ at primes and polynomial growth, so \Cref{lem:conv} applies. (2) For squarefree $n$, $\tau_r(n)=r^{\omega(n)}$. Since $s_r(r^j)=1$, Senge--Straus gives $s_b(r^j)\to\infty$; argue as in \Cref{thm:barrier}. The thresholds follow from \Cref{lem:model} with $u_p(e)=\odd\binom{e+r-1}{r-1}$ and are certified in \ttt{scripts/phase24\_digit\_mass.py}.
+\end{proof}
+
+\Cref{thm:barrier} is the case $r=2$. The refinement that would replace multiplicative dependence by the condition $r\in\{1,\dots,b-1\}\cdot b^m$ for $w_b$ fails. Indeed, if $r=db^m$ with $1<d<b$ and $d$ multiplicatively independent of $b$, then $w_b(r^j)=w_b(d^j)\to\infty$ by the same input.
+
+\begin{theorem}[Odd-divisor and unitary series in base $2$]\label{thm:odd-unitary}\evidence{Paper proof + Finite certificate}
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item $C_{\mathrm{odd}}=\lim_XX^{-1}\sum_{n\le X}s_2(\tau_{\mathrm{odd}}(n))\in[1.160633,1.160645]$, with multiplicative majorant $\prod_{p>2}L(p)\in[1.177388,1.177389]$. Hence $E_{\mathrm{odd}}(2^k)$ is simply nonnormal in base $2$ and in every base $2^j$ for every $k\ge3$, and $\limsup f_1\le0.38689$ at $k=3$. At $k=2$ the method gives only $C_{\mathrm{odd}}/2>\frac12$.
+\item Since $s_2(2^{\omega(n)})=1$, $E^*(2^k)$ satisfies $\limsup_Nf_1(N;E^*(2^k))\le1/k$. For $k\ge3$ it is simply nonnormal in every base $2^j$, and
+\[
+D^-(E^*(2^k);2)\ge\max\Bigl\{\frac12-\frac1k,\ \max_{m\ge1}\Bigl(1-\frac mk-2^{-m}\Bigr)\Bigr\}.
+\]
+This bound equals $\frac16$ at $k=3$, $\frac14$ at $k=4$ and $\frac12$ at $k=8$, and it tends to $1$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) Apply \Cref{lem:model} with $u_2\equiv1$ and $u_p(e)=\odd(e+1)$ for odd $p$. (2) Apply \Cref{cor:asymptotic} and \Cref{prop:criteria}(1)--(3); here $2^{\omega(n)}\le\tau(n)\le2\sqrt n$.
+\end{proof}
+
+\begin{theorem}[Base-$b$ families]\label{thm:base-b}\evidence{Paper proof + Finite certificate}
+Let $b\ge3$.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \textup{(Unitary.)} $\sum_nb^{\omega(n)}b^{-kn}=\sum_m\mu^2(m)(b-1)^{\omega(m)}/(b^{km}-1)$ has base-$b$ digit average at most $1/k$ in the limit superior. It is simply nonnormal in base $b$ whenever $1/k<(b-1)/2$, with $D^-\ge(\frac{b-1}2-\frac1k)/(b-1)$; this covers every $k\ge1$ if $b\ge4$ and every $k\ge2$ if $b=3$.
+\item \textup{($\tau_b$ families.)} $\sum_n\tau_b(n)b^{-kn}=\sum_m\tau_{b-1}(m)/(b^{km}-1)$ has base-$b$ digit average at most $C_{[b]}/k$ in the limit superior, where $C_{[b]}=\Ex\,s_b\bigl(\prod_pu_b(\varepsilon_p)\bigr)$ and $u_b(e)$ is $\binom{e+b-1}{b-1}$ with all factors $b$ removed. With the certified values of \Cref{tab:base-b}, it is simply nonnormal in base $b$ and in every base $b^j$ for every $k\ge k_0(b)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The identities follow from $\sum_{d\mid n}\mu^2(d)(b-1)^{\omega(d)}=b^{\omega(n)}$ and $\tau_b=\tau_{b-1}*1$. (1) $s_b(b^{\omega(n)})=1$; apply \Cref{cor:asymptotic} and \Cref{prop:criteria}(1). (2) $s_b(\tau_b(n))=s_b\bigl(\prod_pu_b(e_p)\bigr)$, so \Cref{lem:model} applies with $F=s_b$, because the majorant has value $s_b(b)=1$ at primes. The lower ends of the certified intervals show that the method fails at $k_0(b)-1$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+$b$ & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\midrule
+$C_{[b]}\ge$ & 1.5063 & 2.1606 & 2.0660 & 3.0703 & 2.7156 & 4.0048 & 3.2503 & 4.1996 \\
+$C_{[b]}\le$ & 1.5075 & 2.1638 & 2.0683 & 3.0770 & 2.7197 & 4.0165 & 3.2564 & 4.2150 \\
+majorant $\le$ & 1.6024 & 2.7871 & 2.4551 & 5.3131 & 3.8789 & 9.2855 & 5.0760 & 10.8678 \\
+$D^-$ at $k_0$, $\ge$ & 0.1231 & 0.1393 & 0.2414 & 0.1923 & 0.0467 & 0.2131 & 0.0929 & 0.0316 \\
+$(b-1)/2$ & 1 & 1.5 & 2 & 2.5 & 3 & 3.5 & 4 & 4.5 \\
+$k_0(b)$ & 2 & 2 & 2 & 2 & 1 & 2 & 1 & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Certified constants for the $\tau_b$ families of \Cref{thm:base-b}(2) (\emph{Finite certificate}, \ttt{scripts/phase24\_digit\_mass.py}).}\label{tab:base-b}
+\end{table}
+
+For example, $\sum_m\tau(m)/(9^m-1)=\sum_n\tau_3(n)9^{-n}$ is simply nonnormal in base $3$ with $D^->0.123$, and $\sum_m\tau_9(m)/(10^m-1)$ is simply nonnormal in base $10$ with $D^->0.031$. These are the base-$b$ analogues of $E(2^k)$ that the method reaches.
+
+\section{Signed series: transitions, $E_+(2^k)$ and the four-state transducer}\label{sec:signed}
+
+\subsection{Signed transition-count transfer}
+
+\begin{theorem}[Signed transfer]\label{thm:signed-transfer}\evidence{Lean-supported paper proof}
+Let $a:\N\to\Z$ satisfy $\log(1+|a(n)|)=o(n)$, and let $x=\sum_{n\ge1}a(n)2^{-kn}$, a real number of either sign. Then for every $N$,
+\[
+\tr_N(x)\le T(\lfloor2^Nx\rfloor)\le2\sum_{n\le N/k}\wpm(a(n))+2\wpm(\lfloor\tau_N\rfloor),\qquad
+\limsup_{N\to\infty}F_N([1/4,3/4);x,2)\le\frac2k\limsup_{X\to\infty}\frac1X\sum_{n\le X}\wpm(a(n))=:\frac{2W}k.
+\]
+If $2W/k<\frac12$, then $x$ is not $2$-normal in base $2$ and not normal in any base $2^j$. Moreover $D^-(x;2)\ge\max_{m\ge2}\bigl(1-2^{1-m}-(m-1)\frac{2W}k\bigr)\ge\frac12-\frac{2W}k$ and $D^-(x;2^j)\ge\frac j{2^j-1}D^-(x;2)$.
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:digits}, $\lfloor2^Nx\rfloor\equiv\sum_{j\le N}d_j2^{N-j}\pmod{2^N}$ for every real $x$. The low $N$ two's-complement bits of an integer depend only on its residue modulo $2^N$, so the low $N$ bits of $\lfloor2^Nx\rfloor$ are $d_N,\dots,d_1$, and the transitions among $d_1,\dots,d_N$ are counted by $T$. Starting from $T(0)=0$, add each term $a(n)2^{N-kn}$ and then $\lfloor\tau_N\rfloor$, using \Cref{thm:prefix} and \Cref{lem:transitions} together with $\wpm(c2^e)=\wpm(c)$. This finite inequality is \leanW{transitions\_prefix\_le}{819}. By hypothesis $\wpm(\lfloor\tau_N\rfloor)\le\log_2(|\tau_N|+2)+1=o(N)$. Finally, $F_N([1/4,3/4))=\tr_{N+1}(x)/N$, and \Cref{prop:criteria}(4)--(5) give the discrepancy bounds.
+\end{proof}
+
+\begin{theorem}[$E_+(2^k)$ for $k\ge4$]\label{thm:Eplus-k4}\evidence{Paper proof + Finite certificate}
+The mean $W_+=\lim_XX^{-1}\sum_{n\le X}\wpm(a_+(n))$ exists and
+\[
+0.908174\le W_+\le0.908184,\qquad W_+\le W_+^{\mathrm{maj}}=\frac12\sum_{e\ge0}\frac{\wpm(|1-e|)}{2^e}\prod_{p>2}\Bigl(1-\frac1p\Bigr)\sum_{f\ge0}\frac{\wpm(f+1)}{p^f}\in[0.936414,\,0.936415].
+\]
+Hence, for every $k\ge4$, $E_+(2^k)$ is not $2$-normal in base $2$ and not normal in any base $2^j$, with the lower bounds of \Cref{tab:Eplus}, and $D^-(E_+(2^k);2)\to1$. Since $\wpm(c)\ge1$ for $c\ne0$ and $a_+(n)\ne0$ exactly when $n\not\equiv2\pmod4$, $W_+\ge\frac34$, so $2W_+/3\ge\frac12$, and no bound of this kind reaches $k\le3$.
+\end{theorem}
+
+\begin{proof}
+With $e=v_2(n)$, $\wpm(a_+(n))=\wpm\bigl(u_2(e)\prod_{p>2}\odd(e_p+1)\bigr)$, where $u_2(e)=\odd(|1-e|)$ for $e\ne1$ and $u_2(1)=0$, because $\wpm(\pm2^sc)=\wpm(c)$. \Cref{lem:model} applies with $F=\wpm$ and majorant $G(2^e)=\wpm(|1-e|)$, $G(p^f)=\wpm(f+1)$ for odd $p$. The value $G(2)=0$ affects only one prime. Since $|a_+(n)|\le\tau(n)\le2\sqrt n$, \Cref{thm:signed-transfer} applies. The $2$-adic factor of $W_+^{\mathrm{maj}}$ lies in $[0.796047,0.796048]$ and the odd product in $[1.176329,1.176330]$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+$k$ & 4 & 5 & 6 & 8 & 16 \\
+\midrule
+$\limsup F_N([1/4,3/4))\le$ & 0.45410 & 0.36328 & 0.30273 & 0.22705 & 0.11353 \\
+$D^-(E_+(2^k);2)\ge$ & 0.04590 & 0.13672 & 0.19727 & 0.29590 & 0.53443 \\
+\bottomrule
+\end{tabular}
+\caption{Certified bounds for $E_+(2^k)$ from \Cref{thm:Eplus-k4} (\emph{Finite certificate}).}\label{tab:Eplus}
+\end{table}
+
+Let $\chi$ be a cubic Dirichlet character modulo $M_\chi$, let $\omega=e^{2\pi i/3}$, and write $c=1*\chi=y_1+y_2\,\omega$ with integers $y_1(n),y_2(n)$. Following \ttt{notes/phase23/dense-characters-and-nonfundamental-forms.md}, put $c_+=2y_1-y_2$, $c_-=y_2$ and $L_\pm(2^k)=\sum_nc_\pm(n)2^{-kn}$.
+
+\begin{proposition}[Cubic characters in base $2$]\label{prop:cubic}\evidence{Paper proof + Finite certificate}
+$\wpm(c_\pm(n))\le G_\chi(n)$, where $G_\chi$ is multiplicative with $G_\chi(p^e)=\wpm(e+1)$ if $\chi(p)=1$, $G_\chi(p^e)=\mathbf 1[e\not\equiv2\ (\mathrm{mod}\ 3)]$ if $\chi(p)\in\{\omega,\bar\omega\}$, and $G_\chi(p^e)=1$ if $p\mid M_\chi$. Its mean is
+\[
+W_\chi=\prod_{\chi(p)=1}\Bigl(1-\frac1p\Bigr)\sum_{e\ge0}\frac{\wpm(e+1)}{p^e}\prod_{\chi(p)\in\{\omega,\bar\omega\}}\frac{1-p^{-2}}{1-p^{-3}},
+\]
+certified as $W_\chi\in[0.756903,0.756905]$, $[0.804514,0.804516]$ and $[0.789313,0.789314]$ for $M_\chi=7,9,13$. Hence $L_\pm(2^k)$ is not $2$-normal in base $2$ for every $k\ge4$, with $D^-(L_\pm(16);2)\ge0.1215$, $0.0977$ and $0.1053$ respectively.
+\end{proposition}
+
+\begin{proof}
+On its support $c(n)=A(n)\zeta$ with $A(n)=\prod_{\chi(p)=1}(e_p+1)$ and $\zeta$ a sixth root of unity, so $c_\pm(n)/A(n)\in\{0,\pm1,\pm2\}$. Hence $\wpm(c_\pm(n))\le\wpm(A(n))\le\prod_{\chi(p)=1}\wpm(e_p+1)$, using $\wpm(2A)=\wpm(A)$. Moreover $c(n)\ne0$ exactly when $e_p\not\equiv2\pmod3$ at every $p$ with $\chi(p)\in\{\omega,\bar\omega\}$. Since $G_\chi(p)=1$ for all $p$, \Cref{lem:conv} applies, and \Cref{thm:signed-transfer} with $k=4$ gives the bounds.
+\end{proof}
+
+Modulo $7$ the majorant just misses $k=3$, since $W_\chi>3/4$. The register entry \ttt{GF-31} proves simple nonnormality of $L_+(2^k)$ ($k\ge4$) and $L_-(2^k)$ ($k\ge3$) in the construction radix $2^k$, using a weighted phase law based on the Selberg--Delange method \cite{Tenenbaum} as external input. \Cref{prop:cubic} proves non-$2$-normality in base $2$ without that input.
+
+\subsection{Free-boundary signed support and the four-state transducer}
+
+\begin{definition}\label{def:sigma}
+For $x\in\R$ with binary digits $d_m$ and $N\ge1$, let $\sigma_1(x;N)$ be the minimum of $\#\{1\le m\le N:a'(m)\ne0\}$ over all sequences $a'\in\{-1,0,1\}^{\N}$ with $x-\sum_{m\ge1}a'(m)2^{-m}\in\Z$. For a word $u=u_1\cdots u_L\in\{0,1\}^L$ let
+\[
+\sfree(u)=\min\Bigl\{\#\{1\le i\le L:u_i+2\delta_{i-1}-\delta_i\ne0\}:\ \delta_0,\dots,\delta_L\in\{-1,0,1\},\ |u_i+2\delta_{i-1}-\delta_i|\le1\ \forall i\Bigr\},
+\]
+and $A_L=(L2^L)^{-1}\sum_{u\in\{0,1\}^L}\sfree(u)$.
+\end{definition}
+
+\begin{lemma}[Carry paths]\label{lem:paths}\evidence{Paper proof}
+If $a'\in\{-1,0,1\}^{\N}$ and $x-\sum_ma'(m)2^{-m}\in\Z$, then there are $\delta_1,\delta_2,\dots\in\{-1,0,1\}$ with $a'(m)=d_m+2\delta_m-\delta_{m+1}$ for every $m\ge1$.
+\end{lemma}
+
+\begin{proof}
+Put $\delta_m=\sum_{j\ge m}(a'(j)-d_j)2^{m-1-j}$. Then $2\delta_m-\delta_{m+1}=a'(m)-d_m$. Also $\delta_m=2^{m-1}\bigl(\sum_ja'(j)2^{-j}-\{x\}\bigr)-\sum_{j<m}(a'(j)-d_j)2^{m-1-j}$ is an integer, because $\sum_ja'(j)2^{-j}-\{x\}\in\Z$. Since $a'(j)-d_j\in[-2,1]$, $\delta_m\in[-2,1]$. The value $-2$ would force $d_j=1$ for all $j\ge m$, which the digit convention excludes.
+\end{proof}
+
+This is the binary case of the three-state transducer description in \ttt{notes/phase23/binary-partition-and-carry-complexity.md}.
+
+\begin{lemma}[Signed support of $E_+(2^k)$]\label{lem:Eplus-support}\evidence{Paper proof using External input}
+Let $k,N_0\ge1$, $H=\lceil\frac2k\log_2(N_0+2)\rceil+4$, $M=N_0+H$ and $S_M^+=\sum_{n\le M}a_+(n)2^{k(M-n)}$. Then
+\[
+\sigma_1(E_+(2^k);kN_0)\le\wpm(S_M^+)\le\sum_{n\le M}\wpm(a_+(n)),\qquad\text{hence}\qquad\limsup_{N\to\infty}\frac{\sigma_1(E_+(2^k);N)}N\le\frac{W_+}k.
+\]
+\end{lemma}
+
+\begin{proof}
+Put $N=kN_0$. Write $S_M^+=\sum_j\varepsilon_j2^j$ in non-adjacent form, which has exactly $\wpm(S_M^+)$ nonzero digits \cite{Reitwiesner1960} (\emph{External input}). Then
+\[
+E_+(2^k)=2^{-kM}\bigl(S_M^++T\bigr),\qquad T=\sum_{n>M}a_+(n)2^{-k(n-M)}.
+\]
+The digit $\varepsilon_j$ sits at binary position $kM-j$. Discard the positions $j\ge kM$ modulo $1$, keep $kH\le j<kM$ on positions $1,\dots,N$, and collect the rest as $2^{-N}r$ with $r=\sum_{j<kH}\varepsilon_j2^{j-kH}+2^{-kH}T$. Non-adjacency gives $|\sum_{j<kH}\varepsilon_j2^{j-kH}|<\sum_{i\ge0}2^{-1-2i}=\frac23$. We have $H<\frac2k\log_2(N_0+2)+5\le2N_0+7$, so $M\le3N_0+7$ and $2^{kH}\ge16(N_0+2)^2$. With $|a_+(n)|\le2n$,
+\[
+2^{-kH}|T|\le2^{-kH}\sum_{j\ge1}2(M+j)2^{-j}=2(M+2)2^{-kH}\le\frac{2(3N_0+9)}{16(N_0+2)^2}<\frac14.
+\]
+Thus $|r|<\frac{11}{12}$, and $r=\sum_{t\ge1}\eta_t2^{-t}$ for some $\eta_t\in\{-1,0,1\}$. Appending these digits on positions $N+t$ gives an admissible $a'$ whose support on $[1,N]$ has at most $\wpm(S_M^+)$ elements. Subadditivity and shift invariance of $\wpm$ (\Cref{lem:signed}) give the second inequality. For arbitrary $N$ take $N_0=\lceil N/k\rceil$ and use monotonicity of $\sigma_1(x;N)$ in $N$. The $H=O(\log N_0)$ extra terms, each of weight $O(\log N_0)$, contribute $o(N_0)$, and $W_+$ exists by \Cref{thm:Eplus-k4}.
+\end{proof}
+
+\begin{theorem}[The four-state transducer]\label{thm:transducer}\evidence{Paper proof + Finite certificate}
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item The min-plus dynamic program for $\sfree$, started from $(0,0,0)$ and normalized by subtracting its minimum, reaches exactly $7$ vectors under the two bit transitions. These lump into the minimal deterministic transducer of \Cref{tab:transducer}, and $\sfree(u)$ is the total cost of its run on $u$ from state $\mathsf A$.
+\item For every $L\ge1$, $A_L=\frac13-\frac{7-(-1/2)^{L-1}}{18L}$. In particular $A_{16}=\frac{324039}{1048576}=0.30902767\ldots$ and $A_L\uparrow\frac13$.
+\end{enumerate}
+\end{theorem}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+State & Normalized vectors & bit $0$: (next, cost) & bit $1$: (next, cost) & Stationary weight \\
+\midrule
+$\mathsf A$ (start) & $(0,0,0),(0,0,1)$ & $(\mathsf C,0)$ & $(\mathsf B,0)$ & $1/6$ \\
+$\mathsf B$ & $(0,1,0),(0,1,1)$ & $(\mathsf A,1)$ & $(\mathsf B,0)$ & $1/3$ \\
+$\mathsf C$ & $(1,0,0),(1,0,1)$ & $(\mathsf C,0)$ & $(\mathsf D,0)$ & $1/3$ \\
+$\mathsf D$ & $(1,1,0)$ & $(\mathsf C,1)$ & $(\mathsf B,1)$ & $1/6$ \\
+\bottomrule
+\end{tabular}
+\caption{The minimal four-state transducer for $\sfree$ (\Cref{thm:transducer}).}\label{tab:transducer}
+\end{table}
+
+\begin{proof}
+(a) The closure is an exhaustive finite computation over the three carry states $\delta\in\{-1,0,1\}$, certified in \ttt{scripts/phase24\_classical.py}. Since the set of reachable normalized vectors is finite and closed, it proves (a) for every $L$. The four classes are minimal: the immediate costs on $(0,1)$ are $(0,0)$ for $\mathsf A,\mathsf C$, $(1,0)$ for $\mathsf B$ and $(1,1)$ for $\mathsf D$, while the suffix $11$ costs $0$ from $\mathsf A$ and $1$ from $\mathsf C$. The script also checks $A_L$ for $L\le20$ by dynamic programming and by brute-force enumeration for $L\le10$.
+
+(b) Under independent uniform bits let $(a_t,b_t,c_t,d_t)$ be the state distribution after $t$ steps from $\mathsf A$. Then $(a_1,b_1,c_1,d_1)=(0,\frac12,\frac12,0)$, and by induction $a_t=d_t$, $b_t=c_t=\frac12-a_t$ and $a_{t+1}=\frac12b_t=\frac14-\frac12a_t$ for $t\ge1$. Hence $a_t=\frac16(1-(-\frac12)^{t-1})$. The expected cost of step $t+1$ is $\frac12b_t+d_t=\frac13-\frac1{12}(-\frac12)^{t-1}$ for $t\ge1$, and the first step costs $0$. Summing,
+\[
+\Ex\,\sfree(U_L)=\frac{L-1}3-\frac1{18}\Bigl(1-\bigl(-\tfrac12\bigr)^{L-1}\Bigr)=\frac L3-\frac{7-(-1/2)^{L-1}}{18},
+\]
+and dividing by $L$ gives $A_L$.
+\end{proof}
+
+\begin{theorem}[Signed-support floor]\label{thm:floor}\evidence{Paper proof}
+Put $s_N=\sigma_1(x;N)/N$. For every real $x$, every $L\ge1$ and every $N\ge1$,
+\begin{equation}\label{eq:finite-floor}
+s_N\ge A_L\bigl(1-2^LD_N(x;2)\bigr)-\frac{L2^L}N.
+\end{equation}
+Consequently $\liminf_Ns_N\ge A_L(1-2^LD^+(x;2))$ and $\limsup_Ns_N\ge A_L(1-2^LD^-(x;2))$. Every base-$2$ normal number satisfies $\liminf_Ns_N\ge\frac13$. If $\limsup_Ns_N\le\alpha<A_L$, then $D^-(x;2)\ge(A_L-\alpha)/(2^LA_L)>0$, so $x$ is not normal in base $2$ or in any base $2^j$.
+\end{theorem}
+
+\begin{proof}
+Let $a'$ attain $\sigma_1(x;N)$ with carry path $\delta$ (\Cref{lem:paths}). For $0\le m\le N-L$ the restriction $(\delta_{m+1},\dots,\delta_{m+L+1})$ is admissible for the word $d_{m+1}\cdots d_{m+L}$ in \Cref{def:sigma}, so the support of $a'$ in $[m+1,m+L]$ has at least $\sfree(d_{m+1}\cdots d_{m+L})$ elements. Each position lies in at most $L$ windows, so
+\[
+L\,\sigma_1(x;N)\ge\sum_{m=0}^{N-L}\sfree(d_{m+1}\cdots d_{m+L})\ge\sum_u\sfree(u)\bigl(Nf_N(u)-(L-1)\bigr),
+\]
+where $f_N(u)=F_N(I_u;x,2)$ for the cylinder $I_u$ of $u$, a half-open interval of length $2^{-L}$. Hence $f_N(u)\ge2^{-L}-D_N(x;2)$. Since $\sum_u\sfree(u)=L2^LA_L\le L2^L/3$, dividing by $LN$ gives \eqref{eq:finite-floor}. Taking the lower limit, with $\liminf(-D_N)=-D^+$, gives the first consequence; along a subsequence with $D_{N_i}\to D^-$ we get the second. A normal number has $D^+=0$, and $A_L\to\frac13$. The last claim follows from the second consequence and radix descent (\Cref{prop:criteria}(5)); equivalently, normality in base $2$ and in base $2^j$ coincide \cite{Maxfield53}.
+\end{proof}
+
+\begin{remark}\label{rem:mixed}
+The mixed inequality $\liminf_Ns_N\ge A_L(1-2^LD^-(x;2))$ is false in general. Alternate long zero blocks with complete repetitions of binary de Bruijn cycles of increasing orders, each stage much longer than the preceding prefix. Then $D^-=0$, but $s_N\to0$ along the ends of the zero blocks.
+\end{remark}
+
+\begin{theorem}[$E_+(2^k)$ is not normal for $k\ge3$]\label{thm:Eplus-k3}\evidence{Paper proof + Finite certificate}
+For every integer $k\ge3$, $E_+(2^k)$ is not normal in base $2$ or in any base $2^j$, and
+\[
+D^-(E_+(2^k);2)\ge\frac{A_{16}-W_+/k}{2^{16}A_{16}}\ge2.34\times10^{-7}.
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{lem:Eplus-support}, $\limsup_Ns_N\le W_+/k\le W_+/3$. An independent outward-rounded enclosure in \ttt{scripts/phase24\_classical.py} gives $W_+\le0.912845$, which is weaker than and consistent with \Cref{thm:Eplus-k4}. So $\limsup s_N\le0.304282<A_{16}$, and \Cref{thm:floor} with $L=16$ gives $D^-\ge(A_{16}-0.304282)/(2^{16}A_{16})=2.343\ldots\times10^{-7}$. The script asserts this bound against exact fractions.
+\end{proof}
+
+\begin{remark}\label{rem:Eplus-open}
+\Cref{thm:Eplus-k3} does not decide whether $E_+(8)$ is simply normal in base $2$. The signed weight controls word complexity, not the digit frequency, and $s_2$ is not subadditive on signed sums. The prefix measurement $f_1\approx0.337$ for $E_+(8)$ in \Cref{tab:measure} (at $N=2^{17}$; $0.3342$ at $M=6000$ in Track~E) is a finite measurement only.
+\end{remark}
+
+\subsection{Shifted divisor identities for $a_+$}
+
+\begin{proposition}[Exact shifted identities]\label{prop:shifted}\evidence{Paper proof + Finite certificate}
+For all integers $X,h\ge1$:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item if $h$ is odd,
+\[
+\sum_{n=1}^Xa_+(n)a_+(n+h)=\sum_{n=1}^X\tau(n)\tau(n+h)-2\sum_{1\le m\le X/2}\tau(m)\tau(2m+h)-2\sum_{(h+1)/2\le m\le(X+h)/2}\tau(2m-h)\tau(m);
+\]
+\item if $h=2h'$ is even,
+\[
+\sum_{n=1}^Xa_+(n)a_+(n+h)=\sum_{n=1}^X\tau(n)\tau(n+h)-2\sum_{m\le X/2}\tau(m)\tau(2m+h)-2\sum_{m\le X/2}\tau(2m)\tau(m+h')+4\sum_{m\le X/2}\tau(m)\tau(m+h').
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Substitute $a_+(n)=\tau(n)-2\cdot\mathbf 1_{2\mid n}\tau(n/2)$, which holds because the even divisors of $n$ are $2d'$ with $d'\mid n/2$. Expanding $a_+(n)a_+(n+h)$ gives four terms. For odd $h$ the fourth vanishes because $n$ and $n+h$ have opposite parity; put $n=2m$ in the second and $n+h=2m$ in the third. For even $h$ all corrections are supported on even $n=2m$. The script checks both identities for $1\le h\le32$ and $X\le2^{16}$, $128$ pairs in total.
+\end{proof}
+
+\begin{remark}\label{rem:shifted}
+Every affine pair in \Cref{prop:shifted} has nonzero determinant. Inserting the affine additive divisor asymptotic of Topacogullari \cite{Topacogullari17} (\emph{External input}), summed over dyadic ranges, recovers the $2$-adic factor $\frac14(2-3\cdot2^{-v_2(h)})$ in the leading coefficient of $\sum_{n\le X}a_+(n)a_+(n+h)$. This removes a congruence hypothesis from an earlier repository computation (\ttt{notes/phase24/classical-constants-and-joint-numerators.md}, \S3.3). Nothing below depends on it.
+\end{remark}
+
+\section{The threshold cases $k=1,2$}\label{sec:boundary}
+
+\begin{theorem}[The $E(4)$ threshold]\label{thm:E4}\evidence{Paper proof}
+For every $k\ge1$,
+\[
+f_1(N;E(2^k))=\frac1N\sum_{n\le N/k}s_2(\tau(n))-\frac{\kappa_k(N)}N+O\Bigl(\frac{\log N}N\Bigr)=\frac{\Ctrue}k-\frac{\kappa_k(N)}N+o(1),
+\]
+with $\kappa_k(N)$ as in \Cref{thm:E}(i). Consequently:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item $E(4)$ is simply normal in base $2$ if and only if $\kappa_2(N)/N\to(\Ctrue-1)/2\in[0.169551,0.169558]$, and $\limsup f_1<\frac12$ if and only if $\liminf\kappa_2(N)/N>(\Ctrue-1)/2$.
+\item Every $\tau(n)\ge1$ has $s_2(\tau(n))\ge1$, with strict inequality on a set of positive density (for example $p^2\parallel n$, where $s_2(3)=2$). So $\Ctrue>1$, and the zero-carry bound gives only $\limsup f_1\le\Ctrue/2\le0.66956$. No coefficient-mass functional bounded below by $1$ on nonzero integers can decide $E(4)$. Simple nonnormality could also arise if $\kappa_2(N)/N$ fails to converge.
+\item For $E(2)$ the condition is $\kappa_1(N)/N\to\Ctrue-\frac12\in[0.839103,0.839116]$. For $k\ge3$, simple normality would require $\kappa_k(N)/N\to\Ctrue/k-\frac12<0$, which is impossible.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\Cref{thm:unsigned} with $b=2$ is exact: $Nf_1(N)=\sum_{n\le N/k}s_2(\tau(n))+s_2(\lfloor\tau_N\rfloor)-s_2(\lfloor E(2^k)\rfloor)-\kappa_k(N)$, and $s_2(\lfloor\tau_N\rfloor)=O(\log N)$ by \Cref{thm:A}(ii). The mean converges to $\Ctrue$ by \Cref{thm:EB-sharp}.
+\end{proof}
+
+\begin{proposition}[Direct base-$4$ transfer for $E(4)$]\label{prop:base4}\evidence{Paper proof using External input}
+$\liminf_XX^{-1}\sum_{n\le X}s_4(\tau(n))\ge2-\delta_2/2>1.59>\frac32$, where $\delta_2<0.8165$ is the density of $\{n:\tau(n)\text{ is a power of }2\}$. Since moreover $w_4(\tau(n))\ge1>\frac34$, neither criterion of \Cref{prop:criteria}(1)--(2) applies to $E(4)$ in base $4$.
+\end{proposition}
+
+\begin{proof}
+$s_4(m)\ge2$ unless $m$ is a power of $4$. The indicator of $\{n:\tau(n)=2^{t(n)}\}$ is multiplicative with value $1$ at every prime, so by \Cref{lem:conv} this set has density $\delta_2=\prod_p(1-\frac1p)\sum_{i\ge0}p^{1-2^i}\le\frac12\sum_{i\ge0}2^{1-2^i}<0.8165$, since the other local factors are at most $1$. On this set, $(-1)^{t(n)}$ extended by $0$ is a real multiplicative function with value $-1$ at every prime. Its mean is $0$ by Wirsing's theorem \cite{Wirsing1967} (\emph{External input}). So $\{n:\tau(n)\text{ is a power of }4\}$ has density $\delta_2/2<0.4083$, and $\liminf X^{-1}\sum s_4(\tau(n))\ge2-\delta_2/2$.
+\end{proof}
+
+\begin{theorem}[The $E^*(4)$ threshold]\label{thm:Estar4}\evidence{Paper proof}
+Write $E^*(4)=\sum_n2^{-q(n)}$ with $q(n)=2n-\omega(n)$, so every term is a single bit. Then $f_1(N;E^*(4))=\frac12-\kappa^*(N)/N+O(\log N/N)$, where $\kappa^*(N)$ is the column-carry total. Hence $\limsup_Nf_1(N;E^*(4))\le\frac12$, and $E^*(4)$ is simply normal in base $2$ if and only if $\kappa^*(N)=o(N)$. Moreover $\kappa^*(N)\ge\frac12\#\{n\le N/2:\exists\,n'>n,\ q(n')=q(n)\}-O(\log N)$.
+\end{theorem}
+
+\begin{proof}
+Apply \Cref{thm:unsigned} with $a(n)=2^{\omega(n)}\le2\sqrt n$ and $s_2(a(n))=1$. A column with $r\ge2$ operands sends $\lfloor r/2\rfloor\ge(r-1)/2$ carries, and collision partners satisfy $n'-n\le\frac12\log_2n'$, which accounts for the boundary term.
+\end{proof}
+
+\begin{proposition}[Collisions]\label{prop:collisions}\evidence{Conditional}
+Let $\mathcal C=\{n:\exists\,n'>n,\ \omega(n')-\omega(n)=2(n'-n)\}$. If $\mathcal C$ has positive upper density $\delta^+$, then $\liminf_Nf_1(N;E^*(4))\le\frac12-\delta^+/4$, and $E^*(4)$ is not simply normal in base $2$. If $\mathcal C$ has positive lower density $\delta^-$, then $\limsup f_1\le\frac12-\delta^-/4$ and $D^-(E^*(4);2)\ge\delta^-/4$.
+\end{proposition}
+
+\begin{proof}
+Combine \Cref{thm:Estar4} with \Cref{prop:criteria}(1).
+\end{proof}
+
+Whether $\mathcal C$ has positive upper density is \textbf{open}. For each fixed gap $d$, the set $\{n:\omega(n+d)-\omega(n)=2d\}$ has density zero, so positive density of $\mathcal C$ would need a union over growing gaps with uniform local lower bounds. \Cref{tab:map} summarizes the status of the dyadic family.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}p{0.2\textwidth}p{0.25\textwidth}p{0.47\textwidth}@{}}
+\toprule
+Constant & Status & Proved bound and what is missing \\
+\midrule
+$E(2^k)$, $k\ge3$ & simply nonnormal, $D^->0$ & $f_1\le29/(20k)$ (Kernel-verified), $f_1\le\Ctrue/k$; exact $D_\infty$ open \\
+$E_{\mathrm{odd}}(2^k)$, $k\ge3$ & simply nonnormal & $f_1\le C_{\mathrm{odd}}/k$ \\
+$E^*(2^k)$, $k\ge3$ & simply nonnormal & $f_1\le1/k$ \\
+$E_+(2^k)$, $k\ge4$ & not $2$-normal, $D^->0$ & $F_N([\frac14,\frac34))\le2W_+/k$ \\
+$E_+(8)$ & nonnormal, $D^-\ge2.34\times10^{-7}$ & $\sigma_1/N\le W_+/3<A_{16}$; simple normality open \\
+$E(4)$ & \textbf{open} & $f_1\le\Ctrue/2\le0.66956$; simple normality $\iff\kappa_2/N\to(\Ctrue-1)/2$ \\
+$E^*(4)$ & \textbf{open} & $f_1\le\frac12$; simple normality $\iff\kappa^*=o(N)$ \\
+$E_+(4)$ & \textbf{open} & $\sigma_1/N\le W_+/2\le0.454092$, above $\frac13>A_L$ \\
+$E(2)$ (\ttt{BC-37}) & \textbf{open} & $f_1\le\Ctrue$ is vacuous; threshold $\kappa_1/N\to\Ctrue-\frac12$ \\
+$E_+(2)$ (\ttt{BC-39}) & \textbf{open} & $\sigma_1/N\le W_+$ is vacuous \\
+\bottomrule
+\end{tabular}
+\caption{The dyadic Lambert family: status and proved bounds (limits superior, base $2$).}\label{tab:map}
+\end{table}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Constant (base $2$), $N=2^{17}$ & $f_1$ & $F_N([\frac14,\frac34))$ & coefficient mass$/N$ & carry $\kappa/N$ \\
+\midrule
+$E(2)$ & 0.50923 & 0.48866 & 1.33854 & 0.82931 \\
+$E(4)$ & 0.49490 & 0.54652 & 0.66910 & 0.17420 \\
+$E(8)$ & 0.40815 & 0.54326 & 0.44604 & 0.03790 \\
+$E(16)$ & 0.32872 & 0.48445 & 0.33459 & 0.00587 \\
+$E^*(4)$ & 0.43910 & 0.60380 & 0.50000 & 0.06091 \\
+$E_+(2)$ & 0.49297 & 0.49982 & 0.90792 ($\wpm$) & --- \\
+$E_+(4)$ & 0.40479 & 0.42993 & 0.45390 ($\wpm$) & --- \\
+$E_+(8)$ & 0.33718 & 0.36037 & 0.30252 ($\wpm$) & --- \\
+\bottomrule
+\end{tabular}
+\caption{Prefix statistics computed exactly from \ttt{scripts/phase24\_digit\_mass.py}. These are \emph{finite measurements only}; they prove nothing about limits.}\label{tab:measure}
+\end{table}
+
+A base-$10$ example shows why finite data cannot serve as proof. Over the first $20{,}000$ base-$10$ digits of $E(100)$ the digit average is $2.5589$, against the uniform value $4.5$ (a finite measurement from the same script). The prefix looks far from uniform, yet \Cref{thm:barrier} shows that the coefficient mass grows without bound, so the method cannot decide this constant.
+
+\section{Questions}\label{sec:questions}
+
+\begin{question}\label{q:E4}
+Is $E(4)$ simply normal in base $2$? By \Cref{thm:E4} this is equivalent to $\kappa_2(N)/N\to(\Ctrue-1)/2$. A route to simple nonnormality of $E(4)$ in base $4$ that avoids binary popcount would be a bias $\limsup_MM^{-1}\sum_{j<M}(-1)^{d_{2j+1}+d_{2j+2}}<0$ of the base-$4$ digits in favour of $\{1,2\}$ over $\{0,3\}$.
+\end{question}
+
+\begin{question}\label{q:Eplus}
+Is $E_+(8)$ simply normal in base $2$? Is $E_+(4)$ normal in base $2$? For $k=2$ put $\Delta_M=\sum_{n\le M}\wpm(a_+(n))-\wpm(S_M^+)\ge0$ in the notation of \Cref{lem:Eplus-support}. If $\liminf_M\Delta_M/(2M)>0.1231$, then $\limsup_N\sigma_1(E_+(4);N)/N<\frac13$, and $E_+(4)$ is not normal in base $2$ by \Cref{thm:floor}.
+\end{question}
+
+\begin{question}\label{q:collisions}
+Does the collision set $\mathcal C$ of \Cref{prop:collisions} have positive upper density?
+\end{question}
+
+\begin{question}\label{q:nonmass}
+Is $E(b^k)$ simply normal in base $b$ when $b$ is not a power of $2$, for example $E(9)$ in base $3$ or $E(100)$ in base $10$? By \Cref{thm:barrier}, any proof must use information beyond mean digit mass.
+\end{question}
+
+\begin{question}\label{q:Dplus}
+For $k\ge3$, does $E(2^k)$ satisfy $D^+(E(2^k);2)<1$, which would in particular place it outside $K_2=\{x:D_N(x;2)\to1\}$? By the kernel-verified equivalence \leanU{BinaryDiscrepancy}{229}{\ttt{discrepancy\_lt\_one\_iff\_transitions}}, $D^+<1$ is equivalent to a positive lower transition density, which digit mass does not supply.
+\end{question}
+
+\section{Formal verification and data availability}\label{sec:formal}
+
+The Lean~4 \cite{Lean4} declarations cited above, built with Mathlib \cite{Mathlib}, live in the repository \url{https://github.com/eldernos/MathematicsResearch}:
+\begin{itemize}[nosep]
+\item \ttt{NormalityChecker/DigitMassTransfer.lean}, an uncommitted module in the Phase~24 working tree, pending commit pinning before release. It exports $62$ theorems and contains no \ttt{sorry}. On \ttt{hail} it was built and kernel-checked with only the standard axioms \ttt{propext}, \ttt{Classical.choice} and \ttt{Quot.sound}. The declarations used here, with working-tree line numbers, are: \leanW{digitSum\_add\_add\_carries}{191}, \leanW{digitSum\_add\_le}{196}, \leanW{digitSum\_mul\_pow}{202}, \leanW{digitSum\_mul\_le}{216}, \leanW{nonzeroDigits\_add\_le}{258}, \leanW{nonzeroDigits\_mul\_le}{338}, \leanW{nonzeroDigits\_pred\_sq}{387}, \leanW{digitSum\_two\_succ}{405}, \leanW{signedWeight\_two\_mul}{444}, \leanW{signedWeight\_mul\_two\_pow}{459}, \leanW{signedWeight\_le\_digitSum}{465}, \leanW{signedWeight\_add\_le}{538}, \leanW{signedWeight\_sub\_le}{543}, \leanW{signedWeight\_mul\_le}{549}, \leanW{transitions\_rec}{610}, \leanW{transitions\_add\_two\_pow}{682}, \leanW{transitions\_add\_le}{738}, \leanW{floor\_pow\_mul\_eq\_head\_add\_floor\_tail}{756}, \leanW{digitSum\_prefix\_le}{798}, \leanW{transitions\_prefix\_le}{819}, \leanW{interval\_le\_radixDiscrepancy}{827}, \leanW{radixDiscrepancy\_ge\_nonzero\_freq}{863}, \leanW{binaryDiscrepancy\_ge\_half\_sub\_transition}{883}, \leanW{radixDiscrepancy\_ge\_zero\_run}{959}, \leanW{tendsto\_average\_of\_summable\_conv\_mobius}{1021}, \leanW{local\_factor\_digitSum\_two}{1142}, \leanW{tauDigitKernel\_prime\_pow}{1283}, \leanW{tauDigitMajorant\_mul\_moebius}{1308}, \leanW{digitSum\_card\_divisors\_le}{1313}, \leanW{summable\_abs\_tauDigitKernel\_div}{1517}, \leanW{tsum\_tauDigitKernel\_div\_le}{1663}, \leanW{erdosBorweinPow\_eq\_divisor\_series}{1770}, \leanW{erdosBorwein\_two\_pow\_digitFreq\_limsup\_le}{2143}, \leanW{erdosBorwein\_two\_pow\_radixDiscrepancy\_eventually\_ge}{2161}, \leanW{erdosBorwein\_two\_pow\_lowerDiscrepancy\_pos}{2194}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal\_pow}{2277}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal}{2334} and \leanW{radixDiscrepancy\_descent}{2417}.
+\item Definitions it depends on, at the pinned Phase~23 commit \ttt{\phaseXXIIIcommit}: \ttt{Basic.shift} and \ttt{Basic.frequency} (lines 15, 18), \ttt{BinaryDiscrepancy.radixDiscrepancy} (line 11), \ttt{HigherOrderTower.OrderNormal} (line 69) and \ttt{SimpleNormalityKernel.wordFreq} (line 73). The coefficient identity \ttt{Phase22Cores.erdosBorweinPlusCoeff\_eq} (line 1052) is pinned at the Phase~22 commit \ttt{\phaseXXIIcommit}.
+\end{itemize}
+Strictly separating evidence scopes: \Cref{thm:A} and \Cref{lem:digit-ineq,lem:transitions,thm:EB-lean} are \emph{Kernel-verified} in full. \Cref{lem:kummer,lem:signed,thm:prefix,thm:unsigned,prop:criteria,lem:conv,cor:kernel,prop:C} are kernel-verified in the parts stated in their labels, and the remaining parts are written proofs. \Cref{thm:signed-transfer} (\Cref{thm:D}(i)) is a \emph{Lean-supported paper proof}: its finite core is kernel-verified, and the asymptotic conclusion is written. All other results are \emph{Paper proofs}, using \emph{Finite certificates} for the numerical constants and \emph{External input} where stated: Senge--Straus and Stewart for \Cref{thm:barrier,thm:dichotomy}; Tur\'an--Kubilius in the same proofs; the minimality of the non-adjacent form in \Cref{lem:Eplus-support}; Wirsing's theorem in \Cref{prop:base4}; and Topacogullari in \Cref{rem:shifted}. \Cref{prop:collisions} is \emph{Conditional}, and the questions of \Cref{sec:questions} are \emph{Open}.
+
+Two exact verification scripts accompany this draft in the same repository. Both are untracked working-tree files, pending commit pinning. \ttt{scripts/phase24\_digit\_mass.py} performs $3{,}095{,}904$ exact checks (integers, \ttt{fractions.Fraction}, and integer arithmetic at scale $2^{-192}$ with outward rounding) and certifies the constants of \Cref{sec:transfer,sec:mean,sec:EB,sec:families} and \Cref{thm:Eplus-k4,prop:cubic}. \ttt{scripts/phase24\_classical.py} performs $108{,}334$ assertions and certifies the closure of \Cref{thm:transducer}, the enclosure $W_+\le0.912845$ and the bound of \Cref{thm:Eplus-k3}, as well as the identities of \Cref{prop:shifted}. Exact checks are \emph{Finite certificates} on their tested ranges. Prefix statistics (\Cref{tab:measure}) are \emph{finite measurements}, never proofs of asymptotic statements. The statement-by-statement verification map and the novelty ledger are \ttt{VERIFICATION.md} and \ttt{LEDGER.md} in \ttt{papers/14-dense-digit-mass-lambert/}.
+
+\section{Use of AI tools}\label{sec:ai}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed proof strategies, drafted the proofs and text, implemented the exact Python verifiers and the Lean~4 formalization, and conducted cross-provider audits of the underlying source notes. The repository owner directed the project and is responsible for any release. The Lean kernel checked the declarations listed in \ttt{VERIFICATION.md}. The written proofs and literature comparisons have been checked only by AI models from different providers. Each source note received a cross-provider review whose findings were repaired, and this assembled candidate manuscript has not been reviewed as a whole. No independent human expert has checked the proofs. Cross-model review is not independent human peer review. This draft is unreleased, and \ttt{pdflatex}/\ttt{bibtex} compilation is pending before release.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+\end{document}

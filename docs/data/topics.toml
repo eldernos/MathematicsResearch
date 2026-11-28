@@ -7,7 +7,7 @@ title = "Normality, discrepancy and Fourier criteria"
 modules = [
   "CoefficientTransfer", "GeneralMassTransfer", "RadixWidthLaw", "DerivativeTransfer",
   "NormalReciprocalCore", "SimpleNormalityKernel", "RadixPowerTower", "Phase22Cores",
-  "HigherOrderTower", "Phase23Cores",
+  "HigherOrderTower", "Phase23Cores", "DigitMassTransfer", "Phase24Cores",
   "EulerPentagonal", "CharacterLambertTransfer", "AntisymmetricLambert",
   "ClassicalBarriers", "ProtectedPole", "PowerSumPeeling",
   "DiscrepancyGeometry", "SurvivingGrid", "PrimePowerGrid", "AdditionSpectrum",

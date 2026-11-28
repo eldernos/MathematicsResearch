@@ -152,3 +152,5 @@ public import NormalityChecker.RadixPowerTower
 public import NormalityChecker.Phase22Cores
 public import NormalityChecker.HigherOrderTower
 public import NormalityChecker.Phase23Cores
+public import NormalityChecker.DigitMassTransfer
+public import NormalityChecker.Phase24Cores
