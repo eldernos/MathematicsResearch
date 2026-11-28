@@ -2,11 +2,11 @@
 
 # Complete declaration directory
 
-Every named public theorem and lemma of the Lean library, 1861 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
+Every named public theorem and lemma of the Lean library, 2008 in all, grouped by mathematical topic and then by module. Each name links to its source line. The summary is the first sentence of the docstring; the Lean statement is authoritative. Result identifiers mark declarations cited in the [curated index](results.md). The machine-readable manifest is [declarations.json](data/declarations.json). The same list, by module only, is collapsed at the end of the [README](../README.md#complete-declaration-directory).
 
 Declaration counts describe the size of the library, not the mathematical significance of its results.
 
-- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 848 declarations
+- [Normality, discrepancy and Fourier criteria](#normality-discrepancy-and-fourier-criteria) · 921 declarations
 - [Stoneham polynomial images and products](#stoneham-polynomial-images-and-products) · 311 declarations
 - [Localized logarithms and polylogarithms](#localized-logarithms-and-polylogarithms) · 196 declarations
 - [Polynomial weights and masked supports](#polynomial-weights-and-masked-supports) · 100 declarations
@@ -14,7 +14,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 - [Signed expansions, exact discrepancy and symbolic spectra](#signed-expansions-exact-discrepancy-and-symbolic-spectra) · 39 declarations
 - [Rational-orbit certificates](#rational-orbit-certificates) · 44 declarations
 - [Complementary coverage, rigidity and limitations of models](#complementary-coverage-rigidity-and-limitations-of-models) · 17 declarations
-- [Classical constant arithmetic](#classical-constant-arithmetic) · 251 declarations
+- [Classical constant arithmetic](#classical-constant-arithmetic) · 325 declarations
 
 ## Normality, discrepancy and Fourier criteria
 
@@ -738,8 +738,8 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_transition`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L28) [CC-48](results.md#cc-48) | Lower discrepancy gap in terms of adjacent binary transitions (`01` and `10`): for every real `x` and `N ≥ 1`, `min (1/3) (transitionFrequency x N) - 1/N ≤ 1… |
 | [`Phase17DiscrepancyBounds.nonzero_shift_has_one_bit`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L46) | If `shift 2 x n ≥ 2⁻ᴸ` (`L ≥ 1`), then some position `n + j` with `j ≤ L - 1` has a `1`-bit (`shift 2 x (n + j) ≥ 1/2`). |
 | [`Phase17DiscrepancyBounds.upper_freq_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L77) [CC-48](results.md#cc-48) | Frequency of shifts in `[2⁻ᴸ, 1)` is controlled by `L` times the `1`-bit frequency plus the boundary allowance `(L - 1) / N`. |
-| [`Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) [CC-48](results.md#cc-48) [GF-48](results.md#gf-48) | Upper discrepancy gap in terms of the `1`-bit frequency: for every real `x`, `L ≥ 1`, and `N ≥ 1`, `1 - binaryDiscrepancy x N ≤ (1/2)^L + (L - 1)/N + L *… |
-| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) [CC-48](results.md#cc-48) [GF-48](results.md#gf-48) | Lower discrepancy gap from two separated positive-mass intervals `[0, ε)` and `[3ε, 1/2)`: if `0 < ε ≤ 1/6`, `Δ ≤ ε`, and both `[0, ε)` and `[3ε, 1/2)`… |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_le_one_bits`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L98) [CC-48](results.md#cc-48) [GF-48](results.md#gf-48) [GF-56](results.md#gf-56) | Upper discrepancy gap in terms of the `1`-bit frequency: for every real `x`, `L ≥ 1`, and `N ≥ 1`, `1 - binaryDiscrepancy x N ≤ (1/2)^L + (L - 1)/N + L *… |
+| [`Phase17DiscrepancyBounds.one_sub_discrepancy_ge_of_separated_mass`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L123) [CC-48](results.md#cc-48) [GF-48](results.md#gf-48) [GF-56](results.md#gf-56) | Lower discrepancy gap from two separated positive-mass intervals `[0, ε)` and `[3ε, 1/2)`: if `0 < ε ≤ 1/6`, `Δ ≤ ε`, and both `[0, ε)` and `[3ε, 1/2)`… |
 | [`Phase17DiscrepancyBounds.general_single_shape_one_one_max`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L184) [ST-35](results.md#st-35) | Exact single-shape maximum relative length for the primary corner `(1, 1)` of `α(b, p) α(b, q)` for arbitrary real parameters `p, q > 1` and ratio `r = Q / P… |
 | [`Phase17DiscrepancyBounds.general_single_shape_one_one_attained`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L232) [ST-35](results.md#st-35) | Equality in `general_single_shape_one_one_max` is attained at `r = q(p - 1) / (p(q - 1))`. |
 | [`Phase17DiscrepancyBounds.jointUniform_of_established_degrees`](../NormalityChecker/Phase17DiscrepancyBounds.lean#L254) [ST-33](results.md#st-33) | If `deg : Fin k → ℕ` lists distinct degrees and every nonzero integer polynomial in `α` whose degree lies in `Set.range deg` is normal in base `b`, then the… |
@@ -1135,7 +1135,7 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SharpTranslation.sharp_translation`](../NormalityChecker/SharpTranslation.lean#L343) [SY-04](results.md#sy-04) | **The exact worst-case change.** For every real `x`, `z` and every `N > 0`, `\|D_N(x+z) - D_N(x)\| ≤ 1 - D_N(z)`. |
 | [`SharpTranslation.radixDiscrepancy_zero`](../NormalityChecker/SharpTranslation.lean#L357) | The orbit of zero has extreme discrepancy one at every cutoff. |
 | [`SharpTranslation.sharp_translation_zero`](../NormalityChecker/SharpTranslation.lean#L378) | **Equality at `x = 0`.** |
-| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) [GF-05](results.md#gf-05) [GF-48](results.md#gf-48) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
+| [`SharpTranslation.sharp_translation_isGreatest`](../NormalityChecker/SharpTranslation.lean#L386) [SY-04](results.md#sy-04) [GF-05](results.md#gf-05) [GF-48](results.md#gf-48) [GF-56](results.md#gf-56) | **Sharpness.** `sup_x \|D_N(x+z) - D_N(x)\| = 1 - D_N(z)`, and the supremum is attained at `x = 0`. |
 
 ### SimpleNormalityKernel
 
@@ -1201,6 +1201,86 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`SurvivingGrid.return_iff`](../NormalityChecker/SurvivingGrid.lean#L13) [OP-08](results.md#op-08) | The exact return times for a stride `g` which fixes the complementary modulus and is one modulo the distinguished odd prime. |
 | [`SurvivingGrid.stride_order`](../NormalityChecker/SurvivingGrid.lean#L43) [OP-08](results.md#op-08) [GF-10](results.md#gf-10) | Multiplicative order, hence the exact number of grid points, at any depth. |
 | [`SurvivingGrid.visits_every_lift`](../NormalityChecker/SurvivingGrid.lean#L56) [OP-08](results.md#op-08) | If the return period equals the number of lifts of a fixed residue, every lift is visited. |
+
+### ToeplitzDeterminants
+
+[`NormalityChecker/ToeplitzDeterminants.lean`](../NormalityChecker/ToeplitzDeterminants.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`ToeplitzDeterminants.orbitPoint_eq_phase`](../NormalityChecker/ToeplitzDeterminants.lean#L100) |  |
+| [`ToeplitzDeterminants.norm_orbitPoint`](../NormalityChecker/ToeplitzDeterminants.lean#L105) |  |
+| [`ToeplitzDeterminants.orbitPoint_zpow`](../NormalityChecker/ToeplitzDeterminants.lean#L109) |  |
+| [`ToeplitzDeterminants.orbitWeylSum_eq_pointWeylSum`](../NormalityChecker/ToeplitzDeterminants.lean#L117) |  |
+| [`ToeplitzDeterminants.orbitWeylSum_eq_pointWeylSum_one`](../NormalityChecker/ToeplitzDeterminants.lean#L121) |  |
+| [`ToeplitzDeterminants.orbitWeylSum_eq_mean`](../NormalityChecker/ToeplitzDeterminants.lean#L125) |  |
+| [`ToeplitzDeterminants.orbitWeylSum_eq_fourierMean`](../NormalityChecker/ToeplitzDeterminants.lean#L130) |  |
+| [`ToeplitzDeterminants.orbitGram_apply`](../NormalityChecker/ToeplitzDeterminants.lean#L134) |  |
+| [`ToeplitzDeterminants.orbitGram_eq_pointGram`](../NormalityChecker/ToeplitzDeterminants.lean#L137) |  |
+| [`ToeplitzDeterminants.natCast_smul_pointGram_eq_conjTranspose_mul_self`](../NormalityChecker/ToeplitzDeterminants.lean#L150) |  |
+| [`ToeplitzDeterminants.pointGram_eq_conjTranspose_mul_self`](../NormalityChecker/ToeplitzDeterminants.lean#L165) | Factorization `pointGram z r = Vᴴ * V` for unimodular points `z`. |
+| [`ToeplitzDeterminants.pointGram_quadForm`](../NormalityChecker/ToeplitzDeterminants.lean#L191) | Finite Fourier quadratic form identity for `pointGram`. |
+| [`ToeplitzDeterminants.pointGram_posSemidef`](../NormalityChecker/ToeplitzDeterminants.lean#L216) |  |
+| [`ToeplitzDeterminants.pointGram_isHermitian`](../NormalityChecker/ToeplitzDeterminants.lean#L221) |  |
+| [`ToeplitzDeterminants.pointGram_diag`](../NormalityChecker/ToeplitzDeterminants.lean#L225) |  |
+| [`ToeplitzDeterminants.pointGram_det_nonneg_complex`](../NormalityChecker/ToeplitzDeterminants.lean#L230) |  |
+| [`ToeplitzDeterminants.pointGram_det_nonneg`](../NormalityChecker/ToeplitzDeterminants.lean#L234) |  |
+| [`ToeplitzDeterminants.pointGram_det_im_eq_zero`](../NormalityChecker/ToeplitzDeterminants.lean#L238) |  |
+| [`ToeplitzDeterminants.orbitGram_quadForm`](../NormalityChecker/ToeplitzDeterminants.lean#L243) | Finite Fourier quadratic form identity for `orbitGram`. |
+| [`ToeplitzDeterminants.orbitGram_posSemidef`](../NormalityChecker/ToeplitzDeterminants.lean#L253) | `orbitGram x b N r h` is positive semidefinite for all parameters. |
+| [`ToeplitzDeterminants.orbitGram_isHermitian`](../NormalityChecker/ToeplitzDeterminants.lean#L259) | `orbitGram x b N r h` is Hermitian for all parameters. |
+| [`ToeplitzDeterminants.orbitGram_diag`](../NormalityChecker/ToeplitzDeterminants.lean#L264) | Unit diagonal of `orbitGram x b N r h` for `N ≥ 1`. |
+| [`ToeplitzDeterminants.orbitGram_det_nonneg`](../NormalityChecker/ToeplitzDeterminants.lean#L270) | The determinant of `orbitGram x b N r h` has nonnegative real part. |
+| [`ToeplitzDeterminants.orbitGram_det_im_eq_zero`](../NormalityChecker/ToeplitzDeterminants.lean#L276) | The determinant of `orbitGram x b N r h` is real (vanishing imaginary part). |
+| [`ToeplitzDeterminants.gramMatrix_det_eq_prod_gramSchmidt`](../NormalityChecker/ToeplitzDeterminants.lean#L308) | **Gram–Schmidt determinant product formula (Lemma 1.1).** For every finite family of vectors `v : Fin r → E` (including linearly dependent families and `r =… |
+| [`ToeplitzDeterminants.gramMatrix_det_re_eq_prod_gramSchmidt`](../NormalityChecker/ToeplitzDeterminants.lean#L371) |  |
+| [`ToeplitzDeterminants.gramMatrix_det_im_eq_zero`](../NormalityChecker/ToeplitzDeterminants.lean#L375) |  |
+| [`ToeplitzDeterminants.gramMatrix_det_nonneg`](../NormalityChecker/ToeplitzDeterminants.lean#L379) |  |
+| [`ToeplitzDeterminants.inner_gramSchmidt_eq_zero_of_mem_span`](../NormalityChecker/ToeplitzDeterminants.lean#L385) | Orthogonality of the `j`-th Gram–Schmidt residual to the span of the preceding vectors. |
+| [`ToeplitzDeterminants.norm_sub_sq_eq_norm_gramSchmidt_sq_add`](../NormalityChecker/ToeplitzDeterminants.lean#L398) | Exact Pythagorean decomposition of `‖v j - w‖^2` for any `w` in the span of `v_0, …, v_{j-1}`. |
+| [`ToeplitzDeterminants.norm_gramSchmidt_sq_le_sub`](../NormalityChecker/ToeplitzDeterminants.lean#L415) | Minimality of the Gram–Schmidt residual norm over the span of preceding vectors. |
+| [`ToeplitzDeterminants.gram_det_le_prod_consecutive`](../NormalityChecker/ToeplitzDeterminants.lean#L424) | **A1.1 (general Gram form).** For any finite family of vectors `v : Fin r → E` with `‖v i‖ ≤ 1` (including singular Gram matrices and `r = 0, 1`), the Gram… |
+| [`ToeplitzDeterminants.inner_pointVec`](../NormalityChecker/ToeplitzDeterminants.lean#L476) |  |
+| [`ToeplitzDeterminants.gramMatrix_pointVec`](../NormalityChecker/ToeplitzDeterminants.lean#L488) |  |
+| [`ToeplitzDeterminants.norm_pointVec`](../NormalityChecker/ToeplitzDeterminants.lean#L494) |  |
+| [`ToeplitzDeterminants.pointGram_det_le_pow`](../NormalityChecker/ToeplitzDeterminants.lean#L508) | **A1.1 for unimodular point sets.** For every `N ≥ 1`, `r`, and unimodular `z : Fin N → ℂ`, `det (pointGram z r) ≤ (1 - ‖S(1)‖^2)^(r - 1)`. |
+| [`ToeplitzDeterminants.orbitGram_det_le_pow`](../NormalityChecker/ToeplitzDeterminants.lean#L529) [GF-49](results.md#gf-49) | **A1.1 (Theorem 1.2) for `orbitGram`.** For every `x : ℝ`, `b`, `N ≥ 1`, `r`, `h : ℤ`, `det (orbitGram x b N r h) ≤ (1 - ‖orbitWeylSum x b N h‖^2)^(r - 1)`… |
+| [`ToeplitzDeterminants.pointGram_two_det`](../NormalityChecker/ToeplitzDeterminants.lean#L535) | **Exact `2 × 2` determinant identity** for `pointGram`. |
+| [`ToeplitzDeterminants.orbitGram_two_det`](../NormalityChecker/ToeplitzDeterminants.lean#L551) [GF-49](results.md#gf-49) | **Exact `2 × 2` determinant identity (A6.2)** for `orbitGram`: `det (orbitGram x b N 2 h) = 1 - ‖orbitWeylSum x b N h‖^2`. |
+| [`ToeplitzDeterminants.orbitGram_two_det_re`](../NormalityChecker/ToeplitzDeterminants.lean#L557) | Real-part form of the `2 × 2` determinant identity for `orbitGram`. |
+| [`ToeplitzDeterminants.pointGram_det_eq_pow_iff`](../NormalityChecker/ToeplitzDeterminants.lean#L611) | **A1.1 equality characterization** for `pointGram`: for `r ≥ 1`, `N ≥ 1`, equality holds in `pointGram_det_le_pow` iff the moments are geometric (`S(k) =… |
+| [`ToeplitzDeterminants.orbitGram_det_eq_pow_iff`](../NormalityChecker/ToeplitzDeterminants.lean#L806) [GF-49](results.md#gf-49) | **A1.1 equality characterization** for `orbitGram`. |
+| [`ToeplitzDeterminants.posSemidef_exists_gram`](../NormalityChecker/ToeplitzDeterminants.lean#L818) | Every complex positive semidefinite matrix is the Gram matrix of a finite family of vectors in `EuclideanSpace ℂ ι`. |
+| [`ToeplitzDeterminants.posSemidef_det_re_le_prod_diag`](../NormalityChecker/ToeplitzDeterminants.lean#L867) | **Hadamard's inequality for PSD matrices:** `det M ≤ ∏ i, (M i i).re`. |
+| [`ToeplitzDeterminants.posSemidef_det_fin_add_le`](../NormalityChecker/ToeplitzDeterminants.lean#L922) | **Hadamard–Fischer PSD block inequality on `Fin (a + b)`.** For any complex positive semidefinite `(a + b) × (a + b)` matrix `M` (singular blocks included),… |
+| [`ToeplitzDeterminants.posSemidef_det_le_mul_submatrix`](../NormalityChecker/ToeplitzDeterminants.lean#L955) | **General Hadamard–Fischer PSD inequality on `m ⊕ n`.** For any finite types `m, n` and any complex PSD matrix `M : Matrix (m ⊕ n) (m ⊕ n) ℂ`, `det M ≤ det… |
+| [`ToeplitzDeterminants.posSemidef_det_fromBlocks_le`](../NormalityChecker/ToeplitzDeterminants.lean#L985) [GF-49](results.md#gf-49) | **Hadamard–Fischer inequality for block PSD matrices `fromBlocks A B Bᴴ D`.** |
+| [`ToeplitzDeterminants.pointGram_det_add_le`](../NormalityChecker/ToeplitzDeterminants.lean#L996) | Submultiplicativity of Toeplitz Gram determinants: `det (pointGram z (a + c)) ≤ det (pointGram z a) · det (pointGram z c)`. |
+| [`ToeplitzDeterminants.pointGram_det_fischer`](../NormalityChecker/ToeplitzDeterminants.lean#L1012) | **Hadamard–Fischer with remainder block (Corollary 1.5(3))** for `pointGram`: `det G_{N,r} ≤ (det G_{N,m})^(r / m) · det G_{N, r % m}`. |
+| [`ToeplitzDeterminants.pointGram_det_le_one`](../NormalityChecker/ToeplitzDeterminants.lean#L1034) | Unit-diagonal upper bound `det (pointGram z r) ≤ 1` for `N ≥ 1`. |
+| [`ToeplitzDeterminants.orbitGram_det_add_le`](../NormalityChecker/ToeplitzDeterminants.lean#L1042) | Submultiplicativity of `orbitGram` determinants. |
+| [`ToeplitzDeterminants.orbitGram_det_fischer`](../NormalityChecker/ToeplitzDeterminants.lean#L1050) | **Hadamard–Fischer with remainder block (Corollary 1.5(3))** for `orbitGram`: `det G_{N,r}(h) ≤ (det G_{N,m}(h))^(r / m) · det G_{N, r % m}(h)`. |
+| [`ToeplitzDeterminants.orbitGram_det_le_pow_div`](../NormalityChecker/ToeplitzDeterminants.lean#L1058) [GF-49](results.md#gf-49) | **Hadamard–Fischer block bound for `orbitGram`** (unit-diagonal corollary): `det G_{N,r}(h) ≤ (det G_{N,m}(h))^(r / m)` for `N ≥ 1`. |
+| [`ToeplitzDeterminants.pointGram_det_pow_antitone`](../NormalityChecker/ToeplitzDeterminants.lean#L1135) | **Monotone normalized determinant root (Corollary 1.5(2))** for `pointGram`: for `m ≤ r`, `(det G_{N,r})^m ≤ (det G_{N,m})^r`. |
+| [`ToeplitzDeterminants.orbitGram_det_pow_antitone`](../NormalityChecker/ToeplitzDeterminants.lean#L1203) [GF-49](results.md#gf-49) | **Monotone normalized determinant root (Corollary 1.5(2))** for `orbitGram`: for `m ≤ r`, `(det G_{N,r}(h))^m ≤ (det G_{N,m}(h))^r`. |
+| [`ToeplitzDeterminants.betaI_add_alphaJ_det`](../NormalityChecker/ToeplitzDeterminants.lean#L1213) | **General compound-symmetric determinant** over any commutative ring `R`: for `r ≥ 1` and all `β, α : R`, `det (β • I_r + α • J_r) = β ^ (r - 1) * (β + r * α)`. |
+| [`ToeplitzDeterminants.oneSubAlphaI_add_alphaJ_det`](../NormalityChecker/ToeplitzDeterminants.lean#L1313) [GF-49](results.md#gf-49) | **A4 exact control matrix determinant (Proposition 4.1)** over any commutative ring `R`: for every `r ≥ 1` and every `α : R` (including negative `α`), `det… |
+| [`ToeplitzDeterminants.oneSubAlphaI_add_alphaJ_det_zero`](../NormalityChecker/ToeplitzDeterminants.lean#L1320) | `r = 0` case of the A4 control matrix determinant (`det = 1`). |
+| [`ToeplitzDeterminants.oneSubAlphaI_add_alphaJ_det_real`](../NormalityChecker/ToeplitzDeterminants.lean#L1325) | Real specialization of `oneSubAlphaI_add_alphaJ_det`. |
+| [`ToeplitzDeterminants.oneSubAlphaI_add_alphaJ_det_complex`](../NormalityChecker/ToeplitzDeterminants.lean#L1331) | Complex specialization of `oneSubAlphaI_add_alphaJ_det`. |
+| [`ToeplitzDeterminants.oneSubAlphaI_add_alphaJ_det_bounds`](../NormalityChecker/ToeplitzDeterminants.lean#L1338) | **A4 determinant sandwich** for `α ∈ [0, 1]` and `r ≥ 1`: `(1 - α)^r ≤ det ((1 - α) I_r + α J_r) ≤ r * (1 - α)^(r - 1)`. |
+| [`ToeplitzDeterminants.det_mul_eq_sum_powersetCard`](../NormalityChecker/ToeplitzDeterminants.lean#L1391) [GF-49](results.md#gf-49) | **General rectangular Cauchy–Binet theorem** over any commutative ring `R`: for `A : Matrix (Fin r) (Fin N) R` and `B : Matrix (Fin N) (Fin r) R`, `det (A *… |
+| [`ToeplitzDeterminants.pointGram_det_eq_cauchy_binet_complex`](../NormalityChecker/ToeplitzDeterminants.lean#L1560) | **A7 exact finite Cauchy–Binet expansion (complex form)** for `pointGram`: `N^r · det (pointGram z r) = ∑_{\|s\| = r} ∏_{a < b ∈ s} ‖z_a - z_b‖^2`. |
+| [`ToeplitzDeterminants.pointGram_det_eq_cauchy_binet`](../NormalityChecker/ToeplitzDeterminants.lean#L1591) | **A7 exact finite Cauchy–Binet expansion (real form)** for `pointGram`. |
+| [`ToeplitzDeterminants.orbitGram_det_eq_cauchy_binet_complex`](../NormalityChecker/ToeplitzDeterminants.lean#L1661) | **A7 exact finite Cauchy–Binet expansion for `orbitGram` (complex form):** `N^r · det (orbitGram x b N r h) = ∑_{s ⊆ {0,…,N-1}, \|s\|=r} ∏_{j < k ∈ s} ‖z_j -… |
+| [`ToeplitzDeterminants.orbitGram_det_eq_cauchy_binet`](../NormalityChecker/ToeplitzDeterminants.lean#L1673) [GF-49](results.md#gf-49) | **A7 exact finite Cauchy–Binet expansion for `orbitGram` (real form):** `(orbitGram x b N r h).det.re = N^(-r) · ∑_{s ⊆ {0,…,N-1}, \|s\|=r} ∏_{j < k ∈ s} ‖z_j -… |
+| [`ToeplitzDeterminants.orbitGram_det_eq_zero_of_lt`](../NormalityChecker/ToeplitzDeterminants.lean#L1683) | Vanishing of `orbitGram` determinant whenever `r > N`. |
+| [`ToeplitzDeterminants.orbitGram_det_pos_of_irrational`](../NormalityChecker/ToeplitzDeterminants.lean#L1701) [GF-49](results.md#gf-49) | **Rank-only positivity for irrational orbits (Proposition 1.6 / Theorem 7.4):** for every irrational `x`, base `b ≥ 2`, nonzero frequency `h`, and `r ≤ N`… |
+| [`ToeplitzDeterminants.posSemidef_regularized_posDef`](../NormalityChecker/ToeplitzDeterminants.lean#L1743) | **A6 finite regularization (complex-scalar form):** for any complex PSD matrix `G` and `0 < t ≤ 1`, the regularized matrix `(1 - t) G + t I` is positive… |
+| [`ToeplitzDeterminants.posSemidef_regularized_posDef_realSmul`](../NormalityChecker/ToeplitzDeterminants.lean#L1756) | **A6 finite regularization (real-scalar form):** for any complex PSD matrix `G` and `0 < t ≤ 1`, `(1 - t) • G + t • 1` is positive definite. |
+| [`ToeplitzDeterminants.posSemidef_regularized_det_ge`](../NormalityChecker/ToeplitzDeterminants.lean#L1763) | **A6 finite regularized determinant lower bound:** for any `r × r` complex PSD matrix `G` and `0 < t ≤ 1`, `det ((1 - t) G + t I) ≥ t ^ r`. |
+| [`ToeplitzDeterminants.orbitGram_regularized_posDef`](../NormalityChecker/ToeplitzDeterminants.lean#L1797) [GF-49](results.md#gf-49) | **A6 regularized orbit Gram matrix** is positive definite for `0 < t ≤ 1`. |
+| [`ToeplitzDeterminants.orbitGram_regularized_det_ge`](../NormalityChecker/ToeplitzDeterminants.lean#L1803) | **A6 regularized orbit Gram determinant floor** `det ((1 - t) G_{N,r}(h) + t I) ≥ t ^ r`. |
 
 ## Stoneham polynomial images and products
 
@@ -3451,6 +3531,87 @@ Declaration counts describe the size of the library, not the mathematical signif
 | [`logPrefix_drift_bounds`](../NormalityChecker/GrowingLags.lean#L12) | The first-order drift of the rational recurrence has a uniform second-order error even when the lag depends on the starting position. |
 | [`logPrefix_centered_lag_bound`](../NormalityChecker/GrowingLags.lean#L36) | Centering by the drift gives a usable joint-character estimate up to lags with 2^r = o(n²). |
 | [`logPrefix_dyadic_lag_limit`](../NormalityChecker/GrowingLags.lean#L53) | A concrete critical scale: at n=a·2^k and lag k, the unwrapped drift tends to 1/a. |
+
+### HankelDeterminants
+
+[`NormalityChecker/HankelDeterminants.lean`](../NormalityChecker/HankelDeterminants.lean)
+
+| Declaration | Summary |
+| --- | --- |
+| [`HankelLogTwo.mem_pIntegral`](../NormalityChecker/HankelDeterminants.lean#L64) |  |
+| [`HankelLogTwo.den_cast_ne_zero`](../NormalityChecker/HankelDeterminants.lean#L66) |  |
+| [`HankelLogTwo.pReduce_apply`](../NormalityChecker/HankelDeterminants.lean#L77) |  |
+| [`HankelLogTwo.cast_add_mem`](../NormalityChecker/HankelDeterminants.lean#L79) |  |
+| [`HankelLogTwo.cast_mul_mem`](../NormalityChecker/HankelDeterminants.lean#L83) |  |
+| [`HankelLogTwo.cast_sub_mem`](../NormalityChecker/HankelDeterminants.lean#L87) |  |
+| [`HankelLogTwo.cast_pow_mem`](../NormalityChecker/HankelDeterminants.lean#L91) |  |
+| [`HankelLogTwo.natCast_mem`](../NormalityChecker/HankelDeterminants.lean#L95) |  |
+| [`HankelLogTwo.intCast_mem`](../NormalityChecker/HankelDeterminants.lean#L97) |  |
+| [`HankelLogTwo.two_mem`](../NormalityChecker/HankelDeterminants.lean#L99) |  |
+| [`HankelLogTwo.two_pow_mem`](../NormalityChecker/HankelDeterminants.lean#L101) |  |
+| [`HankelLogTwo.inv_natCast_mem`](../NormalityChecker/HankelDeterminants.lean#L103) |  |
+| [`HankelLogTwo.cast_prime_mul`](../NormalityChecker/HankelDeterminants.lean#L109) |  |
+| [`HankelLogTwo.padicValRat_eq_zero_of_cast_ne_zero`](../NormalityChecker/HankelDeterminants.lean#L113) | A `p`-integral rational with nonzero reduction is a nonzero `p`-adic unit. |
+| [`HankelLogTwo.padicValRat_nonneg_of_mem`](../NormalityChecker/HankelDeterminants.lean#L124) | `p`-integral rationals have nonnegative `p`-adic valuation. |
+| [`HankelLogTwo.exists_eq_prime_mul_of_cast_eq_zero`](../NormalityChecker/HankelDeterminants.lean#L129) | A `p`-integral rational with zero reduction is `p` times a `p`-integral rational. |
+| [`HankelLogTwo.det_mem_and_cast`](../NormalityChecker/HankelDeterminants.lean#L150) | Determinants of `p`-integral matrices are `p`-integral and commute with reduction. |
+| [`HankelLogTwo.logPrefix_succ`](../NormalityChecker/HankelDeterminants.lean#L169) | The BBP recurrence `s_{n+1} = 2 s_n + 1/(n+1)` in inverse form. |
+| [`HankelLogTwo.logPrefix_mem_of_lt`](../NormalityChecker/HankelDeterminants.lean#L179) | `s_n` is `p`-integral for `n < p`. |
+| [`HankelLogTwo.logPrefix_prime_band`](../NormalityChecker/HankelDeterminants.lean#L188) | In the band `p ≤ n < 2p`, `p s_n` is `p`-integral and `p s_n ≡ 2 ^ (n - p) (mod p)`. |
+| [`HankelLogTwo.bbpHankel_apply`](../NormalityChecker/HankelDeterminants.lean#L237) |  |
+| [`HankelLogTwo.antiTriangular_det`](../NormalityChecker/HankelDeterminants.lean#L247) | Reversing the columns of the anti-triangular pattern gives a unipotent lower-triangular matrix, so its determinant is the sign of the reversal permutation. |
+| [`HankelLogTwo.sign_cast_ne_zero`](../NormalityChecker/HankelDeterminants.lean#L274) |  |
+| [`HankelLogTwo.bbpHankel_prime_mul_reduction`](../NormalityChecker/HankelDeterminants.lean#L286) | **`B1`, entrywise structure.** For `1 ≤ r ≤ p` and `p`-integral shifts, every entry of `p • H` is `p`-integral, and modulo `p` it is `0` strictly above the… |
+| [`HankelLogTwo.bbpHankel_antidiag_reduction`](../NormalityChecker/HankelDeterminants.lean#L309) | **`B1`, anti-diagonal.** On the anti-diagonal `i + j = r - 1`, `p H i j ≡ 1 (mod p)`. |
+| [`HankelLogTwo.bbpHankel_det_reduction`](../NormalityChecker/HankelDeterminants.lean#L317) | **`B1`, determinant congruence.** `p ^ r det H` is `p`-integral and congruent modulo `p` to the sign of the column reversal, i.e. |
+| [`HankelLogTwo.bbpHankel_det_ne_zero_and_padicValRat`](../NormalityChecker/HankelDeterminants.lean#L340) | **`B1` (Theorem 1.1).** For every prime `p` (including `p = 2`), every `1 ≤ r ≤ p` and every matrix of `p`-integral rational shifts, the prime-centred BBP… |
+| [`HankelLogTwo.bbpHankel_det_ne_zero_of_pIntegral`](../NormalityChecker/HankelDeterminants.lean#L357) | **`B1`, nonvanishing** for `p`-integral rational shifts. |
+| [`HankelLogTwo.bbpHankel_det_padicValRat_of_pIntegral`](../NormalityChecker/HankelDeterminants.lean#L362) | **`B1`, exact pole** for `p`-integral rational shifts: `v_p (det H) = -r`. |
+| [`HankelLogTwo.intCast_den_not_dvd`](../NormalityChecker/HankelDeterminants.lean#L367) |  |
+| [`HankelLogTwo.bbpHankel_det_ne_zero`](../NormalityChecker/HankelDeterminants.lean#L371) [GF-50](results.md#gf-50) | **`B1`, unconditional nonvanishing** for arbitrary integer shifts `m i j ∈ ℤ`. |
+| [`HankelLogTwo.bbpHankel_det_padicValRat`](../NormalityChecker/HankelDeterminants.lean#L376) [GF-50](results.md#gf-50) | **`B1`, exact pole** for arbitrary integer shifts: `v_p (det H) = -r`. |
+| [`HankelLogTwo.bbpHankel_hankelShift_det`](../NormalityChecker/HankelDeterminants.lean#L382) | **`B1` for genuine Hankel shifts** `H i j = s_{M+i+j} - m_{M+i+j}` with `m : ℕ → ℤ`. |
+| [`HankelLogTwo.updateCol_mulVec_of_apply_eq_zero`](../NormalityChecker/HankelDeterminants.lean#L395) |  |
+| [`HankelLogTwo.pow_dvd_det_of_le_finrank_ker`](../NormalityChecker/HankelDeterminants.lean#L408) | **Generic rank-sensitive divisibility.** Let `φ : S →+* F` be a surjection onto a field whose kernel is generated by `q`. |
+| [`HankelLogTwo.pow_dvd_det_of_rank_le`](../NormalityChecker/HankelDeterminants.lean#L483) | **Rank form.** If `A.map φ` has rank `≤ s`, then `q ^ (card n - s) ∣ det A`. |
+| [`HankelLogTwo.int_pow_dvd_det_of_rank_le`](../NormalityChecker/HankelDeterminants.lean#L496) [GF-50](results.md#gf-50) | **`B3` (Theorem 3.1(1), integer form).** If an integer matrix has rank `≤ s` modulo a prime `q`, then `q ^ (card n - s)` divides its determinant. |
+| [`HankelLogTwo.int_fin_pow_dvd_det_of_rank_le`](../NormalityChecker/HankelDeterminants.lean#L504) | **`B3` for `r × r` integer matrices**: rank `≤ s` modulo `q` forces `q ^ (r - s) ∣ det A`. |
+| [`HankelLogTwo.pReduce_surjective`](../NormalityChecker/HankelDeterminants.lean#L513) |  |
+| [`HankelLogTwo.pReduce_ker`](../NormalityChecker/HankelDeterminants.lean#L518) |  |
+| [`HankelLogTwo.ratMatrix_det_padicValRat_ge_neg_rank`](../NormalityChecker/HankelDeterminants.lean#L526) [GF-50](results.md#gf-50) | **`B3` (Theorem 3.1(1), rational form).** Let `H` be a rational matrix such that `q • H` is `q`-integral and its reduction modulo `q` has rank `≤ s`. |
+| [`HankelLogTwo.ratMatrix_det_padicValRat_ge_neg_rank_of_int`](../NormalityChecker/HankelDeterminants.lean#L557) | **`B3`, integer-entry form.** If `q • H = B` with `B` an integer matrix whose reduction modulo `q` has rank `≤ s`, and `det H ≠ 0`, then `v_q (det H) ≥ -s`. |
+| [`HankelLogTwo.padicValRat_det_add_smul_vecMulVec_ge`](../NormalityChecker/HankelDeterminants.lean#L570) | `q`-integral rank-one perturbations with a pole of depth `e`: if `A₀`, `u`, `w` are `q`-integral and `q ^ e • s` is `q`-integral, then `v_q (det (A₀ + s • u… |
+| [`HankelLogTwo.logPrefix_sub_pow_mem`](../NormalityChecker/HankelDeterminants.lean#L613) | If `q ∤ M + t` for `1 ≤ t ≤ k`, then `s_{M+k} - 2^k s_M` is `q`-integral. |
+| [`HankelLogTwo.bbpHankel_nonEntering_decomp`](../NormalityChecker/HankelDeterminants.lean#L632) | **Rank-one decomposition at a non-entering prime.** If `q` divides no integer of `(M, M + 2r - 2]` (`M = p - r + 1`) and the shifts are `q`-integral, then `H… |
+| [`HankelLogTwo.bbpHankel_nonEntering_rank_le_one`](../NormalityChecker/HankelDeterminants.lean#L651) | **`B3`, rank `≤ 1` at a non-entering prime of depth `≤ 1`.** If `q` divides no integer of `(M, M + 2r - 2]`, the shifts are `q`-integral and `q s_M` is… |
+| [`HankelLogTwo.bbpHankel_nonEntering_padicValRat_ge`](../NormalityChecker/HankelDeterminants.lean#L683) | **`B3`, non-entering prime of depth `e`.** If `q` divides no integer of `(M, M + 2r - 2]`, the shifts are `q`-integral, `q ^ e s_M` is `q`-integral and `det H… |
+| [`HankelLogTwo.bbpHankel_nonEntering_padicValRat_ge_neg_one`](../NormalityChecker/HankelDeterminants.lean#L699) | **`B3`, non-entering prime corollary for integer shifts (depth `1`).** Let `p` be prime, `1 ≤ r ≤ p`, `M = p - r + 1`, and let `q` be a prime dividing no… |
+| [`HankelLogTwo.bbpHankel_nonEntering_padicValRat_ge_neg_depth`](../NormalityChecker/HankelDeterminants.lean#L711) [GF-50](results.md#gf-50) | **`B3`, non-entering prime corollary for integer shifts (general depth `e`).** |
+| [`HankelLogTwo.two_sub_pos_of_mem`](../NormalityChecker/HankelDeterminants.lean#L729) |  |
+| [`HankelLogTwo.continuousOn_bbpWeight`](../NormalityChecker/HankelDeterminants.lean#L732) |  |
+| [`HankelLogTwo.bbpTail_integrable`](../NormalityChecker/HankelDeterminants.lean#L736) |  |
+| [`HankelLogTwo.bbpTail_zero`](../NormalityChecker/HankelDeterminants.lean#L742) |  |
+| [`HankelLogTwo.bbpTail_succ`](../NormalityChecker/HankelDeterminants.lean#L749) |  |
+| [`HankelLogTwo.two_pow_mul_log_two_eq_logPrefix_add_bbpTail`](../NormalityChecker/HankelDeterminants.lean#L766) [GF-50](results.md#gf-50) | **`B4`, integral form of the BBP tail.** `2ⁿ log 2 = s_n + ∫₀¹ tⁿ / (2 - t) dt`. |
+| [`HankelLogTwo.bbpTail_bounds`](../NormalityChecker/HankelDeterminants.lean#L776) | The integral tail agrees with the tail of `LogTwo.lean`, so `0 ≤ T_n ≤ 1/(n+1)`. |
+| [`HankelLogTwo.tailMatrix_eq_moment`](../NormalityChecker/HankelDeterminants.lean#L793) |  |
+| [`HankelLogTwo.cauchyMatrix_eq_moment`](../NormalityChecker/HankelDeterminants.lean#L798) |  |
+| [`HankelLogTwo.momentMatrix_quadForm`](../NormalityChecker/HankelDeterminants.lean#L805) | The quadratic form of a moment matrix is the integral of a squared polynomial. |
+| [`HankelLogTwo.momentMatrix_quadForm_mono`](../NormalityChecker/HankelDeterminants.lean#L836) | Pointwise comparison of weights gives Loewner comparison of moment matrices. |
+| [`HankelLogTwo.bbpWeight_bounds`](../NormalityChecker/HankelDeterminants.lean#L850) |  |
+| [`HankelLogTwo.tail_cauchy_sandwich`](../NormalityChecker/HankelDeterminants.lean#L857) | **`B4`, Loewner sandwich** `C / 2 ≤ K ≤ C` (as quadratic forms). |
+| [`HankelLogTwo.quadForm_pos_of_ne_zero`](../NormalityChecker/HankelDeterminants.lean#L877) | A nonzero coefficient vector gives a strictly positive squared-polynomial moment. |
+| [`HankelLogTwo.cauchyMatrix_isHermitian`](../NormalityChecker/HankelDeterminants.lean#L909) |  |
+| [`HankelLogTwo.tailMatrix_isHermitian`](../NormalityChecker/HankelDeterminants.lean#L914) |  |
+| [`HankelLogTwo.cauchyMatrix_posDef`](../NormalityChecker/HankelDeterminants.lean#L920) | **`B4`.** The Hilbert/Cauchy matrix `C(M, r)` is positive definite. |
+| [`HankelLogTwo.tailMatrix_posDef`](../NormalityChecker/HankelDeterminants.lean#L926) | **`B4`.** The BBP tail moment matrix `K(M, r)` is positive definite. |
+| [`HankelLogTwo.one_le_det_of_quadForm`](../NormalityChecker/HankelDeterminants.lean#L935) | A real symmetric matrix dominating the identity has determinant at least `1`. |
+| [`HankelLogTwo.det_le_det_of_quadForm_le`](../NormalityChecker/HankelDeterminants.lean#L954) [GF-50](results.md#gf-50) | **Loewner monotonicity of the determinant.** If `A` is positive definite, `B` is symmetric and `xᵀ A x ≤ xᵀ B x` for all `x`, then `det A ≤ det B`. |
+| [`HankelLogTwo.tailMatrix_det_bounds`](../NormalityChecker/HankelDeterminants.lean#L1014) [GF-50](results.md#gf-50) | **`B4`, determinant comparison.** `0 < det C`, `0 < det K` and `2 ^ (-r) det C ≤ det K ≤ det C`. |
+| [`HankelLogTwo.cleanWindow_decomposition`](../NormalityChecker/HankelDeterminants.lean#L1038) | **`B4`, clean-window decomposition** (Proposition 4.1(3)). |
+| [`HankelLogTwo.bbpHankel_clean_decomposition`](../NormalityChecker/HankelDeterminants.lean#L1051) [GF-50](results.md#gf-50) | **`B4`, clean prime-centred BBP window.** With integer shifts `m i j = 2^(i+j) m_M`, the real image of `bbpHankel p r` is `ε • v vᵀ - K(p - r + 1, r)`. |
+| [`HankelLogTwo.tailMatrix_sub_det`](../NormalityChecker/HankelDeterminants.lean#L1060) | **Matrix determinant lemma for `K`.** `det (K - ε • v vᵀ) = det K * (1 - ε vᵀ K⁻¹ v)`. |
+| [`HankelLogTwo.cleanWindow_det`](../NormalityChecker/HankelDeterminants.lean#L1080) [GF-50](results.md#gf-50) | **`B4`, determinant of the clean window** (Proposition 4.1(3)): `det (ε • v vᵀ - K) = (-1)^r det K (1 - ε vᵀ K⁻¹ v)`. |
 
 ### LogarithmBands
 

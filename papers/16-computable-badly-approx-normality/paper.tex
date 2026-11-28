@@ -1,0 +1,758 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\hypersetup{pdftitle={Computable Badly Approximable Numbers with Polynomial Absolute Normality}}
+\newcommand{\dist}[1]{\lVert #1\rVert}
+\newcommand{\fr}[1]{\{#1\}}
+\newcommand{\ttt}[1]{\texttt{\begingroup\def\_{\textunderscore\discretionary{}{}{}}#1\endgroup}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\Ex}{\mathbb{E}}
+\newcommand{\Lop}{\mathcal{L}}
+\newcommand{\Hmeas}{\mathcal{H}}
+\newcommand{\BAD}{\mathrm{BAD}}
+\newcommand{\rhoK}{\rho_{\mathrm{Klo}}}
+\newcommand{\CK}{C_{\mathrm{Klo}}}
+\newcommand{\mlin}{m_{\mathrm{lin}}}
+\newcommand{\Elin}{E_{\mathrm{lin}}}
+\newcommand{\epsTrig}{\epsilon_{\mathrm{trig}}}
+\newcommand{\NTay}{N_{\mathrm{Tay}}}
+\DeclareMathOperator{\dimH}{\dim_{\mathrm{H}}}
+\DeclareMathOperator{\RePart}{Re}
+\renewcommand{\ReleaseLabel}{candidate draft, not yet released}
+\setlength{\emergencystretch}{3em}
+\allowdisplaybreaks
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Computable Badly Approximable Numbers\\[3pt] with Polynomial Absolute Normality\par}
+\vspace{10pt}
+\makebyline{1.0 (candidate draft)}{28 November 2026}
+\end{center}
+
+\begin{abstract}
+Let $F_M=\{[0;a_1,a_2,\dots]\in(0,1):1\le a_n\le M\text{ for all }n\ge1\}$ be the continued-fraction Cantor set of badly approximable numbers with partial quotients bounded by $M$. The \emph{existence} of absolutely normal numbers in $F_M$ is classical: for $M\ge3$ it follows from Kaufman's (1980) Fourier-decay theorem via R.~C.~Baker's observation recorded in Montgomery's \emph{Ten Lectures} (1994), and for $M=2$ it was established by Queff\'elec and Ramar\'e (2003); moreover, Hochman and Shmerkin (2015) established non-constructive pointwise normality for smooth images of measures on arbitrary finite-alphabet continued-fraction Cantor sets. Nothing in this paper solves or strengthens Montgomery's existence question. Rather, we address a Turing-computable form of Queff\'elec's (2006) remark that no explicit normal numbers in $\BAD$ have been constructed yet.
+
+We construct Turing-computable real numbers $x=[0;a_1,a_2,\dots]\in F_M$ (hence $q\dist{qx}>1/(M+2)$ for every integer $q\ge1$ and irrationality exponent $\mu(x)=2$) such that $P(x)$ is normal in every integer base $b\ge2$ for every nonconstant rational polynomial $P\in\Q[X]$, at three principal cap levels:
+(i)~$M=100$ (block length $L=52$, certified Frostman exponent $s=19/20$, $q\dist{qx}>1/102$), by a purely analytic proof with zero external inputs and zero computer certificates;
+(ii)~$M=14$ ($L=344$, $s=18/19$, $q\dist{qx}>1/16$; and a small-alphabet variant $M=42$, $L=4$), via an elementary fourth-moment Kloosterman bound with zero external inputs and an exact rational transfer-operator eigenfunction certificate; and
+(iii)~$M=8$ ($L=226$, $s=46/51$, $q\dist{qx}>1/10$; and small-alphabet variants $M=14$, $L=4$ and $M=30$, $L=2$), via the Weil--Estermann Kloosterman bound and an exact rational transfer-operator certificate.
+The core analytic engine is a Kaufman-type two-block large-sieve Fourier-decay estimate for $P_*\mu$ with fully explicit rational exponents, thresholds and majorants $(\eta,\bar\xi_0(P),\bar C(P))$ valid whenever $s>s^*(\rhoK):=(5-\rhoK)/(2(3-\rhoK))$, yielding thresholds $17/18$ (elementary, $\rhoK=3/4$) and $9/10$ (Weil--Estermann, $\rhoK=1/2$).
+
+Conversely, exact rational upper transfer-operator certificates prove that $\Hmeas^{9/10}(F_7)=0$, $\Hmeas^{17/18}(F_{12})=0$, and $\Hmeas^{5/6}(F_4)=0$, excluding $M\le7$ for \emph{any} measure on the Weil--Estermann route (establishing $M=8$ as optimal for this architecture), $M\le12$ on the elementary route ($M=13$ remains open), and $M\le4$ for any rectangle-count exponent $\rhoK\ge0$. Reaching the classical existence cap $M=2$ therefore requires a genuinely different Fourier-decay mechanism. We repair a zero-weight defect in naive block-weight searches via the exact integer condition $D^Q\ge B_{M,L}^P$, quantify the tree branching complexity ($10^{395}$ children per step at $M=14$, $L=344$ and $10^{205}$ at $M=8$, $L=226$, versus $3.1\times10^6$ at $M=42$, $L=4$ and $900$ at $M=30$, $L=2$), emphasize that the algorithm is computable in principle only and yields no discrepancy rate for $P(x)$, and record an all-prime full-density series corollary alongside a representation lemma clarifying that persistent off-radix prime support carries no intrinsic constraint. All proofs are written arguments backed where stated by exact integer/rational finite certificates; no result here is formalized in Lean~4.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Throughout, $b\ge2$ is an integer radix, $e(u)=\exp(2\pi i u)$, $\fr{u}=u-\lfloor u\rfloor\in[0,1)$ is the fractional part, $\dist{u}=\min(\fr{u},1-\fr{u})\in[0,1/2]$ is the distance to the nearest integer, $\tau(q)=\sum_{d\mid q}1$ is the divisor function, and $\log$ denotes the natural logarithm. For $x\in\R$ and $N\ge1$, the \emph{extreme interval discrepancy} of the first $N$ shifts in base~$b$ is
+\[
+D_N(x;b)=\sup_{0\le u<v\le1}\left|\frac{\#\{0\le n<N:\fr{b^nx}\in[u,v)\}}{N}-(v-u)\right|.
+\]
+A real number $x$ is \emph{normal in base~$b$} if $D_N(x;b)\to0$ as $N\to\infty$, equivalently by Weyl's criterion \cite[Chapter~1]{KN} if $N^{-1}\sum_{n=0}^{N-1}e(hb^nx)\to0$ for every nonzero integer $h$. It is \emph{absolutely normal} if it is normal in every integer base $b\ge2$.
+
+For a finite or infinite regular continued fraction $x=[0;a_1,a_2,\dots]$ ($a_j\in\Z_{\ge1}$), let $p_n/q_n=[0;a_1,\dots,a_n]$ be its convergents ($p_{-1}=1$, $p_0=0$, $q_{-1}=0$, $q_0=1$). For a finite word $\mathbf{a}=(a_1,\dots,a_n)\in\Z_{\ge1}^n$, set
+\begin{equation}\label{eq:cf-matrix}
+M_{\mathbf{a}}=\begin{pmatrix}0&1\\1&a_1\end{pmatrix}\cdots\begin{pmatrix}0&1\\1&a_n\end{pmatrix}=\begin{pmatrix}p_{n-1}&p_n\\q_{n-1}&q_n\end{pmatrix},\qquad
+T_{\mathbf{a}}(y)=\frac{p_n+p_{n-1}y}{q_n+q_{n-1}y},\qquad
+I_{\mathbf{a}}=T_{\mathbf{a}}([0,1]),
+\end{equation}
+and write $p(\mathbf{a})=p_n$, $q(\mathbf{a})=q_n$, $q'(\mathbf{a})=q_{n-1}$. For an integer $M\ge2$, let
+\[
+F_M=\bigl\{[0;a_1,a_2,\dots]\in(0,1):1\le a_n\le M\text{ for all }n\ge1\bigr\}.
+\]
+A real number $x$ is \emph{badly approximable} ($x\in\BAD$) if $\inf_{q\ge1}q\dist{qx}>0$, equivalently if its regular continued fraction has bounded partial quotients; its \emph{irrationality exponent} is $\mu(x)=\sup\{\mu:\dist{qx}<q^{1-\mu}\text{ for infinitely many }q\ge1\}$, and every $x\in\BAD$ satisfies $\mu(x)=2$. For integers $u,v$ and $q\ge1$, the \emph{Kloosterman sum} is
+\[
+S(u,v;q)=\sum_{\substack{x\bmod q\\\gcd(x,q)=1}}e\!\left(\frac{ux+v\bar x}{q}\right),\qquad x\bar x\equiv1\pmod q.
+\]
+
+\paragraph{Historical context and exact framing.}
+The \emph{existence} of normal numbers with bounded partial quotients is a classical theorem. In the Appendix of his \emph{Ten Lectures} \cite[Appendix, Problem~45, p.~204]{Montgomery1994}, Montgomery posed the problem of finding a normal number whose continued-fraction partial quotients are bounded, and already recorded R.~C.~Baker's unpublished observation that combining Jarn\'ik's (1928) dimension bound \cite{Jarnik1928}, the Davenport--Erd\H{o}s--LeVeque criterion \cite{DEL1963}, and Kaufman's (1980) polynomial Fourier-decay theorem on $F_M$ ($\dimH F_M>2/3$, in particular $M\ge3$) \cite{Kaufman1980} proves that $F_M$ contains absolutely normal numbers. Queff\'elec and Ramar\'e \cite{QueffelecRamare2003} lowered the Fourier-decay dimension threshold from $2/3$ to $1/2$, establishing polynomial Fourier decay and hence the existence of infinitely many absolutely normal numbers in $F_2$ (partial quotients in $\{1,2\}$, where $\dimH F_2=0.5312805\dots$ \cite{Hensley1992,JenkinsonPollicott2018}). Jordan and Sahlsten \cite{JordanSahlsten2016} extended polynomial Fourier decay to Gibbs measures of the Gauss map of dimension $>1/2$. Removing the dimension $>1/2$ barrier entirely, Hochman and Shmerkin \cite[Theorems~1.4, 1.5, 1.12 and \S1.3.3]{HochmanShmerkin2015} proved that quasi-product measures on arbitrary finite-alphabet continued-fraction Cantor sets $F_A$ ($|A|\ge2$) and their pushforwards under $C^1$ diffeomorphisms are pointwise normal in every integer (and Pisot) base; restricting a nonconstant rational polynomial $P\in\Q[X]$ to compact intervals avoiding its finitely many critical points already shows non-constructively that almost every $x\in F_2$ has $P(x)$ absolutely normal for every nonconstant $P\in\Q[X]$. More recently, Sahlsten and Stevens \cite{SahlstenStevens2024}, Baker and Banaji \cite{BakerBanaji2025}, and Algom, Rodriguez Hertz and Wang \cite{ARHW2026} established non-effective polynomial Fourier decay for nonlinear self-conformal measures and their smooth pushforwards via Dolgopyat-type and renewal arguments.
+
+\emph{Nothing in this paper answers or strengthens Montgomery's existence question.} Instead, we address a Turing-computable version of Queff\'elec's subsequent survey remark \cite[pp.~232--233]{Queffelec2006}:
+\begin{quote}
+\emph{``Note that no explicit normal numbers in $\BAD$ have been constructed yet.''}
+\end{quote}
+On the computability side, starting from Sierpi\'nski \cite{Sierpinski1917} (made computable by Becher and Figueira \cite{BecherFigueira2002}) and Turing's unpublished algorithm \cite{BecherFigueiraPicchi2007}, computable absolutely normal numbers have been constructed in polynomial time \cite{BecherHeiberSlaman2013}, in nearly linear time \cite{LutzMayordomo2021}, with low discrepancy \cite{Levin1999,AlvarezBecher2017,ABSS2017}, as Liouville numbers \cite{BecherHeiberSlaman2015}, and simultaneously continued-fraction normal \cite{Scheerer2017,BecherYuhjtman2019}. All of those constructions operate inside Lebesgue or Gauss measure (or positive-measure subsets thereof) and therefore produce numbers with \emph{unbounded} partial quotients. To stay inside the Lebesgue-null Cantor set $F_M$, one must transplant the Sierpi\'nski--Turing $L^2$-potential nested-cylinder selection to a computable \emph{singular} measure $\mu$ on $F_M$ whose polynomial pushforwards $P_*\mu$ admit \emph{explicitly computable rational} Fourier-decay exponents, thresholds and constants.
+
+\subsection{Main results}
+
+Our first main theorem constructs Turing-computable badly approximable numbers with polynomial absolute normality across three escalating levels of cap sharpness and proof inputs.
+
+\begin{maintheorem}[Computable badly approximable polynomial-absolutely-normal numbers]\label{thm:A}
+For each certified parameter triple $(M,L,s)$ listed below, there is a Turing machine that computes the continued-fraction partial quotients of an irrational number $x=[0;a_1,a_2,\dots]\in F_M$ ($1\le a_n\le M$ for all $n\ge1$) such that:
+\begin{itemize}[nosep]
+\item $q\dist{qx}>\frac{1}{M+2}$ for every integer $q\ge1$, and hence $\mu(x)=2$;
+\item for every nonconstant rational polynomial $P\in\Q[X]$, the real number $P(x)$ is computable and absolutely normal (normal in every integer base $b\ge2$), with computable base-$b$ digits.
+\end{itemize}
+Specifically, the conclusion holds for the following caps and evidence scopes (and consequently for every larger cap $M'\ge M$, since $F_M\subset F_{M'}$):
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof} \textup{(Purely analytic, zero external inputs, zero computer certificates.)} $M=100$, even block length $L=52$, certified Frostman exponent $s=19/20$, giving $q\dist{qx}>1/102$.
+\item \evidence{Paper proof + Finite certificate} \textup{(Elementary Kloosterman route, zero external inputs.)} $M=14$, $L=344$, $s=18/19$, giving $q\dist{qx}>1/16$ (via an exact rational transfer-operator eigenfunction certificate); and the small-block variant $M=42$, $L=4$, $s=18/19$, giving $q\dist{qx}>1/44$ (via a direct integer $19$th-root certificate).
+\item \evidence{Paper proof + Finite certificate + External input (Weil \cite{Weil1948}, Estermann \cite{Estermann1961})} \textup{(Weil--Estermann Kloosterman route.)} $M=8$, $L=226$, $s=46/51$, giving $q\dist{qx}>1/10$ (via an exact rational transfer-operator eigenfunction certificate); and the small-block variants $M=14$, $L=4$, $s=10/11$ ($q\dist{qx}>1/16$) and $M=30$, $L=2$, $s=10/11$ ($q\dist{qx}>1/32$).
+\end{enumerate}
+\end{maintheorem}
+
+\begin{table}[ht]
+\centering\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}lcclccc@{}}
+\toprule
+Cap $M$ & $L$ & Cert.\ $s$ & Route and inputs & $q\dist{qx}>$ & $M^L$ digits & $B_{M,L}$ digits \\
+\midrule
+$100$ & $52$ & $19/20$ & Analytic, no cert., no ext.\ input & $1/102$ & $105$ & $105$ \\
+$42$ & $4$ & $18/19$ & Elem.\ Kloosterman + direct cert. & $1/44$ & $7$ & $7$ \\
+$14$ & $344$ & $18/19$ & Elem.\ Kloosterman + $\Lop_s$ cert. & $1/16$ & $395$ & $396$ \\
+$30$ & $2$ & $10/11$ & Weil--Estermann + direct cert. & $1/32$ & $3$ & $3$ \\
+$14$ & $4$ & $10/11$ & Weil--Estermann + direct cert. & $1/16$ & $5$ & $5$ \\
+$8$ & $226$ & $46/51$ & Weil--Estermann + $\Lop_s$ cert. & $1/10$ & $205$ & $206$ \\
+\bottomrule
+\end{tabular}
+\caption{Certified parameter regimes of \Cref{thm:A}. Here $s$ is a certified upper-Frostman exponent ($\mu(I)\le C_F|I|^s$), strictly below $\dimH F_M$. The small-block rows $(42,4)$, $(30,2)$ and $(14,4)$ are not cap-optimal; they illustrate the alphabet-size trade-off of \Cref{thm:C}.}\label{tab:regimes}
+\end{table}
+
+\Cref{thm:A} is proved by combining the modular-hyperbola rectangle bounds (\Cref{lem:kloosterman}), the computable block-i.i.d.\ Frostman measures and transfer-operator certificates (\Cref{lem:block-measure,prop:analytic-100,lem:transfer-id,prop:certificates}), the effective polynomial Fourier-decay bound (\Cref{thm:fourier-decay}), and the rational nested-cylinder selection algorithm (\Cref{thm:selection}). Notice that the order $q\dist{qx}\asymp1$ is best possible for badly approximable numbers, though the numerical constant $1/(M+2)$ is not claimed to be sharp on $F_M$.
+
+Our second main theorem determines the exact reach of the two-block large-sieve / modular-hyperbola architecture of \Cref{thm:fourier-decay}. In that architecture, any modular-hyperbola rectangle bound with error exponent $\rhoK\in[0,1)$ (so $\rhoK=3/4$ for the elementary fourth-moment bound and $\rhoK=1/2$ for the Weil--Estermann bound) forces the Frostman exponent $s$ to satisfy the exact feasibility threshold
+\begin{equation}\label{eq:sstar}
+s>s^*(\rhoK):=\frac{5-\rhoK}{2(3-\rhoK)}=\frac12+\frac1{3-\rhoK},
+\end{equation}
+so $s^*(3/4)=17/18$, $s^*(1/2)=9/10$, and $s^*(0)=5/6$.
+
+\begin{maintheorem}[Exact optimality barriers of the two-block large-sieve architecture]\label{thm:B}
+\evidence{Paper proof + Finite certificate}
+Exact rational upper transfer-operator certificates on $[0,1]$ establish $\Sigma(7,L,9/10)\le(99/100)^L$, $\Sigma(12,L,17/18)\le(199/200)^L$ and $\Sigma(4,L,5/6)\le(19/20)^L$ for all $L\ge1$, and consequently
+\[
+\Hmeas^{9/10}(F_7)=0,\qquad \Hmeas^{17/18}(F_{12})=0,\qquad \Hmeas^{5/6}(F_4)=0.
+\]
+Therefore, by the mass distribution principle, \emph{no} Borel probability measure $\mu$ on $F_M$ (block-i.i.d.\ or otherwise) satisfies $\mu(I)\le C|I|^s$ in the forbidden regimes, and the Fourier-decay mechanism of \Cref{thm:fourier-decay} satisfies the following exact limitations:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item On the Weil--Estermann route ($\rhoK=1/2$, $s^*=9/10$), no cap $M\le7$ is attainable; the computable cap $M=8$ of \Cref{thm:A}\textup{(iii)} is \emph{optimal} for this architecture.
+\item On the elementary route ($\rhoK=3/4$, $s^*=17/18$), no cap $M\le12$ is attainable. Thus $M=14$ of \Cref{thm:A}\textup{(ii)} is optimal up to the single open case $M=13$.
+\item Under \emph{any} modular-hyperbola rectangle-count exponent $\rhoK\ge0$ in the parameter system \eqref{eq:param-system}, $s^*(\rhoK)\ge5/6$ and no cap $M\le4$ is attainable. Reaching the classical existence cap $M=2$ therefore requires a genuinely different Fourier-decay mechanism outside \eqref{eq:param-system}.
+\end{enumerate}
+\end{maintheorem}
+
+Our third main theorem records the exact algorithmic repair for block-weight positivity, the computational complexity boundary, and the representation corollary for all-prime full-density series.
+
+\begin{maintheorem}[Repaired rational selection, complexity accounting, and all-prime series]\label{thm:C}
+For the construction of \Cref{thm:A}:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Paper proof + Finite certificate} \textup{(Positivity repair for block weights.)} Let $2s=P/Q$ in lowest terms and $B_{M,L}=\max_{\mathbf{u}\in\{1,\dots,M\}^L}(q_L(\mathbf{u})+p_L(\mathbf{u}))$. In the integer weight search $a_N=\lfloor(D^Q/N^P)^{1/Q}\rfloor$, the naive stopping condition $\sum_{\mathbf{u}}a_{N(\mathbf{u})}>D$ can halt with zero weights (for $(M,L,s)=(30,2,10/11)$ it halts at $D=14{,}200$ with $461$ of $900$ weights equal to $0$), rendering conditional expectations undefined. Restricting the search to integers $D$ satisfying the exact integer test $D^Q\ge B_{M,L}^P$ guarantees $a_{N(\mathbf{u})}\ge1$ and $p_{\mathbf{u}}\in\Q_{>0}$ for every block $\mathbf{u}\in\{1,\dots,M\}^L$, while preserving $p_{\mathbf{u}}<N(\mathbf{u})^{-2s}$ and halting for every $(M,L,s)$ with $\Sigma(M,L,s)>1$ (for $(30,2,10/11)$ the least solution is $D^*=250{,}087$, with all $900$ weights strictly positive).
+\item \evidence{Paper proof + Finite certificate} \textup{(In-principle computability, complexity, and absence of discrepancy rates.)} Every decision of the machine in \Cref{thm:A} is an exact rational comparison, with explicitly computable rational majorants $(\eta,\bar\xi_0(P),\bar C(P),\bar K_e)$ and finite error budgets. However, each selection step evaluates $M^L$ children ($105$ digits at $(100,52)$, $395$ digits at $(14,344)$, $205$ digits at $(8,226)$, versus $7$ digits at $(42,4)$, $5$ digits at $(14,4)$ and $3$ digits at $(30,2)$), the threshold $\bar\xi_0(P)$ is astronomically large (e.g.\ $\log_{10}\bar\xi_0\approx101$ at $(14,4)$, $\approx222$ at $(42,4)$ and $\approx3{,}133$ at $(100,52)$ on degree-$1$ to degree-$7$ sample polynomials), and the runtime per emitted block $m$ is doubly exponential in $m$. The construction is Turing-computable in principle only, not a practical digit generator, and proves \emph{no effective discrepancy rate} for $P(x)$ (plain normality only).
+\item \evidence{Paper proof; external inputs and certificates inherited from \Cref{thm:A}} \textup{(Representation lemma and all-prime full-density series.)} Fix an integer radix $b\ge2$, enumerate the primes $\ell_1<\ell_2<\cdots$ not dividing $b$, and put $S=\sum_{n\ge1}\ell_n^{-1}b^{-n}$. For \emph{every} real $x\notin S+\Z[1/b]$, writing $d_n\in\{0,\dots,b-1\}$ for the canonical base-$b$ digits of $\fr{x-S}$ gives a full-density positive expansion $x-\lfloor x-S\rfloor=\sum_{n\ge1}(d_n+1/\ell_n)b^{-n}$ with coefficients in $(0,b)$ and exact shifted-prefix denominators $\prod_{n\le N}\ell_n$ (so persistent off-radix prime support is a representation-level property carrying no intrinsic constraint on~$x$). Including the affine map $X-S$ in the test enumeration of \Cref{thm:A} produces a computable full-density series $Z=\sum_{n\ge1}(d_n+1/\ell_n)b^{-n}$ whose individual-site digits $d_n$ are normal in base~$b$, whose every nonconstant $P(Z)$ ($P\in\Q[X]$) is absolutely normal, and which satisfies $q\dist{qZ}>1/10$ under Regime~(iii) (with Weil--Estermann), $>1/16$ under Regime~(ii) (zero external inputs), and $>1/102$ under Regime~(i) (purely analytic).
+\end{enumerate}
+\end{maintheorem}
+
+\paragraph{Organization and scope.}
+\Cref{sec:kloosterman} proves the elementary fourth-moment Kloosterman bound and both log-free modular-hyperbola rectangle bounds. \Cref{sec:measures} develops the computable block-i.i.d.\ Frostman measures, the pure-analytic proof at $M=100$, the transfer-operator identity and eigenfunction certificates at $M=14$ and $M=8$, and the exact optimality barriers of \Cref{thm:B}. \Cref{sec:fourier} proves the effective nonlinear polynomial Fourier-decay theorem (\Cref{thm:fourier-decay}) with fully explicit rational constants. \Cref{sec:selection} proves \Cref{thm:A,thm:C}, presenting the repaired weight search, the rational error budgets, the complexity accounting, and the all-prime representation corollary. \Cref{sec:prior} gives a candid specialist literature comparison and exact scope boundaries, \Cref{sec:questions} records five open problems, and \Cref{sec:verification,sec:ai} document the exact finite certificate scripts and the use of AI tools.
+
+No result in this manuscript is formalized in Lean~4. No result changes the status of any entry in the repository's fixed $50$-constant benchmark roster \ttt{BC-01}--\ttt{BC-50}, since all theorems here concern constructed real numbers rather than classical constants. All floating-point numbers appearing in \Cref{tab:eigs} or \Cref{sec:verification} are descriptive finite measurements only and never enter any theorem proof.
+
+\section{Elementary and Weil--Estermann modular-hyperbola bounds}\label{sec:kloosterman}
+
+We begin with the arithmetic input used to count continued-fraction denominators in short phase bins. Part~(1) and Part~(2) are completely elementary and self-contained; Part~(3) substitutes the classical all-moduli $q^{1/2}$ Kloosterman bound of Weil \cite{Weil1948} and Estermann \cite{Estermann1961}.
+
+\begin{lemma}[Kloosterman and log-free modular-hyperbola rectangle bounds]\label{lem:kloosterman}
+Let $q\ge1$ be an integer.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \evidence{Paper proof} \textup{(Elementary fourth-moment Kloosterman bound, zero external inputs.)} For all integers $u,v$,
+\begin{equation}\label{eq:klo-elem}
+|S(u,v;q)|\le 2\,\tau(q)\,\gcd(u,v,q)^{1/4}\,q^{3/4}.
+\end{equation}
+\item \evidence{Paper proof} \textup{(Elementary log-free modular-hyperbola bound.)} For any integer intervals $I,J\subseteq[1,q]$ of cardinalities $L_1,L_2\ge1$,
+\begin{equation}\label{eq:hyp-elem}
+\#\bigl\{(p,q')\in I\times J:pq'\equiv-1\pmod q\bigr\}\le \frac{16L_1L_2}{q}+120\,\tau(q)\,q^{3/4}.
+\end{equation}
+\item \evidence{Paper proof using External input (Weil \cite{Weil1948}, Estermann \cite{Estermann1961})} \textup{(Weil--Estermann refinement.)} Substituting the bound $|S(u,v;q)|\le\tau(q)\gcd(u,v,q)^{1/2}q^{1/2}$ replaces \eqref{eq:hyp-elem} by
+\begin{equation}\label{eq:hyp-weil}
+\#\bigl\{(p,q')\in I\times J:pq'\equiv-1\pmod q\bigr\}\le \frac{16L_1L_2}{q}+90\,\tau(q)\,q^{1/2}.
+\end{equation}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The fourth-moment method at prime moduli originates with Kloosterman \cite{Kloosterman1926}, and the prime-power stationary-phase evaluation with Sali\'e \cite{Salie1931} and Estermann \cite{Estermann1961}; we give a self-contained proof with explicit constants.
+
+\emph{Step~1: Prime moduli $q=p$ in \eqref{eq:klo-elem}.}
+If $p\mid\gcd(u,v)$, then $|S(u,v;p)|=p-1<p=\gcd(u,v,p)^{1/4}p^{3/4}$. If $p$ divides exactly one of $u,v$, then $S(u,v;p)$ is a Ramanujan sum of modulus $1\le 2p^{3/4}$. Suppose $p\nmid u$ and $p\nmid v$. For $p=2$, $|S(1,1;2)|=1\le 2\cdot 2^{3/4}$. For an odd prime $p\ge3$, orthogonality over $\mathbb{F}_p^2$ yields
+\[
+\sum_{a,b\in\mathbb{F}_p}|S(a,b;p)|^4=p^2\cdot\#\Bigl\{(x_1,x_2,x_3,x_4)\in(\mathbb{F}_p^\times)^4:x_1+x_2=x_3+x_4,\ x_1^{-1}+x_2^{-1}=x_3^{-1}+x_4^{-1}\Bigr\}.
+\]
+Put $s=x_1+x_2=x_3+x_4$. If $s=0$, then $x_2=-x_1$ and $x_4=-x_3$ automatically satisfy the reciprocal equation, giving $(p-1)^2$ solutions. If $s\ne0$, the reciprocal equation reads $s/(x_1x_2)=s/(x_3x_4)$, hence $x_1x_2=x_3x_4$ and $\{x_3,x_4\}=\{x_1,x_2\}$; among the $(p-1)(p-2)$ ordered pairs $(x_1,x_2)$ with $x_1+x_2\ne0$, the diagonal $x_1=x_2$ contributes $p-1$ solutions and the off-diagonal $x_1\ne\pm x_2$ contributes $2(p-1)(p-3)$ solutions. The exact solution count is $(p-1)^2+(p-1)+2(p-1)(p-3)=3(p-1)(p-2)$. Changing variables $x\mapsto tx$ shows that the $p-1$ distinct pairs $(tu,t^{-1}v)$ ($t\in\mathbb{F}_p^\times$) all satisfy $S(tu,t^{-1}v;p)=S(u,v;p)$, so
+\[
+(p-1)|S(u,v;p)|^4\le 3p^2(p-1)(p-2)\implies |S(u,v;p)|\le 3^{1/4}p^{3/4}<2p^{3/4}.
+\]
+
+\emph{Step~2: Prime powers $q=p^k$ ($k\ge2$) and Chinese Remainder Theorem.}
+Write $p^r=\gcd(u,v,p^k)$. If $r=k$, then $|S(0,0;p^k)|=\varphi(p^k)\le p^k=p^{r/4}p^{3k/4}$. If $1\le r<k$, reducing modulo $p^{k-r}$ gives $S(u,v;p^k)=p^r S(u/p^r,v/p^r;p^{k-r})$ and $p^r(p^{k-r})^{3/4}=p^{r/4}p^{3k/4}$, reducing to $r=0$. Assume now $\gcd(u,v,p)=1$ and $k\ge2$. Put $m=\lfloor k/2\rfloor\ge1$ and write $x=x_0+p^{k-m}y$ with $x_0\in(\Z/p^{k-m}\Z)^\times$ and $y\bmod p^m$. Since $2(k-m)\ge k$, we have $(x_0+p^{k-m}y)^{-1}\equiv x_0^{-1}-x_0^{-2}p^{k-m}y\pmod{p^k}$, whence
+\[
+S(u,v;p^k)=\sum_{x_0\in(\Z/p^{k-m}\Z)^\times}e\!\left(\frac{ux_0+vx_0^{-1}}{p^k}\right)\sum_{y\bmod p^m}e\!\left(\frac{(u-vx_0^{-2})y}{p^m}\right).
+\]
+The inner sum equals $p^m$ when $ux_0^2\equiv v\pmod{p^m}$ and $0$ otherwise. If $p\mid u$ or $p\mid v$, no unit $x_0$ solves this congruence, so $S(u,v;p^k)=0$. Otherwise $x_0^2\equiv vu^{-1}\pmod{p^m}$ has at most $c_p$ solutions modulo $p^m$, where $c_p=2$ for odd $p$ (since $(\Z/p^m\Z)^\times$ is cyclic) and $c_2=4$ for $p=2$. Each solution lifts to $p^{k-2m}$ values modulo $p^{k-m}$, giving
+\[
+|S(u,v;p^k)|\le c_p\,p^{k-m}\le c_p\,p^{(k+1)/2}\le c_p\,p^{3k/4},
+\]
+since $(k+1)/2\le 3k/4$ for every $k\ge2$. By CRT twisted multiplicativity $S(u,v;q_1q_2)=S(u\bar q_2,v\bar q_2;q_1)S(u\bar q_1,v\bar q_1;q_2)$ for $\gcd(q_1,q_2)=1$ and the bound $2^{\omega(q)}\le\tau(q)$, multiplying over prime powers proves \eqref{eq:klo-elem} (the extra factor $2$ when $4\mid q$ supplies the leading constant~$2$).
+
+\emph{Step~3: Log-free trapezoid majorant for \eqref{eq:hyp-elem}--\eqref{eq:hyp-weil}.}
+For an integer interval $I=[a,a+L-1]\subseteq[1,q]$ of length $L\in[1,q]$, construct a majorant $B_I:\Z/q\Z\to[0,1]$ with $B_I\ge\ind_I$ as follows. If $L\ge q/4$, put $B_I\equiv1$; its discrete Fourier transform $\widehat{B_I}(u)=\sum_{x\bmod q}B_I(x)e(-ux/q)$ satisfies $\widehat{B_I}(0)=q\le 4L$ and $\widehat{B_I}(u)=0$ for $u\not\equiv0\pmod q$. If $1\le L<q/4$, define the trapezoid convolution modulo~$q$ by
+\[
+B_I(x)=\frac1L\sum_{y=-L+1}^0\ind_{[a,a+2L-1]}(x-y\bmod q).
+\]
+Because $3L-1<q$, there is no wraparound: $0\le B_I\le1$, $B_I\equiv1$ on $I$, $\widehat{B_I}(0)=2L\le 4L$, and by Jordan's inequality $|\sin(\pi u/q)|\ge 2|u|/q$ for $1\le|u|\le q/2$,
+\[
+|\widehat{B_I}(u)|=\frac1L\left|\frac{\sin(2\pi uL/q)}{\sin(\pi u/q)}\right|\left|\frac{\sin(\pi uL/q)}{\sin(\pi u/q)}\right|\le\min\!\left(2L,\,\frac{q^2}{4Lu^2}\right).
+\]
+Fix any divisor $d\mid q$, write $u=du'$, and put $U_0=\lfloor q/(2\sqrt2\,Ld)\rfloor$. If $U_0\ge1$, then $U_0\ge q/(4\sqrt2\,Ld)$, so $\sum_{n>U_0}n^{-2}\le 1/U_0$ yields
+\[
+\sum_{1\le|u'|\le q/(2d)}|\widehat{B_I}(du')|\le 4LU_0+\frac{q^2}{2Ld^2U_0}\le 3\sqrt2\,\frac qd<\frac{5q}{d}.
+\]
+If $U_0=0$, then $2Ld>q/\sqrt2$, so $\sum_{1\le|u'|\le q/(2d)}|\widehat{B_I}(du')|\le\frac{q^2}{2Ld^2}\frac{\pi^2}{6}<\frac{\sqrt2\pi^2}{6}\frac qd<\frac{5q}{d}$.
+
+Each residue modulo~$q$ appears at most once in $I,J\subseteq[1,q]$, so discrete Fourier inversion gives
+\begin{align*}
+\#\bigl\{(p,q')\in I\times J:pq'\equiv-1\pmod q\bigr\}
+&\le\sum_{x\in(\Z/q\Z)^\times}B_I(x)B_J(-\bar x)\\
+&=\frac1{q^2}\sum_{u,v\bmod q}\widehat{B_I}(u)\widehat{B_J}(v)S(u,-v;q).
+\end{align*}
+The $u=v=0$ term is $\widehat{B_I}(0)\widehat{B_J}(0)\varphi(q)/q^2\le 16L_1L_2/q$. For the axis terms ($u=0,v\ne0$ and $v=0,u\ne0$), the Ramanujan bound $|S(0,-v;q)|\le\gcd(v,q)$ and $\widehat{B}(0)\le q$ give at most $q^{-1}\sum_{d\mid q}d\cdot(5q/d)=5\tau(q)$ per axis, hence at most $10\tau(q)\le 20\tau(q)$ combined. For $u,v\ne0$ (which vanishes unless $L_1,L_2<q/4$), grouping by $d=\gcd(u,v,q)\mid q$ and applying \eqref{eq:klo-elem} gives at most
+\[
+\frac{2\tau(q)q^{3/4}}{q^2}\sum_{d\mid q}d^{1/4}\left(\frac{5q}{d}\right)^2=50\tau(q)q^{3/4}\sum_{d\mid q}d^{-7/4}\le 50\zeta(7/4)\tau(q)q^{3/4}<100\tau(q)q^{3/4},
+\]
+since $\zeta(7/4)\le\sum_{n=1}^5n^{-7/4}+\frac43\cdot 5^{-3/4}<2$ (checked explicitly by integer $4$th roots; the bound is $\le1.9905$). Adding the $\le 20\tau(q)$ axis bound proves \eqref{eq:hyp-elem}. For \eqref{eq:hyp-weil}, substituting Estermann's all-moduli refinement \cite{Estermann1961} of Weil's bound \cite{Weil1948}, $|S(u,v;q)|\le\tau(q)\gcd(u,v,q)^{1/2}q^{1/2}$, replaces the off-axis sum by $25\zeta(3/2)\tau(q)q^{1/2}$; since $\zeta(3/2)\le\sum_{n=1}^{25}n^{-3/2}+2\cdot 25^{-1/2}<2.8$ ($\le2.6164$), adding the $\le 20\tau(q)$ axis bound gives $(25\cdot 2.8+20)\tau(q)q^{1/2}=90\tau(q)q^{1/2}$.
+\end{proof}
+
+\section{Computable Frostman measures, transfer operators, and optimality barriers}\label{sec:measures}
+
+We construct computable block-i.i.d.\ probability measures on $F_M$, certify their block partition sums analytically ($M=100$) and via exact rational transfer-operator eigenfunctions ($M=14$ and $M=8$), and prove the exact optimality barriers of \Cref{thm:B}.
+
+\subsection{Block-i.i.d.\ Frostman measures and the Diophantine bound}
+
+For integers $M\ge2$, even $L\ge2$, and rational $s\in(0,1)$, define the \emph{block partition sum} and \emph{maximum block norm} by
+\begin{equation}\label{eq:sigma-def}
+\Sigma(M,L,s):=\sum_{\mathbf{u}\in\{1,\dots,M\}^L}\bigl(q_L(\mathbf{u})+p_L(\mathbf{u})\bigr)^{-2s},\qquad
+B_{M,L}:=\max_{\mathbf{u}\in\{1,\dots,M\}^L}\bigl(q_L(\mathbf{u})+p_L(\mathbf{u})\bigr).
+\end{equation}
+Because every generator matrix $\bigl(\begin{smallmatrix}0&1\\1&a\end{smallmatrix}\bigr)$ is entrywise nonnegative and increasing in $a$, the maximum $B_{M,L}$ is attained at the constant word $\mathbf{u}=(M,\dots,M)$ and satisfies $B_{M,L}\le 2(M+1)^L$.
+
+\begin{lemma}[Computable block-i.i.d.\ Frostman measures on $F_M$]\label{lem:block-measure}
+\evidence{Paper proof}
+Let $M\ge2$, let $L\ge2$ be even, and let $s\in(0,1)$ be rational with $2s=P/Q$ in lowest terms.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \textup{(Strictly positive rational block weights.)} Suppose $\Sigma(M,L,s)>1$. For any integer $D\ge1$, set $a_N(D):=\lfloor(D^Q/N^P)^{1/Q}\rfloor$ for each $N=q_L(\mathbf{u})+p_L(\mathbf{u})$. Whenever $D$ satisfies the exact integer test
+\begin{equation}\label{eq:g1-test}
+D^Q\ge B_{M,L}^P\qquad\text{and}\qquad T(D):=\sum_{\mathbf{u}\in\{1,\dots,M\}^L}a_{N(\mathbf{u})}(D)>D,
+\end{equation}
+the rational weights $p_{\mathbf{u}}:=a_{N(\mathbf{u})}(D)/T(D)$ satisfy $p_{\mathbf{u}}\in\Q_{>0}$, $\sum_{\mathbf{u}}p_{\mathbf{u}}=1$, and $p_{\mathbf{u}}<(q_L(\mathbf{u})+p_L(\mathbf{u}))^{-2s}$ for every $\mathbf{u}\in\{1,\dots,M\}^L$. Moreover, searching integers $D$ starting from $\lceil B_{M,L}^{P/Q}\rceil$ is guaranteed to halt and satisfy \eqref{eq:g1-test} once $D(\Sigma(M,L,s)-1)\ge M^L$.
+\item \textup{(Structural, stopping-time, and Frostman properties.)} Let $\mu$ be the pushforward to $F_M$ of the i.i.d.\ product measure on $(\{1,\dots,M\}^L)^{\N}$ with weights $\{p_{\mathbf{u}}\}$. Then:
+\begin{itemize}[nosep]
+\item Every block word $\mathbf{a}=\mathbf{u}_1\cdots\mathbf{u}_m$ has even length $mL$, so $\det M_{\mathbf{a}}=+1$, $T_{\mathbf{a}}$ is strictly increasing on $[0,1]$, $p(\mathbf{a})q'(\mathbf{a})\equiv-1\pmod{q(\mathbf{a})}$, and $(p(\mathbf{a}),q(\mathbf{a}))$ determines $\mathbf{a}$ uniquely.
+\item Submultiplicativity $q(\mathbf{u}_1\cdots\mathbf{u}_m)\le\prod_{j=1}^m(q_L(\mathbf{u}_j)+p_L(\mathbf{u}_j))$ yields $w(\mathbf{a}):=\mu(I_{\mathbf{a}})\le q(\mathbf{a})^{-2s}$.
+\item For every $R>1$, the stopping set $\mathcal{W}(R)=\{\mathbf{a}=\mathbf{u}_1\cdots\mathbf{u}_m:q(\mathbf{a})\ge R>q(\mathbf{u}_1\cdots\mathbf{u}_{m-1})\}$ is a finite partition of $F_M$ satisfying $R\le q(\mathbf{a})<B_{M,L}R$, $w(\mathbf{a})\le R^{-2s}$, $|\mathcal{W}(R)|\le 2B_{M,L}^2R^2$, and exact independence of $\mathbf{a}\sim\mu|_{\mathcal{W}(R)}$ and $y\sim\mu$ in $x=T_{\mathbf{a}}(y)$.
+\item For every interval $I\subset[0,1]$, $\mu(I)\le C_F|I|^s$ with $C_F:=2B_{M,L}^2+2$.
+\end{itemize}
+\item \textup{(Uniform badly approximable bound.)} Every $x=[0;a_1,a_2,\dots]\in F_M$ satisfies $q\dist{qx}>\frac{1}{M+2}$ for every integer $q\ge1$, and $\mu(x)=2$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) Since $N(\mathbf{u})\le B_{M,L}$, the exact integer test $D^Q\ge B_{M,L}^P$ implies $D^Q/N(\mathbf{u})^P\ge1$, hence $a_{N(\mathbf{u})}(D)\ge1$ for every $\mathbf{u}$. Moreover $a_N(D)>DN^{-2s}-1$, so $T(D)>D\Sigma(M,L,s)-M^L$, which exceeds $D$ once $D(\Sigma(M,L,s)-1)\ge M^L$. When \eqref{eq:g1-test} holds, $p_{\mathbf{u}}=a_{N(\mathbf{u})}(D)/T(D)<a_{N(\mathbf{u})}(D)/D\le N(\mathbf{u})^{-2s}$.
+
+(2) Every rational in $(0,1)$ has a unique even-length regular continued fraction, so $(p(\mathbf{a}),q(\mathbf{a}))$ determines $\mathbf{a}$. From $M_{\mathbf{w}\mathbf{u}}=M_{\mathbf{w}}M_{\mathbf{u}}$ we get $q(\mathbf{w}\mathbf{u})=q(\mathbf{w})q_L(\mathbf{u})+q'(\mathbf{w})p_L(\mathbf{u})\le(q_L(\mathbf{u})+p_L(\mathbf{u}))q(\mathbf{w})$ because $0\le q'(\mathbf{w})\le q(\mathbf{w})$. Induction gives $q(\mathbf{a})\le\prod_{j=1}^m(q_L(\mathbf{u}_j)+p_L(\mathbf{u}_j))$, and raising to $-2s<0$ yields $w(\mathbf{a})=\prod_j p_{\mathbf{u}_j}\le q(\mathbf{a})^{-2s}$. Since $q(\mathbf{a})\ge\phi^{mL-1}\to\infty$ (where $\phi=(1+\sqrt5)/2$ via Fibonacci denominators), $\mathcal{W}(R)$ is a finite partition of $F_M$ for every $R>1$; every $\mathbf{a}\in\mathcal{W}(R)$ satisfies $R\le q(\mathbf{a})<B_{M,L}R$ and $|I_{\mathbf{a}}|=(q(\mathbf{a})(q(\mathbf{a})+q'(\mathbf{a})))^{-1}\ge(2B_{M,L}^2R^2)^{-1}$, so pairwise disjoint interiors give $|\mathcal{W}(R)|\le 2B_{M,L}^2R^2$. Independence of $\mathbf{a}\sim\mu|_{\mathcal{W}(R)}$ and $y\sim\mu$ in $T_{\mathbf{a}}(y)$ is the strong Markov property of the block-i.i.d.\ product measure at the stopping time $\mathcal{W}(R)$. For any interval $I\subset[0,1]$ with $0<|I|<1$, setting $R=|I|^{-1/2}>1$ shows that every cylinder $\mathbf{a}\in\mathcal{W}(R)$ wholly inside $I$ has length $\ge(2B_{M,L}^2R^2)^{-1}=|I|/(2B_{M,L}^2)$, so at most $2B_{M,L}^2$ such cylinders lie inside $I$ and at most $2$ more meet its endpoints, giving $\mu(I)\le(2B_{M,L}^2+2)R^{-2s}=C_F|I|^s$; the case $|I|=1$ is trivial.
+
+(3) For $x=[0;a_1,a_2,\dots]\in F_M$ ($1\le a_n\le M$), the complete quotients $\alpha_{i+1}=[a_{i+1};a_{i+2},\dots]$ satisfy $1<\alpha_{i+1}<M+1$ (strictly because $x$ is irrational). From $x=(p_i\alpha_{i+1}+p_{i-1})/(q_i\alpha_{i+1}+q_{i-1})$ and $p_{i-1}q_i-p_iq_{i-1}=(-1)^i$,
+\[
+q_i|q_ix-p_i|=\frac1{\alpha_{i+1}+q_{i-1}/q_i}>\frac1{(M+1)+1}=\frac1{M+2}\qquad(i\ge0).
+\]
+Given any integers $q\ge1$ and $h\in\Z$, let $i\ge0$ be the largest index with $q_i\le q<q_{i+1}$. Expand $(h,q)=u(p_i,q_i)+v(p_{i+1},q_{i+1})$ in this unimodular basis. If $v=0$, then $u\ge1$ and $|qx-h|=u|q_ix-p_i|\ge|q_ix-p_i|$. If $v\ne0$, then $q_i\le q<q_{i+1}$ forces $u,v$ to be nonzero of opposite signs, whereas $q_ix-p_i$ and $q_{i+1}x-p_{i+1}$ also have opposite signs (including at $i=0$ when $a_1\ge2$, where $x>0$ and $a_1x-1<0$). Hence $|qx-h|=|u||q_ix-p_i|+|v||q_{i+1}x-p_{i+1}|>|q_ix-p_i|$. Multiplying by $q\ge q_i$ gives $q|qx-h|>1/(M+2)$, so $q\dist{qx}>1/(M+2)$. Dirichlet's approximation theorem gives $\dist{qx}<1/q$ infinitely often, whence $\mu(x)=2$.
+\end{proof}
+
+\subsection{Pure-analytic existence of weights at \texorpdfstring{$M=100$}{M = 100}}
+
+\begin{proposition}[Pure-analytic hand-checkable certificate at $M=100$]\label{prop:analytic-100}
+\evidence{Paper proof}
+Write $\phi=(1+\sqrt5)/2$. For all integers $M\ge2$, $L\ge1$ and all $s\in(0,1)$,
+\begin{equation}\label{eq:analytic-sigma}
+\Sigma(M,L,s)\ge 2^{-2s}\,\phi^{2(1-s)(L-1)}\left(1-\frac2{M+2}\right)^L.
+\end{equation}
+In particular, $\Sigma(100,52,19/20)>1$ holds purely analytically without any computer certificate. Moreover, $e<11/4$ and $\log 2>2/3$.
+\end{proposition}
+
+\begin{proof}
+We first prove by induction on $L$ that the retained Lebesgue measure of $\bigcup_{\mathbf{u}\in\{1,\dots,M\}^L}I_{\mathbf{u}}$ is at least $(1-\frac2{M+2})^L$. For any parent word $\mathbf{w}$ with convergent denominators $q=q(\mathbf{w})$, $q'=q'(\mathbf{w})$ and ratio $y=q'/q\in[0,1]$, the children $I_{\mathbf{w}j}$ ($1\le j\le M$) have lengths $((jq+q')((j+1)q+q'))^{-1}$, whose sum telescopes to $\frac{M}{(q+q')((M+1)q+q')}$. Dividing by $|I_{\mathbf{w}}|=(q(q+q'))^{-1}$ gives the exact retained fraction $\frac{M}{M+1+y}\ge\frac{M}{M+2}=1-\frac2{M+2}$, proving the induction. Next, $q_L(\mathbf{u})+p_L(\mathbf{u})\le 2q_L(\mathbf{u})$ and $|I_{\mathbf{u}}|=(q_L(q_L+q_{L-1}))^{-1}\le\min(q_L^{-2},\phi^{-2(L-1)})$, so
+\[
+\bigl(q_L(\mathbf{u})+p_L(\mathbf{u})\bigr)^{-2s}\ge 2^{-2s}|I_{\mathbf{u}}|^s=2^{-2s}|I_{\mathbf{u}}|^{s-1}|I_{\mathbf{u}}|\ge 2^{-2s}\phi^{2(1-s)(L-1)}|I_{\mathbf{u}}|.
+\]
+Summing over $\mathbf{u}\in\{1,\dots,M\}^L$ yields \eqref{eq:analytic-sigma}.
+
+For $M=100$, $L=52$, $s=19/20$ ($2s=19/10$), raising the right-hand side of \eqref{eq:analytic-sigma} to the $10$th power shows that $\Sigma(100,52,19/20)>1$ follows from $\phi^{51}>2^{19}(51/50)^{520}$. First, $5\cdot 5^2=125>121=11^2$ gives $\sqrt5>11/5$ and $\phi>8/5$, whence $\phi^{51}>2^{153}/5^{51}$. Second,
+\[
+e=\sum_{k=0}^\infty\frac1{k!}<1+1+\frac12+\frac16+\frac1{24}\sum_{j=0}^\infty\frac1{5^j}=\frac83+\frac5{96}=\frac{261}{96}<\frac{11}4.
+\]
+Hence $e^2<\frac{121}{16}=\frac{242}{32}<\frac{243}{32}=(\frac32)^5$, giving $e^{2/5}<\frac32$ and also $e^2<8=2^3$, which implies $\log 2>2/3$. Therefore $(1+\frac1{50})^{520}<e^{52/5}=e^{10}e^{2/5}<(\frac{11}4)^{10}\cdot\frac32$, so $2^{19}(51/50)^{520}<3\cdot 11^{10}/4$. It suffices to verify $2^{155}>3\cdot 11^{10}\cdot 5^{51}$, equivalently $2(128/121)^5(128/125)^{17}>3$ (since $1+7\cdot 5+7\cdot 17=155$). By Bernoulli's inequality,
+\[
+\left(1+\frac7{121}\right)^5>1+\frac{35}{121}>\frac54\quad(140>121),\qquad
+\left(1+\frac3{125}\right)^{17}>1+\frac{51}{125}>\frac65\quad(51>25),
+\]
+and $2\cdot\frac54\cdot\frac65=3$, completing the hand-checkable proof.
+\end{proof}
+
+\subsection{Transfer-operator identity, eigenfunction certificates, and optimality barriers}
+
+Direct enumeration of $\{1,\dots,M\}^L$ limits $L$ to small values ($L\in\{2,4\}$), where the factor $(q_L+p_L)^{-2s}$ suffers substantial finite-length overhead relative to $\dimH F_M$. Rewriting $\Sigma(M,L,s)$ via the Ruelle transfer operator removes the dependence on $M^L$ from the certification step altogether.
+
+Define the positive linear transfer operator $\Lop_s=\Lop_{M,s}$ on continuous functions $f:[0,1]\to\R$ by
+\begin{equation}\label{eq:transfer-op}
+(\Lop_s f)(x):=\sum_{a=1}^M (a+x)^{-2s}\,f\!\left(\frac1{a+x}\right)\qquad(x\in[0,1]).
+\end{equation}
+
+\begin{lemma}[Transfer-operator identity, supermultiplicativity, and eigenfunction certificates]\label{lem:transfer-id}
+\evidence{Paper proof}
+Fix $M\ge2$ and $s>0$.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item For every integer $L\ge1$,
+\begin{equation}\label{eq:transfer-id}
+\Sigma(M,L,s)=\sum_{\mathbf{v}\in\{1,\dots,M\}^L}\bigl(q_L(\mathbf{v})+q_{L-1}(\mathbf{v})\bigr)^{-2s}=(\Lop_s^L\ind)(1),
+\end{equation}
+and $\Sigma(M,L_1+L_2,s)\ge\Sigma(M,L_1,s)\Sigma(M,L_2,s)$ for all $L_1,L_2\ge1$.
+\item Let $h:[0,1]\to(0,\infty)$ be positive and nonincreasing on $[0,1]$, and let $\lambda>0$.
+\begin{itemize}[nosep]
+\item If $\Lop_s h\ge\lambda h$ on $[0,1]$, then $\Sigma(M,L,s)\ge\lambda^L\,h(1)/h(0)$ for every $L\ge1$.
+\item If $\Lop_s h\le\lambda h$ on $[0,1]$, then $\Sigma(M,L,s)\le\lambda^L$ for every $L\ge1$.
+\end{itemize}
+\item Suppose $2s=P/Q$ is rational, $K\ge1$ is an integer, $x_i=i/K$ ($0\le i\le K$), and $h:[0,1]\to\Q_{>0}$ is piecewise linear with rational node values $H_0>H_1>\dots>H_K>0$ ($h(x_i)=H_i$). For each $n\ge K$, let $\mathrm{lo}(n),\mathrm{hi}(n)\in\Q_{>0}$ satisfy $\mathrm{lo}(n)^Qn^P\le K^P\le\mathrm{hi}(n)^Qn^P$ (so $\mathrm{lo}(n)\le(K/n)^{2s}\le\mathrm{hi}(n)$). Then:
+\begin{itemize}[nosep]
+\item if $\sum_{a=1}^M\mathrm{lo}(aK+i+1)\,h\bigl(\frac{K}{aK+i}\bigr)\ge\lambda H_i$ for every $0\le i<K$, then $\Lop_s h\ge\lambda h$ on $[0,1]$;
+\item if $\sum_{a=1}^M\mathrm{hi}(aK+i)\,h\bigl(\frac{K}{aK+i+1}\bigr)\le\lambda H_{i+1}$ for every $0\le i<K$, then $\Lop_s h\le\lambda h$ on $[0,1]$.
+\end{itemize}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) Each generator $A_a=\bigl(\begin{smallmatrix}0&1\\1&a\end{smallmatrix}\bigr)$ is symmetric, so $M_{\mathbf{u}}^{\mathsf{T}}=M_{\mathbf{u}^{\mathrm{rev}}}$ where $\mathbf{u}^{\mathrm{rev}}=(u_L,\dots,u_1)$. Comparing the $(2,2)$ and $(1,2)$ entries of $M_{\mathbf{u}}$ with the $(2,2)$ and $(2,1)$ entries of $M_{\mathbf{u}^{\mathrm{rev}}}$ yields $(q_L(\mathbf{u}),p_L(\mathbf{u}))=(q_L(\mathbf{u}^{\mathrm{rev}}),q_{L-1}(\mathbf{u}^{\mathrm{rev}}))$, giving the first equality in \eqref{eq:transfer-id}. Writing $\tau_a(x)=1/(a+x)$, we have $|\tau_a'(x)|=(a+x)^{-2}$ and by induction on $L$ the composition $T_{\mathbf{v}}=\tau_{v_1}\circ\cdots\circ\tau_{v_L}$ satisfies $|T_{\mathbf{v}}'(x)|=(q_L(\mathbf{v})+q_{L-1}(\mathbf{v})x)^{-2}$, whence
+\[
+(\Lop_s^L f)(x)=\sum_{\mathbf{v}\in\{1,\dots,M\}^L}\bigl(q_L(\mathbf{v})+q_{L-1}(\mathbf{v})x\bigr)^{-2s}f(T_{\mathbf{v}}(x)).
+\]
+Setting $f=\ind$ and $x=1$ gives \eqref{eq:transfer-id}. For supermultiplicativity, $M_{\mathbf{v}\mathbf{w}}=M_{\mathbf{v}}M_{\mathbf{w}}$ implies
+\[
+q(\mathbf{v}\mathbf{w})+p(\mathbf{v}\mathbf{w})=(q_{\mathbf{v}}+p_{\mathbf{v}})q_{\mathbf{w}}+(q'_{\mathbf{v}}+p'_{\mathbf{v}})p_{\mathbf{w}}\le(q_{\mathbf{v}}+p_{\mathbf{v}})(q_{\mathbf{w}}+p_{\mathbf{w}}),
+\]
+using $p'_{\mathbf{v}}\le p_{\mathbf{v}}$ and $q'_{\mathbf{v}}\le q_{\mathbf{v}}$; raising to $-2s<0$ and summing over $\mathbf{v},\mathbf{w}$ proves $\Sigma(M,L_1+L_2,s)\ge\Sigma(M,L_1,s)\Sigma(M,L_2,s)$.
+
+(2) Since $h$ is positive and nonincreasing, $h(x)/h(0)\le 1\le h(x)/h(1)$ on $[0,1]$. By positivity of $\Lop_s^L$, if $\Lop_s h\ge\lambda h$ then $(\Lop_s^L\ind)(1)\ge h(0)^{-1}(\Lop_s^L h)(1)\ge\lambda^L h(1)/h(0)$; if $\Lop_s h\le\lambda h$ then $(\Lop_s^L\ind)(1)\le h(1)^{-1}(\Lop_s^L h)(1)\le h(1)^{-1}\lambda^L h(1)=\lambda^L$, with $h(1)$ cancelling identically.
+
+(3) On each subinterval $[x_i,x_{i+1}]$, $x\mapsto(a+x)^{-2s}$ is strictly decreasing, so
+\[
+\mathrm{lo}(aK+i+1)\le(a+x_{i+1})^{-2s}\le(a+x)^{-2s}\le(a+x_i)^{-2s}\le\mathrm{hi}(aK+i).
+\]
+Meanwhile $x\mapsto 1/(a+x)$ and $h$ are both decreasing, so their composition $x\mapsto h(1/(a+x))$ is increasing: $h(K/(aK+i))\le h(1/(a+x))\le h(K/(aK+i+1))$. Combined with $H_{i+1}\le h(x)\le H_i$, both interval inequalities hold pointwise on $[x_i,x_{i+1}]$.
+\end{proof}
+
+\begin{proposition}[Exact finite block-sum and barrier certificates]\label{prop:certificates}
+\evidence{Paper proof + Finite certificate}
+Exact integer and rational arithmetic (with zero floating-point operations in any certified inequality; see \Cref{sec:verification}) verifies the following eight certificates:
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \textup{(Transfer-operator lower certificates, $K=1{,}500$.)}
+\begin{itemize}[nosep]
+\item For $(M,s)=(14,18/19)$, $\Lop_{18/19}h\ge\frac{501}{500}h$ on $[0,1]$, yielding $\Sigma(14,344,18/19)\ge(\frac{501}{500})^{344}\frac{h(1)}{h(0)}>1$ at even block length $L=344$.
+\item For $(M,s)=(8,46/51)$, $\Lop_{46/51}h\ge\frac{1003}{1000}h$ on $[0,1]$, yielding $\Sigma(8,226,46/51)\ge(\frac{1003}{1000})^{226}\frac{h(1)}{h(0)}>1$ at even block length $L=226$.
+\end{itemize}
+\item \textup{(Direct small-block integer $Q$-th root certificates, $D=10^{18}$.)}
+$\Sigma(42,4,18/19)>1.018523>1$ ($550{,}612$ distinct values of $q_4+p_4$),
+$\Sigma(14,4,10/11)>1.014769>1$ ($8{,}439$ distinct values), and
+$\Sigma(30,2,10/11)>1.025743>1$ ($337$ distinct values).
+\item \textup{(Transfer-operator upper barrier certificates.)}
+$\Lop_{9/10}h\le\frac{99}{100}h$ on $[0,1]$ for $M=7$ ($K=400$),
+$\Lop_{17/18}h\le\frac{199}{200}h$ on $[0,1]$ for $M=12$ ($K=400$), and
+$\Lop_{5/6}h\le\frac{19}{20}h$ on $[0,1]$ for $M=4$ ($K=200$).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+In parts~(i) and~(iii), floating-point power iteration is used solely to propose a heuristic decreasing grid vector, which is immediately rounded to exact rationals $H_i\in 10^{-12}\Z$ satisfying $H_0>H_1>\dots>H_K>0$. Thereafter every inequality of \Cref{lem:transfer-id}(3) (totalling $1{,}500+1{,}500+400+400+200=4{,}000$ interval inequalities) and every $Q$-th root bracket $\mathrm{lo}^Qn^P\le K^P\le\mathrm{hi}^Qn^P$ (at scale $2^{56}$) is verified strictly in exact integer and \ttt{Fraction} arithmetic in \ttt{scripts/phase26\_constructive\_spectra.py}, followed by the exact rational check $\lambda^L H_K/H_0>1$ at even $L=344$ and $L=226$. Part~(ii) is verified directly in exact integer $Q$-th root arithmetic in \ttt{scripts/phase25\_nonlinear\_approx.py}.
+\end{proof}
+
+\begin{theorem}[Proof of \Cref{thm:B}: exact optimality barriers]\label{thm:barriers}
+\evidence{Paper proof + Finite certificate}
+Suppose a Frostman exponent $s\in(0,1)$ and rectangle-count exponent $\rhoK\in[0,1)$ satisfy the five inequalities \eqref{eq:param-system} of \Cref{thm:fourier-decay} for some $\alpha,\beta>0$ and $\theta\ge0$. Then necessarily $s>s^*(\rhoK)=\frac{5-\rhoK}{2(3-\rhoK)}$. Furthermore:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item For $(M,s)\in\{(7,9/10),\,(12,17/18),\,(4,5/6)\}$, one has $\Hmeas^s(F_M)=0$, and hence for every $M'\le M$ no Borel probability measure $\mu$ supported on $F_{M'}$ satisfies $\mu(I)\le C|I|^s$ for all intervals $I\subset[0,1]$.
+\item Consequently, \Cref{thm:fourier-decay} cannot be applied to any measure on $F_M$ with $M\le7$ in the Weil--Estermann regime ($\rhoK=1/2$), with $M\le12$ in the elementary regime ($\rhoK=3/4$), or with $M\le4$ under any exponent $\rhoK\ge0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+From the first two inequalities of \eqref{eq:param-system} ($2\alpha+4\beta>1$ and $2\alpha+2\beta+\frac32\theta<s$ with $\theta\ge0$), subtracting half the first from the second eliminates $\beta$:
+\[
+\alpha<s-\frac12-\frac32\theta\le s-\frac12.
+\]
+From the third inequality ($1-s-\frac{1-\rhoK}{2}\alpha+\frac12\theta<0$ with $\theta\ge0$), we obtain
+\[
+\alpha>\frac{2(1-s)}{1-\rhoK}.
+\]
+Combining the two bounds forces $\frac{2(1-s)}{1-\rhoK}<s-\frac12$, which rearranges to $2(3-\rhoK)s>5-\rhoK$, i.e.\ $s>s^*(\rhoK)$. Since $\frac{d}{d\rhoK}s^*(\rhoK)=\frac1{(3-\rhoK)^2}>0$ on $[0,1)$, $s^*(\rhoK)$ is strictly increasing with $s^*(0)=5/6$, $s^*(1/2)=9/10$, and $s^*(3/4)=17/18$.
+
+For (1), take any of the three pairs $(M,s)$ from \Cref{prop:certificates}(iii), with certified $\lambda<1$. By \Cref{lem:transfer-id}(2), $\Sigma(M,L,s)\le\lambda^L$ for every $L\ge1$. Since $F_M\subseteq\bigcup_{\mathbf{u}\in\{1,\dots,M\}^L}I_{\mathbf{u}}$ is covered by cylinders of diameter $|I_{\mathbf{u}}|\le\min(q_L(\mathbf{u})^{-2},\phi^{-2(L-1)})$ and $q_L(\mathbf{u})+p_L(\mathbf{u})\le 2q_L(\mathbf{u})$, we have
+\[
+\sum_{\mathbf{u}\in\{1,\dots,M\}^L}|I_{\mathbf{u}}|^s\le\sum_{\mathbf{u}}q_L(\mathbf{u})^{-2s}\le 2^{2s}\Sigma(M,L,s)\le 2^{2s}\lambda^L\longrightarrow0\qquad(L\to\infty),
+\]
+while $\max_{\mathbf{u}}|I_{\mathbf{u}}|\le\phi^{-2(L-1)}\to0$. By definition of Hausdorff measure, $\Hmeas^s(F_M)=0$. If a Borel probability measure $\mu$ on $F_{M'}\subseteq F_M$ satisfied $\mu(I)\le C|I|^s$ for every interval $I$, then $1=\mu(F_{M'})\le C\sum_{\mathbf{u}}|I_{\mathbf{u}}|^s\to0$, a contradiction. Part~(2) follows immediately because $s>s^*(\rhoK)$ implies $\mu(I)\le C|I|^s\le C|I|^{s^*(\rhoK)}$ for all intervals $I\subset[0,1]$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}rccc@{}}
+\toprule
+$M$ & $\lambda_M(5/6)$ \emph{(float)} & $\lambda_M(9/10)$ \emph{(float)} & $\lambda_M(17/18)$ \emph{(float)} \\
+\midrule
+$4$ & $0.933269$ & $0.842641$ & $0.787970$ \\
+$5$ & $1.005802$ & $0.901793$ & $0.839623$ \\
+$7$ & $1.105149$ & $0.980626$ & $0.907233$ \\
+$8$ & $1.140930$ & $1.008329$ & $0.930607$ \\
+$12$ & $1.236655$ & $1.080367$ & $0.990263$ \\
+$13$ & $1.253314$ & $1.092561$ & $1.000176$ \\
+$14$ & $1.268108$ & $1.103294$ & $1.008851$ \\
+\bottomrule
+\end{tabular}
+\caption{Descriptive floating-point Chebyshev-collocation estimates of the leading eigenvalue $\lambda_M(s)$ of $\Lop_{M,s}$ from \ttt{scripts/phase26\_constructive\_spectra.py}. These are \emph{finite measurements only} (not proof certificates). They explain why $M=13$ in the elementary regime ($\lambda_{13}(17/18)\approx1.000176$, corresponding to $\dimH F_{13}\approx0.94453>17/18\approx0.94444$) lies in a narrow $\approx9\times10^{-5}$ margin requiring a grid of order $10^5$ and remains open, and why a hypothetical $\rhoK=0$ input would reach $M=5$ and nothing smaller.}\label{tab:eigs}
+\end{table}
+
+\section{Effective nonlinear polynomial Fourier decay}\label{sec:fourier}
+
+We now prove the Kaufman-type two-block large-sieve Fourier-decay bound for every polynomial pushforward $P_*\mu$ with fully explicit rational exponents, thresholds, and majorants. Rather than invoking van der Corput's method or degree-$r$ stationary phase, the argument passes from linear to degree-$r$ polynomial phases by (a)~excising a shrinking neighborhood of the critical points of $P$ inside each fixed-$(\xi,P)$ Fourier estimate, and (b)~linearizing $\xi P(T_{\mathbf{a}}(y))$ at the second-level cylinder scale $|I_{\mathbf{b}}|\le R_2^{-2}$. Crucially, excision never alters the fixed measure $\mu$ or its support $F_M$, and never computes the roots of $P'$; hence no circularity or simultaneous-excision positivity issue arises across the countably many $P\in\Q[X]$.
+
+\begin{theorem}[Effective polynomial Fourier decay for $P_*\mu$]\label{thm:fourier-decay}
+Let $\mu$ be a block-i.i.d.\ measure on $F_M$ from \Cref{lem:block-measure} with parameters $(M,L)$ and certified rational Frostman exponent $s\in(0,1)$. Suppose either:
+\begin{itemize}[nosep]
+\item \textup{\textbf{Regime~A}} \evidence{Paper proof} (zero external inputs): $s>17/18$, using \Cref{lem:kloosterman}\textup{(2)} with $\rhoK=3/4$ and $\CK=120$; or
+\item \textup{\textbf{Regime~B}} \evidence{Paper proof using External input (Weil \cite{Weil1948}, Estermann \cite{Estermann1961})}: $s>9/10$, using \Cref{lem:kloosterman}\textup{(3)} with $\rhoK=1/2$ and $\CK=90$.
+\end{itemize}
+Then for every degree $r\ge1$ and any admissible rational triple $(\alpha,\beta,\theta)$ satisfying \eqref{eq:param-system} below (in particular the explicit midpoint choice \eqref{eq:midpoint}), there exist an explicit rational exponent $\eta=\eta(r,s,\rhoK,\alpha,\beta,\theta)\in\Q\cap(0,1)$ and an algorithm running in finite rational arithmetic that, given $(M,L,B_{M,L},s,\rhoK,\alpha,\beta,\theta)$ and the rational coefficients of any nonconstant polynomial $P(X)=\sum_{j=0}^r c_jX^j\in\Q[X]$ (or the affine translation $P(X)=X-S$ for any fixed real $S$, with $r=1,c_1=1,M_P=1,L_P=0$), computes an integer threshold $\bar\xi_0(P)\ge16$ and a rational majorant $\bar C(P)\in\Q_{>0}$ such that for every real $\xi$,
+\begin{equation}\label{eq:fourier-decay}
+\left|\int_0^1 e\bigl(\xi P(x)\bigr)\,d\mu(x)\right|\le \bar C(P)\,(1+|\xi|)^{-\eta}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Set $B_0:=B_{M,L}\le 2(M+1)^L$, $C_F:=2B_0^2+2$, $c_*:=|c_r|\in\Q_{>0}$, $M_P:=\sum_{j=1}^r j|c_j|\in\Q_{>0}$, $\bar M_P:=\max(1,M_P)$, $L_P:=\sum_{j=2}^r j(j-1)|c_j|\in\Q_{\ge0}$, and $S_1:=2(M+1)B_0L_P\in\Q_{\ge0}$. Note that $|P'(x)|\le M_P$ and $|P''(x)|\le L_P$ for all $x\in[0,1]$, and that none of these quantities depends on the constant term $c_0$ (so the proof applies verbatim to $X-S$ for irrational~$S$).
+
+\emph{Parameter system.} Choose rationals $\alpha,\beta>0$ and $\theta$ ($\theta=0$ if $r=1$; $\theta>0$ if $r\ge2$) satisfying the five strict rational inequalities
+\begin{equation}\label{eq:param-system}
+2\alpha+4\beta>1,\quad
+2\alpha+2\beta+\tfrac32\theta<s,\quad
+1-s-\tfrac{1-\rhoK}{2}\alpha+\tfrac12\theta<0,\quad
+4\alpha+2\beta>1,\quad
+2\alpha>\theta.
+\end{equation}
+By the proof of \Cref{thm:barriers}, \eqref{eq:param-system} is feasible if and only if $s>s^*(\rhoK)$. Whenever $s>s^*(\rhoK)$, the explicit rational midpoint choice
+\begin{equation}\label{eq:midpoint}
+\begin{aligned}
+\alpha&=\frac12\!\left(\frac{2(1-s)}{1-\rhoK}+s-\frac12\right),\qquad
+\beta=\frac{1+2s-6\alpha}{8},\\
+\theta&=\begin{cases}
+0 & (r=1),\\
+\frac12\min\!\bigl(\frac23(s-2\alpha-2\beta),\,(1-\rhoK)\alpha-2(1-s)\bigr) & (r\ge2)
+\end{cases}
+\end{aligned}
+\end{equation}
+satisfies all five inequalities of \eqref{eq:param-system}: indeed $\alpha\in(\frac{2(1-s)}{1-\rhoK},s-\frac12)$ makes $2\alpha+4\beta-1=s-2\alpha-2\beta=\frac12(s-\frac12-\alpha)>0$, gives $(1-\rhoK)\alpha-2(1-s)>0$, implies $4\alpha+2\beta=\frac14(1+2s+10\alpha)>\frac65>1$ (since $s>9/10$ and $\alpha>(s-\frac12)/2>\frac15$), and yields $\theta\le\frac13(s-2\alpha-2\beta)<\frac13(s-2\alpha)<2\alpha$. Concrete exact choices for every certified regime of \Cref{thm:A} are listed in \Cref{tab:exponents}.
+
+\begin{table}[ht]
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+$(s,\rhoK)$ & $(\alpha,\beta)$ & $\theta$ ($r\ge2$) & $(\mlin,m_A,m_B)$ ($r\ge2$) & $\eta_{r=1}$ & $\eta_{r=2}$ & $\eta_{r=10}$ \\
+\midrule
+$(19/20,3/4)$ \emph{(simp.)} & $(21/50,9/200)$ & $1/1000$ & $(1/50,37/2000,1/500)$ & $1/1600$ & $1/2000$ & $19/180000$ \\
+$(18/19,3/4)$ \emph{(mid.)} & $(33/76,11/304)$ & $1/608$ & $(1/76,5/1216,1/1216)$ & $1/2432$ & $1/4864$ & $1/5776$ \\
+$(18/19,3/4)$ \emph{(simp.)} & $(43/100,37/1000)$ & $1/2000$ & $(1/125,959/76000,33/38000)$ & $17/60800$ & $33/152000$ & $1/19000$ \\
+$(46/51,1/2)$ \emph{(mid.)} & $(27/68,43/816)$ & $1/1224$ & $(1/204,1/816,1/1224)$ & $1/3264$ & $1/4896$ & $23/280908$ \\
+$(10/11,1/2)$ \emph{(simp.)} & $(19/50,13/200)$ & $1/500$ & $(1/50,177/11000,17/5500)$ & $9/8800$ & $17/22000$ & $1/4950$ \\
+\bottomrule
+\end{tabular}
+\caption{Exact admissible rational parameters satisfying \eqref{eq:param-system} and resulting Fourier-decay exponents $\eta$ for the regimes of \Cref{thm:A}. Rows marked \emph{(mid.)} use \eqref{eq:midpoint}; rows marked \emph{(simp.)} give simplified decimal-denominator choices verified in \ttt{scripts/phase25\_nonlinear\_approx.py}. For $r=1$ we set $\theta=0$.}\label{tab:exponents}
+\end{table}
+
+Define the positive rational margins
+\[
+\mlin:=2\alpha+4\beta-1,\qquad m_A:=s-2\alpha-2\beta-\tfrac32\theta,\qquad m_B:=\tfrac{1-\rhoK}{2}\alpha-(1-s)-\tfrac12\theta,
+\]
+and set
+\[
+\eta:=\begin{cases}
+\min\!\bigl\{\mlin,\,\frac{m_A}{2},\,\frac{m_B}{4}\bigr\} & (r=1),\\[3pt]
+\min\!\bigl\{\mlin,\,2\alpha s,\,\frac{s\theta}{r-1},\,\frac{m_A}{2},\,\frac{m_B}{4}\bigr\} & (r\ge2).
+\end{cases}
+\]
+Note that $0<\eta<1$ and that \eqref{eq:param-system} also implies $2\alpha+2\beta+\theta<s<1$ and $\theta<(1-\rhoK)\alpha<(1+\rhoK)\alpha$.
+
+Let $|\xi|\ge\bar\xi_0(P)$, where the integer $\bar\xi_0(P)\ge16$ is defined in Step~5 below. Put $R_1=|\xi|^\alpha>1$, $R_2=|\xi|^\beta>1$, $\Delta=R_2^2=|\xi|^{2\beta}$, and $\delta=|\xi|^{-\theta}$ if $r\ge2$ (while $\delta=c_*$ and $\theta=0$ if $r=1$).
+
+\emph{Step~1: Critical-point excision.}
+Write $\mathcal{W}_1:=\mathcal{W}(R_1)$. When $r=1$, $|P'(x)|=c_*=\delta$ everywhere; set $\widetilde{B}_\delta=\emptyset$, $\mathcal{W}_1^*=\mathcal{W}_1$, and $A_1(P):=0$. When $r\ge2$, writing $P'(x)=rc_*\prod_{i=1}^{r-1}(x-\rho_i)$ over $\C$, every $x\in[0,1]$ with $|P'(x)|<\delta$ satisfies $|x-\RePart\rho_i|\le|x-\rho_i|<(\delta/(rc_*))^{1/(r-1)}=:\rho$ for some $i$, so $\{x\in[0,1]:|P'(x)|<\delta\}\subseteq\widetilde{B}_\delta:=\bigcup_{i=1}^{r-1}(\RePart\rho_i-\rho,\RePart\rho_i+\rho)$. By \Cref{lem:block-measure}(2), $\mu(\widetilde{B}_\delta)\le(r-1)C_F(2\rho)^s$ (also when $2\rho\ge1$, since $\mu(\cdot)\le1\le C_F(2\rho)^s$). Let $\mathcal{W}_1^*=\{\mathbf{a}\in\mathcal{W}_1:I_{\mathbf{a}}\cap\widetilde{B}_\delta=\emptyset\}$. Every $\mathbf{a}\in\mathcal{W}_1\setminus\mathcal{W}_1^*$ either satisfies $I_{\mathbf{a}}\subseteq\widetilde{B}_\delta$ or contains an endpoint of one of the $r-1$ open intervals forming $\widetilde{B}_\delta$. Each of the at most $2(r-1)$ endpoints lies in at most two closed cylinders of $\mathcal{W}_1$ (disjoint interiors), so at most $4(r-1)$ boundary cylinders occur, each of mass $\le R_1^{-2s}$. Using $0<s/(r-1)<1$, we get
+\begin{align*}
+\sum_{\mathbf{a}\in\mathcal{W}_1\setminus\mathcal{W}_1^*}w(\mathbf{a})
+&\le\mu(\widetilde{B}_\delta)+4(r-1)R_1^{-2s}\\
+&\le(r-1)C_F\!\left(2\left(\frac{|\xi|^{-\theta}}{rc_*}\right)^{1/(r-1)}\right)^s+4(r-1)|\xi|^{-2\alpha s}\le A_1(P)|\xi|^{-\eta},
+\end{align*}
+with $A_1(P):=(r-1)(2C_F\max(1,(rc_*)^{-1})+4)\in\Q_{>0}$. On every $\mathbf{a}\in\mathcal{W}_1^*$, $|P'(x)|\ge\delta$ on $I_{\mathbf{a}}$ and $P'$ has constant sign on $I_{\mathbf{a}}$.
+
+\emph{Step~2: Two-block decomposition and linearization.}
+By the stopping-time independence of \Cref{lem:block-measure}(2) (since $R_1,R_2>1$), decomposing $x=T_{\mathbf{a}}(y)$ over $\mathbf{a}\in\mathcal{W}_1$ and partitioning $y$ over $\mathcal{W}_2:=\mathcal{W}(R_2)$ yields
+\[
+\left|\int_0^1 e(\xi P(x))\,d\mu(x)\right|\le A_1(P)|\xi|^{-\eta}+\left|\sum_{\mathbf{b}\in\mathcal{W}_2}\sum_{\mathbf{a}\in\mathcal{W}_1^*}w(\mathbf{a})\int_{I_{\mathbf{b}}}e\bigl(\xi P(T_{\mathbf{a}}(y))\bigr)\,d\mu(y)\right|.
+\]
+For each $\mathbf{b}\in\mathcal{W}_2$, let $y_{\mathbf{b}}=p(\mathbf{b})/q(\mathbf{b})$ be the left endpoint of $I_{\mathbf{b}}$; since $\mathbf{b}$ has even length $\ge2$ and digits $\le M$, $y_{\mathbf{b}}\ge1/(b_1+1)\ge1/(M+1)$ and $|y-y_{\mathbf{b}}|\le q(\mathbf{b})^{-2}\le R_2^{-2}$ on $I_{\mathbf{b}}$. For $f_{\mathbf{a}}(y)=P(T_{\mathbf{a}}(y))$, $|T_{\mathbf{a}}'(y)|\le q(\mathbf{a})^{-2}\le R_1^{-2}$ and $|T_{\mathbf{a}}''(y)|=2q'(\mathbf{a})(q(\mathbf{a})+q'(\mathbf{a})y)^{-3}\le 2R_1^{-2}$, so $|f_{\mathbf{a}}''(y)|\le(L_P+2M_P)R_1^{-2}$. By Taylor's theorem, expanding $\xi f_{\mathbf{a}}(y)=\xi f_{\mathbf{a}}(y_{\mathbf{b}})+\Lambda_{\mathbf{a},\mathbf{b}}(y-y_{\mathbf{b}})+O(\cdot)$ with
+\[
+\Lambda_{\mathbf{a},\mathbf{b}}:=\frac{\xi\,P'(T_{\mathbf{a}}(y_{\mathbf{b}}))}{(q(\mathbf{a})+q'(\mathbf{a})y_{\mathbf{b}})^2}
+\]
+incurs phase error at most $2\pi\cdot\frac12|\xi|(L_P+2M_P)R_1^{-2}R_2^{-4}=\pi(L_P+2M_P)|\xi|^{-\mlin}\le A_2(P)|\xi|^{-\eta}$, where $A_2(P):=4(L_P+2M_P)\in\Q_{>0}$ (using $\pi<4$ and $\mlin\ge\eta$). Thus the remaining double sum is bounded by $\sum_{\mathbf{b}\in\mathcal{W}_2}S_{\mathbf{b}}$, where
+\[
+S_{\mathbf{b}}:=\sum_{\mathbf{a}\in\mathcal{W}_1^*}w(\mathbf{a})\left|\int_{I_{\mathbf{b}}}e(\Lambda_{\mathbf{a},\mathbf{b}}y)\,d\mu(y)\right|.
+\]
+
+\emph{Step~3: Gallagher--Fej\'er large sieve for Frostman measures.}
+Fix $\mathbf{b}\in\mathcal{W}_2$, put $\nu=\mu|_{I_{\mathbf{b}}}$ (total mass $w(\mathbf{b})$), let $x_0$ be the midpoint and $\rho_{\mathbf{b}}=\frac12|I_{\mathbf{b}}|\le\frac12R_2^{-2}=\frac1{2\Delta}$ the half-length of $I_{\mathbf{b}}$, and define $g(t):=\int_{I_{\mathbf{b}}}e(t(y-x_0))\,d\nu(y)$. Every $\Lambda_{\mathbf{a},\mathbf{b}}$ lies in $[-U,U]$ with $U:=M_P|\xi|R_1^{-2}$. Put $T:=U+\Delta$ and
+\[
+N(\Delta):=\sup_{\mathbf{b}\in\mathcal{W}_2}\sup_{u\in\R}\sum_{\substack{\mathbf{a}\in\mathcal{W}_1^*\\\Lambda_{\mathbf{a},\mathbf{b}}\in[u,u+\Delta]}}w(\mathbf{a}).
+\]
+Applying Cauchy--Schwarz and binning $\R$ into intervals $[k\Delta,(k+1)\Delta)$ meeting $[-U,U]$ (all contained in $[-T,T]$) gives
+\[
+S_{\mathbf{b}}^2\le\sum_{\mathbf{a}\in\mathcal{W}_1^*}w(\mathbf{a})|g(\Lambda_{\mathbf{a},\mathbf{b}})|^2\le N(\Delta)\sum_{[k\Delta,(k+1)\Delta)\cap[-U,U]\ne\emptyset}\sup_{t\in[k\Delta,(k+1)\Delta]}|g(t)|^2.
+\]
+On each bin $[a_k,b_k]$ of length $\Delta$, averaging $|g(t_*)|^2-|g(t_0)|^2=\int_{t_0}^{t_*}2\RePart(\overline{g}g')\,dt\le2\int_{a_k}^{b_k}|g||g'|\,dt$ over $t_0\in[a_k,b_k]$, summing over $k$, and applying Cauchy--Schwarz yields Gallagher's Sobolev inequality \cite{Gallagher1970}:
+\[
+\sum_k\sup_{[a_k,b_k]}|g(t)|^2\le\frac1\Delta\int_{-T}^T|g(t)|^2\,dt+2\left(\int_{-T}^T|g(t)|^2\,dt\right)^{1/2}\left(\int_{-T}^T|g'(t)|^2\,dt\right)^{1/2}.
+\]
+With the Fej\'er kernel $H(u)=(\frac{\sin\pi u}{\pi u})^2\ge\frac4{\pi^2}$ on $|u|\le\frac12$, whose Fourier transform is $\int_{\R}H(\frac{t}{2T})e(tz)\,dt=2T\max(1-2T|z|,0)$, \Cref{lem:block-measure}(2) gives
+\[
+\int_{-T}^T|g(t)|^2\,dt\le\frac{\pi^2}{2}T\iint_{I_{\mathbf{b}}^2}\max(1-2T|y-y'|,0)\,d\nu(y)\,d\nu(y')\le\frac{\pi^2}{2}C_F T^{1-s}w(\mathbf{b}).
+\]
+For $g'(t)=2\pi i\int(y-x_0)e(t(y-x_0))\,d\nu(y)$, using $|(y-x_0)(y'-x_0)|\le\rho_{\mathbf{b}}^2\le1/(4\Delta^2)$ inside the same Fej\'er majorant yields $\int_{-T}^T|g'(t)|^2\,dt\le\frac{\pi^4}{2\Delta^2}C_FT^{1-s}w(\mathbf{b})$. Since $\sqrt{\pi^2/2+\pi^3}=5.995\dots<6$, we obtain $S_{\mathbf{b}}\le 6\sqrt{C_F N(\Delta)T^{1-s}/\Delta}\sqrt{w(\mathbf{b})}$. Summing over $\mathbf{b}\in\mathcal{W}_2$ by Cauchy--Schwarz and using $|\mathcal{W}_2|\le 2B_0^2R_2^2=2B_0^2\Delta$ cancels $\Delta$ identically:
+\begin{equation}\label{eq:large-sieve}
+\sum_{\mathbf{b}\in\mathcal{W}_2}S_{\mathbf{b}}\le 6\sqrt{2C_F}\,B_0\sqrt{N(\Delta)\,T^{1-s}}.
+\end{equation}
+
+\emph{Step~4: Bounding $N(\Delta)$ via modular hyperbolas.}
+Split $\mathcal{W}_1^*=\mathcal{W}_1^+\cup\mathcal{W}_1^-$ by the constant sign of $\xi P'$ on $I_{\mathbf{a}}$; by symmetry we bound $\mathcal{W}_1^+$ and double the result. On $\mathcal{W}_1^+$, every $\Lambda_{\mathbf{a},\mathbf{b}}$ lies in $[u_{\min},u_{\max}]$ with $u_{\min}:=\delta|\xi|/(4B_0^2R_1^2)$ (since $q+q'y_{\mathbf{b}}\le 2q<2B_0R_1$) and $u_{\max}:=U$; if $u_{\min}>u_{\max}$, then $\mathcal{W}_1^+=\emptyset$. Replacing $T_{\mathbf{a}}(y_{\mathbf{b}})$ by $p/q=p(\mathbf{a})/q(\mathbf{a})\in I_{\mathbf{a}}$ alters $\Lambda_{\mathbf{a},\mathbf{b}}$ by at most $\Delta':=L_P|\xi|R_1^{-4}$ (zero when $r=1$). For $|\xi|\ge\bar\xi_0(P)$, Step~5 guarantees $\Delta\le\frac12 u_{\min}$ and $\Delta'\le\min(\frac12\Delta,\frac14 u_{\min})$. Thus any interval $[u,u+\Delta]$ meeting $[u_{\min},u_{\max}]$ has $u':=u-\Delta'\ge\frac14 u_{\min}>0$, and every qualifying $\mathbf{a}\in\mathcal{W}_1^+$ satisfies $\xi P'(p/q)(q+q'y_{\mathbf{b}})^{-2}\in[u',u'+\Delta+2\Delta']\subseteq[u',u'+2\Delta]$, i.e.,
+\[
+\sqrt{\frac{\xi P'(p/q)}{u'+2\Delta}}\le q+q'y_{\mathbf{b}}\le\sqrt{\frac{\xi P'(p/q)}{u'}}.
+\]
+Using $\sqrt{A/u'}-\sqrt{A/(u'+2\Delta)}\le\sqrt{A}\,\Delta/(u')^{3/2}$, $u'\ge u_{\min}/4$, and $y_{\mathbf{b}}\ge1/(M+1)$, every qualifying pair $(p,q')$ lies within vertical distance $W_0:=64(M+1)B_0^3M_P^{1/2}\delta^{-3/2}\Delta R_1^3/|\xi|$ of the curve $q'=F_q(p):=y_{\mathbf{b}}^{-1}(\sqrt{\xi P'(p/q)/u'}-q)$.
+
+Fix $q\in[R_1,B_0R_1]$. The set $\{t\in[0,1]:\xi P'(t)\ge\delta|\xi|\}$ has at most $r$ connected components (since $P'\mp\delta$ has degree $r-1$ when $r\ge2$ and is constant when $r=1$), on each of which $F_q$ is $C^1$ with
+\[
+|F_q'(x)|=\frac{|\xi||P''(x/q)|}{2y_{\mathbf{b}}q\sqrt{u'}\sqrt{\xi P'(x/q)}}\le 2(M+1)B_0L_P\delta^{-1}=S_1\delta^{-1}=:S_0.
+\]
+Put $K:=\lceil(S_0+1)^{1/2}q^{(1-\rhoK)/2}\rceil$. For $|\xi|\ge\bar\xi_0(P)$, Step~5 guarantees $S_0+1\le R_1^{1+\rhoK}\le q^{1+\rhoK}$, so $1\le K\le q$, $\lceil q/K\rceil\le 2q/K$, $K+r\le(r+1)K$, and $K\le 2(S_0+1)^{1/2}q^{(1-\rhoK)/2}$. Partitioning $[1,q]$ into $K$ intervals of length $\le\lceil q/K\rceil$ and intersecting with the at most $r$ components gives at most $K+r$ subintervals $I_j$ of length $L_1\le 2q/K$, on each of which $q'$ lies in an interval $J_j\subseteq[1,q]$ of length $L_2\le\min(q,W_0+S_0L_1+2)$. By \Cref{lem:block-measure}(2), $(p,q)$ uniquely determines $\mathbf{a}$ and $pq'\equiv-1\pmod q$. Applying \Cref{lem:kloosterman}(2)--(3) to each rectangle $I_j\times J_j$ and summing over $j$ gives at most
+\begin{multline*}
+(K+r)\!\left(\frac{16(2q/K)(W_0+2S_0q/K+2)}{q}+\CK\tau(q)q^{\rhoK}\right)\\
+\le 32(r+1)W_0+2(r+1)(\CK+64)(S_0+1)^{1/2}\tau(q)q^{(1+\rhoK)/2}
+\end{multline*}
+solutions for fixed $q$ (using $2+2S_0q/K\le 4(S_0+1)^{1/2}q^{(1+\rhoK)/2}$ and $\tau(q)\ge1$). Doubling for $\mathcal{W}_1^\pm$, summing over $q\in[R_1,B_0R_1]$ via $\sum_{q\le X}\tau(q)\le X(1+\log X)$ and $\log(eB_0R_1)\le\log(3B_0|\xi|)$, and multiplying by $w(\mathbf{a})\le R_1^{-2s}$ yields
+\[
+N(\Delta)\le 64(r+1)B_0R_1^{1-2s}W_0+4(r+1)(\CK+64)B_0^2(S_0+1)^{1/2}R_1^{\frac{3+\rhoK}{2}-2s}\log(3B_0|\xi|).
+\]
+
+\emph{Step~5: Explicit computable rational majorants $\bar\xi_0(P)$ and $\bar C(P)$.}
+Every threshold $A|\xi|^{-\gamma}\le1$ ($A,\gamma\in\Q_{>0}$) holds whenever $|\xi|\ge\max(1,\lceil A\rceil)^{\lceil1/\gamma\rceil}\in\Z_{\ge1}$. Set $\gamma_1:=1-2\alpha-2\beta-\theta>0$ and $\gamma_5:=1-2\alpha-2\beta>0$ (and for $r\ge2$, $\gamma_2:=4\alpha+2\beta-1>0$, $\gamma_3:=2\alpha-\theta>0$, $\gamma_4:=(1+\rhoK)\alpha-\theta>0$). Define the explicit integers
+\begin{align*}
+\text{for }r=1:&\quad X_1:=\max(1,\lceil 8B_0^2/c_*\rceil)^{\lceil1/\gamma_1\rceil},\quad X_2=X_3=X_4:=1;\\
+\text{for }r\ge2:&\quad X_1:=(8B_0^2)^{\lceil1/\gamma_1\rceil},\quad X_2:=\max(1,\lceil 2L_P\rceil)^{\lceil1/\gamma_2\rceil},\\
+&\quad X_3:=\max(1,\lceil 16B_0^2L_P\rceil)^{\lceil1/\gamma_3\rceil},\quad X_4:=\max(1,\lceil S_1+1\rceil)^{\lceil1/\gamma_4\rceil};\\
+\text{for all }r\ge1:&\quad X_5:=\max(1,\lceil 1/M_P\rceil)^{\lceil1/\gamma_5\rceil},\quad \bar\xi_0(P):=\max(16,X_1,X_2,X_3,X_4,X_5).
+\end{align*}
+For $|\xi|\ge\bar\xi_0(P)$, $X_1,\dots,X_5$ enforce $\Delta\le\frac12 u_{\min}$, $\Delta'\le\frac12\Delta$, $\Delta'\le\frac14 u_{\min}$, $S_0+1\le R_1^{1+\rhoK}$, and $\Delta\le U$ (whence $T=U+\Delta\le 2M_P|\xi|^{1-2\alpha}$), respectively. Bounding $M_P^{1/2}\le\bar M_P$, $T^{1-s}\le 2\bar M_P|\xi|^{(1-2\alpha)(1-s)}$, $(S_0+1)^{1/2}\le(S_1+1)|\xi|^{\theta/2}$, $\delta^{-3/2}\le D_{\delta,1}|\xi|^{3\theta/2}$ (with $D_{\delta,1}:=1$ for $r\ge2$ and $D_{\delta,1}:=\max(1,c_*^{-2})$ for $r=1$), and $\log(3B_0|\xi|)\le\frac{2}{m_B}(3B_0)^{m_B/2}|\xi|^{m_B/2}\le\frac{6B_0}{m_B}|\xi|^{m_B/2}$ (from $\log x\le x^\varepsilon/\varepsilon$ with $\varepsilon=m_B/2\in(0,1)$) cancels $2\alpha s$ in both exponents of $N(\Delta)T^{1-s}$, leaving $-m_A\le-2\eta$ and $-m_B/2\le-2\eta$:
+\[
+N(\Delta)T^{1-s}\le 2\bar M_P\bigl(K_A^{(0)}(P)+K_B^{(0)}(P)\bigr)|\xi|^{-2\eta},
+\]
+with explicit rationals $K_A^{(0)}(P):=4096(r+1)(M+1)B_0^4\bar M_P D_{\delta,1}$ and $K_B^{(0)}(P):=24(r+1)(\CK+64)B_0^3(S_1+1)/m_B$. Substituting into \eqref{eq:large-sieve} and using $\sqrt{2C_F}\sqrt{2\bar M_P(K_A^{(0)}+K_B^{(0)})}\le 2C_F\bar M_P(K_A^{(0)}+K_B^{(0)})$ gives
+\[
+\sum_{\mathbf{b}\in\mathcal{W}_2}S_{\mathbf{b}}\le 12\,C_FB_0\bar M_P\bigl(K_A^{(0)}(P)+K_B^{(0)}(P)\bigr)|\xi|^{-\eta}=:A_3(P)|\xi|^{-\eta}.
+\]
+Finally, $|\xi|^{-\eta}\le 2(1+|\xi|)^{-\eta}$ for $|\xi|\ge\bar\xi_0(P)\ge16$, whereas for $|\xi|<\bar\xi_0(P)$ the trivial bound $1\le(1+\bar\xi_0(P))(1+|\xi|)^{-\eta}$ holds because $0<\eta<1$. Putting
+\[
+\bar C(P):=\max\!\Bigl(1+\bar\xi_0(P),\,2\bigl(A_1(P)+A_2(P)+A_3(P)\bigr)\Bigr)\in\Q_{>0}
+\]
+proves \eqref{eq:fourier-decay} for every $\xi\in\R$.
+\end{proof}
+
+\section{Rational nested-cylinder selection, complexity, and all-prime series}\label{sec:selection}
+
+We now assemble \Cref{thm:A,thm:C}, using a continuous-partial-sum $L^2$ potential function whose conditional expectations on every cylinder are computable to arbitrary rational tolerance using only finite rational arithmetic.
+
+\begin{theorem}[Proof of \Cref{thm:A} and \Cref{thm:C}(i): rational nested-cylinder selection]\label{thm:selection}
+Let $(M,L,s)$ be any certified parameter triple of \Cref{prop:analytic-100} or \Cref{prop:certificates}(i)--(ii), with corresponding regime and admissible rational parameters from \Cref{thm:fourier-decay}. Then the finite-rational algorithm described below halts at every stage $m\ge0$ and computes the partial quotients of a real number $x=[0;a_1,a_2,\dots]\in F_M$ satisfying all conclusions of \Cref{thm:A} (and, when a fixed target map $X-S$ is included in the test enumeration, making $x-S$ normal in base~$b$).
+\end{theorem}
+
+\begin{proof}
+\emph{Step~1: Uniform $L^2$ moment bound with rational majorant.}
+Fix a computable enumeration $e=1,2,\dots$ of all test triples $e=(P_e,b_e,h_e)$ where $P_e\in\Q[X]$ is a nonconstant polynomial of degree $r_e\ge1$ (optionally also including $(X-S,b,h)$ for all $h\ge1$ and a fixed computable series $S=\sum_{n\ge1}\ell_n^{-1}b^{-n}$), $b_e\ge2$ is an integer base, and $h_e\ge1$ is an integer frequency. Put $S_N(x;e):=N^{-1}\sum_{n=0}^{N-1}e(h_eb_e^nP_e(x))$ and let $\eta_e\in\Q\cap(0,1)$ and $\bar C(P_e)\in\Q_{>0}$ be the explicit rational outputs of \Cref{thm:fourier-decay}. Expanding $|S_N|^2$ and using $h_e(b_e^n-b_e^m)\ge b_e^{n-1}\ge 2^{n-1}$ for $0\le m<n<N$ yields
+\[
+\int_0^1|S_N(x;e)|^2\,d\mu(x)\le\frac1N+\frac{2\bar C(P_e)}{N^2}\sum_{n=1}^{N-1}n\,2^{-\eta_e(n-1)}\le\frac{K(P_e)}{N},\qquad K(P_e):=1+\frac{2\bar C(P_e)}{(1-2^{-\eta_e})^2},
+\]
+uniformly in $b_e\ge2$, $h_e\ge1$, and $N\ge1$. Using $1-e^{-u}\ge u/(1+u)$ ($u>0$) and $\log 2>2/3$ (proved in \Cref{prop:analytic-100}), we get $(1-2^{-\eta_e})^{-1}\le 1+(\eta_e\log 2)^{-1}<1+\frac3{2\eta_e}$. Thus the explicit computable rational
+\[
+\bar K_e:=1+2\bar C(P_e)\left(1+\frac3{2\eta_e}\right)^2\in\Q_{>1}
+\]
+strictly majorizes $K(P_e)$.
+
+\emph{Step~2: Continuous-partial-sum $L^2$ potential.}
+Compute the integer threshold directly by rational floor division:
+\[
+J_e:=\lfloor 2^{e+3}\bar K_e\rfloor+1\in\Z_{\ge1},
+\]
+so $J_e>2^{e+3}\bar K_e>2^{e+3}K(P_e)$. Define $\Psi(x):=\sum_{e=1}^\infty\sum_{j=J_e}^\infty|S_{j^2}(x;e)|^2\in[0,\infty]$. Using $\sum_{j=J_e}^\infty j^{-2}\le 2/J_e$ and Tonelli's theorem gives
+\[
+\int_0^1\Psi(x)\,d\mu(x)\le\sum_{e=1}^\infty\frac{2K(P_e)}{J_e}<\sum_{e=1}^\infty\frac{2\bar K_e}{J_e}<\sum_{e=1}^\infty 2^{-e-2}=\frac14.
+\]
+
+\emph{Step~3: Repaired rational weight search and rational error budgets.}
+First compute the exact rational block weights $p_{\mathbf{u}}$ of \Cref{lem:block-measure}(1) by searching integers $D\ge1$ satisfying \emph{both} $D^Q\ge B_{M,L}^P$ and $\sum_{\mathbf{u}}a_{N(\mathbf{u})}(D)>D$. By \Cref{lem:block-measure}(1), this search halts and produces strictly positive weights $p_{\mathbf{u}}\in\Q_{>0}$ for \emph{every} child block $\mathbf{u}\in\{1,\dots,M\}^L$.
+
+For any block cylinder $I_{\mathbf{a}}$ ($\mathbf{a}=\mathbf{u}_1\cdots\mathbf{u}_m$) of exact positive rational mass $w(\mathbf{a})=\prod_{i=1}^m p_{\mathbf{u}_i}>0$ and any prescribed rational tolerance $\delta>0$, we compute a rational approximation $\widehat E(\mathbf{a})\in\Q$ to $\Ex[\Psi\mid I_{\mathbf{a}}]:=w(\mathbf{a})^{-1}\int_{I_{\mathbf{a}}}\Psi\,d\mu$ satisfying $|\widehat E(\mathbf{a})-\Ex[\Psi\mid I_{\mathbf{a}}]|<\delta$ via four finite rational budgets:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item \emph{Tail truncation in $e$ and $j$ (budget $\delta/4+\delta/4=\delta/2$).} Choose explicit integers $E,J\ge1$ by rational arithmetic so that $2^{-E-2}/w(\mathbf{a})<\delta/4$ and $(2/(Jw(\mathbf{a})))\sum_{e=1}^E\bar K_e<\delta/4$. Put $\mathcal{F}:=\{(e,j):1\le e\le E,\,J_e\le j<J\}$ and $N_{\mathcal{F}}:=|\mathcal{F}|$. Because every term of $\Psi$ is nonnegative, the omitted tail of $\Ex[\Psi\mid I_{\mathbf{a}}]$ lies in $[0,\delta/2)$.
+\item \emph{Sub-cylinder discretization (budget $\delta/6$).} For each $(e,j)\in\mathcal{F}$, $|S_{j^2}(x;e)|^2$ is $C^\infty$ on $[0,1]$ with derivative bounded by $4\pi h_eb_e^{j^2}M_{P_e}\le 16h_eb_e^{j^2}M_{P_e}=:\bar L_{e,j}\in\Q_{>0}$ (since $\pi<4$). Put $\bar L_{\mathrm{tot}}:=\sum_{(e,j)\in\mathcal{F}}\bar L_{e,j}$. Refining $I_{\mathbf{a}}$ by $d\ge1$ additional block levels partitions $I_{\mathbf{a}}$ into sub-cylinders $I_{\mathbf{a}\mathbf{v}}$ of exact rational conditional weights $\prod_{i=1}^d p_{\mathbf{v}_i}$ and diameter $\le\phi^{-2(dL-1)}<(5/8)^{2(dL-1)}$ (using $\phi>8/5$ from \Cref{prop:analytic-100}). Increment $d=1,2,\dots$ until $\bar L_{\mathrm{tot}}(5/8)^{2(dL-1)}<\delta/6$. Evaluating at one rational endpoint $x_{\mathbf{a}\mathbf{v}}\in I_{\mathbf{a}\mathbf{v}}$ incurs discretization error $<\delta/6$ summed over $\mathcal{F}$.
+\item \emph{Truncation of $S$ (budget $\delta/6$).} For any active term with $P_e=X-S$, replace $S$ by $S_{N_S}=\sum_{n=1}^{N_S}\ell_n^{-1}b^{-n}$, where $|S-S_{N_S}|<b^{-N_S}$ (since $\ell_n\ge2$); choose the least integer $N_S\ge1$ with $\bar L_{\mathrm{tot}}b^{-N_S}<\delta/6$.
+\item \emph{Rational trigonometric evaluation (budget $\delta/6$).} Put $\epsTrig:=\min(\frac12,\frac{\delta}{36\max(1,N_{\mathcal{F}})})$. For each angle $\theta=\fr{h_eb_e^n\widetilde{P}_e(x_{\mathbf{a}\mathbf{v}})}\in[0,1)\cap\Q$, compute a rational $\tilde\pi$ with $|\pi-\tilde\pi|<\epsTrig/4$ via Machin's alternating series $\frac\pi4=4\arctan\frac15-\arctan\frac1{239}$, and evaluate $\cos(2\tilde\pi\theta)$ and $\sin(2\tilde\pi\theta)$ by Taylor polynomials of degree $2\NTay$ satisfying $7^{2\NTay+1}/(2\NTay+1)!<\epsTrig/2$ (which forces $\NTay\ge9$ and covers both sine and cosine remainders since $2\tilde\pi\theta<7$). Each sine and cosine is within $\epsTrig$, so each $S_{j^2}$ is within $2\epsTrig$ and each $|S_{j^2}|^2$ is within $(2+2\epsTrig)\cdot2\epsTrig\le 6\epsTrig$. Summing over $\mathcal{F}$ yields error $<\delta/6$.
+\end{enumerate}
+Combining the one-sided truncation error in $[0,\delta/2)$ with the three two-sided errors summing to $<\delta/2$ gives $|\widehat E(\mathbf{a})-\Ex[\Psi\mid I_{\mathbf{a}}]|<\delta$.
+
+Set rational thresholds $B_m:=1-2^{-m-1}$ ($m\ge0$). Initially $I_0=[0,1]$ satisfies $\Ex[\Psi\mid I_0]<\frac14<\frac12=B_0$. Inductively, given $I_m=I_{\mathbf{a}}$ with $\Ex[\Psi\mid I_m]<B_m$, compute $\widehat E(\mathbf{a}\mathbf{u})$ for every child $\mathbf{u}\in\{1,\dots,M\}^L$ to rational accuracy $\delta_m:=(B_{m+1}-B_m)/4=2^{-m-4}$. Since $\sum_{\mathbf{u}}p_{\mathbf{u}}\Ex[\Psi\mid I_{\mathbf{a}\mathbf{u}}]=\Ex[\Psi\mid I_{\mathbf{a}}]<B_m$ and every $p_{\mathbf{u}}>0$, at least one child satisfies $\Ex[\Psi\mid I_{\mathbf{a}\mathbf{u}}]<B_m$, hence $\widehat E(\mathbf{a}\mathbf{u})<B_m+\delta_m<B_{m+1}-\delta_m$. Selecting the lexicographically first child passing the exact rational inequality $\widehat E(\mathbf{a}\mathbf{u})<B_{m+1}-\delta_m$ halts deterministically, certifies $\Ex[\Psi\mid I_{\mathbf{a}\mathbf{u}}]<B_{m+1}$, and sets $I_{m+1}=I_{\mathbf{a}\mathbf{u}}$.
+
+\emph{Step~4: Normality, computability, and Diophantine properties.}
+The nested closed cylinders $I_m$ have diameters $|I_m|\le\phi^{-2(mL-1)}\to0$ and shrink to a unique computable irrational $x=[0;a_1,a_2,\dots]\in F_M$. For every finite cutoff $T\ge1$, the partial sum $\Psi_T(y):=\sum_{e=1}^T\sum_{j=J_e}^T|S_{j^2}(y;e)|^2$ is continuous on $[0,1]$ and satisfies $0\le\Psi_T\le\Psi$, so
+\[
+\frac1{\mu(I_m)}\int_{I_m}\Psi_T(y)\,d\mu(y)\le\Ex[\Psi\mid I_m]<B_m<1\qquad(m\ge0).
+\]
+Letting $m\to\infty$ gives $\Psi_T(x)\le1$ by continuity of $\Psi_T$ at $x$; letting $T\to\infty$ gives $\Psi(x)\le1$. Hence for every $e=(P_e,b_e,h_e)$, $\sum_{j\ge J_e}|S_{j^2}(x;e)|^2\le1$, so $S_{j^2}(x;e)\to0$. For $j^2\le N<(j+1)^2$, $|S_N(x;e)-S_{j^2}(x;e)|\le 2(N-j^2)/N\le 4/j\to0$, whence $S_N(x;e)\to0$. By Weyl's criterion (and complex conjugation for $h<0$), $P(x)$ is absolutely normal for every nonconstant $P\in\Q[X]$ (and $x-S$ is normal in base~$b$). Because $P(x)$ is normal in base~$b$, it is never a $b$-adic rational, so refining $I_m$ computes every base-$b$ digit of $P(x)$ by a fixed halting machine. Finally, $q\dist{qx}>1/(M+2)$ and $\mu(x)=2$ follow from \Cref{lem:block-measure}(3).
+\end{proof}
+
+\begin{remark}[Zero-weight regression and absence of discrepancy rates]\label{rem:g1-rates}
+\evidence{Paper proof + Finite certificate}
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \emph{Zero-weight regression.} Omitting the condition $D^Q\ge B_{M,L}^P$ from \eqref{eq:g1-test} fails concretely: for $(M,L,s)=(30,2,10/11)$ ($P=20$, $Q=11$, $B_{30,2}=931$), the naive stopping rule $\sum_{\mathbf{u}}a_{N(\mathbf{u})}(D)>D$ halts at $D=14{,}200$ with $\sum a_N=14{,}206>14{,}200$, at which point $461$ of the $900$ blocks have $a_N=0$ (and hence $p_{\mathbf{u}}=0$, causing division by zero in $\Ex[\Psi\mid I_{\mathbf{a}\mathbf{u}}]$). Under the exact integer condition $D^{11}\ge 931^{20}$, the least admissible integer is $D^*=250{,}087$, where $\sum a_N=256{,}073>D^*$ and all $900$ weights are strictly positive and satisfy $a_N^{11}N^{20}\le(D^*)^{11}$ (certified in \ttt{scripts/phase26\_constructive\_spectra.py}).
+\item \emph{No discrepancy rate.} The bound $\Psi(x)\le1$ controls the \emph{number} of indices $j\ge J_e$ with $|S_{j^2}(x;e)|>\varepsilon$ (at most $\varepsilon^{-2}$), but gives no upper bound on \emph{where} those indices occur. Accordingly, \Cref{thm:A} establishes plain normality of $P(x)$ and claims no effective discrepancy rate for $P(x)$ (nor for $x$ itself).
+\end{enumerate}
+\end{remark}
+
+\begin{proposition}[Complexity accounting and alphabet-size trade-off]\label{prop:complexity}
+\evidence{Paper proof + Finite certificate}
+For each certified triple $(M,L,s)$ of \Cref{thm:A}, \Cref{tab:regimes} gives the exact decimal digit counts of the branching factor $M^L$ and the maximum block norm $B_{M,L}$. Moreover:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item Lowering the cap $M$ toward the boundary $s^*(\rhoK)$ via \Cref{lem:transfer-id} trades a modest constant-size alphabet ($M^L=900$ at $(30,2)$, $38{,}416$ at $(14,4)$, $3{,}111{,}696$ at $(42,4)$) for an astronomically large block alphabet ($M^L=8^{226}\approx 1.2\times10^{204}$ with $205$ digits at $(8,226)$, and $M^L=14^{344}\approx 2.1\times10^{394}$ with $395$ digits at $(14,344)$). Near the threshold, the certificate requires $L\approx\log(h(0)/h(1))/\log\lambda_M(s)$ (a heuristic scaling from the certificate shape, not a lower-bound theorem).
+\item Even on small-block measures, the explicit rational Fourier threshold $\bar\xi_0(P)$ of \Cref{thm:fourier-decay} satisfies $\log_{10}\bar\xi_0(P)\approx101$ at $(14,4)$, $\approx222$ at $(42,4)$, and $\approx3{,}133$ at $(100,52)$ across degree-$1$ to degree-$7$ test polynomials, and at stage $m$ of \Cref{thm:selection} the cutoff $J\asymp 2^m w(\mathbf{a})^{-1}\sum_{e\le E}\bar K_e$ enters the Lipschitz majorant $\bar L_{e,j}=16h_eb_e^{j^2}M_{P_e}$, forcing refinement depth $d\asymp J^2\log b_e$ and doubly exponential runtime in $m$.
+\end{enumerate}
+Thus \Cref{thm:A} is an in-principle Turing-computability theorem, not a practical digit-generation algorithm.
+\end{proposition}
+
+\begin{proof}
+The exact digit counts of $M^L$ and $B_{M,L}=(q_L+p_L)(M,\dots,M)$ are computed in exact integer arithmetic in \ttt{scripts/phase26\_constructive\_spectra.py}. The scaling of $J$, $\bar L_{e,j}$, and $d$ follows directly from Step~3(a)--(b) of \Cref{thm:selection}, since $w(\mathbf{a})\le B_{M,L}^{-m}$ decreases exponentially in $m$ while $dL$ must grow like $J^2\log b_e$.
+\end{proof}
+
+\begin{proposition}[Representation lemma and all-prime full-density series corollary]\label{prop:allprime}
+\evidence{Paper proof; external inputs and certificates inherited from \Cref{thm:A}}
+Fix an integer radix $b\ge2$, let $\ell_1<\ell_2<\cdots$ enumerate all primes not dividing $b$, and put $S=\sum_{n\ge1}\ell_n^{-1}b^{-n}$.
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \textup{(Representation lemma.)} For \emph{every} real number $x\notin S+\Z[1/b]$, letting $d_1,d_2,\dots\in\{0,\dots,b-1\}$ be the canonical base-$b$ digits of $\fr{x-S}$ yields a full-density positive series
+\begin{equation}\label{eq:allprime}
+Z:=x-\lfloor x-S\rfloor=\sum_{n\ge1}\left(d_n+\frac1{\ell_n}\right)b^{-n}
+\end{equation}
+whose coefficients lie strictly in $(0,b)$ and whose $N$-th shifted prefix $R_N:=\sum_{n=1}^N(d_n+\ell_n^{-1})b^{N-n}$ has exact reduced denominator $\den(R_N)=\prod_{n=1}^N\ell_n$ for every $N\ge1$.
+\item \textup{(Computable badly approximable all-prime series.)} Including $(X-S,b,h)$ ($h\ge1$) in the test enumeration of \Cref{thm:selection} ensures that $x-S$ is normal in base~$b$ (hence irrational, with computable base-$b$ digits $d_n$). The resulting series $Z$ in \eqref{eq:allprime} is computable, has base-$b$ normal individual-site digits $d_n$, has exact shifted-prefix denominators $\prod_{n\le N}\ell_n$, has $P(Z)$ absolutely normal for every nonconstant $P\in\Q[X]$, and satisfies $q\dist{qZ}>1/10$ under Regime~\textup{(iii)} (with Weil--Estermann), $>1/16$ under Regime~\textup{(ii)} (zero external inputs), and $>1/102$ under Regime~\textup{(i)} (purely analytic).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) For $x\notin S+\Z[1/b]$, $\fr{x-S}$ is not a $b$-adic rational and has a unique base-$b$ expansion $\sum_{n\ge1}d_nb^{-n}$, giving \eqref{eq:allprime} with $0<\ell_n^{-1}\le d_n+\ell_n^{-1}\le b-1+\frac12<b$. In $R_N=\sum_{n=1}^Nd_nb^{N-n}+\sum_{n=1}^Nb^{N-n}/\ell_n$, each prime $\ell_m$ ($1\le m\le N$) occurs with exact $\ell_m$-adic valuation $-1$ in the $n=m$ term (as $\ell_m\nmid b$) and valuation $\ge0$ in every other term, while every prime $\ell\notin\{\ell_1,\dots,\ell_N\}$ has valuation $\ge0$; thus $\den(R_N)=\prod_{n=1}^N\ell_n$ identically.
+
+(2) Since $Z=x-\lfloor x-S\rfloor$ differs from $x$ by an integer, $q\dist{qZ}=q\dist{qx}>1/(M+2)$ for all $q\ge1$, and translating $P(X)$ to $P(X-\lfloor x-S\rfloor)\in\Q[X]$ preserves absolute normality of $P(Z)$ for every nonconstant $P\in\Q[X]$. Because $x-S$ is normal in base~$b$, $x\notin S+\Z[1/b]$ and the digits $d_n$ are computable by cylinder refinement.
+\end{proof}
+
+\begin{remark}[Representation versus intrinsic content, and multi-radix extension]\label{rem:rep-scope}
+Part~(1) of \Cref{prop:allprime} demonstrates that persistent all-prime denominator support is a property of a \emph{representation}, available for all but countably many reals, and imposes no intrinsic Diophantine or normality constraint on $x$ itself. In Part~(2), the selected point $x$ depends on the chosen radix $b$ through $S=S_b$; if desired, one can handle every integer radix simultaneously by enumerating $(X-S_b,b,h)$ over all $b\ge2$ and $h\ge1$ in \Cref{thm:selection}.
+\end{remark}
+
+\section{Historical priority, prior-art comparison, and exact scope}\label{sec:prior}
+
+To keep the contribution strictly calibrated against the literature, \Cref{tab:prior-art} separates three distinct questions: (a)~non-constructive \emph{existence} of normal numbers in $F_M$; (b)~\emph{computable} absolute normality without bounded partial quotients; and (c)~Turing-computable realizations inside $F_M$.
+
+\begin{table}[ht]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{0.23\textwidth}
+  >{\raggedright\arraybackslash}p{0.31\textwidth}
+  >{\raggedright\arraybackslash}p{0.12\textwidth}
+  >{\raggedright\arraybackslash}p{0.15\textwidth}
+  >{\raggedright\arraybackslash}p{0.12\textwidth}@{}}
+\toprule
+Source & Conclusion & Cap $M$ & Poly.\ / smooth & Computable \\
+\midrule
+Kaufman \cite{Kaufman1980} + Baker \cite{Montgomery1994} & Polynomial Fourier decay on $F_M$ ($\dimH>2/3$) $\Rightarrow$ $\mu$-a.e.\ abs.\ normal & $M\ge3$ & linear stated$^\dagger$ & no \\
+Queff\'elec--Ramar\'e \cite{QueffelecRamare2003} & Polynomial Fourier decay for $\dimH F_A>1/2$ $\Rightarrow$ $\mu$-a.e.\ abs.\ normal & $M=2$ & linear stated$^\dagger$ & no \\
+Jordan--Sahlsten \cite{JordanSahlsten2016} & Polynomial Fourier decay for Gauss Gibbs measures ($\dimH>1/2$) & $M=2$ & linear ($C^2$ branches) & no \\
+Hochman--Shmerkin \cite{HochmanShmerkin2015} & Pointwise $\beta$-normality for quasi-product measures on $F_A$ \& $C^1$ images & any $|A|\ge2$ & $C^1$ diffeo.\ (Thms.\ 1.4, 1.5, 1.12) & no \\
+Sahlsten--Stevens \cite{SahlstenStevens2024}; Baker--Banaji \cite{BakerBanaji2025}; ARHW \cite{ARHW2026} & Non-effective polynomial Fourier decay for nonlinear self-conformal measures and smooth pushforwards & $M=2$ & smooth / nonlinear & no \\
+\midrule
+Sierpi\'nski \cite{Sierpinski1917}; Becher--Figueira \cite{BecherFigueira2002}; Turing \cite{BecherFigueiraPicchi2007}; BHS \cite{BecherHeiberSlaman2013}; LM \cite{LutzMayordomo2021}; ABSS \cite{ABSS2017}; Levin \cite{Levin1999,AlvarezBecher2017} & Computable absolutely normal numbers (down to nearly linear time and $O(N^{-1/2})$ or $O((\log N)^2/N)$ discrepancy) & unbounded & linear & yes (fast) \\
+BHS \cite{BecherHeiberSlaman2015}; Scheerer \cite{Scheerer2017}; Becher--Yuhjtman \cite{BecherYuhjtman2019} & Computable abs.\ normal Liouville numbers; computable abs.\ normal and CF-normal numbers & unbounded & linear & yes \\
+\midrule
+\textbf{This paper (\Cref{thm:A,thm:B,thm:C})} & Turing-computable $x\in F_M$ with explicit rational decay constants for all nonconstant $P\in\Q[X]$; barriers $M\le7/12/4$ & $M\in\{8,14,100\}$ & all nonconstant $P\in\Q[X]$ & yes (in principle) \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of prior literature and this paper. $^\dagger$As recorded in \ttt{LEDGER.md}, primary texts of \cite{Kaufman1980,QueffelecRamare2003} were not read in full; their stationary-phase lemmas apply to $C^2$ phases arising from M\"obius branches, while their stated applications concern linear Fourier transforms $\widehat\mu(t)$. See \cite{Bugeaud2012} for broader Diophantine context.}\label{tab:prior-art}
+\end{table}
+
+\paragraph{Calibration of novelty and open verification.}
+We state the exact boundaries of our contribution explicitly:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \emph{Existence is classical.} Existence of badly approximable absolutely normal numbers down to $M=2$ is classical \cite{Kaufman1980,Montgomery1994,QueffelecRamare2003}, and existence with polynomial images in $F_2$ already follows from Hochman--Shmerkin \cite[Theorems~1.4, 1.5, 1.12 and \S1.3.3]{HochmanShmerkin2015} (as well as non-effective nonlinear pushforward decay \cite{BakerBanaji2025,ARHW2026}). We claim no novelty for existence or for the underlying Kaufman-style large-sieve paradigm.
+\item \emph{What is provisionally novel.} Within the sources examined in \ttt{LEDGER.md}, we did not locate a prior construction of a \emph{Turing-computable} badly approximable real number whose nonconstant rational polynomial images are all absolutely normal, nor a Kaufman-type polynomial-pushforward Fourier-decay bound with fully explicit rational $(\eta,\bar\xi_0(P),\bar C(P))$ paired with exact transfer-operator optimality barriers ($M\le7/12/4$). This addresses a computable version of Queff\'elec's \cite{Queffelec2006} remark at caps $M\in\{8,14,100\}$.
+\item \emph{Provisional priority disclaimer.} As detailed in \ttt{LEDGER.md}, web searches do not exhaust MathSciNet, zbMATH, conference proceedings or monographs, and a formal MathSciNet/zbMATH search by a human specialist (particularly covering 2015--2026 works by Becher, Slaman, Bugeaud, Scheerer, Madritsch, Levin, Kristensen and Figueira) has not been performed. Absence of a hit is never proof of priority; every priority judgment here is provisional pending independent human peer review.
+\end{enumerate}
+
+\section{Open questions}\label{sec:questions}
+
+\begin{question}[Lowering the computable cap to $M=2$]\label{q:cap2}
+\evidence{Open}
+Is there a Turing-computable real number $x\in F_2$ (partial quotients in $\{1,2\}$, hence $q\dist{qx}>1/4$) that is absolutely normal, or has $P(x)$ absolutely normal for every nonconstant $P\in\Q[X]$? By \Cref{thm:B}, no cap $M\le7$ can be reached by the Weil--Estermann two-block system \eqref{eq:param-system}, and no cap $M\le4$ can be reached by \emph{any} rectangle-count exponent $\rhoK\ge0$. Reaching $M=2$ requires effectivizing a different Fourier-decay mechanism, such as the multi-block large sieve of Queff\'elec--Ramar\'e \cite{QueffelecRamare2003}, the Gibbs-measure argument of Jordan--Sahlsten \cite{JordanSahlsten2016}, or a Dolgopyat / spectral-gap estimate in the style of \cite{SahlstenStevens2024,BakerBanaji2025,ARHW2026}.
+\end{question}
+
+\begin{question}[The elementary gap $M=13$]\label{q:m13}
+\evidence{Open}
+Can the zero-external-input cap of \Cref{thm:A}\textup{(ii)} be lowered from $M=14$ to $M=13$? The descriptive float measurement $\lambda_{13}(17/18)\approx1.000176$ (\Cref{tab:eigs}) indicates $\dimH F_{13}\approx0.94453>17/18\approx0.94444$, leaving a margin of $\approx9\times10^{-5}$; certifying $M=13$ via \Cref{lem:transfer-id}(3) would require a rational exponent $s\in(17/18,\dimH F_{13})$ and a grid of order $K\sim10^5$.
+\end{question}
+
+\begin{question}[Polynomial-time generation]\label{q:polytime}
+\evidence{Open}
+Can a badly approximable absolutely normal number (for any fixed cap $M\ge2$) be computed in polynomial time, analogous to Becher--Heiber--Slaman \cite{BecherHeiberSlaman2013} and Lutz--Mayordomo \cite{LutzMayordomo2021}? \Cref{prop:complexity} shows that the $L^2$-potential cylinder-selection algorithm of \Cref{thm:selection} runs in doubly exponential time per block.
+\end{question}
+
+\begin{question}[Effective discrepancy rates in $F_M$]\label{q:rates}
+\evidence{Open}
+Can a computable badly approximable number $x\in F_M$ be constructed with an effective discrepancy bound $D_N(x;b)\le\varepsilon(N)\to0$ (or $D_N(P(x);b)\to0$ with an explicit rate) in every base $b\ge2$?
+\end{question}
+
+\begin{question}[Closed-form badly approximable normal series]\label{q:closedform}
+\evidence{Open}
+Can one write down an explicit closed-form series or continued fraction (without an iterative measure-selection search) that is simultaneously badly approximable and normal in base~$2$ (or absolutely normal)?
+\end{question}
+
+\section{Computational verification and data availability}\label{sec:verification}
+
+No result in this manuscript is formalized in Lean~4. Every finite certificate invoked by \Cref{prop:certificates}, \Cref{thm:B}, and \Cref{rem:g1-rates}--\Cref{prop:complexity} is reproduced by two standalone Python scripts in \url{https://github.com/eldernos/MathematicsResearch}:
+\begin{itemize}[nosep]
+\item \ttt{scripts/phase25\_nonlinear\_approx.py} (pinned at commit \nolinkurl{c06c97dd7d942bdf46d727aa58309869af88d5e7}): verifies in exact integer and \ttt{fractions.Fraction} arithmetic the fourth-moment solution count ($p\in\{2,3,5,7,11,13\}$), $9$ prime-power stationary-phase congruence counts, $72$ non-wraparound trapezoid majorants, $367$ split-sum bounds ($<5q/d$, max ratio $0.4952$), exact integer-root bounds $\zeta(7/4)<2$ and $\zeta(3/2)<14/5$, all hand-checkable inequalities of \Cref{prop:analytic-100}, the three small-block certificates of \Cref{prop:certificates}(ii) ($D=10^{18}$), the simplified exponent triples and executable rational majorants $(\eta,\bar\xi_0,\bar C,\bar K_e,J_e)$ for sample polynomials of degrees $r=1,2,3$ on $(30,2,10/11)$, $10{,}000$ depth-$4$ block concatenations, and the $900$-child martingale step algebra. Its floating-point section (Kloosterman ratios $\le0.2611$ elementary, $\le0.8493$ Weil--Estermann, and $48$ empirical hyperbola rectangles) is strictly separated as descriptive sanity measurement only.
+\item \ttt{scripts/phase26\_constructive\_spectra.py} (Phase~26 working tree): verifies in exact integer and \ttt{Fraction} arithmetic $17$ exact transfer identities $\Sigma(M,L,1)=(\Lop_1^L\ind)(1)$, $18$ reversal multiset identities, $3{,}125$ supermultiplicativity checks, all $4{,}000$ interval inequalities for the $2$ lowered-cap certificates ($(14,344,18/19)$ and $(8,226,46/51)$) and $3$ barrier certificates ($(7,9/10)$, $(12,17/18)$, $(4,5/6)$) of \Cref{prop:certificates}(i),(iii), $100$ exact feasibility checks of $s^*(\rho)$, $8$ exact midpoint parameter certificates of \eqref{eq:param-system} for $r\in\{1,2,3,7\}$, the \Cref{rem:g1-rates}(1) regression ($D=14{,}200$, $461/900$ zero weights) and exact repair ($D^*=250{,}087$), and the $6$ alphabet/norm digit-count computations of \Cref{tab:regimes}. Floating-point arithmetic appears solely to propose candidate vectors before rounding to $10^{-12}\Z$ and in the descriptive printout of \Cref{tab:eigs}; zero floats enter any certified theorem assertion.
+\end{itemize}
+The statement-by-statement verification map (including reproducible PDF build hashes and toolchain versions) and the claim-to-source novelty ledger are \ttt{VERIFICATION.md} and \ttt{LEDGER.md} in \ttt{papers/16-computable-badly-approx-normality/}.
+
+\section{Use of AI tools}\label{sec:ai}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed proof strategies, drafted the proofs and text, implemented the exact Python certificate scripts, and conducted cross-provider audits of the underlying source notes (Phase~25 Track~F review, Phase~26 Audit~IV on \ttt{GF-46}, and Phase~26 Track~E review on \ttt{E2}--\ttt{E4}, including independent from-scratch re-certification of all five transfer-operator certificates). The repository owner directed the project and is responsible for any release. The written proofs, certificate scripts, and literature comparisons have been checked only by AI models from different providers, and this assembled candidate manuscript has not been reviewed as a whole. No independent human expert has checked the proofs or performed a formal MathSciNet/zbMATH priority search. \textbf{Cross-model review is not independent human peer review.} This draft is unreleased. It has been typeset in two independent clean builds producing byte-identical output (\ttt{VERIFICATION.md} records the toolchain, command and checksum), while independent human specialist review and owner release authorization remain pending.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+\end{document}

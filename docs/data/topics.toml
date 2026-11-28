@@ -8,6 +8,7 @@ modules = [
   "CoefficientTransfer", "GeneralMassTransfer", "RadixWidthLaw", "DerivativeTransfer",
   "NormalReciprocalCore", "SimpleNormalityKernel", "RadixPowerTower", "Phase22Cores",
   "HigherOrderTower", "Phase23Cores", "DigitMassTransfer", "Phase24Cores", "NafGeometricTransfer",
+  "ToeplitzDeterminants",
   "EulerPentagonal", "CharacterLambertTransfer", "AntisymmetricLambert",
   "ClassicalBarriers", "ProtectedPole", "PowerSumPeeling",
   "DiscrepancyGeometry", "SurvivingGrid", "PrimePowerGrid", "AdditionSpectrum",
@@ -103,6 +104,7 @@ modules = [
 title = "Classical constant arithmetic"
 modules = [
   "AdaptiveLogarithmBounds", "ChebyshevPoleApproximation", "WeightedLambertIdentities",
+  "HankelDeterminants",
   "ErdosBorweinArrivals", "GaussianLogarithmRelations", "LogarithmPrimaryCharacters",
   "TransitionWindows", "FredholmOrbit", "AffineDenominator",
   "CorrectedNumeratorIncidence", "ErdosBorweinFourier", "GaussianLogarithmCharacters",

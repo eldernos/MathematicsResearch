@@ -450,9 +450,9 @@ class RadixResultTests(BenchmarkCase):
         disc["evidence"] = "lean+paper"
         self.assertRejected(c, f, "evidence=lean+paper requires", "BC-50")
         c, f = self.data()
-        rec = self.const(c, "BC-37")["radix_results"][0]
-        rec["source"] = "Captain Sude, release without a date"
-        self.assertRejected(c, f, "evidence=external requires a four-digit year", "BC-37")
+        rec = self.const(c, "BC-47")["radix_results"][0]
+        rec["source"] = "Champernowne, release without a date"
+        self.assertRejected(c, f, "evidence=external requires a four-digit year", "BC-47")
 
     def test_scope_radix_record_matches_entry(self):
         c, f = self.data()

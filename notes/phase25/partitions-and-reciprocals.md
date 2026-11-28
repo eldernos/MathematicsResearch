@@ -1,6 +1,6 @@
 # Partition constants and reciprocal discrepancy spectra
 
-**Paper proof.** For every integer radix $b\ge2$ and every real $0\le\alpha\le1$, there is a positive irrational $x\in M_b$ such that $D_N(1/x;b)\to\alpha$. For $0<\alpha<1$ the reciprocal orbit measures converge to $\alpha\delta_0+(1-\alpha)\lambda$, where $\lambda$ is normalized length on the circle. In particular $1/\sqrt2$ occurs exactly in every radix. Theorem E1 gives an elementary construction for dyadic radices. Theorem E1.2 uses coprime periods to handle every radix and prescribe the measure itself.
+**Paper proof.** For every prescribed integer radix $b\ge2$ and every real $0\le\alpha\le1$, there is a positive irrational $x = x(b, \alpha) \in M_b$ (constructed computably whenever $\alpha$ is computable; parameter-dependent existence otherwise, with the witness depending on $b$) such that $D_N(1/x;b)\to\alpha$. For $0<\alpha<1$ the reciprocal orbit measures converge to $\alpha\delta_0+(1-\alpha)\lambda$, where $\lambda$ is normalized length on the circle. In particular, for each radix $b\ge2$, $1/\sqrt2$ occurs exactly via a radix-dependent witness $x(b, 1/\sqrt2)\in M_b$. Theorem E1 gives an elementary construction for dyadic radices. Theorem E1.2 uses coprime periods to handle every radix and prescribe the measure itself.
 
 ## Definitions and scope
 

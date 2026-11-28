@@ -1,0 +1,865 @@
+\documentclass[11pt]{article}
+\input{../common/preamble.tex}
+\input{../common/byline.tex}
+\hypersetup{pdftitle={Complete Reciprocal Discrepancy Spectra in Integer Radices}}
+\newcommand{\dist}[1]{\lVert #1\rVert}
+\newcommand{\fr}[1]{\{#1\}}
+\newcommand{\Aconv}{\mathcal{A}_{\mathrm{conv}}}
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\ind}{\mathbf{1}}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\sgn}{sgn}
+\renewcommand{\ReleaseLabel}{candidate draft, not yet released}
+\setlength{\emergencystretch}{3em}
+\allowdisplaybreaks
+
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Complete Reciprocal Discrepancy Spectra\\[3pt] in Integer Radices\par}
+\vspace{10pt}
+\makebyline{1.0 (candidate draft)}{28 November 2026}
+\end{center}
+
+\begin{abstract}
+Fix an integer radix $b\ge2$, and let $K_b=\{x\in\R:D_N(x;b)\to1\}$ be the discrepancy kernel of reals whose base-$b$ shift orbits have maximal extreme discrepancy, with zero-orbit subgroup $M_b=\{x\in\R:N^{-1}\sum_{n<N}\dist{b^nx}\to0\}\subset K_b$. We determine the full set $\Aconv(b)$ of exact convergent reciprocal discrepancies $\lim_{N\to\infty}D_N(1/x;b)$ attained by irrational $x\in K_b$: for every prescribed integer radix $b\ge2$, $\Aconv(b)=[0,1]$ identically. More precisely, for each pair $(b,\alpha)$ with $\alpha\in[0,1]$, there exists a positive irrational $x=x(b,\alpha)\in M_b\subset K_b$---constructed computably whenever $\alpha$ is computable, with parameter-dependent existence otherwise, and depending on $b$---whose reciprocal $1/x$ has empirical orbit measures converging along all prefixes $N\to\infty$ to $\mu_\alpha=\alpha\delta_0+(1-\alpha)\lambda$, where $\lambda$ is Lebesgue measure on the circle $\T=\R/\Z$, and hence satisfies $D_N(1/x;b)\to\alpha$. For $0<\alpha<1$, every length-$L$ word whose cylinder closure avoids $0$ occurs with exact limiting frequency $(1-\alpha)b^{-L}$, every word has lower frequency at least $(1-\alpha)b^{-L}$ (so $1/x$ is disjunctive and nonnormal), and the adjacent-cylinder sum $f_N(0^L)+f_N((b-1)^L)$ converges to $\alpha+2(1-\alpha)b^{-L}$.
+
+In dyadic radices $b=2^e$, an elementary binary padding-and-contraction scheme steers discrepancies directly to $\alpha$. In non-dyadic radices, rational-orbit $+1$-inversion encounters a multiplicative-order barrier linked to $\gcd(b^P-1,2^P-1)$. We bypass this obstruction completely by a coprime-period \emph{cut-and-fold} operation that replaces binary doubling with additive self-convolution $\mu\mapsto(1-\rho)\mu+\rho(\mu*\mu)$, driving every nonzero Fourier coefficient of the reciprocal cycle to $\alpha$ via the transform $W=1/(1-z)$ while contracting the $x$-orbit to $0$. We isolate the cut-and-fold couplings with explicit constants, give an explicit rational computability procedure, and document why the construction is qualitative and ineffective in $N$.
+
+We establish three complementary results. First, for the orbit Toeplitz Gram matrix $G_{N,r}(z;b,h)$, we prove the exact identity $\det((1-\alpha)I_r+\alpha J_r)=(1-\alpha)^{r-1}(1+(r-1)\alpha)$ and a self-contained determinant-to-uniformity transfer theorem; the reciprocal witnesses $1/x(b,\alpha)$ attain both the limiting normalized root $\lim_r(\det G_r)^{1/r}=1-\alpha$ and the discrepancy ceiling $D^+=1-(1-\alpha)=\alpha$, showing sharpness across the entire interval $[0,1]$. Second, for minus-factor reciprocal products in radices $b\ge3$, we prove complete-period prime-power grid cancellation, a sharp worst-start obstruction for short prefixes, and averaged short-orbit mean-square cancellation on a single rational cycle. Third, a reciprocal-separation lemma yields unconditional run bounds, $\gg_{b,m}\log N$ digit transitions and $1-D_N\gg_{b,m}(\log N)/N$ for Mahler's $m$-ary partition constants $X_{b,m}$ ($m\ge3$), and $\gg_b\log\log N$ transitions for Euler's partition constant $P_b=1/E_b$ together with $1-D_k(R_k^{(E)};b)\gg_b(\log\log k)/k$ on the initial orbit of its rational partial products $R_k^{(E)}$. All results are written proofs backed by exact integer/rational finite certificates; no result in this draft is kernel-verified in Lean~4.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Throughout, $b\ge2$ is an integer radix, $\T=\R/\Z$, $\fr{z}=z-\lfloor z\rfloor\in[0,1)$ is the fractional part, $\dist{z}=\min(\fr{z},1-\fr{z})\in[0,1/2]$ is the distance to the nearest integer, and $e(\theta)=\exp(2\pi i\theta)$. Write $T_b:\T\to\T$ for the shift $T_b(t)=bt\bmod1$ and $\lambda$ for normalized Lebesgue (Haar) measure on $\T$. For $z\in\R$ and $N\ge1$, let
+\[
+\nu_N(z;b)=\frac1N\sum_{n=0}^{N-1}\delta_{T_b^n z}
+\]
+be the empirical orbit measure on $\T$, where indices start at $0$. For a Borel probability measure $\nu$ on $\T$, its \emph{extreme discrepancy} and \emph{mean distance to zero} are
+\[
+D(\nu)=\sup_{I}\bigl|\nu(I)-|I|\bigr|,\qquad M(\nu)=\int_{\T}\dist{t}\,d\nu(t),
+\]
+where $I$ ranges over all half-open circular arcs on $\T$ and $|I|=\lambda(I)$. Since the complement of a wrapping half-open arc on $\T$ is an ordinary half-open interval $[u,v)\subseteq[0,1)$ with $\nu(I^c)-|I^c|=-(\nu(I)-|I|)$, $D(\nu)$ coincides identically with the standard $[0,1)$ extreme interval discrepancy $\sup_{0\le u<v\le1}|\nu([u,v))-(v-u)|$. Put
+\[
+D_N(z;b)=D(\nu_N(z;b)),\qquad D^-(z;b)=\liminf_{N\to\infty}D_N(z;b),\qquad D^+(z;b)=\limsup_{N\to\infty}D_N(z;b),
+\]
+and $M_N(z;b)=M(\nu_N(z;b))=N^{-1}\sum_{n=0}^{N-1}\dist{b^nz}$. The \emph{discrepancy kernel} and its \emph{zero-orbit subgroup} are
+\[
+K_b=\bigl\{z\in\R:\lim_{N\to\infty}D_N(z;b)=1\bigr\},\qquad
+M_b=\bigl\{z\in\R:\lim_{N\to\infty}M_N(z;b)=0\bigr\}\subset K_b,
+\]
+where the inclusion $M_b\subset K_b$ follows immediately from Markov's inequality on the complement of $(-\varepsilon,\varepsilon)$ (see \Cref{lem:fixed-gap} below). For a base-$b$ word $w=d_1\cdots d_L\in\{0,\dots,b-1\}^L$ of integer value $v=\sum_{j=1}^L d_jb^{L-j}$, write $I_w=[v/b^L,(v+1)/b^L)$ for its cylinder and $f_w(N;z,b)=\nu_N(z;b)(I_w)$ for its empirical frequency, where the base-$b$ digits $d_1,d_2,\dots$ of $z$ are the canonical digits obtained by flooring (not ending in $(b-1)^\infty$). A real number $z$ is \emph{normal} in base $b$ if $D_N(z;b)\to0$ \cite[Chapter~1]{KN}, and \emph{disjunctive} if every finite word occurs infinitely often (in fact we obtain strictly positive lower frequencies). For a rational $v$, its \emph{cycle measure} is the uniform probability measure on the finite eventual periodic orbit of $v$ under $T_b$, with period $1$ if $v$ terminates in base~$b$.
+
+A natural measure of how strongly reciprocation $x\mapsto1/x$ can scatter elements of the maximally nonnormal subgroup $K_b$ is the \emph{convergent reciprocal discrepancy spectrum}
+\[
+\Aconv(b)=\Bigl\{\alpha\in[0,1]:\exists\,x\in K_b\setminus\Q,\ \lim_{N\to\infty}D_N(1/x;b)=\alpha\Bigr\}.
+\]
+Earlier work on signed infinite products and $+1$-inversion of rational seeds \cite{PaperXIII} showed that $0,1\in\Aconv(b)$ for every $b\ge2$, that $\Aconv(2)$ is dense in $[0,1]$, and that arbitrary intervals $[\alpha-\varepsilon,\alpha+\varepsilon]$ can be localized for $[D^-(1/x;b),D^+(1/x;b)]$ in every radix. However, rational-orbit $+1$-inversion $v\mapsto v(1+b^{-l})$ preserves a periodic orbit of reduced prime-to-$b$ denominator $D$ only when $2\in\langle b\rangle\pmod D$, which forces $D\mid\gcd(b^P-1,2^P-1)$ where $P=\ord_D(b)$. When $b$ is not a power of $2$, a theorem of Bugeaud, Corvaja and Zannier \cite{BCZ03} bounds $\gcd(b^P-1,2^P-1)\le b^{o(P)}$, blocking long-zero-run rational seeds in every non-dyadic base. Moreover, inverting fixed rational seeds reaches only rational-orbit discrepancies and leaves irrational targets such as $1/\sqrt2$ unresolved.
+
+Our first main theorem settles $\Aconv(b)$ completely in every integer radix, realizing not only every discrepancy target $\alpha\in[0,1]$ but also the exact limiting orbit measure $\mu_\alpha=\alpha\delta_0+(1-\alpha)\lambda$.
+
+\begin{maintheorem}[Complete all-radix reciprocal discrepancy spectrum and limit measures]\label{thm:A}
+\evidence{Paper proof using External input (Stone--Weierstrass and Portmanteau on $\T$)}
+Let $b\ge2$ be an integer radix.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every $\alpha\in[0,1]$, there exists a positive irrational $x=x(b,\alpha)\in M_b\subset K_b$ (depending on the pair $(b,\alpha)$) whose reciprocal $1/x$ satisfies
+\[
+\nu_N(1/x;b)\Longrightarrow \mu_\alpha:=\alpha\delta_0+(1-\alpha)\lambda\qquad\text{and}\qquad \lim_{N\to\infty}D_N(1/x;b)=\alpha
+\]
+along all prefixes $N\to\infty$. In particular, $\Aconv(b)=[0,1]$ for every $b\ge2$, and every irrational target (such as $1/\sqrt2$) belongs to $\Aconv(b)$ via a $b$-dependent witness $x(b,\alpha)\in M_b$.
+\item Whenever $0<\alpha<1$ and $L\ge1$, every word $w\in\{0,\dots,b-1\}^L\setminus\{0^L,(b-1)^L\}$ (whose cylinder closure misses $0$ in $\T$) has exact limiting frequency $\lim_{N\to\infty}f_w(N;1/x,b)=(1-\alpha)b^{-L}$. The two cylinders adjacent to $0$ satisfy
+\[
+\lim_{N\to\infty}\Bigl(f_{0^L}(N;1/x,b)+f_{(b-1)^L}(N;1/x,b)\Bigr)=\alpha+2(1-\alpha)b^{-L},
+\]
+and every word $w\in\{0,\dots,b-1\}^L$ satisfies $\liminf_{N\to\infty}f_w(N;1/x,b)\ge(1-\alpha)b^{-L}>0$. In particular, $1/x$ is disjunctive and nonnormal in base $b$.
+\item Whenever $\alpha\in[0,1]$ is Turing-computable, the witness $x(b,\alpha)$ can be constructed computably by an explicit rational algorithm with an explicit modulus of convergence (\Cref{prop:computable}). For noncomputable $\alpha$, the theorem gives parameter-dependent existence. Nothing in this theorem asserts that a single witness works simultaneously across multiple radices, and the construction yields no discrepancy convergence rate (\Cref{rem:ineffective}).
+\end{enumerate}
+\end{maintheorem}
+
+We present two constructions. In \Cref{sec:dyadic}, \Cref{thm:dyadic} gives a direct, elementary proof of $\Aconv(2^e)=[0,1]$ using only binary padding and doubling contractions, without Fourier analysis. In \Cref{sec:allradix}, \Cref{lem:cutfold} and \Cref{thm:allradix} prove \Cref{thm:A} in full generality for every radix $b\ge2$ by replacing binary doubling with a coprime-period \emph{cut-and-fold} operation. Each operation multiplies $(x,y)$ by mutually inverse rational factors $(1-b^{-m})/(1-b^{-q})$ and $(1-b^{-q})/(1-b^{-m})$ with $\gcd(m,q-m)=1$, preserving coprimality of the eventual periods of $x$ and $y$ without imposing any congruence on $2\bmod D$. On the folded side, coprimality generates exact independent pairs and transforms the cycle measure into $(1-\rho)\mu+\rho(\mu*\mu)$. Alternating cuts of $y$ and $x$ drives the $x$-orbit mean to $0$ while sending every positive Fourier coefficient $z=\widehat{\mu_y}(k)$ into a two-step dynamical system whose reciprocal coordinate $W=1/(1-z)$ contracts to $1/(1-\alpha)$, forcing $z\to\alpha$.
+
+Our second main theorem connects \Cref{thm:A} to Toeplitz Gram determinants of radix orbits. For $z\in\R$, $N\ge1$, $r\ge1$, and a nonzero integer harmonic $h$, put $S_N(k;z,b)=N^{-1}\sum_{n=0}^{N-1}e(kb^nz)$ and define the $r\times r$ Hermitian positive semidefinite Toeplitz matrix
+\[
+G_{N,r}(z;b,h)=\bigl(S_N((k-j)h;z,b)\bigr)_{0\le j,k<r}.
+\]
+We prove a self-contained determinant-to-uniformity transfer theorem and show that the reciprocal witnesses of \Cref{thm:A} realize the exact boundary of the transfer across the full interval $[0,1]$.
+
+\begin{maintheorem}[Toeplitz determinant spectra and sharpness of uniformity transfer]\label{thm:B}
+\evidence{Paper proof}
+Let $b\ge2$ be an integer radix and $h\in\Z\setminus\{0\}$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item Over any commutative ring $R$, for every $\alpha\in R$ and every integer $r\ge1$, with $J_r$ the $r\times r$ all-ones matrix,
+\[
+\det\bigl((1-\alpha)I_r+\alpha J_r\bigr)=(1-\alpha)^{r-1}\bigl(1+(r-1)\alpha\bigr).
+\]
+For real $\alpha\in[0,1]$, $(1-\alpha)^r\le\det((1-\alpha)I_r+\alpha J_r)\le r(1-\alpha)^{r-1}$, whence $\lim_{r\to\infty}\bigl(\det((1-\alpha)I_r+\alpha J_r)\bigr)^{1/r}=1-\alpha$.
+\item \textup{(Determinant-to-uniformity transfer.)} Let $z\in\R$ and let $1\le r(N)\to\infty$. If $\liminf_{N\to\infty}\bigl(\det G_{N,r(N)}(z;b,h)\bigr)^{1/r(N)}\ge c>0$, then every weak$^*$ limit point $\mu$ of $(\nu_N(z;b))$ satisfies $\mu\ge c\lambda$. Consequently $D^+(z;b)\le 1-c$, every length-$L$ word satisfies $\liminf_N f_w(N;z,b)\ge c\,b^{-L}$ and $\limsup_N f_w(N;z,b)\le 1-c(1-b^{-L})$, and $c=1$ implies that $z$ is base-$b$ normal.
+\item \textup{(Arithmetic sharpness across $[0,1]$.)} For every $c\in[0,1]$, setting $\alpha=1-c$ and taking the reciprocal witness $y=1/x(b,\alpha)$ ($x(b,\alpha)\in M_b\subset K_b$) from \Cref{thm:A}, one has $\lim_{N\to\infty}\det G_{N,r}(y;b,h)=c^{r-1}(1+(r-1)(1-c))$ for every fixed $r\ge1$,
+\[
+\sup_{\substack{r(N)\to\infty\\ 1\le r(N)\le N}}\ \liminf_{N\to\infty}\bigl(\det G_{N,r(N)}(y;b,h)\bigr)^{1/r(N)}=c,
+\]
+with the supremum attained by a growing schedule $r(N)\to\infty$, while simultaneously $D_N(y;b)\to 1-c$ and $\lim_{N\to\infty}f_w(N;y,b)=c\,b^{-L}$ for every word $w\notin\{0^L,(b-1)^L\}$. Thus the transfer bounds of \textup{(ii)} are sharp at every $c\in[0,1]$.
+\end{enumerate}
+\end{maintheorem}
+
+Our third main theorem examines the contrasting behaviour of pure minus-factor reciprocal products $R=\prod_{j\ge1}(1-b^{-m_j})^{-1}$ ($m_1<m_2<\cdots$), with partial products $R_k=b^{S_k}/Q_k$ where $S_k=\sum_{j\le k}m_j$, $Q_k=\prod_{j\le k}(b^{m_j}-1)$, and $T_k=\ord_{Q_k}(b)$. It separates complete-period equidistribution and cycle-averaged short-orbit cancellation from the worst-start obstruction that governs slower schedules.
+
+\begin{maintheorem}[Prime-power grids, worst starts, and averaged incomplete orbits]\label{thm:C}
+\evidence{Paper proof using External input (weak$^*$ compactness and Stone--Weierstrass on $\T$ for part~\textup{(iii)})}
+Fix an integer radix $b\ge3$, a prime $p\mid b-1$, and a strictly increasing sequence of positive integers $m_1<m_2<\cdots$. Write $Q_k=p^E Q'$ with $p\nmid Q'$, $H=\lcm(2,\ord_{Q'}(b))$, $g=v_p(b^H-1)$, and $G_k=p^{\max(0,E-g)}$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every unit numerator $A$ coprime to $Q_k$, the complete base-$b$ cycle of $A/Q_k$ is an average of shifted uniform grids of size $G_k\ge p^{\max(0,kv_p(b-1)-v_p(b^2-1))}$, so $D(\mu(A/Q_k;b))\le G_k^{-1}$. If $m_{k+1}\ge(1-o(1))T_k$ along an infinite subsequence, then $D^-(R;b)=0$.
+\item For every integer $Q\ge2$ coprime to $b$, $L=\lfloor\log_b Q\rfloor$, $0\le h<L$, and $N\ge1$,
+\[
+D_N(1/Q;b)\ge\frac{\min(N,L-h)}{N}-b^{-h}.
+\]
+In particular, since $1/Q_k\equiv b^{-S_k\bmod T_k}R_k\pmod1$, any discrepancy estimate tending to $0$ uniformly over starts on the cycle of $R_k$ requires $N/\log_b Q_k\to\infty$. On geometric schedules $m_j\asymp a^j$ ($a>1$), where $\log_b Q_k\asymp m_{k+1}$, no start-uniform normality proof can succeed at length $N\asymp m_{k+1}$.
+\item Fix a nonzero integer harmonic $a$ and put $J_k=\ord_{G_k/\gcd(G_k,|a|)}(b)$ and $W_a(N;z)=N^{-1}\sum_{n=0}^{N-1}e(ab^nz)$. Averaging over the single periodic cycle of $R_k$, for every $N\ge1$,
+\[
+\frac{1}{T_k}\sum_{s=0}^{T_k-1}\bigl|W_a(N;b^sR_k)\bigr|^2
+\le\frac{1}{N^2}\sum_{r\bmod J_k}\#\{0\le i<N:i\equiv r\bmod J_k\}^2
+\le\frac1N+\frac1{J_k},
+\]
+with exact equality $1/N$ whenever $N\le J_k$. Consequently, for any sequence of lengths $N_k\to\infty$ (including subperiodic lengths $N_k=o(\log Q_k)$) and every $\varepsilon>0$, the proportion of shifts $s\in\{0,\dots,T_k-1\}$ with $D_{N_k}(b^sR_k;b)>\varepsilon$ tends to $0$ as $k\to\infty$.
+\end{enumerate}
+\end{maintheorem}
+
+Our fourth main theorem gives unconditional lower bounds on digit transitions and quantitative discrepancy gaps for two classical partition reciprocals whose exponent schedules grow far too slowly for complete-period methods: Mahler's $m$-ary partition constant
+\[
+X_{b,m}=\prod_{i\ge0}\bigl(1-b^{-m^i}\bigr)^{-1}=\sum_{n\ge0}b_m(n)\,b^{-n}\qquad(m\ge3),
+\]
+and Euler's ordinary partition constant and its rational partial products,
+\[
+E_b=\prod_{j\ge1}\bigl(1-b^{-j}\bigr),\qquad P_b=\frac{1}{E_b}=\sum_{n\ge0}p(n)\,b^{-n},\qquad R_k^{(E)}=\prod_{j=1}^k\bigl(1-b^{-j}\bigr)^{-1}.
+\]
+
+\begin{maintheorem}[Unconditional transition and discrepancy-gap bounds for $X_{b,m}$ and $P_b$]\label{thm:D}
+\evidence{Paper proof; part~\textup{(ii)} uses External input (Euler's pentagonal number theorem)}
+Let $b\ge2$ be an integer radix and write $F_b=(b-1)^{-1}\Z/\Z$.
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item For every integer $m\ge3$, every constant-digit run of $X_{b,m}$ starting after position $n\ge0$ has length at most $\frac{m}{m-2}n+O_{b,m}(1)$. Among the first $N\ge2$ base-$b$ digits of $X_{b,m}$ there are $\gg_{b,m}\log N$ digit transitions and $\gg_{b,m}\log N$ orbit times $j<N$ at circle distance at least $1/(2b(b-1))$ from $F_b$. Consequently,
+\[
+1-D_N(X_{b,m};b)\gg_{b,m}\frac{\log N}{N}\qquad(N\ge2).
+\]
+\item For Euler's partition constant $P_b=1/E_b$, every constant-digit run starting after position $n\ge0$ has length at most $\frac38n^2+O_b(n+1)$. Among the first $N\ge3$ base-$b$ digits of $P_b$ there are $\gg_b\log\log N$ digit transitions and $\gg_b\log\log N$ orbit times at distance at least $1/(2b(b-1))$ from $F_b$. Moreover, for $N\ge3$ and $k\ge3$ (on the actual initial orbit of $R_k^{(E)}$ with starting numerator $b^{k(k+1)/2}$),
+\[
+1-D_N(P_b;b)\gg_b\frac{\log\log N}{N},\qquad
+1-D_k(R_k^{(E)};b)\gg_b\frac{\log\log k}{k}.
+\]
+\end{enumerate}
+\end{maintheorem}
+
+The proof of \Cref{thm:D}(ii) transfers orbit distances rather than individual digits from $P_b$ to $R_k^{(E)}$; we do not assert digit transitions for $R_k^{(E)}$.
+
+\Cref{sec:dyadic} establishes the coupling comparison lemma and the elementary dyadic construction for $b=2^e$. \Cref{sec:allradix} proves the standalone Cut-and-Fold Comparison Lemma (\Cref{lem:cutfold}), \Cref{thm:A} (\Cref{thm:allradix}), the explicit computability procedure (\Cref{prop:computable}), and the rate-and-scale remark (\Cref{rem:ineffective}). \Cref{sec:toeplitz} proves \Cref{thm:B}, \Cref{sec:incomplete} proves \Cref{thm:C}, and \Cref{sec:partitions} proves \Cref{thm:D} together with a self-contained proof of the finite fixed-point discrepancy inequality. \Cref{sec:questions} records open problems, including simultaneous multi-radix spectra and non-zero fixed-point Dirac rigidity, and \Cref{sec:verification,sec:ai} document verification, finite certificates, and AI-tool use.
+
+\paragraph{Scope and evidence.} Every theorem in this manuscript is a written proof; no result here is kernel-verified in Lean~4. Exact integer/rational finite certificates check concrete instances of all algebraic identities, couplings, grids, and separation bounds (\Cref{sec:verification}). Finite digit-transition counts appear solely in \Cref{tab:finite-meas} as descriptive finite measurements and are never used in any proof. Nothing in this paper resolves normality, simple normality, $D^+<1$, or $K_b$-membership for $X_{b,m}$, $P_b$, or any classical constant in the repository's benchmark roster.
+
+\section{Coupling stability and the direct dyadic construction}\label{sec:dyadic}
+
+\subsection{Coupling comparison on the circle}
+
+For Borel probability measures $\nu_1,\nu_2$ on $\T$, we say that $(\nu_1,\nu_2)$ admits a \emph{$(h,s)$-coupling} ($h\ge0$, $0\le s\le1$) if there exists a probability measure $\pi$ on $\T\times\T$ with marginals $\nu_1,\nu_2$ such that $\pi(\{(u,v)\in\T^2:\dist{u-v}>h\})\le s$. In particular, a total-variation distance bound $d_{\mathrm{TV}}(\nu_1,\nu_2)\le s$ is equivalent to a $(0,s)$-coupling.
+
+\begin{lemma}[Coupling comparison]\label{lem:coupling}\evidence{Paper proof}
+Let $\nu_1,\nu_2$ be Borel probability measures on $\T$ admitting a $(h,s)$-coupling. Then:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item $|D(\nu_1)-D(\nu_2)|\le 2h+s$;
+\item $|M(\nu_1)-M(\nu_2)|\le h+\frac12 s\le h+s$;
+\item $|\widehat{\nu_1}(k)-\widehat{\nu_2}(k)|\le 2\pi|k|h+2s\le 7|k|h+2s$ for every integer $k\in\Z$, where $\widehat{\nu}(k)=\int_{\T}e(kt)\,d\nu(t)$;
+\item if $(\nu_1,\nu_2)$ admits a $(h_1,s_1)$-coupling and $(\nu_2,\nu_3)$ admits a $(h_2,s_2)$-coupling on finitely supported measures (or general Borel probability measures on $\T$), then $(\nu_1,\nu_3)$ admits a $(h_1+h_2,s_1+s_2)$-coupling.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Let $\pi$ witness the $(h,s)$-coupling. For (a), let $I\subset\T$ be any half-open circular arc. If $|I|+2h\ge1$, then $\nu_1(I)-|I|\le 1-|I|\le 2h\le D(\nu_2)+2h+s$. Otherwise fix any $\varepsilon\in(0,\frac12(1-|I|-2h))$ and let $I^+$ be the half-open circular arc obtained by extending $I$ by $h+\varepsilon$ at both ends, so $|I^+|=|I|+2h+2\varepsilon$. Whenever $(u,v)\in\T^2$ satisfies $\dist{u-v}\le h$ and $u\in I$, we have $v\in I^+$. Hence
+\[
+\nu_1(I)\le \nu_2(I^+)+s\le |I^+|+D(\nu_2)+s=|I|+D(\nu_2)+2h+2\varepsilon+s.
+\]
+Letting $\varepsilon\downarrow0$ gives $\nu_1(I)-|I|\le D(\nu_2)+2h+s$. Applying the same estimate to the complementary half-open arc $I^c$ yields $|I|-\nu_1(I)=\nu_1(I^c)-|I^c|\le D(\nu_2)+2h+s$, so $D(\nu_1)\le D(\nu_2)+2h+s$. Interchanging $\nu_1$ and $\nu_2$ proves (a).
+
+For (b), $|\dist{u}-\dist{v}|\le\dist{u-v}$ everywhere and $|\dist{u}-\dist{v}|\le\frac12$, so integrating over $\pi$ gives $|M(\nu_1)-M(\nu_2)|\le (1-s)h+\frac12 s\le h+\frac12 s$. For (c), $|e(ku)-e(kv)|=2|\sin(\pi k\dist{u-v})|\le\min(2\pi|k|\dist{u-v},2)$ and $2\pi<7$. For (d), gluing the couplings along their common marginal $\nu_2$ (a finite conditional product for discrete measures, or regular conditional disintegration on the Polish space $\T$) gives a coupling of $(\nu_1,\nu_3)$ in which $\dist{u-w}>h_1+h_2$ implies $\dist{u-v}>h_1$ or $\dist{v-w}>h_2$, of probability at most $s_1+s_2$.
+\end{proof}
+
+\subsection{Direct dyadic construction for \texorpdfstring{$b=2^e$}{dyadic radices}}
+
+Before developing the general all-radix convolution method, we give an elementary construction for dyadic radices $b=2^e$ ($e\ge1$) that uses only binary arithmetic and requires no Fourier analysis.
+
+We work in binary time ($T_2$). Let $u,v>0$ be rationals with $uv=1$. Choose a common binary preperiod bound $a\ge0$ beyond both preperiods and write $P_u,P_v\ge1$ for their eventual binary periods (period $1$ for a dyadic rational), so $2^a(2^{P_u}-1)u\in\Z$ and $2^a(2^{P_v}-1)v\in\Z$. Maintain $\gcd(P_v,e)=1$. Then addition of $e$ permutes $\Z/P_v\Z$ transitively, so the cycle measure $\mu$ of $v$ is identical on every binary residue progression $n\equiv r\pmod e$, and in particular equals the base-$2^e$ cycle measure of $v$. Write $D=D(\mu)$ and $B=M(\mu_u)$ for the binary cycle discrepancy of $v$ and binary cycle mean distance of $u$.
+
+\begin{proposition}[Binary padding and binary contraction]\label{prop:dyadic-ops}\evidence{Paper proof}
+Maintain $uv=1$, $a\ge0$, and $\gcd(P_v,e)=1$ as above.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item \textup{(Padding.)} Fix $0<t<1/4$. There exist arbitrarily large integers $p<q<2p$ with
+\[
+P_v\mid p,\qquad p\equiv1\pmod e,\qquad d:=q-p\equiv0\pmod{eP_u},\qquad t\le\theta:=\frac dq\le 2t.
+\]
+Setting
+\[
+v'=v\,\frac{1-2^{-p}}{1-2^{-q}},\qquad u'=\frac1{v'}=u+\frac{w}{2^p-1},\qquad w:=u(1-2^{-d}),
+\]
+one has $2^{a+d}w\in\Z$, $2^a(2^q-1)v'\in\Z$, and $\gcd(P_{v'},e)=1$. As $p\to\infty$ (with input and $t$ fixed, choosing $H\to\infty$ before $p$), the cycle measure $\mu'$ of $v'$ (on every progression modulo $e$) admits a coupling to $(1-\theta)\mu+\theta\delta_0$ with both displacement and exceptional mass tending to $0$. Uniformly over every binary prefix length $N\ge p$ and every progression modulo $e$, the sampled discrepancy of $v'$ differs from $D$ by $O_e(t)+o(1)$, while both the new binary cycle mean $B'$ of $u'$ and every binary prefix mean $M_N(u';2)$ ($N\ge p$) are at most $B+O(t)+o(1)$ with an absolute constant multiplying $t$.
+\item \textup{(Contraction.)} For every sufficiently large integer $l>a$ divisible by $\lcm(P_u,P_v)$, setting
+\[
+v^+=v(1+2^{-l}),\qquad u^+=\frac{u}{1+2^{-l}}=\frac{2^lu}{2^l+1},
+\]
+the eventual binary cycle of $v^+$ is identically $\mu$ (preserving $P_{v^+}=P_v$ and $\gcd(P_{v^+},e)=1$), and uniformly over $N\ge l$ on each progression modulo $e$ the sampled discrepancy of $v^+$ equals $D+o(1)$ as $l\to\infty$. Meanwhile $\den(u^+)\mid(2^{2l}-1)$ (purely periodic), the new binary cycle mean $B^+$ of $u^+$ satisfies $B^+\le B/2+O((a+P_u+u+1)/l)$, and every binary prefix $N\ge l$ satisfies $M_N(u^+;2)\le B+O((a+P_u+u+1)/l)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Since $\gcd(P_v,e)=1$, the Chinese remainder theorem gives arbitrarily large $p$ with $P_v\mid p$ and $p\equiv1\pmod e$. For $0<t<1/4$, the interval $[\frac{t}{1-t}p,\frac{2t}{1-2t}p]\subset(0,p)$ has width exceeding $tp$, so for large $p$ it contains multiples $d$ of $eP_u$; then $q=p+d\equiv1\pmod e$ is coprime to $e$, $p<q<2p$, and $t\le d/q\le 2t$. Exact algebra yields $u'-u=w/(2^p-1)$, $2^{a+d}w=2^a(2^d-1)u\in\Z$, and $2^a(2^q-1)v'=2^{a+d}(2^p-1)v\in\Z$, whence $P_{v'}\mid q$ and $\gcd(P_{v'},e)=1$.
+
+Expand $v'=\sum_{i\ge0}2^{-iq}v(1-2^{-p})$. At binary time $n=iq+r$ ($0\le r<q$), all earlier summands ($j<i$) are integral for $r\ge a$ because $2^{a+p}v(1-2^{-p})\in\Z$. For $a\le r<p-H$, the remaining sum $2^rv'=2^rv-v2^{r-p}(1-2^{-d})/(1-2^{-q})$ tracks $2^rv$ on $\T$ to within $v2^{-H}$. For $p+a\le r<q-H$, the current term $2^rv(1-2^{-p})$ is also integral and the future tail lies in $(0,v2^{-H})$. Fix a residue progression modulo $e$. In one full $q$-block (which is a multiple of $P_{v'}$ once past time $a$, and whose sampled length modulo $e$ is $q$ if we take $e$ consecutive $q$-blocks), the omitted strips have total binary length $O(a+H)$ per $q$-block, and trimming at most $eP_v+e$ binary times per fragment yields exact copies of $\mu$ on the progression. Choosing $H$ first and then $p$ proves the cycle coupling to $(1-\theta)\mu+\theta\delta_0$. For any prefix $N\ge p$, at most $N/q+1$ fragments occur; on each progression the zero pieces contribute fraction $O_e(d/p)=O_e(t)$ and the strips and trimming contribute $O_e((a+H+P_v+1)/p)$, giving sampled discrepancy $D+O_e(t)+o(1)$ by \Cref{lem:coupling}(a).
+
+For $u'$, write $u'-u=w\sum_{i\ge1}2^{-ip}$. At $n=ip+r$ ($0\le r<p$), in block $i=0$ only the future tail $O(u2^{r-p})$ appears; in blocks $i\ge1$, earlier terms are integral since $p>a+d$, the current term $2^rw$ is integral for $r\ge a+d$, and the future tail is $O(u2^{r-p})$. Discarding $r<a+d$ in blocks $i\ge1$ and $r\ge p-H$ in all blocks omits fraction at most $(d+a+2H)/p=O(t)+O((a+H)/p)$ for every $N\ge p$. Since $\nu_N(u;2)$ has total-variation distance at most $(a+P_u)/p$ from $\mu_u$, \Cref{lem:coupling}(b),(d) gives $M_N(u';2)\le B+O(t)+O((a+H+P_u)/p)+O(u2^{-H})$ uniformly for $N\ge p$, and letting $N\to\infty$ gives the same bound for $B'$.
+
+(b) For $n\ge l+a$, since $P_v\mid l$, we have $2^{n-l}(2^l-1)v\in\Z$, so
+\[
+2^nv^+=2^nv+2^{n-l}v\equiv 2^nv+2^nv=2^{n+1}v\pmod1.
+\]
+Hence the eventual binary cycle of $v^+$ is identically $\mu$ with period $P_v$. For $a\le n<l-H$, $2^nv^+$ tracks $2^nv$ to within $v2^{-H}$. Thus on any prefix $N\ge l$, only the strips $[0,a)$ and $[l-H,l+a)$ (at most $2a+H$ binary times) and at most two incomplete sampled cycles intervene, yielding sampled discrepancy $D+o(1)$ uniformly for $N\ge l$ on each progression as $l\to\infty$.
+
+For $u^+$, write $u=A/(2^{a_u}D_u)$ with $a_u\le a<l$ and $D_u$ odd; then $D_u\mid(2^l-1)$, so $2^{l-a_u}\in\Z$ and $\gcd(D_u,2^l+1)=1$, giving $\den(u^+)\mid D_u(2^l+1)\mid(2^{2l}-1)$. For $0\le r<l$, exact algebra yields the two band identities
+\[
+2^ru^+=2^ru-\frac{2^ru}{2^l+1},\qquad
+2^{l+r}u^+=\frac{2^{2l+r}u}{2^l+1}=2^r(2^l-1)u+\frac{2^ru}{2^l+1}.
+\]
+In the second band, $2^r(2^l-1)u\in\Z$ for $r\ge a$. The geometric error sums satisfy $\sum_{r=0}^{l-1}2^ru/(2^l+1)<u$ in each band. Averaging over the full $2l$-period gives $B^+\le B/2+(2u+a+P_u)/(2l)$. For any prefix $N\ge l$, decomposing $[0,N)$ into whole and partial bands of length $l$, each first band contributes at most its length times $B$ plus $O(a+P_u+u)$ and each second band contributes only $O(a+u)$, giving $M_N(u^+;2)\le B+O((a+P_u+u+1)/l)$.
+\end{proof}
+
+\begin{theorem}[Direct dyadic spectrum]\label{thm:dyadic}\evidence{Paper proof}
+For every integer $e\ge1$, $\Aconv(2^e)=[0,1]$, with irrational witnesses $x=x(2^e,\alpha)\in M_{2^e}\subset K_{2^e}$. For computable $\alpha\in[0,1]$, the witness can be chosen computably.
+\end{theorem}
+
+\begin{proof}
+At $\alpha=0$, we obtain an irrational witness from \Cref{thm:allradix} below (or by base-by-base normal reciprocal products \cite{PaperXIII}). At $\alpha=1$, start from $u_0=v_0=1$ and iterate only the binary contraction of \Cref{prop:dyadic-ops}(b); the reciprocal cycle stays $\{0\}$, $B_j\to0$, prefix means and discrepancies converge along all $N$ as below, and irrationality follows from $2^{-l_j}\den(v_j)<1/j^2$.
+
+Now fix $0<\alpha<1$. Choose $h\ge2$ so large that $(4+h+e)/2^h<\alpha$. Take a cyclic binary de Bruijn word of order $h$ (length $2^h$, existing by an Eulerian circuit on $\{0,1\}^{h-1}$ \cite{deBruijn46}), append $r\in\{0,\dots,e-1\}$ zeros so that $P=2^h+r\equiv1\pmod e$, and rotate so the word ends in $1$. Let $v_1\in(0,1)$ be the purely periodic rational with repeating block equal to this word, and set $u_1=1/v_1$. Then $\gcd(P_{v_1},e)=1$. The unmodified de Bruijn cycle has one point in every dyadic cylinder of length $2^{-h}$, hence discrepancy at most $2^{1-h}$. Inserting $r$ zeros leaves all but at most $h+e$ orbit positions unchanged on their first $h$ bits, so \Cref{lem:coupling}(a) gives $D_1:=D(\mu_{v_1})\le 2^{1-h}+2\cdot2^{-h}+(h+e)/2^h=(4+h+e)/2^h<\alpha$.
+
+Inductively, at stage $j\ge1$ with current cycle discrepancy $D_j<\alpha$, pick a rational $t_j$ with
+\[
+\frac{\alpha-D_j}{16}<t_j<\frac{\alpha-D_j}{8}.
+\]
+Apply one binary padding with parameter $t_j$ (\Cref{prop:dyadic-ops}(a)), followed by one binary contraction (\Cref{prop:dyadic-ops}(b)). Choose the padding scale $p_j$ large enough that both the discrepancy error and the mean-distance error of the full-cycle mixture coupling to $(1-\theta_j)\mu_j+\theta_j\delta_0$ ($t_j\le\theta_j\le 2t_j$) are at most $2^{-j}t_j$, and choose all other selectable prefix and cycle errors at stage $j$ to be at most $2^{-j}$. Denote the sequence of operation scales by $s_1,s_2,\dots$ (alternating $p_1,l_1,p_2,l_2,\dots$), requiring $s_1\ge4$ and $s_{i+1}>2s_i$ at every step.
+
+Since contraction preserves the eventual cycle $\mu_{j+1}$ identically, \Cref{lem:coupling}(a) with total-variation distance $\theta_j\le 2t_j$ gives
+\[
+D_{j+1}\le D_j+2t_j+2^{-j}t_j\le D_j+3t_j<\alpha.
+\]
+Let $L_j=M(\mu_j)$. Then $L_{j+1}\le(1-\theta_j)L_j+2^{-j}t_j$. If $\sum_{j\ge1}t_j=\infty$, then $\sum\theta_j=\infty$, so $\prod_{k=J}^m(1-\theta_k)\to0$ as $m\to\infty$ for every $J$; since $\sum 2^{-j}t_j<\infty$, iterating gives $L_j\to0$, whence Markov's inequality on $\T\setminus(-\varepsilon,\varepsilon)$ forces $D_j\to1$, contradicting $D_j<\alpha<1$. Hence $\sum t_j<\infty$, so $t_j\to0$, and therefore $\alpha-D_j<16t_j\to0$, i.e.\ $D_j\to\alpha$. Meanwhile, the two cycle mean bounds yield $B_{j+1}\le\frac12 B_j+O(t_j+2^{-j})$, forcing $B_j\to0$.
+
+Because $s_i\ge i+3$ and $s_{i+1}>2s_i$, each operation changes either coordinate by a multiplicative factor $1+O(2^{-s_i})$, so the rational pairs $(u^{(i)},v^{(i)})$ stay in a fixed compact subinterval of $(0,\infty)$ and converge to positive limits $x,y$ with $xy=1$ and $|x-u^{(i)}|,|y-v^{(i)}|\le C2^{-s_{i+1}}$. For every binary length $N$ with $s_i\le N<s_{i+1}$ and every $n<N-\lceil\sqrt N\rceil$, we have $2^n|y-v^{(i)}|\le C2^{-\sqrt N}$ and likewise for $x$. Discarding the final $\lceil\sqrt N\rceil$ binary indices (an $o(1)$ fraction on each progression modulo $e$) transfers the uniform prefix bounds of \Cref{prop:dyadic-ops} directly to $(x,y)$: $M_N(x;2)\to0$, and hence $M_N(x;2^e)\le e\,M_{eN}(x;2)\to0$ (so $x\in M_{2^e}\subset K_{2^e}$), while taking binary lengths $eN$ gives $D_N(y;2^e)\to\alpha$.
+
+To ensure irrationality even when $\alpha\in\Q$, at each contraction require $2^{-l_j}\den(v_j^{\mathrm{pre}})<1/j^2$ for the rational $v_j^{\mathrm{pre}}$ immediately preceding the contraction, and choose the next padding scale $p_{j+1}$ large enough that the sum of all later changes to $v$ has magnitude less than $\frac12 v_j^{\mathrm{pre}}2^{-l_j}$. Then $0<\frac12 v_j^{\mathrm{pre}}2^{-l_j}\le |y-v_j^{\mathrm{pre}}|\le \frac32 v_j^{\mathrm{pre}}2^{-l_j}\ll j^{-2}/\den(v_j^{\mathrm{pre}})$. If $y$ were rational with denominator $Q$, then $|y-v_j^{\mathrm{pre}}|\ge 1/(Q\den(v_j^{\mathrm{pre}}))$, a contradiction for large $j$. Finally, for computable $\alpha$, all cycle discrepancies and errors are exact rationals with strict slack, so $t_j$ and the scales $s_i$ are computable and the geometric tail gives a computable real $x$.
+\end{proof}
+
+\begin{remark}[Attribution and the non-dyadic obstruction]\label{rem:dyadic-boundary}
+The synchronized plus-factor contraction $v\mapsto v(1+b^{-l})$ for a fixed rational cycle was introduced in \cite{PaperXIII}, where it established density of $\Aconv(2)$. Padding in \Cref{prop:dyadic-ops}(a) modifies the rational cycle itself and uses the exact inverse identity $u'-u=w/(2^p-1)$. In a general radix $b\ge3$, however, $b^nv^+\equiv 2b^nv\pmod1$ doubles the orbit rather than shifting it unless $2\in\langle b\rangle\pmod{\den_{\perp b}(v)}$. Whenever $b$ is not a power of $2$, this condition forces $D\mid\gcd(b^P-1,2^P-1)$, which is bounded by $b^{o(P)}$ by Bugeaud--Corvaja--Zannier \cite{BCZ03} (cited here for context only; nothing in our proofs uses \cite{BCZ03}). \Cref{sec:allradix} avoids doubling entirely.
+\end{remark}
+
+\section{Cut-and-fold additive convolution and the all-radix spectrum}\label{sec:allradix}
+
+\subsection{The standalone Cut-and-Fold Comparison Lemma}
+
+We isolate the all-radix cut-and-fold update and its cycle and prefix couplings with explicit constants.
+
+\begin{lemma}[Cut-and-Fold Comparison Lemma]\label{lem:cutfold}\evidence{Paper proof}
+Fix an integer radix $b\ge2$. Let $C,F>0$ be rationals with $CF=1$, eventual base-$b$ periods $P_C,P_F\ge1$ satisfying $\gcd(P_C,P_F)=1$, and a common preperiod bound $a\ge0$ such that $b^a(b^{P_C}-1)C\in\Z$ and $b^a(b^{P_F}-1)F\in\Z$. Write $\sigma$ and $\mu$ for the eventual base-$b$ cycle probability measures of $C$ and $F$ on $\T$. Let $m,d\ge1$ be integers satisfying
+\[
+P_C\mid m,\qquad P_F\mid d,\qquad \gcd(m,d)=1,\qquad m>d+a,
+\]
+and put $q:=m+d$ and $\rho:=d/m\in(0,1)$. Update the pair by
+\begin{equation}\label{eq:cutfold-update}
+C':=C\,\frac{1-b^{-m}}{1-b^{-q}},\qquad
+F':=F\,\frac{1-b^{-q}}{1-b^{-m}}=F+\frac{w}{b^m-1},\qquad
+w:=F(1-b^{-d}).
+\end{equation}
+Then:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \textup{(Exact algebraic and coprime-period invariants.)} One has $C'F'=1$, $b^{a+d}w\in\Z$, $b^a(b^q-1)C'\in\Z$, and $b^{a+d}(b^{mP_F}-1)F'\in\Z$. In particular, $C'$ has preperiod at most $a$ and eventual period $P_{C'}\mid q$, $F'$ has preperiod at most $a+d$ and eventual period $P_{F'}\mid mP_F=\lcm(m,P_F)$, and $\gcd(P_{C'},P_{F'})=1$.
+\item \textup{(Existence of arbitrarily large scales approaching any target ratio.)} For every $r\in(0,1)$ and every choice of $L\ge2$ with $\gcd(L,P_C)=1$, setting $d_k=(LP_F)^k$ and choosing $m_k=P_C(1+j_kLP_F)$ ($j_k\in\Z_{\ge0}$) closest to $d_k/r$ yields admissible pairs $(m_k,d_k)$ with $m_k\to\infty$ and $d_k/m_k\to r$ as $k\to\infty$.
+\item \textup{(Explicit cycle couplings.)} Write $\sigma'$ and $\mu'$ for the eventual base-$b$ cycle measures of $C'$ and $F'$, and $\mu*\mu$ for the additive convolution on $\T$ (the distribution of $U+V\bmod1$ for independent $U,V\sim\mu$). For every integer $H\ge1$:
+\begin{itemize}[nosep]
+\item $\sigma'$ admits a coupling to $\frac{1}{1+\rho}\sigma+\frac{\rho}{1+\rho}\delta_0$ with circle displacement at most $Cb^{-H}$ and exceptional mass at most $\frac{2a+2H+P_C}{q}<\frac{2a+2H+P_C}{m}$;
+\item $\mu'$ admits a coupling to $(1-\rho)\mu+\rho(\mu*\mu)$ with circle displacement at most $Fb^{-H}$ and exceptional mass at most $\frac{2a+2H+P_F}{m}$.
+\end{itemize}
+\item \textup{(Explicit all-prefix couplings.)} For every integer $H\ge1$ and every prefix length $N\ge m$:
+\begin{itemize}[nosep]
+\item $\nu_N(C';b)$ admits a coupling to $\sigma$ with circle displacement at most $Cb^{-H}$ and exceptional mass at most $2\rho+\frac{2(a+H+P_C)}{m}$;
+\item $\nu_N(F';b)$ admits a coupling to $\mu$ with circle displacement at most $Fb^{-H}$ and exceptional mass at most $\rho+\frac{2a+2H+P_F}{m}$.
+\end{itemize}
+\end{enumerate}
+In particular, fixing the input $(C,F,P_C,P_F,a)$ and choosing first $H$ large and then $m,d$ large via \textup{(2)} makes $(a+H+P_C+P_F)/m$ and $(C+F)b^{-H}$ arbitrarily small while keeping $\rho=d/m$ arbitrarily close to any prescribed $r\in(0,1)$.
+\end{lemma}
+
+\begin{proof}
+(1) From \eqref{eq:cutfold-update}, $C'F'=CF=1$ and
+\[
+F\frac{1-b^{-q}}{1-b^{-m}}-F=F\frac{b^{-m}-b^{-m-d}}{1-b^{-m}}=\frac{F(1-b^{-d})}{b^m-1}=\frac{w}{b^m-1}.
+\]
+Because $P_F\mid d$, $b^{a+d}w=b^a(b^d-1)F\in\Z$. Because $P_C\mid m$, $b^a(b^q-1)C'=b^{a+d}(b^m-1)C\in\Z$, so $C'$ has preperiod at most $a$ and $P_{C'}\mid q$. For $F'$, since $P_F\mid mP_F$ and $(b^m-1)\mid(b^{mP_F}-1)$,
+\[
+b^{a+d}(b^{mP_F}-1)F'=b^{a+d}(b^{mP_F}-1)F+\frac{b^{mP_F}-1}{b^m-1}\,b^{a+d}w\in\Z,
+\]
+so $F'$ has preperiod at most $a+d$ and $P_{F'}\mid mP_F$. Finally, $\gcd(q,m)=\gcd(m+d,m)=\gcd(d,m)=1$, and since $P_F\mid d$, $\gcd(q,P_F)=\gcd(m,P_F)=1$. Thus $\gcd(q,mP_F)=1$, forcing $\gcd(P_{C'},P_{F'})=1$.
+
+(2) Clearly $P_C\mid m_k$ and $P_F\mid d_k$. Since $\gcd(P_C,LP_F)=1$ and $\gcd(1+j_kLP_F,LP_F)=1$, we have $\gcd(m_k,d_k)=1$. The consecutive admissible values of $m_k$ are spaced by $P_CLP_F$, so $|m_k-d_k/r|\le P_CLP_F=o(d_k)$ as $k\to\infty$, giving $d_k/m_k\to r$ and $m_k>d_k+a$ for large $k$.
+
+(3) Fix $H\ge1$. On the cut side, expand $C'=\sum_{j\ge0}b^{-jq}C(1-b^{-m})$ and write $n=iq+r$ with $i\ge0$ and $0\le r<q$. For every $0\le j<i$, the summand $b^{(i-j)q+r}C(1-b^{-m})=b^{(i-j-1)q+r+d-a}\cdot b^a(b^m-1)C$ is an integer whenever $r\ge a$ (in fact whenever $r+d\ge a$). The remaining terms ($j\ge i$) sum identically to $b^rC'$. Using the exact identity
+\[
+b^rC'-b^rC=-C\,b^{r-m}\frac{1-b^{-d}}{1-b^{-q}}\in(-Cb^{r-m},0),
+\]
+we obtain $\dist{b^{iq+r}C'-b^rC}\le Cb^{-H}$ for all $a\le r<m-H$. For $m+a\le r<q-H$, the $j=i$ term $b^rC(1-b^{-m})=b^{r-m-a}\cdot b^a(b^m-1)C$ is also an integer, and the future tail ($j>i$) equals $b^{r-q}C'\in(0,Cb^{r-q})\subset(0,Cb^{-H})$, so $\dist{b^{iq+r}C'}\le Cb^{-H}$.
+
+Consider the single block $i=1$ ($q\le n<2q$). Since $a<m<q$ and $P_{C'}\mid q$, the empirical law of $\{b^nC':q\le n<2q\}$ is identically $\sigma'$. Write $\max(0,m-a-H)=k_CP_C+r_C$ with $0\le r_C<P_C$. On the $k_CP_C$ consecutive indices $r\in[a,a+k_CP_C)$, the points $b^rC\bmod1$ visit the cycle of $C$ exactly $k_C$ times, so their empirical law is $\sigma$; pairing them with $b^{q+r}C'$ moves mass $k_CP_C/q\le m/q=1/(1+\rho)$ by at most $Cb^{-H}$. On the $\max(0,d-a-H)$ indices $r\in[m+a,q-H)$, pairing $b^{q+r}C'$ with $0$ moves mass $\max(0,d-a-H)/q\le d/q=\rho/(1+\rho)$ by at most $Cb^{-H}$. The remaining unmatched mass is
+\[
+\frac{m-k_CP_C}{q}+\frac{\min(d,a+H)}{q}\le\frac{2a+2H+P_C}{q}<\frac{2a+2H+P_C}{m}.
+\]
+
+On the folded side, expand $F'=F+\sum_{j\ge1}b^{-jm}w$ and write $n=im+s$ with $i\ge0$ and $0\le s<m$. For $i=0$, $b^s(F'-F)=b^{s-m}F(1-b^{-d})/(1-b^{-m})\in(0,Fb^{s-m})$, giving $\dist{b^sF'-b^sF}\le Fb^{-H}$ for $0\le s<m-H$. For $i\ge1$: every earlier summand ($1\le j<i$) equals $b^{(i-j)m+s}w=b^{(i-j-1)m+s+(m-d-a)}\cdot b^{a+d}w\in\Z$ for all $0\le s<m$ because $m>d+a$; the future tail ($j>i$) equals $b^{s-m}F(1-b^{-d})/(1-b^{-m})\in(0,Fb^{s-m})$; and the current summand ($j=i$) is $b^sw=b^sF-b^{s-d}F$. For $a\le s<d-H$, combining the tail with $-b^{s-d}F$ yields
+\[
+b^sF\left(\frac{b^{-m}(1-b^{-d})}{1-b^{-m}}-b^{-d}\right)=-Fb^{s-d}\frac{1-b^{d-m}}{1-b^{-m}}\in(-Fb^{s-d},0),
+\]
+so $\dist{b^{im+s}F'-(b^{im+s}F+b^sF)}\le Fb^{-H}$. For $d+a\le s<m-H$, the current term $b^sw=b^{s-d-a}\cdot b^{a+d}w$ is integral, leaving only the future tail, so $\dist{b^{im+s}F'-b^{im+s}F}\le Fb^{-H}$.
+
+Now take the $P_F$ consecutive $m$-blocks $i\in\{1,\dots,P_F\}$ ($m\le n<(P_F+1)m$). Since $a+d<m$ and $P_{F'}\mid mP_F$, the empirical law of $b^nF'$ on these $mP_F$ indices is identically $\mu'$. Write $\max(0,d-a-H)=k_FP_F+r_F$ with $0\le r_F<P_F$. As $(i,s)$ ranges over $\{1,\dots,P_F\}\times[a,a+k_FP_F)$, the map
+\[
+(i,s)\longmapsto\bigl((im+s)\bmod P_F,\; s\bmod P_F\bigr)
+\]
+hits every pair in $(\Z/P_F\Z)^2$ exactly $k_F$ times because $\gcd(m,P_F)=1$: for each fixed $s$, $i\mapsto(im+s)\bmod P_F$ is a bijection on $\Z/P_F\Z$. Since $im+s\ge m>a$ and $s\ge a$, the empirical law of $b^{im+s}F+b^sF\bmod1$ over these $k_FP_F^2$ pairs is identically $\mu*\mu$. Similarly, for each fixed $s\in[d+a,m-H)$, as $i$ runs over $\{1,\dots,P_F\}$, $(im+s)\bmod P_F$ traverses $\Z/P_F\Z$ once, so the empirical law of $b^{im+s}F\bmod1$ over these $P_F\max(0,m-d-a-H)$ indices is identically $\mu$. Matching these two disjoint sets with $\rho(\mu*\mu)$ and $(1-\rho)\mu$ leaves unmatched mass at most
+\[
+\frac{d-k_FP_F}{m}+\frac{\min(m-d,a+H)}{m}\le\frac{2a+2H+P_F}{m}
+\]
+with displacement at most $Fb^{-H}$.
+
+(4) Fix $N\ge m$. On the cut side, write $N=Kq+L$ with $K=\lfloor N/q\rfloor\ge0$ and $0\le L<q$. In each of the $K$ complete blocks $0\le i<K$, keeping $k_CP_C$ good $C$-indices yields exact copies of $\sigma$ to within displacement $Cb^{-H}$, discarding at most $d+a+H+P_C$ indices per block. In the partial block $i=K$ ($0\le r<L$), keeping the maximal multiple of $P_C$ inside $[a,\min(L,m-H))$ yields exact copies of $\sigma$ to within $Cb^{-H}$ and discards at most $\max(0,L-m)+a+H+P_C\le d+a+H+P_C$ indices. If $K=0$ (so $m\le N<q$), the total discarded fraction is at most $(d+a+H+P_C)/N\le\rho+(a+H+P_C)/m$. If $K\ge1$, then $(K+1)/N\le(K+1)/(Kq)\le 2/q<2/m$, so the discarded fraction is at most
+\[
+\frac{(K+1)(d+a+H+P_C)}{N}\le\frac{2(d+a+H+P_C)}{q}\le 2\rho+\frac{2(a+H+P_C)}{m}.
+\]
+
+On the folded side, compare $b^nF'$ directly to $b^nF$ for $0\le n<N$. By the blockwise estimates in (3), $\dist{b^nF'-b^nF}\le Fb^{-H}$ fails on at most $H$ indices in block $i=0$ and at most $d+a+H$ indices in each block $1\le i\le\lfloor(N-1)/m\rfloor$. Since $\lfloor(N-1)/m\rfloor<N/m$ and $N\ge m$, this gives a coupling of $\nu_N(F';b)$ to $\nu_N(F;b)$ with displacement at most $Fb^{-H}$ and exceptional mass at most
+\[
+\frac{H+(N/m)(d+a+H)}{N}\le\rho+\frac{a+2H}{m}.
+\]
+Discarding the preperiod $[0,a)$ and at most $P_F-1$ trailing indices of $\{b^nF\}_{n<N}$ shows $d_{\mathrm{TV}}(\nu_N(F;b),\mu)\le(a+P_F)/N\le(a+P_F)/m$. Applying \Cref{lem:coupling}(d) yields a coupling of $\nu_N(F';b)$ to $\mu$ with displacement at most $Fb^{-H}$ and exceptional mass at most $\rho+(2a+2H+P_F)/m$.
+\end{proof}
+
+\subsection{Proof of \texorpdfstring{\Cref{thm:A}}{Theorem A}}
+
+\begin{theorem}[All-radix limit measures $\mu_\alpha$ and complete spectrum]\label{thm:allradix}
+\evidence{Paper proof using External input (Stone--Weierstrass and Portmanteau on $\T$)}
+For every integer radix $b\ge2$ and every $\alpha\in[0,1]$, there exists a positive irrational $x=x(b,\alpha)\in M_b\subset K_b$ such that $\nu_N(1/x;b)\Rightarrow\mu_\alpha=\alpha\delta_0+(1-\alpha)\lambda$ and $D_N(1/x;b)\to\alpha$ along all prefixes $N\to\infty$. Moreover, when $0<\alpha<1$, all word-frequency conclusions of \Cref{thm:A}\textup{(ii)} hold.
+\end{theorem}
+
+\begin{proof}
+We treat the endpoint $\alpha=1$ first, then the unified regime $\alpha\in[0,1)$.
+
+\emph{Endpoint $\alpha=1$.} Start from $u_0=v_0=1$ ($P_{u_0}=P_{v_0}=1$, $a_0=0$) and iterate the base-$b$ contraction $v_{j+1}=v_j(1+b^{-l_j})$, $u_{j+1}=u_j/(1+b^{-l_j})=b^{l_j}u_j/(b^{l_j}+1)$ with $l_1\ge4$, $l_{j+1}>2l_j$, $P_{u_j}\mid l_j$, $l_j>a_j$, and $b^{-l_j}\den(v_j)<1/j^2$. Writing $u_j=A_j/(b^{a_j}D_j)$ with $\gcd(D_j,b)=1$ and $D_j\mid(b^{l_j}-1)$, for every odd prime $p$ one has $p\nmid\gcd(b^{l_j}-1,b^{l_j}+1)$, while at $p=2$ one has $v_2(D_j(b^{l_j}+1))\le v_2(b^{l_j}-1)+v_2(b^{l_j}+1)=v_2(b^{2l_j}-1)$. Hence $\den(u_{j+1})\mid(b^{2l_j}-1)$ holds in every radix $b\ge2$ (even or odd). The exact band identities
+\[
+b^ru_{j+1}=b^ru_j-\frac{b^ru_j}{b^{l_j}+1},\qquad
+b^{l_j+r}u_{j+1}=b^r(b^{l_j}-1)u_j+\frac{b^ru_j}{b^{l_j}+1}\qquad(0\le r<l_j)
+\]
+give $B_{j+1}\le B_j/2+O_b((a_j+P_{u_j}+u_j+1)/l_j)$ and $M_N(u_{j+1};b)\le B_j+O_b((a_j+P_{u_j}+u_j+1)/l_j)$ for all $N\ge l_j$. Meanwhile $v_j$ has terminating base-$b$ expansion at every stage, so its eventual cycle is $\{0\}$; for $n\ge l_j+a_j$, $b^nv_{j+1}\in\Z$, and for $N\ge l_j$ at most $a_j+H$ indices before $l_j$ fail to track $\{0\}$ within $v_jb^{-H}$, so $M_N(v_{j+1};b)\to0$. Passing to the positive limits $x=\lim u_j$, $y=\lim v_j=1/x$ via the tail argument below gives $x\in M_b\subset K_b$, $\nu_N(y;b)\Rightarrow\delta_0$, and $D_N(y;b)\to1$. Since all increments $v_{j+1}-v_j=v_jb^{-l_j}$ are positive and $v_j\in[1,2]$, we have $0<y-v_j\le 4b^{-l_j}<4/(j^2\den(v_j))$, which rules out rationality of $y$ (and hence $x$).
+
+\emph{Regime $\alpha\in[0,1)$: round structure and uniform bounds.} Fix $\alpha\in[0,1)$. Choose an integer $j_0\ge8$ (if $\alpha>0$, choose $j_0\ge\max(8,\lceil 2/\alpha\rceil)$ so $\alpha h_j>h_j^2$ for all $j\ge1$; if $\alpha=0$, put $j_0=8$), and set $h_j:=1/(j+j_0)\le1/9$ for $j\ge1$, so $\sum_{j\ge1}h_j=\infty$ and $\sum_{j\ge1}h_j^2<\infty$.
+
+Start from $x_0=y_0=1$ (with periods $1$, coprime, and preperiod $0$). In round $j\ge1$, we perform two cut-and-fold operations (\Cref{lem:cutfold}), numbered $i=2j-1$ (Step~A) and $i=2j$ (Step~B), with scales $m_1\ge4$ and $m_{i+1}>2m_i$ (so $m_i\ge 2^{i+1}$):
+\begin{itemize}[nosep]
+\item \emph{Step~A (cut $y$, fold $x$):} apply \Cref{lem:cutfold} with $(C,F)=(y,x)$ and ratio $\rho_A\in(0,1/3)$ satisfying $|\rho_A-\alpha h_j|\le h_j^2$ if $\alpha>0$, or $\rho_A\in(h_j^2/2,h_j^2)$ if $\alpha=0$. In both cases $\rho_A>0$ and $\rho_A=\alpha h_j+O(h_j^2)$. Write $(x',y')$ for the updated pair.
+\item \emph{Step~B (cut $x'$, fold $y'$):} apply \Cref{lem:cutfold} with $(C,F)=(x',y')$ and ratio $\rho_B\in(0,1/3)$ satisfying $|\rho_B-h_j|\le h_j^2$. Write $(x_{\mathrm{next}},y_{\mathrm{next}})$ for the updated pair.
+\end{itemize}
+Denote the pair after operation $i$ by $(x^{(i)},y^{(i)})$, so $(x^{(2j-2)},y^{(2j-2)})=(x_j,y_j)$ at the start of round $j$ and $(x^{(2j-1)},y^{(2j-1)})=(x',y')$ at mid-round. By \Cref{lem:cutfold}(1), coprimality of periods is preserved at every operation. Because $\sum_{i\ge1}b^{-m_i}\le\sum_{i\ge1}2^{-2^{i+1}}<1/10$, every factor $(1-b^{-m_i})/(1-b^{-q_i})$ lies in $(1-b^{-m_i},1)$, so all pairs $(x^{(i)},y^{(i)})$ and their limits $(x,y)$ lie in $[9/10,10/9]\subset[1/2,2]$. Moreover, since $m_{r+1}>2m_r\ge m_r+1$, we have $\sum_{r>i}b^{-m_r}\le 2b^{-m_{i+1}}$, whence
+\begin{equation}\label{eq:tail-modulus}
+|x-x^{(i)}|\le 3b^{-m_{i+1}},\qquad |y-y^{(i)}|\le 3b^{-m_{i+1}}\qquad(\forall\,i\ge0).
+\end{equation}
+
+\emph{Contraction of the $x$-cycle mean.} Let $B_j=M(\mu_{x_j})$ and $B'_j=M(\mu_{x'})$. By subadditivity of circle distance, $M(\mu*\mu)\le 2M(\mu)$, so the ideal folded mean is at most $(1-\rho_A)B_j+2\rho_A B_j=(1+\rho_A)B_j$. Requiring the cycle mean-distance coupling errors (\Cref{lem:coupling}(b) and \Cref{lem:cutfold}(3)) to be at most $h_j^2$ at both steps of round $j$ yields
+\begin{align*}
+B'_j&\le (1+\rho_A)B_j+h_j^2,\\
+B_{j+1}&\le\frac{1}{1+\rho_B}B'_j+h_j^2
+\le\frac{1+\rho_A}{1+\rho_B}B_j+2h_j^2
+=\bigl(1-(1-\alpha)h_j+O(h_j^2)\bigr)B_j+2h_j^2.
+\end{align*}
+Since $1-\alpha>0$, $\sum h_j=\infty$, and $\sum h_j^2<\infty$, iterating gives $B_j\to0$ and hence $B'_j\to0$.
+
+\emph{Fourier dynamics and activation of harmonics.} For a fixed integer frequency $k\ge1$, write $z=\widehat{\mu_{y_j}}(k)$, $\widetilde z_A=\widehat{\mu_{y'}}(k)$, and $z_{\mathrm{next}}=\widehat{\mu_{y_{j+1}}}(k)$. Set $c=\rho_A/(1+\rho_A)$ and $h=\rho_B$. On the $y$-coordinate, Step~A cuts $y$ and Step~B folds $y'$, so the ideal two-step Fourier map is
+\begin{equation}\label{eq:fourier-map}
+z_A:=(1-c)z+c,\qquad
+T(z):=(1-h)z_A+hz_A^2,\qquad
+1-T(z)=(1-c)(1-z)(1+hz_A).
+\end{equation}
+The last identity is verified by expanding $1-T(z)=1-z_A+hz_A(1-z_A)=(1-z_A)(1+hz_A)=(1-c)(1-z)(1+hz_A)$. Note that $z=1$ is a weakly repelling fixed point of $T$, with multiplier $(1-c)(1+h)=1+(1-\alpha)h_j+O(h_j^2)>1$. To prevent errors from collapsing $z$ onto $1$, we impose \emph{relative} precision and denominator activation at every round $j\ge1$:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item For every $1\le k\le j$ with $z\ne1$, choose the Step~A coupling parameters $(H_A,m_A,d_A)$ so that $|\widetilde z_A-z_A|\le\frac{h_j^2}{100}|1-z|^2$.
+\item Write the old $y_j=A_y/(b^{a_y}D_y)$ in lowest terms with $\gcd(b,D_y)=1$. Require $b^{d_A}\ge jA_y$ (feasible since $d_A\to\infty$ while $A_y$ is fixed). In $y'=A_yb^{d_A}(b^{m_A}-1)/(b^{a_y}D_y(b^{q_A}-1))$, powers of $b$ do not cancel primes of $D_y(b^{q_A}-1)$, so the reduced prime-to-$b$ denominator $D_{y'}$ of $y'$ satisfies
+\begin{equation}\label{eq:den-growth}
+D_{y'}=\frac{D_y(b^{q_A}-1)}{\gcd(A_y(b^{m_A}-1),D_y(b^{q_A}-1))}\ge\frac{b^{q_A}-1}{A_y(b^{m_A}-1)}>\frac{b^{d_A}}{A_y}\ge j,
+\end{equation}
+using $b^{m_A+d_A}-1>b^{d_A}(b^{m_A}-1)$. Every point of the eventual cycle of $y'$ has exact reduced denominator $D_{y'}$: for $n\ge a_{y'}$, $b^ny'=b^{n-a_{y'}}A_{y'}/D_{y'}$ with $\gcd(b^{n-a_{y'}}A_{y'},D_{y'})=1$. Hence for every $1\le k\le j$, $D_{y'}\nmid k$, so $kt\notin\Z$ for every point $t$ in the cycle of $y'$, which gives $\widetilde z_A\ne1$ (and indeed $1-\operatorname{Re}\widetilde z_A\ge 8/D_{y'}^2>0$).
+\item In Step~B, choose $(H_B,m_B,d_B)$ so that $|z_{\mathrm{next}}-g(\widetilde z_A)|\le\frac{h_j^2}{100}|1-\widetilde z_A|^2$ for every $1\le k\le j$, where $g(w)=(1-h)w+hw^2$.
+\item Also choose all selectable all-prefix coupling terms $\frac{2(a+H+P)}{m}$ and $2b^{-H}$ in \Cref{lem:cutfold}(4) to be at most $h_j$ at both steps.
+\end{enumerate}
+
+Since $|1+h\widetilde z_A|\ge 1-h>2/3$ and $h_j\le1/9$, condition (c) implies
+\[
+|1-z_{\mathrm{next}}|\ge |1-g(\widetilde z_A)|-\frac{h_j^2}{100}|1-\widetilde z_A|^2
+=\bigl(|1+h\widetilde z_A|-\tfrac{h_j^2}{100}|1-\widetilde z_A|\bigr)|1-\widetilde z_A|>0,
+\]
+so every frequency $k\ge1$ satisfies $z_j(k)\ne1$ for all rounds $j\ge k+1$.
+
+\emph{Convergence via the transform $W=1/(1-z)$.} Fix $k\ge1$ and take any round $j\ge k+1$, so $z=z_j(k)\ne1$. From (a), since $|1-z|\le2$ and $h_j\le1/9$,
+\[
+|1-\widetilde z_A|\le(1-c)|1-z|+\frac{h_j^2}{100}|1-z|^2\le\Bigl(1+\frac{2}{8100}\Bigr)|1-z|\le 2|1-z|.
+\]
+On the closed unit disk $\{|w|\le1\}$, $|g'(w)|=|1-h+2hw|\le 1+h<2$. Combining (a) and (c) yields
+\[
+|z_{\mathrm{next}}-T(z)|\le |z_{\mathrm{next}}-g(\widetilde z_A)|+(1+h)|\widetilde z_A-z_A|
+\le\frac{h_j^2}{100}\bigl(4+2\bigr)|1-z|^2=\frac{6}{100}h_j^2|1-z|^2.
+\]
+From \eqref{eq:fourier-map}, since $c<\rho_A<1/3$ and $h<1/3$, $|1-T(z)|\ge\frac23\cdot\frac23|1-z|=\frac49|1-z|$ and $|1-z_{\mathrm{next}}|\ge(\frac49-\frac{12}{8100})|1-z|>\frac13|1-z|$. Setting $W=1/(1-z)$ and $W_{\mathrm{next}}=1/(1-z_{\mathrm{next}})$, the factors $|1-z|^2$ cancel cleanly:
+\[
+\left|W_{\mathrm{next}}-\frac{1}{1-T(z)}\right|
+=\frac{|z_{\mathrm{next}}-T(z)|}{|1-z_{\mathrm{next}}|\,|1-T(z)|}
+\le\frac{0.06\,h_j^2|1-z|^2}{\frac13\cdot\frac49\,|1-z|^2}\le 0.41\,h_j^2.
+\]
+Using $z_AW=(z+c(1-z))W=zW+c=W-(1-c)$ and $(1+\rho_A)(1-c)=1$, we expand $1/(1-T(z))$ identically:
+\begin{align*}
+\frac{1}{1-T(z)}
+=\frac{(1+\rho_A)W}{1+hz_A}
+&=(1+\rho_A)W\left(1-hz_A+\frac{h^2z_A^2}{1+hz_A}\right)\\
+&=(1+\rho_A)(1-h)W+h+\frac{(1+\rho_A)h^2z_A^2}{1+hz_A}W.
+\end{align*}
+Because $\rho_A=\alpha h_j+O(h_j^2)$, $h=h_j+O(h_j^2)$, and $|1+hz_A|\ge2/3$, this gives
+\[
+W_{\mathrm{next}}=\bigl(1-(1-\alpha)h_j\bigr)W+h_j+O\bigl(h_j^2(1+|W|)\bigr).
+\]
+Taking absolute values, for all $j\ge j_1$ (with $j_1\ge k+1$ large enough that the $O(h_j^2)$ coefficient of $|W|$ is at most $\frac12(1-\alpha)h_j$), $|W_{j+1}|\le(1-\frac{1-\alpha}{2}h_j)|W_j|+2h_j$, so by induction $|W_j|\le\max(|W_{j_1}|,4/(1-\alpha))$ is bounded. Now subtract the fixed point $W^*:=1/(1-\alpha)$, which satisfies $(1-(1-\alpha)h_j)W^*+h_j=W^*$: putting $E_j=|W_j-W^*|$, we obtain $E_{j+1}\le(1-(1-\alpha)h_j)E_j+C_k h_j^2$ for all $j\ge j_1$. Since $\sum h_j=\infty$ and $\sum h_j^2<\infty$, iterating from any $J\ge j_1$ gives $\limsup_j E_j\le C_k\sum_{r\ge J}h_r^2\to0$ as $J\to\infty$. Thus $W_j\to 1/(1-\alpha)$, hence $z_j(k)\to\alpha$, and $|\widetilde z_A-z_j(k)|\le 2c+O(h_j^2)\to0$ gives $\widetilde z_A(k)\to\alpha$ as well.
+
+\emph{All-prefix weak convergence, discrepancy, word frequencies, and irrationality.} Since $\widehat{\mu_{y^{(i)}}}(-k)=\overline{\widehat{\mu_{y^{(i)}}}(k)}$ and $\widehat{\mu_{y^{(i)}}}(0)=1$, every Fourier coefficient of $\mu_{y^{(i)}}$ converges to $\widehat{\mu_\alpha}(k)$. By the Stone--Weierstrass theorem on $\T$ (\emph{External input} \cite{Rudin76}, density of trigonometric polynomials in $C(\T)$), $\mu_{y^{(i)}}\Rightarrow\mu_\alpha$ as $i\to\infty$.
+
+Now let $N\ge m_1$ be arbitrary, and choose $i\ge1$ such that $m_i\le N<m_{i+1}$ (at radix-$b$ scale $s_i=m_i$ of operation $i$). For every $0\le n<N-\lceil\sqrt N\rceil$, \eqref{eq:tail-modulus} gives
+\[
+b^n|x-x^{(i)}|\le 3b^{N-\sqrt N-m_{i+1}}\le 3b^{-\sqrt N},\qquad
+b^n|y-y^{(i)}|\le 3b^{-\sqrt N}.
+\]
+Discarding the final $\lceil\sqrt N\rceil$ indices couples $\nu_N(x;b)$ to $\nu_N(x^{(i)};b)$ and $\nu_N(y;b)$ to $\nu_N(y^{(i)};b)$ with displacement at most $3b^{-\sqrt N}$ and exceptional mass $\lceil\sqrt N\rceil/N\to0$. On the other hand, by \Cref{lem:cutfold}(4) and condition~(d), $\nu_N(x^{(i)};b)$ is coupled to $\mu_{x^{(i-1)}}$ and $\nu_N(y^{(i)};b)$ is coupled to $\mu_{y^{(i-1)}}$ with displacement $O(h_{\lceil i/2\rceil})$ and exceptional mass $O(h_{\lceil i/2\rceil})$. Applying \Cref{lem:coupling}(b),(c),(d) yields $M_N(x;b)\to0$ (so $x\in M_b\subset K_b$) and $\widehat{\nu_N(y;b)}(k)\to\widehat{\mu_\alpha}(k)$ for every $k\in\Z$, hence $\nu_N(y;b)\Rightarrow\mu_\alpha$ along all prefixes $N\to\infty$.
+
+To deduce discrepancy convergence despite the atom at $0$, fix $\varepsilon>0$ and partition $\T$ into finitely many half-open arcs $J_1,\dots,J_r$ of lengths at most $\varepsilon$ whose endpoints all avoid $0$. Each $J_s$ is a $\mu_\alpha$-continuity set, so the Portmanteau theorem (\emph{External input} \cite{Billingsley99}) gives $\nu_N(y;b)(J_s)\to\mu_\alpha(J_s)$ for every $s$. Matching the minimum mass $\min(\nu_N(J_s),\mu_\alpha(J_s))$ within each arc $J_s$ produces a coupling of $\nu_N(y;b)$ and $\mu_\alpha$ with displacement at most $\varepsilon$ and unmatched mass $\sum_s|\nu_N(J_s)-\mu_\alpha(J_s)|\to0$. \Cref{lem:coupling}(a) gives $\limsup_N|D_N(y;b)-D(\mu_\alpha)|\le 2\varepsilon$. Since $\varepsilon>0$ is arbitrary and $D(\mu_\alpha)=\sup_I\alpha|\ind_{0\in I}-|I||=\alpha$ (attained in the limit by shrinking arcs $(-\delta,\delta)$ about $0$), we obtain $D_N(y;b)\to\alpha$.
+
+For $0<\alpha<1$ and any $L\ge1$, if $w\in\{0,\dots,b-1\}^L\setminus\{0^L,(b-1)^L\}$, then $0\notin\overline{I_w}$ in $\T$, so $I_w$ is a $\mu_\alpha$-continuity set and Portmanteau gives $f_w(N;y,b)\to\mu_\alpha(I_w)=(1-\alpha)b^{-L}$. Similarly, $I_{0^L}\cup I_{(b-1)^L}=[-b^{-L},b^{-L})$ on $\T$ has boundary $\{\pm b^{-L}\}$ avoiding $0$, so it is a $\mu_\alpha$-continuity set and $f_{0^L}(N;y,b)+f_{(b-1)^L}(N;y,b)\to\mu_\alpha([-b^{-L},b^{-L}))=\alpha+2(1-\alpha)b^{-L}$. For every word $w$, exhausting the interior of $I_w$ by closed subarcs with endpoints avoiding $0$ yields $\liminf_N f_w(N;y,b)\ge\mu_\alpha(\operatorname{int}I_w)=(1-\alpha)b^{-L}>0$. Finally, because $\alpha<1$, the positive Lebesgue component $(1-\alpha)\lambda$ of $\mu_\alpha$ excludes finite support, so $y=1/x$ is not eventually periodic; hence both $y$ and $x$ are irrational.
+\end{proof}
+
+\subsection{Explicit computability and ineffectivity}
+
+\begin{proposition}[Explicit computability procedure]\label{prop:computable}\evidence{Paper proof}
+Fix an integer radix $b\ge2$, and let $\alpha\in[0,1]$ be a Turing-computable real number (given by an oracle returning a rational within $2^{-t}$ of $\alpha$ on input $t\ge0$). Then the witness $x=x(b,\alpha)\in M_b\subset K_b$ of \Cref{thm:allradix} is Turing-computable, with explicit modulus $|x-x^{(i)}|\le 3b^{-m_{i+1}}$.
+\end{proposition}
+
+\begin{proof}
+At $\alpha=1$, the contraction algorithm of \Cref{thm:allradix} uses only exact integer arithmetic: at stage $j$, compute $P_{u_j}=\ord_{\den_{\perp b}(u_j)}(b)$ by trial multiplication, choose the least multiple $l_j$ of $P_{u_j}$ exceeding $\max(2l_{j-1},a_j,4)$ such that $b^{l_j}>j^2\den(v_j)$ and $(a_j+P_{u_j}+2)/l_j\le 2^{-j}$, and update $(u_j,v_j)$ exactly.
+
+Now let $\alpha\in[0,1)$ be computable. If $\alpha=0$, set $j_0:=8$; if $\alpha>0$, query the oracle for $\alpha$ until an explicit rational lower bound $\alpha_0\in(0,\alpha)$ is certified, and set $j_0:=\max(8,\lceil 2/\alpha_0\rceil)$. Set $h_j:=1/(j+j_0)$ and initialize $(x^{(0)},y^{(0)})=(1,1)$, $m_0:=2$. At round $j\ge1$, given the exact rational pair $(x,y)=(x^{(2j-2)},y^{(2j-2)})$ in lowest terms with $x=A_x/(b^{a_x}D_x)$, $y=A_y/(b^{a_y}D_y)$ ($\gcd(b,D_xD_y)=1$):
+\begin{enumerate}[label=\textup{Step \arabic*.},leftmargin=*,nosep]
+\item \emph{Exact state data.} Compute $a:=\max(a_x,a_y)$, $P_x:=\ord_{D_x}(b)$, and $P_y:=\ord_{D_y}(b)$ by finite integer arithmetic. For every $1\le k\le j$, the condition $\widehat{\mu_y}(k)\ne1$ is equivalent to the decidable integer test $D_y\nmid k$. Whenever $D_y\nmid k$, every point $t=r/D_y$ ($\gcd(r,D_y)=1$) of the eventual cycle of $y$ has $kt\notin\Z$, hence $\dist{kt}\ge 1/D_y$; by $1-\cos(2\pi u)=2\sin^2(\pi u)\ge 8\dist{u}^2$,
+\[
+|1-\widehat{\mu_y}(k)|\ge 1-\operatorname{Re}\widehat{\mu_y}(k)\ge\frac{8}{D_y^2}.
+\]
+\item \emph{Step~A scale selection (cut $y$, fold $x$).} If $\alpha=0$, put $r_{A,j}:=\frac34 h_j^2$ and $\tau_A:=\frac14 h_j^2$; if $\alpha>0$, query the oracle to obtain a rational $r_{A,j}\in(0,1/4)$ with $|r_{A,j}-\alpha h_j|\le h_j^2/2$ and put $\tau_A:=h_j^2/2$ (note $r_{A,j}\ge\alpha h_j-h_j^2/2>\frac12\alpha_0h_j>0$). Set the computable rational error budget and strip parameter
+\[
+\varepsilon_A:=\min\left(h_j^2,\ \frac{16\,h_j^2}{25\,D_y^4}\right),\qquad
+H_A:=\min\bigl\{H\in\Z_{\ge1}:28j\le\varepsilon_A b^H\bigr\}.
+\]
+Let $L\ge2$ be the least integer coprime to $P_y$. For $k=1,2,\dots$, form $d=(LP_x)^k$ and the integer $m=P_y(1+tLP_x)$ ($t\ge0$) closest to $d/r_{A,j}$, and stop at the first $k$ satisfying all five exact rational inequalities:
+\begin{align*}
+m&>\max(2m_{2j-2},\,d+a,\,4), &
+\Bigl|\frac dm-r_{A,j}\Bigr|&\le\tau_A, &
+\frac dm&<\frac13,\\
+b^d&\ge jA_y, &
+\frac{2(2a+2H_A+P_x+P_y)}{m}&\le\frac{\varepsilon_A}{2}.
+\end{align*}
+Update $(x',y')$ by \eqref{eq:cutfold-update} with $(C,F)=(y,x)$ and record $m_{2j-1}:=m$. Since $x,y\le2$ and $7k\cdot 2b^{-H_A}\le 14jb^{-H_A}\le\varepsilon_A/2$ for all $1\le k\le j$, \Cref{lem:coupling}(b),(c) and \Cref{lem:cutfold}(3)--(4) guarantee that the Fourier coupling error at every $1\le k\le j$ is at most $\varepsilon_A\le\frac{h_j^2}{100}|1-\widehat{\mu_y}(k)|^2$ (whenever $D_y\nmid k$), the mean-distance error is at most $h_j^2$, all selectable prefix errors are at most $h_j$, and \eqref{eq:den-growth} forces $D_{y'}>j$.
+\item \emph{Step~B scale selection (cut $x'$, fold $y'$).} Reduce $(x',y')$ to lowest terms, compute $(a',P_{x'},P_{y'},D_{y'})$, and set
+\[
+\varepsilon_B:=\min\left(h_j^2,\ \frac{16\,h_j^2}{25\,D_{y'}^4}\right),\qquad
+H_B:=\min\bigl\{H\in\Z_{\ge1}:28j\le\varepsilon_B b^H\bigr\}.
+\]
+Let $L'\ge2$ be the least integer coprime to $P_{x'}$. Search $k=1,2,\dots$ with $d_B=(L'P_{y'})^k$ and $m_B=P_{x'}(1+tL'P_{y'})$ closest to $d_B/h_j$ until $m_B>\max(2m_{2j-1},d_B+a')$, $|d_B/m_B-h_j|\le h_j^2$, $d_B/m_B<1/3$, and $2(2a'+2H_B+P_{x'}+P_{y'})/m_B\le\varepsilon_B/2$. Update $(x^{(2j)},y^{(2j)})$ via \eqref{eq:cutfold-update} and record $m_{2j}:=m_B$. Since $D_{y'}>j$, we have $|1-\widehat{\mu_{y'}}(k)|\ge 8/D_{y'}^2$ for every $1\le k\le j$, so Step~B satisfies condition~(c) of \Cref{thm:allradix}.
+\end{enumerate}
+By \Cref{lem:cutfold}(2), both searches terminate in finite time at every round $j\ge1$. To approximate $x$ within $2^{-M}$ ($M\ge0$), execute rounds until $3b^{-m_{i+1}}\le 2^{-M}$ (which occurs as soon as $m_{i+1}\ge M+2$) and output the rational $x^{(i)}$; correctness follows from \eqref{eq:tail-modulus}.
+\end{proof}
+
+\begin{remark}[Rate and scale: ineffectivity of the construction]\label{rem:ineffective}
+\Cref{thm:allradix} and \Cref{prop:computable} are qualitative existence and computability theorems: they yield no discrepancy convergence rate for $D_N(1/x;b)\to\alpha$, and they do not provide a practical digit generator. Two compounding mechanisms govern the astronomical scale of the witnesses:
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item \emph{At least doubly exponential scale growth.} On the folded side, \Cref{lem:cutfold}(1) gives $P_{F'}\mid mP_F$, and exact rational experiments confirm that the bound $P_{F'}=mP_F$ is generically attained (for instance, in bases $3,6,7,10$, three updates starting from $(1,1)$ attain periods $73$, $64{,}240$, and $56{,}723{,}920$). Because the next cut scale must satisfy $m_{i+1}\ge P_{C_i}$, the scales $m_i$ grow at least doubly exponentially in the round index $j$ (even faster once $H_A,H_B$ incorporate $D_y^4$).
+\item \emph{Slow harmonic escape and polynomial-in-$j$ contraction.} After harmonic $k$ is activated with $|1-\widetilde z_A|\gtrsim D_{y'}^{-2}$, the contraction factor $\prod_{r=j_1}^j(1-(1-\alpha)h_r)\asymp(j/j_1)^{-(1-\alpha)}$ decays only polynomially in the round number $j$. Against doubly exponential $m_j$, convergence of $D_N(1/x;b)$ to $\alpha$ is astronomically slow, and no finite prefix computation on a witness can ever corroborate the asymptotic limit.
+\end{enumerate}
+At present, effective discrepancy rates for reciprocals of $M_b$ elements are known only at the normal endpoint $\alpha=0$, where anchored coprime minus-factor schedules achieve $D_N(1/x;b)=O_{b,A}((\ln N)^{-A})$ for every $A>0$ \cite{PaperXIII}. Constructing an irrational $x\in M_b$ with $D_N(1/x;b)=\alpha+o(1)$ at an explicit quantitative rate for intermediate $\alpha\in(0,1)$ remains open (\Cref{q:effective}).
+\end{remark}
+
+\section{Toeplitz determinant spectra and sharpness of uniformity transfer}\label{sec:toeplitz}
+
+For a finite positive Borel measure $\rho$ on $\T$ and an integer $m\ge1$, define its $m\times m$ Toeplitz moment matrix by
+\[
+T_m(\rho)_{jk}=\int_{\T}e\bigl((k-j)\theta\bigr)\,d\rho(\theta)\qquad(0\le j,k<m).
+\]
+For any $a\in\C^m$ and trigonometric polynomial $q(\theta)=\sum_{k=0}^{m-1}a_ke(k\theta)$, one has $a^*T_m(\rho)a=\int_{\T}|q|^2\,d\rho\ge0$, so $T_m(\rho)$ is Hermitian positive semidefinite. With $M_h(t)=ht\bmod1$ ($h\in\Z\setminus\{0\}$) and $\nu_{N,h}=(M_h)_*\nu_N(z;b)$, the orbit Toeplitz Gram matrix defined in \Cref{sec:intro} satisfies $G_{N,r}(z;b,h)=T_r(\nu_{N,h})$.
+
+\begin{proposition}[Exact compound-symmetric Toeplitz determinant]\label{prop:compound-det}\evidence{Paper proof}
+Let $R$ be any commutative ring, $\alpha\in R$, and $r\ge1$. Let $I_r$ be the $r\times r$ identity matrix and $J_r$ the $r\times r$ all-ones matrix. Then
+\begin{equation}\label{eq:compound-det}
+\det\bigl((1-\alpha)I_r+\alpha J_r\bigr)=(1-\alpha)^{r-1}\bigl(1+(r-1)\alpha\bigr).
+\end{equation}
+For $\alpha\in\R$, the eigenvalues of $G_r(\alpha):=(1-\alpha)I_r+\alpha J_r$ are $1+(r-1)\alpha$ (multiplicity~$1$, eigenvector $\mathbf 1$) and $1-\alpha$ (multiplicity~$r-1$, eigenvectors $e_0-e_k$ for $1\le k<r$). For $\alpha\in[0,1]$,
+\[
+(1-\alpha)^r\le\det G_r(\alpha)\le r(1-\alpha)^{r-1},
+\qquad\text{whence}\qquad
+\lim_{r\to\infty}\bigl(\det G_r(\alpha)\bigr)^{1/r}=1-\alpha.
+\]
+Moreover, for the measure $\mu_\alpha=\alpha\delta_0+(1-\alpha)\lambda$ and every $h\in\Z\setminus\{0\}$, $(M_h)_*\mu_\alpha=\mu_\alpha$ and $T_r((M_h)_*\mu_\alpha)=G_r(\alpha)$ identically.
+\end{proposition}
+
+\begin{proof}
+Over $\C$, $J_r=\mathbf 1\mathbf 1^T$ has rank $1$ with $J_r\mathbf 1=r\mathbf 1$ and $J_r(e_0-e_k)=0$ for $1\le k<r$. Thus $G_r(\alpha)\mathbf 1=(1+(r-1)\alpha)\mathbf 1$ and $G_r(\alpha)(e_0-e_k)=(1-\alpha)(e_0-e_k)$, giving the complete eigen-decomposition and \eqref{eq:compound-det} over $\Q$. Since both sides of \eqref{eq:compound-det} are polynomials in $\alpha$ with integer coefficients agreeing on $\Q$, they are identical in $\Z[\alpha]$, and specialization proves \eqref{eq:compound-det} over every commutative ring $R$. For $\alpha\in[0,1]$, $1-\alpha\le 1+(r-1)\alpha\le r$, yielding the sandwich and the root limit (including $\alpha=1$, where $\det G_r(1)=0$ for all $r\ge2$). Finally, $M_h(0)=0$ and $(M_h)_*\lambda=\lambda$, so $(M_h)_*\mu_\alpha=\mu_\alpha$, with Fourier coefficients $\widehat{\mu_\alpha}(0)=1$ and $\widehat{\mu_\alpha}(k)=\alpha$ for $k\ne0$; hence $T_r((M_h)_*\mu_\alpha)=G_r(\alpha)$.
+\end{proof}
+
+To prove the determinant-to-uniformity transfer self-containedly without invoking the general Szeg\H{o}--Kolmogorov--Krein theorem as a black box, we isolate two short preliminary results.
+
+\begin{lemma}[Gram--Schmidt monotonicity and invariant Lebesgue decomposition]\label{lem:gs-decomp}\evidence{Paper proof}
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item Let $v_0,\dots,v_{r-1}$ ($r\ge1$) be vectors in a complex inner product space with Gram matrix $G_{jk}=\langle v_k,v_j\rangle$, and let $d_j=\operatorname{dist}(v_j,\operatorname{span}(v_0,\dots,v_{j-1}))^2$ ($d_0=\|v_0\|^2$). Then $\det G=\prod_{j=0}^{r-1}d_j$ (singular cases included). For $T_r(\rho)$ of any finite positive Borel measure $\rho$ on $\T$, $d_j(\rho)=\min\{\int_{\T}|p|^2\,d\rho:p\text{ monic of degree }j\}$ is nonincreasing in $j$, and $(\det T_r(\rho))^{1/r}\le(\det T_m(\rho))^{1/m}$ for all $1\le m\le r$.
+\item Every weak$^*$ limit point $\mu$ of $(\nu_N(z;b))$ is $T_b$-invariant. For every $T_b$-invariant probability measure $\mu$ on $\T$ and every $h\in\Z\setminus\{0\}$, the Lebesgue decomposition of $\mu$ has the constant-density form $\mu=a(\mu)\lambda+\mu_s$ ($a(\mu)\in[0,1]$, $\mu_s\perp\lambda$), and $(M_h)_*\mu=a(\mu)\lambda+\nu_s$ with $\nu_s=(M_h)_*\mu_s\perp\lambda$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) Write $W_j=\operatorname{span}(v_0,\dots,v_{j-1})$ ($W_0=\{0\}$), let $P_j$ be the orthogonal projection onto $W_j$, and set $u_j=v_j-P_jv_j$. Then the $u_j$ are pairwise orthogonal with $\|u_j\|^2=d_j$, and $v_j=u_j+\sum_{i<j,\,u_i\ne0}(\langle v_j,u_i\rangle/\|u_i\|^2)u_i$. In matrix form $V=UT$ with $T$ unit upper triangular, so $G=V^*V=T^*\operatorname{diag}(d_0,\dots,d_{r-1})T$ and $\det G=\prod_{j<r}d_j$. For $T_r(\rho)$, realize $T_r(\rho)$ as the Gram matrix of $v_j(\theta)=e(j\theta)$ in $L^2(\rho)$. Multiplication by $e(\theta)$ is an isometry of $L^2(\rho)$, so
+\[
+d_j(\rho)\le\operatorname{dist}\bigl(v_j,\operatorname{span}(v_1,\dots,v_{j-1})\bigr)^2=d_{j-1}(\rho).
+\]
+Hence the sequence $(\log d_j(\rho))_{j\ge0}$ in $[-\infty,\infty)$ is nonincreasing, so its running averages $\frac1r\log\det T_r(\rho)$ are nonincreasing in $r$, giving $(\det T_r(\rho))^{1/r}\le(\det T_m(\rho))^{1/m}$ (including when $\det=0$).
+
+(b) Because $T_b:\T\to\T$ is continuous and $(T_b)_*\nu_N-\nu_N=N^{-1}(\delta_{T_b^Nz}-\delta_z)$ has total variation at most $2/N$, every weak$^*$ limit point $\mu$ is $T_b$-invariant. Write the Lebesgue decomposition $\mu=\mu_{\mathrm{ac}}+\mu_s$. Since $T_b$ is finite-to-one and piecewise affine of slope $b$, both $T_b^{-1}(E)$ and $T_b(E)$ are $\lambda$-null whenever $E$ is a $\lambda$-null Borel set. Consequently $(T_b)_*\mu_{\mathrm{ac}}\ll\lambda$ and $(T_b)_*\mu_s\perp\lambda$ (if $\mu_s$ is supported on a null Borel set $Z$, then $(T_b)_*\mu_s$ is supported on the null Borel set $T_b(Z)$). Uniqueness of the Lebesgue decomposition yields $(T_b)_*\mu_{\mathrm{ac}}=\mu_{\mathrm{ac}}$. Writing $d\mu_{\mathrm{ac}}=w\,d\lambda$ with $w\in L^1(\T)$, $T_b$-invariance gives $\widehat{\mu_{\mathrm{ac}}}(k)=\widehat{\mu_{\mathrm{ac}}}(b^jk)\to0$ as $j\to\infty$ for every $k\ne0$ by the Riemann--Lebesgue lemma, so $\mu_{\mathrm{ac}}=a(\mu)\lambda$ with $a(\mu)=\mu_{\mathrm{ac}}(\T)\in[0,1]$. Finally, $M_h$ also preserves $\lambda$ and maps $\lambda$-null Borel sets to $\lambda$-null Borel sets, so $(M_h)_*\mu=a(\mu)\lambda+(M_h)_*\mu_s$ with $(M_h)_*\mu_s\perp\lambda$.
+\end{proof}
+
+\begin{proposition}[Constant-density Szeg\H{o}--Kolmogorov--Krein limit]\label{prop:const-szego}\evidence{Paper proof}
+Let $\rho=a\lambda+\rho_s$ be a finite positive Borel measure on $\T$ with $a\ge0$ and $\rho_s\perp\lambda$. Then $T_m(\rho)\succeq aI_m$, $d_m(\rho)\ge a$, and $(\det T_m(\rho))^{1/m}\ge a$ for every $m\ge1$, and
+\[
+\lim_{m\to\infty}d_m(\rho)=\lim_{m\to\infty}\bigl(\det T_m(\rho)\bigr)^{1/m}=a.
+\]
+\end{proposition}
+
+\begin{proof}
+Since $T_m(\rho)=aI_m+T_m(\rho_s)$ with $T_m(\rho_s)\succeq0$, we have $T_m(\rho)\succeq aI_m$, hence $(\det T_m(\rho))^{1/m}\ge a$; similarly, for monic $p$ of degree $m$, $\int|p|^2\,d\rho\ge a\int|p|^2\,d\lambda\ge a$, so $d_m(\rho)\ge a$.
+
+For the upper bound, fix $\varepsilon\in(0,1)$ and $M>0$. Since $\rho_s$ is concentrated on a $\lambda$-null Borel set, inner regularity of $\rho_s$ gives a compact set $K\subset\T$ with $\lambda(K)=0$ and $\rho_s(\T\setminus K)<\varepsilon$, and outer regularity of $\lambda$ gives an open set $U\supseteq K$ with $\lambda(U)<\varepsilon/M$. Choose a smooth cutoff $\varphi\in C^\infty(\T)$ with $0\le\varphi\le1$, $\varphi\equiv1$ on $K$, and $\supp\varphi\subset U$. Set $u=-M\varphi\in C^\infty(\T)$. Its Fourier coefficients $\widehat{u}(k)=\int_{\T}u(\theta)e(-k\theta)\,d\theta$ decay faster than every power of $|k|$, so the harmonic conjugate $\tilde u(\theta)=\sum_{k\ne0}(-i\sgn(k))\widehat{u}(k)e(k\theta)$ is real-valued and smooth, and
+\[
+G(\theta):=u(\theta)+i\tilde u(\theta)=\widehat{u}(0)+2\sum_{k\ge1}\widehat{u}(k)e(k\theta)
+\]
+extends via $G(z)=\widehat{u}(0)+2\sum_{k\ge1}\widehat{u}(k)z^k$ to a function with absolutely convergent Taylor series on the closed unit disk $\overline{\mathbb D}$. Hence $F(z):=\exp(G(z))=\sum_{k\ge0}c_kz^k$ is smooth on $\T$ with absolutely summable power series, $c_0=e^{\widehat{u}(0)}=e^{-M\int\varphi\,d\lambda}\ge e^{-\varepsilon}$, and $|F(e(\theta))|=e^{u(\theta)}=e^{-M\varphi(\theta)}$ everywhere on $\T$. In particular $|F|\le1$ on $\T$ and $|F|=e^{-M}$ on $K$.
+
+Put $P_n(z)=\sum_{k=0}^n c_kz^k$ and $q_n(z)=P_n(z)/c_0$, so $q_n(0)=1$ and $q_n\to F/c_0$ uniformly on $\T$. Thus
+\[
+\lim_{n\to\infty}\int_{\T}|q_n|^2\,d\rho
+=\frac{a\int_{\T}|F|^2\,d\lambda+\int_{\T}|F|^2\,d\rho_s}{c_0^2}
+\le e^{2\varepsilon}\bigl(a+e^{-2M}\rho_s(\T)+\varepsilon\bigr).
+\]
+For every $m\ge n$, the reversed polynomial $p(z)=z^m\overline{q_n(1/\bar z)}$ is monic of degree $m$ with $|p|=|q_n|$ on $\T$, so $d_m(\rho)\le\int_{\T}|q_n|^2\,d\rho$. Letting $m\to\infty$, then $n\to\infty$, then $M\to\infty$ and $\varepsilon\downarrow0$ gives $\limsup_m d_m(\rho)\le a$, hence $\lim_m d_m(\rho)=a$. Since $\det T_m(\rho)=\prod_{j<m}d_j(\rho)$ (\Cref{lem:gs-decomp}(a)), taking geometric means gives $(\det T_m(\rho))^{1/m}\to a$.
+\end{proof}
+
+For general densities $w\in L^1(\T)$, the limit $\lim_m(\det T_m(w\,d\lambda+\rho_s))^{1/m}=\exp\int_{\T}\log w\,d\lambda$ is the classical Szeg\H{o}--Kolmogorov--Krein theorem \cite[Chapter~3]{GrenanderSzego58}, \cite[Chapter~2]{Simon05} (cited here for context only; \Cref{prop:const-szego} makes \Cref{thm:B} completely self-contained).
+
+\begin{theorem}[Determinant-to-uniformity transfer and reciprocal sharpness]\label{thm:toeplitz-sharp}\evidence{Paper proof}
+Parts \textup{(ii)} and \textup{(iii)} of \Cref{thm:B} hold for every integer radix $b\ge2$ and every $h\in\Z\setminus\{0\}$.
+\end{theorem}
+
+\begin{proof}
+\emph{Part \textup{(ii)} (Transfer).} Suppose $1\le r(N)\to\infty$ and $\liminf_{N\to\infty}(\det G_{N,r(N)}(z;b,h))^{1/r(N)}\ge c>0$. Let $\mu$ be any weak$^*$ limit point of $(\nu_N(z;b))$, say $\nu_{N_i}(z;b)\Rightarrow\mu$, and set $\nu=(M_h)_*\mu$. Fix any integer $m\ge1$. Once $r(N_i)\ge m$, \Cref{lem:gs-decomp}(a) gives
+\[
+\bigl(\det G_{N_i,r(N_i)}(z;b,h)\bigr)^{1/r(N_i)}\le\bigl(\det G_{N_i,m}(z;b,h)\bigr)^{1/m}.
+\]
+Each entry $G_{N_i,m}(z;b,h)_{jk}=\int_{\T}e((k-j)ht)\,d\nu_{N_i}(z;b)(t)$ converges to $T_m(\nu)_{jk}$, so $\det G_{N_i,m}\to\det T_m(\nu)$. Taking $\liminf_i$ yields $c\le(\det T_m(\nu))^{1/m}$ for every $m\ge1$. By \Cref{lem:gs-decomp}(b), $\nu=a(\mu)\lambda+\nu_s$ with $\nu_s\perp\lambda$. Letting $m\to\infty$ and applying \Cref{prop:const-szego} gives $c\le a(\mu)$, hence $\mu\ge a(\mu)\lambda\ge c\lambda$.
+
+From $\mu\ge c\lambda$ for every weak$^*$ limit point $\mu$: for every open arc $U\subset\T$, refining a subsequence attaining $\liminf_N\nu_N(U)$ to a weakly convergent subsequence and applying the Portmanteau theorem for open sets \cite{Billingsley99} yields $\liminf_N\nu_N(U)\ge c\lambda(U)$. Fix $\varepsilon>0$ and $K\ge1$ with $2c/K\le\varepsilon/2$. There exists $N_0$ such that $\nu_N(A)\ge c\lambda(A)-\varepsilon/2$ for every open arc $A$ with endpoints in $\frac1K\Z$ and all $N\ge N_0$. Any half-open circular arc $J$ of length $\ell\ge 2/K$ contains such an arc $A$ with $\lambda(A)\ge\ell-2/K$, so $\nu_N(J)\ge c\ell-\varepsilon$ for all $N\ge N_0$ (trivial if $\ell<2/K$). Thus $\lambda(J)-\nu_N(J)\le(1-c)\lambda(J)+\varepsilon\le 1-c+\varepsilon$, and replacing $J$ by $J^c$ gives $\nu_N(J)-\lambda(J)\le 1-c+\varepsilon$. Hence $D^+(z;b)\le 1-c$. For any word $w$ of length $L$, applying the open-arc lower bound to $\operatorname{int}I_w$ (length $b^{-L}$) and to the open arcs forming $\operatorname{int}(I_w^c)$ (total length $1-b^{-L}$) gives $\liminf_N f_w\ge cb^{-L}$ and $\limsup_N f_w\le 1-c(1-b^{-L})$. If $c=1$, then $D^+(z;b)\le0$, so $z$ is base-$b$ normal.
+
+\emph{Part \textup{(iii)} (Sharpness via reciprocal witnesses).} Fix $c\in[0,1]$, put $\alpha=1-c$, and let $y=1/x(b,\alpha)$ be the reciprocal witness from \Cref{thm:allradix}, so $\nu_N(y;b)\Rightarrow\mu_\alpha$ and $D_N(y;b)\to\alpha=1-c$ along all $N$. For every fixed $m\ge1$, $G_{N,m}(y;b,h)\to T_m((M_h)_*\mu_\alpha)=G_m(\alpha)$ entrywise as $N\to\infty$, so $\det G_{N,m}(y;b,h)\to\det G_m(\alpha)=c^{m-1}(1+(m-1)(1-c))$ by \Cref{prop:compound-det}. For any schedule $r'(N)\to\infty$ and any fixed $m\ge1$, \Cref{lem:gs-decomp}(a) gives
+\[
+\limsup_{N\to\infty}\bigl(\det G_{N,r'(N)}(y;b,h)\bigr)^{1/r'(N)}\le\lim_{N\to\infty}\bigl(\det G_{N,m}(y;b,h)\bigr)^{1/m}=\bigl(\det G_m(\alpha)\bigr)^{1/m}.
+\]
+Letting $m\to\infty$ yields $\limsup_N(\det G_{N,r'(N)})^{1/r'(N)}\le c$ for every schedule $r'(N)\to\infty$. Conversely, since $\lambda_{\min}(G_m(\alpha))=c$ for $m\ge2$ (and $1\ge c$ for $m=1$) and $\lambda_{\min}$ is continuous on Hermitian matrices, for each $m\ge1$ there exists $N_m\ge m$ (chosen strictly increasing with $N_1=1$) such that $\lambda_{\min}(G_{N,m}(y;b,h))\ge c-1/m$ for all $N\ge N_m$. Putting $r(N)=\max\{m\le N:N_m\le N\}$ gives $1\le r(N)\le N$, $r(N)\to\infty$, and
+\[
+\bigl(\det G_{N,r(N)}(y;b,h)\bigr)^{1/r(N)}\ge\lambda_{\min}\bigl(G_{N,r(N)}(y;b,h)\bigr)\ge c-\frac{1}{r(N)}\longrightarrow c.
+\]
+Hence the supremum equals $c$ and is attained, while $D_N(y;b)\to 1-c$ and (by \Cref{thm:allradix}) $f_w(N;y,b)\to cb^{-L}$ for every word $w\notin\{0^L,(b-1)^L\}$.
+\end{proof}
+
+\section{Complete periods, worst starts, and averaged incomplete orbits}\label{sec:incomplete}
+
+In this section we analyze pure minus-factor reciprocal products
+\[
+R=\prod_{j=1}^\infty\bigl(1-b^{-m_j}\bigr)^{-1}=\lim_{k\to\infty}R_k,\qquad
+R_k=\frac{b^{S_k}}{Q_k},\qquad
+S_k=\sum_{j=1}^k m_j,\qquad
+Q_k=\prod_{j=1}^k\bigl(b^{m_j}-1\bigr),
+\]
+where $m_1<m_2<\cdots$ are strictly increasing positive integers and $T_k=\ord_{Q_k}(b)$ (with $\ord_1(b)=1$). Because $\gcd(b,Q_k)=1$, every fraction $R_k=b^{S_k}/Q_k$ is reduced.
+
+\begin{proposition}[Prime-power shifted grids for complete periods]\label{prop:prime-grids}\evidence{Paper proof}
+Fix an integer radix $b\ge3$, a prime $p\mid b-1$, and any strictly increasing sequence $m_1<m_2<\cdots$. Write $Q_k=p^E Q'$ with $p\nmid Q'$, $H=\lcm(2,\ord_{Q'}(b))$, $g=v_p(b^H-1)$, and $G_k=p^{\max(0,E-g)}$. Then:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item $G_k\ge p^{\max(0,\,k v_p(b-1)-v_p(b^2-1))}$, and for every unit numerator $A$ coprime to $Q_k$, the complete base-$b$ periodic cycle of $A/Q_k$ is a uniform average of shifted uniform grids on $\T$ of size $G_k$. In particular, $D(\mu(A/Q_k;b))\le G_k^{-1}$.
+\item If $m_{k+1}\ge(1-o(1))T_k$ along an infinite subsequence of $k$, then $D^-(R;b)=0$. Consequently, under that hypothesis, if $\lim_{N\to\infty}D_N(R;b)$ exists then it must equal $0$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Set $c=v_p(b-1)\ge1$ and $t=\max_{j\le k}v_p(m_j)$. For any prime $s\mid Q'$ ($s\ne p$), $s$ divides some $b^{m_j}-1$, so $\ord_s(b)\mid m_j$. The kernel of reduction $(\Z/s^a\Z)^\times\to(\Z/s\Z)^\times$ has order $s^{a-1}$, which is prime to $p$, so $v_p(\ord_{s^a}(b))=v_p(\ord_s(b))\le v_p(m_j)\le t$. Taking the least common multiple over prime powers dividing $Q'$ gives $v_p(\ord_{Q'}(b))\le t$.
+
+We next show $E\ge kc+t$ and $g\le v_p(b^2-1)+t$ by elementary binomial lifting (for $u$ prime to $p$, raising $1+p^v u$ to a power prime to $p$ preserves $v$, and raising it to $p$ increases $v$ by $1$ whenever $p$ is odd or $v\ge2$ at $p=2$). Every factor $b^{m_j}-1$ has $v_p(b^{m_j}-1)\ge c$. Let $j^*$ attain $v_p(m_{j^*})=t$. If $t=0$ then $E\ge kc=kc+t$. If $t\ge1$ and $p$ is odd, then $v_p(b^{m_{j^*}}-1)=c+t$; if $t\ge1$ and $p=2$ (so $b$ is odd and $m_{j^*}$ is even), then $b^{m_{j^*}}-1=(b^2)^{m_{j^*}/2}-1$ has $v_2(b^{m_{j^*}}-1)=v_2(b^2-1)+(t-1)\ge(c+1)+(t-1)=c+t$. Hence $E\ge kc+t$ in all cases. For $g$, since $H=\lcm(2,\ord_{Q'}(b))$ is even, $b^2\equiv1\pmod p$ (and $b^2\equiv1\pmod4$ for $p=2$), and $v_p(H/2)\le t$, exact lifting on $(b^2)^{H/2}-1$ gives $g=v_p(b^2-1)+v_p(H/2)\le v_p(b^2-1)+t$. Subtracting yields $E-g\ge kc-v_p(b^2-1)$, proving the lower bound on $G_k$.
+
+Modulo $p^E$, $v_p(b^H-1)=g$ (with $g\ge v_2(b^2-1)\ge3$ when $p=2$), so exact lifting shows that the powers of $b^H$ have order $G_k=p^{\max(0,E-g)}$ and exhaust all residue classes $1\bmod p^{\min(E,g)}$. Modulo $Q'$, $b^H\equiv1$. By the Chinese remainder theorem, $\langle b^H\rangle\bmod Q_k$ is the arithmetic progression $\{1+jQ'p^{\min(E,g)}\bmod Q_k:0\le j<G_k\}$ of spacing $Q_k/G_k$. Multiplying by any unit $A\in(\Z/Q_k\Z)^\times$ permutes the residue classes modulo $G_k$ and produces a shifted uniform grid of size $G_k$ on $\T$. Partitioning the periodic orbit of $A/Q_k$ into cosets of $\langle b^H\rangle$ and noting that every shifted uniform grid of size $G_k$ has discrepancy $1/G_k$ proves $D(\mu(A/Q_k;b))\le G_k^{-1}$.
+
+(b) Because all exponents $m_j$ are distinct, $R\le P_b<\infty$, and the elementary inequality $1-\prod_i(1-a_i)\le\sum_i a_i$ ($0\le a_i\le1$) gives $0<R-R_k=R\bigl(1-\prod_{j>k}(1-b^{-m_j})\bigr)\le C_b b^{-m_{k+1}}$. Put $N_k=\min(m_{k+1},T_k)$. Along the assumed subsequence, $T_k\ge G_k\to\infty$, so $N_k\to\infty$ and $(T_k-N_k)/T_k=o(1)$. Deleting $T_k-N_k$ points from the complete cycle changes $\mu(R_k;b)$ by at most $(T_k-N_k)/T_k=o(1)$ in total variation, so $D_{N_k}(R_k;b)\le G_k^{-1}+o(1)\to0$. Meanwhile, the mean circle displacement between $\{b^n R\}_{n<N_k}$ and $\{b^n R_k\}_{n<N_k}$ is at most $N_k^{-1}\sum_{n<N_k}C_b b^{n-m_{k+1}}\le C'_b/N_k\to0$. By Markov's inequality on the displacement (taking $h=N_k^{-1/2}$) and \Cref{lem:coupling}(a), $D_{N_k}(R;b)\to0$, whence $D^-(R;b)=0$.
+\end{proof}
+
+\begin{proposition}[Worst-start obstruction for incomplete rational orbits]\label{prop:worst-start}\evidence{Paper proof}
+Let $b\ge2$ and let $Q\ge2$ be coprime to $b$, with $L=\lfloor\log_b Q\rfloor$. For every $0\le h<L$ and every $N\ge1$,
+\[
+D_N(1/Q;b)\ge\frac{\min(N,L-h)}{N}-b^{-h}.
+\]
+Consequently, on the periodic cycle of $R_k$, the start with numerator $1$ occurs at time $s=(-S_k)\bmod T_k$, so any discrepancy bound tending to $0$ uniformly over starts on the cycle of $R_k$ (or uniformly over unit numerators modulo $Q_k$) requires $N/\log_b Q_k\to\infty$. In particular, for geometric schedules $m_j\asymp a^j$ ($a>1$), where $\log_b Q_k=S_k+O_b(1)\asymp m_{k+1}$, no start-uniform discrepancy estimate can establish normality on the shadowing window $N\asymp m_{k+1}$.
+\end{proposition}
+
+\begin{proof}
+For every $0\le n<L-h$, we have $b^n/Q\le b^{L-h-1}/b^L=b^{-h-1}<b^{-h}$, so the first $\min(N,L-h)$ orbit points of $1/Q$ lie in $[0,b^{-h})$. Testing discrepancy on the interval $[0,b^{-h})$ gives the displayed inequality immediately. Since $b^{S_k}/Q_k=R_k$, shifting by $s=(-S_k)\bmod T_k$ recovers $b^s R_k\equiv 1/Q_k\pmod1$. If $N/\log_b Q_k$ stays bounded on a subsequence, choosing $h=\lfloor\sqrt L\rfloor$ makes the lower bound bounded away from $0$.
+\end{proof}
+
+\begin{proposition}[Single-cycle averaged short-orbit cancellation]\label{prop:short-avg}
+\evidence{Paper proof using External input (weak$^*$ compactness and Stone--Weierstrass on $\T$)}
+Fix $b\ge3$, a prime $p\mid b-1$, and a nonzero integer harmonic $a$. With $G_k=p^{\max(0,E-g)}$ from \Cref{prop:prime-grids}, put $J_k=\ord_{G_k/\gcd(G_k,|a|)}(b)$ and $W_a(N;z)=N^{-1}\sum_{n=0}^{N-1}e(ab^nz)$. Then for every $k\ge1$ and every $N\ge1$,
+\begin{equation}\label{eq:short-avg}
+\frac{1}{T_k}\sum_{s=0}^{T_k-1}\bigl|W_a(N;b^sR_k)\bigr|^2
+\le\frac{1}{N^2}\sum_{r\bmod J_k}\#\{0\le i<N:i\equiv r\bmod J_k\}^2
+\le\frac1N+\frac1{J_k},
+\end{equation}
+with exact equality $1/N$ whenever $N\le J_k$. Consequently, for any sequence of lengths $N_k\to\infty$ (even subperiodic lengths $N_k=o(\log Q_k)$) and every $\varepsilon>0$,
+\[
+\frac{1}{T_k}\#\bigl\{0\le s<T_k:D_{N_k}(b^sR_k;b)>\varepsilon\bigr\}\longrightarrow0\qquad(k\to\infty).
+\]
+\end{proposition}
+
+\begin{proof}
+Expanding the square and averaging first over $s\in\{0,\dots,T_k-1\}$ gives
+\[
+\frac{1}{T_k}\sum_{s=0}^{T_k-1}\bigl|W_a(N;b^sR_k)\bigr|^2
+=\frac{1}{N^2}\sum_{0\le i,j<N}\widehat{\mu(R_k;b)}\bigl(a(b^i-b^j)\bigr).
+\]
+By \Cref{prop:prime-grids}(a), $\mu(R_k;b)$ is an average of shifted uniform grids of size $G_k$. The $m$-th Fourier coefficient of a shifted uniform grid of size $G_k$ vanishes unless $G_k\mid m$. Because $\gcd(G_k,b)=1$, we have $G_k\mid a(b^i-b^j)\iff (G_k/\gcd(G_k,|a|))\mid(b^{|i-j|}-1)\iff J_k\mid(i-j)$. Every diagonal term $i=j$ equals $1$, and every surviving off-diagonal term has absolute value at most $1$. Summing $1$ over all pairs $(i,j)$ with $i\equiv j\pmod{J_k}$ gives the first inequality of \eqref{eq:short-avg}, with exact equality $1/N$ when $N\le J_k$ (no off-diagonal pairs survive). Each residue class modulo $J_k$ contains at most $N/J_k+1$ indices in $\{0,\dots,N-1\}$, so
+\[
+\frac{1}{N^2}\sum_{r\bmod J_k}c_r^2\le\frac{1}{N^2}\Bigl(\frac{N}{J_k}+1\Bigr)\sum_{r\bmod J_k}c_r=\frac{1}{J_k}+\frac{1}{N}.
+\]
+
+Since $G_k\to\infty$ (\Cref{prop:prime-grids}(a)), for fixed $a\ne0$ we have $G_k/\gcd(G_k,|a|)\to\infty$ and therefore $J_k\to\infty$ (bounded orders $J_k\le M$ would force unbounded moduli to divide $\prod_{j=1}^M(b^j-1)$). Thus for every fixed $a\ne0$, the mean square \eqref{eq:short-avg} at $N=N_k$ tends to $0$.
+
+Finally, fix $\varepsilon>0$. We claim that there exist $M\ge1$ and $\eta>0$ such that every Borel probability measure $\nu$ on $\T$ with $|\widehat{\nu}(a)|\le\eta$ for all $1\le a\le M$ satisfies $D(\nu)\le\varepsilon$. Otherwise, for each $m\ge1$ there exists a probability measure $\nu_m$ with $|\widehat{\nu_m}(a)|\le 1/m$ ($1\le a\le m$) and $D(\nu_m)>\varepsilon$. By sequential weak$^*$ compactness of probability measures on $\T$ (\emph{External input} \cite{Billingsley99}), a subsequence $\nu_{m_r}$ converges weakly to a probability measure $\nu$ with $\widehat{\nu}(a)=0$ for all $a\ne0$, hence $\nu=\lambda$ by Stone--Weierstrass (\emph{External input} \cite{Rudin76}). Partitioning $\T$ into arcs of length at most $\varepsilon/4$ (all $\lambda$-continuity sets) and coupling within each arc via \Cref{lem:coupling}(a) gives $D(\nu_{m_r})\le\varepsilon/2+o(1)$, contradicting $D(\nu_{m_r})>\varepsilon$. Applying Markov's inequality to \eqref{eq:short-avg} for each $1\le a\le M$ and taking the finite union bound proves that the proportion of starts $s<T_k$ with $D_{N_k}(b^sR_k;b)>\varepsilon$ tends to $0$.
+\end{proof}
+
+\begin{remark}[Conditional transfer from numerator-specific bounds]\label{rem:conditional-short}\evidence{Conditional}
+Comparing \Cref{prop:worst-start} with \Cref{prop:short-avg} locates the remaining difficulty for slow minus-factor schedules squarely at the specific unshifted numerator $b^{S_k}\bmod Q_k$: almost all shifts on the cycle of $R_k$ have small short-orbit discrepancy, while the shift $-S_k\bmod T_k$ (numerator $1$) fails completely. \emph{Conditionally} on a numerator-specific estimate $D_{m_{k+1}}(R_k;b)=o(1)$, the geometric tail bound $0<R-R_k\le C_b b^{-m_{k+1}}$ transfers directly to $D_{m_{k+1}}(R;b)=o(1)$ along those prefixes, and a uniform intermediate bound $\sup_{m_k\le N\le m_{k+1}}D_N(R_k;b)=o(1)$ would yield full normality of $R$. No such short-orbit bound is proved or used in this paper.
+\end{remark}
+
+\section{Reciprocal separation and digit transitions for \texorpdfstring{$X_{b,m}$ and $P_b$}{X(b,m) and P(b)}}\label{sec:partitions}
+
+Write $d_1,d_2,\dots\in\{0,\dots,b-1\}$ for the canonical base-$b$ digits of a real number. A \emph{constant run of length $h$ after position $n\ge0$} means $d_{n+1}=d_{n+2}=\cdots=d_{n+h}$, and a \emph{digit transition} is an index $j\ge1$ with $d_j\ne d_{j+1}$. Let $F_b=(b-1)^{-1}\Z/\Z$ be the set of fixed points of $T_b$ on $\T$. Notice that $\operatorname{dist}_{\T}(t,F_b)=\dist{(b-1)t}/(b-1)$ detects departure from every constant-digit run in every radix $b\ge2$.
+
+\subsection{Finite fixed-point discrepancy inequality and reciprocal separation}
+
+We begin with a short, self-contained proof of the finite fixed-point distance inequality needed to pass from orbit escapes to quantitative discrepancy gaps.
+
+\begin{lemma}[Finite fixed-point discrepancy inequality]\label{lem:fixed-gap}\evidence{Paper proof}
+For every real $z\in\R$, every integer radix $b\ge2$, and every $N\ge1$,
+\begin{equation}\label{eq:fixed-gap}
+1-D_N(z;b)\ge\frac25\min_{c_0\in F_b}M_N(z-c_0;b)-\frac1N.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Set $\delta=1-D_N(z;b)\in[0,1]$ and fix any $\delta'>\delta$. Since $D_N(z;b)>1-\delta'$, passing to the complement if needed gives a half-open circular arc $A\subset\T$ with $\nu_N(z;b)(A)-|A|>1-\delta'$, so $|A|<\delta'$ and the index set $S=\{0\le n<N:t_n:=\{b^nz\}\in A\}$ satisfies $|S|>(1-\delta')N$.
+
+If $N(1-2\delta')\le1$, then $\delta'\ge\frac12-\frac{1}{2N}$, and since $\dist{w}\le\frac12$ everywhere we have $\frac25\min_{c_0\in F_b}M_N(z-c_0;b)-\frac1N\le\frac15-\frac1N<\delta'$.
+
+Otherwise $N(1-2\delta')>1$. Then $S\cap\{0,\dots,N-2\}$ and $(S-1)\cap\{0,\dots,N-2\}$ each have cardinality strictly greater than $(1-\delta')N-1$, so their intersection is nonempty: there exists $n\in\{0,\dots,N-2\}$ with both $t_n\in A$ and $t_{n+1}\in A$. Let $u\in\T$ be the midpoint of $A$, so $\dist{t-u}\le|A|/2<\delta'/2$ for all $t\in A$. Since $t_{n+1}\equiv bt_n\pmod1$,
+\[
+\dist{(b-1)u}=\dist{bu-u}\le\dist{bu-bt_n}+\dist{t_{n+1}-u}\le b\dist{u-t_n}+\dist{t_{n+1}-u}<\frac{b+1}{2}\delta'.
+\]
+Hence there exists $c_0\in F_b$ with $\dist{u-c_0}=\dist{(b-1)u}/(b-1)<\frac{b+1}{2(b-1)}\delta'\le\frac32\delta'$ (using $b\ge2$). Because $T_b(c_0)=c_0$, we have $\dist{b^m(z-c_0)}=\dist{t_m-c_0}$ for all $m$. For $m\in S$, $\dist{t_m-c_0}\le\dist{t_m-u}+\dist{u-c_0}<2\delta'$; for the at most $\delta'N$ indices $m\notin S$, $\dist{t_m-c_0}\le\frac12$. Averaging over $0\le m<N$ yields
+\[
+M_N(z-c_0;b)<2\delta'+\frac12\delta'=\frac52\delta'\le\frac52\Bigl(\delta'+\frac1N\Bigr).
+\]
+Thus $\frac25\min_{c_0\in F_b}M_N(z-c_0;b)-\frac1N\le\delta'$ in both cases; letting $\delta'\downarrow\delta$ proves \eqref{eq:fixed-gap}.
+\end{proof}
+
+\begin{lemma}[Reciprocal separation lemma]\label{lem:recip-sep}\evidence{Paper proof}
+Fix an integer radix $b\ge2$ and a real number $V>0$, and put $Z=1/V$. Suppose $U=A/b^s>0$ is a terminating base-$b$ rational ($A,s\in\Z_{\ge1}$) with $\gcd(A,b)=1$, $A>b-1$, $U$ lying in a fixed compact subinterval $[U_-,U_+]\subset(0,\infty)$, and $|U-V|\le Cb^{-s-g}$ for some $C>0$ and $g\ge1$. Then there exist constants $c_1,c_2>0$ depending only on $b,V,U_-,U_+,C$ such that, for every integer $n\ge0$ with $n+c_1\le g$:
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item $\dist{(b-1)b^n Z}\ge\frac{1}{2A}$;
+\item every constant-digit run of $Z$ starting after position $n$ has length at most $s+c_2$;
+\item there exists an integer $j\in[n,\,n+s+c_2]$ such that $\dist{(b-1)b^j Z}\ge\frac{1}{2b}$, i.e.\ $\operatorname{dist}_{\T}(b^j Z,F_b)\ge\frac{1}{2b(b-1)}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Since $\gcd(A,b)=1$ and $A>b-1$, $A$ cannot divide $(b-1)b^{n+s}$, so $(b-1)b^{n+s}/A\notin\Z$, giving $\dist{(b-1)b^n/U}\ge 1/A$. Meanwhile, the factor $b^{-s}$ cancels identically in the reciprocal error:
+\[
+(b-1)b^n\Bigl|Z-\frac1U\Bigr|
+=(b-1)b^n\frac{|U-V|}{UV}
+\le\frac{(b-1)C b^{n-s-g}}{(A/b^s)V}
+=\frac{(b-1)C b^{n-g}}{AV}.
+\]
+Choosing $c_1\ge\log_b(2(b-1)C/V)$, the condition $n+c_1\le g$ forces $(b-1)b^n|Z-1/U|\le 1/(2A)$, proving (a).
+
+For (b), if $d_{n+1}=\cdots=d_{n+h}=d\in\{0,\dots,b-1\}$, summing the geometric series gives $|\fr{b^nZ}-d/(b-1)|\le b^{-h}$, hence $\dist{(b-1)b^nZ}\le(b-1)b^{-h}$. Combining with (a) and $A=Ub^s\le U_+b^s$ yields $b^h\le 2(b-1)U_+b^s$, so $h\le s+\log_b(2(b-1)U_+)$.
+
+For (c), note that whenever $\dist{y}<1/(2b)$ we have $\dist{by}=b\dist{y}$ identically. Starting from $y_0=(b-1)b^nZ$ with $\dist{y_0}\ge 1/(2A)$, iterating multiplication by $b$ must reach $\dist{(b-1)b^jZ}\ge 1/(2b)$ within at most $\max(0,\lceil\log_b(A/b)\rceil)\le s+\lceil\log_b(U_+/b)\rceil+1$ steps. Taking $c_2=\lceil\log_b(2(b-1)U_+)\rceil+1$ establishes both (b) and (c).
+\end{proof}
+
+\subsection{Mahler's \texorpdfstring{$m$-ary partition constants $X_{b,m}$ and Euler's $P_b$}{m-ary partition constants X(b,m) and Euler's P(b)}}
+
+\begin{theorem}[Mahler's $m$-ary partition constants $X_{b,m}$]\label{thm:mahler}\evidence{Paper proof}
+Let $b\ge2$ and $m\ge3$, and put $Y_{b,m}=\prod_{i\ge0}(1-b^{-m^i})$ and $X_{b,m}=1/Y_{b,m}$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item Every constant-digit run of $X_{b,m}$ starting after position $n\ge0$ has length at most $\frac{m}{m-2}n+O_{b,m}(1)$.
+\item Among the first $N\ge2$ base-$b$ digits of $X_{b,m}$, there are $\gg_{b,m}\log N$ digit transitions and $\gg_{b,m}\log N$ indices $j<N$ with $\operatorname{dist}_{\T}(b^jX_{b,m},F_b)\ge\frac{1}{2b(b-1)}$. Consequently, $1-D_N(X_{b,m};b)\gg_{b,m}(\log N)/N$.
+\item Writing $s_k=(m^k-1)/(m-1)$, $A_k=\prod_{i=0}^{k-1}(b^{m^i}-1)$, and $M_k=m^k$ ($k\ge1$), the orbit satisfies the exact signed recurrence
+\begin{equation}\label{eq:mahler-rec}
+b^{M_k-s_k}\bigl(A_k X_{b,m}-b^{s_k}\bigr)=1+O_b\bigl(b^{-M_k}\bigr).
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a)--(b) For each $k\ge2$, truncate the product $Y_{b,m}$ before $i=k$, obtaining $U_k=\prod_{i=0}^{k-1}(1-b^{-m^i})=A_k/b^{s_k}$ with $s_k=(m^k-1)/(m-1)$ and $A_k=\prod_{i=0}^{k-1}(b^{m^i}-1)$. Clearly $\gcd(A_k,b)=1$, and since $k\ge2$ we have $A_k\ge(b-1)(b^m-1)>b-1$. Because $0<Y_{b,m}<U_k<1$, the truncations lie in the compact interval $[Y_{b,m},1]$. The product inequality $1-\prod_{i\ge k}(1-b^{-m^i})\le\sum_{i\ge k}b^{-m^i}\le b^{-m^k}/(1-b^{-1})$ gives $|U_k-Y_{b,m}|\le C_b b^{-s_k-g_k}$ with $C_b=1/(1-b^{-1})$ and exact gap
+\[
+g_k:=m^k-s_k=\bigl((m-1)s_k+1\bigr)-s_k=(m-2)s_k+1.
+\]
+Given $n\ge0$, let $k\ge2$ be the least integer with $g_k\ge n+c_1$, where $c_1$ is the constant of \Cref{lem:recip-sep}. If $k\ge3$, minimality gives $(m-2)s_{k-1}+1<n+c_1$; since $s_k=ms_{k-1}+1$, it follows that
+\[
+s_k\le\frac{m}{m-2}(n+c_1)+1=\frac{m}{m-2}n+O_{b,m}(1).
+\]
+Applying \Cref{lem:recip-sep}(b)--(c) gives the run bound of (a) and guarantees that, for every sufficiently large $n$, both a digit transition and an escape $\operatorname{dist}_{\T}(b^jX_{b,m},F_b)\ge 1/(2b(b-1))$ occur inside $[n,C_{b,m}n]$ for a constant $C_{b,m}>1$. Taking disjoint geometric intervals $[n_r,C_{b,m}n_r]$ with $n_{r+1}=\lfloor C_{b,m}n_r\rfloor+1$ yields $\gg_{b,m}\log N$ transitions and $\gg_{b,m}\log N$ escapes before $N$. Since each escape contributes at least $1/(2b(b-1))$ to $\sum_{j<N}\dist{b^j(X_{b,m}-c_0)}$ uniformly for every $c_0\in F_b$, \Cref{lem:fixed-gap} gives $1-D_N(X_{b,m};b)\gg_{b,m}(\log N)/N$ (for small $N\ge2$ the bound holds by adjusting the implied constant, since $X_{b,m}$ is not in $F_b$).
+
+(c) By definition $A_kX_{b,m}/b^{s_k}=\prod_{j\ge k}(1-b^{-m^j})^{-1}$. The first factor is $(1-b^{-M_k})^{-1}=1+b^{-M_k}+O_b(b^{-2M_k})$, and since $m\ge3$ the remaining factors satisfy $\prod_{j>k}(1-b^{-m^j})^{-1}=1+O_b(b^{-mM_k})=1+O_b(b^{-3M_k})$. Subtracting $1$ and multiplying by $b^{M_k}$ proves \eqref{eq:mahler-rec}.
+\end{proof}
+
+Expanding $A_k=\prod_{i=0}^{k-1}(b^{m^i}-1)$ turns \eqref{eq:mahler-rec} into an explicit signed relation among $2^k$ binary-subset shifts of the radix orbit of $X_{b,m}$, directly connecting the reciprocal orbit to the Mahler product $Y(z)=(1-z)Y(z^m)$ without assuming any automaton or frequency transfer for the digits of $X_{b,m}$.
+
+\begin{theorem}[Euler's partition constant $P_b$ and its partial products $R_k^{(E)}$]\label{thm:euler}
+\evidence{Paper proof using External input (Euler's pentagonal number theorem)}
+Let $b\ge2$, $E_b=\prod_{j\ge1}(1-b^{-j})$, $P_b=1/E_b$, and $R_k^{(E)}=\prod_{j=1}^k(1-b^{-j})^{-1}$.
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item Every constant-digit run of $P_b$ starting after position $n\ge0$ has length at most $\frac38n^2+O_b(n+1)$.
+\item Among the first $N\ge3$ base-$b$ digits of $P_b$, there are $\gg_b\log\log N$ digit transitions and $\gg_b\log\log N$ indices $j<N$ with $\operatorname{dist}_{\T}(b^jP_b,F_b)\ge\frac{1}{2b(b-1)}$.
+\item For all $N\ge3$ and $k\ge3$,
+\[
+1-D_N(P_b;b)\gg_b\frac{\log\log N}{N},\qquad
+1-D_k(R_k^{(E)};b)\gg_b\frac{\log\log k}{k}.
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By Euler's pentagonal number theorem (\emph{External input} \cite[Chapter~1]{Andrews1976}, \cite{EulerE541}), evaluated at $z=1/b$ inside its disk of absolute convergence,
+\[
+E_b=1+\sum_{i=1}^\infty(-1)^i\Bigl(b^{-i(3i-1)/2}+b^{-i(3i+1)/2}\Bigr).
+\]
+For each integer $i\ge2$, truncate the series through the term $b^{-s_i}$ where $s_i=i(3i+1)/2$, obtaining $U_i=A_i/b^{s_i}$. Because the final term has coefficient $(-1)^i$, we have $A_i\equiv(-1)^i\pmod b$, so $\gcd(A_i,b)=1$. Moreover, since $i\ge2$, $s_i\ge7$ and $U_i\to E_b>0$ lies in a compact subinterval $[U_-,U_+]\subset(0,\infty)$, so $A_i=U_ib^{s_i}>b-1$ for all $i\ge2$ (checked explicitly for $b=2,i=2$: $U_2=1-2^{-1}-2^{-2}+2^{-5}+2^{-7}=37/128$, $A_2=37>1$; for $b\ge3,i\ge2$: $U_i\ge 1-b^{-1}-b^{-2}\ge 5/9$ and $b^7\cdot\frac59>b-1$). The next exponent in the pentagonal series is $(i+1)(3i+2)/2=s_i+2i+1$, so the gap is $g_i=2i+1$ and the tail satisfies $|U_i-E_b|\le\frac{1}{1-b^{-1}}b^{-s_i-g_i}$.
+
+For any $n\ge0$, take $i=\max(2,\lceil(n+c_1)/2\rceil)$, where $c_1$ is the constant of \Cref{lem:recip-sep}. Then $g_i=2i+1\ge n+c_1$ and $s_i=\frac32i^2+\frac12i=\frac38n^2+O_b(n+1)$. \Cref{lem:recip-sep}(b)--(c) gives the run bound (a) and guarantees both a transition and an escape from $F_b$ inside $[n,C_b n^2]$ for all sufficiently large $n$. Forming disjoint intervals $[n_r,C_b n_r^2]$ with $n_{r+1}=\lfloor C_b n_r^2\rfloor+1$, the quantities $\log n_r$ grow at most geometrically, yielding $\gg_b\log\log N$ transitions and $\gg_b\log\log N$ escapes before $N\ge3$. Applying \Cref{lem:fixed-gap} gives $1-D_N(P_b;b)\gg_b(\log\log N)/N$.
+
+For the rational partial product $R_k^{(E)}$ ($k\ge3$), the product tail inequality yields
+\[
+0<P_b-R_k^{(E)}=P_b\left(1-\prod_{j>k}(1-b^{-j})\right)\le P_b\sum_{j>k}b^{-j}=\frac{P_b}{(b-1)b^k}.
+\]
+Summing the circle perturbation over the first $k$ orbit times gives
+\[
+\sum_{j=0}^{k-1}b^j\bigl|P_b-R_k^{(E)}\bigr|
+\le\frac{P_b}{(b-1)b^k}\cdot\frac{b^k-1}{b-1}
+<\frac{P_b}{(b-1)^2}.
+\]
+Since $t\mapsto\dist{t-c_0}$ is $1$-Lipschitz on $\T$, for every $c_0\in F_b$ we obtain
+\[
+k\,M_k\bigl(R_k^{(E)}-c_0;b\bigr)
+\ge k\,M_k(P_b-c_0;b)-\frac{P_b}{(b-1)^2}
+\ge \frac{\#\{\text{escapes of }P_b\text{ before }k\}}{2b(b-1)}-\frac{P_b}{(b-1)^2}.
+\]
+Because the number of escapes of $P_b$ before $k$ is $\gg_b\log\log k$ while $P_b/(b-1)^2=O_b(1)$, \Cref{lem:fixed-gap} at $N=k$ gives $1-D_k(R_k^{(E)};b)\gg_b(\log\log k)/k$ for all sufficiently large $k$, and hence for all $k\ge3$ after adjusting the implied constant (since $R_k^{(E)}\notin F_b$, as $b^k-1$ is divisible by factors beyond $b-1$ for $k\ge3$, so $D_k(R_k^{(E)};b)<1$).
+\end{proof}
+
+Notice that the proof of \Cref{thm:euler}(c) transfers \emph{orbit distances} to $F_b$, not individual digits, because equality of all $k$ digits of $R_k^{(E)}$ and $P_b$ would require cylinder-boundary margins. The bound on $R_k^{(E)}$ operates at the actual initial numerator $b^{k(k+1)/2}$ on length $N=k$, completely independently of complete-period estimates (whose period satisfies $\log T_k^{(E)}=(\frac12-\frac{3}{\pi^2})k^2\log b+O_b(k\log^2 k)$).
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Constant (base $2$, first $256$ certified bits) & $X_{2,3}$ & $X_{2,4}$ & $X_{2,5}$ & $P_2=1/E_2$ \\
+\midrule
+Digit transitions (out of $255$ adjacent pairs) & $131$ & $138$ & $146$ & $111$ \\
+\bottomrule
+\end{tabular}
+\caption{Exact digit-transition counts in certified $256$-bit binary prefixes computed by \nolinkurl{scripts/phase25_partitions_reciprocals.py}. These are \emph{finite measurements only}; they do not establish any limiting density, $D^+<1$, or normality property.}\label{tab:finite-meas}
+\end{table}
+
+\section{Open questions}\label{sec:questions}
+
+\begin{question}[Inverse measure-realization problem and non-zero Dirac rigidity]\label{q:dirac}
+For an integer radix $b\ge2$, let $\mathcal{R}_b$ be the set of Borel probability measures $\mu$ on $\T$ realized as $\lim_{N\to\infty}\nu_N(1/x;b)=\mu$ along all prefixes for some irrational $x\in M_b$. \Cref{thm:A} proves $\mathcal{R}_b\supseteq\{\mu_\alpha:\alpha\in[0,1]\}$, and rational-orbit $+1$-inversion \cite{PaperXIII} places periodic orbit measures $\mu(r;b)$ in $\mathcal{R}_b$ whenever $2\in\langle b\rangle\pmod{\den_{\perp b}(r)}$. Which further $T_b$-invariant measures belong to $\mathcal{R}_b$?
+
+In particular, suppose $b\ge3$, $D\mid(b-1)$ with $D\ge2$, and $r\not\equiv0\pmod D$ (so $r/D$ is a non-zero fixed point of $T_b$). Can the Dirac measure $\delta_{r/D}$ belong to $\mathcal{R}_b$? The cleanest test cases are $b=3$ with $\delta_{1/2}$ (an irrational $x\in M_3$ whose reciprocal $1/x$ has base-$3$ digit $1$ with density $1$) and $b=10$ with $\delta_{1/3}$ (digits of $1/x$ equal to $3$ with density $1$). Neither mechanism used in this paper reaches $\delta_{r/D}$ for $D\ge3$: any cyclotomic band factor $G$ preserving $\delta_{r/D}$ satisfies $G\equiv1\pmod D$, which forces $G=1$ for every $D\ge3$ (while at $D=2$, e.g.\ $b=3$, nontrivial cyclotomic factors such as $\Phi_6/\Phi_3$ still fail to create zero bands on $x$, though single-step contraction can occur), and any cut-and-fold fold-band applies a multiplier $1+b^t\equiv2\pmod D$, moving mass at $r/D$ to $2r/D\not\equiv r/D\pmod1$. Whether $\delta_{r/D}\notin\mathcal{R}_b$ holds unconditionally remains open.
+\end{question}
+
+\begin{question}[Simultaneous multi-radix reciprocal spectra]\label{q:multiradix}
+In \Cref{thm:A}, the witness $x=x(b,\alpha)\in M_b$ depends on the radix $b$. Given two multiplicatively independent radices $b_1,b_2\ge2$ and targets $\alpha_1,\alpha_2\in(0,1)$, does there exist a single irrational $x\in M_{b_1}\cap M_{b_2}$ with $D_N(1/x;b_i)\to\alpha_i$ for $i=1,2$? Even for powers of a single radix $b$, while coprimality of periods to a single fixed $k\ge2$ can be maintained in \Cref{lem:cutfold}, whether a single irrational $x\in M_b$ can realize $\nu_N(1/x;b^k)\Rightarrow\mu_\alpha$ simultaneously for all $k\ge1$ is open.
+\end{question}
+
+\begin{question}[Effective discrepancy spectra and one-sided atom splits]\label{q:effective}
+For a prescribed $\alpha\in(0,1)$ and radix $b\ge2$, does there exist an irrational $x\in M_b$ with $D_N(1/x;b)=\alpha+O(r(N))$ for an explicit rate $r(N)\to0$ (for example $r(N)=(\ln N)^{-c}$)? Separately, for the witnesses of \Cref{thm:A}, while $f_{0^L}(N)+f_{(b-1)^L}(N)\to\alpha+2(1-\alpha)b^{-L}$, do the individual frequencies $f_{0^L}(N)$ and $f_{(b-1)^L}(N)$ converge separately (corresponding to a well-defined one-sided split $\alpha=\alpha^++\alpha^-$ of the atom at $0$), and can every split $\alpha^+/\alpha^-$ be prescribed?
+\end{question}
+
+\begin{question}[Single-factor products and sub-doubly-exponential schedules]\label{q:single-factor}
+The witnesses of \Cref{thm:A} are constructed from ratios $(1-b^{-m})/(1-b^{-q})$ rather than single-factor products $\prod_{k\ge1}(1\pm b^{-m_k})^{-1}$. Which intermediate targets $\alpha\in(0,1)$ are attained as exact limits $D_N(1/x;b)\to\alpha$ within the single-factor product family outside the hypothesis of \Cref{prop:prime-grids}(b)? Likewise, does any strictly increasing minus-factor schedule with sub-doubly-exponential period growth give $x\in M_b$ and a base-$b$ normal reciprocal? \Cref{prop:worst-start} rules out a start-uniform proof on geometric schedules, leaving cancellation at the specific starting phase $S_k\bmod T_k$ unresolved.
+\end{question}
+
+\begin{question}[Classical partition constants $X_{b,m}$ and $P_b$]\label{q:classical-part}
+For Mahler's constants $X_{b,m}$ ($m\ge2$) and Euler's partition constant $P_b=1/E_b$, determine whether $D^+(X_{b,m};b)<1$ or $D^+(P_b;b)<1$ (which would in particular exclude membership in $K_b$), or whether either constant has a positive lower density of digit transitions or escapes from $F_b$. \Cref{thm:mahler,thm:euler} supply growing counts whose proven proportion tends to $0$.
+\end{question}
+
+\section{Verification and data availability}\label{sec:verification}
+
+No theorem in this manuscript is kernel-verified in Lean~4. Every theorem, proposition, and lemma is a \emph{Paper proof}, with external inputs explicitly identified:
+\begin{itemize}[nosep]
+\item \Cref{thm:A} and \Cref{thm:allradix} use the Stone--Weierstrass theorem on $\T$ \cite{Rudin76} and the Portmanteau theorem on continuity sets \cite{Billingsley99}.
+\item \Cref{thm:B} and \Cref{thm:toeplitz-sharp} use standard measure theory on $\T$ (Lebesgue decomposition, inner/outer regularity, Riemann--Lebesgue) and Portmanteau for open sets \cite{Billingsley99}; the general Szeg\H{o}--Kolmogorov--Krein theorem \cite{GrenanderSzego58,Simon05} is cited for context only and is not used.
+\item \Cref{thm:C}(iii) and \Cref{prop:short-avg} use sequential weak$^*$ compactness of probability measures on $\T$ \cite{Billingsley99} and Stone--Weierstrass \cite{Rudin76}.
+\item \Cref{thm:D}(ii) and \Cref{thm:euler} use Euler's pentagonal number theorem at $z=1/b$ \cite[Chapter~1]{Andrews1976}, \cite{EulerE541}.
+\item \Cref{rem:dyadic-boundary} cites Bugeaud--Corvaja--Zannier \cite{BCZ03} for context only; no proof in this paper uses \cite{BCZ03}.
+\item \Cref{rem:conditional-short} is \emph{Conditional}, and \Cref{q:dirac,q:multiradix,q:effective,q:single-factor,q:classical-part} are \emph{Open}.
+\end{itemize}
+
+Exact finite checks of the algebraic identities, couplings, prime-power grids, collision counts, reciprocal-separation instances, and Euler orbit windows are provided by the Python standard-library script \nolinkurl{scripts/phase25_partitions_reciprocals.py} in the repository \url{https://github.com/eldernos/MathematicsResearch} (pinned at commit \nolinkurl{c06c97dd7d942bdf46d727aa58309869af88d5e7}). Running \ttt{python -B} \nolinkurl{scripts/phase25_partitions_reciprocals.py} executes exclusively in exact \ttt{int}/\ttt{Fraction} arithmetic with zero floating-point operations and verifies:
+\begin{itemize}[nosep]
+\item $15$ dyadic padding updates across $e\in\{1,\dots,5\}$ and a composed $936$-position binary contraction (\Cref{prop:dyadic-ops});
+\item $15$ coprime-period cut-and-fold updates across bases $2,3,4,5,10$ (including exact pair multiplicities in $\mu*\mu$ and exact cycle couplings), plus the rational factorization \eqref{eq:fourier-map} (\Cref{lem:cutfold}, \Cref{thm:allradix});
+\item $16$ minus-factor product denominators across bases $3,4,5,7,10$ (exact prime-power grids, combinatorial collision counts for \eqref{eq:short-avg}, and worst-start bounds of \Cref{prop:prime-grids,prop:worst-start,prop:short-avg});
+\item $152$ reciprocal-separation instances across bases $2,3,5,10$ for $X_{b,m}$ and $P_b$, and $16$ actual initial Euler orbit windows for $R_k^{(E)}$ ($b\in\{2,3,5,10\}$, $k\in\{16,32,64,128\}$; the conservative lower bound $\frac25\text{lower}/k-1/k$ is strictly positive on the four windows $(b,k)\in\{(2,64),(2,128),(3,64),(3,128)\}$ and negative, hence vacuous, on the remaining $12$ windows).
+\end{itemize}
+These checks are \emph{Finite certificates} on their tested instances and do not substitute for the written proofs. The $256$-bit transition counts in \Cref{tab:finite-meas} are \emph{finite measurements only}. The statement-by-statement verification map, exact reproducible \LaTeX\ build record, and novelty ledger are recorded in \ttt{VERIFICATION.md} and \ttt{LEDGER.md} in \nolinkurl{papers/15-reciprocal-discrepancy-spectra/}.
+
+\section{Use of AI tools}\label{sec:ai}
+
+This manuscript was produced in an AI-assisted research project. Large language models proposed proof strategies, drafted the proofs and text, implemented the exact Python finite-certificate verifiers, and conducted cross-provider audits of the underlying research notes. The repository owner directed the project and is responsible for any release. The written proofs, literature comparisons, and priority statements have been checked only by AI models from different providers. They have not been checked by an independent human expert. Cross-model review is not independent human peer review. This manuscript is an unreleased candidate draft.
+
+\bibliographystyle{plainurl}
+\bibliography{references}
+\end{document}

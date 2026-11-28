@@ -556,7 +556,7 @@ Let *E* be the sum of 1/(2ᵐ − 1) over *m* ≥ 1. Fix an odd integer *h* and 
 ```
 '''
 scope = '''
-The kernel inequality takes the observed word count as input. Starts in the final *k* − 1 positions are eligible. CC-21 supplies a positive proportional count on specified windows by an external paper theorem. Captain Sude’s separate elementary Lean release gives an unconditional prefix count of at least *N* exp(−70000(log log *N*)³) for each fixed word at sufficiently large *N*. Both word counts come from the sources cited in the note. The finite transfer also holds for any real number.
+The kernel inequality takes the observed word count as input. Starts in the final *k* − 1 positions are eligible. CC-21 records Mira Cult’s external paper claim for a positive proportional count on specified windows (whose residual analytic induction steps remain unverified internally per GF-18 and BC-37, so D⁺(E; 2) < 1 is not promoted on the benchmark roster). Captain Sude’s separate elementary Lean release gives an unconditional prefix count of at least *N* exp(−70000(log log *N*)³) for each fixed word at sufficiently large *N*. Both word counts come from the sources cited in the note. The finite transfer also holds for any real number.
 '''
 lean = [
   "NormalityChecker.ErdosBorweinAudit.erdosBorwein_window_fourier",
@@ -574,7 +574,7 @@ statement = '''
 Fix a nonempty binary word *w* and 7/12 < *a* ≤ 1. In the expansion of the Erdős–Borwein constant *E* from CC-20, every sufficiently late window of *H* digits after digit *N*, with *N*ᵃ ≤ *H* ≤ *N*, contains at least *c*<sub>*a*,*w*</sub>*H* wholly contained copies of *w*, for some *c*<sub>*a*,*w*</sub> > 0. In particular every fixed word has positive ordinary lower density.
 '''
 scope = '''
-This is Mira Cult’s November 2026 short-window theorem. The independent written audit derives the weighted local estimate for exact prime counts using polynomial upper and lower bounds and checks the passage to ordinary digit counts. With CC-20 the theorem gives a Fourier norm bounded away from one on these windows for each fixed nonzero frequency after division by *H*. Binary normality, which requires the correct limiting frequency for every word, remains open.
+This is Mira Cult’s November 2026 external short-window claim (claim 0002). The repository’s Phase 13 written audit derives the weighted local estimate for exact prime counts using polynomial upper and lower bounds and checks the passage to ordinary digit counts, while recording residual unverified induction/analytic steps (noted in GF-18, GF-48, and BC-37). Consequently, although combining an independently verified CC-21 with CC-20 would give a Fourier norm bounded away from one and D⁺(E; 2) < 1 on these windows, BC-37 keeps discrepancy_status = "open" and digit_frequency_status = "open" pending full independent verification of those analytic inputs. Binary normality, which requires the correct limiting frequency for every word, remains open.
 '''
 proof = ["notes/phase13/reviews/erdos-local-limit.md", "notes/phase13/erdos-borwein.md#audit-of-the-november-proof"]
 inputs = ["Mira Cult, Erdős–Borwein positive word density, claim 0002 (November 2026).", "Huxley–Iwaniec’s short-interval Bombieri–Vinogradov estimate in the range stated by Perelli, Pintz and Salerno."]

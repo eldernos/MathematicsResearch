@@ -155,3 +155,5 @@ public import NormalityChecker.Phase23Cores
 public import NormalityChecker.DigitMassTransfer
 public import NormalityChecker.Phase24Cores
 public import NormalityChecker.NafGeometricTransfer
+public import NormalityChecker.HankelDeterminants
+public import NormalityChecker.ToeplitzDeterminants

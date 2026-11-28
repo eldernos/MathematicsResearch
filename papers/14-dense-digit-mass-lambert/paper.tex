@@ -3,7 +3,11 @@
 \input{../common/byline.tex}
 \hypersetup{pdftitle={Digit-Mass Transfer and Nonnormality of Dense Arithmetic Lambert Series}}
 \DeclareMathOperator{\odd}{odd}
-\newcommand{\ttt}[1]{\texttt{#1}}
+% \ttt{...}: typewriter text in which every \_ is a permitted line break, so that long Lean
+% identifiers and file names do not overrun the margin.
+\newcommand{\ttbreak}{\discretionary{}{}{}}
+\newcommand{\ttt}[1]{\texttt{\begingroup\def\_{\textunderscore\ttbreak}#1\endgroup}}
+\newcommand{\tpath}[1]{\nolinkurl{#1}}
 \newcommand{\Ctrue}{C_{\mathrm{true}}}
 \newcommand{\wpm}{w_{\pm}}
 \newcommand{\tr}{\mathrm{tr}}
@@ -13,10 +17,15 @@
 \newcommand{\phaseXXIIcommit}{8ca43095887858bf9697b6a8332c6a6dd0b0cda3}
 \newcommand{\phaseXXIIIcommit}{cb395159c6e343c60c1413719cdfc8429e15af2c}
 \newcommand{\phaseXXIVcommit}{04969b91f0c897ce55d21cb62c6b2c5aa3affe97}
+\newcommand{\phaseXXVcommit}{c06c97dd7d942bdf46d727aa58309869af88d5e7}
+% \commitref{hash}: the full 40-hex commit, breakable anywhere, linked to its GitHub commit page.
+\newcommand{\commitref}[1]{\href{https://github.com/eldernos/MathematicsResearch/commit/#1}{\expandafter\nolinkurl\expandafter{#1}}}
 \newcommand{\leanT}[3]{\leanat{\phaseXXIIcommit}{#1}{#2}{#3}}
 \newcommand{\leanU}[3]{\leanat{\phaseXXIIIcommit}{#1}{#2}{#3}}
 % \leanW{declaration}{line}: NormalityChecker/DigitMassTransfer.lean pinned at Phase 24 commit \phaseXXIVcommit.
 \newcommand{\leanW}[2]{\leanat{\phaseXXIVcommit}{DigitMassTransfer}{#2}{\ttt{#1}}}
+% \leanX{declaration}{line}: NormalityChecker/NafGeometricTransfer.lean pinned at Phase 25 commit \phaseXXVcommit.
+\newcommand{\leanX}[2]{\leanat{\phaseXXVcommit}{NafGeometricTransfer}{#2}{\ttt{#1}}}
 \renewcommand{\ReleaseLabel}{candidate draft, not yet released}
 \setlength{\emergencystretch}{3em}
 
@@ -24,15 +33,20 @@
 \begin{center}
 {\LARGE\bfseries Digit-Mass Transfer and Nonnormality\\[3pt] of Dense Arithmetic Lambert Series\par}
 \vspace{10pt}
-\makebyline{1.0 (candidate draft)}{28 November 2026}
+\makebyline{1.1 (candidate draft)}{28 November 2026}
 \end{center}
 
 \begin{abstract}
-For an integer radix $b\ge2$, an integer $k\ge1$ and a slowly growing coefficient sequence $a(n)\ge0$, the base-$b$ digits of $x=\sum_{n\ge1}a(n)b^{-kn}$ arise by adding the shifted base-$b$ expansions of the coefficients. Carries can only destroy digit mass. We make this \emph{digit-mass transfer} exact and apply it to dense arithmetic Lambert series such as the generalized Erd\H{o}s--Borwein constants $E(2^k)=\sum_{m\ge1}1/(2^{km}-1)=\sum_{n\ge1}\tau(n)2^{-kn}$.
+For an integer radix $b\ge2$, an integer $k\ge1$ and a slowly growing coefficient sequence $a(n)$, the base-$b$ digits of $x=\sum_{n\ge1}a(n)b^{-kn}$ arise by adding the shifted base-$b$ expansions of the coefficients. For nonnegative coefficients, carries can only destroy digit mass. For signed coefficients, the non-adjacent form (NAF) of the prefix integer takes over the same role. We make both transfers exact and apply them to the two classical generalized Erd\H{o}s--Borwein families
+\[
+E(2^k)=\sum_{m\ge1}\frac1{2^{km}-1}=\sum_{n\ge1}\tau(n)2^{-kn},\qquad E_+(2^k)=\sum_{m\ge1}\frac1{2^{km}+1}=\sum_{n\ge1}a_+(n)2^{-kn}.
+\]
 
-The base-$b$ Kummer identity, subadditivity of digit sums and nonzero-digit counts, the exact prefix decomposition, an elementary Dirichlet-convolution mean-value theorem, a local binary digit-sum identity and the bound $C\le 29/20$ for the multiplicative majorant of $s_2(\tau(n))$ are kernel-verified in Lean~4. So is the resulting classification: for every $k\ge3$, $\limsup_N f_1(N;E(2^k))\le 29/(20k)<1/2$, the lower extreme discrepancy satisfies $D^-(E(2^k);2)\ge 1/120$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$. Written proofs with outward-rounded finite certificates sharpen this. The exact mean of $s_2(\tau(n))$ is $\Ctrue\in[1.339103,1.339116]$, and $D^-(E(2^k);2)\to1$. Odd-divisor, higher-divisor, unitary and base-$b$ divisor families are shown to be simply nonnormal in the same way. For radices $b$ that are not powers of $2$, the Senge--Straus theorem shows that the mean base-$b$ digit mass of $\tau(n)$ is infinite. More generally, the mean base-$b$ digit mass of $\tau_r(n)$ is bounded if and only if $r$ and $b$ are multiplicatively dependent.
+\emph{The family $E(2^k)$.} For every $k\ge3$ the following are kernel-verified in Lean~4: the frequency of the binary digit $1$ satisfies $\limsup_N f_1(N;E(2^k))\le 29/(20k)<\frac12$; the lower extreme discrepancy satisfies $D^-(E(2^k);2)\ge\frac12-\frac{29}{20k}$; and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$. The formalization covers the base-$b$ Kummer identity, the exact prefix decomposition, an elementary Dirichlet-convolution mean-value theorem and the bound $29/20$ for a multiplicative majorant of the mean of $s_2(\tau(n))$.
 
-For the signed series $E_+(2^k)=\sum 1/(2^{kn}+1)$, a transfer of two's-complement transitions through the non-adjacent-form weight proves that $E_+(2^k)$ is not $2$-normal in base $2$ for $k\ge4$. The same transfer applies to cubic-character Lambert series. A minimal four-state transducer computes the free-boundary signed-digit weight $A_L=\frac13-\frac{7-(-1/2)^{L-1}}{18L}$ of uniform words and gets below the transition-count threshold: $E_+(8)$ is not normal in base $2$, with $D^-(E_+(8);2)\ge 2.34\times10^{-7}$. Exact carry-density criteria describe the thresholds $E(4)$ and $E^*(4)=\sum\mu^2(m)/(4^m-1)$. Normality questions for $E(2)$, $E(4)$, $E_+(2)$ and $E_+(4)$ remain open.
+\emph{The family $E_+(2^k)$.} For every $k\ge3$, including $E_+(8)$, the following are kernel-verified: $E_+(2^k)$ is not $4$-normal in base $2$ and not $2$-normal in base $4$, and its extreme discrepancies satisfy $D_N(E_+(2^k);2)\ge\frac{21}{500}$ and $D_N(E_+(2^k);4)\ge\frac{21}{500}$ for all large $N$. The formalization covers a self-contained non-adjacent signed-digit geometric transfer (NAF existence and minimality, a geometric tail bound and an orbit-covering count) and the Euler-product bound $93694/100000$ for a multiplicative majorant of the mean NAF weight of $a_+(n)$. Written proofs with outward-rounded certificates sharpen the bound to $D^-(E_+(8);b)\ge\frac{17431}{300000}$, and with a sharper certified mean to $D^-(E_+(8);b)\ge\frac{11477}{187500}$, for $b\in\{2,4\}$. Whether $E_+(8)$ is simply normal in base $2$, and whether $D^+(E_+(8);2)<1$, remain open.
+
+Written proofs with finite certificates also give the exact mean $\Ctrue\in[1.339103,1.339116]$ of $s_2(\tau(n))$, show $D^-(E(2^k);2)\to1$, and treat odd-divisor, higher-divisor, unitary and base-$b$ divisor families in the same way. For radices $b$ that are not powers of $2$, the Senge--Straus theorem shows that the mean base-$b$ digit mass of $\tau(n)$ is infinite; more generally, the mean base-$b$ digit mass of $\tau_r(n)$ is bounded if and only if $r$ and $b$ are multiplicatively dependent. Transition counts, a minimal four-state signed-digit transducer and exact carry-density criteria treat cubic-character Lambert series and the threshold cases $E(4)$ and $E^*(4)=\sum\mu^2(m)/(4^m-1)$. Normality questions for $E(2)$, $E(4)$, $E_+(2)$ and $E_+(4)$ remain open.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -47,11 +61,11 @@ D_N(x;b)=\sup_{0\le a<c\le1}\bigl|F_N([a,c);x,b)-(c-a)\bigr|,
 \]
 and we write $D^-(x;b)=\liminf_N D_N(x;b)$ and $D^+(x;b)=\limsup_N D_N(x;b)$. The point $\{b^nx\}$ lies in the cylinder of a word $u\in\{0,\dots,b-1\}^L$ exactly when $d_{n+1}\cdots d_{n+L}=u$. A real number is \emph{simply normal} in base $b$ if every digit has asymptotic frequency $1/b$, \emph{$L$-normal} if every word of length $L$ has frequency $b^{-L}$, and \emph{normal} if it is $L$-normal for every $L$; normality is equivalent to $D_N(x;b)\to0$ \cite[Chapter~1]{KN}. In base $2$ we write
 \[
-f_1(N;x)=F_N([1/2,1);x,2)=\frac1N\#\{1\le j\le N:d_j=1\},\qquad \tr_N(x)=\#\{1\le j<N:d_j\ne d_{j+1}\},
+f_1(N;x)=F_N([1/2,1);x,2)=\frac1N\#\{1\le j\le N:d_j=1\}
 \]
-so that $F_N([1/4,3/4);x,2)=\tr_{N+1}(x)/N$ is the empirical frequency $f_{01}+f_{10}$ of the words $01$ and $10$.
+for the frequency of the digit $1$ and $\tr_N(x)=\#\{1\le j<N:d_j\ne d_{j+1}\}$ for the number of transitions, so that $F_N([1/4,3/4);x,2)=\tr_{N+1}(x)/N$ is the empirical frequency $f_{01}+f_{10}$ of the words $01$ and $10$.
 
-For an integer $a\ge0$, $s_b(a)$ denotes its base-$b$ digit sum and $w_b(a)$ its number of nonzero base-$b$ digits; $s_2=w_2$. For $c\in\Z$ the \emph{signed weight} $\wpm(c)$ is the least number of terms in a representation $c=\sum_i\varepsilon_i2^{m_i}$ with $\varepsilon_i=\pm1$ and $m_i\in\Z_{\ge0}$; it is the weight of the non-adjacent form \cite{Reitwiesner1960}. For $A\in\Z$ with two's-complement bits $A_0,A_1,\dots$ (eventually constant) let $T(A)=\#\{i\ge0:A_i\ne A_{i+1}\}$. We write $\tau_r(n)$ for the number of ordered factorizations $n=d_1\cdots d_r$, so $\tau_r(p^e)=\binom{e+r-1}{r-1}$, and $\tau=\tau_2$. Further, $\tau_{\mathrm{odd}}(n)$ is the number of odd divisors, $\omega(n)$ the number of distinct prime factors, $\mu$ the M\"obius function, $v_p$ the $p$-adic valuation, $e_p(n)=v_p(n)$, and $\odd(m)=m\,2^{-v_2(m)}$.
+For an integer $a\ge0$, $s_b(a)$ denotes its base-$b$ digit sum and $w_b(a)$ its number of nonzero base-$b$ digits; $s_2=w_2$. For $c\in\Z$ the \emph{signed weight} $\wpm(c)$ is the least number of terms in a representation $c=\sum_i\varepsilon_i2^{m_i}$ with $\varepsilon_i=\pm1$ and $m_i\in\Z_{\ge0}$. It equals the number of nonzero digits of the non-adjacent form of $c$, a classical fact going back to Reitwiesner \cite{Reitwiesner1960}; we prove it, in kernel-verified form, in \Cref{thm:naf}(a), so no external input about the non-adjacent form is used. A real $x$ has \emph{prefix NAF density at most $\rho$} if for every $\rho'>\rho$ one has $\wpm(\lfloor2^Mx\rfloor)\le\rho'M$ for all large $M$. For $A\in\Z$ with two's-complement bits $A_0,A_1,\dots$ (eventually constant) let $T(A)=\#\{i\ge0:A_i\ne A_{i+1}\}$. We write $\tau_r(n)$ for the number of ordered factorizations $n=d_1\cdots d_r$, so $\tau_r(p^e)=\binom{e+r-1}{r-1}$, and $\tau=\tau_2$. Further, $\tau_{\mathrm{odd}}(n)$ is the number of odd divisors, $\omega(n)$ the number of distinct prime factors, $\mu$ the M\"obius function, $v_p$ the $p$-adic valuation, $e_p(n)=v_p(n)$, and $\odd(m)=m\,2^{-v_2(m)}$.
 
 For an integer $q\ge2$ consider the Lambert series
 \begin{equation}\label{eq:lambert}
@@ -62,9 +76,11 @@ E_{\mathrm{odd}}(q)&=\sum_{m\ \mathrm{odd}}\frac1{q^m-1}=\sum_{n\ge1}\tau_{\math
 E^*(q)&=\sum_{m\ge1}\frac{\mu^2(m)}{q^m-1}=\sum_{n\ge1}2^{\omega(n)}q^{-n},
 \end{aligned}
 \end{equation}
-where $a_+(n)=\sum_{d\mid n}(-1)^{d-1}=(1-v_2(n))\,\tau_{\mathrm{odd}}(n)$ (kernel-verified as \leanT{Phase22Cores}{1052}{\ttt{Phase22Cores.erdosBorweinPlusCoeff\_eq}}). The number $E=E(2)$ is the Erd\H{o}s--Borwein constant. Its irrationality is due to Erd\H{o}s \cite{erdos1948}; irrationality results for the more general series are due to P.~Borwein \cite{borwein1991,borwein1992}. Binary normality and $2$-density questions for $E(2)$ were highlighted by Bailey and Crandall \cite{BaileyCrandall2002}; for the sparse two-square Lambert value $\theta_3(1/2)^2=1+4\sum_{m\ge1}\chi_4(m)/(2^m-1)$, Bailey, Borwein, Crandall and Pomerance \cite[\S9]{BBCP2004} proved that the $1$-bit count is asymptotic to $C_0 N/\sqrt{\log N}$, and Captain~Sude \cite{SudePowerLambert2026} formalized disjunctivity and nonnormality for sparse power-Lambert series $\sum(b^{m^r}-1)^{-1}$ with $r\ge2$. Whether the linear-exponent ($r=1$) dense series $E(2)$, $E_{\mathrm{odd}}(2)$ or $E_+(2)$ is normal, or even simply normal, in base $2$ is open; finite-statistic obstructions for $E(2)$ are studied in \cite{PaperIX}. We take $q=b^k$ and call $k$ the \emph{construction exponent}: in base $b$ the $n$-th coefficient enters at digit position $kn$. The results below concern $q=2^k$ with $k\ge3$ and certain base-$b$ families. They do not decide any of the three constants $E(2)$, $E_{\mathrm{odd}}(2)$, $E_+(2)$.
+where $a_+(n)=\sum_{d\mid n}(-1)^{d-1}=(1-v_2(n))\,\tau_{\mathrm{odd}}(n)$ (kernel-verified as \leanT{Phase22Cores}{1052}{\ttt{Phase22Cores.\allowbreak erdosBorweinPlusCoeff\_eq}}). The number $E=E(2)$ is the Erd\H{o}s--Borwein constant. Its irrationality is due to Erd\H{o}s \cite{erdos1948}; irrationality results for the more general series are due to P.~Borwein \cite{borwein1991,borwein1992}. Binary normality and $2$-density questions for $E(2)$ were highlighted by Bailey and Crandall \cite{BaileyCrandall2002}; for the sparse two-square Lambert value $\theta_3(1/2)^2=1+4\sum_{m\ge1}\chi_4(m)/(2^m-1)$, Bailey, Borwein, Crandall and Pomerance \cite[\S9]{BBCP2004} proved that the $1$-bit count is asymptotic to $C_0 N/\sqrt{\log N}$, and Captain~Sude \cite{SudePowerLambert2026} formalized disjunctivity and nonnormality for sparse power-Lambert series $\sum(b^{m^r}-1)^{-1}$ with $r\ge2$. Whether the linear-exponent ($r=1$) dense series $E(2)$, $E_{\mathrm{odd}}(2)$ or $E_+(2)$ is normal, or even simply normal, in base $2$ is open; finite-statistic obstructions for $E(2)$ are studied in \cite{PaperIX}. We take $q=b^k$ and call $k$ the \emph{construction exponent}: in base $b$ the $n$-th coefficient enters at digit position $kn$. The results below concern $q=2^k$ with $k\ge3$ and certain base-$b$ families. They do not decide any of the three constants $E(2)$, $E_{\mathrm{odd}}(2)$, $E_+(2)$.
 
 The principle is simple. If $a(n)\ge0$ grows slowly, the base-$b$ expansion of $\lfloor b^Nx\rfloor$ for $x=\sum a(n)b^{-kn}$ is obtained by adding the shifted expansions $a(n)b^{N-kn}$ ($n\le N/k$) and a short tail. By Kummer's carry identity \cite{Kummer1852}, carries only remove digit mass. So the digit average of $x$ is at most $1/k$ times the mean digit mass of $a(n)$, and simple nonnormality follows once this is below $(b-1)/2$. For $a=\tau$ and $b=2$ the mean of $s_2(\tau(n))$ is $\Ctrue\approx1.339$, so $k\ge3$ suffices. The analytic input is elementary: $s_2(\tau(n))$ is dominated by a multiplicative function whose Dirichlet-convolution kernel is supported on squarefull integers. No Tauberian theorem is needed.
+
+For signed coefficients such as $a_+(n)$, carries can create digits, and the digit sum is no longer subadditive. The signed weight $\wpm$ is subadditive, and the non-adjacent form converts a bound on $\wpm(\lfloor2^Mx\rfloor)$ into geometry. Non-adjacent digits $e_i\in\{-1,0,1\}$ satisfy $|\sum_{i<K}e_i2^i|<\frac23\,2^K$. Hence a shift $\{2^nx\}$ can lie in the middle interval $[\frac16,\frac56]$ only if one of the two non-adjacent digits of the prefix integer just below the corresponding position is nonzero. Each nonzero digit serves at most two shifts, so the frequency of $[\frac16,\frac56]$ is asymptotically at most twice the prefix NAF density. For $E_+(2^k)$ with $k\ge3$ that density is at most $W_+^{\mathrm{maj}}/3\le\frac{93694}{300000}<0.3124$. This is below $\frac13$, which gives a positive discrepancy bound, and below $\frac5{16}=0.3125$, which excludes $4$-normality in base $2$.
 
 \begin{maintheorem}[Kernel-verified digit-mass transfer and the classification of $E(2^k)$]\label{thm:A}
 Let $b\ge2$ and $k\ge1$ be integers.
@@ -84,14 +100,58 @@ and $C:=\sum_{n\ge1}h(n)/n\le 29/20$.
 \[
 \limsup_{N\to\infty}f_1\bigl(N;E(2^k)\bigr)\le\frac{29}{20k}.
 \]
-Consequently, for every $k\ge3$, $D_N(E(2^k);2)\ge 1/120$ for all sufficiently large $N$, so $D^-(E(2^k);2)\ge1/120>0$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$. In particular it is not simply normal in base $2$ or in its construction radix $2^k$.
+For every $\varepsilon>0$, $D_N(E(2^k);2)\ge\frac12-\frac{29}{20k}-\varepsilon$ for all large $N$, so $D^-(E(2^k);2)\ge\frac12-\frac{29}{20k}$. Consequently, for every $k\ge3$, $D^-(E(2^k);2)\ge\frac1{60}>0$, the uniform bound $D_N(E(2^k);2)\ge\frac1{120}$ holds for all large $N$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$. In particular it is not simply normal in base $2$ or in its construction radix $2^k$.
 \item \evidence{Kernel-verified} For every real $x$ and $N\ge1$: $D_N(x;b)\ge\frac{b-1}b-F_N([1/b,1);x,b)$; $D_N(x;2)\ge\frac12-F_N([1/4,3/4);x,2)$; $D_N(x;2)\ge1-m\frac{N+m}{N}f_1(N+m;x)-2^{-m}$ for every $m\ge0$; and $D_{kN}(x;b)\le\frac{b^k-1}{k(b-1)}D_N(x;b^k)$ for every $N\ge0$.
 \end{enumerate}
 \end{maintheorem}
 
-All five parts are kernel-verified in \ttt{NormalityChecker/DigitMassTransfer.lean} (\Cref{sec:transfer,sec:mean,sec:EB,sec:formal}), committed and pinned at \ttt{\phaseXXIVcommit} (built and independently checked via \ttt{leanchecker} on the Linux build server \ttt{hail} and in remote GitHub Actions CI). Every declaration citation below links directly to its line at that pinned commit. The kernel-verified bound $29/(20k)$ comes from a crude Euler-product estimate. Written proofs with finite certificates give the sharp constant.
+All five parts are kernel-verified in \tpath{NormalityChecker/DigitMassTransfer.lean} (\Cref{sec:transfer,sec:mean,sec:EB,sec:formal}), committed and pinned at the Phase~24 commit \commitref{\phaseXXIVcommit} (built and independently checked via \ttt{leanchecker} on the Linux build server \ttt{hail} and in remote GitHub Actions CI). Every \ttt{DigitMassTransfer} citation below links directly to its line at that pinned commit. The kernel-verified bound $29/(20k)$ comes from a crude Euler-product estimate. Written proofs with finite certificates give the sharp constant (\Cref{thm:sharp}).
 
-\begin{maintheorem}[Sharp constants and dense divisor-type families]\label{thm:B}
+The second classical family is decided at the same construction exponents $k\ge3$, but through the non-adjacent form rather than through digit sums.
+
+\begin{maintheorem}[Kernel-verified non-adjacent geometric transfer and $E_+(2^k)$ for $k\ge3$]\label{thm:Eplus-main}
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item \evidence{Kernel-verified} \textup{(Non-adjacent form.)} Every $A\in\Z$ has a representation $A=\sum_{i\ge0}e_i2^i$ with $e_i\in\{-1,0,1\}$, $e_ie_{i+1}=0$ and exactly $\wpm(A)$ nonzero digits, and every representation $A=\sum_{i\in S}\varepsilon_i2^{m_i}$ with $\varepsilon_i=\pm1$ (repeated exponents allowed) has $|S|\ge\wpm(A)$. Non-adjacent digits satisfy $3|\sum_{i<K}e_i2^i|+1\le2^{K+1}$. For $s,r\ge1$, $sN\le M$ and $c=\frac23\,2^{-sr}$, at most $r\wpm(A)$ of the points $\{2^{sm}A/2^M\}$, $0\le m<N$, lie in $[c,1-c]$.
+\item \evidence{Kernel-verified} \textup{(Real and series transfer.)} If $x\in\R$ has prefix NAF density at most $\rho$, then for all $s,r\ge1$ and $\varepsilon>0$,
+\[
+D_N(x;2^s)\ge1-\frac4{3\cdot2^{sr}}-rs\rho-\varepsilon\qquad\text{for all large }N.
+\]
+If $\rho<\frac5{16}$, then $x$ is not $4$-normal in base $2$ and not $2$-normal in base $4$. If $a:\N\to\Z$ satisfies $|a(n)|\le C_0n^B$ and $\limsup_XX^{-1}\sum_{n\le X}\wpm(a(n))\le C$, then $\sum_{n\ge1}a(n)2^{-kn}$ has prefix NAF density at most $C/k$.
+\item \evidence{Kernel-verified} \textup{($E_+(2^k)$.)} $E_+(2^k)=\sum_{n\ge1}a_+(n)2^{-kn}$, $\wpm(a_+(n))\le G_0(n)$ for a multiplicative function $G_0$, and the mean $W_+^{\mathrm{maj}}$ of $G_0$ satisfies $W_+^{\mathrm{maj}}\le\frac{93694}{100000}$. For every $k\ge1$, $b\in\{2,4\}$ and $\varepsilon>0$, $D_N(E_+(2^k);b)\ge\frac23-\frac{2\cdot937}{1000k}-\varepsilon$ for all large $N$. For every $k\ge3$, including $k=3$,
+\[
+D_N(E_+(2^k);2)\ge\frac{21}{500}\quad\text{and}\quad D_N(E_+(2^k);4)\ge\frac{21}{500}\qquad\text{for all large }N,
+\]
+and $E_+(2^k)$ is not $4$-normal in base $2$, not $2$-normal in base $4$, and not normal in base $2$ or in base $4$.
+\item \evidence{Lean-supported paper proof + Finite certificate} For every $k\ge3$, $E_+(2^k)$ is not normal in any base $2^j$, and $D^-(E_+(2^k);2^j)\ge\frac{j}{2^j-1}\cdot\frac{21}{500}$. For $b\in\{2,4\}$, the certified means $W_+\le0.912845$ and $W_+\le0.908184$ give
+\[
+D^-(E_+(8);b)\ge\frac{17431}{300000}=0.0581033\ldots\quad\text{and}\quad D^-(E_+(8);b)\ge\frac{11477}{187500}=0.0612106\ldots,
+\]
+respectively, and $D^-(E_+(8);8)\ge\frac{11477}{437500}>0.02623$.
+\end{enumerate}
+\end{maintheorem}
+
+Parts (i)--(iii) are kernel-verified in \tpath{NormalityChecker/NafGeometricTransfer.lean}, committed and pinned at the Phase~25 commit \commitref{\phaseXXVcommit} (built and independently replayed via \ttt{leanchecker} on \ttt{hail}, and passed in remote GitHub Actions CI). They are \Cref{thm:naf,thm:Eplus-lean}, and every \ttt{NafGeometricTransfer} citation links to its line at that commit. Part (iv) is \Cref{cor:Eplus-sharp}: its only inputs beyond the kernel-verified statements are the certified means of \Cref{thm:Eplus-k4,thm:Eplus-k3} and a two-line radix-descent deduction. The two numbers in part (iv) come from different inputs and must be read separately. The bound $\frac{17431}{300000}$ uses the weaker mean $W_+\le0.912845$; for exactly that input, a periodic example in the repository register (\ttt{GF-44}, a written proof with a finite certificate, not part of this paper) shows that no argument using only $\limsup_N\sigma_1(x;N)/N\le0.912845/3$ (\Cref{def:sigma}; by \Cref{lem:sigma-naf} this is the same as prefix NAF density at most $0.912845/3$) can exceed $0.059108$, so this bound is within $1.8\%$ of the best possible for its input. The bound $\frac{11477}{187500}$ uses the sharper mean $W_+\le0.908184$, a stronger input to which that ceiling does not apply, and we do not compare the two.
+
+\Cref{thm:Eplus-main} excludes $4$-normality but not simple normality: whether $E_+(8)$ is simply normal in base $2$ is open (\Cref{rem:Eplus-open}). It gives $D^->0$ and says nothing about $D^+$. In particular, whether $D^+(E_+(8);2)<1$ is open. The register entry \ttt{GF-42} (Theorem~B1.4, a written proof not used here) proves $D^+(E_+(2^k);2)<1$ only for all sufficiently large $k\ge k_0$, with an effective $k_0>3.05\times10^{10}$.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.14\textwidth}>{\raggedright\arraybackslash}p{0.41\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}@{}}
+\toprule
+Family & Proved statement (base $2$ unless stated) & Evidence & Where \\
+\midrule
+$E(2^k)$, $k\ge3$ & not simply normal in base $2^j$ for every $j\ge1$; $\limsup f_1\le\frac{29}{20k}$; $D^-\ge\frac12-\frac{29}{20k}$ & Kernel-verified & \Cref{thm:A}(iv), \Cref{thm:EB-lean} \\
+$E(2^k)$, $k\ge3$ & $\limsup f_1\le\Ctrue/k$; $D^-\to1$; \Cref{tab:EB} & Paper proof + Finite certificate & \Cref{thm:sharp}(i)--(ii) \\
+$E_+(2^k)$, $k\ge3$ & not $4$-normal in base $2$, not $2$-normal in base $4$; $D_N\ge\frac{21}{500}$ eventually in bases $2$ and $4$ & Kernel-verified & \Cref{thm:Eplus-main}(iii), \Cref{thm:Eplus-lean} \\
+$E_+(8)$ & $D^-\ge\frac{17431}{300000}$, and $D^-\ge\frac{11477}{187500}$, in bases $2$ and $4$ & Lean-supported paper proof + Finite certificate & \Cref{thm:Eplus-main}(iv), \Cref{cor:Eplus-sharp} \\
+$E_+(2^k)$, $k\ge4$ & not $2$-normal; $D^-\to1$; \Cref{tab:Eplus} & Paper proof + Finite certificate & \Cref{thm:signed-main}(ii) \\
+$E_+(8)$ & simple normality in base $2$; $D^+<1$ & Open & \Cref{rem:Eplus-open} \\
+\bottomrule
+\end{tabular}
+\caption{The two classical generalized Erd\H{o}s--Borwein families: what is proved, with evidence labels. Both rows labelled \emph{Kernel-verified} hold for every $k\ge3$, including $E(8)$ and $E_+(8)$.}\label{tab:summary}
+\end{table}
+
+\begin{maintheorem}[Sharp constants and dense divisor-type families]\label{thm:sharp}
 \begin{enumerate}[label=\textup{(\roman*)},nosep]
 \item \evidence{Paper proof + Finite certificate} The limit $\Ctrue=\lim_{X\to\infty}X^{-1}\sum_{n\le X}s_2(\tau(n))$ exists. It equals $\Ex\,s_2\bigl(\prod_p\odd(\varepsilon_p+1)\bigr)$ for independent $\varepsilon_p$ with $\Pr(\varepsilon_p=e)=(1-1/p)p^{-e}$, and
 \[
@@ -100,9 +160,9 @@ All five parts are kernel-verified in \ttt{NormalityChecker/DigitMassTransfer.le
 For every $k\ge1$, $\limsup_Nf_1(N;E(2^k))\le\Ctrue/k$; in particular $\limsup_Nf_1(N;E(8))\le0.44638$.
 \item \evidence{Paper proof + Finite certificate} For every $k\ge3$,
 \[
-D^-(E(2^k);2)\ge\max\Bigl\{\frac12-\frac{\Ctrue}k,\ \max_{m\ge1}\Bigl(1-\frac{m\Ctrue}k-2^{-m}\Bigr)\Bigr\},\qquad 1-D^-(E(2^k);2)\le\frac{\Ctrue\lceil\log_2k\rceil+1}k,
+D^-(E(2^k);2)\ge\max\Bigl\{\frac12-\frac{\Ctrue}k,\ \max_{m\ge1}\Bigl(1-\frac{m\Ctrue}k-2^{-m}\Bigr)\Bigr\}
 \]
-so $D^-(E(2^k);2)\to1$ as $k\to\infty$. Moreover $D^-(E(2^k);2^j)\ge\frac{j}{2^j-1}D^-(E(2^k);2)$ for every $j\ge1$, and $D^-(E(2^k);2^k)\ge\bigl(1-\frac{\Ctrue}2-\frac{k+1}{2^k}\bigr)/(k-1)$ for $k\ge4$.
+and $1-D^-(E(2^k);2)\le(\Ctrue\lceil\log_2k\rceil+1)/k$, so $D^-(E(2^k);2)\to1$ as $k\to\infty$. Moreover $D^-(E(2^k);2^j)\ge\frac{j}{2^j-1}D^-(E(2^k);2)$ for every $j\ge1$, and $D^-(E(2^k);2^k)\ge\bigl(1-\frac{\Ctrue}2-\frac{k+1}{2^k}\bigr)/(k-1)$ for $k\ge4$.
 \item \evidence{Paper proof + Finite certificate} Each of the following numbers is simply nonnormal in base $2$ and in every base $2^j$ ($j\ge1$), with an explicit positive lower bound for $D^-(\,\cdot\,;2)$: $E_{\mathrm{odd}}(2^k)$ for $k\ge3$; $\sum_{n}\tau_r(n)2^{-kn}=\sum_m\tau_{r-1}(m)/(2^{km}-1)$ for $r\in\{4,8\}$, $k\ge4$, and for $r=16$, $k\ge5$; and $E^*(2^k)=\sum_m\mu^2(m)/(2^{km}-1)$ for $k\ge3$.
 \item \evidence{Paper proof + Finite certificate} Let $b\ge3$. The unitary series $\sum_m\mu^2(m)(b-1)^{\omega(m)}/(b^{km}-1)=\sum_nb^{\omega(n)}b^{-kn}$ is simply nonnormal in base $b$ for every $k\ge1$ if $b\ge4$, and for every $k\ge2$ if $b=3$. For $3\le b\le10$ the series $\sum_m\tau_{b-1}(m)/(b^{km}-1)=\sum_n\tau_b(n)b^{-kn}$ is simply nonnormal in base $b$ and in every base $b^j$ for every $k\ge k_0(b)$, where $k_0(b)=1$ for $b\in\{7,9,10\}$ and $k_0(b)=2$ for $b\in\{3,4,5,6,8\}$.
 \end{enumerate}
@@ -110,7 +170,7 @@ so $D^-(E(2^k);2)\to1$ as $k\to\infty$. Moreover $D^-(E(2^k);2^j)\ge\frac{j}{2^j
 
 Parts (i)--(ii) are \Cref{thm:EB-sharp}; parts (iii)--(iv) are \Cref{thm:dichotomy,thm:odd-unitary,thm:base-b}. The method needs the mean digit mass of the coefficients to be finite. This fails whenever the radix and the coefficient structure are arithmetically independent.
 
-\begin{maintheorem}[Base-dependence barrier and multiplicative dependence]\label{thm:C}
+\begin{maintheorem}[Base-dependence barrier and multiplicative dependence]\label{thm:barrier-main}
 \begin{enumerate}[label=\textup{(\roman*)},nosep]
 \item \evidence{Paper proof using External input} If $b\ge2$ is not a power of $2$, then $X^{-1}\sum_{n\le X}w_b(\tau(n))\to\infty$ and $X^{-1}\sum_{n\le X}s_b(\tau(n))\to\infty$, and the same holds with $\tau_{\mathrm{odd}}$ in place of $\tau$. Hence the digit-mass bound is vacuous for $E(b^k)$ and $E_{\mathrm{odd}}(b^k)$ in base $b$ for every $k\ge1$. In particular $E(9)$ in base $3$, $E(25)$ in base $5$ and $E(100)$ in base $10$ are not decided. For $b=2^j$, $E(b^k)$ is simply nonnormal in base $b$ whenever $jk\ge3$.
 \item \evidence{Paper proof using External input} Let $r,b\ge2$. Then $\limsup_XX^{-1}\sum_{n\le X}s_b(\tau_r(n))<\infty$ if and only if $r$ and $b$ are multiplicatively dependent, that is, $r^u=b^v$ for some integers $u,v\ge1$. Otherwise $X^{-1}\sum_{n\le X}w_b(\tau_r(n))\to\infty$.
@@ -121,9 +181,9 @@ The external inputs are the Senge--Straus theorem \cite{SengeStraus73} (with Ste
 
 These are \Cref{thm:barrier,thm:dichotomy} and \Cref{lem:digit-ineq}(c).
 
-For signed coefficients, carries can create as well as destroy digits, and the digit sum is no longer subadditive. The non-adjacent-form weight $\wpm$ and the two's-complement transition count $T$ replace $s_2$.
+Besides the non-adjacent form, two further signed routes are available. The two's-complement transition count $T$ gives frequency bounds for the words $01$ and $10$, and a free-boundary signed-digit transducer gives a full-normality statistic. Both reach fewer cases, or weaker constants, than \Cref{thm:Eplus-main}, but they are independent of it and apply to other coefficient sequences.
 
-\begin{maintheorem}[Signed transfer, $E_+(2^k)$ for $k\ge3$, and cubic-character series]\label{thm:D}
+\begin{maintheorem}[Transition counts, cubic-character series and the four-state transducer]\label{thm:signed-main}
 \begin{enumerate}[label=\textup{(\roman*)},nosep]
 \item \evidence{Lean-supported paper proof} Let $a:\N\to\Z$ satisfy $\log(1+|a(n)|)=o(n)$ and put $x=\sum_{n\ge1}a(n)2^{-kn}$. Then $\tr_N(x)\le T(\lfloor2^Nx\rfloor)\le2\sum_{n\le N/k}\wpm(a(n))+2\wpm(\lfloor\tau_N\rfloor)$ and $\limsup_NF_N([1/4,3/4);x,2)\le2W/k$, where $W=\limsup_XX^{-1}\sum_{n\le X}\wpm(a(n))$. If $2W/k<1/2$, then $x$ is not $2$-normal in base $2$, $D^-(x;2)\ge\max_{m\ge2}\bigl(1-2^{1-m}-(m-1)\frac{2W}k\bigr)>0$, and $x$ is not normal in any base $2^j$.
 \item \evidence{Paper proof + Finite certificate} The limit $W_+=\lim_XX^{-1}\sum_{n\le X}\wpm(a_+(n))$ exists and $0.908174\le W_+\le0.908184$. For every $k\ge4$, $E_+(2^k)$ is not $2$-normal in base $2$ and not normal in any base $2^j$, and $D^-(E_+(16);2)\ge0.0459$. The transition-count method cannot reach $k\le3$, since $W_+\ge3/4$. For the cubic characters modulo $7$, $9$ and $13$ and every $k\ge4$, the cubic-character Lambert series $L_\pm(2^k)$ (defined before \Cref{prop:cubic}) are not $2$-normal in base $2$, with $D^-(L_\pm(16);2)\ge0.1215$, $0.0977$ and $0.1053$ respectively.
@@ -131,32 +191,31 @@ For signed coefficients, carries can create as well as destroy digits, and the d
 \[
 A_L=\frac13-\frac{7-(-1/2)^{L-1}}{18L}\qquad(L\ge1).
 \]
-Every real $x$ satisfies $\limsup_N\sigma_1(x;N)/N\ge A_L\bigl(1-2^LD^-(x;2)\bigr)$, where $\sigma_1(x;N)$ is the minimal number of nonzero signed binary digits on positions $1,\dots,N$. Moreover $\limsup_N\sigma_1(E_+(2^k);N)/N\le W_+/k$. Hence, for every $k\ge3$, \emph{including $k=3$}, $E_+(2^k)$ is not normal in base $2$ or in any base $2^j$, and
+Every real $x$ satisfies $\limsup_N\sigma_1(x;N)/N\ge A_L\bigl(1-2^LD^-(x;2)\bigr)$, where $\sigma_1(x;N)$ is the minimal number of nonzero signed binary digits on positions $1,\dots,N$. Moreover $\limsup_N\sigma_1(E_+(2^k);N)/N\le W_+/k$. Hence, by a route independent of \Cref{thm:Eplus-main}, $E_+(2^k)$ is not normal in base $2$ or in any base $2^j$ for every $k\ge3$, with
 \[
 D^-(E_+(2^k);2)\ge2.34\times10^{-7}.
 \]
-Whether $E_+(8)$ is simply normal in base $2$ is open.
 \end{enumerate}
 \end{maintheorem}
 
-Part (i) is \Cref{thm:signed-transfer}, part (ii) is \Cref{thm:Eplus-k4,prop:cubic}, and part (iii) is \Cref{thm:transducer,thm:floor,lem:Eplus-support,thm:Eplus-k3}. Part (iii) needs no bound on the frequency of the digit $1$ or of transitions. It compares the signed-digit complexity of $E_+(2^k)$ with that of a typical word. Signed-digit complexity is a full-normality statistic rather than a simple-normality statistic, so the conclusion is nonnormality with $D^->0$ but not simple nonnormality. Part (ii) also complements the result in the repository register (\ttt{GF-31}) that $L_\pm(2^k)$ is simply nonnormal in its construction radix $2^k$; here the conclusion is in base $2$.
+Part (i) is \Cref{thm:signed-transfer}, part (ii) is \Cref{thm:Eplus-k4,prop:cubic}, and part (iii) is \Cref{thm:transducer,thm:floor,lem:Eplus-support,thm:Eplus-k3}. Part (iii) needs no bound on the frequency of the digit $1$ or of transitions. It compares the signed-digit complexity of $E_+(2^k)$ with that of a typical word. Signed-digit complexity is a full-normality statistic rather than a simple-normality statistic, so the conclusion is nonnormality with $D^->0$ but not simple nonnormality. Its constant is far below the kernel-verified $\frac{21}{500}$ of \Cref{thm:Eplus-main}, which supersedes it quantitatively; we keep it because the closed formula for $A_L$ and the floor inequality hold for every real number. Part (ii) also complements the result in the repository register (\ttt{GF-31}) that $L_\pm(2^k)$ is simply nonnormal in its construction radix $2^k$; here the conclusion is in base $2$.
 
 The construction exponents $k=1,2$ lie below every threshold above. Here the transfer becomes an exact carry balance.
 
-\begin{maintheorem}[Exact carry-density thresholds]\label{thm:E}
+\begin{maintheorem}[Exact carry-density thresholds]\label{thm:thresholds}
 \begin{enumerate}[label=\textup{(\roman*)},nosep]
-\item \evidence{Paper proof} For every $k\ge1$, $f_1(N;E(2^k))=\Ctrue/k-\kappa_k(N)/N+o(1)$, where $\kappa_k(N)\ge0$ is the total column carry in the binary addition of the integers $\tau(n)2^{N-kn}$ ($n\le N/k$) and $\lfloor\tau_N\rfloor$. Thus $E(4)$ is simply normal in base $2$ if and only if $\kappa_2(N)/N\to(\Ctrue-1)/2\in[0.169551,0.169558]$, and $\limsup_Nf_1(N;E(4))<\frac12$ if and only if $\liminf_N\kappa_2(N)/N>(\Ctrue-1)/2$. Since $\Ctrue>1$, no argument that bounds the carries below by $0$ can decide $E(4)$. For $E(2)$ the threshold carry density is $\Ctrue-\frac12\in[0.839103,0.839116]$.
+\item \evidence{Paper proof} For every $k\ge1$ the frequency of the digit $1$ satisfies $f_1(N;E(2^k))=\Ctrue/k-\kappa_k(N)/N+o(1)$, where $\kappa_k(N)\ge0$ is the total column carry in the binary addition of the integers $\tau(n)2^{N-kn}$ ($n\le N/k$) and $\lfloor\tau_N\rfloor$. Thus $E(4)$ is simply normal in base $2$ if and only if $\kappa_2(N)/N\to(\Ctrue-1)/2\in[0.169551,0.169558]$, and $\limsup_Nf_1(N;E(4))<\frac12$ if and only if $\liminf_N\kappa_2(N)/N>(\Ctrue-1)/2$. Since $\Ctrue>1$, no argument that bounds the carries below by $0$ can decide $E(4)$. For $E(2)$ the threshold carry density is $\Ctrue-\frac12\in[0.839103,0.839116]$.
 \item \evidence{Paper proof using External input} Direct transfer in base $4$ also fails for $E(4)$: $\liminf_XX^{-1}\sum_{n\le X}s_4(\tau(n))>1.59>\frac32$. The proof uses Wirsing's mean-value theorem \cite{Wirsing1967}.
-\item \evidence{Paper proof; Conditional} For $E^*(4)=\sum_n2^{-(2n-\omega(n))}$, $f_1(N;E^*(4))=\frac12-\kappa^*(N)/N+O(\log N/N)$, where $\kappa^*(N)\ge0$ is the corresponding carry count. Hence $\limsup_Nf_1(N;E^*(4))\le\frac12$, and $E^*(4)$ is simply normal in base $2$ if and only if $\kappa^*(N)=o(N)$. \emph{Conditionally} on the collision set $\mathcal C=\{n:\exists\,n'>n,\ \omega(n')-\omega(n)=2(n'-n)\}$ having positive upper density, $E^*(4)$ is not simply normal in base $2$.
-\item \evidence{Open} The normality, simple normality, $D^+<1$ and $K_2$-membership of $E(2)$, $E(4)$, $E_+(2)$ and $E_+(4)$ in base $2$ are open, as is the simple normality of $E(9)$, $E(25)$ and $E(100)$ in bases $3$, $5$ and $10$.
+\item \evidence{Paper proof; Conditional} For $E^*(4)=\sum_n2^{-(2n-\omega(n))}$, $f_1(N;E^*(4))=\frac12-\kappa^*(N)/N+O(\log N/N)$, where $\kappa^*(N)\ge0$ is the corresponding carry count. Hence the frequency of the digit $1$ satisfies $\limsup_Nf_1(N;E^*(4))\le\frac12$, and $E^*(4)$ is simply normal in base $2$ if and only if $\kappa^*(N)=o(N)$. \emph{Conditionally} on the collision set $\mathcal C=\{n:\exists\,n'>n,\ \omega(n')-\omega(n)=2(n'-n)\}$ having positive upper density, $E^*(4)$ is not simply normal in base $2$.
+\item \evidence{Open} The normality, simple normality, $D^+<1$ and $K_2$-membership of $E(2)$, $E(4)$, $E_+(2)$ and $E_+(4)$ in base $2$ are open, as are the simple normality of $E_+(8)$ in base $2$, the inequality $D^+(E_+(8);2)<1$, and the simple normality of $E(9)$, $E(25)$ and $E(100)$ in bases $3$, $5$ and $10$.
 \end{enumerate}
 \end{maintheorem}
 
 Parts (i)--(iii) are \Cref{thm:E4,prop:base4,thm:Estar4,prop:collisions}.
 
-\Cref{sec:transfer} proves the digit inequalities and the transfer theorems. \Cref{sec:mean} develops the elementary mean values, and \Cref{sec:EB} treats $E(2^k)$. \Cref{sec:families} covers the arithmetic families and the barrier, \Cref{sec:signed} the signed series, and \Cref{sec:boundary} the threshold cases. \Cref{sec:questions,sec:formal,sec:ai} record open questions, the formal verification and data, and the use of AI tools. Finite digit statistics appear only in \Cref{tab:measure}. They are finite measurements, and no asymptotic statement rests on them.
+\Cref{sec:transfer} proves the digit inequalities and the transfer theorems. \Cref{sec:mean} develops the elementary mean values, and \Cref{sec:EB} treats $E(2^k)$. \Cref{sec:families} covers the arithmetic families and the barrier. \Cref{sec:naf} proves the non-adjacent geometric transfer and the kernel-verified results for $E_+(2^k)$, \Cref{sec:signed} the other signed routes, and \Cref{sec:boundary} the threshold cases. \Cref{sec:questions,sec:formal,sec:ai} record open questions, the formal verification and data, and the use of AI tools. Finite digit statistics appear only in \Cref{tab:measure}. They are finite measurements, and no asymptotic statement rests on them.
 
-\paragraph{Scope.} No result here changes the status of any entry of the repository's fixed $50$-constant benchmark roster. In particular, the entries for $E(2)$, $E_{\mathrm{odd}}(2)$ and $E_+(2)$ (\ttt{BC-37}--\ttt{BC-39}) are unchanged. The nonnormality results concern $q=2^k$ with $k\ge3$ and the base-$b$ families of \Cref{thm:B}(iv).
+\paragraph{Scope.} No result here changes the status of any entry of the repository's fixed $50$-constant benchmark roster \ttt{BC-01}--\ttt{BC-50}. In particular, the entries for $E(2)$, $E_{\mathrm{odd}}(2)$ and $E_+(2)$ (\ttt{BC-37}--\ttt{BC-39}) are unchanged. The nonnormality results concern $q=2^k$ with $k\ge3$ and the base-$b$ families of \Cref{thm:sharp}(iv), none of which is a roster entry. No result here gives $D^+<1$ for any constant.
 
 \section{Digit inequalities and the carry transfer}\label{sec:transfer}
 
@@ -188,12 +247,12 @@ For integers $a,c,t\ge0$:
 These are \leanW{digitSum\_add\_le}{196}, \leanW{digitSum\_mul\_pow}{202}, \leanW{digitSum\_mul\_le}{216}, \leanW{nonzeroDigits\_add\_le}{258}, \leanW{nonzeroDigits\_mul\_le}{338}, \leanW{nonzeroDigits\_pred\_sq}{387} and \leanW{digitSum\_two\_succ}{405}. We sketch the arguments. (a) Subadditivity is \Cref{lem:kummer}, and $ac=\sum_jc_j\,ab^j$ is a sum of $s_b(c)$ shifted copies of $a$. (b) Let $S_a,S_c$ be the digit supports and $\varepsilon_i\in\{0,1\}$ the carry into position $i$. The nonzero digits of $a+c$ lie in $S_a\cup S_c\cup Z$ with $Z=\{i\notin S_a\cup S_c:\varepsilon_i=1\}$. For $i\in Z$ let $j<i$ be maximal with $\varepsilon_j=0$. Position $j$ emits a carry without receiving one, so $a_j+c_j\ge b$ and $j\in S_a\cap S_c$. Distinct elements of $Z$ end distinct maximal carry runs, so $i\mapsto j$ is injective and $w_b(a+c)\le|S_a\cup S_c|+|S_a\cap S_c|$. (c) $ac$ is a sum of $s_b(a)$ shifted copies of $c$; alternatively $ac=\sum_{i,j}a_ic_jb^{i+j}$ with $a_ic_j<b^2$. Finally $(b-1)^2=(b-2)b+1$ has the two nonzero digits $b-2\ge1$ and $1$. (d) Adding $1$ to $m$ turns its $v_2(m+1)$ trailing ones into zeros and one zero into a one.
 \end{proof}
 
-\begin{lemma}[Signed weight]\label{lem:signed}\evidence{Kernel-verified for the recursion; Paper proof + Finite certificate for its identification with $\wpm$}
+\begin{lemma}[Signed weight]\label{lem:signed}\evidence{Kernel-verified}
 The signed weight satisfies $\wpm(-c)=\wpm(c)=\wpm(2c)$, $\wpm(c+c')\le\wpm(c)+\wpm(c')$, $\wpm(cc')\le\wpm(c)\wpm(c')$, $\wpm(c)\le s_2(|c|)$, and $\wpm(c)\le\lfloor\log_2|c|\rfloor+1$ for $c\ne0$. On $\Z_{\ge0}$ it is given by the recursion $\wpm(0)=0$, $\wpm(1)=1$, $\wpm(2c)=\wpm(c)$, and $\wpm(c)=1+\min\{\wpm(\frac{c-1}2),\wpm(\frac{c+1}2)\}$ for odd $c\ge3$.
 \end{lemma}
 
 \begin{proof}
-For $\wpm(2c)\ge\wpm(c)$, take a minimal representation of $2c$. Two terms with exponent $0$ would either cancel or merge into $2^1$, so at most one has exponent $0$, and parity excludes exactly one. Halving all exponents gives a representation of $c$. The same parity argument gives the recursion, and concatenating or multiplying representations gives subadditivity and submultiplicativity. The script \ttt{scripts/phase24\_digit\_mass.py} checks that the recursion agrees with the non-adjacent-form algorithm for $|c|\le4096$. In Lean, \ttt{signedWeight} is defined by this recursion. For it, \leanW{signedWeight\_two\_mul}{444}, \leanW{signedWeight\_le\_digitSum}{465}, \leanW{signedWeight\_add\_le}{538}, \leanW{signedWeight\_sub\_le}{543}, \leanW{signedWeight\_mul\_le}{549} and \leanW{signedWeight\_mul\_two\_pow}{459} are kernel-verified. Kernel-verified statements below that involve $\wpm$ refer to this recursion.
+For $\wpm(2c)\ge\wpm(c)$, take a minimal representation of $2c$. Two terms with exponent $0$ would either cancel or merge into $2^1$, so at most one has exponent $0$, and parity excludes exactly one. Halving all exponents gives a representation of $c$. The same parity argument gives the recursion, and concatenating or multiplying representations gives subadditivity and submultiplicativity. In Lean, \ttt{signedWeight} is defined by this recursion. For it, \leanW{signedWeight\_two\_mul}{444}, \leanW{signedWeight\_le\_digitSum}{465}, \leanW{signedWeight\_add\_le}{538}, \leanW{signedWeight\_sub\_le}{543}, \leanW{signedWeight\_mul\_le}{549}, \leanW{signedWeight\_mul\_two\_pow}{459}, and on $\Z$ \leanX{signedWeight\_natAbs\_add\_le}{94} and \leanX{signedWeight\_le\_log}{902}, are kernel-verified. That the recursion computes the minimal number of signed powers of $2$ is also kernel-verified: every representation with $\varepsilon_i=\pm1$, repeated exponents allowed, has at least \ttt{signedWeight}$\,|c|$ terms (\leanX{signedWeight\_natAbs\_le\_card\_of\_signed\_sum}{137}), and the non-adjacent form attains it (\leanX{exists\_naf}{367}; see \Cref{thm:naf}(a)). So kernel-verified statements involving $\wpm$ are statements about the minimal signed weight itself. The script \ttt{scripts/phase24\_digit\_mass.py} also checks the agreement with the non-adjacent-form algorithm for $|c|\le4096$, as an independent finite cross-check.
 \end{proof}
 
 \begin{lemma}[Transition increments]\label{lem:transitions}\evidence{Kernel-verified}
@@ -234,10 +293,10 @@ For $E(8)$ ($b=2$, $k=3$, $a=\tau$) and $N=35$ we have $M=11$ and $\tau_{35}=\ta
 
 \begin{corollary}[Asymptotic transfer]\label{cor:asymptotic}\evidence{Paper proof}
 Suppose $\log(1+\Theta_M)=o(M)$, which holds whenever $\log(1+|a(n)|)=o(n)$, in particular when $|a(n)|\le Cn^A$. Then the carry tail is $o(N)$, and it is $O(\log N)$ under polynomial growth. Consequently, for $a\ge0$,
-\[
-\limsup_{N\to\infty}\frac1N\sum_{j\le N}d_j\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}s_b(a(n)),\qquad
-\limsup_{N\to\infty}\frac{\#\{j\le N:d_j\ne0\}}N\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}w_b(a(n)).
-\]
+\begin{align*}
+\limsup_{N\to\infty}\frac1N\sum_{j\le N}d_j&\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}s_b(a(n)),\\
+\limsup_{N\to\infty}\frac{\#\{j\le N:d_j\ne0\}}N&\le\frac1k\limsup_{X\to\infty}\frac1X\sum_{n\le X}w_b(a(n)).
+\end{align*}
 \end{corollary}
 
 \begin{proof}
@@ -312,7 +371,7 @@ The mean $C=\sum_nh(n)/n=\prod_pL(p)$, $L(p)=\sum_{j\ge0}p/(p^{2^j}+1)$, of the 
 The bound $C\le29/20$ is \leanW{tsum\_tauDigitKernel\_div\_le}{1663}. Since $h(p^e)=1$ for even $e$, $h(p^e)\le0$ for odd $e$, $h(p^3)=-1$ and $h(p^7)=-2$, one has $0\le L(p)\le B(p):=(1-p^{-2})^{-1}-p^{-3}-2p^{-7}$, and $1\le B(p)\le1+p^{-2}$ for every prime $p$. Mathlib's Euler product theorem gives $C=\lim_P\prod_{p<P}L(p)$. An exact rational evaluation gives $\prod_{p<37}B(p)\le1.3958$. For $p\ge37$, $\prod(1+p^{-2})\le(1-\sum_{p\ge37}p^{-2})^{-1}\le(1-\frac1{36})^{-1}=\frac{36}{35}$, using $\prod_i(1+a_i)(1-\sum_ia_i)\le1$ and $\sum_{n\ge37}n^{-2}\le\frac1{36}$. Hence $C\le1.3958\cdot\frac{36}{35}<1.4357\le\frac{29}{20}$. The enclosure is computed over $p\le3\cdot10^5$ in integer arithmetic at scale $2^{-192}$ with directed rounding. Each local factor is bracketed by a finite sum and an explicit geometric tail, and the prime tail uses $L(p)\le1+A/p^2$ with an exact bound for $\sum_{p>Y}p^{-2}$.
 \end{proof}
 
-\section{Generalized Erd\H{o}s--Borwein constants $E(2^k)$}\label{sec:EB}
+\section{\texorpdfstring{Generalized Erd\H{o}s--Borwein constants $E(2^k)$}{Generalized Erd\H{o}s--Borwein constants E(2\textasciicircum k)}}\label{sec:EB}
 
 \begin{theorem}[Kernel-verified classification]\label{thm:EB-lean}\evidence{Kernel-verified}
 For every $k\ge1$, $E(2^k)=\sum_{n\ge1}\tau(n)2^{-kn}$ and $\limsup_Nf_1(N;E(2^k))\le29/(20k)$. For every $\varepsilon>0$, $D_N(E(2^k);2)\ge\frac12-\frac{29}{20k}-\varepsilon$ for all large $N$. For every $k\ge3$, $D_N(E(2^k);2)\ge\frac1{120}$ for all large $N$, and $E(2^k)$ is not simply normal in base $2^j$ for any $j\ge1$.
@@ -335,7 +394,7 @@ For base $2^j$, the base-$2^j$ digits are the aligned $j$-bit blocks, and the po
 \end{proof}
 
 \begin{theorem}[Sharp constants for $E(2^k)$]\label{thm:EB-sharp}\evidence{Paper proof + Finite certificate}
-The limit $\Ctrue=\lim_XX^{-1}\sum_{n\le X}s_2(\tau(n))$ exists, equals $\Ex\,s_2\bigl(\prod_p\odd(\varepsilon_p+1)\bigr)$ in the model of \Cref{lem:model}, and $1.339103\le\Ctrue\le1.339116$. For every $k\ge1$, $\limsup_Nf_1(N;E(2^k))\le\Ctrue/k$, and the conclusions of \Cref{thm:B}(i)--(ii) hold, with the values of \Cref{tab:EB}.
+The limit $\Ctrue=\lim_XX^{-1}\sum_{n\le X}s_2(\tau(n))$ exists, equals $\Ex\,s_2\bigl(\prod_p\odd(\varepsilon_p+1)\bigr)$ in the model of \Cref{lem:model}, and $1.339103\le\Ctrue\le1.339116$. For every $k\ge1$, $\limsup_Nf_1(N;E(2^k))\le\Ctrue/k$, and the conclusions of \Cref{thm:sharp}(i)--(ii) hold, with the values of \Cref{tab:EB}.
 \end{theorem}
 
 \begin{proof}
@@ -442,16 +501,111 @@ $k_0(b)$ & 2 & 2 & 2 & 2 & 1 & 2 & 1 & 1 \\
 
 For example, $\sum_m\tau(m)/(9^m-1)=\sum_n\tau_3(n)9^{-n}$ is simply nonnormal in base $3$ with $D^->0.123$, and $\sum_m\tau_9(m)/(10^m-1)$ is simply nonnormal in base $10$ with $D^->0.031$. These are the base-$b$ analogues of $E(2^k)$ that the method reaches.
 
-\section{Signed series: transitions, $E_+(2^k)$ and the four-state transducer}\label{sec:signed}
+\section{\texorpdfstring{The non-adjacent geometric transfer and $E_+(2^k)$ for $k\ge3$}{The non-adjacent geometric transfer and E+(2\textasciicircum k) for k >= 3}}\label{sec:naf}
+
+This section proves \Cref{thm:Eplus-main}. \Cref{thm:naf,thm:Eplus-lean} are kernel-verified in \tpath{NormalityChecker/NafGeometricTransfer.lean} at the Phase~25 commit \commitref{\phaseXXVcommit}. The written proofs below are the arguments that the formalization follows. They use only \Cref{lem:signed}, \Cref{thm:prefix}, \Cref{lem:conv} and radix descent; the classical facts about the non-adjacent form are proved here and not imported. In Lean, prefix NAF density is the predicate \leanX{NafDensityLE}{662}, $L$-normality in base $b$ is \leanU{HigherOrderTower}{69}{\ttt{OrderNormal}}~$b\,L$, normality is \leanU{Basic}{23}{\ttt{NormalIn}}, and $D_N$ is \leanU{BinaryDiscrepancy}{11}{\ttt{radixDiscrepancy}}.
+
+\begin{theorem}[Non-adjacent geometric transfer]\label{thm:naf}\evidence{Kernel-verified}
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item \textup{(Non-adjacent form.)} For every $A\in\Z$ there are digits $e_i=e_i(A)\in\{-1,0,1\}$ ($i\ge0$) with $e_ie_{i+1}=0$ for all $i$, $e_i=0$ for $i\ge|A|$, $A=\sum_{i<|A|}e_i2^i$ and $\#\{i:e_i\ne0\}=\wpm(A)$. If $A=\sum_{i\in S}\varepsilon_i2^{m_i}$ with $\varepsilon_i=\pm1$, then $|S|\ge\wpm(A)$; in particular every representation $A=\sum_{i<K}c_i2^i$ with $|c_i|\le1$ has at least $\wpm(A)$ nonzero digits.
+\item \textup{(Geometric tail.)} If $|d_i|\le1$ and $d_id_{i+1}=0$ for all $i$, then $3|\sum_{i<K}d_i2^i|+1\le2^{K+1}$ for every $K$. Consequently, if $e_u(A)=0$ for $r-\ell\le u<r$, then $|\sum_{i<r}e_i(A)2^i|/2^r<\frac23\,2^{-\ell}$.
+\item \textup{(Orbit covering.)} Let $s,r\ge1$, $N\ge0$, $M\ge sN$ and $c=\frac23\,2^{-sr}$. Then at most $r\,\wpm(A)$ indices $0\le m<N$ satisfy $\{2^{sm}A/2^M\}\in[c,1-c]$.
+\item \textup{(Real transfer.)} Let $x$ have prefix NAF density at most $\rho$, and let $s,r\ge1$, $R\ge0$ and $\varepsilon>0$. Then for all large $N$, with $c=\frac23\,2^{-sr}$,
+\[
+F_N\bigl([c+2^{-R},1-c);x,2^s\bigr)\le rs\rho+\varepsilon\qquad\text{and}\qquad D_N(x;2^s)\ge1-\frac4{3\cdot2^{sr}}-rs\rho-\varepsilon.
+\]
+In particular $D_N(x;2)\ge\frac23-2\rho-\varepsilon$ and $D_N(x;4)\ge\frac23-2\rho-\varepsilon$ for all large $N$.
+\item \textup{(Order exclusion.)} If $\rho<\frac5{16}$, then $x$ is not $4$-normal in base $2$ and not $2$-normal in base $4$.
+\item \textup{(Series transfer.)} Let $k\ge1$ and $a:\N\to\Z$ with $|a(n)|\le C_0n^B$ for $n\ge1$. If for every $C'>C$ one has $\sum_{n\le X}\wpm(a(n))\le C'X$ for all large $X$, then $x=\sum_{n\ge1}a(n)2^{-kn}$ has prefix NAF density at most $C/k$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+{\raggedright The Lean statements are: (a) \leanX{nafWeight\_eq\_signedWeight}{360}, \leanX{exists\_naf}{367}, \leanX{nafWeight\_le\_card\_support}{376} and \leanX{signedWeight\_natAbs\_le\_card\_of\_signed\_sum}{137}; (b) \leanX{three\_mul\_abs\_sum\_add\_one\_le}{386} and \leanX{abs\_nafLow\_div\_lt}{442}; (c) \leanX{naf\_dyadic\_count\_le}{541}, with the binary case \leanX{naf\_orbit\_count\_le}{579}; (d) \leanX{frequency\_naf\_interval\_le}{594}, \leanX{eventually\_frequency\_le\_of\_nafDensity}{680}, \leanX{radixDiscrepancy\_eventually\_ge\_of\_nafDensity}{716}, \leanX{binary\_radixDiscrepancy\_eventually\_ge\_of\_nafDensity}{745}, \leanX{binary\_radixDiscrepancy\_eventually\_ge\_two\_thirds}{753} and \leanX{base4\_radixDiscrepancy\_eventually\_ge\_two\_thirds}{762}; (e) \leanX{not\_orderNormal\_two\_four\_of\_nafDensity}{847} and \leanX{not\_orderNormal\_four\_two\_of\_nafDensity}{863}; (f) \leanX{nafDensityLE\_of\_series}{1026}.\par}
+
+(a) Put $e_0(A)=0$ if $A$ is even, and $e_0(A)=\pm1$ with $A\equiv e_0(A)\pmod4$ if $A$ is odd, and continue with $A'=(A-e_0(A))/2$. If $e_0(A)\ne0$, then $4\mid A-e_0(A)$, so $A'$ is even and $e_1(A)=e_0(A')=0$; the digits are non-adjacent. Since $|A'|\le|A|-1$ for $A\ne0$, the process reaches $0$ within $|A|$ steps, which gives the support bound and the value. For the weight, $\wpm(A)=\wpm(A/2)$ if $A$ is even. If $A$ is odd, $(A-1)/2$ and $(A+1)/2$ are consecutive integers, and $A'$ is the even one. An even integer $2q$ has $\wpm(2q)\le\wpm(2q\pm1)$ (\leanX{signedWeight\_parity\_mono}{85}, from $\wpm(2q+1)=1+\min\{\wpm(q),\wpm(q+1)\}$ and $|\wpm(q+1)-\wpm(q)|\le1$), so the recursion of \Cref{lem:signed} gives $\wpm(A)=1+\wpm(A')$. Induction gives $\#\{i:e_i\ne0\}=\wpm(A)$. Minimality follows from subadditivity and $\wpm(\pm2^m)=1$.
+
+(b) Induct on $K$, proving the bounds for $K$ and $K+1$ together. If $d_{K+1}=0$, the bound for $K+1$ gives the one for $K+2$. Otherwise $d_K=0$, so $|\sum_{i<K+2}d_i2^i|\le|\sum_{i<K}d_i2^i|+2^{K+1}$ and $3|\sum_{i<K+2}d_i2^i|+1\le2^{K+1}+3\cdot2^{K+1}=2^{K+3}$. For the consequence, the vanishing digits give $\sum_{i<r}e_i2^i=\sum_{i<r-\ell}e_i2^i$, whose absolute value is less than $\frac23\,2^{r-\ell}$.
+
+(c) For $m<N$ put $j=sm\le M$. Then $2^jA/2^M$ is an integer plus $\sum_{i<M-j}e_i2^i/2^{M-j}$. If the $sr$ digits $e_u$ with $M-j-sr\le u<M-j$ all vanish, (b) shows that this fraction has absolute value less than $c\le\frac13$, so $\{2^jA/2^M\}\in[0,c)\cup(1-c,1)$. Hence every counted $m$ has a nonzero digit $e_u$ with $M-sm-sr\le u<M-sm$. A fixed $u$ lies in at most $r$ of these windows, because they have length $sr$ and move by $s$. So the count is at most $r\,\#\{u:e_u\ne0\}=r\,\wpm(A)$.
+
+(d) Put $M=sN+R$ and $A=\lfloor2^Mx\rfloor$. For $m<N$, $2^{sm}x-2^{sm}A/2^M=2^{sm-M}(2^Mx-A)\in[0,2^{-R})$. So if $\{2^{sm}x\}\in[c+2^{-R},1-c)$, then $\{2^{sm}A/2^M\}\in[c,1-c)$, and (c) gives $N\,F_N([c+2^{-R},1-c);x,2^s)\le r\,\wpm(A)\le r\rho'(sN+R)$ for every $\rho'>\rho$ and all large $N$. This gives the frequency bound. The interval has length $1-2c-2^{-R}$, and $2c=\frac43\,2^{-sr}$, so choosing $2^{-R}<\varepsilon/2$ gives the discrepancy bound. The pairs $(s,r)=(1,2)$ and $(2,1)$ both have $c=\frac16$.
+
+(e) Take $(s,r)=(1,2)$, respectively $(2,1)$, and $R=6$. Then $c+2^{-R}=\frac16+\frac1{64}<\frac3{16}$ and $1-c=\frac56>\frac{13}{16}$. The interval $[\frac3{16},\frac{13}{16})$ is the union of the ten cylinders of the binary words of length $4$, respectively the base-$4$ words of length $2$, with values $3,\dots,12$. Under $4$-normality in base $2$, respectively $2$-normality in base $4$, its frequency would tend to $\frac{10}{16}=\frac58$. By (d) it is eventually at most $2\rho+\varepsilon<\frac58$ for $\varepsilon=(\frac58-2\rho)/2$.
+
+(f) By \Cref{thm:prefix}, $\lfloor2^Mx\rfloor=A_M+\lfloor\tau_M\rfloor$ with $A_M=\sum_{n\le M/k}a(n)2^{M-kn}$. Subadditivity and shift invariance of $\wpm$ give $\wpm(A_M)\le\sum_{n\le M/k}\wpm(a(n))\le C'M/k$ for all large $M$. The growth hypothesis gives $|\tau_M|=O(M^B)$, so $\wpm(\lfloor\tau_M\rfloor)\le\log_2(|\tau_M|+1)+1=o(M)$ by \Cref{lem:signed}.
+\end{proof}
+
+The constant $\frac23$ in (b) cannot be improved: the non-adjacent digits $e_{K-1}=e_{K-3}=\dots=1$ give $\sum_{i<K}e_i2^i/2^K\to\frac23$. For $E_+(2^k)$ the transfer gives the following.
+
+\begin{theorem}[$E_+(2^k)$: kernel-verified bounds]\label{thm:Eplus-lean}\evidence{Kernel-verified}
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item For every $k\ge1$, $E_+(2^k)=\sum_{n\ge1}a_+(n)2^{-kn}$ with $a_+(n)=(1-v_2(n))\,\tau_{\mathrm{odd}}(n)$, and $|a_+(n)|\le n$.
+\item $\wpm(a_+(n))\le G_0(n)$, where $G_0$ is multiplicative with $G_0(2^e)=\wpm(|1-e|)$ and $G_0(p^e)=\wpm(e+1)$ for odd primes $p$. The mean $W_+^{\mathrm{maj}}=\lim_XX^{-1}\sum_{n\le X}G_0(n)$ exists and $W_+^{\mathrm{maj}}\le\frac{93694}{100000}$.
+\item $E_+(2^k)$ has prefix NAF density at most $W_+^{\mathrm{maj}}/k$. Hence, for all $k\ge1$, $b\in\{2,4\}$ and $\varepsilon>0$, $D_N(E_+(2^k);b)\ge\frac23-\frac{2\cdot937}{1000k}-\varepsilon$ for all large $N$.
+\item For every $k\ge3$, $D_N(E_+(2^k);2)\ge\frac{21}{500}$ and $D_N(E_+(2^k);4)\ge\frac{21}{500}$ for all large $N$. Moreover $E_+(2^k)$ is not $4$-normal in base $2$, not $2$-normal in base $4$, and not normal in base $2$ or in base $4$. In particular all of this holds for $E_+(8)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+{\raggedright The Lean statements are: (1) \leanX{erdosBorweinPlusPow\_eq\_signed\_series}{1148}, \leanX{aPlus\_eq\_erdosBorweinPlusCoeff}{1129} and \leanX{abs\_aPlus\_le}{1421}; (2) \leanX{signedWeight\_aPlus\_le}{1439}, \leanX{ePlusMajorant\_mul\_moebius}{1343}, \leanX{summable\_abs\_ePlusKernel\_div}{1591}, \leanX{tendsto\_average\_ePlusMajorant}{1661} and \leanX{ePlusMean\_le}{1836}; (3) \leanX{erdosBorweinPlusPow\_nafDensityLE}{1916}, \leanX{erdosBorweinPlus\_two\_pow\_radixDiscrepancy\_eventually\_ge}{1945} and \leanX{erdosBorweinPlus\_two\_pow\_radixDiscrepancy\_base4\_eventually\_ge}{1962}; (4) \leanX{erdosBorweinPlus\_two\_pow\_lowerDiscrepancy\_ge}{1978}, \leanX{erdosBorweinPlus\_two\_pow\_lowerDiscrepancy\_pos}{1988}, \leanX{erdosBorweinPlus\_two\_pow\_lowerDiscrepancy\_base4\_ge}{1993}, \leanX{erdosBorweinPlus\_two\_pow\_not\_orderNormal\_four}{2003}, \leanX{erdosBorweinPlus\_two\_pow\_not\_orderNormal\_base4\_two}{2010}, \leanX{erdosBorweinPlus\_two\_pow\_not\_normalIn\_two}{2016} and \leanX{erdosBorweinPlus\_two\_pow\_not\_normalIn\_four}{2021}, and for $E_+(8)$ \leanX{erdosBorweinPlus\_eight\_not\_orderNormal\_four}{2026} and \leanX{erdosBorweinPlus\_eight\_not\_orderNormal\_base4\_two}{2030}.\par}
+
+(1) $\frac1{q^m+1}=\frac1{q^m-1}-\frac2{q^{2m}-1}$ gives $E_+(q)=E(q)-2E(q^2)$, so $a_+(n)=\tau(n)-2\cdot\mathbf 1_{2\mid n}\tau(n/2)=(1-v_2(n))\tau_{\mathrm{odd}}(n)$, and $|a_+(n)|\le\tau(n)\le n$.
+
+(2) $a_+$ is multiplicative, with $a_+(2^e)=1-e$ and $a_+(p^e)=e+1$ for odd $p$. Submultiplicativity of $\wpm$ (\Cref{lem:signed}) gives $\wpm(a_+(n))\le G_0(n)$. The Dirichlet kernel $h_0=G_0*\mu$ is multiplicative, vanishes at odd primes and satisfies $|h_0(p^e)|\le1$, so $\sum_n|h_0(n)|/n<\infty$, and \Cref{lem:conv} gives $W_+^{\mathrm{maj}}=\sum_nh_0(n)/n=\prod_pL_0(p)$ with $L_0(p)=(1-\frac1p)\sum_{e\ge0}G_0(p^e)p^{-e}$. Each $L_0(p)$ is at most a finite head of its series plus a geometric tail: an explicit rational function $U_{15}(1/p)$ for $3\le p\le19$ (and a similar bound at $p=2$), and $U_5(1/p)=1+p^{-2}-p^{-3}+p^{-4}+p^{-5}/(1-p^{-1})\le1+p^{-2}$ for $p\ge23$. An exact rational evaluation over the $72$ primes below $361$, together with $\sum_{p\ge361}p^{-2}\le\frac1{1074}$ (summing over integers $\equiv\pm1\pmod6$) and $\prod_i(1+a_i)\le(1-\sum_ia_i)^{-1}$, gives $W_+^{\mathrm{maj}}\le\frac{1074}{1073}\prod_{p<361}U(p)\le\frac{93694}{100000}$. No finite certificate outside the kernel is used.
+
+(3) Apply \Cref{thm:naf}(f) with $C_0=B=1$, $C=W_+^{\mathrm{maj}}$ and the mean bound from (2), and then \Cref{thm:naf}(d) with $\frac{93694}{100000}\le\frac{937}{1000}$.
+
+(4) For $k\ge3$ the density is at most $\rho=\frac{93694}{300000}=0.31231\ldots$. Then $\frac23-2\rho=\frac{1051}{25000}=0.04204$, and (d) with $\varepsilon=\frac1{50000}$ gives $D_N\ge0.04202\ge\frac{21}{500}$ in bases $2$ and $4$. Since $\rho<\frac5{16}=0.3125$, part (e) excludes $4$-normality in base $2$ and $2$-normality in base $4$; normality in base $b$ implies $L$-normality for every $L$.
+\end{proof}
+
+The margin in (4) is small: the order-exclusion threshold is $\frac5{16}=0.3125$ and the kernel-verified density bound is $0.31232$. The sharper certified means of \Cref{sec:signed} give more room.
+
+\begin{corollary}[Sharper and multi-radix bounds for $E_+(2^k)$]\label{cor:Eplus-sharp}\evidence{Lean-supported paper proof + Finite certificate}
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item For every $k\ge3$ and $j\ge1$, $D^-(E_+(2^k);2^j)\ge\frac j{2^j-1}\cdot\frac{21}{500}$. In particular $E_+(2^k)$ is not normal in any base $2^j$.
+\item If the mean $W_+$ of $\wpm(a_+(n))$ satisfies $W_+\le W$, then for every $k\ge1$ and $\ell\ge1$,
+\[
+D^-(E_+(2^k);2)\ge1-\frac4{3\cdot2^\ell}-\frac{\ell W}k\qquad\text{and}\qquad D^-(E_+(2^k);4)\ge\frac23-\frac{2W}k.
+\]
+\item With $W=0.912845$ and with $W=0.908184$ respectively, for $b\in\{2,4\}$,
+\[
+D^-(E_+(8);b)\ge\frac{17431}{300000}=0.0581033\ldots\quad\text{and}\quad D^-(E_+(8);b)\ge\frac{11477}{187500}=0.0612106\ldots,
+\]
+and $D^-(E_+(8);8)\ge\frac37\cdot\frac{11477}{187500}=\frac{11477}{437500}>0.02623$. The bounds for other $k$ are in \Cref{tab:Eplus}.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(1) Radix descent (\Cref{prop:criteria}(5), kernel-verified as \leanW{radixDiscrepancy\_descent}{2417}) gives $D_{jN}(x;2)\le\frac{2^j-1}jD_N(x;2^j)$; combine it with \Cref{thm:Eplus-lean}(4). (2) The limit $W_+$ exists (\Cref{thm:Eplus-k4}), so for every $C'>W$ the mean bound in \Cref{thm:naf}(f) holds with $C=W$; together with $|a_+(n)|\le n$ this gives prefix NAF density at most $W/k$, and \Cref{thm:naf}(d) gives the two bounds. (3) The enclosure $W_+\le0.912845$ is the independent certificate used in the proof of \Cref{thm:Eplus-k3}, and $W_+\le0.908184$ is \Cref{thm:Eplus-k4}. With $k=3$ and $\ell=2$, exact arithmetic gives $\frac23-\frac23\cdot0.912845=\frac{17431}{300000}$ and $\frac23-\frac23\cdot0.908184=\frac{11477}{187500}$. Radix descent with $j=3$ gives the base-$8$ bound. Only the two enclosures for $W_+$ are finite certificates; the transfer itself is kernel-verified.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+$k$ & 3 & 4 & 5 & 6 & 8 & 16 \\
+\midrule
+NAF, $\ell=2$, $W_+^{\mathrm{maj}}\le0.937$ & 0.04200 & 0.19816 & 0.29186 & 0.35433 & 0.43241 & 0.54954 \\
+NAF, best $\ell$, $W_+\le0.908184$ & 0.06121 & 0.21257 & 0.30339 & 0.37924 & 0.49276 & 0.68962 \\
+\quad best $\ell$ & 2 & 2 & 2 & 3 & 3 & 4 \\
+transitions: $\limsup F_N([\frac14,\frac34))\le$ & --- & 0.45410 & 0.36328 & 0.30273 & 0.22705 & 0.11353 \\
+transitions: $D^-\ge$ & --- & 0.04590 & 0.13672 & 0.19727 & 0.29590 & 0.53443 \\
+\bottomrule
+\end{tabular}
+\caption{Bounds for $E_+(2^k)$ in base $2$, rounded toward the weaker side. The rows labelled NAF and the last row are lower bounds for $D^-(E_+(2^k);2)$. The first row is \Cref{thm:Eplus-lean}(3) (\emph{Kernel-verified}; at $k=3$ it is \Cref{thm:Eplus-lean}(4)). The second row is \Cref{cor:Eplus-sharp}(2) (\emph{Lean-supported paper proof + Finite certificate}). The last two rows are \Cref{thm:Eplus-k4} (\emph{Paper proof + Finite certificate}).}\label{tab:Eplus}
+\end{table}
+
+\section{Signed series: transitions and the four-state transducer}\label{sec:signed}
 
 \subsection{Signed transition-count transfer}
 
 \begin{theorem}[Signed transfer]\label{thm:signed-transfer}\evidence{Lean-supported paper proof}
 Let $a:\N\to\Z$ satisfy $\log(1+|a(n)|)=o(n)$, and let $x=\sum_{n\ge1}a(n)2^{-kn}$, a real number of either sign. Then for every $N$,
-\[
-\tr_N(x)\le T(\lfloor2^Nx\rfloor)\le2\sum_{n\le N/k}\wpm(a(n))+2\wpm(\lfloor\tau_N\rfloor),\qquad
-\limsup_{N\to\infty}F_N([1/4,3/4);x,2)\le\frac2k\limsup_{X\to\infty}\frac1X\sum_{n\le X}\wpm(a(n))=:\frac{2W}k.
-\]
+\begin{align*}
+\tr_N(x)\le T(\lfloor2^Nx\rfloor)&\le2\sum_{n\le N/k}\wpm(a(n))+2\wpm(\lfloor\tau_N\rfloor),\\
+\limsup_{N\to\infty}F_N([1/4,3/4);x,2)&\le\frac2k\limsup_{X\to\infty}\frac1X\sum_{n\le X}\wpm(a(n))=:\frac{2W}k.
+\end{align*}
 If $2W/k<\frac12$, then $x$ is not $2$-normal in base $2$ and not normal in any base $2^j$. Moreover $D^-(x;2)\ge\max_{m\ge2}\bigl(1-2^{1-m}-(m-1)\frac{2W}k\bigr)\ge\frac12-\frac{2W}k$ and $D^-(x;2^j)\ge\frac j{2^j-1}D^-(x;2)$.
 \end{theorem}
 
@@ -460,31 +614,20 @@ By \eqref{eq:digits}, $\lfloor2^Nx\rfloor\equiv\sum_{j\le N}d_j2^{N-j}\pmod{2^N}
 \end{proof}
 
 \begin{theorem}[$E_+(2^k)$ for $k\ge4$]\label{thm:Eplus-k4}\evidence{Paper proof + Finite certificate}
-The mean $W_+=\lim_XX^{-1}\sum_{n\le X}\wpm(a_+(n))$ exists and
+The mean $W_+=\lim_XX^{-1}\sum_{n\le X}\wpm(a_+(n))$ exists and satisfies $0.908174\le W_+\le0.908184$. Moreover
 \[
-0.908174\le W_+\le0.908184,\qquad W_+\le W_+^{\mathrm{maj}}=\frac12\sum_{e\ge0}\frac{\wpm(|1-e|)}{2^e}\prod_{p>2}\Bigl(1-\frac1p\Bigr)\sum_{f\ge0}\frac{\wpm(f+1)}{p^f}\in[0.936414,\,0.936415].
+W_+\le W_+^{\mathrm{maj}}=\frac12\sum_{e\ge0}\frac{\wpm(|1-e|)}{2^e}\prod_{p>2}\Bigl(1-\frac1p\Bigr)\sum_{f\ge0}\frac{\wpm(f+1)}{p^f}\in[0.936414,\,0.936415].
 \]
 Hence, for every $k\ge4$, $E_+(2^k)$ is not $2$-normal in base $2$ and not normal in any base $2^j$, with the lower bounds of \Cref{tab:Eplus}, and $D^-(E_+(2^k);2)\to1$. Since $\wpm(c)\ge1$ for $c\ne0$ and $a_+(n)\ne0$ exactly when $n\not\equiv2\pmod4$, $W_+\ge\frac34$, so $2W_+/3\ge\frac12$, and no bound of this kind reaches $k\le3$.
 \end{theorem}
 
 \begin{proof}
-With $e=v_2(n)$, $\wpm(a_+(n))=\wpm\bigl(u_2(e)\prod_{p>2}\odd(e_p+1)\bigr)$, where $u_2(e)=\odd(|1-e|)$ for $e\ne1$ and $u_2(1)=0$, because $\wpm(\pm2^sc)=\wpm(c)$. \Cref{lem:model} applies with $F=\wpm$ and majorant $G(2^e)=\wpm(|1-e|)$, $G(p^f)=\wpm(f+1)$ for odd $p$. The value $G(2)=0$ affects only one prime. Since $|a_+(n)|\le\tau(n)\le2\sqrt n$, \Cref{thm:signed-transfer} applies. The $2$-adic factor of $W_+^{\mathrm{maj}}$ lies in $[0.796047,0.796048]$ and the odd product in $[1.176329,1.176330]$.
+With $e=v_2(n)$, $\wpm(a_+(n))=\wpm\bigl(u_2(e)\prod_{p>2}\odd(e_p+1)\bigr)$, where $u_2(e)=\odd(|1-e|)$ for $e\ne1$ and $u_2(1)=0$, because $\wpm(\pm2^sc)=\wpm(c)$. \Cref{lem:model} applies with $F=\wpm$ and majorant $G(2^e)=\wpm(|1-e|)$, $G(p^f)=\wpm(f+1)$ for odd $p$. The value $G(2)=0$ affects only one prime. Since $|a_+(n)|\le\tau(n)\le2\sqrt n$, \Cref{thm:signed-transfer} applies. The $2$-adic factor of $W_+^{\mathrm{maj}}$ lies in $[0.796047,0.796048]$ and the odd product in $[1.176329,1.176330]$. These enclosures are consistent with the kernel-verified bound $W_+^{\mathrm{maj}}\le\frac{93694}{100000}$ of \Cref{thm:Eplus-lean}, which uses an explicit Euler product instead of a finite certificate.
 \end{proof}
 
-\begin{table}[ht]
-\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-$k$ & 4 & 5 & 6 & 8 & 16 \\
-\midrule
-$\limsup F_N([1/4,3/4))\le$ & 0.45410 & 0.36328 & 0.30273 & 0.22705 & 0.11353 \\
-$D^-(E_+(2^k);2)\ge$ & 0.04590 & 0.13672 & 0.19727 & 0.29590 & 0.53443 \\
-\bottomrule
-\end{tabular}
-\caption{Certified bounds for $E_+(2^k)$ from \Cref{thm:Eplus-k4} (\emph{Finite certificate}).}\label{tab:Eplus}
-\end{table}
+The rows of \Cref{tab:Eplus} labelled ``transition count'' are the bounds of \Cref{thm:Eplus-k4}. For every $k$ in the table they are weaker than the non-adjacent bounds of \Cref{sec:naf}.
 
-Let $\chi$ be a cubic Dirichlet character modulo $M_\chi$, let $\omega=e^{2\pi i/3}$, and write $c=1*\chi=y_1+y_2\,\omega$ with integers $y_1(n),y_2(n)$. Following \ttt{notes/phase23/dense-characters-and-nonfundamental-forms.md}, put $c_+=2y_1-y_2$, $c_-=y_2$ and $L_\pm(2^k)=\sum_nc_\pm(n)2^{-kn}$.
+Let $\chi$ be a cubic Dirichlet character modulo $M_\chi$, let $\omega=e^{2\pi i/3}$, and write $c=1*\chi=y_1+y_2\,\omega$ with integers $y_1(n),y_2(n)$. Following \tpath{notes/phase23/dense-characters-and-nonfundamental-forms.md}, put $c_+=2y_1-y_2$, $c_-=y_2$ and $L_\pm(2^k)=\sum_nc_\pm(n)2^{-kn}$.
 
 \begin{proposition}[Cubic characters in base $2$]\label{prop:cubic}\evidence{Paper proof + Finite certificate}
 $\wpm(c_\pm(n))\le G_\chi(n)$, where $G_\chi$ is multiplicative with $G_\chi(p^e)=\wpm(e+1)$ if $\chi(p)=1$, $G_\chi(p^e)=\mathbf 1[e\not\equiv2\ (\mathrm{mod}\ 3)]$ if $\chi(p)\in\{\omega,\bar\omega\}$, and $G_\chi(p^e)=1$ if $p\mid M_\chi$. Its mean is
@@ -518,9 +661,21 @@ If $a'\in\{-1,0,1\}^{\N}$ and $x-\sum_ma'(m)2^{-m}\in\Z$, then there are $\delta
 Put $\delta_m=\sum_{j\ge m}(a'(j)-d_j)2^{m-1-j}$. Then $2\delta_m-\delta_{m+1}=a'(m)-d_m$. Also $\delta_m=2^{m-1}\bigl(\sum_ja'(j)2^{-j}-\{x\}\bigr)-\sum_{j<m}(a'(j)-d_j)2^{m-1-j}$ is an integer, because $\sum_ja'(j)2^{-j}-\{x\}\in\Z$. Since $a'(j)-d_j\in[-2,1]$, $\delta_m\in[-2,1]$. The value $-2$ would force $d_j=1$ for all $j\ge m$, which the digit convention excludes.
 \end{proof}
 
-This is the binary case of the three-state transducer description in \ttt{notes/phase23/binary-partition-and-carry-complexity.md}.
+This is the binary case of the three-state transducer description in \tpath{notes/phase23/binary-partition-and-carry-complexity.md}.
 
-\begin{lemma}[Signed support of $E_+(2^k)$]\label{lem:Eplus-support}\evidence{Paper proof using External input}
+\begin{lemma}[Free-boundary and prefix signed weights]\label{lem:sigma-naf}\evidence{Paper proof}
+For every real $x$ there is a constant $C_x$ such that, for every $N\ge1$,
+\[
+\sigma_1(x;N)\le\wpm(\lfloor2^Nx\rfloor)\le\sigma_1(x;N)+C_x.
+\]
+In particular $\limsup_N\sigma_1(x;N)/N=\limsup_M\wpm(\lfloor2^Mx\rfloor)/M$, and $x$ has prefix NAF density at most $\alpha$ if and only if $\limsup_N\sigma_1(x;N)/N\le\alpha$.
+\end{lemma}
+
+\begin{proof}
+Write $A=\lfloor2^Nx\rfloor=\sum_ie_i2^i$ in non-adjacent form (\Cref{thm:naf}(a)), so that $x=2^{-N}A+2^{-N}\{2^Nx\}$. The digit $e_i$ sits at binary position $N-i$, the digits with $i\ge N$ give an integer, and $\{2^Nx\}\in[0,1)$ can be written in binary on positions $>N$. This is an admissible sequence in \Cref{def:sigma} with at most $\wpm(A)$ nonzero entries on $[1,N]$, which proves the first inequality. Conversely, let $a'$ attain $\sigma_1(x;N)$, and put $z=x-\sum_ma'(m)2^{-m}\in\Z$, $I=\sum_{m\le N}a'(m)2^{N-m}$ and $T=\sum_{m>N}a'(m)2^{N-m}\in[-1,1]$. Then $2^Nx=2^Nz+I+T$, so $\lfloor2^Nx\rfloor=2^Nz+I+\lfloor T\rfloor$ with $\lfloor T\rfloor\in\{-1,0,1\}$. By \Cref{lem:signed}, $\wpm(I)\le\sigma_1(x;N)$, and $|z|\le|x|+1$. Subadditivity and shift invariance give the second inequality with $C_x=1+\max_{|z|\le|x|+1}\wpm(z)$.
+\end{proof}
+
+\begin{lemma}[Signed support of $E_+(2^k)$]\label{lem:Eplus-support}\evidence{Paper proof; non-adjacent form Kernel-verified}
 Let $k,N_0\ge1$, $H=\lceil\frac2k\log_2(N_0+2)\rceil+4$, $M=N_0+H$ and $S_M^+=\sum_{n\le M}a_+(n)2^{k(M-n)}$. Then
 \[
 \sigma_1(E_+(2^k);kN_0)\le\wpm(S_M^+)\le\sum_{n\le M}\wpm(a_+(n)),\qquad\text{hence}\qquad\limsup_{N\to\infty}\frac{\sigma_1(E_+(2^k);N)}N\le\frac{W_+}k.
@@ -528,11 +683,11 @@ Let $k,N_0\ge1$, $H=\lceil\frac2k\log_2(N_0+2)\rceil+4$, $M=N_0+H$ and $S_M^+=\s
 \end{lemma}
 
 \begin{proof}
-Put $N=kN_0$. Write $S_M^+=\sum_j\varepsilon_j2^j$ in non-adjacent form, which has exactly $\wpm(S_M^+)$ nonzero digits \cite{Reitwiesner1960} (\emph{External input}). Then
+Put $N=kN_0$. Write $S_M^+=\sum_j\varepsilon_j2^j$ in non-adjacent form, which has exactly $\wpm(S_M^+)$ nonzero digits by \Cref{thm:naf}(a) (\leanX{exists\_naf}{367}); no external input is needed. Then
 \[
 E_+(2^k)=2^{-kM}\bigl(S_M^++T\bigr),\qquad T=\sum_{n>M}a_+(n)2^{-k(n-M)}.
 \]
-The digit $\varepsilon_j$ sits at binary position $kM-j$. Discard the positions $j\ge kM$ modulo $1$, keep $kH\le j<kM$ on positions $1,\dots,N$, and collect the rest as $2^{-N}r$ with $r=\sum_{j<kH}\varepsilon_j2^{j-kH}+2^{-kH}T$. Non-adjacency gives $|\sum_{j<kH}\varepsilon_j2^{j-kH}|<\sum_{i\ge0}2^{-1-2i}=\frac23$. We have $H<\frac2k\log_2(N_0+2)+5\le2N_0+7$, so $M\le3N_0+7$ and $2^{kH}\ge16(N_0+2)^2$. With $|a_+(n)|\le2n$,
+The digit $\varepsilon_j$ sits at binary position $kM-j$. Discard the positions $j\ge kM$ modulo $1$, keep $kH\le j<kM$ on positions $1,\dots,N$, and collect the rest as $2^{-N}r$ with $r=\sum_{j<kH}\varepsilon_j2^{j-kH}+2^{-kH}T$. Non-adjacency gives $|\sum_{j<kH}\varepsilon_j2^{j-kH}|<\frac23$ (\leanX{three\_mul\_abs\_sum\_add\_one\_le}{386}). We have $H<\frac2k\log_2(N_0+2)+5\le2N_0+7$, so $M\le3N_0+7$ and $2^{kH}\ge16(N_0+2)^2$. With $|a_+(n)|\le2n$,
 \[
 2^{-kH}|T|\le2^{-kH}\sum_{j\ge1}2(M+j)2^{-j}=2(M+2)2^{-kH}\le\frac{2(3N_0+9)}{16(N_0+2)^2}<\frac14.
 \]
@@ -591,7 +746,7 @@ where $f_N(u)=F_N(I_u;x,2)$ for the cylinder $I_u$ of $u$, a half-open interval 
 The mixed inequality $\liminf_Ns_N\ge A_L(1-2^LD^-(x;2))$ is false in general. Alternate long zero blocks with complete repetitions of binary de Bruijn cycles of increasing orders, each stage much longer than the preceding prefix. Then $D^-=0$, but $s_N\to0$ along the ends of the zero blocks.
 \end{remark}
 
-\begin{theorem}[$E_+(2^k)$ is not normal for $k\ge3$]\label{thm:Eplus-k3}\evidence{Paper proof + Finite certificate}
+\begin{theorem}[$E_+(2^k)$ for $k\ge3$: the transducer route]\label{thm:Eplus-k3}\evidence{Paper proof + Finite certificate}
 For every integer $k\ge3$, $E_+(2^k)$ is not normal in base $2$ or in any base $2^j$, and
 \[
 D^-(E_+(2^k);2)\ge\frac{A_{16}-W_+/k}{2^{16}A_{16}}\ge2.34\times10^{-7}.
@@ -602,23 +757,35 @@ D^-(E_+(2^k);2)\ge\frac{A_{16}-W_+/k}{2^{16}A_{16}}\ge2.34\times10^{-7}.
 By \Cref{lem:Eplus-support}, $\limsup_Ns_N\le W_+/k\le W_+/3$. An independent outward-rounded enclosure in \ttt{scripts/phase24\_classical.py} gives $W_+\le0.912845$, which is weaker than and consistent with \Cref{thm:Eplus-k4}. So $\limsup s_N\le0.304282<A_{16}$, and \Cref{thm:floor} with $L=16$ gives $D^-\ge(A_{16}-0.304282)/(2^{16}A_{16})=2.343\ldots\times10^{-7}$. The script asserts this bound against exact fractions.
 \end{proof}
 
-\begin{remark}\label{rem:Eplus-open}
-\Cref{thm:Eplus-k3} does not decide whether $E_+(8)$ is simply normal in base $2$. The signed weight controls word complexity, not the digit frequency, and $s_2$ is not subadditive on signed sums. The prefix measurement $f_1\approx0.337$ for $E_+(8)$ in \Cref{tab:measure} (at $N=2^{17}$; $0.3342$ at $M=6000$ in Track~E) is a finite measurement only.
+The kernel-verified bound $\frac{21}{500}$ of \Cref{thm:Eplus-lean} exceeds this constant by a factor of more than $1.79\times10^5$. The reason is that \Cref{thm:floor} spreads a deficit of signed weight over all $2^{16}$ cylinders of length $16$, while the non-adjacent transfer concentrates it on the single middle interval $[\frac16,\frac56]$.
+
+\begin{remark}[How far the signed-weight input can go]\label{rem:ceiling}
+By \Cref{lem:sigma-naf}, the input used for $E_+(8)$ in \Cref{cor:Eplus-sharp} is equivalent to $\limsup_N\sigma_1(E_+(8);N)/N\le W_+/3$. The register entry \ttt{GF-44} (a written proof with a finite certificate from an explicit periodic binary word of length $16076$; not part of this paper) shows that
+\[
+\Delta(\alpha)=\inf\Bigl\{D^-(x;2):\limsup_{N\to\infty}\frac{\sigma_1(x;N)}N\le\alpha\Bigr\}\le0.059108\qquad\text{for every }\alpha\ge\frac{4887}{16076}=0.30399\ldots.
+\]
+Since $0.912845/3=0.3042816\ldots\ge4887/16076$, no argument whose only input about $E_+(8)$ is $\limsup_N\sigma_1/N\le0.912845/3$ can prove $D^-(E_+(8);2)>0.059108$. The bound $\frac{17431}{300000}=0.0581033\ldots$ obtained from exactly that input is therefore within $1.8\%$ of the best possible. The sharper input $W_+/3\le0.908184/3=0.302728$ lies below $4887/16076$, so the ceiling $0.059108$ does not apply to it, and we do not compare the bound $\frac{11477}{187500}=0.0612106\ldots$ with that ceiling. \ttt{GF-44} also shows that the order-$3$ analogue of the threshold $\frac5{16}$ in \Cref{thm:naf}(e) is $\frac14<0.302728$. So signed-weight input of this kind cannot exclude $3$-normality of $E_+(8)$: failure of $4$-normality is the strongest finite-order conclusion it gives.
 \end{remark}
 
-\subsection{Shifted divisor identities for $a_+$}
+\begin{remark}\label{rem:Eplus-open}
+Neither \Cref{thm:Eplus-lean} nor \Cref{thm:Eplus-k3} decides whether $E_+(8)$ is simply normal in base $2$. The signed weight controls word complexity, through the frequency of the middle interval or of cylinders, not the frequency of a single digit, and $s_2$ is not subadditive on signed sums. The register entry \ttt{GF-42} records a transducer obstruction of this kind: signed-weight bounds alone do not determine individual digit frequencies. Nor does any result here give $D^+(E_+(8);2)<1$. \ttt{GF-42} (Theorem~B1.4, a written proof) proves $D^+(E_+(2^k);2)<1$ only for all sufficiently large $k\ge k_0$, with an effective $k_0>3.05\times10^{10}$, so $D^+(E_+(8);2)<1$ remains open. The prefix measurement $f_1\approx0.337$ for $E_+(8)$ in \Cref{tab:measure} (at $N=2^{17}$; $0.3342$ at $M=6000$ in Track~E) is a finite measurement only.
+\end{remark}
+
+\subsection{\texorpdfstring{Shifted divisor identities for $a_+$}{Shifted divisor identities for a+}}
 
 \begin{proposition}[Exact shifted identities]\label{prop:shifted}\evidence{Paper proof + Finite certificate}
 For all integers $X,h\ge1$:
 \begin{enumerate}[label=\textup{(\arabic*)},nosep]
 \item if $h$ is odd,
-\[
-\sum_{n=1}^Xa_+(n)a_+(n+h)=\sum_{n=1}^X\tau(n)\tau(n+h)-2\sum_{1\le m\le X/2}\tau(m)\tau(2m+h)-2\sum_{(h+1)/2\le m\le(X+h)/2}\tau(2m-h)\tau(m);
-\]
+\begin{multline*}
+\sum_{n=1}^Xa_+(n)a_+(n+h)=\sum_{n=1}^X\tau(n)\tau(n+h)-2\sum_{1\le m\le X/2}\tau(m)\tau(2m+h)\\
+-2\sum_{(h+1)/2\le m\le(X+h)/2}\tau(2m-h)\tau(m);
+\end{multline*}
 \item if $h=2h'$ is even,
-\[
-\sum_{n=1}^Xa_+(n)a_+(n+h)=\sum_{n=1}^X\tau(n)\tau(n+h)-2\sum_{m\le X/2}\tau(m)\tau(2m+h)-2\sum_{m\le X/2}\tau(2m)\tau(m+h')+4\sum_{m\le X/2}\tau(m)\tau(m+h').
-\]
+\begin{multline*}
+\sum_{n=1}^Xa_+(n)a_+(n+h)=\sum_{n=1}^X\tau(n)\tau(n+h)-2\sum_{m\le X/2}\tau(m)\tau(2m+h)\\
+-2\sum_{m\le X/2}\tau(2m)\tau(m+h')+4\sum_{m\le X/2}\tau(m)\tau(m+h').
+\end{multline*}
 \end{enumerate}
 \end{proposition}
 
@@ -630,14 +797,14 @@ Substitute $a_+(n)=\tau(n)-2\cdot\mathbf 1_{2\mid n}\tau(n/2)$, which holds beca
 Every affine pair in \Cref{prop:shifted} has nonzero determinant. Inserting the affine additive divisor asymptotic of Topacogullari \cite{Topacogullari17} (\emph{External input}), summed over dyadic ranges, recovers the $2$-adic factor $\frac14(2-3\cdot2^{-v_2(h)})$ in the leading coefficient of $\sum_{n\le X}a_+(n)a_+(n+h)$. This removes a congruence hypothesis from an earlier repository computation (\ttt{notes/phase24/classical-constants-and-joint-numerators.md}, \S3.3). Nothing below depends on it.
 \end{remark}
 
-\section{The threshold cases $k=1,2$}\label{sec:boundary}
+\section{\texorpdfstring{The threshold cases $k=1,2$}{The threshold cases k = 1, 2}}\label{sec:boundary}
 
 \begin{theorem}[The $E(4)$ threshold]\label{thm:E4}\evidence{Paper proof}
 For every $k\ge1$,
 \[
 f_1(N;E(2^k))=\frac1N\sum_{n\le N/k}s_2(\tau(n))-\frac{\kappa_k(N)}N+O\Bigl(\frac{\log N}N\Bigr)=\frac{\Ctrue}k-\frac{\kappa_k(N)}N+o(1),
 \]
-with $\kappa_k(N)$ as in \Cref{thm:E}(i). Consequently:
+with $\kappa_k(N)$ as in \Cref{thm:thresholds}(i). Consequently:
 \begin{enumerate}[label=\textup{(\arabic*)},nosep]
 \item $E(4)$ is simply normal in base $2$ if and only if $\kappa_2(N)/N\to(\Ctrue-1)/2\in[0.169551,0.169558]$, and $\limsup f_1<\frac12$ if and only if $\liminf\kappa_2(N)/N>(\Ctrue-1)/2$.
 \item Every $\tau(n)\ge1$ has $s_2(\tau(n))\ge1$, with strict inequality on a set of positive density (for example $p^2\parallel n$, where $s_2(3)=2$). So $\Ctrue>1$, and the zero-carry bound gives only $\limsup f_1\le\Ctrue/2\le0.66956$. No coefficient-mass functional bounded below by $1$ on nonzero integers can decide $E(4)$. Simple nonnormality could also arise if $\kappa_2(N)/N$ fails to converge.
@@ -684,8 +851,9 @@ Constant & Status & Proved bound and what is missing \\
 $E(2^k)$, $k\ge3$ & simply nonnormal, $D^->0$ & $f_1\le29/(20k)$ (Kernel-verified), $f_1\le\Ctrue/k$; exact $D_\infty$ open \\
 $E_{\mathrm{odd}}(2^k)$, $k\ge3$ & simply nonnormal & $f_1\le C_{\mathrm{odd}}/k$ \\
 $E^*(2^k)$, $k\ge3$ & simply nonnormal & $f_1\le1/k$ \\
-$E_+(2^k)$, $k\ge4$ & not $2$-normal, $D^->0$ & $F_N([\frac14,\frac34))\le2W_+/k$ \\
-$E_+(8)$ & nonnormal, $D^-\ge2.34\times10^{-7}$ & $\sigma_1/N\le W_+/3<A_{16}$; simple normality open \\
+$E_+(2^k)$, $k\ge3$ & not $4$-normal; not $2$-normal in base $4$; $D^-\ge\frac{21}{500}$ in bases $2$, $4$ (Kernel-verified) & NAF density $\le W_+^{\mathrm{maj}}/k\le0.31232$; simple normality open for $k=3$ \\
+$E_+(2^k)$, $k\ge4$ & not $2$-normal, $D^-\to1$ & $F_N([\frac14,\frac34))\le2W_+/k$; \Cref{tab:Eplus} \\
+$E_+(8)$ & $D^-\ge\frac{11477}{187500}$ in bases $2$, $4$ & NAF density $\le W_+/3\le0.302728$; simple normality and $D^+<1$ open \\
 $E(4)$ & \textbf{open} & $f_1\le\Ctrue/2\le0.66956$; simple normality $\iff\kappa_2/N\to(\Ctrue-1)/2$ \\
 $E^*(4)$ & \textbf{open} & $f_1\le\frac12$; simple normality $\iff\kappa^*=o(N)$ \\
 $E_+(4)$ & \textbf{open} & $\sigma_1/N\le W_+/2\le0.454092$, above $\frac13>A_L$ \\
@@ -724,7 +892,7 @@ Is $E(4)$ simply normal in base $2$? By \Cref{thm:E4} this is equivalent to $\ka
 \end{question}
 
 \begin{question}\label{q:Eplus}
-Is $E_+(8)$ simply normal in base $2$? Is $E_+(4)$ normal in base $2$? For $k=2$ put $\Delta_M=\sum_{n\le M}\wpm(a_+(n))-\wpm(S_M^+)\ge0$ in the notation of \Cref{lem:Eplus-support}. If $\liminf_M\Delta_M/(2M)>0.1231$, then $\limsup_N\sigma_1(E_+(4);N)/N<\frac13$, and $E_+(4)$ is not normal in base $2$ by \Cref{thm:floor}.
+Is $E_+(8)$ simply normal in base $2$? Is it $3$-normal in base $2$? By \Cref{rem:ceiling}, signed-weight input alone cannot exclude $3$-normality, so a negative answer needs other information. Is $E_+(4)$ normal in base $2$? For $k=2$ put $\Delta_M=\sum_{n\le M}\wpm(a_+(n))-\wpm(S_M^+)\ge0$ in the notation of \Cref{lem:Eplus-support}. If $\liminf_M\Delta_M/(2M)>0.1231$, then $\limsup_N\sigma_1(E_+(4);N)/N<\frac13$, and $E_+(4)$ is not normal in base $2$ by \Cref{thm:floor}.
 \end{question}
 
 \begin{question}\label{q:collisions}
@@ -736,23 +904,27 @@ Is $E(b^k)$ simply normal in base $b$ when $b$ is not a power of $2$, for exampl
 \end{question}
 
 \begin{question}\label{q:Dplus}
-For $k\ge3$, does $E(2^k)$ satisfy $D^+(E(2^k);2)<1$, which would in particular place it outside $K_2=\{x:D_N(x;2)\to1\}$? By the kernel-verified equivalence \leanU{BinaryDiscrepancy}{229}{\ttt{discrepancy\_lt\_one\_iff\_transitions}}, $D^+<1$ is equivalent to a positive lower transition density, which digit mass does not supply.
+Does $E_+(8)$ satisfy $D^+(E_+(8);2)<1$, which would in particular place it outside $K_2=\{x:D_N(x;2)\to1\}$? More generally, for which $k$ with $3\le k<k_0$ does $D^+(E_+(2^k);2)<1$ hold? By the kernel-verified equivalence \leanU{BinaryDiscrepancy}{229}{\ttt{discrepancy\_lt\_one\_iff\_transitions}}, $D^+<1$ is equivalent to a positive lower transition density, which neither digit mass nor signed weight supplies: both bound a frequency from above, and $D^+<1$ needs a frequency bounded from below. The register entry \ttt{GF-42} gives written proofs (not reproduced or kernel-verified here) of $D^+(E(2^k);2)<1$ for every $k\ge3$ (Theorem~B1.3) and of $D^+(E_+(2^k);2)<1$ for $k\ge k_0$ with an effective $k_0>3.05\times10^{10}$ (Theorem~B1.4). A kernel-verified proof of the first statement, and any proof for $E_+(8)$, would be new.
 \end{question}
 
 \section{Formal verification and data availability}\label{sec:formal}
+\begingroup\raggedright
 
 The Lean~4 \cite{Lean4} declarations cited above, built with Mathlib \cite{Mathlib}, live in the repository \url{https://github.com/eldernos/MathematicsResearch}:
 \begin{itemize}[nosep]
-\item \ttt{NormalityChecker/DigitMassTransfer.lean}, committed and pinned at Phase~24 commit \ttt{\phaseXXIVcommit}. It exports $62$ theorems and contains no \ttt{sorry}. On \ttt{hail} and in remote GitHub Actions CI (\ttt{Lean verification} run \ttt{46117198083}) it was built and kernel-checked (including \ttt{leanchecker} replay) with only the standard axioms \ttt{propext}, \ttt{Classical.choice} and \ttt{Quot.sound}. The declarations used here, linked directly to their lines at \ttt{\phaseXXIVcommit}, are: \leanW{digitSum\_add\_add\_carries}{191}, \leanW{digitSum\_add\_le}{196}, \leanW{digitSum\_mul\_pow}{202}, \leanW{digitSum\_mul\_le}{216}, \leanW{nonzeroDigits\_add\_le}{258}, \leanW{nonzeroDigits\_mul\_le}{338}, \leanW{nonzeroDigits\_pred\_sq}{387}, \leanW{digitSum\_two\_succ}{405}, \leanW{signedWeight\_two\_mul}{444}, \leanW{signedWeight\_mul\_two\_pow}{459}, \leanW{signedWeight\_le\_digitSum}{465}, \leanW{signedWeight\_add\_le}{538}, \leanW{signedWeight\_sub\_le}{543}, \leanW{signedWeight\_mul\_le}{549}, \leanW{transitions\_rec}{610}, \leanW{transitions\_add\_two\_pow}{682}, \leanW{transitions\_add\_le}{738}, \leanW{floor\_pow\_mul\_eq\_head\_add\_floor\_tail}{756}, \leanW{digitSum\_prefix\_le}{798}, \leanW{transitions\_prefix\_le}{819}, \leanW{interval\_le\_radixDiscrepancy}{827}, \leanW{radixDiscrepancy\_ge\_nonzero\_freq}{863}, \leanW{binaryDiscrepancy\_ge\_half\_sub\_transition}{883}, \leanW{radixDiscrepancy\_ge\_zero\_run}{959}, \leanW{tendsto\_average\_of\_summable\_conv\_mobius}{1021}, \leanW{local\_factor\_digitSum\_two}{1142}, \leanW{tauDigitKernel\_prime\_pow}{1283}, \leanW{tauDigitMajorant\_mul\_moebius}{1308}, \leanW{digitSum\_card\_divisors\_le}{1313}, \leanW{summable\_abs\_tauDigitKernel\_div}{1517}, \leanW{tsum\_tauDigitKernel\_div\_le}{1663}, \leanW{erdosBorweinPow\_eq\_divisor\_series}{1770}, \leanW{erdosBorwein\_two\_pow\_digitFreq\_limsup\_le}{2143}, \leanW{erdosBorwein\_two\_pow\_radixDiscrepancy\_eventually\_ge}{2161}, \leanW{erdosBorwein\_two\_pow\_lowerDiscrepancy\_pos}{2194}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal\_pow}{2277}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal}{2334} and \leanW{radixDiscrepancy\_descent}{2417}.
-\item Definitions it depends on, at the pinned Phase~23 commit \ttt{\phaseXXIIIcommit}: \ttt{Basic.shift} and \ttt{Basic.frequency} (lines 15, 18), \ttt{BinaryDiscrepancy.radixDiscrepancy} (line 11), \ttt{HigherOrderTower.OrderNormal} (line 69) and \ttt{SimpleNormalityKernel.wordFreq} (line 73). The coefficient identity \ttt{Phase22Cores.erdosBorweinPlusCoeff\_eq} (line 1052) is pinned at the Phase~22 commit \ttt{\phaseXXIIcommit}.
+\item \tpath{NormalityChecker/DigitMassTransfer.lean}, committed and pinned at the Phase~24 commit \commitref{\phaseXXIVcommit}. It exports $62$ theorems and contains no \ttt{sorry}. On \ttt{hail} and in remote GitHub Actions CI (\ttt{Lean verification} run \ttt{46117198083}) it was built and kernel-checked (including \ttt{leanchecker} replay) with only the standard axioms \ttt{propext}, \ttt{Classical.choice} and \ttt{Quot.sound}. The declarations used here, linked directly to their lines at that commit, are: \leanW{digitSum\_add\_add\_carries}{191}, \leanW{digitSum\_add\_le}{196}, \leanW{digitSum\_mul\_pow}{202}, \leanW{digitSum\_mul\_le}{216}, \leanW{nonzeroDigits\_add\_le}{258}, \leanW{nonzeroDigits\_mul\_le}{338}, \leanW{nonzeroDigits\_pred\_sq}{387}, \leanW{digitSum\_two\_succ}{405}, \leanW{signedWeight\_two\_mul}{444}, \leanW{signedWeight\_mul\_two\_pow}{459}, \leanW{signedWeight\_le\_digitSum}{465}, \leanW{signedWeight\_add\_le}{538}, \leanW{signedWeight\_sub\_le}{543}, \leanW{signedWeight\_mul\_le}{549}, \leanW{transitions\_rec}{610}, \leanW{transitions\_add\_two\_pow}{682}, \leanW{transitions\_add\_le}{738}, \leanW{floor\_pow\_mul\_eq\_head\_add\_floor\_tail}{756}, \leanW{digitSum\_prefix\_le}{798}, \leanW{transitions\_prefix\_le}{819}, \leanW{interval\_le\_radixDiscrepancy}{827}, \leanW{radixDiscrepancy\_ge\_nonzero\_freq}{863}, \leanW{binaryDiscrepancy\_ge\_half\_sub\_transition}{883}, \leanW{radixDiscrepancy\_ge\_zero\_run}{959}, \leanW{tendsto\_average\_of\_summable\_conv\_mobius}{1021}, \leanW{local\_factor\_digitSum\_two}{1142}, \leanW{tauDigitKernel\_prime\_pow}{1283}, \leanW{tauDigitMajorant\_mul\_moebius}{1308}, \leanW{digitSum\_card\_divisors\_le}{1313}, \leanW{summable\_abs\_tauDigitKernel\_div}{1517}, \leanW{tsum\_tauDigitKernel\_div\_le}{1663}, \leanW{erdosBorweinPow\_eq\_divisor\_series}{1770}, \leanW{erdosBorwein\_two\_pow\_digitFreq\_limsup\_le}{2143}, \leanW{erdosBorwein\_two\_pow\_radixDiscrepancy\_eventually\_ge}{2161}, \leanW{erdosBorwein\_two\_pow\_lowerDiscrepancy\_pos}{2194}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal\_pow}{2277}, \leanW{erdosBorwein\_two\_pow\_not\_simplyNormal}{2334} and \leanW{radixDiscrepancy\_descent}{2417}.
+\item \tpath{NormalityChecker/NafGeometricTransfer.lean}, committed and pinned at the Phase~25 commit \commitref{\phaseXXVcommit}. It has $2{,}034$ lines, contains no \ttt{sorry}, imports \ttt{DigitMassTransfer}, and $39$ of its declarations are listed in \ttt{Audit.lean}. On \ttt{hail} it was built with \ttt{lake build}, audited with \ttt{lake env lean Audit.lean}, and independently replayed with \ttt{lake env leanchecker NormalityChecker.NafGeometricTransfer} and \ttt{replayFromImports}; it also passed remote GitHub Actions CI (\ttt{Lean verification} run \ttt{46129564650}). Only the standard axioms \ttt{propext}, \ttt{Classical.choice} and \ttt{Quot.sound} are used. The declarations used here, linked directly to their lines at that commit, are: \leanX{signedWeight\_parity\_mono}{85}, \leanX{signedWeight\_natAbs\_add\_le}{94}, \leanX{signedWeight\_natAbs\_le\_card\_of\_signed\_sum}{137}, \leanX{nafWeight\_eq\_signedWeight}{360}, \leanX{exists\_naf}{367}, \leanX{nafWeight\_le\_card\_support}{376}, \leanX{three\_mul\_abs\_sum\_add\_one\_le}{386}, \leanX{abs\_nafLow\_div\_lt}{442}, \leanX{naf\_dyadic\_count\_le}{541}, \leanX{naf\_orbit\_count\_le}{579}, \leanX{frequency\_naf\_interval\_le}{594}, \leanX{NafDensityLE}{662}, \leanX{eventually\_frequency\_le\_of\_nafDensity}{680}, \leanX{radixDiscrepancy\_eventually\_ge\_of\_nafDensity}{716}, \leanX{binary\_radixDiscrepancy\_eventually\_ge\_of\_nafDensity}{745}, \leanX{binary\_radixDiscrepancy\_eventually\_ge\_two\_thirds}{753}, \leanX{base4\_radixDiscrepancy\_eventually\_ge\_two\_thirds}{762}, \leanX{not\_orderNormal\_two\_four\_of\_nafDensity}{847}, \leanX{not\_orderNormal\_four\_two\_of\_nafDensity}{863}, \leanX{signedWeight\_le\_log}{902}, \leanX{nafDensityLE\_of\_series}{1026}, \leanX{aPlus\_eq\_erdosBorweinPlusCoeff}{1129}, \leanX{erdosBorweinPlusPow\_eq\_signed\_series}{1148}, \leanX{ePlusMajorant\_mul\_moebius}{1343}, \leanX{abs\_aPlus\_le}{1421}, \leanX{signedWeight\_aPlus\_le}{1439}, \leanX{summable\_abs\_ePlusKernel\_div}{1591}, \leanX{tendsto\_average\_ePlusMajorant}{1661}, \leanX{ePlusMean\_le}{1836}, \leanX{erdosBorweinPlusPow\_nafDensityLE}{1916}, \leanX{erdosBorweinPlus\_two\_pow\_radixDiscrepancy\_eventually\_ge}{1945}, \leanX{erdosBorweinPlus\_two\_pow\_radixDiscrepancy\_base4\_eventually\_ge}{1962}, \leanX{erdosBorweinPlus\_two\_pow\_lowerDiscrepancy\_ge}{1978}, \leanX{erdosBorweinPlus\_two\_pow\_lowerDiscrepancy\_pos}{1988}, \leanX{erdosBorweinPlus\_two\_pow\_lowerDiscrepancy\_base4\_ge}{1993}, \leanX{erdosBorweinPlus\_two\_pow\_not\_orderNormal\_four}{2003}, \leanX{erdosBorweinPlus\_two\_pow\_not\_orderNormal\_base4\_two}{2010}, \leanX{erdosBorweinPlus\_two\_pow\_not\_normalIn\_two}{2016}, \leanX{erdosBorweinPlus\_two\_pow\_not\_normalIn\_four}{2021}, \leanX{erdosBorweinPlus\_eight\_not\_orderNormal\_four}{2026} and \leanX{erdosBorweinPlus\_eight\_not\_orderNormal\_base4\_two}{2030}.
+\item Definitions both modules depend on, at the pinned Phase~23 commit \commitref{\phaseXXIIIcommit} (unchanged at the later commits): \leanU{Basic}{15}{\ttt{Basic.shift}}, \leanU{Basic}{18}{\ttt{Basic.frequency}}, \leanU{Basic}{23}{\ttt{Basic.NormalIn}}, \leanU{BinaryDiscrepancy}{11}{\ttt{BinaryDiscrepancy.\allowbreak radixDiscrepancy}}, \leanU{HigherOrderTower}{69}{\ttt{HigherOrderTower.\allowbreak OrderNormal}} and \leanU{SimpleNormalityKernel}{73}{\ttt{SimpleNormalityKernel.\allowbreak wordFreq}}. The coefficient identity \leanT{Phase22Cores}{1052}{\ttt{Phase22Cores.\allowbreak erdosBorweinPlusCoeff\_eq}} is pinned at the Phase~22 commit \commitref{\phaseXXIIcommit}.
 \end{itemize}
-Strictly separating evidence scopes: \Cref{thm:A} and \Cref{lem:digit-ineq,lem:transitions,thm:EB-lean} are \emph{Kernel-verified} in full. \Cref{lem:kummer,lem:signed,thm:prefix,thm:unsigned,prop:criteria,lem:conv,cor:kernel,prop:C} are kernel-verified in the parts stated in their labels, and the remaining parts are written proofs. \Cref{thm:signed-transfer} (\Cref{thm:D}(i)) is a \emph{Lean-supported paper proof}: its finite core is kernel-verified, and the asymptotic conclusion is written. All other results are \emph{Paper proofs}, using \emph{Finite certificates} for the numerical constants and \emph{External input} where stated: Senge--Straus and Stewart for \Cref{thm:barrier,thm:dichotomy}; Tur\'an--Kubilius in the same proofs; the minimality of the non-adjacent form in \Cref{lem:Eplus-support}; Wirsing's theorem in \Cref{prop:base4}; and Topacogullari in \Cref{rem:shifted}. \Cref{prop:collisions} is \emph{Conditional}, and the questions of \Cref{sec:questions} are \emph{Open}.
+Strictly separating evidence scopes: \Cref{thm:A}, \Cref{thm:Eplus-main}(i)--(iii) and \Cref{lem:signed,lem:digit-ineq,lem:transitions,thm:EB-lean,thm:naf,thm:Eplus-lean} are \emph{Kernel-verified} in full. \Cref{lem:kummer,thm:prefix,thm:unsigned,prop:criteria,lem:conv,cor:kernel,prop:C} are kernel-verified in the parts stated in their labels, and the remaining parts are written proofs. \Cref{thm:signed-transfer} (\Cref{thm:signed-main}(i)) is a \emph{Lean-supported paper proof}: its finite core is kernel-verified, and the asymptotic conclusion is written. \Cref{cor:Eplus-sharp} (\Cref{thm:Eplus-main}(iv)) is a \emph{Lean-supported paper proof} whose only further inputs are the \emph{Finite certificates} $W_+\le0.912845$ and $W_+\le0.908184$. In \Cref{lem:Eplus-support} the non-adjacent form and its tail bound are kernel-verified and the rest is written. All other results are \emph{Paper proofs}, using \emph{Finite certificates} for the numerical constants and \emph{External input} where stated: Senge--Straus and Stewart for \Cref{thm:barrier,thm:dichotomy}; Tur\'an--Kubilius in the same proofs; Wirsing's theorem in \Cref{prop:base4}; and Topacogullari in \Cref{rem:shifted}. The non-adjacent form is not an external input. Statements attributed to the register entries \ttt{GF-31}, \ttt{GF-42} and \ttt{GF-44} are written proofs outside this paper and are not used in any proof here. \Cref{prop:collisions} is \emph{Conditional}, and the questions of \Cref{sec:questions} are \emph{Open}.
 
-Two exact verification scripts accompany this draft at commit \ttt{\phaseXXIVcommit} (registered under \ttt{GF-36} and \ttt{GF-40} in \ttt{docs/registry/GF.toml}). \ttt{scripts/phase24\_digit\_mass.py} performs over $3{,}095{,}904$ exact checks (integers, \ttt{fractions.Fraction}, and integer arithmetic at scale $2^{-192}$ with outward rounding) and certifies the constants of \Cref{sec:transfer,sec:mean,sec:EB,sec:families} and \Cref{thm:Eplus-k4,prop:cubic}. \ttt{scripts/phase24\_classical.py} performs $108{,}334$ assertions and certifies the closure of \Cref{thm:transducer}, the enclosure $W_+\le0.912845$ and the bound of \Cref{thm:Eplus-k3}, as well as the identities of \Cref{prop:shifted}. Exact checks are \emph{Finite certificates} on their tested ranges. Prefix statistics (\Cref{tab:measure}) are \emph{finite measurements}, never proofs of asymptotic statements. The statement-by-statement verification map and the novelty ledger are \ttt{VERIFICATION.md} and \ttt{LEDGER.md} in \ttt{papers/14-dense-digit-mass-lambert/}.
+Two exact verification scripts accompany this draft at commit \commitref{\phaseXXIVcommit} (registered under \ttt{GF-36} and \ttt{GF-40} in \tpath{docs/registry/GF.toml}). \ttt{scripts/phase24\_digit\_mass.py} performs over $3{,}095{,}904$ exact checks (integers, \ttt{fractions.Fraction}, and integer arithmetic at scale $2^{-192}$ with outward rounding) and certifies the constants of \Cref{sec:transfer,sec:mean,sec:EB,sec:families} and \Cref{thm:Eplus-k4,prop:cubic}. \ttt{scripts/phase24\_classical.py} performs $108{,}334$ assertions and certifies the closure of \Cref{thm:transducer}, the enclosure $W_+\le0.912845$ and the bound of \Cref{thm:Eplus-k3}, as well as the identities of \Cref{prop:shifted}. At the Phase~25 commit, \ttt{scripts/phase25\_naf\_transfer.py} (registered under \ttt{GF-44}) independently re-certifies both enclosures of $W_+$ and the exact rationals $\frac{17431}{300000}$ and $\frac{11477}{187500}$ of \Cref{cor:Eplus-sharp}. Exact checks are \emph{Finite certificates} on their tested ranges. Prefix statistics (\Cref{tab:measure}) are \emph{finite measurements}, never proofs of asymptotic statements. The statement-by-statement verification map and the novelty ledger are \ttt{VERIFICATION.md} and \ttt{LEDGER.md} in \tpath{papers/14-dense-digit-mass-lambert/}.
+
+\par\endgroup
 
 \section{Use of AI tools}\label{sec:ai}
 
-This manuscript was produced in an AI-assisted research project. Large language models proposed proof strategies, drafted the proofs and text, implemented the exact Python verifiers and the Lean~4 formalization, and conducted cross-provider audits of the underlying source notes. The repository owner directed the project and is responsible for any release. The Lean kernel checked the declarations listed in \ttt{VERIFICATION.md}. The written proofs and literature comparisons have been checked only by AI models from different providers. Each source note received a cross-provider review whose findings were repaired, and this assembled candidate manuscript has not been reviewed as a whole. No independent human expert has checked the proofs. Cross-model review is not independent human peer review. This draft is unreleased, and \ttt{pdflatex}/\ttt{bibtex} compilation is pending before release.
+This manuscript was produced in an AI-assisted research project. Large language models proposed proof strategies, drafted the proofs and text, implemented the exact Python verifiers and the Lean~4 formalization, and conducted cross-provider audits of the underlying source notes. The repository owner directed the project and is responsible for any release. The Lean kernel checked the declarations listed in \ttt{VERIFICATION.md}. The written proofs and literature comparisons have been checked only by AI models from different providers. Each source note received a cross-provider review whose findings were repaired, and this assembled candidate manuscript has not been reviewed as a whole. No independent human expert has checked the proofs. Cross-model review is not independent human peer review. This draft is unreleased. It has been typeset in two independent clean builds that produce byte-identical output (\ttt{VERIFICATION.md} records the toolchain, command and checksum), but owner release steps and independent human review are pending.
 
 \bibliographystyle{plainurl}
 \bibliography{references}

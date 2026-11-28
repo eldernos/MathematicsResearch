@@ -3,7 +3,7 @@
 
 [meta]
 schema_version = 2
-status_as_of = "Phase 25"
+status_as_of = "Phase 26"
 roster_size = 50
 
 # ---------------------------------------------------------------- algebraic
@@ -201,7 +201,7 @@ digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
 discrepancy_summary = "No bound D⁺ < 1 is known in any base. The first N binary digits contain at least a constant times log N transitions, from the finite irrationality exponent μ(π) ≤ 7.1032, far below positive density."
-registry_ids = ["CC-04", "CC-08", "CC-12", "SY-21", "SY-22", "SY-23", "CC-50", "GF-18"]
+registry_ids = ["CC-04", "CC-08", "CC-12", "SY-21", "SY-22", "SY-23", "CC-50", "GF-18", "GF-50"]
 external_sources = [
   "Lambert 1761: π is irrational",
   "Lindemann 1882: π is transcendental",
@@ -210,7 +210,7 @@ external_sources = [
 ]
 control_provenance = {}
 radix_results = []
-notes = "BBP and Bellard prefixes have exact denominator rates 3/2 and 1 per binary shift (SY-21); Legendre rounding gives odd-denominator rational models with linear windows (SY-23). BBP extraction is position-local rather than low-denominator, and the window–denominator barrier applies (CC-50). Main open question: D⁺(π; b) < 1 in some base b."
+notes = "BBP and Bellard prefixes have exact denominator rates 3/2 and 1 per binary shift (SY-21); Legendre rounding gives odd-denominator rational models with linear windows (SY-23). BBP extraction is position-local rather than low-denominator, and the window–denominator barrier applies (CC-50). GF-50 extends the prime-centered base-16 BBP Hankel determinant to π (exact pole v_p = −r and positive-definite tail matrix K^{(π)} ≻ 0 across all odd classes mod 8, with symmetric M = 0 linear-balance excess +1.8731 > 0). Main open question: D⁺(π; b) < 1 in some base b."
 
 [[constant]]
 id = "BC-09"
@@ -227,14 +227,14 @@ discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
-discrepancy_summary = "No bound D⁺ < 1 is known in any base; the binary bound D⁺(ln 2) ≤ 0.9999 is open. The first N binary digits contain at least a constant times log N transitions (CC-05)."
-registry_ids = ["CC-01", "CC-02", "CC-04", "CC-05", "CC-42", "CC-43", "CC-50", "OP-11", "OP-13", "GF-09", "GF-18", "GF-28", "GF-35", "GF-40", "GF-47"]
+discrepancy_summary = "No bound D⁺ < 1 is known in any base; the binary bound D⁺(ln 2) ≤ 0.9999 is open. The first N binary digits contain at least (0.3806 − o(1)) log_2 N transitions via the prime-centered BBP Hankel measure μ_2^{Hankel} = 6.178813… (GF-50, nearly doubling CC-05)."
+registry_ids = ["CC-01", "CC-02", "CC-04", "CC-05", "CC-42", "CC-43", "CC-50", "OP-11", "OP-13", "GF-09", "GF-18", "GF-28", "GF-35", "GF-40", "GF-47", "GF-49", "GF-50", "GF-55"]
 external_sources = [
   "Lindemann 1882: Hermite–Lindemann theorem; the logarithm of an algebraic number other than 0 and 1 is transcendental",
 ]
 control_provenance = {}
 radix_results = []
-notes = "The denominator rate 1/2 is optimal among finite dyadic logarithm identities (CC-02); every balanced algebraic trace source has rate at least 5/12 (CC-43); the window–denominator barrier excludes the incomplete-orbit hypothesis at every positive denominator rate (CC-50); the actual Taylor prefixes have superpolynomial rational periods (OP-11); the logarithmic Euler-product representation collapses to the Taylor prefixes (GF-09); the badly-approximable K_2 barrier (GF-28) shows μ = 2 and bounded partial quotients cannot exclude K_2; GF-35 proves the exact BBP prime-band law (p ∣ Q_N iff p ∤ A_{⌊N/p⌋} for √N < p ≤ N), the kernel-verified Glaisher–Wieferich congruence p ∣ A_{p−1} iff p is Wieferich, and D⁺(x; 2) = 1 iff lim sup ∣S_N(1)∣ = 1; GF-40 proves the unconditional dropped-prime bound Σ_{p ∈ D_n} log p ≤ 4 n^{2/3}, top-band decomposition ln 2 = α_top + β_low, and two sharp joint-BBP barriers; and GF-47 extends the BBP band law all-p-adically, quantifies recurrence rigidity, and proves a geometric O(log N)-reset barrier. Normality of the logarithm restricted to finitely many primes (LS-01) does not pass to ln 2."
+notes = "The denominator rate 1/2 is optimal among finite dyadic logarithm identities (CC-02); every balanced algebraic trace source has rate at least 5/12 (CC-43); the window–denominator barrier excludes the incomplete-orbit hypothesis at every positive denominator rate (CC-50); the actual Taylor prefixes have superpolynomial rational periods (OP-11); the logarithmic Euler-product representation collapses to the Taylor prefixes (GF-09); the badly-approximable K_2 barrier (GF-28) shows μ = 2 and bounded partial quotients cannot exclude K_2; GF-35 proves the exact BBP prime-band law, the kernel-verified Glaisher–Wieferich congruence, and D⁺(x; 2) = 1 iff lim sup ∣S_N(1)∣ = 1; GF-40 proves the unconditional dropped-prime bound Σ_{p ∈ D_n} log p ≤ 4 n^{2/3}, top-band decomposition, and joint-BBP barriers; GF-47 extends the BBP band law all-p-adically and proves an O(log N)-reset barrier; GF-49 kernel-verifies orbit Toeplitz Gram inequalities and proves the separation-cost barrier leaving only r = 1 for ln 2 BBP models; GF-50 kernel-verifies prime-centered BBP Hankel nonvanishing (v_p = −r) and proves exact Cauchy-block cancellation and Uvarov–Christoffel collapse to μ_2^{Hankel} = 6.178813… alongside reset-countermodel survival (activation 2.5897, exclusion 6.1788 vs 1.44 bits/index); and GF-55 proves CRT decoupling and exact Θ(log N) reset thresholds bracketing the optimal uniform ratio in [2.442695…, 6.178813…]. Normality of the logarithm restricted to finitely many primes (LS-01) does not pass to ln 2."
 
 [[constant]]
 id = "BC-10"
@@ -401,14 +401,14 @@ digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
 discrepancy_summary = "No bound D⁺ < 1 is known in any base. The irrationality exponent is μ(e) = 2, and from μ = 2 alone one can deduce only about log N binary transitions among the first N digits."
-registry_ids = ["CC-04", "CC-09", "CC-50", "AC-11", "GF-18", "GF-47"]
+registry_ids = ["CC-04", "CC-09", "CC-50", "AC-11", "GF-18", "GF-47", "GF-50"]
 external_sources = [
   "Euler 1744: continued fraction e = [2; 1, 2, 1, 1, 4, 1, 1, 6, …], proving irrationality (and implying μ(e) = 2)",
   "Hermite 1873: e is transcendental",
 ]
 control_provenance = {}
 radix_results = []
-notes = "The logarithmic transition count is sharp for the information μ = 2: the Kempner–Fredholm number BC-45 also has μ = 2 and only O(log N) transitions (CC-50, AC-11). Taylor shifted denominators have rate ln 2 and Euler convergents rate ln 2/2; GF-47 proves a new factorial-prefix p-adic band law p^m e_K ≡ (−1)^m e_{K−mp}/m! (mod p) and rigidity transfer."
+notes = "The logarithmic transition count is sharp for the information μ = 2: the Kempner–Fredholm number BC-45 also has μ = 2 and only O(log N) transitions (CC-50, AC-11). Taylor shifted denominators have rate ln 2 and Euler convergents rate ln 2/2; GF-47 proves a factorial-prefix p-adic band law p^m e_K ≡ (−1)^m e_{K−mp}/m! (mod p) and rigidity transfer, and GF-50 proves exact multi-band Hankel poles v_p = −mr alongside non-PD (R_1 R_3 < R_2²) and B3 clearing obstructions, all purely arithmetic results establishing no new ordinary-radix normality or discrepancy classification."
 
 [[constant]]
 id = "BC-17"
@@ -546,11 +546,11 @@ digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
 discrepancy_summary = "No bound D⁺ < 1 is known in any base."
-registry_ids = ["GF-28"]
+registry_ids = ["GF-28", "GF-50"]
 external_sources = ["Apéry 1978: ζ(3) is irrational"]
 control_provenance = {}
 radix_results = []
-notes = "Apéry and Dirichlet-series denominators carry cubic prime powers p³ ∥ den, triggering a superlinear denominator barrier against rational-orbit transfer (GF-28)."
+notes = "Apéry and Dirichlet-series denominators carry cubic prime powers p³ ∥ den, triggering a superlinear denominator barrier against rational-orbit transfer (GF-28); GF-50 proves exact cubic Broadhurst base-2^{12} Hankel poles v_p = −3r alongside an indefiniteness obstruction for K^{(ζ(3))} and symmetric M = 0 balance excess +62.30 > 0."
 
 [[constant]]
 id = "BC-23"
@@ -717,7 +717,7 @@ digit_frequency_status = "nontrivial_bound"
 barrier_status = "resolved"
 evidence = "lean+paper"
 discrepancy_summary = "E_2² ∈ K_2 with exact constant 1 − D_N ∼ (3 C_η/(4 log 2)) (log log N)/(log N)^{3/4}, where C_η = 2.41852914… (GF-12); the coefficient support has counting function ≍ X/(log X)^{3/4} (GF-04), both 0^L and 1^L have strictly positive lower asymptotic frequency (GF-20, GF-27), and each binary digit 0 and 1 (as well as every constant word 0^L, 1^L) has unconditional explicit lower frequency at least 1/(3π) ≈ 0.106103 > 1/10 (upper frequency at most 1 − 1/(3π)), tightening GF-37's 1/26 by more than 2.75× and GF-29's 1/40000 by more than 4,244× (GF-43)."
-registry_ids = ["GF-04", "GF-12", "GF-20", "GF-27", "GF-29", "GF-37", "GF-43"]
+registry_ids = ["GF-04", "GF-12", "GF-20", "GF-27", "GF-29", "GF-37", "GF-43", "GF-53"]
 external_sources = ["Nesterenko 1996: E_2 is transcendental, hence so is E_2²"]
 control_provenance = {}
 radix_results = [
@@ -725,7 +725,7 @@ radix_results = [
   { radix = "base 2", property = "discrepancy_status", status = "maximal_K_b", evidence = "lean+paper", source = "GF-04 (order of 1 − D_N) and GF-12 (exact constant 3 C_η/(4 log 2))" },
   { radix = "base 2", property = "digit_frequency_status", status = "nontrivial_bound", evidence = "paper", source = "GF-20 part (4) with GF-27 (0^L and 1^L have positive lower frequency), GF-29 (1/40000), GF-37 (1/26), and GF-43 (unconditional explicit lower frequency ≥ 1/(3π) > 1/10 and upper frequency ≤ 1 − 1/(3π) for each binary digit 0 and 1 and constant word 0^L, 1^L via sign-conditioned single-endpoint equidistribution)" },
 ]
-notes = "The prime sign rule of η(12τ)² is x² + 36y² versus 4x² + 9y² (not a congruence condition by Bauer's theorem); completed uniform Selberg sieve GF-27 yields positive lower frequencies for both 0^L and 1^L (GF-20), GF-29 proves the preceding-gap signed imbalance identity and explicit lower binary digit frequency 1/40000, GF-37 tightens to 1/26, and GF-43 tightens by a further >2.75× to 1/(3π) ≈ 0.106103 > 1/10 via sign-conditioned single-endpoint equidistribution; binary simple normality and disjunctivity remain open."
+notes = "The prime sign rule of η(12τ)² is x² + 36y² versus 4x² + 9y² (not a congruence condition by Bauer's theorem); completed uniform Selberg sieve GF-27 yields positive lower frequencies for both 0^L and 1^L (GF-20), GF-29 proves the preceding-gap signed imbalance identity and explicit lower binary digit frequency 1/40000, GF-37 tightens to 1/26, GF-43 tightens by a further >2.75× to 1/(3π) ≈ 0.106103 > 1/10 via sign-conditioned single-endpoint equidistribution, and GF-53 proves 1/(3π) is exact/sharp for the entire first-order class and all multilinear sign, gap-Gram, and PSD/Lasserre/SOS inequalities on GF-43's inputs (conditional β-sieve ≈ 0.1148 and level-1 ≈ 0.1784 bounds do not change status); binary simple normality and disjunctivity remain open."
 
 [[constant]]
 id = "BC-30"
@@ -768,14 +768,14 @@ digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
 discrepancy_summary = "Open: normality, simple normality, D⁺ < 1, and membership or non-membership in K_2."
-registry_ids = ["GF-06", "GF-08", "GF-17", "GF-27"]
+registry_ids = ["GF-06", "GF-08", "GF-17", "GF-27", "GF-53"]
 external_sources = [
   "Nesterenko 1996: E_2 is transcendental, hence so is E_2⁴",
   "Serre 1985: lacunarity of the even powers η^r for r ∈ {2, 4, 6, 8, 10, 14, 26}",
 ]
 control_provenance = {}
 radix_results = []
-notes = "η(6τ)⁴ is a weight-2 CM newform. Its b-coprime coefficient factors survive radix displacement and force radix-digit width W_U(N) ≍ N √(log N), which blocks every sparse or width transfer (GF-17); the entropy–multiplicity NAF wall blocks signed-digit sparse transfers as well (GF-27), and the coefficient-transfer method fails for lacunary even η-powers (GF-06)."
+notes = "η(6τ)⁴ is a weight-2 CM newform. Its b-coprime coefficient factors survive radix displacement and force radix-digit width W_U(N) ≍ N √(log N), which blocks every sparse or width transfer (GF-17); the entropy–multiplicity NAF wall blocks signed-digit sparse transfers as well (GF-27), the coefficient-transfer method fails for lacunary even η-powers (GF-06), and GF-53 proves D⁺ < 1 for stretched prime Fourier subseries (k ≥ 47) and a dichotomy showing at most one of E(2^{−k})⁴ (k ≥ 277) and its composite-index complement can lie in K_2."
 
 [[constant]]
 id = "BC-32"
@@ -792,12 +792,15 @@ discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
-discrepancy_summary = "Open: normality, simple normality, D⁺ < 1, and both P_2 ∈ K_2 and P_2 ∉ K_2."
-registry_ids = ["GF-08", "GF-17", "GF-27", "GF-38", "GF-45"]
-external_sources = ["Nesterenko 1996: E_2 is transcendental, hence so is 1/E_2"]
+discrepancy_summary = "Open: normality, simple normality, D⁺ < 1, and both P_2 ∈ K_2 and P_2 ∉ K_2. Unconditionally, every constant run after N has length at most (4/3) N + 4.63 √N + O(1), yielding at least (0.818 − o(1)) log_2 N transitions and 1 − D_N(P_2; 2) ≫ (log N)/N (GF-55, exponentially sharpening GF-45's ≫ log log N)."
+registry_ids = ["GF-08", "GF-17", "GF-27", "GF-38", "GF-45", "GF-55"]
+external_sources = [
+  "Nesterenko 1996: E_2 is transcendental, hence so is 1/E_2",
+  "Bundschuh 1970: irrationality exponent μ(E_b) ≤ 7/3 for Euler's product",
+]
 control_provenance = {}
 radix_results = []
-notes = "Carry windows are sharp to log_2 N + O(1) digits, or (3/4) log_2 N + O(1) with the η-refinement; the pentagonal recurrence admits both the zero orbit and equidistributed orbits, so it cannot decide any distributional property; rational approximants 1/E_2^{(K)} track P_2 for only Θ(√m_K) digits beyond denominator scale (GF-17). Intermediate partition products P_2(M) can achieve lim inf D_N = 0 even at upper density 1 (GF-27), GF-38 proves the exact quadratic period asymptotic ln T_k^{(E)} = (1/2 − 3/π²)(ln 2) k² + O(k ln² k) and a short-orbit Weyl characterization of D⁺(P_2; 2) < 1, GF-45 adds unconditional ≫ log log N transitions and 1 − D_k(R_k^{(E)}; 2) ≫ (log log k)/k on the actual initial orbit, and Ramanujan congruences wash out of the digits (GF-08)."
+notes = "Carry windows are sharp to log_2 N + O(1) digits, or (3/4) log_2 N + O(1) with the η-refinement; the pentagonal recurrence admits both the zero orbit and equidistributed orbits, so it cannot decide any distributional property; rational approximants 1/E_2^{(K)} track P_2 for only Θ(√m_K) digits beyond denominator scale (GF-17). Intermediate partition products P_2(M) can achieve lim inf D_N = 0 even at upper density 1 (GF-27), GF-38 proves the exact quadratic period asymptotic ln T_k^{(E)} = (1/2 − 3/π²)(ln 2) k² + O(k ln² k) and a short-orbit Weyl characterization of D⁺(P_2; 2) < 1, GF-45 adds ≫ log log N transitions and 1 − D_k(R_k^{(E)}; 2) ≫ (log log k)/k on the actual initial orbit, GF-55 self-containedly reproves Bundschuh (1970)'s μ(E_2) = μ(P_2) ≤ 7/3 and transfers it unconditionally to linear runs ≤ (4/3) N + 4.63 √N + O(1), ≥ (0.818 − o(1)) log_2 N transitions, and 1 − D_N(P_2; 2) ≫ (log N)/N alongside the 2-power N²-pinning and run-method log N barriers (beating log N is equivalent to a 2-adic Ridout property for E_2), and Ramanujan congruences wash out of the digits (GF-08)."
 
 [[constant]]
 id = "BC-33"
@@ -867,13 +870,13 @@ digit_frequency_status = "open"
 barrier_status = "barrier_proved"
 evidence = "open"
 discrepancy_summary = "Open: normality, simple normality, D⁺ < 1, and membership or non-membership in K_2."
-registry_ids = ["GF-06", "GF-08", "GF-17", "GF-43"]
+registry_ids = ["GF-06", "GF-08", "GF-17", "GF-43", "GF-53"]
 external_sources = [
   "Duverney–Nishioka–Nishioka–Shiokawa 1996: Θ_3(1/2) is transcendental, hence so is its cube",
 ]
 control_provenance = {}
 radix_results = []
-notes = "The support of r_3 has density 5/6, outside every sparse transfer (GF-06). Θ_3(1/b)³ ≡ 4 Θ_3(1/b) L_{χ_4}(b) modulo K_b, and K_b is not closed under multiplication (GF-08). GF-43 proves the mean NAF signed weight of r_3(n) diverges to ∞ (blocking fixed-stretch digit-mass and NAF transfers), while fixed low-bit truncations of Θ_3(2^{−k})³ lie in M_2 ⊂ K_2 with binary 1-frequency 0."
+notes = "The support of r_3 has density 5/6, outside every sparse transfer (GF-06). Θ_3(1/b)³ ≡ 4 Θ_3(1/b) L_{χ_4}(b) modulo K_b, and K_b is not closed under multiplication (GF-08). GF-43 proves the mean NAF signed weight of r_3(n) diverges to ∞ (blocking fixed-stretch digit-mass and NAF transfers), while fixed low-bit truncations of Θ_3(2^{−k})³ lie in M_2 ⊂ K_2 with binary 1-frequency 0, and GF-53 proves Legendre's zero set, 4-adic self-similarity, fixed low bits, and leading-order size data are completely inert for the binary distribution of Θ_3(2^{−k})³."
 
 [[constant]]
 id = "BC-36"
@@ -915,19 +918,19 @@ disjunctivity = "proved_disjunctive"
 discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
-evidence = "external"
-discrepancy_summary = "No bound D⁺ < 1 is proved in the repository. Every fixed word has positive lower density on windows H ≥ N^{7/12+ε} by an external theorem (CC-21); combined with CC-20 it would give D⁺(E; 2) < 1 once its analytic inputs are independently verified (GF-18)."
-registry_ids = ["CC-20", "CC-21", "CC-22", "CC-28", "CC-29", "CC-30", "CC-35", "CC-47", "CC-49", "GF-07", "GF-18", "GF-28", "GF-35", "GF-36", "GF-41", "GF-42", "GF-47", "GF-48"]
+evidence = "paper"
+discrepancy_summary = "No bound D⁺ < 1 is proved in the repository. Unconditional base-2 disjunctivity is proved internally with zero external inputs and at least N exp(−37 (log log N)³) occurrences per word (GF-52, independently sharpening Captain Sude's external Lean-verified 70,000). Every fixed word has positive lower density on windows H ≥ N^{7/12+ε} by an external claim (CC-21); combined with CC-20 it would give D⁺(E; 2) < 1 once its analytic inputs are independently verified (GF-18)."
+registry_ids = ["CC-20", "CC-21", "CC-22", "CC-28", "CC-29", "CC-30", "CC-35", "CC-47", "CC-49", "GF-07", "GF-18", "GF-28", "GF-35", "GF-36", "GF-41", "GF-42", "GF-47", "GF-48", "GF-49", "GF-51", "GF-52"]
 external_sources = [
   "Erdős 1948: Σ 1/(2ⁿ − 1) is irrational",
-  "Captain Sude 2026, release erdos-borwein-disjunctivity-elementary (8 September 2026, commit d51e93e): base-2 disjunctivity, with at least N exp(−70000 (log log N)³) occurrences of each fixed word among the first N digits",
+  "Captain Sude 2026, release erdos-borwein-disjunctivity-elementary (8 September 2026, commit d51e93e): external Lean-verified base-2 disjunctivity, with at least N exp(−70000 (log log N)³) occurrences of each fixed word among the first N digits",
   "Mira Cult, claim 0002 (November 2026): positive lower word density on windows H ≥ N^{7/12+ε}",
 ]
 control_provenance = {}
 radix_results = [
-  { radix = "base 2", property = "disjunctivity", status = "proved_disjunctive", evidence = "external", source = "Captain Sude 2026, release erdos-borwein-disjunctivity-elementary (8 September 2026, commit d51e93e): base-2 disjunctivity" },
+  { radix = "base 2", property = "disjunctivity", status = "proved_disjunctive", evidence = "paper", source = "GF-52 (Theorem C5.3): unconditional zero-external-input base-2 disjunctivity of E(2) with at least N exp(−37 (log log N)³) occurrences per word (independent internal paper proof alongside Captain Sude 2026's external Lean-verified release)" },
 ]
-notes = "Main open question: simple non-normality, f(1) < 1/2; the comparison model gives p∗ ∈ [0.492450290, 0.492460864]. Sixteen columns is the sharp minimal single-window truncation, column subsets of size at most 4 and trigonometric certificates of degree at most 110 provably cannot certify f(1) < 1/2 (CC-49), and an outward-rounded order-6 certificate establishes 7 ≤ r_min(D) ≤ 92 for all D ≥ 16 (GF-28); GF-41 halves the column threshold to 8 under shift invariance (conditional criterion B_8 ≤ 0.497108), while GF-47 proves fixed-distance collision density o(N) and a bounded-perturbation barrier in [−3, 3]; GF-35 adds an elementary uniform divisor-correlation bound and iterated 2-adic peeling; GF-36 kernel-verifies unconditional simple nonnormality and D⁻ > 0 for every E(2^k) with k ≥ 3 (in base 2 and every base 2^j), and GF-42 adds unconditional D⁺(E(2^k); 2) < 1 and E(2^k) ∉ K_2 for k ≥ 3, while k = 1 (E = E(2)) and k = 2 (E(4)) remain open; GF-48 records a strictly Conditional Dirichlet GRH dependency audit of Mira Cult pushing 7/12 → 1/2 (authorizing no status change). Certified finite shell frequencies are not asymptotic evidence. CC-21 would also give each binary digit a positive lower frequency, but, as for D⁺ < 1, it is not promoted before its analytic inputs are independently verified, so digit_frequency_status stays open."
+notes = "Main open question: simple non-normality, f(1) < 1/2; the comparison model gives p∗ ∈ [0.492450290, 0.492460864]. Sixteen columns is the sharp minimal single-window truncation, column subsets of size at most 4 and trigonometric certificates of degree at most 110 provably cannot certify f(1) < 1/2 (CC-49), and an outward-rounded order-6 certificate establishes 7 ≤ r_min(D) ≤ 92 for all D ≥ 16 (GF-28); GF-41 halves the column threshold to 8 under shift invariance (conditional criterion B_8 ≤ 0.497108) and GF-51 halves the Bonferroni order at W = 8 from 92 to 46, while GF-47 proves fixed-distance collision density o(N) and a bounded-perturbation barrier in [−3, 3]; GF-52 proves base-2 disjunctivity internally with zero external inputs (paper constant 37, alongside Captain Sude 2026's external Lean-verified 70,000); GF-35 adds an elementary uniform divisor-correlation bound and iterated 2-adic peeling; GF-36 kernel-verifies unconditional simple nonnormality and D⁻ > 0 for every E(2^k) with k ≥ 3 (in base 2 and every base 2^j), and GF-42 adds unconditional D⁺(E(2^k); 2) < 1 and E(2^k) ∉ K_2 for k ≥ 3, while k = 1 (E = E(2)) and k = 2 (E(4)) remain open; GF-48 records a strictly Conditional Dirichlet GRH dependency audit of Mira Cult pushing 7/12 → 1/2 (authorizing no status change). Certified finite shell frequencies are not asymptotic evidence. CC-21 would also give each binary digit a positive lower frequency, but, as for D⁺ < 1, it is not promoted before its analytic inputs are independently verified, so digit_frequency_status stays open."
 
 [[constant]]
 id = "BC-38"
@@ -939,19 +942,21 @@ arithmetic_nature = "irrational (Borwein 1991); transcendence open"
 radices_scope = "base 2"
 full_normality = "open"
 simple_normality = "open"
-disjunctivity = "open"
+disjunctivity = "proved_disjunctive"
 discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
-evidence = "open"
-discrepancy_summary = "Open. E_odd and the residue-class sums A_r = Σ_{m ≡ r (mod 8)} 1/(2^m − 1), r ∈ {1, 3, 5, 7}, have identical D⁻, D⁺ and limit sets (GF-07)."
-registry_ids = ["GF-07", "GF-18", "GF-36", "GF-42"]
+evidence = "paper"
+discrepancy_summary = "Discrepancy and normality are open; unconditionally base-2 disjunctive with at least N exp(−37 (log log N)³) occurrences per word (GF-52, zero external inputs). E_odd and the residue-class sums A_r = Σ_{m ≡ r (mod 8)} 1/(2^m − 1), r ∈ {1, 3, 5, 7}, have identical D⁻, D⁺ and limit sets (GF-07)."
+registry_ids = ["GF-07", "GF-18", "GF-36", "GF-42", "GF-52"]
 external_sources = [
   "Borwein 1991: Σ 1/(qⁿ + r) is irrational for integers q ≥ 2 and rational r ≠ 0 with r ≠ −qⁿ; here q = 4, r = −2",
 ]
 control_provenance = {}
-radix_results = []
-notes = "Complementary congruence coverage forces support density at least 1/(2k) whenever a combination has nonzero weight on a full complementary cover, which blocks additive K_b-cancellation routes (GF-18). GF-36 proves E_odd(2^k) is simply nonnormal with D⁻ > 0 for every k ≥ 3, and GF-42 proves unconditional D⁺(E_odd(2^k); 2) < 1 and E_odd(2^k) ∉ K_2 already for every k ≥ 2 (including E_odd(4)), while k = 1 (E_odd(2)) remains open."
+radix_results = [
+  { radix = "base 2", property = "disjunctivity", status = "proved_disjunctive", evidence = "paper", source = "GF-52 (Theorem C5.3): unconditional zero-external-input base-2 disjunctivity of E_odd(2) with at least N exp(−37 (log log N)³) occurrences per word via CRT planting and the Odd-Target Guard-Bit Lemma" },
+]
+notes = "GF-52 proves unconditionally with zero external inputs that E_odd(2^k) is base-2 disjunctive for every k ≥ 1 (including E_odd = E_odd(2) here, and establishing disjunctive nonnormality for k ≥ 3). Complementary congruence coverage forces support density at least 1/(2k) whenever a combination has nonzero weight on a full complementary cover, which blocks additive K_b-cancellation routes (GF-18). GF-36 proves E_odd(2^k) is simply nonnormal with D⁻ > 0 for every k ≥ 3, and GF-42 proves unconditional D⁺(E_odd(2^k); 2) < 1 and E_odd(2^k) ∉ K_2 already for every k ≥ 2 (including E_odd(4)), while normality, simple normality, and D⁺ < 1 for E_odd(2) remain open."
 
 [[constant]]
 id = "BC-39"
@@ -963,19 +968,21 @@ arithmetic_nature = "irrational (Borwein 1991); transcendence open"
 radices_scope = "base 2"
 full_normality = "open"
 simple_normality = "open"
-disjunctivity = "open"
+disjunctivity = "proved_disjunctive"
 discrepancy_status = "open"
 digit_frequency_status = "open"
 barrier_status = "barrier_proved"
-evidence = "open"
-discrepancy_summary = "No distributional result is known. Lean verifies E_+ = E − 2 E(4) with exact coefficients a_+(n) = (1 − v_2(n)) τ_odd(n), zero iff n ≡ 2 (mod 4) and odd iff n is a square (GF-28), as well as odd-shift nonpositivity a_+(n) a_+(n+h) ≤ 0, four-consecutive-zero, and 2-adic peeling (GF-35)."
-registry_ids = ["GF-28", "GF-35", "GF-36", "GF-40", "GF-42", "GF-44", "GF-47"]
+evidence = "paper"
+discrepancy_summary = "Discrepancy and normality are open; unconditionally base-2 disjunctive with at least N exp(−37 (log log N)³) occurrences per word (GF-52, zero external inputs). Lean verifies E_+ = E − 2 E(4) with exact coefficients a_+(n) = (1 − v_2(n)) τ_odd(n), zero iff n ≡ 2 (mod 4) and odd iff n is a square (GF-28), as well as odd-shift nonpositivity a_+(n) a_+(n+h) ≤ 0, four-consecutive-zero, and 2-adic peeling (GF-35)."
+registry_ids = ["GF-28", "GF-35", "GF-36", "GF-40", "GF-42", "GF-44", "GF-47", "GF-51", "GF-52"]
 external_sources = [
   "Borwein 1991: Σ 1/(qⁿ + r) is irrational for integers q ≥ 2 and rational r ≠ 0 with r ≠ −qⁿ; here q = 2, r = 1",
 ]
 control_provenance = {}
-radix_results = []
-notes = "The exact identity E_+ = E − 2 E(4) has bounded signed mean ln 2 and a 14-column two-sided comparison model (GF-28). GF-35 proves unconditionally that the signed tail has mean square ≍ log³ X (leading variance ratio 1/3 against E via Ingham), a_+(k²) ≡ λ(k) (mod 4), and iterated 2-adic peeling D_N(E_+) − D_N(B_j) → 0; GF-40 eliminates Phase 23 Hypothesis (H2) unconditionally via Topacogullari (2017) Theorem 1.2; GF-44 kernel-verifies in Lean 4 (NafGeometricTransfer.lean) that E_+(2^k) is not 4-normal in base 2 and not 2-normal in base 4 with D_N(E_+(2^k); 2) ≥ 21/500 = 0.042 eventually for every k ≥ 3 (including E_+(8); ≥ 0.061210 on paper, within 1.8% of the 0.059108 LP ceiling), and GF-42 adds unconditional D⁺(E_+(2^k); 2) < 1 and E_+(2^k) ∉ K_2 for k ≥ 3 plus the fixed-window carry-cancellation barrier for E_+(4), while E_+(2) itself remains open under the fixed-distance collision and bounded-perturbation barriers (GF-47)."
+radix_results = [
+  { radix = "base 2", property = "disjunctivity", status = "proved_disjunctive", evidence = "paper", source = "GF-52 (Theorem C5.3): unconditional zero-external-input base-2 disjunctivity of E_+(2) with at least N exp(−37 (log log N)³) occurrences per word via CRT planting and the Odd-Target Guard-Bit Lemma" },
+]
+notes = "GF-52 proves unconditionally with zero external inputs that E_+(2^k) is base-2 disjunctive for every k ≥ 1 (including E_+ = E_+(2) here, and establishing disjunctive nonnormality for k ≥ 3). The exact identity E_+ = E − 2 E(4) has bounded signed mean ln 2 and a 14-column two-sided comparison model (GF-28). GF-35 proves unconditionally that the signed tail has mean square ≍ log³ X (leading variance ratio 1/3 against E via Ingham), a_+(k²) ≡ λ(k) (mod 4), and iterated 2-adic peeling D_N(E_+) − D_N(B_j) → 0; GF-40 eliminates Phase 23 Hypothesis (H2) unconditionally via Topacogullari (2017) Theorem 1.2; GF-44 kernel-verifies in Lean 4 (NafGeometricTransfer.lean) that E_+(2^k) is not 4-normal in base 2 and not 2-normal in base 4 with D_N(E_+(2^k); 2) ≥ 21/500 = 0.042 eventually for every k ≥ 3 (including E_+(8); on paper ≥ 17431/300000 = 0.0581033… from W_+ ≤ 0.912845, within ~1.8% of the 0.059108 LP ceiling for that input, and ≥ 11477/187500 = 0.0612106… from the sharper W_+ ≤ 0.908184); GF-51 slashes the unconditional D⁺(E_+(2^k); 2) < 1 threshold from GF-42's k_0 > 3.05 × 10^{10} to k_0 = 25 (with 1 − D⁺ ≥ 4.36 × 10^{−5}) and proves E_+(8) is simply nonnormal in base 256 (sharp at L = 8 for NAF weight alone), while E_+(2) normality, simple normality, and D⁺ < 1 remain open under the fixed-distance collision and bounded-perturbation barriers (GF-47)."
 
 [[constant]]
 id = "BC-40"
@@ -993,7 +1000,7 @@ digit_frequency_status = "exact_law"
 barrier_status = "resolved"
 evidence = "lean+paper"
 discrepancy_summary = "1 − D_N ∼ (K/(2 log 2)) (log log N)/√(log N), with K the Landau–Ramanujan constant (GF-05). Each binary word containing a 1 occurs Θ(N/√(log N)) times among the first N digits, so the digit 1 has frequency 0 (CC-46, CC-48)."
-registry_ids = ["CC-46", "CC-48", "GF-05", "GF-12", "GF-13", "SY-24", "GF-48"]
+registry_ids = ["CC-46", "CC-48", "GF-05", "GF-12", "GF-13", "SY-24", "GF-48", "GF-56"]
 external_sources = [
   "Duverney–Nishioka–Nishioka–Shiokawa 1996: Θ_3(1/2) is transcendental",
   "Hamieh–Murty 2016: transcendence of Lambert series with odd character coefficients",
@@ -1004,7 +1011,7 @@ control_provenance = { basis = "published_theorem", property = "simple_normality
 radix_results = [
   { radix = "base 2", property = "simple_normality", status = "proved_not_simply_normal", evidence = "lean+paper", source = "CC-46 (χ = χ_4): the binary digit 1 of L_{χ_4}(2) has frequency 0, with at most O(N/√(log N)) ones among the first N digits" },
 ]
-notes = "Equals (Θ_3(1/2)² − 1)/4 and the normalized q-digamma reflection (ψ_q(1/4) − ψ_q(3/4))/log q at q = 2^{−4} (GF-13 with M = 4, r = 1). Disjunctive and in K_2 at once; GF-48 adds the unconditional short-window discrepancy gap 1 − D_{N,H} ≍ (log log N)/√(log N) for a > 0.53 (and conditionally for a > 1/2 under GRH(4))."
+notes = "Equals (Θ_3(1/2)² − 1)/4 and the normalized q-digamma reflection (ψ_q(1/4) − ψ_q(3/4))/log q at q = 2^{−4} (GF-13 with M = 4, r = 1). Disjunctive and in K_2 at once; GF-48 adds the unconditional short-window discrepancy gap 1 − D_{N,H} ≍ (log log N)/√(log N) for a > 0.53 (and conditionally for a > 1/2 under GRH(4)), and GF-56 upgrades this unconditionally to almost all windows at every 1/6 < a ≤ 1 plus exact GF-12 leading constants on all windows H ≥ N exp(−c_1 √(log N)) (and conditionally under GRH(4) to H = √N (log N)^C for C > 2)."
 
 [[constant]]
 id = "BC-41"
